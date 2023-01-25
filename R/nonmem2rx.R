@@ -11,6 +11,14 @@ nonmem2rx <- function(file) {
   .lines <- readLines(file)
 }
 
+.nonmem2rxBuildRecord <- function() {
+  cat("Update Parser c for record locator\n");
+  dparser::mkdparse(devtools::package_file("inst/records.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxRecords")
+}
+
+
 .nonmem2rxBuildTheta <- function() {
   cat("Update Parser c for theta block\n");
   dparser::mkdparse(devtools::package_file("inst/theta.g"),
@@ -19,6 +27,7 @@ nonmem2rx <- function(file) {
 }
 
 .nonmem2rxBuildGram <- function() {
+  .nonmem2rxBuildRecord()
   .nonmem2rxBuildTheta()
   ""
 }
