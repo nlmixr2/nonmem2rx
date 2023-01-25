@@ -1,8 +1,16 @@
 //loop
-theta_list : (theta)+ ;
+statement_list : (statement)+ ;
 
 statement: theta_statement |
+  numberpointsLine |
+  abortInfo |
   singleLineComment?;
+
+abortInfo: 'ABORT' | 'NOABORT';
+
+numberpoints: 'NUMBERPOINTS' | 'NUM' | 'NUMPTS' | 'NUMBERPTS' ;
+
+numberpointsLine: numberpoints '=' decimalint singleLineComment?;
 
 theta_statement:  theta singleLineComment?;
 
