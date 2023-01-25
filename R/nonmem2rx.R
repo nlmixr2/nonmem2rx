@@ -18,6 +18,8 @@ nonmem2rx <- function(file) {
   dparser::mkdparse(devtools::package_file("inst/records.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxRecords")
+  file.rename(devtools::package_file("src/records.g.d_parser.c"),
+              devtools::package_file("src/records.g.d_parser.h"))
 }
 
 .nonmem2rxBuildOmega <- function() {
@@ -25,6 +27,8 @@ nonmem2rx <- function(file) {
   dparser::mkdparse(devtools::package_file("inst/omega.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxOmega")
+  file.rename(devtools::package_file("src/omega.g.d_parser.c"),
+              devtools::package_file("src/omega.g.d_parser.h"))
 }
 
 
@@ -34,6 +38,8 @@ nonmem2rx <- function(file) {
   dparser::mkdparse(devtools::package_file("inst/theta.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxTheta")
+  file.rename(devtools::package_file("src/theta.g.d_parser.c"),
+              devtools::package_file("src/theta.g.d_parser.h"))
 }
 
 .nonmem2rxBuildGram <- function() {
