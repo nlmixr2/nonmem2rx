@@ -1,9 +1,9 @@
 //loop
 statement_list : (statement)+ ;
 
-statement: theta_statement |
-  numberpointsLine |
-  abortInfo |
+statement: theta_statement ','* |
+  numberpointsLine ','* |
+  abortInfo ','* |
   singleLineComment?;
 
 abortInfo: 'ABORT' | 'NOABORT';
