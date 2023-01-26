@@ -58,12 +58,14 @@ void parseFree(int last) {
 char *curRecord = NULL;
 sbuf curLine;
 
+SEXP nonmem2rxPushRecord(const char *rec, const char *info);
+
 void pushRecord() {
-  if (curRecord != NULL) {
-    // push record information
-    curRecord = NULL;
-    sClear(&curLine);
-  }
+  // push record information
+  nonmem2rxPushRecord(curRecord, curLine.s);
+  curRecord = NULL;
+  sClear(&curLine);
+  
 }
 
 const char *lastStr;
@@ -82,7 +84,7 @@ typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, v
 
 void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
-  //int nch = d_get_number_of_children(pn) = 0;
+  int nch = d_get_number_of_children(pn);
   if (!strcmp("singleLineRecord", name)) {
     D_ParseNode *xpn = d_get_child(pn,1); // record
     pushRecord();
@@ -90,10 +92,21 @@ void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, pri
     xpn = d_get_child(pn,2); // rest of line
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppend(&curLine, "%s\n",v);
+    return;
   } else if (!strcmp("singleLineNoRecord", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0); // line
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curLine, "%s",v);
+    xpn = d_get_child(pn, 1); // line
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppend(&curLine, "%s\n",v);
+    return;
+  }
+  if (nch != 0) {
+    for (int i = 0; i < nch; i++) {
+      D_ParseNode *xpn = d_get_child(pn, i);
+      wprint_parsetree_records(pt, xpn, depth, fn, client_data);
+    }
   }
 }
 
@@ -114,6 +127,7 @@ void trans_records(const char* parse){
     //rx_syntax_error = 1;
   } else {
     wprint_parsetree_records(parser_tables_nonmem2rxRecords, _pn, 0, wprint_parsetree_records, NULL);
+    pushRecord();
   }
 }
 

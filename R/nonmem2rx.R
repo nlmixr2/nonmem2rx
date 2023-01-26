@@ -6,8 +6,9 @@
 #' @eval .nonmem2rxBuildGram()
 #' @export
 #'
-#' @examples
 #' @useDynLib nonmem2rx, .registration=TRUE
+#' @importFrom Rcpp sourceCpp
+#' @examples
 nonmem2rx <- function(file) {
   .lines <- readLines(file)
 }
