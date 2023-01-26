@@ -82,7 +82,7 @@ sbuf curOmega;
 
 SEXP _nonmem2rx_omeganum_reset() {
   nonmem2rx_omeganum = 1;
-  nonmem2rx_omegaDiagonal = 1;
+  nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
   nonmem2rx_omegaBlockn = 0;
   nonmem2rx_omegaSame = 0;
   nonmem2rx_omegaFixed = 0;
@@ -107,17 +107,25 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       curComment = v;
     }
   } else if (!strcmp("blockn", name)) {
-  } else if (!strcmp("blocknsame", name)) {
-  } else if (!strcmp("blocksame", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rx_omegaBlockn = atoi(v);
+  } else if (!strcmp("same", name)) {
+    nonmem2rx_omegaSame = 1;    
   } else if (!strcmp("diagonal", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rx_omegaDiagonal = atoi(v);
   } else if (!strcmp("omega2", name)) {
-    // this form is only good for diagonal matrices
-    if (nonmem2rx_omegaBlockn != 0) {
-      
-    }
     nonmem2rx_omegaFixed = 1;
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    // this form is only good for diagonal matrices
+    if (nonmem2rx_omegaBlockn != 0) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "(FIXED %s) is not supported in a $OMEGA BLOCK", v);
+    }
+
     sAppend(&curOmega, "%s%d ~ fix(%s)", v);
     return;
   }
