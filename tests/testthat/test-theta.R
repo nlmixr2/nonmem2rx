@@ -8,6 +8,8 @@ test_that("test thetas", {
     expect_equal(.nonmem2rx$ini, eq)
   }
 
+  .t("1", "theta1 <- 1")
+  .t("1 ; clearance\n", c("theta1 <- 1", "label(\"clearance\")"))
   .t("(1 fix)", "theta1 <- fix(1)")
   .t("(1) FIXED", "theta1 <- fix(1)")
   .t("(1, 2.0) FIXED", "theta1 <- fix(1, 2.0)")

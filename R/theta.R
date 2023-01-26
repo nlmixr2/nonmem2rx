@@ -16,15 +16,15 @@ nonmem2rxRec.the <- function(x) {
 #' @author Matthew L. Fidler
 .handleThetaComment <- function(comment) {
   .reg1 <- ";.*?([A-Za-z][A-Za-z0-9_.]*)"
-  if (regexpr(comment, .reg1)) {
+  if (regexpr(.reg1, comment) != -1) {
     .addThetaName(sub(.reg1, "\\1", comment))
   } else {
     .addThetaName("")
   }
   .reg2 <- "^;+ *(.*) +"
-  if (regexpr(comment, .reg2)) {
+  if (regexpr(.reg2, comment) != -1) {
     .comment <- sub(.reg2, "\\1", comment)
-    if (.comment != "") .addIni(paste0("label(", deparse1(.comment), ")"))
+    .addIni(paste0("label(", deparse1(.comment), ")"))
   }
 }
 #' This pushes the $theta into the ini({}) block
