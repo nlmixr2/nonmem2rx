@@ -1,16 +1,30 @@
 .nonmem2rx <- new.env(parent=emptyenv())
-
+#' Clear the .nonmem2rx environment
+#'  
+#' @return Nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
 .clearNonmem2rx <- function() {
   .ls <- ls(all=TRUE, envir=.nonmem2rx)
   if (length(.ls) > 0L) rm(list=.ls,envir=.nonmem2rx)
   .nonmem2rx$ini <- NULL
   .nonmem2rx$model <- NULL
 }
-
+#' Add to initialization block
+#'
+#' @param text Line to add to the initialization block
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
 .addIni <- function(text) {
   assign("ini", c(.nonmem2rx$ini, text), envir=.nonmem2rx)
 }
-
+#' Add to model block
+#'
+#' @param text line to add to the model block
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
 .addModel <- function(text) {
   assign("model", c(.nonmem2rx$model, text), envir=.nonmem2rx)
 }
@@ -28,12 +42,12 @@
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 nonmem2rx <- function(file) {
+  .clearNonmem2rx()
   if (file.exists(file)) {
     .lines <- paste(readLines(file), collapse = "\n")
     .parseRec(.lines)
   }
 }
-
 
 ### Parser build
 .nonmem2rxBuildRecord <- function() {
