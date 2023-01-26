@@ -20,6 +20,16 @@
 #endif
 #include "records.g.d_parser.h"
 
+#define gBuf nonmem2rx_records_gBuf
+#define gBufFree nonmem2rx_records_gBufFree
+#define gBufLast nonmem2rx_records_gBufLast
+#define curP nonmem2rx_records_curP
+#define _pn nonmem2rx_records__pn
+#define freeP nonmem2rx_records_freeP
+#define parseFreeLast nonmem2rx_records_parseFreeLast
+#define parseFree nonmem2rx_records_parseFree
+
+
 extern D_ParserTables parser_tables_nonmem2rxRecords;
 
 char *gBuf;
