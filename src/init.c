@@ -8,9 +8,10 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
+SEXP _nonmem2rx_trans_records(SEXP in);
 void R_init_nonmem2rx(DllInfo *info){
   R_CallMethodDef callMethods[]  = {
-    //{"_rxode2_parse_strncmpci", (DL_FUNC) &_rxode2_parse_strncmpci, 0}
+    {"_nonmem2rx_trans_records", (DL_FUNC) &_nonmem2rx_trans_records, 1},
     {NULL, NULL, 0}
   };
   // log likelihoods used in calculations
