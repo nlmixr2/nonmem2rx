@@ -184,6 +184,13 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
     pushTheta();
     nonmem2rx_thetanum++;
+    return;
+  } else if (!strcmp("abortInfo", name)) {
+    Rf_warning(_("ABORT / NOABORT ignored in $THETA ignored"));
+    return;
+  } else if (!strcmp("numberpointsLine", name)) {
+    Rf_warning(_("NUMBERPOINTS=# ignored  in $THETA ignored"));
+    return;
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {

@@ -24,7 +24,7 @@ nonmem2rxRec.the <- function(x) {
   .reg2 <- "^;+ *(.*) +"
   if (regexpr(comment, .reg2)) {
     .comment <- sub(.reg2, "\\1", comment)
-    .addIni(paste0("label(", deparse1(.comment), ")"))
+    if (.comment != "") .addIni(paste0("label(", deparse1(.comment), ")"))
   }
 }
 #' This pushes the $theta into the ini({}) block
@@ -41,7 +41,6 @@ nonmem2rxRec.the <- function(x) {
 }
 
 #' Creates the theta midpoint estimate info $theta style (low,,hi)
-#'
 #'  
 #' @param low Low estimate
 #' @param hi Hi estimate
