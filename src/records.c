@@ -82,8 +82,7 @@ typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, v
 
 void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
-  int nch = d_get_number_of_children(pn), i, ii, found, safe_zero = 0;
-  char *value = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+  //int nch = d_get_number_of_children(pn) = 0;
   if (!strcmp("singleLineRecord", name)) {
     D_ParseNode *xpn = d_get_child(pn,1); // record
     pushRecord();
