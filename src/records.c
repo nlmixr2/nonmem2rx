@@ -92,6 +92,10 @@ char * rc_dup_str(const char *s, const char *e) {
 // from mkdparse_tree.h
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
 
+void wprint_node_records(int depth, char *name, char *value, void *client_data)  {
+  
+}
+
 void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
@@ -136,7 +140,7 @@ void trans_records(const char* parse){
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
   } else {
-    wprint_parsetree_records(parser_tables_nonmem2rxRecords, _pn, 0, wprint_parsetree_records, NULL);
+    wprint_parsetree_records(parser_tables_nonmem2rxRecords, _pn, 0, wprint_node_records, NULL);
     pushRecord();
   }
 }

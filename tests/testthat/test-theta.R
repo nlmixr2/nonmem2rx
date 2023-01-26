@@ -1,6 +1,7 @@
 test_that("test thetas", {
   
   .t <- function(theta, eq="no") {
+    requireNamespace("dparser")
     .clearNonmem2rx()
     .Call(`_nonmem2rx_thetanum_reset`)
     .Call(`_nonmem2rx_trans_theta`, theta)

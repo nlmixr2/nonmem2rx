@@ -66,6 +66,9 @@ void parseFree(int last) {
 
 extern char * rc_dup_str(const char *s, const char *e);
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
+void wprint_node_theta(int depth, char *token_name, char *token_value, void *client_data) {
+  
+}
 
 int nonmem2rx_thetanum = 1;
 
@@ -217,7 +220,7 @@ void trans_theta(const char* parse){
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
   } else {
-    wprint_parsetree_theta(parser_tables_nonmem2rxTheta, _pn, 0, wprint_parsetree_theta, NULL);
+    wprint_parsetree_theta(parser_tables_nonmem2rxTheta, _pn, 0, wprint_node_theta, NULL);
   }
 }
 

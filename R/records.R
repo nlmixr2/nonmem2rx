@@ -62,7 +62,7 @@
 #' .clearRecordEnv()
 #'
 .clearRecordEnv <- function() {
-  .ls <- ls(all=TRUE, envir=.recordEnv)
+  .ls <- ls(all.names=TRUE, envir=.recordEnv)
   if (length(.ls) > 0L) rm(list=.ls,envir=.recordEnv)
 }
 

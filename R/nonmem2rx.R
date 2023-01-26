@@ -5,7 +5,7 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .clearNonmem2rx <- function() {
-  .ls <- ls(all=TRUE, envir=.nonmem2rx)
+  .ls <- ls(all.names=TRUE, envir=.nonmem2rx)
   if (length(.ls) > 0L) rm(list=.ls,envir=.nonmem2rx)
   .nonmem2rx$ini <- NULL
   .nonmem2rx$thetaNames <- NULL
@@ -50,6 +50,7 @@
 #'
 #' @useDynLib nonmem2rx, .registration=TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom stats setNames
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 nonmem2rx <- function(file) {
