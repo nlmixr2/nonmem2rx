@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @examples
+#' @useDynLib nonmem2rx, .registration=TRUE
 nonmem2rx <- function(file) {
   .lines <- readLines(file)
 }
@@ -46,5 +47,5 @@ nonmem2rx <- function(file) {
   .nonmem2rxBuildRecord()
   .nonmem2rxBuildTheta()
   .nonmem2rxBuildOmega()
-  ""
+  invisible("")
 }
