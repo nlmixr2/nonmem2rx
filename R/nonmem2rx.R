@@ -69,6 +69,7 @@ nonmem2rx <- function(file) {
                          "}")))
 }
 
+## nocov start
 ### Parser build
 .nonmem2rxBuildRecord <- function() {
   cat("Update Parser c for record locator\n");
@@ -105,3 +106,4 @@ nonmem2rx <- function(file) {
   .nonmem2rxBuildOmega()
   invisible("")
 }
+## nocov end
