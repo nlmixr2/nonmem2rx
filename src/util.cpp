@@ -13,10 +13,9 @@
 using namespace Rcpp;
 Function loadNamespace("loadNamespace", R_BaseNamespace);
 
-Environment nonmem2rxNs = loadNamespace("nonmem2rx");
-
 extern "C" SEXP nonmem2rxPushRecord(const char *rec, const char *info) {
   BEGIN_RCPP
+    Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector recS(1);
   if (rec == NULL) {
     recS[0] = Rf_mkChar("aaa");     
@@ -32,6 +31,7 @@ extern "C" SEXP nonmem2rxPushRecord(const char *rec, const char *info) {
 
 extern "C" SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi) {
   BEGIN_RCPP
+    Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector lowC(1);
   lowC[0] = Rf_mkChar(low);
   CharacterVector hiC(1);
@@ -43,6 +43,7 @@ extern "C" SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi) {
 
 extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment) {
   BEGIN_RCPP
+    Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector iniC(1);
   iniC[0] = Rf_mkChar(ini);
   CharacterVector commentS(1);
