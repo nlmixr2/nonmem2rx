@@ -8,7 +8,18 @@
   .ls <- ls(all=TRUE, envir=.nonmem2rx)
   if (length(.ls) > 0L) rm(list=.ls,envir=.nonmem2rx)
   .nonmem2rx$ini <- NULL
+  .nonmem2rx$thetaNames <- NULL
   .nonmem2rx$model <- NULL
+}
+#' Add theta name to .nonmem2rx info
+#'
+#'  
+#' @param theta string representing variable name
+#' @return Nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.addThetaName <- function(theta) {
+  assign("theta", c(.nonmem2rx$theta, theta), envir=.nonmem2rx)
 }
 #' Add to initialization block
 #'
@@ -42,11 +53,19 @@
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 nonmem2rx <- function(file) {
+  loadNamespace("dparser")
   .clearNonmem2rx()
   if (file.exists(file)) {
     .lines <- paste(readLines(file), collapse = "\n")
-    .parseRec(.lines)
+  } else {
+    .lines <- file
   }
+  .parseRec(.lines)
+  eval(parse(text=paste0("function() {\n",
+                         "ini({\n",
+                         paste(.nonmem2rx$ini, collapse="\n"),
+                         "\n})\n",
+                         "}")))
 }
 
 ### Parser build

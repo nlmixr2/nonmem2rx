@@ -127,7 +127,10 @@
 #' @author Matthew L. Fidler
 #' @keywords internal
 nonmem2rxRec <- function(x) {
-  if (inherits(x , "nonmem2rx")) stop("record not from nonmem2rx", call.=FALSE)
+  if (!inherits(x , "nonmem2rx")) {
+    print(x)
+    stop("record not from nonmem2rx", call.=FALSE)
+  }
   UseMethod("nonmem2rxRec")
 }
 

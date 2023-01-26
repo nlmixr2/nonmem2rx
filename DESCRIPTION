@@ -9,7 +9,7 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 LinkingTo: 
     dparser,
     Rcpp,
@@ -17,3 +17,6 @@ LinkingTo:
 Imports: 
     checkmate,
     Rcpp
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

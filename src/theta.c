@@ -74,16 +74,30 @@ sbuf curTheta;
 
 SEXP _nonmem2rx_thetanum_reset() {
   nonmem2rx_thetanum = 1;
-  sClear(&curTheta);
+  sIni(&curTheta);
   return R_NilValue;
 }
 
+SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi);
+
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
+
+void pushTheta() {
+  nonmem2rxPushTheta(curTheta.s, curComment);
+  sClear(&curTheta);
+}
 
 void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   if (!strcmp("theta_statement", name)) {
-    //D_ParseNode *xpn = d_get_child(pn, 1);
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[0] == 0) {
+      curComment = NULL;
+    } else {
+      curComment = v;
+    }
   } else if (!strcmp("theta0", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -95,27 +109,81 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     } else {
       sAppend(&curTheta, "theta%d <- fix(%s)", nonmem2rx_thetanum, v);
     }
+    pushTheta();
+    nonmem2rx_thetanum++;
+    return;
+  } else if (!strcmp("theta6", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curTheta, "theta%d <- fix(%s)", nonmem2rx_thetanum, v);
+    pushTheta();
     nonmem2rx_thetanum++;
     return;
   } else if (!strcmp("theta2", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    REprintf("low: %s\n", low);
     xpn = d_get_child(pn, 3);
     char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    REprintf("ini: %s\n", ini);
-    xpn = d_get_child(pn, 5);
-    char *fixed = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    REprintf("fixed: %s\n", fixed);
-    if (fixed[0] == 0) {
+    sAppend(&curTheta, "theta%d <- fix(%s, %s)", nonmem2rx_thetanum, low, ini);
+    pushTheta();
+    nonmem2rx_thetanum++;
+    return;
+  } else if (!strcmp("theta3", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 4);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (fix[0] == 0) {
       // not fixed
       sAppend(&curTheta, "theta%d <- c(%s, %s)", nonmem2rx_thetanum, low, ini);
     } else {
       sAppend(&curTheta, "theta%d <- fix(%s, %s)", nonmem2rx_thetanum, low, ini);
     }
-    REprintf("%s\n", curTheta.s);
+    pushTheta();
     nonmem2rx_thetanum++;
     return;
+  } else if (!strcmp("theta4", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 5);
+    char *hi = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curTheta, "theta%d <- fix(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    pushTheta();
+    nonmem2rx_thetanum++;
+    return;
+  }  else if (!strcmp("theta5", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 5);
+    char *hi = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 6);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (fix[0] == 0) {
+      // unfixed
+      sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    } else {
+      sAppend(&curTheta, "theta%d <- fix(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    }
+    pushTheta();
+    nonmem2rx_thetanum++;
+    return;    
+  } else if (!strcmp("theta7", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 4);
+    char *hi = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    SEXP cur = PROTECT(nonmem2rxThetaGetMiddle(low, hi));
+    char *ini = (char*)rc_dup_str(CHAR(STRING_ELT(cur, 0)), 0);
+    UNPROTECT(1);
+    sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    pushTheta();
+    nonmem2rx_thetanum++;
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {

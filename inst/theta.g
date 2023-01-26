@@ -6,30 +6,35 @@ statement: theta_statement ','* |
   abortInfo ','* |
   singleLineComment?;
 
-abortInfo: 'ABORT' | 'NOABORT';
+abortInfo: 'ABORT' | 'NOABORT' | 'Abort' | 'Noabort' | 'abort' | 'noabort';
 
-numberpoints: 'NUMBERPOINTS' | 'NUM' | 'NUMPTS' | 'NUMBERPTS' ;
+numberpoints: 'NUMBERPOINTS' | 'NUM' | 'NUMPTS' | 'NUMBERPTS' |
+    'numberpoints' | 'num' | 'numpts' | 'numberpts' |
+    'Numberpoints' | 'Num' | 'Numpts' | 'Numberpts';
 
 numberpointsLine: numberpoints '=' decimalint singleLineComment?;
 
 theta_statement:  theta singleLineComment?;
 
-theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 ;
+theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 | theta6 | theta7;
 
 theta0: ini_constant fixed?;
+
 theta1: '(' theta0 ')';
+theta6: '(' ini_constant ')' fixed;
 
-theta2: '(' low_ini ','? ini_constant ')' fixed?;
-
+theta2: '(' low_ini ','? ini_constant ')' fixed;
 theta3: '(' low_ini ','? ini_constant fixed? ')' ;
 
-theta4: '(' low_ini ','? ini_constant ','? hi_constant ')' fixed?;
+theta4: '(' low_ini ','? ini_constant ','? hi_constant ')' fixed;
 theta5: '(' low_ini ','? ini_constant ','? hi_constant fixed? ')' ;
 
+theta7: '(' ini_constant ',' ',' ini_constant ')' ;
 
-fixed: 'fixed' | 'FIXED' | 'FIX' | 'fix';
 
-infinite: 'INF' | 'inf';
+fixed: 'fixed' | 'FIXED' | 'Fixed' |  'FIX' | 'fix' | 'Fix';
+
+infinite: 'INF' | 'inf' | 'Inf';
 
 low_ini:  '-' infinite | ini_constant;
 

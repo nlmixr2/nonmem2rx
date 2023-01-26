@@ -7,7 +7,7 @@
   Available at https://github.com/jplevyak/dparser
 */
 
-#line 7 "C:/R/nonmem2rx/src/records.g.d_parser.c"
+#line 7 "/home/matt/src/nonmem2rx/src/records.g.d_parser.c"
 #include "dparse.h"
 
 D_Reduction d_reduction_0_nonmem2rxRecords = {1, 0, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};

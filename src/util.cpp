@@ -29,3 +29,29 @@ extern "C" SEXP nonmem2rxPushRecord(const char *rec, const char *info) {
   addRec(recS, infoS);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi) {
+  BEGIN_RCPP
+  CharacterVector lowC(1);
+  lowC[0] = Rf_mkChar(low);
+  CharacterVector hiC(1);
+  hiC[0] = Rf_mkChar(hi);
+  Function midpoint(".thetaMidpoint", nonmem2rxNs);
+  return midpoint(lowC, hiC);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment) {
+  BEGIN_RCPP
+  CharacterVector iniC(1);
+  iniC[0] = Rf_mkChar(ini);
+  CharacterVector commentS(1);
+  if (comment == NULL) {
+    commentS[0] = "";
+  } else {
+    commentS[0] = Rf_mkChar(comment);
+  }
+  Function pushTheta(".pushTheta", nonmem2rxNs);
+  pushTheta(ini, commentS);
+  END_RCPP
+}
