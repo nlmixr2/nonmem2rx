@@ -21,4 +21,5 @@ test_that("test thetas", {
   expect_warning(.t("(1,, 3.0)", "theta1 <- c(1, 2, 3.0)"))
   expect_warning(.t("NUMBERPOINTS = 3", NULL))
   expect_warning(.t("NOABORT", NULL))
+
 })
