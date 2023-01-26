@@ -1,3 +1,20 @@
+.nonmem2rx <- new.env(parent=emptyenv())
+
+.clearNonmem2rx <- function() {
+  .ls <- ls(all=TRUE, envir=.nonmem2rx)
+  if (length(.ls) > 0L) rm(list=.ls,envir=.nonmem2rx)
+  .nonmem2rx$ini <- NULL
+  .nonmem2rx$model <- NULL
+}
+
+.addIni <- function(text) {
+  assign("ini", c(.nonmem2rx$ini, text), envir=.nonmem2rx)
+}
+
+.addModel <- function(text) {
+  assign("model", c(.nonmem2rx$model, text), envir=.nonmem2rx)
+}
+
 #' Convert a NONMEM source file to a rxode control
 #'
 #' @param file NONMEM control file location
@@ -9,8 +26,12 @@
 #' @useDynLib nonmem2rx, .registration=TRUE
 #' @importFrom Rcpp sourceCpp
 #' @examples
+#' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 nonmem2rx <- function(file) {
-  .lines <- readLines(file)
+  if (file.exists(file)) {
+    .lines <- paste(readLines(file), collapse = "\n")
+    .parseRec(.lines)
+  }
 }
 
 

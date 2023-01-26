@@ -15,3 +15,6 @@ rxode2 function
 \description{
 Convert a NONMEM source file to a rxode control
 }
+\examples{
+nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+}

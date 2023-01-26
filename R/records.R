@@ -101,7 +101,7 @@
 #' @return nothing called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-#' @example
+#' @examples
 #' .parseRec(paste(readLines(system.file("run001.mod", package="nonmem2rx")), collapse = "\n"))
 .parseRec <- function(ctl) {
   checkmate::checkString(ctl)
