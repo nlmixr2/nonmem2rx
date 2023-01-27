@@ -107,10 +107,20 @@ nonmem2rx <- function(file) {
               devtools::package_file("src/theta.g.d_parser.h"))
 }
 
+.nonmem2rxBuildModel <- function() {
+  cat("Update Parser c for model block\n");
+  dparser::mkdparse(devtools::package_file("inst/model.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxModel")
+  file.rename(devtools::package_file("src/model.g.d_parser.c"),
+              devtools::package_file("src/model.g.d_parser.h"))
+}
+
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildRecord()
   .nonmem2rxBuildTheta()
   .nonmem2rxBuildOmega()
+  .nonmem2rxBuildModel()
   invisible("")
 }
 ## nocov end
