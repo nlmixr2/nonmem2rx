@@ -2,6 +2,7 @@
 
 S3method(nonmem2rxRec,default)
 S3method(nonmem2rxRec,ome)
+S3method(nonmem2rxRec,sig)
 S3method(nonmem2rxRec,the)
 export(nonmem2rx)
 export(nonmem2rxRec)

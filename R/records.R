@@ -13,6 +13,7 @@
     pre="pre", # $pred
     the="the", # $theta
     ome="ome", # $omega
+    sig="sig", # $sigma
     msf="msf", # $msfi
     sim="sim", # $simulation
     est="est", # $estimation

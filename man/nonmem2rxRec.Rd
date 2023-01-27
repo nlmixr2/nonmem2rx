@@ -2,12 +2,15 @@
 % Please edit documentation in R/omega.R, R/records.R, R/theta.R
 \name{nonmem2rxRec.ome}
 \alias{nonmem2rxRec.ome}
+\alias{nonmem2rxRec.sig}
 \alias{nonmem2rxRec}
 \alias{nonmem2rxRec.default}
 \alias{nonmem2rxRec.the}
 \title{Record handling for nonmem records}
 \usage{
 \method{nonmem2rxRec}{ome}(x)
+
+\method{nonmem2rxRec}{sig}(x)
 
 nonmem2rxRec(x)
 

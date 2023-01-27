@@ -62,6 +62,12 @@ nonmem2rx <- function(file) {
     .lines <- file
   }
   .parseRec(.lines)
+  if (length(.nonmem2rx$sigma) > 0L) {
+    .sigma <- eval(parse(text=paste0("lotri::lotri({\n",
+                                paste(.nonmem2rx$sigma, collapse="\n"),
+                                "\n})")))
+    print(.sigma)
+  }
   eval(parse(text=paste0("function() {\n",
                          "ini({\n",
                          paste(.nonmem2rx$ini, collapse="\n"),
