@@ -86,3 +86,13 @@ extern "C" SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefi
   addOmegaComment(commentC, prefixC);
   END_RCPP  
 }
+
+extern "C" SEXP nonmem2rxPushModel(const char *cmtName) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  CharacterVector cmtC(1);
+  cmtC[0] = Rf_mkChar(cmtName);
+  Function addModelName(".addModelName", nonmem2rxNs);
+  addModelName(cmtName);
+  END_RCPP
+}

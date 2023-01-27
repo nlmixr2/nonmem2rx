@@ -13,6 +13,7 @@ SEXP _nonmem2rx_trans_theta(SEXP in);
 SEXP _nonmem2rx_thetanum_reset();
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix);
 SEXP _nonmem2rx_omeganum_reset();
+SEXP _nonmem2rx_trans_model(SEXP in);
 void R_init_nonmem2rx(DllInfo *info){
   R_CallMethodDef callMethods[]  = {
     {"_nonmem2rx_trans_records", (DL_FUNC) &_nonmem2rx_trans_records, 1},
@@ -20,6 +21,7 @@ void R_init_nonmem2rx(DllInfo *info){
     {"_nonmem2rx_omeganum_reset", (DL_FUNC) &_nonmem2rx_omeganum_reset, 0},
     {"_nonmem2rx_trans_theta", (DL_FUNC) &_nonmem2rx_trans_theta, 1},
     {"_nonmem2rx_thetanum_reset", (DL_FUNC) &_nonmem2rx_thetanum_reset, 0},
+    {"_nonmem2rx_trans_model", (DL_FUNC) &_nonmem2rx_trans_model, 1},
     {NULL, NULL, 0}
   };
   // log likelihoods used in calculations
