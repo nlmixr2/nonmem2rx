@@ -8,3 +8,4 @@ nonmem2rxRec.ome <- function(x) {
     .Call(`_nonmem2rx_trans_omega`, .cur, "eta")
   }
 }
+

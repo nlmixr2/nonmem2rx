@@ -56,3 +56,13 @@ extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment) {
   pushTheta(ini, commentS);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushOmega(const char *ini) {
+  BEGIN_RCPP
+    Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  CharacterVector iniC(1);
+  iniC[0] = Rf_mkChar(ini);
+  Function addIni(".addIni", nonmem2rxNs);
+  addIni(iniC);
+  END_RCPP
+}

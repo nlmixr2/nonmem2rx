@@ -9,7 +9,7 @@ blockn : block '(' decimalint ')';
 
 same : 'SAME' | 'same';
 
-blocknsame : blockn same;
+blocknsame : block '(' decimalint ')'  same;
 
 blocksame : block same;
 
