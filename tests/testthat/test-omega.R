@@ -4,10 +4,10 @@ test_that("test omega", {
     requireNamespace("dparser")
     .clearNonmem2rx()
     .Call(`_nonmem2rx_omeganum_reset`)
-    .Call(`_nonmem2rx_trans_omega`, omega)
+    .Call(`_nonmem2rx_trans_omega`, omega, "eta")
     expect_equal(.nonmem2rx$ini, eq)
   }
 
-  .o("1", "eta ~ 1")
+  .o("1", "eta1 ~ 1")
 
 })

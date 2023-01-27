@@ -73,11 +73,16 @@ void wprint_node_omega(int depth, char *token_name, char *token_value, void *cli
 int nonmem2rx_omeganum = 1;
 int nonmem2rx_omegaDiagonal = 0;
 int nonmem2rx_omegaBlockn = 0;
+int nonmem2rx_omegaBlockCount = 0;
 int nonmem2rx_omegaSame = 0;
 int nonmem2rx_omegaFixed = 0;
+int nonmem2rx_omegaBlockI = 0;
+int nonmem2rx_omegaBlockJ = 0;
 char *omegaEstPrefix;
 
 extern char *curComment;
+sbuf curOmegaLhs;
+sbuf curOmegaRhs;
 sbuf curOmega;
 
 SEXP _nonmem2rx_omeganum_reset() {
@@ -86,6 +91,10 @@ SEXP _nonmem2rx_omeganum_reset() {
   nonmem2rx_omegaBlockn = 0;
   nonmem2rx_omegaSame = 0;
   nonmem2rx_omegaFixed = 0;
+  nonmem2rx_omegaBlockI = 0;
+  nonmem2rx_omegaBlockJ = 0;
+  sIni(&curOmegaLhs);
+  sIni(&curOmegaRhs);
   sIni(&curOmega);
   return R_NilValue;
 }
@@ -110,24 +119,74 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rx_omegaBlockn = atoi(v);
+    nonmem2rx_omegaBlockI = 0;
+    nonmem2rx_omegaBlockJ = 0;
+    nonmem2rx_omegaBlockCount = 0;
   } else if (!strcmp("same", name)) {
     nonmem2rx_omegaSame = 1;    
   } else if (!strcmp("diagonal", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rx_omegaDiagonal = atoi(v);
+    nonmem2rx_omegaBlockCount = 0;
   } else if (!strcmp("omega2", name)) {
-    nonmem2rx_omegaFixed = 1;
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     // this form is only good for diagonal matrices
     if (nonmem2rx_omegaBlockn != 0) {
       parseFree(0);
-      Rf_errorcall(R_NilValue, "(FIXED %s) is not supported in a $OMEGA BLOCK", v);
+      Rf_errorcall(R_NilValue, "(FIXED %s) is not supported in an $OMEGA or $SIGMA BLOCK", v);
     }
-
-    sAppend(&curOmega, "%s%d ~ fix(%s)", v);
+    sAppend(&curOmega, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
+    sAppend(&curOmega, " ~ fix(%s)", v);
+    if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
+    nonmem2rx_omeganum++;
     return;
+  } else if (!strcmp("omega0", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 1);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (nonmem2rx_omegaBlockn == 0) {
+      // This is a regular initialization
+      if (fix[0] != 0) {
+        sAppend(&curOmega, "%s%d ~ fix(%s)", omegaEstPrefix, nonmem2rx_omeganum, v);
+      } else {
+        sAppend(&curOmega, "%s%d ~ %s", omegaEstPrefix, nonmem2rx_omeganum, v);
+      }
+      if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
+      nonmem2rx_omeganum++;
+    } else {
+      if (fix[0] != 0) {
+        nonmem2rx_omegaFixed = 1; 
+      }
+      if (nonmem2rx_omegaBlockCount >= nonmem2rx_omegaBlockn) {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(#) has too many elements");
+      }
+      // This is a block
+      if (nonmem2rx_omegaBlockI == nonmem2rx_omegaBlockJ) {
+        // Diagonal term
+        nonmem2rx_omegaBlockI++;
+        nonmem2rx_omegaBlockJ = 0;
+        if (curOmegaLhs.s[0] == 0) {
+          // not added yet
+          sAppend(&curOmegaLhs, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
+        } else {
+          // added, use eta1 + eta2 ...
+          sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
+        }
+        nonmem2rx_omegaBlockCount++;
+        nonmem2rx_omeganum++;
+      } else {
+        nonmem2rx_omegaBlockJ++;
+      }
+      if (curOmegaRhs.s[0] == 0) {
+        sAppend(&curOmegaRhs, "(%s", v);
+      } else {
+        sAppend(&curOmegaRhs, ", %s", v);
+      }
+    }
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
@@ -150,11 +209,30 @@ void trans_omega(const char* parse){
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
+  nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
+  nonmem2rx_omegaBlockn   = 0;
+  nonmem2rx_omegaSame     = 0;
+  nonmem2rx_omegaFixed    = 0;
+  nonmem2rx_omegaBlockI   = 0;
+  nonmem2rx_omegaBlockJ   = 0;
+  nonmem2rx_omegaBlockCount = 0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
   } else {
     wprint_parsetree_omega(parser_tables_nonmem2rxOmega, _pn, 0, wprint_node_omega, NULL);
+  }
+  if (nonmem2rx_omegaBlockn == 0) {
+  } else if (nonmem2rx_omegaBlockCount < nonmem2rx_omegaBlockn) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(#) has not enough elements");
+  } else {
+    // push block
+    if (nonmem2rx_omegaFixed == 0) {
+      sAppend(&curOmega, "%s ~ c%s)", curOmegaLhs.s, curOmegaRhs.s);
+    } else {
+      sAppend(&curOmega, "%s ~ fix%s)", curOmegaLhs.s, curOmegaRhs.s);
+    }
   }
 }
 
