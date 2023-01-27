@@ -52,6 +52,7 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats setNames
 #' @importFrom lotri lotri
+#' @importFrom dparser mkdparse
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 nonmem2rx <- function(file) {

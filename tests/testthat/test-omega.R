@@ -1,7 +1,6 @@
 test_that("test omega", {
   
   .o <- function(omega, eq="no", reset=TRUE) {
-    requireNamespace("dparser")
     .clearNonmem2rx()
     if (reset) .Call(`_nonmem2rx_omeganum_reset`)
     .Call(`_nonmem2rx_trans_omega`, omega, "eta")

@@ -1,4 +1,7 @@
 .recordEnv <- new.env(parent=emptyenv())
+.recordEnv$hasPro <- FALSE
+.recordEnv$ignoreRec <- FALSE
+
 
 .transRecords <-
   c("aaa"="aaa", # Triple A is before any record 
@@ -65,6 +68,8 @@
 .clearRecordEnv <- function() {
   .ls <- ls(all.names=TRUE, envir=.recordEnv)
   if (length(.ls) > 0L) rm(list=.ls,envir=.recordEnv)
+  .recordEnv$hasPro <- FALSE
+  .recordEnv$ignoreRec <- FALSE
 }
 
 #' Add record information for further conversion later
@@ -79,7 +84,17 @@
 #'
 #' .addRec("OMEGA", "BLOCK(3) 6 .005 .0002 .3 .006 .4")
 .addRec <- function(rec, text) {
+  if (.recordEnv$ignoreRec) return(invisible())
   .rec <- .transRecord(rec)
+  if (.rec == "pro") {
+    if (.recordEnv$hasPro) {
+      warning("multiple $PROBLEM statements; only use first $PROBLEM for translation",
+              call.=FALSE)
+      .recordEnv$ignoreRec <- TRUE
+    } else {
+      .recordEnv$hasPro <- TRUE
+    }
+  }
   # don't do anything with unknown records
   if (.rec == "") return(invisible())
   if (!exists(".recs", envir = .recordEnv)) {
