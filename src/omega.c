@@ -169,6 +169,8 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rx_omegaDiagonal = atoi(v);
     nonmem2rx_omegaBlockCount = 0;
+    Rf_warning("DIAGONAL(%d) does not do anything right now, it is ignored", nonmem2rx_omegaDiagonal);
+    nonmem2rx_omegaDiagonal = NA_INTEGER;
   } else if (nonmem2rx_omegaBlockn != 0 && !strcmp("omega1", name)) {
     if (nonmem2rx_omegaBlockn != 0) {
       parseFree(0);
@@ -291,5 +293,6 @@ void trans_omega(const char* parse){
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix) {
   omegaEstPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   trans_omega(R_CHAR(STRING_ELT(in, 0)));
+  parseFree(0);
   return R_NilValue;
 }
