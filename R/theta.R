@@ -15,8 +15,8 @@ nonmem2rxRec.the <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .handleThetaComment <- function(comment) {
-  .reg1 <- ";.*?([A-Za-z][A-Za-z0-9_.]*)"
-  if (regexpr(.reg1, comment) != -1) {
+  .reg1 <- "^;.*?([A-Za-z][A-Za-z0-9_.]*).*"
+  if (regexpr(.reg1, comment, perl=TRUE) != -1) {
     .addThetaName(sub(.reg1, "\\1", comment))
   } else {
     .addThetaName("")

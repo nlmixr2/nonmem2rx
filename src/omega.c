@@ -101,6 +101,7 @@ SEXP _nonmem2rx_omeganum_reset() {
 }
 
 SEXP nonmem2rxPushOmega(const char *ini);
+SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefix);
 
 void pushOmega() {
   //nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
@@ -115,16 +116,19 @@ void pushOmega() {
   sClear(&curOmega);
 }
 
+void pushOmegaComment() {
+  nonmem2rxPushOmegaComment(curComment, omegaEstPrefix);
+  curComment = NULL;
+}
+
 void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   int isBlockNsame = 0;
   if (!strcmp("omega_statement", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 1);
+    D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    if (v[0] == 0) {
-      curComment = NULL;
-    } else {
+    if (v[0] != 0) {
       curComment = v;
     }
   } else if (!strcmp("blockn", name)) {
@@ -163,7 +167,6 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     sAppend(&curOmega, "%s ~ fix%s)", curOmegaLhs.s, curOmegaRhs.s);
     nonmem2rx_omegaSame = 1;
     pushOmega();
-    return;
   } else if (!strcmp("diagonal", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -189,7 +192,6 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
     nonmem2rx_omeganum++;
     pushOmega();
-    return;
   } else if (!strcmp("omega0", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -204,8 +206,8 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       }
       if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
       nonmem2rx_omeganum++;
+      pushOmegaComment();
       pushOmega();
-      return;
     } else {
       if (fix[0] != 0) {
         nonmem2rx_omegaFixed = 1; 
@@ -227,10 +229,12 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
           // added, use eta1 + eta2 ...
           sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
         }
+        pushOmegaComment();
         nonmem2rx_omegaBlockCount++;
         nonmem2rx_omeganum++;
       } else {
         nonmem2rx_omegaBlockJ++;
+        curComment = NULL; // comments between estimates are not considered as labels
       }
       if (curOmegaRhs.s[0] == 0) {
         sClear(&curOmegaRhs);
@@ -261,12 +265,12 @@ void trans_omega(const char* parse){
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
-  nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
-  nonmem2rx_omegaBlockn   = 0;
-  nonmem2rx_omegaSame     = 0;
-  nonmem2rx_omegaFixed    = 0;
-  nonmem2rx_omegaBlockI   = 0;
-  nonmem2rx_omegaBlockJ   = 0;
+  nonmem2rx_omegaDiagonal   = NA_INTEGER; // diagonal but not specified
+  nonmem2rx_omegaBlockn     = 0;
+  nonmem2rx_omegaSame       = 0;
+  nonmem2rx_omegaFixed      = 0;
+  nonmem2rx_omegaBlockI     = 0;
+  nonmem2rx_omegaBlockJ     = 0;
   nonmem2rx_omegaBlockCount = 0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
@@ -291,6 +295,7 @@ void trans_omega(const char* parse){
 }
 
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix) {
+  curComment=NULL;
   omegaEstPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   trans_omega(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);

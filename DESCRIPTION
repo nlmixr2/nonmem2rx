@@ -17,6 +17,7 @@ LinkingTo:
 Imports: 
     checkmate,
     dparser,
+    lotri,
     Rcpp
 Suggests: 
     devtools,

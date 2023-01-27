@@ -51,6 +51,7 @@
 #' @useDynLib nonmem2rx, .registration=TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats setNames
+#' @importFrom lotri lotri
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 nonmem2rx <- function(file) {
@@ -66,7 +67,6 @@ nonmem2rx <- function(file) {
     .sigma <- eval(parse(text=paste0("lotri::lotri({\n",
                                 paste(.nonmem2rx$sigma, collapse="\n"),
                                 "\n})")))
-    print(.sigma)
   }
   eval(parse(text=paste0("function() {\n",
                          "ini({\n",
