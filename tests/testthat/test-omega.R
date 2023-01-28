@@ -30,4 +30,7 @@ test_that("test omega", {
   expect_error(.o("BLOCK(3) 6. .005 .3 .0002 .006 (fix .4)"))
   expect_warning(.o("DIAGONAL(1) 1", "eta1 ~ 1"))
 
+  expect_error(.o("garbage"))
+  
+
 })

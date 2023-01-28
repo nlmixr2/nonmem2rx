@@ -21,4 +21,11 @@ test_that("test thetas", {
   expect_warning(.t("NUMBERPOINTS = 3", NULL))
   expect_warning(.t("NOABORT", NULL))
 
+  .t("(.1,3,5) (.008,.08,.5) (.004,.04,.9)",
+     c("theta1 <- c(.1, 3, 5)",
+       "theta2 <- c(.008, .08, .5)",
+       "theta3 <- c(.004, .04, .9)"))
+
+  expect_error(.t("garbage"))
+
 })

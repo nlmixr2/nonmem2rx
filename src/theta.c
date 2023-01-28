@@ -219,6 +219,8 @@ void trans_theta(const char* parse){
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "parsing error in $THETA");
   } else {
     wprint_parsetree_theta(parser_tables_nonmem2rxTheta, _pn, 0, wprint_node_theta, NULL);
   }
