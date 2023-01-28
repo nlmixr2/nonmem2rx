@@ -29,5 +29,8 @@ test_that("test model", {
                     "DEPOT"))
 
   expect_error(.m("malformed"))
+
+  .m("COMP=(DEPOT,INITIALOFF,DEFDOSE) COMP=(CENTRAL,DEFOBS,NOOFF)",
+     c("DEPOT", "CENTRAL"))
   
 })
