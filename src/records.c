@@ -139,6 +139,8 @@ void trans_records(const char* parse){
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "parsing error during the record parsing");
   } else {
     wprint_parsetree_records(parser_tables_nonmem2rxRecords, _pn, 0, wprint_node_records, NULL);
     pushRecord();
@@ -147,5 +149,6 @@ void trans_records(const char* parse){
 
 SEXP _nonmem2rx_trans_records(SEXP in) {
   trans_records(R_CHAR(STRING_ELT(in, 0)));
+  parseFree(0);
   return R_NilValue;
 }

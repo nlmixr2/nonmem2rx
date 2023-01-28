@@ -131,5 +131,6 @@ SEXP _nonmem2rx_trans_model(SEXP in) {
   trans_model(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   sFree(&modelName);
+  parseFree(0);
   return R_NilValue;
 }

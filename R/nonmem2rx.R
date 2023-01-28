@@ -116,11 +116,22 @@ nonmem2rx <- function(file) {
               devtools::package_file("src/model.g.d_parser.h"))
 }
 
+.nonmem2rxBuildInput <- function() {
+  cat("Update Parser c for input block\n");
+  dparser::mkdparse(devtools::package_file("inst/input.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxInput")
+  file.rename(devtools::package_file("src/input.g.d_parser.c"),
+              devtools::package_file("src/input.g.d_parser.h"))
+}
+
+
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildRecord()
   .nonmem2rxBuildTheta()
   .nonmem2rxBuildOmega()
   .nonmem2rxBuildModel()
+  .nonmem2rxBuildInput()
   invisible("")
 }
 ## nocov end
