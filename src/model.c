@@ -71,13 +71,17 @@ void wprint_node_model(int depth, char *token_name, char *token_value, void *cli
 sbuf modelName;
 SEXP nonmem2rxPushModel(const char *cmtName);
 int nonmem2rx_model_cmt = 1;
+int nonmem2rx_model_warn_npar = 0;
 
 void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   if (!strcmp("ncpt_statement", name)) {
-    Rf_warning("$MODEL NCOMPARTMENTS statement ignored");
+    if (nonmem2rx_model_warn_npar ==0)
+      Rf_warning("$MODEL NCOMPARTMENTS/NEQUILIBRIUM/NPARAMETERS statement(s) ignored");
+    nonmem2rx_model_warn_npar = 1;
   } else if (!strcmp("link_statement", name)) {
+    parseFree(0);
     Rf_errorcall(R_NilValue, "$MODEL statements with LINK are not currently translated");
   } else if (!strcmp("comp_statement_1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 3);
@@ -111,9 +115,12 @@ void trans_model(const char* parse){
   gBuf = (char*)(parse);
   gBufFree=0;
   nonmem2rx_model_cmt = 1;
+  nonmem2rx_model_warn_npar = 0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "error parsing $MODEL statement");
   } else {
     wprint_parsetree_model(parser_tables_nonmem2rxModel, _pn, 0, wprint_node_model, NULL);
   }
