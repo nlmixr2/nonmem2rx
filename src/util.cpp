@@ -96,3 +96,23 @@ extern "C" SEXP nonmem2rxPushModel(const char *cmtName) {
   addModelName(cmtName);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushInput(const char *item1, const char *item2) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  CharacterVector item1C(1);
+  if (item1 == NULL) {
+    item1C[0] = "DROP";
+  } else {
+    item1C[0] = Rf_mkChar(item1);
+  }
+  CharacterVector item2C(1);
+  if (item2 == NULL) {
+    item2C[0] = "DROP";
+  } else {
+    item2C[0] = Rf_mkChar(item2);
+  }
+  Function addInputItem(".addInputItem", nonmem2rxNs);
+  addInputItem(item1C, item2C);
+  END_RCPP
+}

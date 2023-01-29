@@ -14,8 +14,10 @@ SEXP _nonmem2rx_thetanum_reset();
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix);
 SEXP _nonmem2rx_omeganum_reset();
 SEXP _nonmem2rx_trans_model(SEXP in);
+SEXP _nonmem2rx_trans_input(SEXP in);
 void R_init_nonmem2rx(DllInfo *info){
   R_CallMethodDef callMethods[]  = {
+    {"_nonmem2rx_trans_input", (DL_FUNC) &_nonmem2rx_trans_input, 1},
     {"_nonmem2rx_trans_records", (DL_FUNC) &_nonmem2rx_trans_records, 1},
     {"_nonmem2rx_trans_omega", (DL_FUNC) &_nonmem2rx_trans_omega, 2},
     {"_nonmem2rx_omeganum_reset", (DL_FUNC) &_nonmem2rx_omeganum_reset, 0},
