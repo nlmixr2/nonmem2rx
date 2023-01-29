@@ -125,6 +125,16 @@ nonmem2rx <- function(file) {
               devtools::package_file("src/input.g.d_parser.h"))
 }
 
+.nonmem2rxBuildAbbrev <- function() {
+  cat("Update Parser c for abbrev block\n");
+  dparser::mkdparse(devtools::package_file("inst/abbrev.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxAbbrev")
+  file.rename(devtools::package_file("src/abbrev.g.d_parser.c"),
+              devtools::package_file("src/abbrev.g.d_parser.h"))
+}
+
+
 
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildRecord()
@@ -132,6 +142,8 @@ nonmem2rx <- function(file) {
   .nonmem2rxBuildOmega()
   .nonmem2rxBuildModel()
   .nonmem2rxBuildInput()
+  .nonmem2rxBuildAbbrev()
   invisible("")
+  
 }
 ## nocov end
