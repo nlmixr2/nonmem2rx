@@ -24,7 +24,12 @@ statement
   | callsimeta
   | callsimeps
   | callpassmode
-  | callrandom;
+  | callrandom
+  | exit_line
+  | comresn1
+  | ifexit
+  | callfl
+  | verbatimCode;
 
 
 ini         :  'A_0' '(' decimalintNo0 ')' '=' logical_or_expression;
@@ -36,6 +41,11 @@ scale       : "[Ss]([0-9]+|C)" '=' logical_or_expression;
 derivative  : "[Dd][Aa][Dd][Tt]" '(' decimalintNo0 ')' '=' logical_or_expression;
 da          : "[Dd][Aa]" '(' decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 dp          : "[Dd][Pp]" '(' decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
+
+exit_line: 'EXIT' decimalint decimalint;
+ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
+comresn1: 'COMRES' '=' '-' '1';
+callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1'); 
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
@@ -160,4 +170,5 @@ float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
 singleLineComment: ';' "[^\n]*";
+verbatimCode: '"' "[^\n]*";
 

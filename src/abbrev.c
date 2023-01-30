@@ -19,6 +19,7 @@
 #define _(String) (String)
 #endif
 #include "abbrev.g.d_parser.h"
+#include "strncmpi.h"
 
 #define gBuf nonmem2rx_abbrev_gBuf
 #define gBufFree nonmem2rx_abbrev_gBufFree
@@ -69,9 +70,7 @@ extern sbuf curLine;
 // from mkdparse_tree.h
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
 
-void wprint_node_abbrev(int depth, char *name, char *value, void *client_data)  {
-  
-}
+void wprint_node_abbrev(int depth, char *name, char *value, void *client_data)  {}
 
 extern char * rc_dup_str(const char *s, const char *e);
 
@@ -82,7 +81,7 @@ void pushModel() {
   sClear(&curLine);
 }
 
-int abbrev_if_while_clause(char *name, int i) {
+int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
   if (strcmp("ifthen", name)) {
     if (i == 0) {
       sAppendN(&curLine, "if (", 4);
@@ -94,6 +93,7 @@ int abbrev_if_while_clause(char *name, int i) {
       pushModel();
       return 1;
     }
+    return 0;
   } else if (!strcmp("elseif", name)) {
     if (i == 0) {
       sAppendN(&curLine, "} else if (", 11);
@@ -105,6 +105,7 @@ int abbrev_if_while_clause(char *name, int i) {
       pushModel();
       return 1;
     }
+    return 0;
   } else if (!strcmp("if1", name)) {
     if (i == 0) {
       sAppendN(&curLine, "if (", 4);
@@ -115,6 +116,7 @@ int abbrev_if_while_clause(char *name, int i) {
       sAppendN(&curLine, ")", 1);
       return 1;
     }
+    return 0;
   } else if (!strcmp("dowhile", name)) {
     if (i == 0) {
       sAppendN(&curLine, "while (", 7);
@@ -126,15 +128,167 @@ int abbrev_if_while_clause(char *name, int i) {
       pushModel();
       return 1;
     }
+    return 0;
   }
   return 0;
 }
+
+int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("ini", name)) {
+    if (i ==0) {
+      D_ParseNode *xpn = d_get_child(pn, 2);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      // a1(0) <- ....
+      sAppend(&curLine, "a%s(0) <- ", v);
+      return 1;
+    } else if (i == 1 || i == 2 || i == 3 || i == 4) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("fbio", name)) {
+    // would have to parse what the output compartment is....
+    // f0 and FO default to absorption lag parameters if they are not in abbreviated code
+    // for the translation you are out of luck.
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (v[1] == 'O' || v[1] == '0') {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "F0/FO is not supported in translation");
+      }
+      // f(a1) <- ....
+      sAppend(&curLine, "f(a%s) <- ", v + 1);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("alag", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "alag(a%s) <- ", v + 4);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("rate", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "rate(a%s) <- ", v + 1);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("dur", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "dur(a%s) <- ", v + 1);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("scale", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (v[1] == 'O' || v[1] == '0') {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "S0/SO is not supported in translation");
+      }
+      if (v[1] == 'C') {
+        sAppendN(&curLine, "scalec <- ", 10);
+        return 1;
+      }
+      // scale# <- ....
+      sAppend(&curLine, "scale%s <- ", v + 1);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    }
+    return 0;
+  }
+  return 0;
+}
+
+int abbrev_logic_operators(const char *name) {
+  if (!strcmp("le_expression_nm", name)) {
+    sAppendN(&curLine, " <= ", 4);
+    return 1;
+  } else if (!strcmp("ge_expression_nm", name)) {
+    sAppendN(&curLine, " >= ", 4);
+    return 1;
+  } else if (!strcmp("gt_expression_nm", name)) {
+    sAppendN(&curLine, " > ", 3);
+    return 1;
+  } else if (!strcmp("lt_expression_nm", name)) {
+    sAppendN(&curLine, " < ", 3);
+    return 1;
+  } else if (!strcmp("neq_expression_nm", name)) {
+    sAppendN(&curLine, " != ", 4);
+    return 1;
+  } else if (!strcmp("eq_expression_nm", name)) {
+    sAppendN(&curLine, " == ", 4);
+    return 1;
+  } else if (!strcmp("and_expression_nm", name)) {
+    sAppendN(&curLine, " && ", 4);
+    return 1;
+  } else if (!strcmp("or_expression_nm", name)) {
+    sAppendN(&curLine, " || ", 4);
+    return 1;
+  }
+  return 0;
+}
+
+
+int abbrev_operators(const char *name) {
+  if (!strcmp("(", name) ||
+      !strcmp(")", name) ||
+      !strcmp("*", name) ||
+      !strcmp("/", name) ||
+      !strcmp("+", name) ||
+      !strcmp("-", name)) {
+    sAppend(&curLine, "%s", name);
+    return 1;
+  }
+  if (!strcmp("**", name)) {
+    sAppendN(&curLine, "^", 1);
+    return 1;
+  }
+  if (!strcmp("=", name)) {
+    sAppendN(&curLine, "<-", 2);
+    return 1;
+  }
+  return 0;
+}
+
+// nonmem variables
+// NEWIND
+// COMRES = -1 unsupported
+// PCMT() not supported
+// MIXNUM
+// MIXEST
+// ICALL
+// COMACT
+// COMSAV
+// COM(n)
+// A#
+// C#
+// verbatim code
 
 void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   // These don't have any recursive paring involved and can be handled here
-  if (!strcmp("else", name)) {
+  if (abbrev_logic_operators(name) ||
+      abbrev_operators(name)) {
+    return;
+  } else if (!strcmp("else", name)) {
     sAppendN(&curLine, "} else {", 7);
     pushModel();
     return;
@@ -142,10 +296,11 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     sAppendN(&curLine, "}", 1);
     pushModel();
     return;
-  }
+  } 
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
-      if (abbrev_if_while_clause(name, i)) {
+      if (abbrev_if_while_clause(name, i, pn) ||
+          abbrev_cmt_properties(name, i, pn)) {
         continue;
       }
       D_ParseNode *xpn = d_get_child(pn, i);
