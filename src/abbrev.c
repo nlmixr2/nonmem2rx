@@ -133,6 +133,73 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
   return 0;
 }
 
+int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("exit_line", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "Verbatim code is not supported in translation");
+  } else if (!strcmp("exit_line", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'EXIT # #' statements not supported in translation");
+  } else if (!strcmp("ifexit", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'IF () EXIT # #' statements not supported in translation");
+  } else if (!strcmp("comresn1", name)) {
+    Rf_warning("'COMRES = -1' ignored");
+  } else if (!strcmp("callfl", name)) {
+    Rf_warning("'CALLFL = ' ignored");
+    return 1;
+  } else if (!strcmp("callpassmode", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'CALL PASS(MODE)' statements not supported in translation");
+  } else if (!strcmp("callsupp", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'CALL SUPP(# , #)' statements not supported in translation");
+  } else if (!strcmp("callrandom", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'CALL RANDOM()' statements not supported in translation");
+  } else if (!strcmp("dt", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "DT(#) not supported in translation");
+  } else if (!strcmp("mtime", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "MTIME(#) not supported in translation");
+  } else if (!strcmp("mnext", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "MNEXT(#) not supported in translation");
+  } else if (!strcmp("mpast", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "MPAST(#) not supported in translation");
+  } else if (!strcmp("mixp", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "MIXP(#) not supported in translation");
+  } else if (!strcmp("com", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "COM(#) not supported in translation");
+  }
+  return 0;
+}
+
+int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("derivative", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 2);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "d/dt(a%s) <- ", v);
+      return 1;
+    } else if (i == 1 || i == 2 || i == 3 || i == 4) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("da", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "DA(#, #) not supported in translation");
+  } else if (!strcmp("dp", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "DP(#, #) not supported in translation");
+  }
+  return 0;
+}
+
 int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("ini", name)) {
     if (i ==0) {
@@ -245,7 +312,6 @@ int abbrev_logic_operators(const char *name) {
   return 0;
 }
 
-
 int abbrev_operators(const char *name) {
   if (!strcmp("(", name) ||
       !strcmp(")", name) ||
@@ -300,7 +366,9 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
       if (abbrev_if_while_clause(name, i, pn) ||
-          abbrev_cmt_properties(name, i, pn)) {
+          abbrev_cmt_properties(name, i, pn) ||
+          abbrev_cmt_ddt_related(name, i, pn) ||
+          abbrev_unsupported_lines(name, i ,pn)) {
         continue;
       }
       D_ParseNode *xpn = d_get_child(pn, i);

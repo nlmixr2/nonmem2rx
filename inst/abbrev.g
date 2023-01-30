@@ -108,6 +108,7 @@ mtime : ('MTIME' | 'mtime') '(' decimalintNo0 ')';
 mnext : ('MNEXT' | 'mext') '(' decimalintNo0 ')';
 mpast : ('MPAST' | 'mpast') '(' decimalintNo0 ')';
 mixp : ('MIXP' | 'mixp') '(' decimalintNo0 ')';
+com  : ('COM' | 'com') '(' decimalintNo0 ')';
 
 
 unary_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression );
