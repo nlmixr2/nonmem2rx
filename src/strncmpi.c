@@ -120,7 +120,7 @@ int strncmpci(const char * str1, const char * str2, size_t num)
     return ret_code;
 }
 
-extern int rxstrcmpi(const char * str1, const char * str2) {
+extern int nmrxstrcmpi(const char * str1, const char * str2) {
   return strncmpci(str1, str2, INT_MAX);  
 }
 
@@ -201,7 +201,7 @@ bool expect_equals(int a, int b, int * error_count, char * a_str, char * b_str, 
     return false;
 }
 
-SEXP _rxode2_parse_strncmpci() {
+SEXP _nonmem2rx_parse_strncmpci() {
     REprintf("-----------------------\n"
            "String Comparison Tests\n"
            "-----------------------\n\n");

@@ -81,8 +81,67 @@ void pushModel() {
   sClear(&curLine);
 }
 
+int abbrev_function(char *name, int i, D_ParseNode *pn) {
+  if (i == 1 && !nmrxstrcmpi("LOG", name)) {
+    sAppendN(&curLine, "log", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("LOG10", name)) {
+    sAppendN(&curLine, "log10", 5);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("EXP", name)) {
+    sAppendN(&curLine, "exp", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("SQRT", name)) {
+    sAppendN(&curLine, "sqrt", 4);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("SIN", name)) {
+    sAppendN(&curLine, "sin", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("COS", name)) {
+    sAppendN(&curLine, "cos", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("ABS", name)) {
+    sAppendN(&curLine, "abs", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("TAN", name)) {
+    sAppendN(&curLine, "tan", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("ASIN", name)) {
+    sAppendN(&curLine, "asin", 4);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("ACOS", name)) {
+    sAppendN(&curLine, "acos", 4);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("ATAN", name)) {
+    sAppendN(&curLine, "atan", 4);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("ATAN", name)) {
+    sAppendN(&curLine, "atan", 4);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("MIN", name)) {
+    sAppendN(&curLine, "min", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("MAX", name)) {
+    sAppendN(&curLine, "max", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("PHI", name)) {
+    sAppendN(&curLine, "phi", 3);
+    return 1;
+  } else if (i == 1 && !nmrxstrcmpi("GAMLN", name)) {
+    sAppendN(&curLine, "lgamma", 6);
+    return 1;
+  } else if (!nmrxstrcmpi("mod", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'MOD' function not supported in translation");
+  } else if (!nmrxstrcmpi("int", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'INT' function not supported in translation");
+  } 
+  return 0;
+}
+
 int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
-  if (strcmp("ifthen", name)) {
+  if (!strcmp("ifthen", name)) {
     if (i == 0) {
       sAppendN(&curLine, "if (", 4);
       return 1;
@@ -368,6 +427,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       if (abbrev_if_while_clause(name, i, pn) ||
           abbrev_cmt_properties(name, i, pn) ||
           abbrev_cmt_ddt_related(name, i, pn) ||
+          abbrev_function(name, i, pn) ||
           abbrev_unsupported_lines(name, i ,pn)) {
         continue;
       }

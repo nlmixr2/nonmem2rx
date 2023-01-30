@@ -136,7 +136,7 @@ primary_expression
   | '(' logical_or_expression ')'
   ;
 
-function : function_name '(' (logical_or_expression)* (',' logical_or_expression)* ')' ;
+function : ('D' | 'd')? function_name '(' (logical_or_expression)* (',' logical_or_expression)* ')' ;
 
 function_name: 'LOG' | 'LOG10' | 'EXP' | 'SQRT' | 'SIN' | 'COS' |
         'ABS' |'TAN' | 'ASIN' | 'ACOS' | 'ATAN' | 'INT' | 'MIN' |

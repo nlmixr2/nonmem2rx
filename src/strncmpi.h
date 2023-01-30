@@ -7,7 +7,7 @@ extern "C" {
 #define strncmpci rxode2parse_strncmpci
   
   int strncmpci(const char * str1, const char * str2, size_t num);
-  int rxstrcmpi(const char * str1, const char * str2);
+  int nmrxstrcmpi(const char * str1, const char * str2);
   
 #if defined(__cplusplus)
 }
