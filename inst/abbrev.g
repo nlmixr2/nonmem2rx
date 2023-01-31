@@ -24,6 +24,7 @@ statement
   | callsimeta
   | callsimeps
   | callpassmode
+  | callsupp
   | callrandom
   | exit_line
   | comresn1
@@ -102,7 +103,6 @@ theta : ('THETA' | 'theta') '(' decimalintNo0 ')';
 eta   : ('ETA' | 'eta') '(' decimalintNo0 ')';
 eps   : ('EPS' | 'eps') '(' decimalintNo0 ')';
 err   : ('ERR' | 'err') '(' decimalintNo0 ')';
-dt    : ('DT' | 'dt') '(' decimalintNo0 ')';
 amt   : ('A' | 'a') '(' decimalintNo0 ')';
 mtime : ('MTIME' | 'mtime') '(' decimalintNo0 ')';
 mnext : ('MNEXT' | 'mext') '(' decimalintNo0 ')';
@@ -115,9 +115,9 @@ avar:  "[Aa][0-9]+";
 cvar:  "[Cc][0-9]+";
 
 
-unary_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression | avar | cvar);
+unary_expression : ('+' | '-')? (primary_expression | power_expression);
 
-exponent_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression | avar | cvar);
+exponent_expression : ('+' | '-')? (primary_expression | power_expression);
 
 power_expression : primary_expression power_operator exponent_expression;
 
@@ -156,10 +156,6 @@ function_name: 'LOG' | 'LOG10' | 'EXP' | 'SQRT' | 'SIN' | 'COS' |
     ;
 
 constant : decimalint | float1 | float2;
-theta : ('THETA' | 'theta') '(' decimalintNo0 ')';
-eta   : ('ETA' | 'eta') '(' decimalintNo0 ')';
-eps   : ('EPS' | 'eps') '(' decimalintNo0 ')';
-err   : ('ERR' | 'err') '(' decimalintNo0 ')';
 dt    : ('DT' | 'dt') '(' decimalintNo0 ')';
 amt   : ('A' | 'a') '(' decimalintNo0 ')';
 mtime : ('MTIME' | 'mtime') '(' decimalintNo0 ')';

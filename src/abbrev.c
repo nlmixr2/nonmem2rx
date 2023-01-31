@@ -89,7 +89,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     Rf_errorcall(R_NilValue, "'A#' NONMEM reserved variable is not translated");
   } else if (!strcmp("cvar", name)) {
     parseFree(0);
-    Rf_errorcall(R_NilValue, "'A#' NONMEM reserved variable is not translated");
+    Rf_errorcall(R_NilValue, "'C#' NONMEM reserved variable is not translated");
   } else if (!strcmp("constant", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -101,22 +101,23 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     if (!nmrxstrcmpi("newind", v)) {
       sAppendN(&curLine, "newind", 6);
       return 1;
-    } else if (!nmrxstrcmpi("MIXNUM", name)) {
+    } else if (!nmrxstrcmpi("MIXNUM", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'MIXNUM' NONMEM reserved variable is not translated");
-    } else if (!nmrxstrcmpi("MIXEST", name)) {
+    } else if (!nmrxstrcmpi("MIXEST", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'MIXEST' NONMEM reserved variable is not translated");
-    } else if (!nmrxstrcmpi("ICALL", name)) {
+    } else if (!nmrxstrcmpi("ICALL", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'ICALL' NONMEM reserved variable is not translated");
-    } else if (!nmrxstrcmpi("COMACT", name)) {
+    } else if (!nmrxstrcmpi("COMACT", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'COMACT' NONMEM reserved variable is not translated");
-    } else if (!nmrxstrcmpi("COMSAV", name)) {
+    } else if (!nmrxstrcmpi("COMSAV", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'COMSAV' NONMEM reserved variable is not translated");
     }
+    sAppend(&curLine, v);
     return 1;
   }
   return 0;
@@ -157,61 +158,69 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
 }
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
-  if (i == 1 && !nmrxstrcmpi("LOG", name)) {
-    sAppendN(&curLine, "log", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("LOG10", name)) {
-    sAppendN(&curLine, "log10", 5);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("EXP", name)) {
-    sAppendN(&curLine, "exp", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("SQRT", name)) {
-    sAppendN(&curLine, "sqrt", 4);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("SIN", name)) {
-    sAppendN(&curLine, "sin", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("COS", name)) {
-    sAppendN(&curLine, "cos", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("ABS", name)) {
-    sAppendN(&curLine, "abs", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("TAN", name)) {
-    sAppendN(&curLine, "tan", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("ASIN", name)) {
-    sAppendN(&curLine, "asin", 4);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("ACOS", name)) {
-    sAppendN(&curLine, "acos", 4);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("ATAN", name)) {
-    sAppendN(&curLine, "atan", 4);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("ATAN", name)) {
-    sAppendN(&curLine, "atan", 4);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("MIN", name)) {
-    sAppendN(&curLine, "min", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("MAX", name)) {
-    sAppendN(&curLine, "max", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("PHI", name)) {
-    sAppendN(&curLine, "phi", 3);
-    return 1;
-  } else if (i == 1 && !nmrxstrcmpi("GAMLN", name)) {
-    sAppendN(&curLine, "lgamma", 6);
-    return 1;
-  } else if (!nmrxstrcmpi("mod", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'MOD' function not supported in translation");
-  } else if (!nmrxstrcmpi("int", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'INT' function not supported in translation");
-  } 
+  if (!strcmp("function", name)) {
+    if (i == 0) return 1;
+    if (i == 1) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (!nmrxstrcmpi("LOG", v)) {
+        sAppendN(&curLine, "log", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("LOG10", v)) {
+        sAppendN(&curLine, "log10", 5);
+        return 1;
+      } else if (!nmrxstrcmpi("EXP", v)) {
+        sAppendN(&curLine, "exp", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("SQRT", v)) {
+        sAppendN(&curLine, "sqrt", 4);
+        return 1;
+      } else if (!nmrxstrcmpi("SIN", v)) {
+        sAppendN(&curLine, "sin", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("COS", v)) {
+        sAppendN(&curLine, "cos", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("ABS", v)) {
+        sAppendN(&curLine, "abs", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("TAN", v)) {
+        sAppendN(&curLine, "tan", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("ASIN", v)) {
+        sAppendN(&curLine, "asin", 4);
+        return 1;
+      } else if (!nmrxstrcmpi("ACOS", v)) {
+        sAppendN(&curLine, "acos", 4);
+        return 1;
+      } else if (!nmrxstrcmpi("ATAN", v)) {
+        sAppendN(&curLine, "atan", 4);
+        return 1;
+      } else if (!nmrxstrcmpi("ATAN", v)) {
+        sAppendN(&curLine, "atan", 4);
+        return 1;
+      } else if (!nmrxstrcmpi("MIN", v)) {
+        sAppendN(&curLine, "min", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("MAX", v)) {
+        sAppendN(&curLine, "max", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("PHI", v)) {
+        sAppendN(&curLine, "phi", 3);
+        return 1;
+      } else if (!nmrxstrcmpi("GAMLN", v)) {
+        sAppendN(&curLine, "lgamma", 6);
+        return 1;
+      } else if (!nmrxstrcmpi("mod", v)) {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "'MOD' function not supported in translation");
+      } else if (!nmrxstrcmpi("int", v)) {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "'INT' function not supported in translation");
+      }
+    }
+    return 0;
+  }
   return 0;
 }
 
@@ -247,7 +256,7 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
     } else if (i == 1) {
       return 1;
     } else if (i == 3) {
-      sAppendN(&curLine, ")", 1);
+      sAppendN(&curLine, ") ", 2);
       return 1;
     }
     return 0;
@@ -268,7 +277,7 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
 }
 
 int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
-  if (!strcmp("exit_line", name)) {
+  if (!strcmp("verbatimCode", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "Verbatim code is not supported in translation");
   } else if (!strcmp("exit_line", name)) {
@@ -278,9 +287,9 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'IF () EXIT # #' statements not supported in translation");
   } else if (!strcmp("comresn1", name)) {
-    Rf_warning("'COMRES = -1' ignored");
+    if (i ==0) Rf_warning("'COMRES = -1' ignored");
   } else if (!strcmp("callfl", name)) {
-    Rf_warning("'CALLFL = ' ignored");
+    if (i == 1) Rf_warning("'CALLFL = ' ignored");
     return 1;
   } else if (!strcmp("callpassmode", name)) {
     parseFree(0);
@@ -449,15 +458,16 @@ int abbrev_logic_operators(const char *name) {
   return 0;
 }
 
-
 int abbrev_operators(const char *name) {
   if (!strcmp("(", name) ||
-      !strcmp(")", name) ||
-      !strcmp("*", name) ||
-      !strcmp("/", name) ||
-      !strcmp("+", name) ||
-      !strcmp("-", name)) {
+      !strcmp(")", name)) {
     sAppend(&curLine, "%s", name);
+    return 1;
+  } else if (!strcmp("*", name) ||
+             !strcmp("/", name) ||
+             !strcmp("+", name) ||
+             !strcmp("-", name)) {
+    sAppend(&curLine, " %s ", name);
     return 1;
   }
   if (!strcmp("**", name)) {
@@ -465,7 +475,7 @@ int abbrev_operators(const char *name) {
     return 1;
   }
   if (!strcmp("=", name)) {
-    sAppendN(&curLine, "<-", 2);
+    sAppendN(&curLine, " <- ", 4);
     return 1;
   }
   return 0;
@@ -502,7 +512,8 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       wprint_parsetree_abbrev(pt, xpn, depth, fn, client_data);
     }
   }
-  if (strcmp("statement", name)) {
+  if (!strcmp("assignment", name) ||
+      !strcmp("if1", name)) {
     pushModel();
   }
 
@@ -531,6 +542,7 @@ void trans_abbrev(const char* parse){
 }
 
 SEXP _nonmem2rx_trans_abbrev(SEXP in) {
+  sIni(&curLine);
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;
