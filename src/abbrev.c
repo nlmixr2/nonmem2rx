@@ -116,6 +116,12 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     } else if (!nmrxstrcmpi("COMSAV", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'COMSAV' NONMEM reserved variable is not translated");
+    } else if (!nmrxstrcmpi("tscale", v)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'TSCALE' NONMEM reserved variable is not translated");
+    }  else if (!nmrxstrcmpi("xscale", v)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'XSCALE' NONMEM reserved variable is not translated");
     }
     sAppend(&curLine, v);
     return 1;
@@ -126,31 +132,39 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
 int abbrev_params(char *name, int i,  D_ParseNode *pn) {
   if (!strcmp("theta", name)) {
     if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 2);
+      D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppend(&curLine, "theta%s", v);
     }
     return 1;
   } else if (!strcmp("eta", name)) {
     if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 2);
+      D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppend(&curLine, "eta%s", v);
     }
     return 1;
   } else if (!strcmp("eps", name)) {
     if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 2);
+      D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
   } else if (!strcmp("err", name)) {
     if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 2);
+      D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       // since parser translates  $sigma
       sAppend(&curLine, "eps%s", v);
+    }
+    return 1;
+  } else if (!strcmp("amt", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      // since parser translates  $sigma
+      sAppend(&curLine, "a%s", v);
     }
     return 1;
   }
@@ -159,10 +173,10 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("function", name)) {
-    if (i == 0) return 1;
-    if (i == 1) {
-      D_ParseNode *xpn = d_get_child(pn, 1);
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (v[0] == 'D' || v[0] == 'd') v++;
       if (!nmrxstrcmpi("LOG", v)) {
         sAppendN(&curLine, "log", 3);
         return 1;
@@ -328,11 +342,11 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
 int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("derivative", name)) {
     if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 2);
+      D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppend(&curLine, "d/dt(a%s) <- ", v);
       return 1;
-    } else if (i == 1 || i == 2 || i == 3 || i == 4) {
+    } else if (i == 1 || i == 2 || i == 3) {
       return 1;
     }
     return 0;
@@ -349,12 +363,12 @@ int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
 int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("ini", name)) {
     if (i ==0) {
-      D_ParseNode *xpn = d_get_child(pn, 2);
+      D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       // a1(0) <- ....
       sAppend(&curLine, "a%s(0) <- ", v);
       return 1;
-    } else if (i == 1 || i == 2 || i == 3 || i == 4) {
+    } else if (i == 1 || i == 2 || i == 3) {
       return 1;
     }
     return 0;
@@ -469,6 +483,8 @@ int abbrev_operators(const char *name) {
              !strcmp("-", name)) {
     sAppend(&curLine, " %s ", name);
     return 1;
+  } else if (!strcmp(",", name)) {
+    sAppendN(&curLine, ", ", 2);
   }
   if (!strcmp("**", name)) {
     sAppendN(&curLine, "^", 1);
@@ -496,7 +512,18 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     sAppendN(&curLine, "}", 1);
     pushModel();
     return;
-  } 
+  } else if (!strcmp("callsimeta", name)) {
+    sAppendN(&curLine,"simeta()", 8);
+    pushModel();
+    return;
+  } else if (!strcmp("callsimeps", name)) {
+    sAppendN(&curLine,"simeps()", 8);
+    pushModel();
+    return;
+  } else if (!strcmp("callgeteta", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'CALL GETETA(ETA)' not supported in translation");
+  }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
       if (abbrev_identifier_or_constant(name, i, pn) ||
@@ -513,7 +540,14 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     }
   }
   if (!strcmp("assignment", name) ||
-      !strcmp("if1", name)) {
+      !strcmp("if1", name) ||
+      !strcmp("derivative", name) ||
+      !strcmp("ini", name) ||
+      !strcmp("fbio", name) ||
+      !strcmp("alag", name) ||
+      !strcmp("rate", name) ||
+      !strcmp("dur", name) ||
+      !strcmp("scale", name)) {
     pushModel();
   }
 
@@ -535,7 +569,7 @@ void trans_abbrev(const char* parse){
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
     parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error during the record parsing");
+    Rf_errorcall(R_NilValue, "parsing error with abbreviated code");
   } else {
     wprint_parsetree_abbrev(parser_tables_nonmem2rxAbbrev, _pn, 0, wprint_node_abbrev, NULL);
   }

@@ -66,12 +66,36 @@ test_that("test abbrev", {
     expect_error(.a("CALL SUPP(0 , 1)"), "'CALL SUPP")
     expect_error(.a("CALL RANDOM(1, R)"), "'CALL RANDOM")
     expect_error(.a("C=DT(3)"), "DT\\(#\\)")
-    
-    ## FIXME
-    .a(" CL      = LOG(A)")
-    .a(" CL      = MIN(C, D)", "CL <- min(C, E)")
-    .a(" CL      = MAX(C, D)", "CL <- max(C, E)")
+    expect_error(.a("C=MTIME(3)"), "MTIME\\(#\\)")
+    expect_error(.a("C=MNEXT(3)"), "MNEXT\\(#\\)")
+    expect_error(.a("C=MPAST(3)"), "MPAST\\(#\\)")
+    expect_error(.a("C=MIXP(3)"), "MIXP\\(#\\)")
+    expect_error(.a("C=COM(3)"), "COM\\(#\\)")
+    expect_error(.a("C=PCMT(3)"), "PCMT\\(#\\)")
 
+    #d/dt() related lines
 
-    
+    .a("DADT(1) = -KEL*A(1)",
+       # could look better but functional
+       "d/dt(a1) <-  - KEL * a1")
+    expect_error(.a("DA(1, 2) = -KEL*A(1)"), "DA[(]#, #[)]")
+    expect_error(.a("DP(1, 2) = -KEL*A(1)"), "DP[(]#, #[)]")
+
+    # cmt properties
+    .a("A_0(1) = 1","a1(0) <- 1")
+    .a("F1 = 1","f(a1) <- 1")
+    .a("R1 = 1","rate(a1) <- 1")
+    .a("D1 = 1","dur(a1) <- 1")
+    .a("S1 = 1","scale1 <- 1")
+    .a(" CL      = LOG(A)", "CL <- log(A)")
+    .a(" CL      = MIN(C, D)", "CL <- min(C, D)")
+    .a(" CL      = MAX(C, D)", "CL <- max(C, D)")
+
+    expect_error(.a(" TSCALE      = 4"), "'TSCALE'")
+    expect_error(.a(" XSCALE      = 4"), "'XSCALE'")
+
+    .a("CALL SIMETA(ETA)", "simeta()")
+    .a("CALL SIMEPS(EPS)", "simeps()")
+    expect_error(.a("CALL GETETA(ETA)"), "'CALL GETETA")
+
 })

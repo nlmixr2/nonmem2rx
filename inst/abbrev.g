@@ -22,6 +22,7 @@ statement
   | da        
   | dp
   | callsimeta
+  | callgeteta
   | callsimeps
   | callpassmode
   | callsupp
@@ -33,15 +34,15 @@ statement
   | verbatimCode;
 
 
-ini         :  'A_0' '(' decimalintNo0 ')' '=' logical_or_expression;
+ini         :  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
 fbio        : "[Ff]([0-9]+|O)" '='  logical_or_expression;
 alag        : "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
 rate        : "[Rr][1-9][0-9]*" '=' logical_or_expression;
 dur         : "[Dd][1-9][0-9]*" '=' logical_or_expression;
 scale       : "[Ss]([0-9]+|C)" '=' logical_or_expression;
-derivative  : "[Dd][Aa][Dd][Tt]" '(' decimalintNo0 ')' '=' logical_or_expression;
-da          : "[Dd][Aa]" '(' decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
-dp          : "[Dd][Pp]" '(' decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
+derivative  : ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
+da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
+dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 
 exit_line: 'EXIT' decimalint decimalint;
 ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
@@ -57,6 +58,7 @@ dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
 enddo: 'ENDDO';
 
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
+callgeteta: 'CALL' 'GETETA' '(' 'ETA' ')';
 callsimeps: 'CALL' 'SIMEPS' '(' 'EPS' ')';
 callpassmode: 'CALL' 'PASS' '(' 'MODE' ')';
 callsupp:   'CALL' 'SUPP' '(' "[01]" ',' "[01]" ')';
@@ -99,17 +101,17 @@ multiplicative_expression : unary_expression
 
 mult_part : ('*' | '/') unary_expression ;
 
-theta : ('THETA' | 'theta') '(' decimalintNo0 ')';
-eta   : ('ETA' | 'eta') '(' decimalintNo0 ')';
-eps   : ('EPS' | 'eps') '(' decimalintNo0 ')';
-err   : ('ERR' | 'err') '(' decimalintNo0 ')';
-amt   : ('A' | 'a') '(' decimalintNo0 ')';
-mtime : ('MTIME' | 'mtime') '(' decimalintNo0 ')';
-mnext : ('MNEXT' | 'mext') '(' decimalintNo0 ')';
-mpast : ('MPAST' | 'mpast') '(' decimalintNo0 ')';
-mixp  : ('MIXP' | 'mixp') '(' decimalintNo0 ')';
-com   : ('COM' | 'com') '(' decimalintNo0 ')';
-pcmt  : ('PCMT' | 'pcmt') '(' decimalintNo0 ')';
+theta : ('THETA(' | 'theta(') decimalintNo0 ')';
+eta   : ('ETA(' | 'eta(') decimalintNo0 ')';
+eps   : ('EPS(' | 'eps(') decimalintNo0 ')';
+err   : ('ERR(' | 'err(') decimalintNo0 ')';
+amt   : ('A(' | 'a(')  decimalintNo0 ')';
+mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
+mnext : ('MNEXT(' | 'mext(') decimalintNo0 ')';
+mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
+mixp  : ('MIXP(' | 'mixp(') decimalintNo0 ')';
+com   : ('COM(' | 'com(') decimalintNo0 ')';
+pcmt  : ('PCMT(' | 'pcmt(') decimalintNo0 ')';
 
 avar:  "[Aa][0-9]+";
 cvar:  "[Cc][0-9]+";
@@ -138,30 +140,33 @@ primary_expression
   | mixp
   | avar
   | cvar
+  | com
+  | pcmt
   | function
   | '(' logical_or_expression ')'
   ;
 
-function : ('D' | 'd')? function_name '(' (logical_or_expression)* (',' logical_or_expression)* ')' ;
+function : function_name '(' (logical_or_expression)*  (',' logical_or_expression)* ')' ;
 
 function_name: 'LOG' | 'LOG10' | 'EXP' | 'SQRT' | 'SIN' | 'COS' |
         'ABS' |'TAN' | 'ASIN' | 'ACOS' | 'ATAN' | 'INT' | 'MIN' |
         'MAX' |'MOD' | 'PHI'  | 'GAMLN' |
+        'DLOG' |'DLOG10' | 'DEXP' | 'DSQRT' | 'DSIN' | 'DCOS' |
+        'DABS' |'DTAN' | 'DASIN' | 'DACOS' | 'DATAN' | 'DINT' | 'DMIN' |
+        'DMAX' |'DMOD' | 'DPHI'  | 'DGAMLN' |
         'log' | 'log10' | 'exp' | 'sqrt' | 'sin' | 'cos' |
         'abs' |'tan' | 'asin' | 'acos' | 'atan' | 'int' | 'min' |
         'max' |'mod' | 'phi'  | 'gamln' |
+        'dlog' |'dlog10' |'dexp'  | 'dsqrt' | 'dsin' | 'dcos' |
+        'dabs' |'dtan'   |'dasin' | 'dacos' | 'datan' | 'dint' | 'dmin' |
+        'dmax' |'dmod'   |'dphi'  | 'dgamln' |
         'Log' | 'Log10' | 'Exp' | 'Sqrt' | 'Sin' | 'Cos' |
         'Abs' |'Tan' | 'Asin' | 'Acos' | 'Atan' | 'Int' | 'Min' |
         'Max' |'Mod' | 'Phi'  | 'Gamln'
     ;
 
 constant : decimalint | float1 | float2;
-dt    : ('DT' | 'dt') '(' decimalintNo0 ')';
-amt   : ('A' | 'a') '(' decimalintNo0 ')';
-mtime : ('MTIME' | 'mtime') '(' decimalintNo0 ')';
-mnext : ('MNEXT' | 'mext') '(' decimalintNo0 ')';
-mpast : ('MPAST' | 'mpast') '(' decimalintNo0 ')';
-mixp : ('MIXP' | 'mixp') '(' decimalintNo0 ')';
+dt    : ('DT(' | 'dt(') decimalintNo0 ')';
 
 
 decimalintNo0: "([1-9][0-9]*)" $term -1;
