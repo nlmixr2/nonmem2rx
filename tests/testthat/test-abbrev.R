@@ -1,8 +1,8 @@
 test_that("test abbrev", {
   
-  .a <- function(abbrev, eq="no", reset=TRUE) {
+  .a <- function(abbrev, eq="no", abbrevLin=0L) {
     .clearNonmem2rx()
-    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED')
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
     expect_equal(.nonmem2rx$model, eq)
   }
   
@@ -100,4 +100,24 @@ test_that("test abbrev", {
     expect_error(.a(","), "[$]PRED")
     .a("x=time", "x <- t")
     .a("x=t", "x <- nm_t")
+
+    # in the presence of linCmt()
+    .a("f1=1", "f(central) <- 1", abbrevLin=1L)
+    .a("A_0(1) = 1","central(0) <- 1", abbrevLin=1L)
+    .a("R1 = 1","rate(central) <- 1", abbrevLin=1L)
+    .a("D1 = 1","dur(central) <- 1", abbrevLin=1L)
+    .a("SC = 1","scale1 <- 1", abbrevLin=1L)
+    expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=1L), "central")
+
+    .a("f1=1", "f(depot) <- 1", abbrevLin=2L)
+    .a("A_0(1) = 1","depot(0) <- 1", abbrevLin=2L)
+    .a("R1 = 1","rate(depot) <- 1", abbrevLin=2L)
+    .a("D1 = 1","dur(depot) <- 1", abbrevLin=2L)
+    .a("SC = 1","scale2 <- 1", abbrevLin=2L)
+    .a("f2=1", "f(central) <- 1", abbrevLin=2L)
+    .a("A_0(2) = 1","central(0) <- 1", abbrevLin=2L)
+    .a("R2 = 1","rate(central) <- 1", abbrevLin=2L)
+    .a("D2 = 1","dur(central) <- 1", abbrevLin=2L)
+    expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=2L), "central")
+    
 })

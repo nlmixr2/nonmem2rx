@@ -136,6 +136,32 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   return 0;
 }
 
+int abbrevLin = 0;
+
+void writeAinfo(const char *v) {
+  // abbrevLin = 0 is ode
+  // abbrevLin = 1 is linCmt() without ka
+  // abbrevLin = 2 is linCmt() with ka
+  if (abbrevLin == 0) {
+    sAppend(&curLine, "a%s", v);
+    return;
+  }
+  int cur = atoi(v);
+  if (abbrevLin == 2 && cur == 1) {
+    sAppendN(&curLine, "depot", 5);
+    return;
+  }
+  if ((abbrevLin == 1 && cur == 1) || (abbrevLin == 2 && cur == 2)) {
+    sAppendN(&curLine, "central", 7);
+    return;
+  }
+  if (abbrevLin != 0) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "can only request depot and central compartments for solved systems in rxode2 translations");
+  }
+  sAppend(&curLine, "a%s", v);
+}
+
 int abbrev_params(char *name, int i,  D_ParseNode *pn) {
   if (!strcmp("theta", name)) {
     if (i == 0) {
@@ -171,7 +197,7 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       // since parser translates  $sigma
-      sAppend(&curLine, "a%s", v);
+      writeAinfo(v);
     }
     return 1;
   }
@@ -373,7 +399,8 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       // a1(0) <- ....
-      sAppend(&curLine, "a%s(0) <- ", v);
+      writeAinfo(v);
+      sAppendN(&curLine, "(0) <- ", 7);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {
       return 1;
@@ -391,7 +418,9 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
         Rf_errorcall(R_NilValue, "F0/FO is not supported in translation");
       }
       // f(a1) <- ....
-      sAppend(&curLine, "f(a%s) <- ", v + 1);
+      sAppendN(&curLine, "f(", 2);
+      writeAinfo(v + 1);
+      sAppendN(&curLine, ") <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -401,7 +430,9 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "alag(a%s) <- ", v + 4);
+      sAppendN(&curLine, "alag(", 5);
+      writeAinfo(v + 4);
+      sAppendN(&curLine, ") <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -411,7 +442,9 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "rate(a%s) <- ", v + 1);
+      sAppend(&curLine, "rate(", 5);
+      writeAinfo(v + 1);
+      sAppendN(&curLine, ") <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -421,7 +454,9 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "dur(a%s) <- ", v + 1);
+      sAppendN(&curLine, "dur(",4);
+      writeAinfo(v + 1);
+      sAppendN(&curLine, ") <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -436,7 +471,14 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
         Rf_errorcall(R_NilValue, "S0/SO is not supported in translation");
       }
       if (v[1] == 'C') {
-        sAppendN(&curLine, "scalec <- ", 10);
+        if (abbrevLin == 1) {
+          sAppendN(&curLine, "scale1 <- ", 10);
+        } else if (abbrevLin == 2) {
+          sAppendN(&curLine, "scale2 <- ", 10);
+        } else {
+          parseFree(0);
+          Rf_errorcall(R_NilValue, "translation cannot determine 'SC'");
+        }
         return 1;
       }
       // scale# <- ....
@@ -582,9 +624,10 @@ void trans_abbrev(const char* parse){
   }
 }
 
-SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix) {
+SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   sIni(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
+  abbrevLin = INTEGER(abbrevLinSEXP)[0];
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;

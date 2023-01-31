@@ -10,6 +10,7 @@
   .nonmem2rx$ini <- NULL
   .nonmem2rx$thetaNames <- NULL
   .nonmem2rx$model <- NULL
+  .nonmem2rx$abbrevLin <- 0L # ode; 1 = linCmt() no ka; 2= linCmt() ka
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -138,6 +139,16 @@ nonmem2rx <- function(file) {
               devtools::package_file("src/abbrev.g.d_parser.h"))
 }
 
+.nonmem2rxBuildSub <- function() {
+  cat("Update Parser c for sub block\n");
+  dparser::mkdparse(devtools::package_file("inst/sub.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxSub")
+  file.rename(devtools::package_file("src/sub.g.d_parser.c"),
+              devtools::package_file("src/sub.g.d_parser.h"))
+}
+
+
 
 
 .nonmem2rxBuildGram <- function() {
@@ -147,6 +158,7 @@ nonmem2rx <- function(file) {
   .nonmem2rxBuildModel()
   .nonmem2rxBuildInput()
   .nonmem2rxBuildAbbrev()
+  .nonmem2rxBuildSub()
   invisible("")
   
 }
