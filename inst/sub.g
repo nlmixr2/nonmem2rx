@@ -27,7 +27,6 @@ unsupported_subnames: 'SS' | 'PK' | 'ERROR' | 'DES' | 'AES' | 'INFN' | 'MODEL'
     'Ss' | 'Pk' | 'Error' | 'Des' | 'Aes' | 'Infn' | 'Model';
 
 unsupported_statement: unsupported_subnames '=' nonSpace;
-
 decimalintNo0: "([1-9][0-9]*)" $term -1;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 string: "\"([^\"\\]|\\[^])*\"";
@@ -35,5 +34,5 @@ float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
 singleLineComment: ';' "[^\n]*";
-nonSpace: "[^ \n]+";
+nonSpace: "[^0-9 \n][^ \n]*";
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;

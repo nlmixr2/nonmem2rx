@@ -957,7 +957,7 @@ unsigned char d_scanner_61_0_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 
+0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 
 };
 
 unsigned char d_scanner_61_0_1_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
@@ -977,15 +977,22 @@ unsigned char d_scanner_61_1_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
 D_Shift * d_shift_61_1_nonmem2rxSub[] = {&d_shift_46_nonmem2rxSub,NULL};
 
 unsigned char d_scanner_61_2_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
-0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 
 };
 
 D_Shift * d_accepts_diff_62_0_nonmem2rxSub[] = {0};
 D_Shift ** d_accepts_diff_62_nonmem2rxSub[] = {
 d_accepts_diff_62_0_nonmem2rxSub
+};
+
+unsigned char d_scanner_62_0_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
+0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 
 };
 
 D_Shift * d_accepts_diff_64_0_nonmem2rxSub[] = {0};
@@ -1609,8 +1616,8 @@ SB_uint8 d_scanner_61_nonmem2rxSub[3] = {
  , d_scanner_61_0_1_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub}},
 {d_shift_61_1_nonmem2rxSub, {d_scanner_61_1_0_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub
  , d_scanner_61_0_1_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub}},
-{d_shift_61_1_nonmem2rxSub, {d_scanner_61_2_0_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub
- , d_scanner_61_0_1_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub}}
+{d_shift_38_1_nonmem2rxSub, {d_scanner_61_2_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub
+ , d_scanner_0_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub}}
 };
 
 SB_trans_uint8 d_transition_61_nonmem2rxSub[3] = {
@@ -1623,7 +1630,7 @@ SB_trans_uint8 d_transition_61_nonmem2rxSub[3] = {
 };
 
 SB_uint8 d_scanner_62_nonmem2rxSub[2] = {
-{NULL, {d_scanner_61_1_0_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub
+{NULL, {d_scanner_62_0_0_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub
  , d_scanner_61_0_1_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub}},
 {d_shift_61_1_nonmem2rxSub, {d_scanner_61_1_0_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub
  , d_scanner_61_0_1_nonmem2rxSub, d_scanner_61_0_1_nonmem2rxSub}}
@@ -1932,7 +1939,7 @@ D_Symbol d_symbols_nonmem2rxSub[] = {
 {D_SYMBOL_REGEX, "[ \\t\\r\\n]+", 13, -1},
 {D_SYMBOL_STRING, ";", 1, -1},
 {D_SYMBOL_REGEX, "[^\\n]*", 7, -1},
-{D_SYMBOL_REGEX, "[^ \\n]+", 8, -1},
+{D_SYMBOL_REGEX, "[^0-9 \\n][^ \\n]*", 18, -1},
 {D_SYMBOL_REGEX, "[a-zA-Z][a-zA-Z0-9_]*", 21, -1},
 };
 

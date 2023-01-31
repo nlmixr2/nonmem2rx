@@ -12,6 +12,8 @@
   .nonmem2rx$model <- NULL
   .nonmem2rx$abbrevLin <- 0L # ode; 1 = linCmt() no ka; 2= linCmt() ka
   .nonmem2rx$scale <- NULL
+  .nonmem2rx$advan <- 0L
+  .nonmem2rx$trans <- 0L
 }
 #' Add theta name to .nonmem2rx info
 #'

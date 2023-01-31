@@ -137,10 +137,9 @@ extern "C" SEXP nonmem2rxPushScale(int scale) {
   IntegerVector scaleI(1);
   scaleI[0] = scale;
   Function addScale(".addScale", nonmem2rxNs);
-  addScale(scale);
+  addScale(scaleI);
   END_RCPP
 }
-
 
 extern "C" SEXP nonmem2rxGetScale(int scale) {
   BEGIN_RCPP
@@ -148,6 +147,26 @@ extern "C" SEXP nonmem2rxGetScale(int scale) {
   IntegerVector scaleI(1);
   scaleI[0] = scale;
   Function getScale(".getScale", nonmem2rxNs);
-  return getScale(scale);
+  return getScale(scaleI);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxSetAdvan(int advan) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  IntegerVector advanI(1);
+  advanI[0] = advan;
+  Function setAdvan(".setAdvan", nonmem2rxNs);
+  return setAdvan(advanI);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxSetTrans(int trans) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  IntegerVector transI(1);
+  transI[0] = trans;
+  Function setTrans(".setTrans", nonmem2rxNs);
+  return setTrans(transI);
   END_RCPP
 }
