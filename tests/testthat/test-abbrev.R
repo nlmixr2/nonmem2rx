@@ -2,7 +2,7 @@ test_that("test abbrev", {
   
   .a <- function(abbrev, eq="no", reset=TRUE) {
     .clearNonmem2rx()
-    .Call(`_nonmem2rx_trans_abbrev`, abbrev)
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED')
     expect_equal(.nonmem2rx$model, eq)
   }
   
@@ -34,8 +34,8 @@ test_that("test abbrev", {
     # note that  mod parser doesn't check for the number of arguments (none of the parsing does)
     expect_error(.a(" CL      = MOD(C)"), "'MOD'")
     expect_error(.a(" CL      = INT(C)"), "'INT'")
-    expect_error(.a("CL = A02"), "'A#'")
-    expect_error(.a("CL = C02"), "'C#'")
+    expect_error(.a("CL = A12345"), "'A#'")
+    expect_error(.a("CL = C12345"), "'C#'")
     expect_error(.a("A = MIXNUM"), "'MIXNUM'")
     expect_error(.a("A = MIXEST"), "'MIXEST'")
     expect_error(.a("A = ICALL"), "'ICALL'")
@@ -97,5 +97,7 @@ test_that("test abbrev", {
     .a("CALL SIMETA(ETA)", "simeta()")
     .a("CALL SIMEPS(EPS)", "simeps()")
     expect_error(.a("CALL GETETA(ETA)"), "'CALL GETETA")
-
+    expect_error(.a(","), "[$]PRED")
+    .a("x=time", "x <- t")
+    .a("x=t", "x <- nm_t")
 })

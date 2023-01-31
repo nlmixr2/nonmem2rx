@@ -66,6 +66,7 @@ void parseFree(int last) {
   }
 }
 extern sbuf curLine;
+const char *abbrevPrefix;
 
 // from mkdparse_tree.h
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
@@ -98,7 +99,13 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   } else if (!strcmp("identifier", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    if (!nmrxstrcmpi("newind", v)) {
+    if (!nmrxstrcmpi("t", v)) {
+      sAppendN(&curLine, "nm_t", 4);
+      return 1;
+    } else if (!nmrxstrcmpi("time", v)) {
+      sAppendN(&curLine, "t", 1);
+      return 1;
+    } else if (!nmrxstrcmpi("newind", v)) {
       sAppendN(&curLine, "newind", 6);
       return 1;
     } else if (!nmrxstrcmpi("MIXNUM", v)) {
@@ -569,14 +576,15 @@ void trans_abbrev(const char* parse){
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
     parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error with abbreviated code");
+    Rf_errorcall(R_NilValue, "parsing error with abbreviated code in %s", abbrevPrefix);
   } else {
     wprint_parsetree_abbrev(parser_tables_nonmem2rxAbbrev, _pn, 0, wprint_node_abbrev, NULL);
   }
 }
 
-SEXP _nonmem2rx_trans_abbrev(SEXP in) {
+SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix) {
   sIni(&curLine);
+  abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;

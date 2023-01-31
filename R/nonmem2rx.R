@@ -69,11 +69,15 @@ nonmem2rx <- function(file) {
                                 paste(.nonmem2rx$sigma, collapse="\n"),
                                 "\n})")))
   }
-  eval(parse(text=paste0("function() {\n",
+  .fun <- eval(parse(text=paste0("function() {\n",
                          "ini({\n",
                          paste(.nonmem2rx$ini, collapse="\n"),
                          "\n})\n",
+                         "model({\n",
+                         paste(.nonmem2rx$model, collapse="\n"),
+                         "\n})",
                          "}")))
+  .fun
 }
 
 ## nocov start
