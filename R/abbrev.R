@@ -32,6 +32,15 @@ nonmem2rxRec.des <- function(x) {
 nonmem2rxRec.err <- function(x) {
   .x <- x
   class(.x) <- NULL
+  # Add F for linear models
+  if (.nonmem2rx$abbrevLin != 0L) {
+    .addModel("rxLinCmt1 = linCmt()")
+  }
+  if (.nonmem2rx$abbrevLin == 1L) {
+    .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+  } else if (.nonmem2rx$abbrevLin == 2L) {
+    .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+  }
   for (.cur in .x) {
     # add 3 so that in err a(central) = linCmt()/scale1 or linCmt()/scale2
     # and a(depot) = dose(depot)*exp(-tad(depot)*ka)/scale1

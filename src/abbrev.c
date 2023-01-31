@@ -172,7 +172,7 @@ void writeAinfo(const char *v) {
     return;
   }
   if ((abbrevLin == 4 && cur == 1) || (abbrevLin == 5 && cur == 2)) {
-    sAppend(&curLine, "linCmt()%s", CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
+    sAppend(&curLine, "rxLinCmt1%s", CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
     return;
   }
   parseFree(0);
