@@ -130,3 +130,24 @@ extern "C" SEXP nonmem2rxPushModelLine(const char *item1) {
   addModel(item1C);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushScale(int scale) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  IntegerVector scaleI(1);
+  scaleI[0] = scale;
+  Function addScale(".addScale", nonmem2rxNs);
+  addScale(scale);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxGetScale(int scale) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  IntegerVector scaleI(1);
+  scaleI[0] = scale;
+  Function getScale(".getScale", nonmem2rxNs);
+  return getScale(scale);
+  END_RCPP
+}

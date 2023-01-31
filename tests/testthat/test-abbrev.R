@@ -120,4 +120,26 @@ test_that("test abbrev", {
     .a("D2 = 1","dur(central) <- 1", abbrevLin=2L)
     expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=2L), "central")
     
+    expect_warning(.a("S1 = 1\nSC=1", c("scale1 <- 1", "scale1 <- 1"), abbrevLin=1L), "last defined")
+    expect_warning(.a("S1 = 1\nS2=1", c("scale1 <- 1"), abbrevLin = 1L), "scale2 ignored")
+    .a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 2L)
+    expect_warning(.a("S1 = 1\nS2=1\nS3=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 2L),
+                   "scale3 ignored")
+
+    .a("A1=A(1)", "A1 <- a1")
+    .a("A1=A(1)", "A1 <- central", abbrevLin = 1L)
+    .a("A1=A(1)", "A1 <- depot", abbrevLin = 2L)
+    
+    .a("A1=A(1)", "A1 <- a1", abbrevLin = 3L)
+    .a("S1=1\nA1=A(1)", c("scale1 <- 1", "A1 <- a1/scale1"), abbrevLin = 3L)
+    .a("S2=1\nA1=A(1)", c("scale2 <- 1", "A1 <- a1"), abbrevLin = 3L)
+    
+    .a("A1=A(1)", "A1 <- linCmt()", abbrevLin = 4L)
+    .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- linCmt()/scale1"), abbrevLin = 4L)
+
+    .a("A1=A(1)", "A1 <- dose(depot)*exp(-KA*tad(depot))", abbrevLin = 5L)
+    .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- dose(depot)*exp(-KA*tad(depot))/scale1"), abbrevLin = 5L)
+    .a("A2=A(2)", "A2 <- linCmt()", abbrevLin = 5L)
+    .a("S2=V\nA2=A(2)", c("scale2 <- V","A2 <- linCmt()/scale2"), abbrevLin = 5L)
+    
 })

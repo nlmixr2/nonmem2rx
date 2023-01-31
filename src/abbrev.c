@@ -76,6 +76,7 @@ void wprint_node_abbrev(int depth, char *name, char *value, void *client_data)  
 extern char * rc_dup_str(const char *s, const char *e);
 
 SEXP nonmem2rxPushModelLine(const char *item1);
+SEXP nonmem2rxPushScale(int scale);
 
 void pushModel() {
   if (curLine.s == NULL) return;
@@ -138,28 +139,44 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
 
 int abbrevLin = 0;
 
+SEXP nonmem2rxGetScale(int scale);
+
 void writeAinfo(const char *v) {
   // abbrevLin = 0 is ode
   // abbrevLin = 1 is linCmt() without ka
   // abbrevLin = 2 is linCmt() with ka
+  //
+  // $error block abbrevLin
+  // abbrevLin = 3 is ode in  block
+  // abbrevLin = 4 is linCmt() without ka
+  // abbrevLin = 5 is linCmt() with ka
   if (abbrevLin == 0) {
     sAppend(&curLine, "a%s", v);
     return;
   }
   int cur = atoi(v);
+  if (abbrevLin == 3) {
+    sAppend(&curLine, "a%s%s", v, CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
+    return;
+  }
   if (abbrevLin == 2 && cur == 1) {
     sAppendN(&curLine, "depot", 5);
+    return;
+  }
+  if (abbrevLin == 5 && cur == 1) {
+    sAppend(&curLine, "dose(depot)*exp(-KA*tad(depot))%s", CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
     return;
   }
   if ((abbrevLin == 1 && cur == 1) || (abbrevLin == 2 && cur == 2)) {
     sAppendN(&curLine, "central", 7);
     return;
   }
-  if (abbrevLin != 0) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "can only request depot and central compartments for solved systems in rxode2 translations");
+  if ((abbrevLin == 4 && cur == 1) || (abbrevLin == 5 && cur == 2)) {
+    sAppend(&curLine, "linCmt()%s", CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
+    return;
   }
-  sAppend(&curLine, "a%s", v);
+  parseFree(0);
+  Rf_errorcall(R_NilValue, "can only request depot and central compartments for solved systems in rxode2 translations");
 }
 
 int abbrev_params(char *name, int i,  D_ParseNode *pn) {
@@ -463,31 +480,47 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     }
     return 0;
   } else if (!strcmp("scale", name)) {
-    if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 0);
-      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      if (v[1] == 'O' || v[1] == '0') {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[1] == 'O' || v[1] == '0') {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "S0/SO is not supported in translation");
+    }
+    int scaleCmt = NA_INTEGER;
+    if (i == 0 && v[1] == 'C') {
+      if (abbrevLin == 1) {
+        sAppendN(&curLine, "scale1 <- ", 10);
+        scaleCmt = 1;
+      } else if (abbrevLin == 2) {
+        sAppendN(&curLine, "scale2 <- ", 10);
+        scaleCmt = 2;
+      } else {
         parseFree(0);
-        Rf_errorcall(R_NilValue, "S0/SO is not supported in translation");
+        Rf_errorcall(R_NilValue, "translation cannot determine 'SC'");
       }
-      if (v[1] == 'C') {
-        if (abbrevLin == 1) {
-          sAppendN(&curLine, "scale1 <- ", 10);
-        } else if (abbrevLin == 2) {
-          sAppendN(&curLine, "scale2 <- ", 10);
-        } else {
-          parseFree(0);
-          Rf_errorcall(R_NilValue, "translation cannot determine 'SC'");
-        }
+      nonmem2rxPushScale(scaleCmt);
+      return 1;
+    } else {
+      scaleCmt = atoi(v + 1);
+    }
+    if (abbrevLin == 1) {
+      if (scaleCmt > 1) {
+        if (i == 0) Rf_warning("scale%d ignored with this linCmt() model translation");
         return 1;
       }
+    } else if (abbrevLin == 2) {
+      if (scaleCmt > 2) {
+        if (i == 0) Rf_warning("scale%d ignored with this linCmt() model translation");
+        return 1;
+      }
+    }
+    if (i == 0) {
       // scale# <- ....
+      nonmem2rxPushScale(scaleCmt);
       sAppend(&curLine, "scale%s <- ", v + 1);
       return 1;
-    } else if (i == 1) {
-      return 1;
     }
-    return 0;
+    if (i == 1) return 1;
   }
   return 0;
 }
@@ -599,7 +632,6 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       !strcmp("scale", name)) {
     pushModel();
   }
-
 }
 
 void trans_abbrev(const char* parse){

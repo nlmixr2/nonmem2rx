@@ -11,10 +11,10 @@
   .nonmem2rx$thetaNames <- NULL
   .nonmem2rx$model <- NULL
   .nonmem2rx$abbrevLin <- 0L # ode; 1 = linCmt() no ka; 2= linCmt() ka
+  .nonmem2rx$scale <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'
-#'  
 #' @param theta string representing variable name
 #' @return Nothing called for side effects
 #' @noRd
