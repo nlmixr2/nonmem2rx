@@ -77,8 +77,83 @@ extern char * rc_dup_str(const char *s, const char *e);
 SEXP nonmem2rxPushModelLine(const char *item1);
 
 void pushModel() {
+  if (curLine.s == NULL) return;
+  if (curLine.s[0] == 0) return;
   nonmem2rxPushModelLine(curLine.s);
   sClear(&curLine);
+}
+
+int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("avar", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'A#' NONMEM reserved variable is not translated");
+  } else if (!strcmp("cvar", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "'A#' NONMEM reserved variable is not translated");
+  } else if (!strcmp("constant", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curLine, "%s", v);
+    return 1;
+  } else if (!strcmp("identifier", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (!nmrxstrcmpi("newind", v)) {
+      sAppendN(&curLine, "newind", 6);
+      return 1;
+    } else if (!nmrxstrcmpi("MIXNUM", name)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'MIXNUM' NONMEM reserved variable is not translated");
+    } else if (!nmrxstrcmpi("MIXEST", name)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'MIXEST' NONMEM reserved variable is not translated");
+    } else if (!nmrxstrcmpi("ICALL", name)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'ICALL' NONMEM reserved variable is not translated");
+    } else if (!nmrxstrcmpi("COMACT", name)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'COMACT' NONMEM reserved variable is not translated");
+    } else if (!nmrxstrcmpi("COMSAV", name)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "'COMSAV' NONMEM reserved variable is not translated");
+    }
+    return 1;
+  }
+  return 0;
+}
+
+int abbrev_params(char *name, int i,  D_ParseNode *pn) {
+  if (!strcmp("theta", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 2);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "theta%s", v);
+    }
+    return 1;
+  } else if (!strcmp("eta", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 2);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "eta%s", v);
+    }
+    return 1;
+  } else if (!strcmp("eps", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 2);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "eps%s", v);
+    }
+    return 1;
+  } else if (!strcmp("err", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 2);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      // since parser translates  $sigma
+      sAppend(&curLine, "eps%s", v);
+    }
+    return 1;
+  }
+  return 0;
 }
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
@@ -234,6 +309,9 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   } else if (!strcmp("com", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "COM(#) not supported in translation");
+  } else if (!strcmp("pcmt", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "PCMT(#) not supported in translation");
   }
   return 0;
 }
@@ -371,6 +449,7 @@ int abbrev_logic_operators(const char *name) {
   return 0;
 }
 
+
 int abbrev_operators(const char *name) {
   if (!strcmp("(", name) ||
       !strcmp(")", name) ||
@@ -392,20 +471,6 @@ int abbrev_operators(const char *name) {
   return 0;
 }
 
-// nonmem variables
-// NEWIND
-// COMRES = -1 unsupported
-// PCMT() not supported
-// MIXNUM
-// MIXEST
-// ICALL
-// COMACT
-// COMSAV
-// COM(n)
-// A#
-// C#
-// verbatim code
-
 void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
@@ -424,9 +489,11 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   } 
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
-      if (abbrev_if_while_clause(name, i, pn) ||
-          abbrev_cmt_properties(name, i, pn) ||
+      if (abbrev_identifier_or_constant(name, i, pn) ||
+          abbrev_params(name, i,  pn) ||
+          abbrev_if_while_clause(name, i, pn) ||
           abbrev_cmt_ddt_related(name, i, pn) ||
+          abbrev_cmt_properties(name, i, pn) ||
           abbrev_function(name, i, pn) ||
           abbrev_unsupported_lines(name, i ,pn)) {
         continue;
@@ -435,6 +502,10 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       wprint_parsetree_abbrev(pt, xpn, depth, fn, client_data);
     }
   }
+  if (strcmp("statement", name)) {
+    pushModel();
+  }
+
 }
 
 void trans_abbrev(const char* parse){
@@ -456,7 +527,6 @@ void trans_abbrev(const char* parse){
     Rf_errorcall(R_NilValue, "parsing error during the record parsing");
   } else {
     wprint_parsetree_abbrev(parser_tables_nonmem2rxAbbrev, _pn, 0, wprint_node_abbrev, NULL);
-    pushModel();
   }
 }
 

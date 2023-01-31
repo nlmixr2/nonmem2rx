@@ -107,13 +107,17 @@ amt   : ('A' | 'a') '(' decimalintNo0 ')';
 mtime : ('MTIME' | 'mtime') '(' decimalintNo0 ')';
 mnext : ('MNEXT' | 'mext') '(' decimalintNo0 ')';
 mpast : ('MPAST' | 'mpast') '(' decimalintNo0 ')';
-mixp : ('MIXP' | 'mixp') '(' decimalintNo0 ')';
-com  : ('COM' | 'com') '(' decimalintNo0 ')';
+mixp  : ('MIXP' | 'mixp') '(' decimalintNo0 ')';
+com   : ('COM' | 'com') '(' decimalintNo0 ')';
+pcmt  : ('PCMT' | 'pcmt') '(' decimalintNo0 ')';
+
+avar:  "[Aa][0-9]+";
+cvar:  "[Cc][0-9]+";
 
 
-unary_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression );
+unary_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression | avar | cvar);
 
-exponent_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression );
+exponent_expression : ('+' | '-')? (theta | eta | eps | err | dt | amt | mtime | mnext | mpast | mixp | primary_expression | power_expression | avar | cvar);
 
 power_expression : primary_expression power_operator exponent_expression;
 
@@ -131,7 +135,9 @@ primary_expression
   | mpast
   | mnext
   | mtime
-  | mixp        
+  | mixp
+  | avar
+  | cvar
   | function
   | '(' logical_or_expression ')'
   ;
@@ -150,7 +156,6 @@ function_name: 'LOG' | 'LOG10' | 'EXP' | 'SQRT' | 'SIN' | 'COS' |
     ;
 
 constant : decimalint | float1 | float2;
-
 theta : ('THETA' | 'theta') '(' decimalintNo0 ')';
 eta   : ('ETA' | 'eta') '(' decimalintNo0 ')';
 eps   : ('EPS' | 'eps') '(' decimalintNo0 ')';
