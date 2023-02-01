@@ -110,9 +110,6 @@ void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, pri
   } else if (!strcmp("singleLineNoRecord", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0); // line
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curLine, "%s",v);
-    xpn = d_get_child(pn, 1); // line
-    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppend(&curLine, "%s\n",v);
     return;
   }
