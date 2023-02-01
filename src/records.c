@@ -148,6 +148,7 @@ void trans_records(const char* parse){
 }
 
 SEXP _nonmem2rx_trans_records(SEXP in) {
+  sIni(&curLine);
   trans_records(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;

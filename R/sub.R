@@ -2,8 +2,8 @@
 .supportedTrans <-
   list(c(0L, 1L, 2L), #1
        c(0L, 1L, 2L), #2
-       c(0L, 3L, 4L, 5L, 6L), #3
-       c(0L, 1L, 3L, 5L, 6L), #4
+       c(0L, 1L, 3L, 4L, 5L, 6L), #3
+       c(0L, 1L, 3L, 4L, 5L, 6L), #4
        c(0L, 1L), #5
        c(0L, 1L), #6
        c(0L, 1L), #7

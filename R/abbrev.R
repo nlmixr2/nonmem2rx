@@ -34,7 +34,7 @@ nonmem2rxRec.err <- function(x) {
   class(.x) <- NULL
   # Add F for linear models
   if (.nonmem2rx$abbrevLin != 0L) {
-    .addModel("rxLinCmt1 = linCmt()")
+    .addModel("rxLinCmt1 <- linCmt()")
   }
   if (.nonmem2rx$abbrevLin == 1L) {
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)

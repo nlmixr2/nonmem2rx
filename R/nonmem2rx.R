@@ -358,6 +358,11 @@
   .mv <- rxode2::rxModelVars(rxui)
   .lhs <- tolower(.mv$lhs)
   .rhs <- .mv$lhs
+  .w <- which(.lhs == .rhs)
+  if (length(.w) > 0) {
+    .lhs <- .lhs[-.w]
+    .rhs <- .rhs[-.w]
+  }
   eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))    
 }
 #' Replace theta names
@@ -378,9 +383,18 @@
   }
   .n <- vapply(thetaNames, function(v) {
     if (v == "") return("")
-    if (v %in% .mv$lhs) {
+    # They can't even match based on case or it can interfere with linCmt()
+    if (tolower(v) %in% tolower(.mv$lhs)) {
       return(paste0("t.", v))
     }
+    if (.nonmem2rx$abbrevLin != 0L) {
+      # linear compartment protection by making sure parameters won't
+      # collide ie Vc and V1 in the model
+      if (regexpr("^[kvcqabg]", tolower(v)) != -1) {
+        return(paste0("t.", v))
+      }
+    }
+      
     v
   }, character(1), USE.NAMES = FALSE)
   .t <- rxui$iniDf$name[!is.na(rxui$iniDf$ntheta)]
