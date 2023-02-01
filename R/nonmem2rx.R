@@ -229,10 +229,46 @@
   }
   FALSE
 }
-
-
-#' Determine type of residual error for common models
-.determineError <- function(rxui, sigma) {
+#' Remove W related 
+#'  
+#' @param rxui ui object
+#' @param text model piping test to modify
+#' @return full model piping test to modify the nlmixr2 model
+#' @noRd
+#' @author Matthew L. Fidler
+.removeWrelated <- function(rxui, text) {
+  .iwres <- which(vapply(rxui$lstExpr, function(e) {
+    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
+      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "iwres") return(TRUE)
+    }
+    FALSE
+  }, logical(1), USE.NAMES = FALSE))
+  if (length(.iwres) != 1) return(text)
+  text <- paste0("rxode2::model(", text, ", -",as.character(rxui$lstExpr[[.iwres]][[2]]),")")
+  .w <- which(vapply(rxui$lstExpr, function(e) {
+    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
+      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "w") return(TRUE)
+    }
+    FALSE
+  }, logical(1), USE.NAMES = FALSE))
+  if (length(.w) != 1) return(text)
+  text <- paste0("rxode2::model(", text, ", -",as.character(rxui$lstExpr[[.w]][[2]]),")")
+  .ires <- which(vapply(rxui$lstExpr, function(e) {
+    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
+      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "ires") return(TRUE)
+    }
+    FALSE
+  }, logical(1), USE.NAMES = FALSE))
+  if (length(.ires) != 1) return(text)
+  paste0("rxode2::model(", text, ", -",as.character(rxui$lstExpr[[.ires]][[2]]),")")
+}
+#' This tries to parse the type of error and change to a fully qualified nlmixr2 object
+#'  
+#' @param rxui rxui object
+#' @return rxui object possibly modified to be a nlmixr2 compatible function
+#' @noRd
+#' @author Matthew L. Fidler
+.determineError <- function(rxui) {
   # Additive: f+eps(1)
   # proportional: f*(1+eps(1))
   # Additive + Proportional: f*(1+eps(1)) + eps(2)
@@ -258,8 +294,32 @@
       FALSE
     }, logical(1), USE.NAMES = FALSE))
     if (length(.ww) != 1) return(rxui)
-    .wp <- rxui$lstExpr[.ww]
+    .wp <- rxui$lstExpr[[.ww]]
+    if (.isAddW(.wp)) {
+      .y0 <- as.character(.y[[2]])
+      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
+                     "~ add(", .nonmem2rx$addPar, ")}, append = TRUE), -", .y0, ")")
+      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+    } else if (.isPropW(.wp)) {
+      .y0 <- as.character(.y[[2]])
+      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
+                     "~ prop(", .nonmem2rx$propPar, ")}, append = TRUE), -", .y0, ")")
+      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+    } else if (.isAddPropW1(.wp)) {
+      .y0 <- as.character(.y[[2]])
+      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
+                     "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
+                     ") + combined1()}, append = TRUE), -", .y0, ")")
+      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+    } else if (.isAddPropW2(.wp)) {
+      .y0 <- as.character(.y[[2]])
+      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
+                     "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
+                     ") + combined2()}, append = TRUE), -", .y0, ")")
+      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+    }
   }
+  rxui
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -378,6 +438,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
                          "\n})",
                          "}")))
   .rx <- .fun()
+  .rx <- .determineError(.rx)
   if (tolowerLhs) {
     .rx <- .toLowerLhs(.rx)
   }

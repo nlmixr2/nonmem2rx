@@ -20,7 +20,9 @@ Imports:
     checkmate,
     dparser,
     lotri,
-    Rcpp
+    Rcpp,
+    rxode2,
+    magrittr
 Suggests: 
     devtools,
     testthat (>= 3.0.0)
