@@ -406,9 +406,15 @@
   }
   eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))          
 }
-
-.replaceCmtNames <- function(rxui) {
-  if (!exists("cmtName", envir=.nonmem2rx))  return(rxui)
+#' Replace compartment names
+#'  
+#' @param rxui ui 
+#' @param cmtName compartment names to replace
+#' @return updated ui with the compartment names replaced
+#' @noRd
+#' @author Matthew L. Fidler
+.replaceCmtNames <- function(rxui, cmtName) {
+  if (length(cmtName) == 0L) return(rxui)
   .mv <- rxode2::rxModelVars(rxui)
   .n <- vapply(.nonmem2rx$cmtName,
                function(v) {
@@ -479,7 +485,10 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
     .rx <- .toLowerLhs(.rx)
   }
   .rx <- .replaceThetaNames(.rx, thetaNames)
-  .rx <- .replaceCmtNames(.rx)
+  cmtName <- character(0)
+  if (exists("cmtName", envir=.nonmem2rx)) cmtName <- .nonmem2rx$cmtName
+
+  .rx <- .replaceCmtNames(.rx, cmtName)
   .rx
 }
 
