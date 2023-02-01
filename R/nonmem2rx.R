@@ -407,8 +407,26 @@
   eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))          
 }
 
+.replaceCmtNames <- function(rxui) {
+  if (!exists("cmtName", envir=.nonmem2rx))  return(rxui)
+  .mv <- rxode2::rxModelVars(rxui)
+  .n <- vapply(.nonmem2rx$cmtName,
+               function(v) {
+                 v <- gsub(" +", "_", v)
+                 if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params))) {
+                   return(paste0("c.", v))
+                 }
+                 if (regexpr("^[0-9]", v) != -1) {
+                   return(paste0("c.", v))
+                 }
+                 v
+               }, character(1), USE.NAMES=FALSE)
+  .c <- paste0("rxddta",seq_along(.n))
+  eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")))          
+}
+
 #' Convert a NONMEM source file to a rxode control
-#'
+#,'
 #' @param file NONMEM control file location
 #'
 #' @return rxode2 function
@@ -461,6 +479,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
     .rx <- .toLowerLhs(.rx)
   }
   .rx <- .replaceThetaNames(.rx, thetaNames)
+  .rx <- .replaceCmtNames(.rx)
   .rx
 }
 
