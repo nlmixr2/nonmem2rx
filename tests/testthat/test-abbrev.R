@@ -138,7 +138,7 @@ test_that("test abbrev", {
     .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- rxLinCmt1/scale1"), abbrevLin = 4L)
 
     .a("A1=A(1)", "A1 <- dose(depot)*exp(-KA*tad(depot))", abbrevLin = 5L)
-     .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- dose(depot)*exp(-KA*tad(depot))/scale1"), abbrevLin = 5L)
+    .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- dose(depot)*exp(-KA*tad(depot))/scale1"), abbrevLin = 5L)
     .a("A2=A(2)", "A2 <- rxLinCmt1", abbrevLin = 5L)
     .a("S2=V\nA2=A(2)", c("scale2 <- V","A2 <- rxLinCmt1/scale2"), abbrevLin = 5L)
     

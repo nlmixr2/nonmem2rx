@@ -14,6 +14,7 @@
   .nonmem2rx$advan <- 0L
   .nonmem2rx$trans <- 0L
   .nonmem2rx$addPar <- NA_character_
+  .nonmem2rx$propPar <- NA_character_
 }
 #' Is this ipred or f?  
 #'  
@@ -23,9 +24,30 @@
 #' @author Matthew L. Fidler
 .isIpredOrF <- function(x) {
   if (length(x) != 1L) return(FALSE)
-  .c <- tolower(as.character(x))
-  .nonmem2rx$curF <- .c
-  return(.c %in% c("ipred", "f"))
+  .c0 <-as.character(x)
+  .c <- tolower(.c0)
+  if (.c %in% c("ipred", "f")) {
+    .nonmem2rx$curF <- .c0
+    return(TRUE)
+  }
+  FALSE
+}
+#' Is this theta1*f
+.isThetaF <- function(x) {
+  if (length(x) != 3L) return(FALSE)
+  if (!identical(x[[1]], quote(`*`))) return(FALSE)
+  if (.isIpredOrF(x[[2]])) {
+    .theta <- as.character(x[[3]])
+  } else if (.isIpredOrF(x[[3]])) {
+    .theta <- as.character(x[[2]])
+  } else {
+    return(FALSE)
+  }
+  if (regexpr("theta[0-9]+", .theta) != -1) {
+    .nonmem2rx$propPar <- .theta
+    return(TRUE)
+  }
+  FALSE
 }
 #' Is this w*eps1 ?
 #'
@@ -64,7 +86,7 @@
 .isAddW <- function(x) {
   if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`)))) {
     return(.isAddW(x[[3]]))
-  }  
+  }
   if (length(x) != 1L) return(FALSE)
   .theta <- as.character(x)
   if (regexpr("theta[0-9]+", .theta) != -1) {
@@ -73,6 +95,141 @@
   }
   FALSE
 }
+#' Is the w expression represent a proportional error?
+#'  
+#' @param x expression
+#' @return logical
+#' @noRd
+#' @author Matthew L. Fidler
+.isPropW <- function(x) {
+  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`)))) {
+    return(.isPropW(x[[3]]))
+  }
+  return(.isThetaF(x))
+}
+#' Test for add+prop combination 1
+#'
+#'  
+#' @param x expression
+#' @return logical saying if the expression is add+prop comb 1
+#' @noRd
+#' @author Matthew L. Fidler
+.isAddPropW1 <- function(x) {
+  if (length(x) != 3L) return(FALSE)
+  if (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`))) {
+    return(.isAddPropW1(x[[3]]))
+  }
+  if (!identical(x[[1]], quote(`+`))) return(FALSE)
+  .isThetaF(x[[2]]) &&  .isAddW(x[[3]]) ||
+    .isThetaF(x[[3]]) &&  .isAddW(x[[2]])
+}
+#' Is this expression theta^2
+#'
+#' It also checks theta*theta
+#'  
+#' @param x expression
+#' @param useF boolean to check for F expressions instead of theta expressions
+#' @return boolean
+#' @noRd
+#' @author Matthew L. Fidler
+.isTheta2 <- function(x, useF=FALSE) {
+  if (length(x) != 3) return(FALSE)
+  if (identical(x[[1]], quote(`^`)) ||
+        identical(x[[1]], quote(`**`))) {
+    if (length(x[[2]]) != 1) return(FALSE)
+    if (x[[3]] != 2) return(FALSE)
+    if (isTRUE(useF) && .isIpredOrF(x[[2]])) return(TRUE)
+    .theta <- as.character(x[[2]])
+    if (regexpr("theta[0-9]+", .theta) != -1) {
+      if (is.na(useF)){
+        .nonmem2rx$propPar <- .theta
+      } else {
+        .nonmem2rx$addPar <- .theta
+      }
+      return(TRUE)
+    }
+  } else if (identical(x[[1]], quote(`*`))) {
+    if (length(x[[2]]) != 1) return(FALSE)
+    if (isTRUE(useF)) {
+      return(.isIpredOrF(x[[2]]) && .isIpredOrF(x[[3]]))
+    }
+    if (!identical(x[[2]], x[[3]])) return(FALSE)
+    .theta <- as.character(x[[2]])
+    if (regexpr("theta[0-9]+", .theta) != -1) {
+      if (is.na(useF)){
+        .nonmem2rx$propPar <- .theta
+      } else {
+        .nonmem2rx$addPar <- .theta
+      }
+      return(TRUE)
+    }
+  }
+  FALSE
+}
+
+#' Is this theta^2 * f^2
+#'  
+#' @param x expression
+#' @return boolean
+#' @noRd
+#' @author Matthew L. Fidler
+.isTheta2F2 <- function(x) {
+  if (length(x) == 3L && identical(x[[1]], quote(`*`))) {
+    .mult1 <- x[[2]]
+    .mult2 <- x[[3]]
+    ## in the case of f^2*theta1*theta1 length(.mult2) == 1
+    if (length(.mult2) == 1L) {
+      ## This works for:
+      ##f^2*theta1*theta1
+      ## This works for theta1*f^2*theta1
+      ## theta1 * theta1 * f * f
+      if (identical(.mult1[[1]], quote(`*`))) {
+        if (identical(.mult2, .mult1[[3]])) {
+          .mult1 <- .mult1[[2]]
+          .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
+        } else if (identical(.mult2, .mult1[[2]])) {
+          .mult1 <- .mult1[[3]]
+          .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
+        } else if (identical(.mult1[[1]], quote(`*`))) {
+          # theta1 * f * f * theta1
+          .mult12 <- .mult1[[2]]
+          .mult13 <- .mult1[[3]]
+          if (identical(.mult2, .mult12[[2]])) {
+            .mult1 <- as.call(list(quote(`*`), .mult12[[3]], .mult13))
+            .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
+          } else if (identical(.mult2, .mult12[[3]])) {
+            .mult1 <- as.call(list(quote(`*`), .mult12[[2]], .mult13))
+            .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
+          }
+        }
+      }
+    } 
+    return(.isTheta2(.mult1, useF=NA) && .isTheta2(.mult2, useF=TRUE) ||
+             .isTheta2(.mult1, useF=TRUE) && .isTheta2(.mult2, useF=NA))
+  }
+  FALSE
+}
+#' Is it add+prop comb2() 
+#'
+#' @param x expression
+#' @return boolean
+#' @noRd
+#' @author Matthew L. Fidler
+.isAddPropW2 <- function(x) {
+  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`<-`)))) {
+    return(.isAddPropW2(x[[3]]))
+  }
+  if (length(x) == 2L && identical(x[[1]], quote(`sqrt`))) {
+    .x <- x[[2]]
+    if (length(.x) != 3L) return(FALSE)
+    if (identical(.x[[1]], quote(`+`))) {
+      return(.isTheta2(.x[[2]]) && .isTheta2F2(.x[[3]]) ||
+               .isTheta2(.x[[3]]) && .isTheta2F2(.x[[2]]))
+    }
+  }
+  FALSE
+}
+
 
 #' Determine type of residual error for common models
 .determineError <- function(rxui, sigma) {
