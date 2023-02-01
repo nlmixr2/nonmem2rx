@@ -69,6 +69,7 @@ void sAppendN(sbuf *sbb, const char *what, int n) {
   sbb->o +=n;
 }
 
+
 void sAppend(sbuf *sbb, const char *format, ...) {
   if (sbb->sN == 0) sIni(sbb);
   if (format == NULL) return;

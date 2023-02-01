@@ -1,8 +1,8 @@
+.nmlst <- new.env(parent=emptyenv())
 #' Reads the NONMEM list file for information
-#'
 #'  
 #' @param file File where the list is located
-#' @return 
+#' @return return a list with `$theta`, `$eta` and `$eps`
 #' @export 
 #' @author Matthew L. Fidler
 #' @examples
@@ -27,6 +27,31 @@ nmlst <- function(file) {
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
-  
-  
+
+  .est <- paste(.est, collapse="\n")
+  .Call(`_nonmem2rx_trans_lst`, .est)
+  list(theta=.nmlst$theta,
+       eta=.nmlst$eta,
+       eps=.nmlst$eps)
+}
+#' Push final estimates
+#'
+#' @param type Type of element ("theta", "eta", "eps")
+#' @param est R code for the estimates (need to apply names and lotri)
+#' @param maxElt maximum number of the element type
+#' @return nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushLst <- function(type, est, maxElt) {
+  if (type == "theta") {
+    .theta <- setNames(eval(parse(text=est)), paste0(type,seq(1, maxElt)))
+    assign("theta", .theta, envir=.nmlst)
+  } else {
+    .est <- paste0("lotri::lotri(",
+                   paste(paste0(type, seq(1, maxElt)), collapse="+"),
+                   " ~ ", est, ")")
+    .est <- eval(parse(text=.est))
+    assign(type, .est, envir=.nmlst)
+  }
+  invisible()
 }

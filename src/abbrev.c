@@ -80,7 +80,7 @@ SEXP nonmem2rxPushScale(int scale);
 
 int maxA = 0;
 
-void pushModel() {
+void pushModel(void) {
   if (curLine.s == NULL) return;
   if (curLine.s[0] == 0) return;
   nonmem2rxPushModelLine(curLine.s);

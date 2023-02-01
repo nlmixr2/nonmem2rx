@@ -8,32 +8,28 @@ statement: theta_est_line
     | sigma_cor_line
     | constant_line
     | one_stop_line
-    | blank_line
     ;
 
-theta_est_line: 'THETA' '-' 'VECTOR' ".*";
-omega_est_line: 'OMEGA' '-' 'COV' ".*";
-sigma_est_line: 'SIGMA' '-' 'COV' ".*";
-omega_cor_line: 'OMEGA' '-' 'COR' ".*";
-sigma_cor_line: 'SIGMA' '-' 'COR' ".*";
+theta_est_line: 'THETA - VECTOR OF FIXED EFFECTS PARAMETERS';
+omega_est_line: 'OMEGA - COV MATRIX FOR RANDOM EFFECTS - ETAS';
+sigma_est_line: 'SIGMA - COV MATRIX FOR RANDOM EFFECTS - EPSILONS';
+omega_cor_line: 'OMEGA - CORR MATRIX FOR RANDOM EFFECTS - ETAS';
+sigma_cor_line: 'SIGMA - CORR MATRIX FOR RANDOM EFFECTS - EPSILONS';
 one_stop_line: '1';
-blank_line: "[ ]+";
 
 constant_line: '+'? (constant_item)+;
 
-constant_item: constant | na_item;
+constant_item: est_label | constant | na_item;
 
 na_item: '.........';
 
-th_label: 'TH' decimalint;
-eta_label: 'ETA' decimalint;
-eps_label: 'EPS' decimalint;
+est_label: ('TH' | 'ETA' | 'EPS') decimalint;
 
-constant : decimalint | float1 | float2;
+constant : float1 | float2;
 decimalintNo0: "([1-9][0-9]*)" $term -1;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
-whitespace: "[ \t\r\n]+";
+whitespace: "[ \t\r\n*]+";
 
 

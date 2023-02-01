@@ -19,6 +19,7 @@
 #define _(String) (String)
 #endif
 #include "lst.g.d_parser.h"
+#define max2( a , b )  ( (a) > (b) ? (a) : (b) )
 
 #define gBuf nonmem2rx_lst_gBuf
 #define gBufFree nonmem2rx_lst_gBufFree
@@ -66,12 +67,76 @@ void parseFree(int last) {
 
 extern char * rc_dup_str(const char *s, const char *e);
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
-void wprint_node_lst(int depth, char *token_name, char *token_value, void *client_data) {
-}
+void wprint_node_lst(int depth, char *token_name, char *token_value, void *client_data) {}
 
+extern sbuf curLine;
+void sExchangeParen(sbuf *sbb) {
+  char *cur =sbb->s+sbb->o - 1;
+  cur[0] = ')';
+}
+int lstType = 0;
+int maxLstItem = 0;
+SEXP nonmem2rxPushLst(const char* type, const char *est, int maxV);
+void pushList(void) {
+  switch(lstType) {
+  case 1:
+    nonmem2rxPushLst("theta", curLine.s, maxLstItem);
+    break;
+  case 2:
+    nonmem2rxPushLst("eta", curLine.s, maxLstItem);
+    break;
+  case 3:
+    nonmem2rxPushLst("eps", curLine.s, maxLstItem);
+    break;
+  }
+  lstType=0;
+}
 void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
+  if (!strcmp("constant", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curLine, "%s,", v);
+  } else if (!strcmp("est_label", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    maxLstItem = max2(maxLstItem, atoi(v));
+  } else if (!strcmp("na_item", name)) {
+    sAppendN(&curLine, "NA,", 3);
+  } else if (!strcmp("theta_est_line", name)) {
+    maxLstItem=0;
+    lstType=1;
+    sClear(&curLine);
+    sAppendN(&curLine, "c(", 2);
+  } else if (!strcmp("omega_est_line", name)) {
+    sExchangeParen(&curLine);
+    pushList();
+    lstType=2;
+    sClear(&curLine);
+    maxLstItem=0;
+    sAppendN(&curLine, "c(", 2);
+  } else if (!strcmp("sigma_est_line", name)) {
+    sExchangeParen(&curLine);
+    pushList();
+    lstType=3;
+    sClear(&curLine);
+    maxLstItem=0;
+    sAppendN(&curLine, "c(", 2);
+  } else if (!strcmp("omega_cor_line", name)) {
+    sExchangeParen(&curLine);
+    pushList();
+    lstType=4;
+    sClear(&curLine);
+    sAppendN(&curLine, "c(", 2);
+  } else if (!strcmp("sigma_cor_line", name)) {
+    sExchangeParen(&curLine);
+    pushList();
+    lstType=4;
+    sClear(&curLine);
+    maxLstItem=0;
+    sAppendN(&curLine, "c(", 2);
+  }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
       D_ParseNode *xpn = d_get_child(pn, i);
@@ -79,7 +144,6 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     }
   }
 }
-
 
 void trans_lst(const char* parse){
   freeP();
@@ -101,9 +165,14 @@ void trans_lst(const char* parse){
   } else {
     wprint_parsetree_lst(parser_tables_nonmem2rxLst, _pn, 0, wprint_node_lst, NULL);
   }
+  if (lstType != 0) {
+    sExchangeParen(&curLine);
+    pushList();
+  }
 }
 
 SEXP _nonmem2rx_trans_lst(SEXP in) {
+  sIni(&curLine);
   trans_lst(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;

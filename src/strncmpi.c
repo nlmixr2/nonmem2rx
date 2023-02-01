@@ -201,7 +201,7 @@ bool expect_equals(int a, int b, int * error_count, char * a_str, char * b_str, 
     return false;
 }
 
-SEXP _nonmem2rx_parse_strncmpci() {
+SEXP _nonmem2rx_parse_strncmpci(void) {
     REprintf("-----------------------\n"
            "String Comparison Tests\n"
            "-----------------------\n\n");

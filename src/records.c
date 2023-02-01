@@ -70,7 +70,7 @@ sbuf curLine;
 
 SEXP nonmem2rxPushRecord(const char *rec, const char *info);
 
-void pushRecord() {
+void pushRecord(void) {
   // push record information
   nonmem2rxPushRecord(curRecord, curLine.s);
   curRecord = NULL;

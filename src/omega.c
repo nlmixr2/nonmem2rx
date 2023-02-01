@@ -86,7 +86,7 @@ sbuf curOmegaLhs;
 sbuf curOmegaRhs;
 sbuf curOmega;
 
-SEXP _nonmem2rx_omeganum_reset() {
+SEXP _nonmem2rx_omeganum_reset(void) {
   nonmem2rx_omeganum = 1;
   nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
   nonmem2rx_omegaBlockn = 0;
@@ -103,7 +103,7 @@ SEXP _nonmem2rx_omeganum_reset() {
 SEXP nonmem2rxPushOmega(const char *ini);
 SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefix);
 
-void pushOmega() {
+void pushOmega(void) {
   //nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
   nonmem2rx_omegaBlockn   = 0;
   nonmem2rx_omegaSame     = 0;
@@ -116,7 +116,7 @@ void pushOmega() {
   sClear(&curOmega);
 }
 
-void pushOmegaComment() {
+void pushOmegaComment(void) {
   nonmem2rxPushOmegaComment(curComment, omegaEstPrefix);
   curComment = NULL;
 }

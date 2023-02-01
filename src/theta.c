@@ -75,7 +75,7 @@ int nonmem2rx_thetanum = 1;
 char *curComment = NULL;
 sbuf curTheta;
 
-SEXP _nonmem2rx_thetanum_reset() {
+SEXP _nonmem2rx_thetanum_reset(void) {
   nonmem2rx_thetanum = 1;
   sIni(&curTheta);
   return R_NilValue;
@@ -85,7 +85,7 @@ SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi);
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
 
-void pushTheta() {
+void pushTheta(void) {
   nonmem2rxPushTheta(curTheta.s, curComment);
   sClear(&curTheta);
 }
