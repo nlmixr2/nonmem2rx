@@ -93,6 +93,9 @@ int abbrevLin = 0;
 
 SEXP nonmem2rxGetScale(int scale);
 
+int evidWarning = 0;
+
+
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
@@ -184,9 +187,16 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     } else if (!nmrxstrcmpi("tscale", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'TSCALE' NONMEM reserved variable is not translated");
-    }  else if (!nmrxstrcmpi("xscale", v)) {
+    } else if (!nmrxstrcmpi("xscale", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'XSCALE' NONMEM reserved variable is not translated");
+    } else if (!nmrxstrcmpi("evid", v)) {
+      if (evidWarning == 0) {
+        Rf_warning("'evid' variable is not supported in rxode2, renamed to 'nmevid', rename/copy in your data too");
+        evidWarning = 1;
+      }
+      sAppendN(&curLine, "nmevid", 6);
+      return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
     int i = 0;
