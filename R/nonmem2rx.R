@@ -448,6 +448,9 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
                          paste(.nonmem2rx$ini, collapse="\n"),
                          "\n})\n",
                          "rxode2::model({\n",
+                         ifelse(.nonmem2rx$abbrevLin == 0L,
+                                paste0(paste(paste0("cmt(a", 1:4, ")"), collapse="\n"), "\n"),
+                                ""),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))

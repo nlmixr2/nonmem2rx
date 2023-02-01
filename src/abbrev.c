@@ -101,7 +101,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (!nmrxstrcmpi("t", v)) {
-      sAppendN(&curLine, "nm_t", 4);
+      sAppendN(&curLine, "t", 1);
       return 1;
     } else if (!nmrxstrcmpi("time", v)) {
       sAppendN(&curLine, "t", 1);
@@ -130,6 +130,12 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     }  else if (!nmrxstrcmpi("xscale", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'XSCALE' NONMEM reserved variable is not translated");
+    }
+    // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
+    int i = 0;
+    while(v[i] != 0) {
+      v[i] = toupper(v[i]);
+      i++;
     }
     sAppend(&curLine, v);
     return 1;
@@ -339,11 +345,13 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
   }
   return 0;
 }
-
+int verbWarning = 0;
 int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("verbatimCode", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "Verbatim code is not supported in translation");
+    if (verbWarning == 0) {
+      Rf_warning("Verbatim code is not supported in translation\nignored verbatim in %s", abbrevPrefix);
+      verbWarning = 1;
+    }
   } else if (!strcmp("exit_line", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'EXIT # #' statements not supported in translation");
@@ -660,6 +668,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   sIni(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
+  verbWarning = 0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;
