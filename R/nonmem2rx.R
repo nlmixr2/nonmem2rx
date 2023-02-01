@@ -550,8 +550,14 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
               devtools::package_file("src/sub.g.d_parser.h"))
 }
 
-
-
+.nonmem2rxBuildLst <- function() {
+  cat("Update Parser c for lst final estimate parsing\n");
+  dparser::mkdparse(devtools::package_file("inst/lst.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxLst")
+  file.rename(devtools::package_file("src/lst.g.d_parser.c"),
+              devtools::package_file("src/lst.g.d_parser.h"))
+}
 
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildRecord()
@@ -561,6 +567,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
   .nonmem2rxBuildInput()
   .nonmem2rxBuildAbbrev()
   .nonmem2rxBuildSub()
+  .nonmem2rxBuildLst()
   invisible("")
   
 }
