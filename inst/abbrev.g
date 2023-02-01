@@ -112,6 +112,8 @@ mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
 mixp  : ('MIXP(' | 'mixp(') decimalintNo0 ')';
 com   : ('COM(' | 'com(') decimalintNo0 ')';
 pcmt  : ('PCMT(' | 'pcmt(') decimalintNo0 ')';
+sigma  : ('SIGMA(' | 'sigma(') decimalintNo0 ',' decimalintNo0 ')';
+omega  : ('OMEGA(' | 'omega(') decimalintNo0 ',' decimalintNo0 ')';
 
 avar:  "[Aa][0-9][0-9][0-9][0-9][0-9]";
 cvar:  "[Cc][0-9][0-9][0-9][0-9][0-9]";
@@ -154,6 +156,8 @@ primary_expression
   | cvar
   | com
   | pcmt
+  | sigma
+  | omega
   | function
   | '(' logical_or_expression ')'
   ;

@@ -447,6 +447,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   } else if (!strcmp("pcmt", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "PCMT(#) not supported in translation");
+  } else if (!strcmp("sigma", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "SIGMA(#, #) not supported in translation");
+  } else if (!strcmp("omega", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "OMEGA(#, #) not supported in translation");
   }
   return 0;
 }
