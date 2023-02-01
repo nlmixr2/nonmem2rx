@@ -13,6 +13,7 @@
   .nonmem2rx$scale <- NULL
   .nonmem2rx$advan <- 0L
   .nonmem2rx$trans <- 0L
+  .nonmem2rx$maxa <- 0L
   .nonmem2rx$addPar <- NA_character_
   .nonmem2rx$propPar <- NA_character_
 }
@@ -449,7 +450,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
                          "\n})\n",
                          "rxode2::model({\n",
                          ifelse(.nonmem2rx$abbrevLin == 0L,
-                                paste0(paste(paste0("cmt(a", 1:4, ")"), collapse="\n"), "\n"),
+                                paste0(paste(paste0("cmt(a", seq(1,.nonmem2rx$maxa), ")"), collapse="\n"), "\n"),
                                 ""),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",

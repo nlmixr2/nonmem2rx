@@ -29,7 +29,7 @@
 #define freeP nonmem2rx_abbrev_freeP
 #define parseFreeLast nonmem2rx_abbrev_parseFreeLast
 #define parseFree nonmem2rx_abbrev_parseFree
-
+#define max2( a , b )  ( (a) > (b) ? (a) : (b) )
 
 extern D_ParserTables parser_tables_nonmem2rxAbbrev;
 
@@ -78,6 +78,8 @@ extern char * rc_dup_str(const char *s, const char *e);
 SEXP nonmem2rxPushModelLine(const char *item1);
 SEXP nonmem2rxPushScale(int scale);
 
+int maxA = 0;
+
 void pushModel() {
   if (curLine.s == NULL) return;
   if (curLine.s[0] == 0) return;
@@ -85,8 +87,63 @@ void pushModel() {
   sClear(&curLine);
 }
 
+void writeAinfo(const char *v);
+
+int abbrevLin = 0;
+
+SEXP nonmem2rxGetScale(int scale);
+
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
-  if (!strcmp("avar", name)) {
+  if (!strcmp("fbioi", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppendN(&curLine, "f(", 2);
+    writeAinfo(v + 1);
+    sAppendN(&curLine, ")", 1);
+    return 1;
+  } else if (!strcmp("alagi", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppendN(&curLine, "alag(", 5);
+    writeAinfo(v + 1);
+    sAppendN(&curLine, ")", 1);
+    return 1;
+  } else if (!strcmp("ratei", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppendN(&curLine, "rate(", 5);
+    writeAinfo(v + 1);
+    sAppendN(&curLine, ")", 1);
+    return 1;
+  } else if (!strcmp("duri", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppendN(&curLine, "dur(", 4);
+    writeAinfo(v + 1);
+    sAppendN(&curLine, ")", 1);
+    return 1;
+  } else if (!strcmp("scalei", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppendN(&curLine, "scale", 5);
+    if (v[1] == 'O' || v[1] == '0') {
+      sAppendN(&curLine, "0", 1);
+      return 1;
+    }
+    if (i == 0 && v[1] == 'C') {
+      if (abbrevLin == 1) {
+        sAppendN(&curLine, "1", 1);
+        return 1;
+      } else if (abbrevLin == 2) {
+        sAppendN(&curLine, "2", 1);
+        return 1;
+      }
+      sAppendN(&curLine, "c", 1);
+      return 1;
+    }
+    sAppend(&curLine, "%s", v+1);
+    return 1;
+  } else if (!strcmp("avar", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'A#' NONMEM reserved variable is not translated");
   } else if (!strcmp("cvar", name)) {
@@ -143,10 +200,6 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   return 0;
 }
 
-int abbrevLin = 0;
-
-SEXP nonmem2rxGetScale(int scale);
-
 void writeAinfo(const char *v) {
   // abbrevLin = 0 is ode
   // abbrevLin = 1 is linCmt() without ka
@@ -157,6 +210,7 @@ void writeAinfo(const char *v) {
   // abbrevLin = 4 is linCmt() without ka
   // abbrevLin = 5 is linCmt() with ka
   if (abbrevLin == 0) {
+    maxA = max2(maxA, atoi(v));
     sAppend(&curLine, "a%s", v);
     return;
   }
@@ -491,41 +545,40 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[1] == 'O' || v[1] == '0') {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "S0/SO is not supported in translation");
+      if (i == 0) {
+        sAppendN(&curLine, "scale0 <- ", 10);
+        nonmem2rxPushScale(0);
+        return 1;
+      }
+      if (i == 1) return 1;
     }
     int scaleCmt = NA_INTEGER;
     if (i == 0 && v[1] == 'C') {
       if (abbrevLin == 1) {
-        sAppendN(&curLine, "scale1 <- ", 10);
         scaleCmt = 1;
       } else if (abbrevLin == 2) {
-        sAppendN(&curLine, "scale2 <- ", 10);
         scaleCmt = 2;
       } else {
-        parseFree(0);
-        Rf_errorcall(R_NilValue, "translation cannot determine 'SC'");
+        Rf_warning("translation cannot determine 'SC', using as constant");
+        sAppendN(&curLine, "scalec <- ", 10);
+        return 1;
       }
-      nonmem2rxPushScale(scaleCmt);
-      return 1;
     } else {
       scaleCmt = atoi(v + 1);
     }
     if (abbrevLin == 1) {
       if (scaleCmt > 1) {
-        if (i == 0) Rf_warning("scale%d ignored with this linCmt() model translation");
-        return 1;
+        if (i == 0) Rf_warning("scale%d could be meaningless with this linCmt() model translation");
       }
     } else if (abbrevLin == 2) {
       if (scaleCmt > 2) {
-        if (i == 0) Rf_warning("scale%d ignored with this linCmt() model translation");
-        return 1;
+        if (i == 0) Rf_warning("scale%d could be meaningless with this linCmt() model translation");
       }
     }
     if (i == 0) {
       // scale# <- ....
       nonmem2rxPushScale(scaleCmt);
-      sAppend(&curLine, "scale%s <- ", v + 1);
+      sAppend(&curLine, "scale%d <- ", scaleCmt);
       return 1;
     }
     if (i == 1) return 1;
@@ -664,12 +717,16 @@ void trans_abbrev(const char* parse){
   }
 }
 
+SEXP nonmem2rxSetMaxA(int maxa);
+
 SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   sIni(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
   verbWarning = 0;
+  maxA = 0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
+  nonmem2rxSetMaxA(maxA);
   parseFree(0);
   return R_NilValue;
 }

@@ -119,24 +119,20 @@ test_that("test abbrev", {
     .a("R2 = 1","rate(central) <- 1", abbrevLin=2L)
     .a("D2 = 1","dur(central) <- 1", abbrevLin=2L)
     expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=2L), "central")
-    
     expect_warning(.a("S1 = 1\nSC=1", c("scale1 <- 1", "scale1 <- 1"), abbrevLin=1L), "last defined")
-    expect_warning(.a("S1 = 1\nS2=1", c("scale1 <- 1"), abbrevLin = 1L), "scale2 ignored")
+    expect_warning(.a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 1L), "scale2 could be meaningless")
     .a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 2L)
-    expect_warning(.a("S1 = 1\nS2=1\nS3=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 2L),
-                   "scale3 ignored")
-
+    expect_warning(.a("S1 = 1\nS2=1\nS3=1", c("scale1 <- 1", "scale2 <- 1", "scale3 <- 1"), abbrevLin = 2L),
+                   "scale3 could be meaningless")
+    .a("S0=1", "scale0 <- 1")
     .a("A1=A(1)", "A1 <- a1")
     .a("A1=A(1)", "A1 <- central", abbrevLin = 1L)
     .a("A1=A(1)", "A1 <- depot", abbrevLin = 2L)
-    
     .a("A1=A(1)", "A1 <- a1", abbrevLin = 3L)
     .a("S1=1\nA1=A(1)", c("scale1 <- 1", "A1 <- a1/scale1"), abbrevLin = 3L)
     .a("S2=1\nA1=A(1)", c("scale2 <- 1", "A1 <- a1"), abbrevLin = 3L)
-    
     .a("A1=A(1)", "A1 <- rxLinCmt1", abbrevLin = 4L)
     .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- rxLinCmt1/scale1"), abbrevLin = 4L)
-
     .a("A1=A(1)", "A1 <- dose(depot)*exp(-KA*tad(depot))", abbrevLin = 5L)
     .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- dose(depot)*exp(-KA*tad(depot))/scale1"), abbrevLin = 5L)
     .a("A2=A(2)", "A2 <- rxLinCmt1", abbrevLin = 5L)

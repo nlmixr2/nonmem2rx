@@ -42,9 +42,7 @@ nonmem2rxRec.err <- function(x) {
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L)
   }
   for (.cur in .x) {
-    # add 3 so that in err a(central) = linCmt()/scale1 or linCmt()/scale2
-    # and a(depot) = dose(depot)*exp(-tad(depot)*ka)/scale1
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin+3L)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin)
   }
 }
 #' Add the parameters scaled for rode2 translation
@@ -72,4 +70,15 @@ nonmem2rxRec.err <- function(x) {
 .getScale <- function(scale) {
   if (scale %in% .nonmem2rx$scale) return(sprintf("/scale%d", scale))
   ""
+}
+
+#' Set maximum number of compartments
+#'
+#' @param maxa maximum 
+#' @return nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.setMaxA <- function(maxa) {
+  .nonmem2rx$maxa <- maxa
+  invisible()
 }

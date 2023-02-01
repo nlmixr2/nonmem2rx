@@ -170,3 +170,13 @@ extern "C" SEXP nonmem2rxSetTrans(int trans) {
   return setTrans(transI);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxSetMaxA(int maxa) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  IntegerVector maxI(1);
+  maxI[0] = maxa;
+  Function setMax(".setMaxA", nonmem2rxNs);
+  return setMax(maxI);
+  END_RCPP
+}

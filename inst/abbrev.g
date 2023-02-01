@@ -39,7 +39,7 @@ fbio        : "[Ff]([0-9]+|O)" '='  logical_or_expression;
 alag        : "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
 rate        : "[Rr][1-9][0-9]*" '=' logical_or_expression;
 dur         : "[Dd][1-9][0-9]*" '=' logical_or_expression;
-scale       : "[Ss]([0-9]+|C)" '=' logical_or_expression;
+scale       : "[Ss]([0-9]+|C|O)" '=' logical_or_expression;
 derivative  : ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
 da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
@@ -125,8 +125,20 @@ power_expression : primary_expression power_operator exponent_expression;
 
 power_operator   : '**';
 
+fbioi        : "[Ff]([0-9]+|O)";
+alagi        : "[Aa][Ll][Aa][Gg][1-9][0-9]*";
+ratei        : "[Rr][1-9][0-9]*";
+duri         : "[Dd][1-9][0-9]*";
+scalei       : "[Ss]([0-9]+|C|O)";
+
+
 primary_expression 
   : constant
+  | fbioi
+  | alagi
+  | ratei
+  | duri
+  | scalei
   | identifier
   | theta
   | eta
