@@ -94,7 +94,9 @@ int abbrevLin = 0;
 SEXP nonmem2rxGetScale(int scale);
 
 int evidWarning = 0;
+int icallWarning = 0;
 
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
 
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
@@ -176,8 +178,13 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'MIXEST' NONMEM reserved variable is not translated");
     } else if (!nmrxstrcmpi("ICALL", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'ICALL' NONMEM reserved variable is not translated");
+      if (icallWarning == 0) {
+        nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation");
+        Rf_warning("icall found and added as rxode2 parameter to model; set to 4 to activate simulation code");
+        icallWarning=1;
+      }
+      sAppendN(&curLine, "icall", 5);
+      return 1;
     } else if (!nmrxstrcmpi("COMACT", v)) {
       parseFree(0);
       Rf_errorcall(R_NilValue, "'COMACT' NONMEM reserved variable is not translated");
@@ -221,12 +228,13 @@ void writeAinfo(const char *v) {
   // abbrevLin = 5 is linCmt() with ka
   if (abbrevLin == 0) {
     maxA = max2(maxA, atoi(v));
-    sAppend(&curLine, "a%s", v);
+    sAppend(&curLine, "rxddta%s", v);
     return;
   }
   int cur = atoi(v);
   if (abbrevLin == 3) {
-    sAppend(&curLine, "a%s%s", v, CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
+    maxA = max2(maxA, atoi(v));
+    sAppend(&curLine, "rxddta%s%s", v, CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
     return;
   }
   if (abbrevLin == 2 && cur == 1) {
@@ -383,6 +391,39 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     return 0;
+  } else if (!strcmp("ifcallsimeta", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "if (", 4);
+      return 1;
+    } else if (i == 3) {
+      sAppendN(&curLine, ") simeta()", 10);
+      return 1;
+    } else if (i != 2) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("ifcallsimeps", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "if (", 4);
+      return 1;
+    } else if (i == 3) {
+      sAppendN(&curLine, ") simeps()", 10);
+      return 1;
+    } else if (i != 2) {
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("ifcallrandom", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "if (", 4);
+      return 1;
+    } else if (i == 3) {
+      sAppendN(&curLine, ") R <- rxunif()", 15);
+      return 1;
+    } else if (i != 2) {
+      return 1;
+    }
+    return 0;
   } else if (!strcmp("if1", name)) {
     if (i == 0) {
       sAppendN(&curLine, "if (", 4);
@@ -433,9 +474,6 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   } else if (!strcmp("callsupp", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'CALL SUPP(# , #)' statements not supported in translation");
-  } else if (!strcmp("callrandom", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'CALL RANDOM()' statements not supported in translation");
   } else if (!strcmp("dt", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "DT(#) not supported in translation");
@@ -472,7 +510,8 @@ int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "d/dt(a%s) <- ", v);
+      maxA = max2(maxA, atoi(v));
+      sAppend(&curLine, "d/dt(rxddta%s) <- ", v);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {
       return 1;
@@ -671,6 +710,9 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     sAppendN(&curLine, "}", 1);
     pushModel();
     return;
+  } else if (!strcmp("callrandom", name)) {
+    sAppendN(&curLine,"R <- rxunif()", 13);
+    pushModel();
   } else if (!strcmp("callsimeta", name)) {
     sAppendN(&curLine,"simeta()", 8);
     pushModel();
@@ -706,7 +748,10 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       !strcmp("alag", name) ||
       !strcmp("rate", name) ||
       !strcmp("dur", name) ||
-      !strcmp("scale", name)) {
+      !strcmp("scale", name) ||
+      !strcmp("ifcallrandom", name) ||
+      !strcmp("ifcallsimeta", name) ||
+      !strcmp("ifcallsimeps", name) ) {
     pushModel();
   }
 }
@@ -741,6 +786,8 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
   verbWarning = 0;
   maxA = 0;
+  evidWarning=0;
+  icallWarning=0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   nonmem2rxSetMaxA(maxA);
   parseFree(0);

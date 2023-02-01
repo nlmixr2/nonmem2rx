@@ -10,7 +10,7 @@ comp_name: 'COMP' | 'comp' | 'COMPARTMENT' | 'compartment';
 
 comp_option: identifier_nm ','?;
 
-comp_statement_1: comp_name '=' '(' identifier_nm ','?  comp_option* ')' ','? ;
+comp_statement_1: comp_name '='? '(' identifier_nm ','?  comp_option* ')' ','? ;
 comp_statement_2: comp_name ','? ;
 
 comp_statement: (comp_statement_1 | comp_statement_2 | ncpt_statement | link_statement);

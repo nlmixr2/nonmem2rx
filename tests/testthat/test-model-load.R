@@ -7,7 +7,11 @@ test_that("model loading", {
 
   #nonmem2rx(system.file("mods/DDMODEL00000323/run1.mod", package="nonmem2rx")) # advan7
 
-  nonmem2rx(system.file("mods/DDMODEL00000298/run1.mod", package="nonmem2rx"))
+  expect_error(nonmem2rx(system.file("mods/DDMODEL00000298/run1.mod", package="nonmem2rx")), NA)
+  
+  #nonmem2rx(system.file("mods/DDMODEL00000310/run1.mod", package="nonmem2rx")) advan
+
+  expect_error(nonmem2rx(system.file("mods/DDMODEL00000302/run1.mod", package="nonmem2rx")), NA)
   
   
 })

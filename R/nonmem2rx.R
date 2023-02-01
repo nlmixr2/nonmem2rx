@@ -385,7 +385,7 @@
   .n <- vapply(thetaNames, function(v) {
     if (v == "") return("")
     # They can't even match based on case or it can interfere with linCmt()
-    if (tolower(v) %in% tolower(.mv$lhs)) {
+    if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params))) {
       return(paste0("t.", v))
     }
     if (.nonmem2rx$abbrevLin != 0L) {
@@ -450,7 +450,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
                          "\n})\n",
                          "rxode2::model({\n",
                          ifelse(.nonmem2rx$abbrevLin == 0L,
-                                paste0(paste(paste0("cmt(a", seq(1,.nonmem2rx$maxa), ")"), collapse="\n"), "\n"),
+                                paste0(paste(paste0("cmt(rxddta", seq(1,.nonmem2rx$maxa), ")"), collapse="\n"), "\n"),
                                 ""),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",

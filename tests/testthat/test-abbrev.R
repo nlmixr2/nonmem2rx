@@ -38,7 +38,7 @@ test_that("test abbrev", {
     expect_error(.a("CL = C12345"), "'C#'")
     expect_error(.a("A = MIXNUM"), "'MIXNUM'")
     expect_error(.a("A = MIXEST"), "'MIXEST'")
-    expect_error(.a("A = ICALL"), "'ICALL'")
+    expect_warning(.a("A = ICALL", "A <- icall"), "icall")
     expect_error(.a("A = COMACT"), "'COMACT'")
     expect_error(.a("A = COMSAV"), "'COMSAV'")
 
@@ -64,7 +64,7 @@ test_that("test abbrev", {
     expect_warning(.a("CALLFL = -1", NULL), "'CALLFL = ' ignored")
     expect_error(.a("CALL PASS(MODE)"), "'CALL PASS")
     expect_error(.a("CALL SUPP(0 , 1)"), "'CALL SUPP")
-    expect_error(.a("CALL RANDOM(1, R)"), "'CALL RANDOM")
+    .a("CALL RANDOM(1, R)", "R <- rxunif()")
     expect_error(.a("C=DT(3)"), "DT\\(#\\)")
     expect_error(.a("C=MTIME(3)"), "MTIME\\(#\\)")
     expect_error(.a("C=MNEXT(3)"), "MNEXT\\(#\\)")
@@ -77,15 +77,15 @@ test_that("test abbrev", {
 
     .a("DADT(1) = -KEL*A(1)",
        # could look better but functional
-       "d/dt(a1) <-  - KEL * a1")
+       "d/dt(rxddta1) <-  - KEL * rxddta1")
     expect_error(.a("DA(1, 2) = -KEL*A(1)"), "DA[(]#, #[)]")
     expect_error(.a("DP(1, 2) = -KEL*A(1)"), "DP[(]#, #[)]")
 
     # cmt properties
-    .a("A_0(1) = 1","a1(0) <- 1")
-    .a("F1 = 1","f(a1) <- 1")
-    .a("R1 = 1","rate(a1) <- 1")
-    .a("D1 = 1","dur(a1) <- 1")
+    .a("A_0(1) = 1","rxddta1(0) <- 1")
+    .a("F1 = 1","f(rxddta1) <- 1")
+    .a("R1 = 1","rate(rxddta1) <- 1")
+    .a("D1 = 1","dur(rxddta1) <- 1")
     .a("S1 = 1","scale1 <- 1")
     .a(" CL      = LOG(A)", "CL <- log(A)")
     .a(" CL      = MIN(C, D)", "CL <- min(C, D)")
@@ -125,12 +125,12 @@ test_that("test abbrev", {
     expect_warning(.a("S1 = 1\nS2=1\nS3=1", c("scale1 <- 1", "scale2 <- 1", "scale3 <- 1"), abbrevLin = 2L),
                    "scale3 could be meaningless")
     .a("S0=1", "scale0 <- 1")
-    .a("A1=A(1)", "A1 <- a1")
+    .a("A1=A(1)", "A1 <- rxddta1")
     .a("A1=A(1)", "A1 <- central", abbrevLin = 1L)
     .a("A1=A(1)", "A1 <- depot", abbrevLin = 2L)
-    .a("A1=A(1)", "A1 <- a1", abbrevLin = 3L)
-    .a("S1=1\nA1=A(1)", c("scale1 <- 1", "A1 <- a1/scale1"), abbrevLin = 3L)
-    .a("S2=1\nA1=A(1)", c("scale2 <- 1", "A1 <- a1"), abbrevLin = 3L)
+    .a("A1=A(1)", "A1 <- rxddta1", abbrevLin = 3L)
+    .a("S1=1\nA1=A(1)", c("scale1 <- 1", "A1 <- rxddta1/scale1"), abbrevLin = 3L)
+    .a("S2=1\nA1=A(1)", c("scale2 <- 1", "A1 <- rxddta1"), abbrevLin = 3L)
     .a("A1=A(1)", "A1 <- rxLinCmt1", abbrevLin = 4L)
     .a("S1=V\nA1=A(1)", c("scale1 <- V", "A1 <- rxLinCmt1/scale1"), abbrevLin = 4L)
     .a("A1=A(1)", "A1 <- dose(depot)*exp(-KA*tad(depot))", abbrevLin = 5L)

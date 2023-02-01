@@ -7,6 +7,9 @@ statement
   : assignment
   | if1
   | ifthen
+  | ifcallrandom
+  | ifcallsimeps
+  | ifcallsimeta
   | elseif
   | else
   | endif
@@ -58,11 +61,14 @@ dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
 enddo: 'ENDDO';
 
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
+ifcallsimeta: 'IF' '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';
 callgeteta: 'CALL' 'GETETA' '(' 'ETA' ')';
 callsimeps: 'CALL' 'SIMEPS' '(' 'EPS' ')';
+ifcallsimeps:'IF' '(' logical_or_expression ')' 'CALL' 'SIMEPS' '(' 'EPS' ')';
 callpassmode: 'CALL' 'PASS' '(' 'MODE' ')';
 callsupp:   'CALL' 'SUPP' '(' "[01]" ',' "[01]" ')';
 callrandom: 'CALL' 'RANDOM' '(' "(10|[1-9])" ',' 'R' ')';
+ifcallrandom: 'IF' '(' logical_or_expression ')' 'CALL' 'RANDOM' '(' "(10|[1-9])" ',' 'R' ')';
 
 assignment : identifier  '='  logical_or_expression;
 
