@@ -6,9 +6,9 @@ test_that("test abbrev", {
     expect_equal(.nonmem2rx$model, eq)
   }
   
-  .a("TVCL    = matt", "TVCL <- matt")
+  .a("TVCL    = matt", "TVCL <- MATT")
   .a("TVCL    = matt+3",
-     "TVCL <- matt + 3")
+     "TVCL <- MATT + 3")
     .a("TVCL    = THETA(1)",
      "TVCL <- theta1")
     .a("TVCL    = THETA(1)*(1+THETA(7)*(CLCR-65))",
@@ -57,7 +57,7 @@ test_that("test abbrev", {
     .a("IF (CL .GE. 4) CL = 4", "if (CL >= 4) CL <- 4")
 
     # Unsupported lines
-    expect_error(.a("\"FIRST"), "Verbatim")
+    expect_warning(.a("\"FIRST", NULL), "Verbatim")
     expect_error(.a("EXIT 1 2"), "'EXIT # #'")
     expect_error(.a("IF (B .LT. 0) EXIT 1 2"), "'IF \\(\\) EXIT # #'")
     expect_warning(.a("COMRES = -1", NULL), "'COMRES = -1' ignored")
@@ -98,8 +98,8 @@ test_that("test abbrev", {
     .a("CALL SIMEPS(EPS)", "simeps()")
     expect_error(.a("CALL GETETA(ETA)"), "'CALL GETETA")
     expect_error(.a(","), "[$]PRED")
-    .a("x=time", "x <- t")
-    .a("x=t", "x <- nm_t")
+    .a("x=time", "X <- t")
+    .a("x=t", "X <- t")
 
     # in the presence of linCmt()
     .a("f1=1", "f(central) <- 1", abbrevLin=1L)
