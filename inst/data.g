@@ -1,11 +1,11 @@
 //loop
 statement_list : filename
-        (statement)+;
+        (statement)*;
 
 filename: filename_t1 | filename_t2 | filename_t3;
-filename_t1: '\'' "[^'\n]*" '\'';
-filename_t2: '\"' "[^\"\n]*" '\"';
-filename_t3: "[^ ]+";
+filename_t1: "\'([^\'\\]|\\[^])*\'";
+filename_t2: "\"([^\"\\]|\\[^])*\"";
+filename_t3: "[^ '\"\n]+";
 
 ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore') '=' "[^\n]";
 ignore_statement: ('IGNORE' | 'ignore' | 'Ignore') '=' logic_bracket;
@@ -18,7 +18,7 @@ lrecl_statement: ('LRECL' | 'lrecl' | 'Lrecl') '=' decimalint;
 rewind_statement: ('NOREWIND' | 'REWIND' | 'norewind' | 'rewind' | 'Norewind' | 'Rewind');
 
 logic_bracket: '(' (simple_logic)*  (',' simple_logic)* ')';
-simple_logic: identifier_nm logic_compare identifier_nm;
+simple_logic: identifier_nm logic_compare (identifier_nm | logic_constant);
 
 logic_compare: eq_expression_nm
     | neq_expression_nm
@@ -46,6 +46,7 @@ statement: ignore1_statement
     | rewind_statement
     ;
 
+logic_constant: '-'? constant;
 constant : decimalint | float1 | float2;
 
 whitespace: ( "[ \t\r\n]+" | singleLineComment)*;

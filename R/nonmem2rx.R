@@ -21,6 +21,9 @@
   .nonmem2rx$maxa <- 0L
   .nonmem2rx$addPar <- NA_character_
   .nonmem2rx$propPar <- NA_character_
+  .nonmem2rx$dataFile <- NA_character_
+  .nonmem2rx$dataCond <- character(0)
+  .nonmem2rx$dataIgnore1 <- NULL
 }
 #' Is this ipred or f?  
 #'  

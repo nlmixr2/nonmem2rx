@@ -188,3 +188,21 @@ extern "C" SEXP nonmem2rxPushLst(const char* type, const char *est, int maxV) {
   return pushLst(type, est, maxV);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushDataFile(const char* file) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushDataFile(".pushDataFile", nonmem2rxNs);
+  CharacterVector cur(1);
+  cur[0] = Rf_mkChar(file);
+  pushDataFile(cur);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxPushDataCond(const char* cond) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushDataCond(".pushDataCond", nonmem2rxNs);
+  pushDataCond(cond);
+  END_RCPP
+}

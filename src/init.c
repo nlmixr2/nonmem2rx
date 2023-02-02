@@ -19,6 +19,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP linCmt);
 SEXP _nonmem2rx_parse_strncmpci(void);
 SEXP _nonmem2rx_trans_sub(SEXP in);
 SEXP _nonmem2rx_trans_lst(SEXP in);
+SEXP _nonmem2rx_trans_data(SEXP in);
 void R_init_nonmem2rx(DllInfo *info){
   R_CallMethodDef callMethods[]  = {
     {"_nonmem2rx_trans_input", (DL_FUNC) &_nonmem2rx_trans_input, 1},
@@ -32,6 +33,7 @@ void R_init_nonmem2rx(DllInfo *info){
     {"_nonmem2rx_parse_strncmpci", (DL_FUNC) &_nonmem2rx_parse_strncmpci, 0},
     {"_nonmem2rx_trans_sub", (DL_FUNC) &_nonmem2rx_trans_sub, 1},
     {"_nonmem2rx_trans_lst", (DL_FUNC) &_nonmem2rx_trans_lst, 1},
+    {"_nonmem2rx_trans_data", (DL_FUNC) &_nonmem2rx_trans_data, 1},
     {NULL, NULL, 0}
   };
   // log likelihoods used in calculations
