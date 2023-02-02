@@ -488,14 +488,19 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE,
                          "}")))
   .rx <- .fun()
   if (updateFinal && file.exists(.lstFile)) {
-    .fin <- nmlst(.lstFile)
+    .fin <- try(nmlst(.lstFile), silent=TRUE)
+    if (inherits(.fin, "try-error")) {
+      warning("error reading estimates from .lst file", call.=FALSE)
+      .fin <- list(theta=NULL, eta=NULL, eps=NULL)
+    }
     if (!is.null(.fin$theta)) {
       .theta <- .fin$theta
       .theta <- .theta[!is.na(.theta)]
-      .rx <- rxode2:ini(.rx, .theta)
+      .rx <- rxode2::ini(.rx, .theta)
     }
     if (!is.null(.fin$eta)) {
-      .rx <- rxode2:ini(.rx, .fin$eta)
+      .eta <- .fin$eta
+      .rx <- rxode2::ini(.rx, .eta)
     }
     if (!is.null(.fin$eps)) {
       .sigma <- .fin$eps

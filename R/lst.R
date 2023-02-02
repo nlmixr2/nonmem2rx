@@ -8,6 +8,7 @@
 #' @examples
 #' nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
+#' nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
 nmlst <- function(file) {
   # run time
   # nmtran message
@@ -18,12 +19,12 @@ nmlst <- function(file) {
   .w <- .w[1]
   .est <- .lst[seq(.w, length(.lst))]
   
-  .w <- which(regexpr("^THETA +- +VECTOR", .est) != -1)
+  .w <- which(regexpr("THETA +- +VECTOR", .est) != -1)
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
   .w <- .w[1]
   .est <- .est[seq(.w, length(.est))]
   
-  .w <- which(regexpr("^[*][*][*]+", .est) != -1)
+  .w <- which(regexpr("^ *[*][*][*]+", .est) != -1)
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
