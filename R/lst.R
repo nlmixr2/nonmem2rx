@@ -7,10 +7,10 @@
 #' @author Matthew L. Fidler
 #' @examples
 #' nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
+#' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
 nmlst <- function(file) {
   # run time
   # nmtran message
-
   .lst <- readLines(file)
   
   .w <- which(regexpr("FINAL +PARAMETER +ESTIMATE", .lst) != -1)
@@ -44,8 +44,7 @@ nmlst <- function(file) {
 #' @author Matthew L. Fidler
 .pushLst <- function(type, est, maxElt) {
   if (type == "theta") {
-    .theta <- setNames(eval(parse(text=est)), paste0(type,seq(1, maxElt)))
-    assign("theta", .theta, envir=.nmlst)
+    assign("theta", setNames(eval(parse(text=est)), paste0(type,seq(1, maxElt))), envir=.nmlst)
   } else {
     .est <- paste0("lotri::lotri(",
                    paste(paste0(type, seq(1, maxElt)), collapse="+"),

@@ -97,6 +97,9 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
   if (!strcmp("constant", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[0] != 0) sAppend(&curLine, "%s", v);
+    xpn = d_get_child(pn, 1);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppend(&curLine, "%s,", v);
   } else if (!strcmp("est_label", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);

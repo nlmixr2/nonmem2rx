@@ -25,11 +25,10 @@ na_item: '.........';
 
 est_label: ('TH' | 'ETA' | 'EPS') decimalint;
 
-constant : float1 | float2;
+constant: '-'? (float1 | float2);
 decimalintNo0: "([1-9][0-9]*)" $term -1;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 whitespace: "[ \t\r\n*]+";
-
 

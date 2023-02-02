@@ -4,7 +4,7 @@
 \alias{nonmem2rx}
 \title{Convert a NONMEM source file to a rxode control}
 \usage{
-nonmem2rx(file, tolowerLhs = TRUE, thetaNames = TRUE)
+nonmem2rx(file, tolowerLhs = TRUE, thetaNames = TRUE, cmtNames = TRUE)
 }
 \arguments{
 \item{file}{NONMEM control file location}

@@ -408,7 +408,7 @@
 }
 #' Replace compartment names
 #'  
-#' @param rxui ui 
+#' @param rxui ui
 #' @param cmtName compartment names to replace
 #' @return updated ui with the compartment names replaced
 #' @noRd
@@ -446,10 +446,11 @@
 #' @importFrom dparser mkdparse
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
-nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
+nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE) {
   loadNamespace("dparser")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   .clearNonmem2rx()
+  .lstFile <- paste0(tools::file_path_sans_ext(file), ".lst")
   if (file.exists(file)) {
     .lines <- paste(readLines(file), collapse = "\n")
   } else {
@@ -474,21 +475,32 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE) {
                          "\n})\n",
                          "rxode2::model({\n",
                          ifelse(.nonmem2rx$abbrevLin == 0L,
-                                paste0(paste(paste0("cmt(rxddta", seq(1,.nonmem2rx$maxa), ")"), collapse="\n"), "\n"),
+                                paste0(paste(paste0("cmt(rxddta", seq(1,.nonmem2rx$maxa), ")"),
+                                             collapse="\n"), "\n"),
                                 ""),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))
   .rx <- .fun()
+  if (file.exists(.lstFile)) {
+    .fin <- nmlst(.lstFile)
+    print(.fin)
+  }
   .rx <- .determineError(.rx)
   if (tolowerLhs) {
     .rx <- .toLowerLhs(.rx)
   }
   .rx <- .replaceThetaNames(.rx, thetaNames)
-  cmtName <- character(0)
-  if (exists("cmtName", envir=.nonmem2rx)) cmtName <- .nonmem2rx$cmtName
+  if (inherits(cmtNames, "logical")) {
+    if (cmtNames) {
+      cmtNames <- character(0)
+      if (exists("cmtName", envir=.nonmem2rx)) cmtNames <- .nonmem2rx$cmtName
+    } else {
+      cmtNames <- character(0)
+    }
+  }
 
-  .rx <- .replaceCmtNames(.rx, cmtName)
+  .rx <- .replaceCmtNames(.rx, cmtNames)
   .rx
 }
 

@@ -17,6 +17,7 @@ Reads the NONMEM list file for information
 }
 \examples{
 nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
+nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
 }
 \author{
 Matthew L. Fidler
