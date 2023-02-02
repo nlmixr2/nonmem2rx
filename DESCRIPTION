@@ -22,7 +22,8 @@ Imports:
     lotri,
     Rcpp,
     rxode2,
-    magrittr
+    magrittr,
+    cli
 Suggests: 
     devtools,
     nonmemica,

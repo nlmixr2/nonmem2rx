@@ -1,3 +1,8 @@
+.minfo <- function (text, ..., .envir = parent.frame()) 
+{
+    cli::cli_alert_info(gettext(text), ..., .envir = .envir)
+}
+
 .nonmem2rx <- new.env(parent=emptyenv())
 #' Clear the .nonmem2rx environment
 #'  
@@ -356,6 +361,7 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .toLowerLhs <- function(rxui) {
+  .minfo("changing most variables to lower case")
   .mv <- rxode2::rxModelVars(rxui)
   .lhs <- tolower(.mv$lhs)
   .rhs <- .mv$lhs
@@ -364,8 +370,11 @@
     .lhs <- .lhs[-.w]
     .rhs <- .rhs[-.w]
   }
-  eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))    
+  .ret <- eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))
+  .minfo("done")
+  .ret
 }
+
 #' Replace theta names
 #'  
 #' @param rxui rxode2 ui
@@ -373,8 +382,10 @@
 #' @return New ui with theta replaced
 #' @noRd
 #' @author Matthew L. Fidler
-.replaceThetaNames <- function(rxui, thetaNames) {
+.replaceThetaNames <- function(rxui, thetaNames,
+                               label="theta", prefix="t.") {
   if (length(thetaNames) == 0) return(rxui)
+  .minfo(sprintf("replace %s names", label))
   .mv <- rxode2::rxModelVars(rxui)
   .dups <- unique(thetaNames[duplicated(thetaNames)])
   if (length(.dups) > 0) {
@@ -386,25 +397,31 @@
     if (v == "") return("")
     # They can't even match based on case or it can interfere with linCmt()
     if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params))) {
-      return(paste0("t.", v))
+      return(paste0(prefix, v))
     }
     if (.nonmem2rx$abbrevLin != 0L) {
       # linear compartment protection by making sure parameters won't
       # collide ie Vc and V1 in the model
       if (regexpr("^[kvcqabg]", tolower(v)) != -1) {
-        return(paste0("t.", v))
+        return(paste0(prefix, v))
       }
     }
       
     v
   }, character(1), USE.NAMES = FALSE)
-  .t <- rxui$iniDf$name[!is.na(rxui$iniDf$ntheta)]
+  if (prefix == "t.") {
+    .t <- rxui$iniDf$name[!is.na(rxui$iniDf$ntheta)]
+  } else {
+    .t <- rxui$iniDf$name[which(is.na(rxui$iniDf$ntheta) & rxui$iniDf$neta1 == rxui$iniDf$neta2)]
+  }
   .w <- which(.n == "")
   if (length(.w) > 0) {
     .n <- .n[-.w]
     .t <- .t[-.w]
   }
-  eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))          
+  .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
+  .minfo("done")
+  .ret
 }
 #' Replace compartment names
 #'  
@@ -415,6 +432,7 @@
 #' @author Matthew L. Fidler
 .replaceCmtNames <- function(rxui, cmtName) {
   if (length(cmtName) == 0L) return(rxui)
+  .minfo("renaming compartments")
   .mv <- rxode2::rxModelVars(rxui)
   .n <- vapply(.nonmem2rx$cmtName,
                function(v) {
@@ -428,7 +446,9 @@
                  v
                }, character(1), USE.NAMES=FALSE)
   .c <- paste0("rxddta",seq_along(.n))
-  eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")))          
+  .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")))
+  .minfo("done")
+  .ret
 }
 
 #' Convert a NONMEM source file to a rxode control
@@ -446,7 +466,8 @@
 #' @importFrom dparser mkdparse
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
-nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE,
+nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
+                      cmtNames=TRUE,
                       updateFinal=TRUE) {
   loadNamespace("dparser")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
@@ -511,6 +532,17 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE,
     .rx <- .toLowerLhs(.rx)
   }
   .rx <- .replaceThetaNames(.rx, thetaNames)
+  if (inherits(etaNames, "logical")) {
+    checkmate::assertLogical(etaNames, len=1, any.missing=FALSE)
+    etaNames <- character(0)
+    if (exists("etaLabel", .nonmem2rx)) {
+      etaNames <- .nonmem2rx$etaLabel
+    }
+  } else {
+    checkmate::assertCharacter(etaNames, any.missing = FALSE)    
+  }
+  .rx <-.replaceThetaNames(.rx, etaNames,
+                           label="eta", prefix="e.")
   if (inherits(cmtNames, "logical")) {
     checkmate::assertLogical(cmtNames, len=1, any.missing = FALSE)
     if (cmtNames) {
@@ -612,6 +644,5 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE,
   .nonmem2rxBuildSub()
   .nonmem2rxBuildLst()
   invisible("")
-  
 }
 ## nocov end
