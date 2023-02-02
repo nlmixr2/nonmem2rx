@@ -121,7 +121,7 @@ int strncmpci(const char * str1, const char * str2, size_t num)
 }
 
 extern int nmrxstrcmpi(const char * str1, const char * str2) {
-  return strncmpci(str1, str2, INT_MAX);  
+  return strncmpci(str1, str2, INT_MAX);
 }
 
 
