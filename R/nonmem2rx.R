@@ -38,7 +38,8 @@
   }
   FALSE
 }
-#' Is this theta1*f
+
+# Is this theta1*f
 .isThetaF <- function(x) {
   if (length(x) != 3L) return(FALSE)
   if (!identical(x[[1]], quote(`*`))) return(FALSE)
@@ -451,10 +452,26 @@
   .ret
 }
 
-#' Convert a NONMEM source file to a rxode control
-#,'
-#' @param file NONMEM control file location
-#'
+#' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+#' 
+#' @param file NONMEM run file
+#' @param tolowerLhs Boolean to change the lhs to lower case (default:
+#'   `TRUE`)
+#' @param thetaNames this could be a boolean indicating that the theta
+#'   names should be changed to the comment-labeled names (default:
+#'   `TRUE`). This could also be a character vector of the theta names
+#'   (in order) to be replaced.
+#' @param etaNames this could be a boolean indicating that the eta
+#'   names should be changed to the comment-labeled names (default:
+#'   `TRUE`). This could also be a character vector of the theta names
+#'   (in order) to be replaced.
+#' @param cmtNames this could be a boolean indicating that the
+#'   compartment names should be changed to the named compartments in
+#'   the `$MODEL` by `COMP = (name)` (default: `TRUE`). This could
+#'   also be a character vector of the compartment names (in order) to
+#'   be replaced.
+#' @param updateFinal Update the parsed model with the model estimates
+#'   from the `.lst` output file.
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -469,7 +486,6 @@
 nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       cmtNames=TRUE,
                       updateFinal=TRUE) {
-  loadNamespace("dparser")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   .clearNonmem2rx()

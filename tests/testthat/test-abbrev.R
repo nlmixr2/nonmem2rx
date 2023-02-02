@@ -158,5 +158,7 @@ test_that("test abbrev", {
 
     .a("IF (cmt .lt. 1 .or. cmt .eq. 10)  m=atan(2)",
        "if (CMT < 1 || CMT == 10) M <- atan(2)")
+
+    expect_error(.a("F0=3"), "F0/FO")
     
 })

@@ -2,18 +2,47 @@
 % Please edit documentation in R/nonmem2rx.R
 \name{nonmem2rx}
 \alias{nonmem2rx}
-\title{Convert a NONMEM source file to a rxode control}
+\title{Convert a NONMEM source file to a rxode model (nlmixr2-syle)}
 \usage{
-nonmem2rx(file, tolowerLhs = TRUE, thetaNames = TRUE, cmtNames = TRUE)
+nonmem2rx(
+  file,
+  tolowerLhs = TRUE,
+  thetaNames = TRUE,
+  etaNames = TRUE,
+  cmtNames = TRUE,
+  updateFinal = TRUE
+)
 }
 \arguments{
-\item{file}{NONMEM control file location}
+\item{file}{NONMEM run file}
+
+\item{tolowerLhs}{Boolean to change the lhs to lower case (default:
+`TRUE`)}
+
+\item{thetaNames}{this could be a boolean indicating that the theta
+names should be changed to the comment-labeled names (default:
+`TRUE`). This could also be a character vector of the theta names
+(in order) to be replaced.}
+
+\item{etaNames}{this could be a boolean indicating that the eta
+names should be changed to the comment-labeled names (default:
+`TRUE`). This could also be a character vector of the theta names
+(in order) to be replaced.}
+
+\item{cmtNames}{this could be a boolean indicating that the
+compartment names should be changed to the named compartments in
+the `$MODEL` by `COMP = (name)` (default: `TRUE`). This could
+also be a character vector of the compartment names (in order) to
+be replaced.}
+
+\item{updateFinal}{Update the parsed model with the model estimates
+from the `.lst` output file.}
 }
 \value{
 rxode2 function
 }
 \description{
-Convert a NONMEM source file to a rxode control
+Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 }
 \examples{
 nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
