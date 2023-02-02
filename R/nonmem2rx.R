@@ -28,312 +28,6 @@
   .nonmem2rx$needNmevid <- FALSE
   .nonmem2rx$tables <- list()
 }
-#' Is this ipred or f?  
-#'  
-#' @param x expression  
-#' @return TRUE if this is ipred/f
-#' @noRd
-#' @author Matthew L. Fidler
-.isIpredOrF <- function(x) {
-  if (length(x) != 1L) return(FALSE)
-  .c0 <-as.character(x)
-  .c <- tolower(.c0)
-  if (.c %in% c("ipred", "f")) {
-    .nonmem2rx$curF <- .c0
-    return(TRUE)
-  }
-  FALSE
-}
-
-# Is this theta1*f
-.isThetaF <- function(x) {
-  if (length(x) != 3L) return(FALSE)
-  if (!identical(x[[1]], quote(`*`))) return(FALSE)
-  if (.isIpredOrF(x[[2]])) {
-    .theta <- as.character(x[[3]])
-  } else if (.isIpredOrF(x[[3]])) {
-    .theta <- as.character(x[[2]])
-  } else {
-    return(FALSE)
-  }
-  if (regexpr("theta[0-9]+", .theta) != -1) {
-    .nonmem2rx$propPar <- .theta
-    return(TRUE)
-  }
-  FALSE
-}
-#' Is this w*eps1 ?
-#'
-#' @param x expression
-#' @return TRUE if this is w*eps1
-#' @noRd
-#' @author Matthew L. Fidler
-.isWtimesEps <- function(x) {
-  if (length(x) != 3L) return(FALSE)
-  if (!identical(x[[1]], quote(`*`))) return(FALSE)
-  if (length(x[[2]]) !=1L) return(FALSE)
-  if (length(x[[3]]) !=1L) return(FALSE)
-  all(sort(tolower(c(as.character(x[[2]]), as.character(x[[3]])))) == c("eps1", "w"))
-}
-#' Determines if expression line is the fixed theta with w approach
-#'
-#' @param x expression 
-#' @return logical determining if this is the w fixed parameter approach
-#' @noRd
-#' @author Matthew L. Fidler
-#' @noRd
-.isParamWeps <- function(x) {
-  if (length(x) != 3L) return(FALSE)
-  if (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`))) return(.isParamWeps(x[[3]]))
-  if (!identical(x[[1]], quote(`+`))) return(FALSE)
-  .isIpredOrF(x[[2]]) && .isWtimesEps(x[[3]]) ||
-    .isIpredOrF(x[[3]]) && .isWtimesEps(x[[2]])
-}
-#' Is this an additive W expression?
-#'
-#'  
-#' @param x expression 
-#' @return lodical saying if this is an additive error model
-#' @noRd
-#' @author Matthew L. Fidler
-.isAddW <- function(x) {
-  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`)))) {
-    return(.isAddW(x[[3]]))
-  }
-  if (length(x) != 1L) return(FALSE)
-  .theta <- as.character(x)
-  if (regexpr("theta[0-9]+", .theta) != -1) {
-    .nonmem2rx$addPar <- .theta
-    return(TRUE)
-  }
-  FALSE
-}
-#' Is the w expression represent a proportional error?
-#'  
-#' @param x expression
-#' @return logical
-#' @noRd
-#' @author Matthew L. Fidler
-.isPropW <- function(x) {
-  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`)))) {
-    return(.isPropW(x[[3]]))
-  }
-  return(.isThetaF(x))
-}
-#' Test for add+prop combination 1
-#'
-#'  
-#' @param x expression
-#' @return logical saying if the expression is add+prop comb 1
-#' @noRd
-#' @author Matthew L. Fidler
-.isAddPropW1 <- function(x) {
-  if (length(x) != 3L) return(FALSE)
-  if (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`))) {
-    return(.isAddPropW1(x[[3]]))
-  }
-  if (!identical(x[[1]], quote(`+`))) return(FALSE)
-  .isThetaF(x[[2]]) &&  .isAddW(x[[3]]) ||
-    .isThetaF(x[[3]]) &&  .isAddW(x[[2]])
-}
-#' Is this expression theta^2
-#'
-#' It also checks theta*theta
-#'  
-#' @param x expression
-#' @param useF boolean to check for F expressions instead of theta expressions
-#' @return boolean
-#' @noRd
-#' @author Matthew L. Fidler
-.isTheta2 <- function(x, useF=FALSE) {
-  if (length(x) != 3) return(FALSE)
-  if (identical(x[[1]], quote(`^`)) ||
-        identical(x[[1]], quote(`**`))) {
-    if (length(x[[2]]) != 1) return(FALSE)
-    if (x[[3]] != 2) return(FALSE)
-    if (isTRUE(useF) && .isIpredOrF(x[[2]])) return(TRUE)
-    .theta <- as.character(x[[2]])
-    if (regexpr("theta[0-9]+", .theta) != -1) {
-      if (is.na(useF)){
-        .nonmem2rx$propPar <- .theta
-      } else {
-        .nonmem2rx$addPar <- .theta
-      }
-      return(TRUE)
-    }
-  } else if (identical(x[[1]], quote(`*`))) {
-    if (length(x[[2]]) != 1) return(FALSE)
-    if (isTRUE(useF)) {
-      return(.isIpredOrF(x[[2]]) && .isIpredOrF(x[[3]]))
-    }
-    if (!identical(x[[2]], x[[3]])) return(FALSE)
-    .theta <- as.character(x[[2]])
-    if (regexpr("theta[0-9]+", .theta) != -1) {
-      if (is.na(useF)){
-        .nonmem2rx$propPar <- .theta
-      } else {
-        .nonmem2rx$addPar <- .theta
-      }
-      return(TRUE)
-    }
-  }
-  FALSE
-}
-
-#' Is this theta^2 * f^2
-#'  
-#' @param x expression
-#' @return boolean
-#' @noRd
-#' @author Matthew L. Fidler
-.isTheta2F2 <- function(x) {
-  if (length(x) == 3L && identical(x[[1]], quote(`*`))) {
-    .mult1 <- x[[2]]
-    .mult2 <- x[[3]]
-    ## in the case of f^2*theta1*theta1 length(.mult2) == 1
-    if (length(.mult2) == 1L) {
-      ## This works for:
-      ##f^2*theta1*theta1
-      ## This works for theta1*f^2*theta1
-      ## theta1 * theta1 * f * f
-      if (identical(.mult1[[1]], quote(`*`))) {
-        if (identical(.mult2, .mult1[[3]])) {
-          .mult1 <- .mult1[[2]]
-          .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
-        } else if (identical(.mult2, .mult1[[2]])) {
-          .mult1 <- .mult1[[3]]
-          .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
-        } else if (identical(.mult1[[1]], quote(`*`))) {
-          # theta1 * f * f * theta1
-          .mult12 <- .mult1[[2]]
-          .mult13 <- .mult1[[3]]
-          if (identical(.mult2, .mult12[[2]])) {
-            .mult1 <- as.call(list(quote(`*`), .mult12[[3]], .mult13))
-            .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
-          } else if (identical(.mult2, .mult12[[3]])) {
-            .mult1 <- as.call(list(quote(`*`), .mult12[[2]], .mult13))
-            .mult2 <- as.call(list(quote(`*`), .mult2, .mult2))
-          }
-        }
-      }
-    } 
-    return(.isTheta2(.mult1, useF=NA) && .isTheta2(.mult2, useF=TRUE) ||
-             .isTheta2(.mult1, useF=TRUE) && .isTheta2(.mult2, useF=NA))
-  }
-  FALSE
-}
-#' Is it add+prop comb2() 
-#'
-#' @param x expression
-#' @return boolean
-#' @noRd
-#' @author Matthew L. Fidler
-.isAddPropW2 <- function(x) {
-  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`<-`)))) {
-    return(.isAddPropW2(x[[3]]))
-  }
-  if (length(x) == 2L && identical(x[[1]], quote(`sqrt`))) {
-    .x <- x[[2]]
-    if (length(.x) != 3L) return(FALSE)
-    if (identical(.x[[1]], quote(`+`))) {
-      return(.isTheta2(.x[[2]]) && .isTheta2F2(.x[[3]]) ||
-               .isTheta2(.x[[3]]) && .isTheta2F2(.x[[2]]))
-    }
-  }
-  FALSE
-}
-#' Remove W related 
-#'  
-#' @param rxui ui object
-#' @param text model piping test to modify
-#' @return full model piping test to modify the nlmixr2 model
-#' @noRd
-#' @author Matthew L. Fidler
-.removeWrelated <- function(rxui, text) {
-  .iwres <- which(vapply(rxui$lstExpr, function(e) {
-    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
-      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "iwres") return(TRUE)
-    }
-    FALSE
-  }, logical(1), USE.NAMES = FALSE))
-  if (length(.iwres) != 1) return(text)
-  text <- paste0("rxode2::model(", text, ", -",as.character(rxui$lstExpr[[.iwres]][[2]]),")")
-  .w <- which(vapply(rxui$lstExpr, function(e) {
-    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
-      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "w") return(TRUE)
-    }
-    FALSE
-  }, logical(1), USE.NAMES = FALSE))
-  if (length(.w) != 1) return(text)
-  text <- paste0("rxode2::model(", text, ", -",as.character(rxui$lstExpr[[.w]][[2]]),")")
-  .ires <- which(vapply(rxui$lstExpr, function(e) {
-    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
-      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "ires") return(TRUE)
-    }
-    FALSE
-  }, logical(1), USE.NAMES = FALSE))
-  if (length(.ires) != 1) return(text)
-  paste0("rxode2::model(", text, ", -",as.character(rxui$lstExpr[[.ires]][[2]]),")")
-}
-#' This tries to parse the type of error and change to a fully qualified nlmixr2 object
-#'  
-#' @param rxui rxui object
-#' @return rxui object possibly modified to be a nlmixr2 compatible function
-#' @noRd
-#' @author Matthew L. Fidler
-.determineError <- function(rxui) {
-  # Additive: f+eps(1)
-  # proportional: f*(1+eps(1))
-  # Additive + Proportional: f*(1+eps(1)) + eps(2)
-  # lognormal: log(f) + eps(1)
-  # with W
-  # Additive + Proportional comb2: sqrt(theta1^2+theta2^2*ipred^2)
-  # proportional: theta1*ipred
-  # additive: theta1
-  # Additive + Proportional comb1: theta1 + theta2*ipred
-  .wy <- which(vapply(rxui$lstExpr, function(e) {
-    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
-      if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "y") return(TRUE)
-    }
-    FALSE
-  }, logical(1), USE.NAMES = FALSE))
-  if (length(.wy) != 1) return(rxui)
-  .y <- rxui$lstExpr[[.wy]]
-  if (.isParamWeps(.y)) {
-    .ww <- which(vapply(rxui$lstExpr, function(e) {
-      if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
-        if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "w") return(TRUE)
-      }
-      FALSE
-    }, logical(1), USE.NAMES = FALSE))
-    if (length(.ww) != 1) return(rxui)
-    .wp <- rxui$lstExpr[[.ww]]
-    if (.isAddW(.wp)) {
-      .y0 <- as.character(.y[[2]])
-      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
-                     "~ add(", .nonmem2rx$addPar, ")}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    } else if (.isPropW(.wp)) {
-      .y0 <- as.character(.y[[2]])
-      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
-                     "~ prop(", .nonmem2rx$propPar, ")}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    } else if (.isAddPropW1(.wp)) {
-      .y0 <- as.character(.y[[2]])
-      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
-                     "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
-                     ") + combined1()}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    } else if (.isAddPropW2(.wp)) {
-      .y0 <- as.character(.y[[2]])
-      .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
-                     "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
-                     ") + combined2()}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    }
-  }
-  rxui
-}
 #' Add theta name to .nonmem2rx info
 #'
 #' @param theta string representing variable name
@@ -390,7 +84,7 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .replaceThetaNames <- function(rxui, thetaNames,
-                               label="theta", prefix="t.") {
+                               label="theta", prefix="t.", df=NULL) {
   if (length(thetaNames) == 0) return(rxui)
   .minfo(sprintf("replace %s names", label))
   .mv <- rxode2::rxModelVars(rxui)
@@ -432,6 +126,9 @@
     .t <- .t[-.w]
   }
   .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
+  if (!is.null(df)) {
+      .nonmem2rx$etas <-eval(parse(text=paste0("dplyr::rename(df, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
+  }
   .minfo("done")
   .ret
 }
@@ -503,66 +200,6 @@
   list(rx=.rx, sigma=.sigma)
 }
 
-.readInDataFromNonmem <- function(file) {
-  .data <- NULL
-  .file <- suppressWarnings(normalizePath(file.path(dirname(file), .nonmem2rx$dataFile)))
-  .ext <- tools::file_ext(.file)
-  if (.ext == "csv" && file.exists(.file)) {
-    .minfo("read in nonmem data: ", .file)
-    .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."))
-    if (!is.null(.nonmem2rx$dataIgnore1)) {
-      if (.nonmem2rx$dataIgnore1 == "@") {
-        .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
-        .w <- which(regexpr("^[A-Za-z]", .data[,1]) != -1)
-        .data <- .data[-.w, ]
-      } else {
-        .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
-        .w <- which(.data[,1] == .nonmem2rx$dataIgnore1)
-        .data <- .data[-.w, ]
-      }
-    }
-    .minfo("applying names specified by $INPUT")
-    # need to apply input names
-    # 1. Only work with columns specified in $input
-    .inp <- .nonmem2rx$input
-    .data <- .data[,seq_along(.inp)]
-    # 2. drop values requested by nonmem
-    names(.data) <- names(.nonmem2rx$input)
-    .w <- which(.inp == "DROP")
-    if (length(.w) > 0) {
-      .inp <- .inp[-.w]
-      .data <- .data[, -.w]
-    }
-    # 3. add nonmem declared aliases into the dataset
-    .w <- which(names(.inp) != .inp)
-    if (length(.w) > 0) {
-      .inpr <- .inp[.w]
-      for (.i in names(.inpr)) {
-        .data[, .inpr[.i]] <- .data[, .i]
-      }
-    }
-    # https://www.mail-archive.com/nmusers@globomaxnm.com/msg05323.html
-    if (length(.nonmem2rx$dataCond) > 0) {
-      .cond <- paste0(".data[which(",
-                      ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
-                      paste(.nonmem2rx$dataCond, collapse=" || "),
-                      ")),]")
-      .minfo(paste0("subsetting to records after filters code: ", .nonmem2rx$dataRecords))
-      eval(parse(text=.cond))
-    }
-    if (.nonmem2rx$needNmevid) {
-      .minfo("adding nmevid to dataset")
-      .data$nmevid <- .data[, which(downcase(names(.data)) == "evid")]
-    }
-    # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
-    if (!is.na(.nonmem2rx$dataRecords)) {
-      .minfo(sprintf("subsetting to %d records after filters", .nonmem2rx$dataRecords))
-      .data <- .data[seq_len(.nonmem2rx$dataRecords), ]
-    }
-  }
-  .data
-}
-
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 #' 
 #' @param file NONMEM run file
@@ -611,6 +248,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       cmtNames=TRUE,
                       updateFinal=TRUE,
                       determineError=TRUE,
+                      validate=TRUE,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
@@ -655,6 +293,16 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   if (determineError) {
     .rx <- .determineError(.rx)
   }
+  .ipredData <- .predData <- .etaData <- NULL
+  if (validate)  {
+  .nonmemData <- .readInDataFromNonmem(file)
+    
+  }
+  .ipredData <- .readInIpredFromTables(file)
+  if (!is.null(.ipredData)) {
+    .etaData <- .readInEtasFromTables(file)
+  }
+  
   if (tolowerLhs) {
     .rx <- .toLowerLhs(.rx)
   }
@@ -669,7 +317,11 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     checkmate::assertCharacter(etaNames, any.missing = FALSE)    
   }
   .rx <-.replaceThetaNames(.rx, etaNames,
-                           label="eta", prefix="e.")
+                           label="eta", prefix="e.",
+                           df=.etaData)
+  if (!is.null(.etaData)) {
+    .etaData <- .nonmem2rx$etas
+  }
   if (inherits(cmtNames, "logical")) {
     checkmate::assertLogical(cmtNames, len=1, any.missing = FALSE)
     if (cmtNames) {
@@ -682,117 +334,6 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     checkmate::assertCharacter(cmtNames, any.missing = FALSE)
   }
   .rx <- .replaceCmtNames(.rx, cmtNames)
-  .nonmemData <- .readInDataFromNonmem(file)
-  print(head(.nonmemData))
   .rx
 }
 
-## nocov start
-### Parser build
-.nonmem2rxBuildRecord <- function() {
-  message("Update Parser c for record locator")
-  dparser::mkdparse(devtools::package_file("inst/records.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxRecords")
-  file.rename(devtools::package_file("src/records.g.d_parser.c"),
-              devtools::package_file("src/records.g.d_parser.h"))
-}
-
-.nonmem2rxBuildOmega <- function() {
-  message("Update Parser c for omega block")
-  dparser::mkdparse(devtools::package_file("inst/omega.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxOmega")
-  file.rename(devtools::package_file("src/omega.g.d_parser.c"),
-              devtools::package_file("src/omega.g.d_parser.h"))
-}
-
-
-
-.nonmem2rxBuildTheta <- function() {
-  message("Update Parser c for theta block")
-  dparser::mkdparse(devtools::package_file("inst/theta.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxTheta")
-  file.rename(devtools::package_file("src/theta.g.d_parser.c"),
-              devtools::package_file("src/theta.g.d_parser.h"))
-}
-
-.nonmem2rxBuildModel <- function() {
-  message("Update Parser c for model block")
-  dparser::mkdparse(devtools::package_file("inst/model.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxModel")
-  file.rename(devtools::package_file("src/model.g.d_parser.c"),
-              devtools::package_file("src/model.g.d_parser.h"))
-}
-
-.nonmem2rxBuildInput <- function() {
-  message("Update Parser c for input block")
-  dparser::mkdparse(devtools::package_file("inst/input.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxInput")
-  file.rename(devtools::package_file("src/input.g.d_parser.c"),
-              devtools::package_file("src/input.g.d_parser.h"))
-}
-
-.nonmem2rxBuildAbbrev <- function() {
-  message("Update Parser c for abbrev block")
-  dparser::mkdparse(devtools::package_file("inst/abbrev.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxAbbrev")
-  file.rename(devtools::package_file("src/abbrev.g.d_parser.c"),
-              devtools::package_file("src/abbrev.g.d_parser.h"))
-}
-
-.nonmem2rxBuildSub <- function() {
-  message("Update Parser c for sub block")
-  dparser::mkdparse(devtools::package_file("inst/sub.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxSub")
-  file.rename(devtools::package_file("src/sub.g.d_parser.c"),
-              devtools::package_file("src/sub.g.d_parser.h"))
-}
-
-.nonmem2rxBuildLst <- function() {
-  message("Update Parser c for lst final estimate parsing")
-  dparser::mkdparse(devtools::package_file("inst/lst.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxLst")
-  file.rename(devtools::package_file("src/lst.g.d_parser.c"),
-              devtools::package_file("src/lst.g.d_parser.h"))
-}
-
-.nonmem2rxBuildData <- function() {
-  message("Update Parser c for data block")
-  dparser::mkdparse(devtools::package_file("inst/data.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxData")
-  file.rename(devtools::package_file("src/data.g.d_parser.c"),
-              devtools::package_file("src/data.g.d_parser.h"))
-}
-
-.nonmem2rxBuildTab <- function() {
-  message("Update Parser c for tab block")
-  dparser::mkdparse(devtools::package_file("inst/tab.g"),
-                    devtools::package_file("src/"),
-                    grammar_ident="nonmem2rxTab")
-  file.rename(devtools::package_file("src/tab.g.d_parser.c"),
-              devtools::package_file("src/tab.g.d_parser.h"))
-}
-
-
-.nonmem2rxBuildGram <- function() {
-  .nonmem2rxBuildRecord()
-  .nonmem2rxBuildTheta()
-  .nonmem2rxBuildOmega()
-  .nonmem2rxBuildModel()
-  .nonmem2rxBuildInput()
-  .nonmem2rxBuildAbbrev()
-  .nonmem2rxBuildSub()
-  .nonmem2rxBuildLst()
-  .nonmem2rxBuildData()
-  .nonmem2rxBuildTab()
-  invisible("")
-}
-## nocov end

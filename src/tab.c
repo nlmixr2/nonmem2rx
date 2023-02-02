@@ -88,6 +88,8 @@ void wprint_parsetree_tab(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     if (!nmrxstrcmpi("noappend", v)) {
       tableHasPred=0;
+    } else if (!nmrxstrcmpi("ipre", v)) {
+      tableHasIPred=1;
     } else if (!nmrxstrcmpi("ipred", v)) {
       tableHasIPred=1;
     } else if (!strncmpci("eta", v, 3)) {

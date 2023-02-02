@@ -46,6 +46,5 @@ void R_init_nonmem2rx(DllInfo *info){
   R_useDynamicSymbols(info, FALSE);
 }
 
-void R_unload_nonmem2rx(DllInfo *info){
-}
+void R_unload_nonmem2rx(DllInfo *info){}
 
