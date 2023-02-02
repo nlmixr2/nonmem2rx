@@ -12,6 +12,7 @@ nonmem2rx(
   cmtNames = TRUE,
   updateFinal = TRUE,
   determineError = TRUE,
+  validate = TRUE,
   lst = ".lst",
   ext = ".ext"
 )

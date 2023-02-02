@@ -167,7 +167,7 @@
 #' @return List with new ui and sigma
 #' @noRd
 #' @author Matthew L. Fidler
-.updateRxWithFinalParameters <- function(rxui, file, lst, ext) {
+.updateRxWithFinalParameters <- function(rxui, file, sigma,lst, ext) {
   .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .extFile <- paste0(tools::file_path_sans_ext(file), ext)
   if (file.exists(.extFile)) {
@@ -194,6 +194,7 @@
     .eta <- .fin$eta
     .rx <- rxode2::ini(.rx, .eta)
   }
+  .sigma <- sigma
   if (!is.null(.fin$eps)) {
     .sigma <- .fin$eps
   }
@@ -267,6 +268,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   } else {
     checkmate::assertCharacter(thetaNames, any.missing = FALSE)
   }
+  .sigma <- NULL
   if (length(.nonmem2rx$sigma) > 0L) {
     .sigma <- eval(parse(text=paste0("lotri::lotri({\n",
                                 paste(.nonmem2rx$sigma, collapse="\n"),
@@ -286,7 +288,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                          "}")))
   .rx <- .fun()
   if (updateFinal) {
-    .tmp <- .updateRxWithFinalParameters(.rx, file, lst, ext)
+    .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
     .rx <- .tmp$rx
     if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
   }

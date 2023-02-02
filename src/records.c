@@ -100,10 +100,10 @@ void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, pri
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   if (!strcmp("singleLineRecord", name)) {
-    D_ParseNode *xpn = d_get_child(pn,2); // record
+    D_ParseNode *xpn = d_get_child(pn,3); // record
     pushRecord();
     curRecord = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 3); // rest of line
+    xpn = d_get_child(pn, 4); // rest of line
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppend(&curLine, "%s\n",v);
     return;
