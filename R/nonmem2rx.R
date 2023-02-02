@@ -446,9 +446,11 @@
 #' @importFrom dparser mkdparse
 #' @examples
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
-nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE) {
+nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE,
+                      updateFinal=TRUE) {
   loadNamespace("dparser")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
+  checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   .clearNonmem2rx()
   .lstFile <- paste0(tools::file_path_sans_ext(file), ".lst")
   if (file.exists(file)) {
@@ -458,11 +460,14 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE) {
   }
   .parseRec(.lines)
   if (inherits(thetaNames, "logical")) {
+    checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
     if (thetaNames) {
       thetaNames <- .nonmem2rx$theta
     } else {
       thetaNames <- character(0)
     }
+  } else {
+    checkmate::assertCharacter(thetaNames, any.missing = FALSE)
   }
   if (length(.nonmem2rx$sigma) > 0L) {
     .sigma <- eval(parse(text=paste0("lotri::lotri({\n",
@@ -482,9 +487,19 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE) {
                          "\n})",
                          "}")))
   .rx <- .fun()
-  if (file.exists(.lstFile)) {
+  if (updateFinal && file.exists(.lstFile)) {
     .fin <- nmlst(.lstFile)
-    print(.fin)
+    if (!is.null(.fin$theta)) {
+      .theta <- .fin$theta
+      .theta <- .theta[!is.na(.theta)]
+      .rx <- rxode2:ini(.rx, .theta)
+    }
+    if (!is.null(.fin$eta)) {
+      .rx <- rxode2:ini(.rx, .fin$eta)
+    }
+    if (!is.null(.fin$eps)) {
+      .sigma <- .fin$eps
+    }
   }
   .rx <- .determineError(.rx)
   if (tolowerLhs) {
@@ -492,14 +507,16 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, cmtNames=TRUE) {
   }
   .rx <- .replaceThetaNames(.rx, thetaNames)
   if (inherits(cmtNames, "logical")) {
+    checkmate::assertLogical(cmtNames, len=1, any.missing = FALSE)
     if (cmtNames) {
       cmtNames <- character(0)
       if (exists("cmtName", envir=.nonmem2rx)) cmtNames <- .nonmem2rx$cmtName
     } else {
       cmtNames <- character(0)
     }
+  } else {
+    checkmate::assertCharacter(cmtNames, any.missing = FALSE)
   }
-
   .rx <- .replaceCmtNames(.rx, cmtNames)
   .rx
 }

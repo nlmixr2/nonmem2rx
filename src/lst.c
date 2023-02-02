@@ -106,7 +106,11 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     maxLstItem = max2(maxLstItem, atoi(v));
   } else if (!strcmp("na_item", name)) {
-    sAppendN(&curLine, "NA,", 3);
+    if (lstType == 1) {
+      sAppendN(&curLine, "NA,", 3);
+    } else {
+      sAppendN(&curLine, "0.0,", 4);
+    }
   } else if (!strcmp("theta_est_line", name)) {
     maxLstItem=0;
     lstType=1;
