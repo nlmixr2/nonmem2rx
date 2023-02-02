@@ -2,8 +2,8 @@ Package: nonmem2rx
 Type: Package
 Title: 'nonmem2rx' Converts NONMEM Syntax to 'rxode2'
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Matthew Fidler
+Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
     person("Gabriel", "Staples", role="ctb")
            )
@@ -23,7 +23,9 @@ Imports:
     Rcpp,
     rxode2,
     magrittr,
-    cli
+    cli,
+    pmxTools,
+    tools
 Suggests: 
     devtools,
     testthat (>= 3.0.0)

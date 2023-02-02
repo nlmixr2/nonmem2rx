@@ -1,5 +1,5 @@
 .nmlst <- new.env(parent=emptyenv())
-#' Reads the NONMEM list file for information
+#' Reads the NONMEM `.lst` file for final parameter information
 #'  
 #' @param file File where the list is located
 #' @return return a list with `$theta`, `$eta` and `$eps`

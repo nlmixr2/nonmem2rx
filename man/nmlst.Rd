@@ -2,7 +2,7 @@
 % Please edit documentation in R/lst.R
 \name{nmlst}
 \alias{nmlst}
-\title{Reads the NONMEM list file for information}
+\title{Reads the NONMEM `.lst` file for final parameter information}
 \usage{
 nmlst(file)
 }
@@ -13,7 +13,7 @@ nmlst(file)
 return a list with `$theta`, `$eta` and `$eps`
 }
 \description{
-Reads the NONMEM list file for information
+Reads the NONMEM `.lst` file for final parameter information
 }
 \examples{
 nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))

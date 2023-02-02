@@ -10,7 +10,10 @@ nonmem2rx(
   thetaNames = TRUE,
   etaNames = TRUE,
   cmtNames = TRUE,
-  updateFinal = TRUE
+  updateFinal = TRUE,
+  determineError = TRUE,
+  lst = ".lst",
+  ext = ".ext"
 )
 }
 \arguments{
@@ -37,6 +40,14 @@ be replaced.}
 
 \item{updateFinal}{Update the parsed model with the model estimates
 from the `.lst` output file.}
+
+\item{determineError}{Boolean to try to determine the `nlmixr2`-style residual
+error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
+not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)}
+
+\item{lst}{the NONMEM output extension, defaults to `.lst`}
+
+\item{ext}{the NONMEM ext file extension, defaults to `.ext`}
 }
 \value{
 rxode2 function
@@ -45,5 +56,7 @@ rxode2 function
 Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 }
 \examples{
+
 nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+
 }

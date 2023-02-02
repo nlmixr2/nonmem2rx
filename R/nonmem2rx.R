@@ -472,24 +472,35 @@
 #'   be replaced.
 #' @param updateFinal Update the parsed model with the model estimates
 #'   from the `.lst` output file.
+#' @param determineError Boolean to try to determine the `nlmixr2`-style residual
+#'   error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
+#'   not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)
+#' @param lst the NONMEM output extension, defaults to `.lst`
+#' @param ext the NONMEM ext file extension, defaults to `.ext`
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
-#'
 #' @useDynLib nonmem2rx, .registration=TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats setNames
 #' @importFrom lotri lotri
 #' @importFrom dparser mkdparse
 #' @examples
+#' 
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+#' 
 nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       cmtNames=TRUE,
-                      updateFinal=TRUE) {
+                      updateFinal=TRUE,
+                      determineError=TRUE,
+                      lst=".lst",
+                      ext=".ext") {
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
+  checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
-  .lstFile <- paste0(tools::file_path_sans_ext(file), ".lst")
+  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
+  .extFile <- paste0(tools::file_path_sans_ext(file), ext)
   if (file.exists(file)) {
     .lines <- paste(readLines(file), collapse = "\n")
   } else {
@@ -524,10 +535,17 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                          "\n})",
                          "}")))
   .rx <- .fun()
-  if (updateFinal && file.exists(.lstFile)) {
-    .fin <- try(nmlst(.lstFile), silent=TRUE)
+  if (updateFinal) {
+    if (file.exists(.extFile)) {
+      .fin <- try(nmext(.extFile), silent=TRUE)
+      if (inherits(.fin, "try-error") && file.exists(.lstFile)) {
+        .fin <- try(nmlst(.lstFile), silent=TRUE)
+      }
+    } else if (file.exists(.lstFile)) {
+      .fin <- try(nmlst(.lstFile), silent=TRUE)
+    }
     if (inherits(.fin, "try-error")) {
-      warning("error reading estimates from .lst file", call.=FALSE)
+      warning("error reading estimates from output", call.=FALSE)
       .fin <- list(theta=NULL, eta=NULL, eps=NULL)
     }
     if (!is.null(.fin$theta)) {
