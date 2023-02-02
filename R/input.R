@@ -1,6 +1,6 @@
 #' @export
 #' @rdname nonmem2rxRec
-nonmem2rxRec.the <- function(x) {
+nonmem2rxRec.inp <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {

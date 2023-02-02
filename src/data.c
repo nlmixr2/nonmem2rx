@@ -72,6 +72,7 @@ void wprint_node_data(int depth, char *token_name, char *token_value, void *clie
 extern sbuf curLine;
 SEXP nonmem2rxPushDataFile(const char* file);
 SEXP nonmem2rxPushDataCond(const char* cond);
+SEXP nonmem2rxPushDataRecords(int nrec);
 int ignoreAcceptFlag=0;
 void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
@@ -120,6 +121,11 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushDataCond(v);
+    return;
+  } else if (!strcmp("records_statement", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxPushDataRecords(atoi(v));
     return;
   }
   if (nch != 0) {

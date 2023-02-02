@@ -24,6 +24,8 @@
   .nonmem2rx$dataFile <- NA_character_
   .nonmem2rx$dataCond <- character(0)
   .nonmem2rx$dataIgnore1 <- NULL
+  .nonmem2rx$dataRecords <- NA_integer_
+  .nonmem2rx$needNmevid <- FALSE
 }
 #' Is this ipred or f?  
 #'  
@@ -394,8 +396,13 @@
   .dups <- unique(thetaNames[duplicated(thetaNames)])
   if (length(.dups) > 0) {
     thetaNames[(thetaNames %in% .dups)] <- ""
-    warning("there are duplicate theta names, not renaming duplicate parameters",
-            call.=FALSE)
+    if (prefix == "t.") {
+      warning("there are duplicate theta names, not renaming duplicate parameters",
+              call.=FALSE)
+    } else {
+      warning("there are duplicate eta names, not renaming duplicate parameters",
+              call.=FALSE)
+    }
   }
   .n <- vapply(thetaNames, function(v) {
     if (v == "") return("")
@@ -454,30 +461,137 @@
   .minfo("done")
   .ret
 }
+#'  Update the input model with final parmeter estimates
+#'  
+#' @param rxui ui
+#' @inheritParams nonmem2rx
+#' @param cmtName compartment names to replace
+#' @return List with new ui and sigma
+#' @noRd
+#' @author Matthew L. Fidler
+.updateRxWithFinalParameters <- function(rxui, file, lst, ext) {
+  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
+  .extFile <- paste0(tools::file_path_sans_ext(file), ext)
+  if (file.exists(.extFile)) {
+    .fin <- try(nmext(.extFile), silent=TRUE)
+    if (inherits(.fin, "try-error") && file.exists(.lstFile)) {
+      .fin <- try(nmlst(.lstFile), silent=TRUE)
+    }
+  } else if (file.exists(.lstFile)) {
+    .fin <- try(nmlst(.lstFile), silent=TRUE)
+  } else {
+    return(list(rx=rxui, sigma=NULL))
+  }
+  .rx <- rxui
+  if (inherits(.fin, "try-error")) {
+    warning("error reading estimates from output", call.=FALSE)
+    .fin <- list(theta=NULL, eta=NULL, eps=NULL)
+  }
+  if (!is.null(.fin$theta)) {
+    .theta <- .fin$theta
+    .theta <- .theta[!is.na(.theta)]
+    .rx <- rxode2::ini(.rx, .theta)
+  }
+  if (!is.null(.fin$eta)) {
+    .eta <- .fin$eta
+    .rx <- rxode2::ini(.rx, .eta)
+  }
+  if (!is.null(.fin$eps)) {
+    .sigma <- .fin$eps
+  }
+  list(rx=.rx, sigma=.sigma)
+}
+
+.readInDataFromNonmem <- function(file) {
+  .data <- NULL
+  .file <- suppressWarnings(normalizePath(file.path(dirname(file), .nonmem2rx$dataFile)))
+  .ext <- tools::file_ext(.file)
+  if (.ext == "csv" && file.exists(.file)) {
+    .minfo("read in nonmem data: ", .file)
+    .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."))
+    if (!is.null(.nonmem2rx$dataIgnore1)) {
+      if (.nonmem2rx$dataIgnore1 == "@") {
+        .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
+        .w <- which(regexpr("^[A-Za-z]", .data[,1]) != -1)
+        .data <- .data[-.w, ]
+      } else {
+        .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
+        .w <- which(.data[,1] == .nonmem2rx$dataIgnore1)
+        .data <- .data[-.w, ]
+      }
+    }
+    .minfo("applying names specified by $INPUT")
+    # need to apply input names
+    # 1. Only work with columns specified in $input
+    .inp <- .nonmem2rx$input
+    .data <- .data[,seq_along(.inp)]
+    # 2. drop values requested by nonmem
+    names(.data) <- names(.nonmem2rx$input)
+    .w <- which(.inp == "DROP")
+    if (length(.w) > 0) {
+      .inp <- .inp[-.w]
+      .data <- .data[, -.w]
+    }
+    # 3. add nonmem declared aliases into the dataset
+    .w <- which(names(.inp) != .inp)
+    if (length(.w) > 0) {
+      .inpr <- .inp[.w]
+      for (.i in names(.inpr)) {
+        .data[, .inpr[.i]] <- .data[, .i]
+      }
+    }
+    # https://www.mail-archive.com/nmusers@globomaxnm.com/msg05323.html
+    if (length(.nonmem2rx$dataCond) > 0) {
+      .cond <- paste0(".data[which(",
+                      ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
+                      paste(.nonmem2rx$dataCond, collapse=" || "),
+                      ")),]")
+      .minfo(paste0("subsetting to records after filters code: ", .nonmem2rx$dataRecords))
+      eval(parse(text=.cond))
+    }
+    if (.nonmem2rx$needNmevid) {
+      .minfo("adding nmevid to dataset")
+      .data$nmevid <- .data[, which(downcase(names(.data)) == "evid")]
+    }
+    # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
+    if (!is.na(.nonmem2rx$dataRecords)) {
+      .minfo(sprintf("subsetting to %d records after filters", .nonmem2rx$dataRecords))
+      .data <- .data[seq_len(.nonmem2rx$dataRecords), ]
+    }
+  }
+  .data
+}
 
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 #' 
 #' @param file NONMEM run file
+#' 
 #' @param tolowerLhs Boolean to change the lhs to lower case (default:
 #'   `TRUE`)
+#' 
 #' @param thetaNames this could be a boolean indicating that the theta
 #'   names should be changed to the comment-labeled names (default:
 #'   `TRUE`). This could also be a character vector of the theta names
 #'   (in order) to be replaced.
+#' 
 #' @param etaNames this could be a boolean indicating that the eta
 #'   names should be changed to the comment-labeled names (default:
 #'   `TRUE`). This could also be a character vector of the theta names
 #'   (in order) to be replaced.
+#' 
 #' @param cmtNames this could be a boolean indicating that the
 #'   compartment names should be changed to the named compartments in
 #'   the `$MODEL` by `COMP = (name)` (default: `TRUE`). This could
 #'   also be a character vector of the compartment names (in order) to
 #'   be replaced.
+#' 
 #' @param updateFinal Update the parsed model with the model estimates
 #'   from the `.lst` output file.
+#' 
 #' @param determineError Boolean to try to determine the `nlmixr2`-style residual
 #'   error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
 #'   not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)
+#' 
 #' @param lst the NONMEM output extension, defaults to `.lst`
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
 #' @return rxode2 function
@@ -502,13 +616,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
-  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
-  .extFile <- paste0(tools::file_path_sans_ext(file), ext)
-  if (file.exists(file)) {
-    .lines <- paste(readLines(file), collapse = "\n")
-  } else {
-    .lines <- file
-  }
+  .lines <- paste(readLines(file), collapse = "\n")
   .parseRec(.lines)
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
@@ -539,32 +647,13 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                          "}")))
   .rx <- .fun()
   if (updateFinal) {
-    if (file.exists(.extFile)) {
-      .fin <- try(nmext(.extFile), silent=TRUE)
-      if (inherits(.fin, "try-error") && file.exists(.lstFile)) {
-        .fin <- try(nmlst(.lstFile), silent=TRUE)
-      }
-    } else if (file.exists(.lstFile)) {
-      .fin <- try(nmlst(.lstFile), silent=TRUE)
-    }
-    if (inherits(.fin, "try-error")) {
-      warning("error reading estimates from output", call.=FALSE)
-      .fin <- list(theta=NULL, eta=NULL, eps=NULL)
-    }
-    if (!is.null(.fin$theta)) {
-      .theta <- .fin$theta
-      .theta <- .theta[!is.na(.theta)]
-      .rx <- rxode2::ini(.rx, .theta)
-    }
-    if (!is.null(.fin$eta)) {
-      .eta <- .fin$eta
-      .rx <- rxode2::ini(.rx, .eta)
-    }
-    if (!is.null(.fin$eps)) {
-      .sigma <- .fin$eps
-    }
+    .tmp <- .updateRxWithFinalParameters(.rx, file, lst, ext)
+    .rx <- .tmp$rx
+    if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
   }
-  .rx <- .determineError(.rx)
+  if (determineError) {
+    .rx <- .determineError(.rx)
+  }
   if (tolowerLhs) {
     .rx <- .toLowerLhs(.rx)
   }
@@ -592,6 +681,8 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     checkmate::assertCharacter(cmtNames, any.missing = FALSE)
   }
   .rx <- .replaceCmtNames(.rx, cmtNames)
+  .nonmemData <- .readInDataFromNonmem(file)
+  print(head(.nonmemData))
   .rx
 }
 
@@ -680,6 +771,15 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
               devtools::package_file("src/data.g.d_parser.h"))
 }
 
+.nonmem2rxBuildTab <- function() {
+  message("Update Parser c for tab block")
+  dparser::mkdparse(devtools::package_file("inst/tab.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxTab")
+  file.rename(devtools::package_file("src/tab.g.d_parser.c"),
+              devtools::package_file("src/tab.g.d_parser.h"))
+}
+
 
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildRecord()
@@ -691,6 +791,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   .nonmem2rxBuildSub()
   .nonmem2rxBuildLst()
   .nonmem2rxBuildData()
+  .nonmem2rxBuildTab()
   invisible("")
 }
 ## nocov end

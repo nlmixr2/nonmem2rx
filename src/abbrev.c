@@ -97,6 +97,7 @@ int evidWarning = 0;
 int icallWarning = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
+SEXP nonmem2rxNeedNmevid(void);
 
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
@@ -201,6 +202,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       if (evidWarning == 0) {
         Rf_warning("'evid' variable is not supported in rxode2, renamed to 'nmevid', rename/copy in your data too");
         evidWarning = 1;
+        nonmem2rxNeedNmevid();
       }
       sAppendN(&curLine, "nmevid", 6);
       return 1;

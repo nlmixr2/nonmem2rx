@@ -7,13 +7,14 @@
 \alias{nonmem2rxRec.des}
 \alias{nonmem2rxRec.err}
 \alias{nonmem2rxRec.dat}
-\alias{nonmem2rxRec.the}
+\alias{nonmem2rxRec.inp}
 \alias{nonmem2rxRec.mod}
 \alias{nonmem2rxRec.ome}
 \alias{nonmem2rxRec.sig}
 \alias{nonmem2rxRec}
 \alias{nonmem2rxRec.default}
 \alias{nonmem2rxRec.sub}
+\alias{nonmem2rxRec.the}
 \title{Record handling for nonmem records}
 \usage{
 \method{nonmem2rxRec}{pk}(x)
@@ -26,7 +27,7 @@
 
 \method{nonmem2rxRec}{dat}(x)
 
-\method{nonmem2rxRec}{the}(x)
+\method{nonmem2rxRec}{inp}(x)
 
 \method{nonmem2rxRec}{mod}(x)
 

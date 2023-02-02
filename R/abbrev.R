@@ -82,3 +82,7 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$maxa <- maxa
   invisible()
 }
+
+.needNmevid <- function() {
+  .nonmem2rx$needNmevid <- TRUE
+}

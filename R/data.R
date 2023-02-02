@@ -27,3 +27,12 @@ nonmem2rxRec.dat <- function(x) {
 .pushDataFile <- function(file) {
   .nonmem2rx$dataFile <- file
 }
+#' Push $data number of records  
+#'  
+#' @param rec Number of records
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushDataRecords <- function(rec) {
+  .nonmem2rx$dataRecords <- rec
+}

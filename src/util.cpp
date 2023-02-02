@@ -206,3 +206,20 @@ extern "C" SEXP nonmem2rxPushDataCond(const char* cond) {
   pushDataCond(cond);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushDataRecords(int nrec) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushDataRecords(".pushDataRecords", nonmem2rxNs);
+  pushDataRecords(nrec);
+  END_RCPP  
+}
+
+
+extern "C" SEXP nonmem2rxNeedNmevid(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needNmevid(".needNmevid", nonmem2rxNs);
+  needNmevid();
+  END_RCPP  
+}
