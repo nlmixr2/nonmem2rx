@@ -110,7 +110,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppendN(&curLine, "alag(", 5);
-    writeAinfo(v + 1);
+    writeAinfo(v + 4);
     sAppendN(&curLine, ")", 1);
     return 1;
   } else if (!strcmp("ratei", name)) {
@@ -334,9 +334,6 @@ int abbrev_function(char *name, int i, D_ParseNode *pn) {
         return 1;
       } else if (!nmrxstrcmpi("ACOS", v)) {
         sAppendN(&curLine, "acos", 4);
-        return 1;
-      } else if (!nmrxstrcmpi("ATAN", v)) {
-        sAppendN(&curLine, "atan", 4);
         return 1;
       } else if (!nmrxstrcmpi("ATAN", v)) {
         sAppendN(&curLine, "atan", 4);

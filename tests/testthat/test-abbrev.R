@@ -142,4 +142,21 @@ test_that("test abbrev", {
     expect_error(.a("a=OMEGA(1, 1)"), "OMEGA[(]#, #[)]")
     expect_warning(.a("a=evid+3", "A <- nmevid + 3"), "evid")
     
+    .a("a=D1", "A <- dur(rxddta1)")
+    .a("a=F1", "A <- f(rxddta1)")
+    .a("a=ALAG1", "A <- alag(rxddta1)")
+    .a("a=R1", "A <- rate(rxddta1)")
+
+    .a("a=SC", "A <- scalec")
+    .a("a=SC", "A <- scale1", abbrevLin=1L)
+    .a("a=SC", "A <- scale2", abbrevLin=2L)
+    expect_warning(.a("SC=a","scalec <- A"), "'SC'")
+    .a("a=S0", "A <- scale0")
+    .a("a=SO", "A <- scale0")
+    .a("S0=a", "scale0 <- A")
+    .a("SO=asin(a)", "scale0 <- asin(A)")
+
+    .a("IF (cmt .lt. 1 .or. cmt .eq. 10)  m=atan(2)",
+       "if (CMT < 1 || CMT == 10) M <- atan(2)")
+    
 })
