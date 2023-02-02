@@ -34,7 +34,7 @@ nonmem2rxRec.sig <- function(x) {
   if (regexpr(.prefixGobble, comment) != -1) {
     comment <- sub(.prefixGobble, "; \\1.", comment)
   }
-  .reg1 <- ";.*?([A-Za-z][A-Za-z0-9_.]*)"
+  .reg1 <- ";.*?([A-Za-z][A-Za-z0-9_.]*).*"
   if (regexpr(.reg1, comment) != -1) {
     comment <- sub(.reg1, "\\1", comment)
   } else {
