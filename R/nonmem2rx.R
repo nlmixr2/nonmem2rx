@@ -595,7 +595,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 ## nocov start
 ### Parser build
 .nonmem2rxBuildRecord <- function() {
-  cat("Update Parser c for record locator\n");
+  message("Update Parser c for record locator")
   dparser::mkdparse(devtools::package_file("inst/records.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxRecords")
@@ -604,7 +604,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 }
 
 .nonmem2rxBuildOmega <- function() {
-  cat("Update Parser c for omega block\n");
+  message("Update Parser c for omega block")
   dparser::mkdparse(devtools::package_file("inst/omega.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxOmega")
@@ -615,7 +615,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 
 
 .nonmem2rxBuildTheta <- function() {
-  cat("Update Parser c for theta block\n");
+  message("Update Parser c for theta block")
   dparser::mkdparse(devtools::package_file("inst/theta.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxTheta")
@@ -624,7 +624,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 }
 
 .nonmem2rxBuildModel <- function() {
-  cat("Update Parser c for model block\n");
+  message("Update Parser c for model block")
   dparser::mkdparse(devtools::package_file("inst/model.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxModel")
@@ -633,7 +633,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 }
 
 .nonmem2rxBuildInput <- function() {
-  cat("Update Parser c for input block\n");
+  message("Update Parser c for input block")
   dparser::mkdparse(devtools::package_file("inst/input.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxInput")
@@ -642,7 +642,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 }
 
 .nonmem2rxBuildAbbrev <- function() {
-  cat("Update Parser c for abbrev block\n");
+  message("Update Parser c for abbrev block")
   dparser::mkdparse(devtools::package_file("inst/abbrev.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxAbbrev")
@@ -651,7 +651,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 }
 
 .nonmem2rxBuildSub <- function() {
-  cat("Update Parser c for sub block\n");
+  message("Update Parser c for sub block")
   dparser::mkdparse(devtools::package_file("inst/sub.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxSub")
@@ -660,13 +660,23 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
 }
 
 .nonmem2rxBuildLst <- function() {
-  cat("Update Parser c for lst final estimate parsing\n");
+  message("Update Parser c for lst final estimate parsing")
   dparser::mkdparse(devtools::package_file("inst/lst.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxLst")
   file.rename(devtools::package_file("src/lst.g.d_parser.c"),
               devtools::package_file("src/lst.g.d_parser.h"))
 }
+
+.nonmem2rxBuildData <- function() {
+  message("Update Parser c for data block")
+  dparser::mkdparse(devtools::package_file("inst/data.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxData")
+  file.rename(devtools::package_file("src/data.g.d_parser.c"),
+              devtools::package_file("src/data.g.d_parser.h"))
+}
+
 
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildRecord()
@@ -677,6 +687,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   .nonmem2rxBuildAbbrev()
   .nonmem2rxBuildSub()
   .nonmem2rxBuildLst()
+  .nonmem2rxBuildData()
   invisible("")
 }
 ## nocov end
