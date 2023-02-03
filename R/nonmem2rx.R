@@ -29,6 +29,8 @@
   .nonmem2rx$tables <- list()
   .nonmem2rx$scaleVol <- list()
   .nonmem2rx$modelDesc <- NULL
+  .nonmem2rx$defdose <- 0L
+  .nonmem2rx$defobs <- 0L
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -312,15 +314,14 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
     .nonmemData <- .readInDataFromNonmem(file)
-    .ipredData <- .readInIpredFromTables(file)
+    .predData <- .ipredData <- .readInIpredFromTables(file)
     if (!is.null(.ipredData)) {
       .etaData <- .readInEtasFromTables(file)
     }
-    if (any(names(.ipredData) == "PRED")) {
+    if (!any(names(.ipredData) == "PRED")) {
       .predData  <- .readInPredFromTables(file)
     }
   }
-  
   if (tolowerLhs) {
     .rx <- .toLowerLhs(.rx)
   }
@@ -381,20 +382,24 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
         # no endpoint in model
         .w <- which(tolower(names(.ipredSolve)) == "y")
         .y <- names(.ipredSolve)[.w]
-        .cmp <- data.frame(nonmemIPRED=.ipredData$IPRED,
-                           IPRED=.ipredSolve[[.y]])
-        .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
-        #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-        .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
-        #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-        .msg <- c(paste0("IPRED relative difference compared to Nonmem IPRED: ", round(.qi[3], 2),
-                         "%; ", .ci * 100,"% percentile: (",
-                         round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
-                         signif(.qi[3] / 100, digits=.sigdig)),
-                  paste0("IPRED absolute difference compared to Nonmem IPRED: atol=",
-                         signif(.qai[3], .sigdig),
-                         "; ", .ci * 100,"% percentile: (",
-                         signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), ")"))
+        if (length(.ipredData$IPRED) == length(.ipredSolve[[.y]])) {
+          .cmp <- data.frame(nonmemIPRED=.ipredData$IPRED,
+                             IPRED=.ipredSolve[[.y]])
+          .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
+          #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+          .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
+          #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+          .msg <- c(paste0("IPRED relative difference compared to Nonmem IPRED: ", round(.qi[3], 2),
+                           "%; ", .ci * 100,"% percentile: (",
+                           round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
+                           signif(.qi[3] / 100, digits=.sigdig)),
+                    paste0("IPRED absolute difference compared to Nonmem IPRED: atol=",
+                           signif(.qai[3], .sigdig),
+                           "; ", .ci * 100,"% percentile: (",
+                           signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), ")"))
+        } else {
+          .minfo(sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d)", length(.ipredData$IPRED), length(.ipredSolve[[.y]])))
+        }
       }
     }
     .params <- c(.theta,
@@ -414,20 +419,24 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
       .w <- which(tolower(names(.predSolve)) == "y")
       .y <- names(.predSolve)[.w]
       #print(data.frame(.predSolve[[.y]], .ipredData$PRED))
-      .cmp <- data.frame(nonmemPRED=.predData$PRED,
-                         PRED=.ipredSolve[[.y]])
-      .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-      .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-      .msg <- c(.msg, 
-                paste0("PRED relative difference compared to Nonmem PRED: ", round(.qp[3], 2),
-                       "%; ", .ci * 100,"% percentile: (",
-                       round(.qp[2], 2), "%,", round(.qp[4], 2), "%); rtol=",
-                       signif(.qp[3] / 100,
-                              digits=.sigdig)),
-                paste0("PRED absolute difference compared to Nonmem PRED: atol=",
-                       signif(.qap[3], .sigdig),
-                       "; ", .ci * 100,"% percentile: (",
-                       signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
+      if (length(.predData$PRED) == length(.predSolve[[.y]])) {
+        .cmp <- data.frame(nonmemPRED=.predData$PRED,
+                           PRED=.predSolve[[.y]])
+        .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+        .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+        .msg <- c(.msg, 
+                  paste0("PRED relative difference compared to Nonmem PRED: ", round(.qp[3], 2),
+                         "%; ", .ci * 100,"% percentile: (",
+                         round(.qp[2], 2), "%,", round(.qp[4], 2), "%); rtol=",
+                         signif(.qp[3] / 100,
+                                digits=.sigdig)),
+                  paste0("PRED absolute difference compared to Nonmem PRED: atol=",
+                         signif(.qap[3], .sigdig),
+                         "; ", .ci * 100,"% percentile: (",
+                         signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
+      } else {
+        .minfo(sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d)", length(.predData$PRED), length(.predSolve[[.y]])))
+      }
     }
     if (!is.null(.msg)) {
       .rx$meta$validation <- .msg

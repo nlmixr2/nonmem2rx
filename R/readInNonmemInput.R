@@ -19,11 +19,11 @@
       if (.nonmem2rx$dataIgnore1 == "@") {
         .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
         .w <- which(regexpr("^[A-Za-z]", .data[,1]) != -1)
-        .data <- .data[-.w, ]
+        if (length(.w) > 0) .data <- .data[-.w, ]
       } else {
         .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
         .w <- which(.data[,1] == .nonmem2rx$dataIgnore1)
-        .data <- .data[-.w, ]
+        if (length(.w) > 0) .data <- .data[-.w, ]
       }
     }
     .minfo("applying names specified by $INPUT")

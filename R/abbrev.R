@@ -48,6 +48,9 @@ nonmem2rxRec.err <- function(x) {
       .addModel(paste0("scale2 <- scale2/", .nonmem2rx$scaleVol[["scale2"]]))
     }
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+  } else {
+    .cmt <- .nonmem2rx$defobs
+    .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin)
   }
   for (.cur in .x) {
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin)
@@ -72,11 +75,12 @@ nonmem2rxRec.err <- function(x) {
 #' Get scale for compartment (if defined) 
 #'  
 #' @param scale integer for compartment
+#' @param des is this an ODE system
 #' @return string "/scale#" if present  an empty string "" if not present
 #' @noRd
 #' @author Matthew L. Fidler
-.getScale <- function(scale) {
-  if (scale %in% .nonmem2rx$scale) return(sprintf("/scale%d", scale))
+.getScale <- function(scale, des=FALSE) {
+  if (scale %in% .nonmem2rx$scale) return(sprintf("/%s%d", ifelse(des, "S", "scale"), scale))
   ""
 }
 

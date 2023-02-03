@@ -19,6 +19,7 @@
 #define _(String) (String)
 #endif
 #include "model.g.d_parser.h"
+#include "strncmpi.h"
 
 #define gBuf nonmem2rx_model_gBuf
 #define gBufFree nonmem2rx_model_gBufFree
@@ -69,9 +70,25 @@ void wprint_node_model(int depth, char *token_name, char *token_value, void *cli
 }
 
 sbuf modelName;
-SEXP nonmem2rxPushModel(const char *cmtName);
+SEXP nonmem2rxPushModel0(const char *cmtName);
 int nonmem2rx_model_cmt = 1;
 int nonmem2rx_model_warn_npar = 0;
+
+int nonmem2rxDefObs = 0;
+int nonmem2rxDefDose = 0;
+
+int nonmem2rxDefDepot = 0;
+int nonmem2rxDefCentral = 0;
+
+SEXP nonmem2rxPushModel(const char *cmtName) {
+  if (!nmrxstrcmpi("depot", cmtName)) {
+    nonmem2rxDefDepot = nonmem2rx_model_cmt;
+  } else if (!nmrxstrcmpi("central", cmtName)) {
+    nonmem2rxDefCentral = nonmem2rx_model_cmt;
+  }
+  nonmem2rx_model_cmt++;
+  return nonmem2rxPushModel0(cmtName);
+}
 
 void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
@@ -87,12 +104,24 @@ void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushModel(v);
-    nonmem2rx_model_cmt++;
   } else if (!strcmp("comp_statement_2", name)) {
     sClear(&modelName);
-    sAppend(&modelName, "a%d", nonmem2rx_model_cmt);
+    sAppend(&modelName, "rxddta%d", nonmem2rx_model_cmt);
     nonmem2rxPushModel(modelName.s);
-    nonmem2rx_model_cmt++;
+  } else if (!strcmp("comp_statement_3", name)) {
+    sClear(&modelName);
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    v++;
+    int len = strlen(v);
+    v[len-1] = 0;
+    nonmem2rxPushModel(v);
+  } else if (!strcmp("identifier_nm", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    if (!nmrxstrcmpi("defdose", v)) {
+      nonmem2rxDefDose = nonmem2rx_model_cmt - 1;
+    } else if (!strncmpci("defobs", v, 6)) {
+      nonmem2rxDefDose = nonmem2rx_model_cmt - 1;
+    }
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
@@ -126,11 +155,23 @@ void trans_model(const char* parse){
   }
 }
 
+SEXP nonmem2rxPushCmtInfo(int defdose, int defobs);
 SEXP _nonmem2rx_trans_model(SEXP in) {
   sIni(&modelName);
+  nonmem2rxDefObs = 0;
+  nonmem2rxDefDose = 0;
+  nonmem2rxDefDepot = 0;
+  nonmem2rxDefCentral = 0;
+  
   trans_model(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   sFree(&modelName);
   parseFree(0);
+  if (nonmem2rxDefObs == 0) nonmem2rxDefObs = nonmem2rxDefCentral;
+  if (nonmem2rxDefDose == 0) nonmem2rxDefDose = nonmem2rxDefDepot;
+  if (nonmem2rxDefObs == 0) nonmem2rxDefObs = 1;
+  if (nonmem2rxDefDose == 0) nonmem2rxDefDose = 1;
+  
+  nonmem2rxPushCmtInfo(nonmem2rxDefDose, nonmem2rxDefObs);  
   return R_NilValue;
 }

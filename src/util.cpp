@@ -87,7 +87,7 @@ extern "C" SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefi
   END_RCPP  
 }
 
-extern "C" SEXP nonmem2rxPushModel(const char *cmtName) {
+extern "C" SEXP nonmem2rxPushModel0(const char *cmtName) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector cmtC(1);
@@ -243,4 +243,12 @@ extern "C" SEXP nonmem2rxPushScaleVolume(int scale, const char *v) {
   Function pushScaleVolume(".pushScaleVolume", nonmem2rxNs);
   pushScaleVolume(scale, v);
   END_RCPP    
+}
+
+extern "C" SEXP nonmem2rxPushCmtInfo(int defdose, int defobs) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushCmtInfo(".pushCmtInfo", nonmem2rxNs);
+  pushCmtInfo(defdose, defobs);
+  END_RCPP
 }
