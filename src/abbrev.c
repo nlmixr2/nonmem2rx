@@ -78,13 +78,15 @@ extern char * rc_dup_str(const char *s, const char *e);
 SEXP nonmem2rxPushModelLine(const char *item1);
 SEXP nonmem2rxPushScale(int scale);
 
-int maxA = 0;
+int maxA = 0,
+  definingScale = 0;
 
 void pushModel(void) {
   if (curLine.s == NULL) return;
   if (curLine.s[0] == 0) return;
   nonmem2rxPushModelLine(curLine.s);
   sClear(&curLine);
+  definingScale = 0;
 }
 
 void writeAinfo(const char *v);
@@ -98,6 +100,7 @@ int icallWarning = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
 SEXP nonmem2rxNeedNmevid(void);
+SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
@@ -212,6 +215,9 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     while(v[i] != 0) {
       v[i] = toupper(v[i]);
       i++;
+    }
+    if (definingScale && v[0] == 'V') {
+      nonmem2rxPushScaleVolume(definingScale-1, v);
     }
     sAppend(&curLine, v);
     return 1;
@@ -601,6 +607,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (v[1] == 'O' || v[1] == '0') {
       if (i == 0) {
         sAppendN(&curLine, "scale0 <- ", 10);
+        definingScale = 1;
         nonmem2rxPushScale(0);
         return 1;
       }
@@ -613,6 +620,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       } else if (abbrevLin == 2) {
         scaleCmt = 2;
       } else {
+        definingScale = -1;
         Rf_warning("translation cannot determine 'SC', using as constant");
         sAppendN(&curLine, "scalec <- ", 10);
         return 1;
@@ -632,6 +640,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       // scale# <- ....
       nonmem2rxPushScale(scaleCmt);
+      definingScale = scaleCmt+1;
       sAppend(&curLine, "scale%d <- ", scaleCmt);
       return 1;
     }

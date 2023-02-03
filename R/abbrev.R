@@ -36,9 +36,17 @@ nonmem2rxRec.err <- function(x) {
   if (.nonmem2rx$abbrevLin != 0L) {
     .addModel("rxLinCmt1 <- linCmt()")
   }
+  # in rxode2 scale is automatically calculated for linear models based on volume
+  # volume needs to be divided out
   if (.nonmem2rx$abbrevLin == 1L) {
+    if (!is.null(.nonmem2rx$scaleVol[["scale1"]])) {
+      .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale2"]]))
+    }
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)
   } else if (.nonmem2rx$abbrevLin == 2L) {
+    if (!is.null(.nonmem2rx$scaleVol[["scale2"]])) {
+      .addModel(paste0("scale2 <- scale2/", .nonmem2rx$scaleVol[["scale2"]]))
+    }
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L)
   }
   for (.cur in .x) {
@@ -82,7 +90,28 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$maxa <- maxa
   invisible()
 }
-
+#' If called, sets the flag that we need nmevid in the dataset
+#'
+#' @return none, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
 .needNmevid <- function() {
   .nonmem2rx$needNmevid <- TRUE
+}
+#' Push defined volume information in the scaling
+#'  
+#' @param scale Scale integer representing 
+#' @param volume volume defined while defining scale
+#' @return none, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushScaleVolume <- function(scale, volume) {
+  if (scale == -2L) {
+    .scale <- "scalec"
+  } else {
+    .scale <- sprintf("scale%d", scale)
+  }
+  .scaleVol <- .nonmem2rx$scaleVol
+  .scaleVol <- c(.scaleVol, setNames(list(volume), .scale))
+  .nonmem2rx$scaleVol <- .scaleVol
 }

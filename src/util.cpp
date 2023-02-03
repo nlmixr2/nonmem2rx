@@ -236,3 +236,11 @@ extern "C" SEXP nonmem2rxPushTableInfo(const char *file, int hasPred, int fullDa
                 LogicalVector::create(hasEta));
   END_RCPP  
 }
+
+extern "C" SEXP nonmem2rxPushScaleVolume(int scale, const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushScaleVolume(".pushScaleVolume", nonmem2rxNs);
+  pushScaleVolume(scale, v);
+  END_RCPP    
+}

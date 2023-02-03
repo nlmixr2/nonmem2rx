@@ -27,6 +27,8 @@
   .nonmem2rx$dataRecords <- NA_integer_
   .nonmem2rx$needNmevid <- FALSE
   .nonmem2rx$tables <- list()
+  .nonmem2rx$scaleVol <- list()
+  .nonmem2rx$modelDesc <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -143,7 +145,7 @@
   if (length(cmtName) == 0L) return(rxui)
   .minfo("renaming compartments")
   .mv <- rxode2::rxModelVars(rxui)
-  .n <- vapply(.nonmem2rx$cmtName,
+  .n <- vapply(cmtName,
                function(v) {
                  v <- gsub(" +", "_", v)
                  if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params))) {
@@ -155,8 +157,15 @@
                  v
                }, character(1), USE.NAMES=FALSE)
   .c <- paste0("rxddta",seq_along(.n))
-  .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")))
-  .minfo("done")
+  .txt<- paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")
+  .tmp <- try(eval(parse(text=.txt)),silent=TRUE)
+  if (inherits(.tmp, "try-error")) {
+    .minfo(sprintf("cmt not renamed; err evaluating: %s", .txt))
+    .ret <- rxui
+  } else {
+    .ret <- .tmp
+    .minfo("done")
+  }
   .ret
 }
 #'  Update the input model with final parmeter estimates
@@ -297,12 +306,14 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   }
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
-  .nonmemData <- .readInDataFromNonmem(file)
-    
-  }
-  .ipredData <- .readInIpredFromTables(file)
-  if (!is.null(.ipredData)) {
-    .etaData <- .readInEtasFromTables(file)
+    .nonmemData <- .readInDataFromNonmem(file)
+    .ipredData <- .readInIpredFromTables(file)
+    if (!is.null(.ipredData)) {
+      .etaData <- .readInEtasFromTables(file)
+    }
+    if (any(names(.ipredData) == "PRED")) {
+      .predData  <- .readInPredFromTables(file)
+    }
   }
   
   if (tolowerLhs) {
@@ -335,7 +346,93 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   } else {
     checkmate::assertCharacter(cmtNames, any.missing = FALSE)
   }
+  print(cmtNames)
   .rx <- .replaceCmtNames(.rx, cmtNames)
+
+  # now try to validate
+  if (!is.null(.nonmemData)) {
+    .model <- .rx$simulationModel
+    .theta <- .rx$theta
+    .ci <- 0.95
+    .sigdig <- 3
+    .ci <- (1 - .ci) / 2
+    .q <- c(0, .ci, 0.5, 1 - .ci, 1)
+
+    .msg <- NULL
+    if (!is.null(.etaData)) {
+      .params <- .etaData
+      for (.i in seq_along(.theta)) {
+        .params[[names(.theta)[.i]]] <- .theta[.i]
+      }
+      .dn <- dimnames(.sigma)[[1]]
+      for (.i in .dn) {
+        .params[[.i]] <- 0
+      }
+      .ipredSolve <- rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+                             covsInterpolation="nocb",
+                             addDosing = TRUE)
+      if (is.null(.rx$predDf)) {
+        # no endpoint in model
+        .w <- which(tolower(names(.ipredSolve)) == "y")
+        .y <- names(.ipredSolve)[.w]
+        .cmp <- data.frame(nonmemIPRED=.ipredData$IPRED,
+                           IPRED=.ipredSolve[[.y]])
+        .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
+        #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+        .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
+        #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+        .msg <- c(paste0("IPRED relative difference compared to Nonmem IPRED: ", round(.qi[3], 2),
+                         "%; ", .ci * 100,"% percentile: (",
+                         round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
+                         signif(.qi[3] / 100, digits=.sigdig)),
+                  paste0("IPRED absolute difference compared to Nonmem IPRED: atol=",
+                         signif(.qai[3], .sigdig),
+                         "; ", .ci * 100,"% percentile: (",
+                         signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), ")"))
+      }
+    }
+    .params <- c(.theta,
+                 vapply(dimnames(.rx$omega)[[1]],
+                        function(x) {
+                          return(0.0)
+                        }, double(1), USE.NAMES = TRUE),
+                 vapply(dimnames(.sigma)[[1]],
+                        function(x) {
+                          return(0.0)
+                        }, double(1), USE.NAMES = TRUE))
+    .predSolve <- rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+                          covsInterpolation="nocb",
+                          addDosing = TRUE)
+    if (is.null(.rx$predDf)) {
+      .w <- which(tolower(names(.predSolve)) == "y")
+      .y <- names(.predSolve)[.w]
+      #print(data.frame(.predSolve[[.y]], .ipredData$PRED))
+      .cmp <- data.frame(nonmemPRED=.predData$PRED,
+                         PRED=.ipredSolve[[.y]])
+      .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+      .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+      .msg <- c(.msg, 
+                paste0("PRED relative difference compared to Nonmem PRED: ", round(.qp[3], 2),
+                       "%; ", .ci * 100,"% percentile: (",
+                       round(.qp[2], 2), "%,", round(.qp[4], 2), "%); rtol=",
+                       signif(.qp[3] / 100,
+                              digits=.sigdig)),
+                paste0("PRED absolute difference compared to Nonmem PRED: atol=",
+                       signif(.qap[3], .sigdig),
+                       "; ", .ci * 100,"% percentile: (",
+                       signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
+    }
+    if (!is.null(.msg)) {
+      .rx <- rxode2::rxUiDecompress(.rx)
+      .rx$meta$validation <- .msg
+      .rx <- rxode2::rxUiCompress(.rx)
+    }
+  }
+  if (length(.nonmem2rx$modelDesc) > 0) {
+    .rx <- rxode2::rxUiDecompress(.rx)
+    .rx$meta$description <- .nonmem2rx$modelDesc
+    .rx <- rxode2::rxUiCompress(.rx)    
+  }
   .rx
 }
 
