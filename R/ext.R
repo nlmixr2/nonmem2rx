@@ -11,7 +11,11 @@
 #' nmext(system.file("run001.ext", package="nonmem2rx"))
 nmext <- function(file) {
   .lst <- suppressWarnings(pmxTools::read_nmext(file))
-  .theta <- setNames(.lst$Thetas, paste0("theta", seq_along(.lst$Thetas)))
+  if (length(.lst$Thetas) > 0) {
+    .theta <- setNames(.lst$Thetas, paste0("theta", seq_along(.lst$Thetas)))
+  } else {
+    .theta <- NULL
+  }
   if (length(.lst$Omega) > 0) {
     .omega <- eval(parse(text=paste0("lotri::lotri(",
                                      paste(paste0("eta",seq_along(.lst$Omega)), collapse="+"),

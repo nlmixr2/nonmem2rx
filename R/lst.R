@@ -19,7 +19,7 @@ nmlst <- function(file) {
   .w <- .w[1]
   .est <- .lst[seq(.w, length(.lst))]
   
-  .w <- which(regexpr("THETA +- +VECTOR", .est) != -1)
+  .w <- which(regexpr("(THETA +- +VECTOR|OMEGA +- +COV|SIGMA +- +COV)", .est) != -1)
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
   .w <- .w[1]
   .est <- .est[seq(.w, length(.est))]

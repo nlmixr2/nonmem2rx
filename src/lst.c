@@ -71,6 +71,7 @@ void wprint_node_lst(int depth, char *token_name, char *token_value, void *clien
 
 extern sbuf curLine;
 void sExchangeParen(sbuf *sbb) {
+  if (sbb->o == 0) return;
   char *cur =sbb->s+sbb->o - 1;
   cur[0] = ')';
 }
