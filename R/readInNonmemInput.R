@@ -57,7 +57,7 @@
     }
     if (.nonmem2rx$needNmevid) {
       .minfo("adding nmevid to dataset")
-      .data$nmevid <- .data[, which(downcase(names(.data)) == "evid")]
+      .data$nmevid <- .data[, which(tolower(names(.data)) == "evid")]
     }
     # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
     if (!is.na(.nonmem2rx$dataRecords)) {

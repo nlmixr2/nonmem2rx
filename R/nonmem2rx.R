@@ -239,6 +239,10 @@
 #' @param determineError Boolean to try to determine the `nlmixr2`-style residual
 #'   error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
 #'   not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)
+#'
+#' @param validate Boolean that this tool will attempt to "validate"
+#'   the model by solving the derived model under pred conditions
+#'   (etas are zero and eps values are zero)
 #' 
 #' @param lst the NONMEM output extension, defaults to `.lst`
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
@@ -250,6 +254,7 @@
 #' @importFrom stats setNames
 #' @importFrom lotri lotri
 #' @importFrom dparser mkdparse
+#' @importFrom utils read.csv
 #' @examples
 #' 
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
@@ -288,8 +293,8 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                          paste(.nonmem2rx$ini, collapse="\n"),
                          "\n})\n",
                          "rxode2::model({\n",
-                         ifelse(.nonmem2rx$abbrevLin == 0L,
-                                paste0(paste(paste0("cmt(rxddta", seq(1,.nonmem2rx$maxa), ")"),
+                         ifelse(.nonmem2rx$abbrevLin == 0L && .nonmem2rx$maxa != 0L,
+                                paste0(paste(paste0("cmt(rxddta", seq_len(.nonmem2rx$maxa), ")"),
                                              collapse="\n"), "\n"),
                                 ""),
                          paste(.nonmem2rx$model, collapse="\n"),
@@ -346,8 +351,9 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   } else {
     checkmate::assertCharacter(cmtNames, any.missing = FALSE)
   }
-  print(cmtNames)
   .rx <- .replaceCmtNames(.rx, cmtNames)
+  .rx <- rxode2::rxUiDecompress(.rx)
+
 
   # now try to validate
   if (!is.null(.nonmemData)) {
@@ -368,10 +374,10 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
       for (.i in .dn) {
         .params[[.i]] <- 0
       }
-      .ipredSolve <- rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                              covsInterpolation="nocb",
-                             addDosing = TRUE)
-      if (is.null(.rx$predDf)) {
+                             addDosing = TRUE))
+      if (is.null(.rx$predDf) && !inherits(.ipredSolve, "try-error")) {
         # no endpoint in model
         .w <- which(tolower(names(.ipredSolve)) == "y")
         .y <- names(.ipredSolve)[.w]
@@ -400,10 +406,11 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                         function(x) {
                           return(0.0)
                         }, double(1), USE.NAMES = TRUE))
-    .predSolve <- rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+    .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                           covsInterpolation="nocb",
-                          addDosing = TRUE)
-    if (is.null(.rx$predDf)) {
+                          addDosing = TRUE))
+    if (inherits(.predSolve, "try-error")) {
+    } else if (is.null(.rx$predDf)) {
       .w <- which(tolower(names(.predSolve)) == "y")
       .y <- names(.predSolve)[.w]
       #print(data.frame(.predSolve[[.y]], .ipredData$PRED))
@@ -423,16 +430,15 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                        signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
     }
     if (!is.null(.msg)) {
-      .rx <- rxode2::rxUiDecompress(.rx)
       .rx$meta$validation <- .msg
-      .rx <- rxode2::rxUiCompress(.rx)
     }
   }
   if (length(.nonmem2rx$modelDesc) > 0) {
-    .rx <- rxode2::rxUiDecompress(.rx)
     .rx$meta$description <- .nonmem2rx$modelDesc
-    .rx <- rxode2::rxUiCompress(.rx)    
   }
-  .rx
+  if (!is.null(.sigma)) {
+    .rx$meta$sigma <- .sigma
+  }
+  rxode2::rxUiCompress(.rx)
 }
 

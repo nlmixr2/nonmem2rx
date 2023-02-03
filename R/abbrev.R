@@ -87,7 +87,7 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .setMaxA <- function(maxa) {
-  .nonmem2rx$maxa <- maxa
+  .nonmem2rx$maxa <- max(maxa, .nonmem2rx$maxa)
   invisible()
 }
 #' If called, sets the flag that we need nmevid in the dataset

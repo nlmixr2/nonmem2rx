@@ -25,9 +25,11 @@ Imports:
     magrittr,
     cli,
     pmxTools,
-    tools
+    tools,
+    utils
 Suggests: 
     devtools,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3

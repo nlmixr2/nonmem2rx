@@ -46,6 +46,10 @@ from the `.lst` output file.}
 error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
 not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)}
 
+\item{validate}{Boolean that this tool will attempt to "validate"
+the model by solving the derived model under pred conditions
+(etas are zero and eps values are zero)}
+
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
 
 \item{ext}{the NONMEM ext file extension, defaults to `.ext`}
