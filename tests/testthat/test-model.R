@@ -20,7 +20,7 @@ test_that("test model", {
      c("DEPOT", "CENTRAL"))
 
   .m("COMP=(DEPOT DEFDOSE INITIALOFF) COMP",
-     c("DEPOT", "a2"))
+     c("DEPOT", "rxddta2"))
 
   .m("\nCOMP=(DEPOT DEFDOSE INITIALOFF)\nCOMP=(CENTRAL DEFOBS NOOFF)",
      c("DEPOT", "CENTRAL"))
@@ -32,5 +32,8 @@ test_that("test model", {
 
   .m("COMP=(DEPOT,INITIALOFF,DEFDOSE) COMP=(CENTRAL,DEFOBS,NOOFF)",
      c("DEPOT", "CENTRAL"))
+
+  .m("COMP=('depot compartment with spaces',INITIALOFF,DEFDOSE) COMP=(CENTRAL,DEFOBS,NOOFF)",
+     c("depot compartment with spaces", "CENTRAL"))
   
 })
