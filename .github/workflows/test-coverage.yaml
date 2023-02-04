@@ -27,6 +27,7 @@ jobs:
           extra-packages: |
             any::covr
             nlmixr2/lotri
+            nlmixr2/dparser-R
             nlmixr2/rxode2ll
             nlmixr2/rxode2parse
             nlmixr2/rxode2random
