@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>/404.html</loc>
+  </url>
+  <url>
+    <loc>/authors.html</loc>
+  </url>
+  <url>
+    <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nmext.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nmlst.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nonmem2rx.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nonmem2rxRec.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reexports.html</loc>
+  </url>
+</urlset>
