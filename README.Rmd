@@ -1,0 +1,49 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# nonmem2rx
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/nlmixr2/nonmem2rx/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nlmixr2/nonmem2rx/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/nlmixr2/nonmem2rx/branch/main/graph/badge.svg)](https://app.codecov.io/gh/nlmixr2/nonmem2rx?branch=main)
+[![CRAN version](http://www.r-pkg.org/badges/version/nonmem2rx)](https://cran.r-project.org/package=nonmem2rx)
+[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/grand-total/nonmem2rx)](https://cran.r-project.org/package=nonmem2rx)
+[![CRAN total downloads](https://cranlogs.r-pkg.org/badges/nonmem2rx)](https://cran.r-project.org/package=nonmem2rx)
+[![CodeFactor](https://www.codefactor.io/repository/github/nlmixr2/nonmem2rx/badge)](https://www.codefactor.io/repository/github/nlmixr2/nonmem2rx)
+![r-universe](https://nlmixr2.r-universe.dev/badges/nonmem2rx)
+<!-- badges: end -->
+
+The goal of nonmem2rx is to convert a NONMEM control stream to
+`rxode2` for easy clinical trial simulation in R.
+
+## Installation
+
+You can install the development version of nonmem2rx from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("nlmixr2/nonmem2rx")
+```
+
+## Example
+
+Once `nonmem2rx` has been loaded, you simply type the location of the
+nonmem control stream for the parser to start.  For example:
+
+```{r example}
+library(nonmem2rx)
+mod <- nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+mod 
+```
