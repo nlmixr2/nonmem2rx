@@ -40,7 +40,7 @@ nonmem control stream for the parser to start. For example:
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 #> Warning: multiple $PROBLEM statements; only use first $PROBLEM for translation
-#> Reading /tmp/RtmpEycmzA/temp_libpath18b2321da259/nonmem2rx/run001.ext
+#> Reading /tmp/RtmpTtRIFL/temp_libpath201f5e0d392c/nonmem2rx/run001.ext
 #> ℹ change initial estimate of `theta1` to `26.2909`
 #> ℹ change initial estimate of `theta2` to `1.34809`
 #> ℹ change initial estimate of `theta3` to `4.20364`
@@ -115,3 +115,33 @@ mod
 #>     })
 #> }
 ```
+
+The process steps are below:
+
+  - Read in the nonmem control stream and convert the model to a
+    `rxode2` ui function.
+
+  - Try to determine an endpoint in the model (if possible), and convert
+    to a fully qualified ui model that can be used in `nlmixr2` and
+    `rxode2`.
+
+  - If available, `nonmem2rx` will read the final parameter estimates
+    and update the model. (It tries the `.ext` file followed by the
+    `.lst` file; without these files, will simply keep the initial
+    estimates in the model).
+
+  - This will read in the nonmem input dataset, and search for the
+    output files with `IPRED`, `PRED` and the `ETA` values. The
+    translated `rxode2` model is run for the population parameters and
+    the individual parameters. This will then compare the results
+    between `NONMEM` and `rxode2` to make sure the translation makes
+    sense. This only works when `nonmem2rx` has access to the input data
+    and the output with the `IPRED`, `PRED` and the `ETA` values.
+
+  - Converts the upper case NONMEM variables to lower case.
+
+  - Replaces the NONMEM theta / eta names with the label-based names
+    like an extended control stream
+
+  - Replaces the compartment names with the defined compartment names in
+    the control stream (ie `COMP=(compartmenName)`)
