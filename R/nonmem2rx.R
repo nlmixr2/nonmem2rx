@@ -268,6 +268,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       validate=TRUE,
                       lst=".lst",
                       ext=".ext") {
+  checkmate::assertFileExists(file)
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
