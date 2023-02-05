@@ -140,6 +140,8 @@ test_that("test abbrev", {
     expect_error(.a("a=SIGMA(1, 1)"), "SIGMA[(]#, #[)]")
     expect_error(.a("a=OMEGA(1, 1)"), "OMEGA[(]#, #[)]")
     expect_warning(.a("a=evid+3", "A <- nmevid + 3"), "evid")
+    expect_warning(.a("a=sim+3", "A <- nmsim + 3"), "sim")
+    expect_warning(.a("a=ipredSim+3", "A <- nmipredsim + 3"), "ipredSim")
     
     .a("a=D1", "A <- dur(rxddta1)")
     .a("a=F1", "A <- f(rxddta1)")

@@ -319,7 +319,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), ".cov"))
   if (file.exists(.cov)) {
     .cov <- pmxTools::read_nmcov(.cov)
-    print(.cov)
+    ## print(.cov)
   } else {
     .cov <- NULL
   }
@@ -376,7 +376,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   if (!is.null(.nonmemData)) {
     .model <- .rx$simulationModel
     .theta <- .rx$theta
-    .ci <- 0.95
+    .ci0 <- .ci <- 0.95
     .sigdig <- 3
     .ci <- (1 - .ci) / 2
     .q <- c(0, .ci, 0.5, 1 - .ci, 1)
@@ -391,13 +391,19 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
       for (.i in .dn) {
         .params[[.i]] <- 0
       }
-      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+      if (!is.null(.rx$predDf)) {
+        .params[[paste0("err.", .rx$predDf$var)]] <- 0
+      }
+      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                              covsInterpolation="nocb",
                              addDosing = TRUE))
-      if (is.null(.rx$predDf) && !inherits(.ipredSolve, "try-error")) {
-        # no endpoint in model
-        .w <- which(tolower(names(.ipredSolve)) == "y")
-        .y <- names(.ipredSolve)[.w]
+      if (!inherits(.ipredSolve, "try-error")) {
+        if (is.null(.rx$predDf)) {
+          .w <- which(tolower(names(.ipredSolve)) == "y")
+          .y <- names(.ipredSolve)[.w]
+        } else {
+          .y <- "sim"
+        }
         if (length(.ipredData$IPRED) == length(.ipredSolve[[.y]])) {
           .cmp <- data.frame(nonmemIPRED=.ipredData$IPRED,
                              IPRED=.ipredSolve[[.y]])
@@ -406,12 +412,12 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
           .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
           #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .msg <- c(paste0("IPRED relative difference compared to Nonmem IPRED: ", round(.qi[3], 2),
-                           "%; ", .ci * 100,"% percentile: (",
+                           "%; ", .ci0 * 100,"% percentile: (",
                            round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
                            signif(.qi[3] / 100, digits=.sigdig)),
                     paste0("IPRED absolute difference compared to Nonmem IPRED: atol=",
                            signif(.qai[3], .sigdig),
-                           "; ", .ci * 100,"% percentile: (",
+                           "; ", .ci0 * 100,"% percentile: (",
                            signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), ")"))
         } else {
           .minfo(sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
@@ -429,14 +435,19 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                         function(x) {
                           return(0.0)
                         }, double(1), USE.NAMES = TRUE))
+    if (!is.null(.rx$predDf)) {
+      .params <- c(.params, setNames(0, paste0("err.", .rx$predDf$var)))
+    }
     .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                           covsInterpolation="nocb",
                           addDosing = TRUE))
-    if (inherits(.predSolve, "try-error")) {
-    } else if (is.null(.rx$predDf)) {
-      .w <- which(tolower(names(.predSolve)) == "y")
-      .y <- names(.predSolve)[.w]
-      #print(data.frame(.predSolve[[.y]], .ipredData$PRED))
+    if (!inherits(.predSolve, "try-error")) {
+      if (is.null(.rx$predDf)) {
+        .w <- which(tolower(names(.predSolve)) == "y")
+        .y <- names(.predSolve)[.w]
+      } else {
+        .y <- "sim"
+      }
       if (length(.predData$PRED) == length(.predSolve[[.y]])) {
         .cmp <- data.frame(nonmemPRED=.predData$PRED,
                            PRED=.predSolve[[.y]])
@@ -444,13 +455,13 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
         .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
         .msg <- c(.msg, 
                   paste0("PRED relative difference compared to Nonmem PRED: ", round(.qp[3], 2),
-                         "%; ", .ci * 100,"% percentile: (",
+                         "%; ", .ci0 * 100,"% percentile: (",
                          round(.qp[2], 2), "%,", round(.qp[4], 2), "%); rtol=",
                          signif(.qp[3] / 100,
                                 digits=.sigdig)),
                   paste0("PRED absolute difference compared to Nonmem PRED: atol=",
                          signif(.qap[3], .sigdig),
-                         "; ", .ci * 100,"% percentile: (",
+                         "; ", .ci0 * 100,"% percentile: (",
                          signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
       } else {
         .minfo(sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",

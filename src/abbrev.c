@@ -97,6 +97,8 @@ SEXP nonmem2rxGetScale(int scale);
 
 int evidWarning = 0;
 int icallWarning = 0;
+int simWarning=0;
+int ipredSimWarning = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
 SEXP nonmem2rxNeedNmevid(void);
@@ -208,6 +210,20 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
         nonmem2rxNeedNmevid();
       }
       sAppendN(&curLine, "nmevid", 6);
+      return 1;
+    } else if (!nmrxstrcmpi("sim", v)) {
+      if (simWarning == 0) {
+        Rf_warning("'sim' variable is used in rxode2 simulations, renamed to 'nmsim'");
+        simWarning = 1;
+      }
+      sAppendN(&curLine, "nmsim", 5);
+      return 1;
+    } else if (!nmrxstrcmpi("ipredSim", v)) {
+      if (ipredSimWarning == 0) {
+        Rf_warning("'ipredSim' variable is used in rxode2 simulations, renamed to 'nmipredsim'");
+        ipredSimWarning = 1;
+      }
+      sAppendN(&curLine, "nmipredsim", 10);
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
@@ -795,6 +811,8 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   verbWarning = 0;
   maxA = 0;
   evidWarning=0;
+  simWarning=0;
+  ipredSimWarning=0;
   icallWarning=0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   nonmem2rxSetMaxA(maxA);
