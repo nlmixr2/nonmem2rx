@@ -129,6 +129,10 @@
     .n <- .n[-.w]
     .t <- .t[-.w]
   }
+  if (length(.n) == 0)  {
+    .minfo("done (no labels)")
+    return(rxui)
+  }
   .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
   if (!is.null(df)) {
       .nonmem2rx$etas <-eval(parse(text=paste0("dplyr::rename(df, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
@@ -260,6 +264,8 @@
 #' @examples
 #' 
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+#'
+#' nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
 #' 
 nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       cmtNames=TRUE,
@@ -273,7 +279,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
-  .lines <- paste(readLines(file), collapse = "\n")
+  .lines <- paste(suppressWarnings(readLines(file)), collapse = "\n")
   .parseRec(.lines)
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
