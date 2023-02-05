@@ -1,3 +1,34 @@
+#' Is this a simple theta expression?
+#'
+#' This will also check for aliases the model ie `var=theta1`
+#'
+#' @param var variable to determine if it is a simple theta
+#' @param rxui rxode2 ui to search aliases (or null to skip search)
+#' @return theta number if it has been found, otherwise `FALSE`
+#' @noRd
+#' @author Matthew L. Fidler
+.isTheta <- function(var, rxui=NULL) {
+  if (regexpr("theta[0-9]+", var) != -1) {
+    return(var)
+  }
+  if (is.null(rxui)) return(FALSE)
+  .env <- new.env(parent=emptyenv())
+  .wt <- which(vapply(rxui$lstExpr, function(e) {
+    if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
+      if (length(e[[2]]) == 1L && as.character(e[[2]]) == var) {
+        .v <- deparse1(e[[3]])
+        if (regexpr("theta[0-9]+", .v) != -1) {
+          .env$v <- .v
+          return(TRUE)
+        }
+      }
+    }
+    FALSE
+  }, logical(1), USE.NAMES = FALSE))
+  if (length(.wt) == 1L) return(.env$v)
+  FALSE
+}
+
 #' Is this ipred or f?  
 #'  
 #' @param x expression
@@ -33,11 +64,10 @@
   } else {
     return(FALSE)
   }
-  if (regexpr("theta[0-9]+", .theta) != -1) {
-    .nonmem2rx$propPar <- .theta
-    return(TRUE)
-  }
-  FALSE
+  .cur <- .isTheta(.theta, rxui)
+  if (isFALSE(.cur)) return(FALSE)
+  .nonmem2rx$propPar <- .cur
+  TRUE
 }
 #' Is this w*eps1 ?
 #'
@@ -84,11 +114,10 @@
   }
   if (length(x) != 1L) return(FALSE)
   .theta <- as.character(x)
-  if (regexpr("theta[0-9]+", .theta) != -1) {
-    .nonmem2rx$addPar <- .theta
-    return(TRUE)
-  }
-  FALSE
+  .cur <- .isTheta(.theta, rxui)
+  if (isFALSE(.cur)) return(FALSE)
+  .nonmem2rx$addPar <- .cur
+  TRUE
 }
 #' Is the w expression represent a proportional error?
 #'  
@@ -137,11 +166,12 @@
     if (x[[3]] != 2) return(FALSE)
     if (isTRUE(useF) && .isIpredOrF(x[[2]], rxui=rxui)) return(TRUE)
     .theta <- as.character(x[[2]])
-    if (regexpr("theta[0-9]+", .theta) != -1) {
+    .cur <- .isTheta(.theta, rxui)
+    if (!isFALSE(.cur)) {
       if (is.na(useF)){
-        .nonmem2rx$propPar <- .theta
+        .nonmem2rx$propPar <- .cur
       } else {
-        .nonmem2rx$addPar <- .theta
+        .nonmem2rx$addPar <- .cur
       }
       return(TRUE)
     }
@@ -152,11 +182,12 @@
     }
     if (!identical(x[[2]], x[[3]])) return(FALSE)
     .theta <- as.character(x[[2]])
-    if (regexpr("theta[0-9]+", .theta) != -1) {
+    .cur <- .isTheta(.theta, rxui)
+    if (!isFALSE(.cur)) {
       if (is.na(useF)){
-        .nonmem2rx$propPar <- .theta
+        .nonmem2rx$propPar <- .cur
       } else {
-        .nonmem2rx$addPar <- .theta
+        .nonmem2rx$addPar <- .cur
       }
       return(TRUE)
     }
