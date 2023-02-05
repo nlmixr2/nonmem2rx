@@ -62,7 +62,7 @@
                       ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
                       paste(.nonmem2rx$dataCond, collapse=" || "),
                       ")),]")
-      .minfo(paste0("subsetting to records after filters code: ", .nonmem2rx$dataRecords))
+      .minfo(paste0("subsetting to records after filters code: ", .cond))
       eval(parse(text=.cond))
     }
     if (.nonmem2rx$needNmevid) {
