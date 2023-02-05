@@ -304,6 +304,70 @@ the model by solving the derived model under pred conditions
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> param(theta1,theta2,theta3,theta4,RSV,eta1,eta2,eta3,eta4);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cmt(CENTRAL);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cmt(PERI);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cl=exp(theta1+eta1);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v=exp(theta2+eta2);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> q=exp(theta3+eta3);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v2=exp(theta4+eta4);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v1=v;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> scale1=v;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> k21=q/v2;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> k12=q/v;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d/dt(CENTRAL)=k21*PERI-k12*CENTRAL-cl*CENTRAL/v1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d/dt(PERI)=-k21*PERI+k12*CENTRAL;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> f=CENTRAL/scale1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ipred=f;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rescv=RSV;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_yj_~2;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_lambda_~1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_low_~0;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_hi_~1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_pred_f_~ipred;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_pred_~rx_pred_f_;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_r_~(rx_pred_f_*RSV)^2;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ipredSim=rxTBSi(rx_pred_,rx_lambda_,rx_yj_,rx_low_,rx_hi_);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sim=rxTBSi(rx_pred_+sqrt(rx_r_)*err.ipred,rx_lambda_,rx_yj_,rx_low_,rx_hi_);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cmt(ipred);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dvid(3);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in rxSolveSEXP(object, .ctl, .nms, .xtra, params, events, inits,  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   The following parameter(s) are required for solving: err.ipred</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> param(theta1,theta2,theta3,theta4,RSV,eta1,eta2,eta3,eta4);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cmt(CENTRAL);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cmt(PERI);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cl=exp(theta1+eta1);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v=exp(theta2+eta2);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> q=exp(theta3+eta3);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v2=exp(theta4+eta4);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v1=v;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> scale1=v;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> k21=q/v2;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> k12=q/v;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d/dt(CENTRAL)=k21*PERI-k12*CENTRAL-cl*CENTRAL/v1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d/dt(PERI)=-k21*PERI+k12*CENTRAL;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> f=CENTRAL/scale1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ipred=f;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rescv=RSV;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_yj_~2;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_lambda_~1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_low_~0;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_hi_~1;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_pred_f_~ipred;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_pred_~rx_pred_f_;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rx_r_~(rx_pred_f_*RSV)^2;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ipredSim=rxTBSi(rx_pred_,rx_lambda_,rx_yj_,rx_low_,rx_hi_);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sim=rxTBSi(rx_pred_+sqrt(rx_r_)*err.ipred,rx_lambda_,rx_yj_,rx_low_,rx_hi_);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cmt(ipred);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dvid(3);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in rxSolveSEXP(object, .ctl, .nms, .xtra, params, events, inits,  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   The following parameter(s) are required for solving: err.ipred</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 2-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Initalization:</span> ──  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span>
@@ -333,10 +397,6 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sigma &lt;- structure(1, dim = c(1L, 1L), dimnames = list("eps1", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "eps1"))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 2.5% percentile: (0%,0%); rtol=7e-06", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "IPRED absolute difference compared to Nonmem IPRED: atol=0.0018; 2.5% percentile: (2.41e-05, 0.0421)", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED relative difference compared to Nonmem PRED: 0%; 2.5% percentile: (0%,0%); rtol=6.78e-06", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED absolute difference compared to Nonmem PRED: atol=6.78e-06; 2.5% percentile: (7.31e-07,0.00322)")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ini({</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         theta1 &lt;- 1.37034</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         label("logCl")</span>
@@ -368,10 +428,7 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span>         f &lt;- CENTRAL/scale1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ipred &lt;- f</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         rescv &lt;- RSV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         w &lt;- ipred * rescv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ires &lt;- DV - ipred</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         iwres &lt;- ires/w</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         y &lt;- ipred + w * eps1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ipred ~ prop(RSV)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-in"><span></span></span>
