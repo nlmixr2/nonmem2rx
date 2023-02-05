@@ -352,10 +352,11 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   } else {
     checkmate::assertCharacter(etaNames, any.missing = FALSE)    
   }
+  .nonmem2rx$etas <- NULL
   .rx <-.replaceThetaNames(.rx, etaNames,
                            label="eta", prefix="e.",
                            df=.etaData)
-  if (is.null(.etaData)) {
+  if (!is.null(.nonmem2rx$etas)) {
     .etaData <- .nonmem2rx$etas
   }
   if (inherits(cmtNames, "logical")) {

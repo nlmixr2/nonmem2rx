@@ -9,6 +9,11 @@ test_that("model loading", {
   #nonmem2rx(system.file("mods/DDMODEL00000310/run1.mod", package="nonmem2rx")) advan
   expect_error(nonmem2rx(system.file("mods/DDMODEL00000302/run1.mod", package="nonmem2rx")), NA)
   expect_error(nonmem2rx(system.file("run001.mod", package="nonmem2rx")), NA)
-  
-  
+
+  f <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+  expect_equal(length(f$meta$validation), 4L)
+
+  f <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
+                 determineError=FALSE)
+  expect_equal(length(f$meta$validation), 4L)
 })
