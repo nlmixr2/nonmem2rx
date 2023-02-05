@@ -1,10 +1,11 @@
 #' Is this ipred or f?  
 #'  
-#' @param x expression  
+#' @param x expression
+#' @param rxui the ui to help with determination of expressions
 #' @return TRUE if this is ipred/f
 #' @noRd
 #' @author Matthew L. Fidler
-.isIpredOrF <- function(x) {
+.isIpredOrF <- function(x, rxui=NULL) {
   if (length(x) != 1L) return(FALSE)
   .c0 <-as.character(x)
   .c <- tolower(.c0)
@@ -15,13 +16,19 @@
   FALSE
 }
 
-# Is this theta1*f
-.isThetaF <- function(x) {
+#' Is this theta1*f
+#'  
+#' @param x expression
+#' @param rxui the ui to help with determination of expressions
+#' @return TRUE if this is ipred/f
+#' @noRd
+#' @author Matthew L. Fidler
+.isThetaF <- function(x, rxui) {
   if (length(x) != 3L) return(FALSE)
   if (!identical(x[[1]], quote(`*`))) return(FALSE)
-  if (.isIpredOrF(x[[2]])) {
+  if (.isIpredOrF(x[[2]], rxui=rxui)) {
     .theta <- as.character(x[[3]])
-  } else if (.isIpredOrF(x[[3]])) {
+  } else if (.isIpredOrF(x[[3]], rxui=rxui)) {
     .theta <- as.character(x[[2]])
   } else {
     return(FALSE)
@@ -35,10 +42,11 @@
 #' Is this w*eps1 ?
 #'
 #' @param x expression
+#' @param rxui ui to help determine error structure
 #' @return TRUE if this is w*eps1
 #' @noRd
 #' @author Matthew L. Fidler
-.isWtimesEps <- function(x) {
+.isWtimesEps <- function(x, rxui=NULL) {
   if (length(x) != 3L) return(FALSE)
   if (!identical(x[[1]], quote(`*`))) return(FALSE)
   if (length(x[[2]]) !=1L) return(FALSE)
@@ -47,28 +55,32 @@
 }
 #' Determines if expression line is the fixed theta with w approach
 #'
-#' @param x expression 
+#' @param x expression
+#' @param rxui is the ui to help figure out values
 #' @return logical determining if this is the w fixed parameter approach
 #' @noRd
 #' @author Matthew L. Fidler
 #' @noRd
-.isParamWeps <- function(x) {
+.isParamWeps <- function(x, rxui=NULL) {
   if (length(x) != 3L) return(FALSE)
   if (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`))) return(.isParamWeps(x[[3]]))
   if (!identical(x[[1]], quote(`+`))) return(FALSE)
-  .isIpredOrF(x[[2]]) && .isWtimesEps(x[[3]]) ||
-    .isIpredOrF(x[[3]]) && .isWtimesEps(x[[2]])
+  .isIpredOrF(x[[2]], rxui=rxui) && .isWtimesEps(x[[3]], rxui=rxui) ||
+    .isIpredOrF(x[[3]], rxui=rxui) && .isWtimesEps(x[[2]], rxui=rxui)
 }
 #' Is this an additive W expression?
 #'
 #'  
-#' @param x expression 
-#' @return lodical saying if this is an additive error model
+#' @param x expression
+#' @param rxui ui object
+#' @return logical saying if this is an additive error model
 #' @noRd
 #' @author Matthew L. Fidler
-.isAddW <- function(x) {
-  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`)))) {
-    return(.isAddW(x[[3]]))
+.isAddW <- function(x, rxui=NULL) {
+  if (length(x) == 3L &&
+        (identical(x[[1]], quote(`<-`))
+          || identical(x[[1]], quote(`=`)))) {
+    return(.isAddW(x[[3]], rxui=rxui))
   }
   if (length(x) != 1L) return(FALSE)
   .theta <- as.character(x)
@@ -81,14 +93,16 @@
 #' Is the w expression represent a proportional error?
 #'  
 #' @param x expression
+#' @param rxui ui object
 #' @return logical
 #' @noRd
 #' @author Matthew L. Fidler
-.isPropW <- function(x) {
-  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`)))) {
-    return(.isPropW(x[[3]]))
+.isPropW <- function(x, rxui=NULL) {
+  if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) ||
+                            identical(x[[1]], quote(`=`)))) {
+    return(.isPropW(x[[3]], rxui=rxui))
   }
-  return(.isThetaF(x))
+  return(.isThetaF(x, rxui=rxui))
 }
 #' Test for add+prop combination 1
 #'
@@ -97,14 +111,14 @@
 #' @return logical saying if the expression is add+prop comb 1
 #' @noRd
 #' @author Matthew L. Fidler
-.isAddPropW1 <- function(x) {
+.isAddPropW1 <- function(x, rxui=NULL) {
   if (length(x) != 3L) return(FALSE)
   if (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`))) {
-    return(.isAddPropW1(x[[3]]))
+    return(.isAddPropW1(x[[3]], rxui=rxui))
   }
   if (!identical(x[[1]], quote(`+`))) return(FALSE)
-  .isThetaF(x[[2]]) &&  .isAddW(x[[3]]) ||
-    .isThetaF(x[[3]]) &&  .isAddW(x[[2]])
+  .isThetaF(x[[2]], rxui=rxui) &&  .isAddW(x[[3]], rxui=rxui) ||
+    .isThetaF(x[[3]], rxui=rxui) &&  .isAddW(x[[2]], rxui=rxui)
 }
 #' Is this expression theta^2
 #'
@@ -115,13 +129,13 @@
 #' @return boolean
 #' @noRd
 #' @author Matthew L. Fidler
-.isTheta2 <- function(x, useF=FALSE) {
+.isTheta2 <- function(x, rxui= NULL, useF=FALSE) {
   if (length(x) != 3) return(FALSE)
   if (identical(x[[1]], quote(`^`)) ||
         identical(x[[1]], quote(`**`))) {
     if (length(x[[2]]) != 1) return(FALSE)
     if (x[[3]] != 2) return(FALSE)
-    if (isTRUE(useF) && .isIpredOrF(x[[2]])) return(TRUE)
+    if (isTRUE(useF) && .isIpredOrF(x[[2]], rxui=rxui)) return(TRUE)
     .theta <- as.character(x[[2]])
     if (regexpr("theta[0-9]+", .theta) != -1) {
       if (is.na(useF)){
@@ -134,7 +148,7 @@
   } else if (identical(x[[1]], quote(`*`))) {
     if (length(x[[2]]) != 1) return(FALSE)
     if (isTRUE(useF)) {
-      return(.isIpredOrF(x[[2]]) && .isIpredOrF(x[[3]]))
+      return(.isIpredOrF(x[[2]], rxui=rxui) && .isIpredOrF(x[[3]], rxui=rxui))
     }
     if (!identical(x[[2]], x[[3]])) return(FALSE)
     .theta <- as.character(x[[2]])
@@ -156,7 +170,7 @@
 #' @return boolean
 #' @noRd
 #' @author Matthew L. Fidler
-.isTheta2F2 <- function(x) {
+.isTheta2F2 <- function(x, rxui = NULL) {
   if (length(x) == 3L && identical(x[[1]], quote(`*`))) {
     .mult1 <- x[[2]]
     .mult2 <- x[[3]]
@@ -187,8 +201,10 @@
         }
       }
     } 
-    return(.isTheta2(.mult1, useF=NA) && .isTheta2(.mult2, useF=TRUE) ||
-             .isTheta2(.mult1, useF=TRUE) && .isTheta2(.mult2, useF=NA))
+    return(.isTheta2(.mult1, rxui=rxui, useF=NA) &&
+             .isTheta2(.mult2, rxui=rxui, useF=TRUE) ||
+             .isTheta2(.mult1, rxui=rxui, useF=TRUE) &&
+             .isTheta2(.mult2, rxui=rxui, useF=NA))
   }
   FALSE
 }
@@ -198,16 +214,16 @@
 #' @return boolean
 #' @noRd
 #' @author Matthew L. Fidler
-.isAddPropW2 <- function(x) {
+.isAddPropW2 <- function(x, rxui=NULL) {
   if (length(x) == 3L && (identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`<-`)))) {
-    return(.isAddPropW2(x[[3]]))
+    return(.isAddPropW2(x[[3]], rxui=rxui))
   }
   if (length(x) == 2L && identical(x[[1]], quote(`sqrt`))) {
     .x <- x[[2]]
     if (length(.x) != 3L) return(FALSE)
     if (identical(.x[[1]], quote(`+`))) {
-      return(.isTheta2(.x[[2]]) && .isTheta2F2(.x[[3]]) ||
-               .isTheta2(.x[[3]]) && .isTheta2F2(.x[[2]]))
+      return(.isTheta2(.x[[2]], rxui=rxui) && .isTheta2F2(.x[[3]], rxui=rxui) ||
+               .isTheta2(.x[[3]], rxui=rxui) && .isTheta2F2(.x[[2]], rxui=rxui))
     }
   }
   FALSE
@@ -269,7 +285,7 @@
   }, logical(1), USE.NAMES = FALSE))
   if (length(.wy) != 1) return(rxui)
   .y <- rxui$lstExpr[[.wy]]
-  if (.isParamWeps(.y)) {
+  if (.isParamWeps(.y, rxui=rxui)) {
     .ww <- which(vapply(rxui$lstExpr, function(e) {
       if (identical(e[[1]], quote(`<-`)) || identical(e[[2]], quote(`=`))) {
         if (length(e[[2]]) == 1L && tolower(as.character(e[[2]])) == "w") return(TRUE)
@@ -278,23 +294,23 @@
     }, logical(1), USE.NAMES = FALSE))
     if (length(.ww) != 1) return(rxui)
     .wp <- rxui$lstExpr[[.ww]]
-    if (.isAddW(.wp)) {
+    if (.isAddW(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ add(", .nonmem2rx$addPar, ")}, append = TRUE), -", .y0, ")")
       return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    } else if (.isPropW(.wp)) {
+    } else if (.isPropW(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ prop(", .nonmem2rx$propPar, ")}, append = TRUE), -", .y0, ")")
       return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    } else if (.isAddPropW1(.wp)) {
+    } else if (.isAddPropW1(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
                      ") + combined1()}, append = TRUE), -", .y0, ")")
       return(eval(parse(text=.removeWrelated(rxui, .mod))))
-    } else if (.isAddPropW2(.wp)) {
+    } else if (.isAddPropW2(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,

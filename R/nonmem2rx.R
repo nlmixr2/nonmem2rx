@@ -174,6 +174,7 @@
   }
   .ret
 }
+
 #'  Update the input model with final parmeter estimates
 #'  
 #' @param rxui ui
@@ -315,6 +316,13 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     .rx <- .tmp$rx
     if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
   }
+  .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), ".cov"))
+  if (file.exists(.cov)) {
+    .cov <- pmxTools::read_nmcov(.cov)
+    print(.cov)
+  } else {
+    .cov <- NULL
+  }
   if (determineError) {
     .rx <- .determineError(.rx)
   }
@@ -347,7 +355,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   .rx <-.replaceThetaNames(.rx, etaNames,
                            label="eta", prefix="e.",
                            df=.etaData)
-  if (!is.null(.etaData)) {
+  if (is.null(.etaData)) {
     .etaData <- .nonmem2rx$etas
   }
   if (inherits(cmtNames, "logical")) {
@@ -363,7 +371,6 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   }
   .rx <- .replaceCmtNames(.rx, cmtNames)
   .rx <- rxode2::rxUiDecompress(.rx)
-
 
   # now try to validate
   if (!is.null(.nonmemData)) {
