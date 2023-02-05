@@ -12,6 +12,16 @@
   .data <- NULL
   .file <- suppressWarnings(normalizePath(file.path(dirname(file), .nonmem2rx$dataFile)))
   .ext <- tools::file_ext(.file)
+  if (.ext == "csv" && !file.exists(.file)) {
+    .path <- file.path(dirname(file), .nonmem2rx$dataFile)
+    .dirname <- dirname(.path)
+    .basename <- basename(.path)
+    .files <- list.files(.dirname, pattern="[.]csv$")
+    .w <- which(tolower(.basename)==tolower(.files))
+    if (length(.w) == 1) {
+      .file <- normalizePath(file.path(.dirname, .files[.w]))
+    }
+  }
   if (.ext == "csv" && file.exists(.file)) {
     .minfo(paste0("read in nonmem input data (for model validation): ", .file))
     .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."))
