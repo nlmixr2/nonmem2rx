@@ -7,14 +7,14 @@ filename_t1: "\'([^\'\\]|\\[^])*\'";
 filename_t2: "\"([^\"\\]|\\[^])*\"";
 filename_t3: "[^ '\"\n]+";
 
-ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore') '=' "[^\n]";
-ignore_statement: ('IGNORE' | 'ignore' | 'Ignore') '=' logic_bracket;
-accept_statement: ('ACCEPT' | 'accept' | 'Accept') '=' logic_bracket;
-null_statement: 'NULL' '=' "[^\n]";
+ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore') '='? "[^\n]";
+ignore_statement: ('IGNORE' | 'ignore' | 'Ignore') '='? logic_bracket;
+accept_statement: ('ACCEPT' | 'accept' | 'Accept') '='? logic_bracket;
+null_statement: 'NULL' '='? "[^\n]";
 wide_statement: ('NOWIDE' | 'WIDE' | 'nowide' | 'wide' | 'Nowide' | 'Wide');
 checkout_statement: ('CHECKOUT' | 'checkout' | 'Checkout' );
-records_statement: ('RECORDS' | 'Records' | 'records') '=' decimalint;
-lrecl_statement: ('LRECL' | 'lrecl' | 'Lrecl') '=' decimalint;
+records_statement: ('RECORDS' | 'Records' | 'records') '='? decimalint;
+lrecl_statement: ('LRECL' | 'lrecl' | 'Lrecl') '='? decimalint;
 rewind_statement: ('NOREWIND' | 'REWIND' | 'norewind' | 'rewind' | 'Norewind' | 'Rewind');
 
 logic_bracket: '(' (simple_logic)*  (',' simple_logic)* ')';
