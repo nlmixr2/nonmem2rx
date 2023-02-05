@@ -10,18 +10,8 @@
 #' @author Matthew L. Fidler
 .readInDataFromNonmem <- function(file) {
   .data <- NULL
-  .file <- suppressWarnings(normalizePath(file.path(dirname(file), .nonmem2rx$dataFile)))
+  .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
   .ext <- tools::file_ext(.file)
-  if (.ext == "csv" && !file.exists(.file)) {
-    .path <- file.path(dirname(file), .nonmem2rx$dataFile)
-    .dirname <- dirname(.path)
-    .basename <- basename(.path)
-    .files <- list.files(.dirname, pattern="[.]csv$")
-    .w <- which(tolower(.basename)==tolower(.files))
-    if (length(.w) == 1) {
-      .file <- normalizePath(file.path(.dirname, .files[.w]))
-    }
-  }
   if (.ext == "csv" && file.exists(.file)) {
     .minfo(paste0("read in nonmem input data (for model validation): ", .file))
     .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."))
@@ -58,12 +48,15 @@
     }
     # https://www.mail-archive.com/nmusers@globomaxnm.com/msg05323.html
     if (length(.nonmem2rx$dataCond) > 0) {
-      .cond <- paste0(".data[which(",
-                      ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
-                      paste(.nonmem2rx$dataCond, collapse=" || "),
-                      ")),]")
-      .minfo(paste0("subsetting to records after filters code: ", .cond))
-      eval(parse(text=.cond))
+      .cond <- paste0("-which(",
+                     ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
+                     paste(.nonmem2rx$dataCond, collapse=" || "),
+                     "))")
+      .minfo(paste0("subsetting accept/ignore filters code: .data[", .cond, ",]"))
+      .w <- eval(parse(text=.cond))
+      if (length(.w) > 0) {
+        .data <- .data[.w,]
+      }
     }
     if (.nonmem2rx$needNmevid) {
       .minfo("adding nmevid to dataset")
@@ -90,14 +83,14 @@
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$fullData) return(FALSE)
                        if (!.table$hasIpred) return(FALSE)
-                       .file <- suppressWarnings(normalizePath(file.path(dirname(file), .table$file)))
+                       .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
                        if (!file.exists(.file)) return(FALSE)
                        TRUE
                      }, logical(1), USE.NAMES=FALSE))
   if (length(.w) == 0) return(NULL)
   .w <- .w[1]
   .table <- .nonmem2rx$tables[[.w]]
-  .file <- suppressWarnings(normalizePath(file.path(dirname(file), .table$file)))
+  .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
   .minfo(paste0("read in nonmem IPRED data (for model validation): ", .file))
   .ret <- pmxTools::read_nm_multi_table(.file)
   .w <- which(names(.ret) == "IPRE")
@@ -105,6 +98,22 @@
   .minfo("done")
   .ret
 }
+#'  Get and normalize path (if exists or exists in a case insensitive way)
+#'  
+#' @param path path to normalize 
+#' @return normalized case sensitive path
+#' @noRd
+#' @author Matthew L. Fidler
+.getFileNameIgnoreCase <- function(path) {
+  if (file.exists(path)) return(normalizePath(path))
+  .dirname <- dirname(path)
+  .basename <- basename(path)
+  .files <- list.files(.dirname)
+  .w <- which(tolower(.basename)==tolower(.files))
+  if (length(.w) != 1) return(path)
+  normalizePath(file.path(.dirname, .files[.w]))
+}
+
 #' Read in the ipred data from nonmem output
 #'  
 #' @param file nonmem control stream name
@@ -117,14 +126,14 @@
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$fullData) return(FALSE)
                        if (!.table$hasPred) return(FALSE)
-                       .file <- suppressWarnings(normalizePath(file.path(dirname(file), .table$file)))
+                       .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
                        if (!file.exists(.file)) return(FALSE)
                        TRUE
                      }, logical(1), USE.NAMES=FALSE))
   if (length(.w) == 0) return(NULL)
   .w <- .w[1]
   .table <- .nonmem2rx$tables[[.w]]
-  .file <- suppressWarnings(normalizePath(file.path(dirname(file), .table$file)))
+  .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
   .minfo(paste0("read in nonmem PRED data (for model validation): ", .file))
   .ret <- pmxTools::read_nm_multi_table(.file)
   .minfo("done")
@@ -142,14 +151,14 @@
                      function(i) {
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$hasEta) return(FALSE)
-                       .file <- suppressWarnings(normalizePath(file.path(dirname(file), .table$file)))
+                       .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
                        if (!file.exists(.file)) return(FALSE)
                        TRUE
                      }, logical(1), USE.NAMES=FALSE))
   if (length(.w) == 0) return(NULL)
   .w <- .w[1]
   .table <- .nonmem2rx$tables[[.w]]
-  .file <- suppressWarnings(normalizePath(file.path(dirname(file), .table$file)))
+  .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
   .minfo(paste0("read in nonmem ETA data (for model validation): ", .file))
   .ret <- pmxTools::read_nm_multi_table(.file)
   if (.table$fullData) {

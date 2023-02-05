@@ -100,23 +100,27 @@ void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, pri
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   if (!strcmp("singleLineRecord", name)) {
-    D_ParseNode *xpn = d_get_child(pn,3); // record
     pushRecord();
+    D_ParseNode *xpn = d_get_child(pn,3); // record
     curRecord = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 4); // rest of line
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curLine, "%s\n",v);
-    return;
+    sAppend(&curLine, "%s",v);
   } else if (!strcmp("singleLineNoRecord", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     sAppend(&curLine, "%s\n",v);
-    return;
+  } else if (!strcmp("singleLineComment", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    sAppend(&curLine, " %s",v);
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
       D_ParseNode *xpn = d_get_child(pn, i);
       wprint_parsetree_records(pt, xpn, depth, fn, client_data);
     }
+  }
+  if (!strcmp("recLine", name)) {
+    sAppendN(&curLine, "\n",1);
   }
 }
 

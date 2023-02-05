@@ -64,4 +64,6 @@ Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 
 nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 
+nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+
 }

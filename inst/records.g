@@ -1,9 +1,10 @@
 //loop
 statement_list : (statement)+ ;
 
-statement: singleLineRecord |
-  singleLineNoRecord;
+statement: recLine | singleLineNoRecord;
 
-singleLineRecord: "[ \t\r]*" "[$]" "[ \t\r]*" "[A-Za-z]+" "[^\n]*";
+recLine: singleLineRecord singleLineComment?;
+
+singleLineRecord: "[ \t\r]*" "[$]" "[ \t\r]*" "[A-Za-z]+" "[^\n;$]*";
 singleLineNoRecord: "[^$][^\n]*";
-whitespace: "[\n]*";
+singleLineComment: ';' "[^\n]*";

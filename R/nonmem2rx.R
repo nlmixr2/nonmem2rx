@@ -325,7 +325,9 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     if (!is.null(.ipredData)) {
       .etaData <- .readInEtasFromTables(file)
     }
-    if (!any(names(.ipredData) == "PRED")) {
+    if (is.null(.predData)) {
+      .predData  <- .readInPredFromTables(file)
+    } else if (!any(names(.ipredData) == "PRED")) {
       .predData  <- .readInPredFromTables(file)
     }
   }
@@ -405,8 +407,8 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                            "; ", .ci * 100,"% percentile: (",
                            signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), ")"))
         } else {
-          .minfo(sprintf("the length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
-                         length(.ipredData$IPRED), length(.ipredSolve[[.y]]),
+          .minfo(sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
+                         length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
                          length(.nonmemData[,1])))
         }
       }
@@ -445,8 +447,8 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                          signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
       } else {
         .minfo(sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
-                       length(.predData$PRED),
                        length(.predSolve[[.y]]),
+                       length(.predData$PRED),
                        length(.nonmemData[,1])))
       }
     }
