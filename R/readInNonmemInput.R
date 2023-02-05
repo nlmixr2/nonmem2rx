@@ -164,7 +164,7 @@
   if (.table$fullData) {
     .ret <- .ret[!duplicated(.ret$ID),]
   }
-  .w <- which(regexpr("(ID|ETA.*)", names(.ret)) != -1)
+  .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
   .ret <- .ret[,.w]
   names(.ret)[-1] <- tolower(names(.ret)[-1])
   .minfo("done")
