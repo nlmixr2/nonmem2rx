@@ -1,7 +1,6 @@
 #' Read in data file
 #'  
-#' @param ... 
-#' @inheritParams NMdata::NMreadTab
+#' @inheritParams nmtab
 #' @export 
 #' @author Philip Delff and Matthew L. Fidler
 #' @examples

@@ -5,6 +5,7 @@ Version: 0.1.0
 Author: Matthew Fidler
 Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
+    person("Philip", "Delff", email = "philip@delff.dk",role = c("ctb")),
     person("Gabriel", "Staples", role="ctb")
            )
 Description: More about what it does (maybe more than one line)
@@ -24,15 +25,14 @@ Imports:
     rxode2,
     magrittr,
     cli,
-    pmxTools,
     tools,
     utils,
-    NMdata,
     data.table
 Suggests: 
     devtools,
     testthat (>= 3.0.0),
     nonmemica,
+    NMdata,
     nonmem2R,
     withr
 Config/testthat/edition: 3

@@ -7,9 +7,9 @@
 nmcov(file, ...)
 }
 \arguments{
-\item{file}{path to Nonmem table file}
+\item{file}{file name to read the results from}
 
-\item{...}{}
+\item{...}{other parameters passed to `data.table::fread`}
 }
 \description{
 Read in data file

@@ -11,7 +11,7 @@
 #' nmext(system.file("run001.ext", package="nonmem2rx"))
 nmext <- function(file) {
   checkmate::assertFile(file)
-  .lst <- NMdata::NMreadTab(file)
+  .lst <- nmtab(file)
   .lst <- .lst[.lst$NMREP == 1 & .lst$ITERATION == -1e+09,]
   .w <- which(regexpr("THETA[1-9][0-9]*",names(.lst)) != -1)
   if (length(.w) > 0) {
