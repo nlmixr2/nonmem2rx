@@ -122,10 +122,24 @@
 .parseRec <- function(ctl) {
   checkmate::checkString(ctl)
   .clearRecordEnv()
-  .Call(`_nonmem2rx_trans_records`, ctl)
+  .recs <- strsplit(ctl, "(^|\\n) *[$]")[[1]]
+  .addRec("aaa", .recs[1])
+  lapply(.recs[-1], function(r) {
+    .m <- regexpr("^ *[A-Za-z]+", r)
+    if (.m != -1) {
+      .rec <- substr(r, 1, attr(.m, "match.length"))
+      .content <- substr(r, attr(.m, "match.length")+1, nchar(r))
+      .addRec(.rec, .content)
+    } else  {
+      
+      message(deparse1(r))
+      stop("unexpected line", call. = FALSE)
+    }
+  })
   for(.r in .recordEnv$.recs) {
     .ret <- get(.r, envir=.recordEnv)
     class(.ret) <- c(.r, "nonmem2rx")
+    ## print(.ret)
     nonmem2rxRec(.ret)
   }
 }
