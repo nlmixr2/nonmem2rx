@@ -162,8 +162,8 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function() {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- c(";; 1. Based on:     000", ";; 2. Description:       ", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ";;    NONMEM PK example for xpose", "Parameter estimation", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "Model simulations")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ";;    NONMEM PK example for xpose", "    Parameter estimation", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "    Model simulations")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sigma &lt;- structure(1, dim = c(1L, 1L), dimnames = list("eps1", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "eps1"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ini({</span>
@@ -221,8 +221,14 @@ the model by solving the derived model under pred conditions
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading data using fread</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding table numbers to data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> getting rid of non-data rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading data using fread</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding table numbers to data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> getting rid of non-data rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
@@ -262,7 +268,7 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function() {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "    BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sigma &lt;- structure(1, dim = c(1L, 1L), dimnames = list("eps1", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "eps1"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7e-06", </span>
