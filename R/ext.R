@@ -10,41 +10,42 @@
 #'
 #' nmext(system.file("run001.ext", package="nonmem2rx"))
 nmext <- function(file) {
-  .lst <- suppressWarnings(pmxTools::read_nmext(file))
-  if (length(.lst$Thetas) > 0) {
-    .theta <- setNames(.lst$Thetas, paste0("theta", seq_along(.lst$Thetas)))
+  checkmate::assertFile(file)
+  .lst <- NMdata::NMreadTab(file)
+  .lst <- .lst[.lst$NMREP == 1 & .lst$ITERATION == -1e+09,]
+  .w <- which(regexpr("THETA[1-9][0-9]*",names(.lst)) != -1)
+  if (length(.w) > 0) {
+    .theta <- unlist(.lst[,.w])
+    names(.theta) <- gsub("^THETA", "theta", names(.theta))
   } else {
     .theta <- NULL
   }
-  if (length(.lst$Omega) > 0) {
+  .w <- which(regexpr("^OMEGA",names(.lst)) != -1)
+  if (length(.w) > 0) {
+    .omega <-  unlist(.lst[,.w])
+    names(.omega) <- NULL
     .omega <- eval(parse(text=paste0("lotri::lotri(",
-                                     paste(paste0("eta",seq_along(.lst$Omega)), collapse="+"),
-                                     "~ ",
-                                     deparse1(unlist(.lst$Omega)),
-                                     ")")))
+                           paste(paste0("eta",seq_len(sqrt(1 + length(.omega) * 8)/2 - 1/2)), collapse="+"),
+                           "~ ",
+                           deparse1(.omega),
+                           ")")))
   } else {
     .omega <- NULL
   }
-  if (length(.lst$Omega) > 0) {
-    .omega <- eval(parse(text=paste0("lotri::lotri(",
-                                     paste(paste0("eta",seq_along(.lst$Omega)), collapse="+"),
-                                     "~ ",
-                                     deparse1(unlist(.lst$Omega)),
-                                     ")")))
-  } else {
-    .omega <- NULL
-  }
-
-  if (length(.lst$Sigma) > 0) {
+  .w <- which(regexpr("^SIGMA",names(.lst)) != -1)
+  if (length(.w) > 0) {
+    .sigma <-  unlist(.lst[,.w])
+    names(.sigma) <- NULL
     .sigma <- eval(parse(text=paste0("lotri::lotri(",
-                                     paste(paste0("eps",seq_along(.lst$Sigma)), collapse="+"),
+                                     paste(paste0("eps",seq_len(sqrt(1 + length(.sigma) * 8)/2 - 1/2)), collapse="+"),
                                      "~ ",
-                                     deparse1(unlist(.lst$Sigma)),
+                                     deparse1(.sigma),
                                      ")")))
   } else {
     .sigma <- NULL
   }
   list(theta=.theta,
        omega=.omega,
-       sigma=.sigma)
+       sigma=.sigma,
+       objf=.lst$OBJ)
 }
