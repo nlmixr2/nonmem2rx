@@ -13,6 +13,13 @@ nmlst <- function(file) {
   # run time
   # nmtran message
   .lst <- readLines(file)
+
+  .w <- which(regexpr("^[#]OBJV:", .lst) != -1)
+  if (length(.w) == 0) {
+    .obj <- NULL
+  } else {
+    .obj <- as.numeric(sub("[^*]*[*]+ *([^* ]*) *[*]*", "\\1",.lst[.w]))
+  }
   
   .w <- which(regexpr("FINAL +PARAMETER +ESTIMATE", .lst) != -1)
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
@@ -33,7 +40,8 @@ nmlst <- function(file) {
   .Call(`_nonmem2rx_trans_lst`, .est)
   list(theta=.nmlst$theta,
        omega=.nmlst$eta,
-       sigma=.nmlst$eps)
+       sigma=.nmlst$eps,
+       objf=.obj)
 }
 #' Push final estimates
 #'
