@@ -36,5 +36,6 @@ test_that("test nonemem2R models", {
 })
 
 test_that("test NMproject models", {
-  
+  skip_if_not(requireNamespace("NMproject", quietly = TRUE))
+  expect_error(system.file("example/nonmem2R/xgxr001.mod", package="NMproject"), "SIGMA")
 })
