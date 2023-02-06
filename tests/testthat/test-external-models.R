@@ -34,3 +34,7 @@ test_that("test nonemem2R models", {
   m1 <- nonmem2rx(system.file("extdata/run001.mod",package="nonmem2R"))
   
 })
+
+test_that("test NMproject models", {
+  
+})
