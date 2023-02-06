@@ -119,3 +119,28 @@ nonmem2rxRec.err <- function(x) {
   .scaleVol <- c(.scaleVol, setNames(list(volume), .scale))
   .nonmem2rx$scaleVol <- .scaleVol
 }
+#' Push observed sigma(#, #) into translation queue
+#'
+#' @param x integer of the row of the sigma matrix
+#' @param y integer of the column of the sigma matrix
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushSigmaEst <- function(x, y) {
+  .w <- which(.nonmem2rx$sigmaEst$x == x && .nonmem2rx$sigmaEst$y == y)
+  if (length(.w) != 0L) return(invisible())
+  .nonmem2rx$sigmaEst <- rbind(.nonmem2rx$sigmaEst, data.frame(x=x, y=y))
+}
+
+#' Push observed omega(#, #) into translation queue  
+#'  
+#' @param x integer of the row of the omega matrix
+#' @param y integer of the column of the omega matrix
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushOmegaEst <- function(x, y) {
+  .w <- which(.nonmem2rx$omegaEst$x == x && .nonmem2rx$omegaEst$y == y)
+  if (length(.w) != 0L) return(invisible()) 
+  .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
+}

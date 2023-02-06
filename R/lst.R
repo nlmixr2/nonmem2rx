@@ -32,8 +32,8 @@ nmlst <- function(file) {
   .est <- paste(.est, collapse="\n")
   .Call(`_nonmem2rx_trans_lst`, .est)
   list(theta=.nmlst$theta,
-       eta=.nmlst$eta,
-       eps=.nmlst$eps)
+       omega=.nmlst$eta,
+       sigma=.nmlst$eps)
 }
 #' Push final estimates
 #'
