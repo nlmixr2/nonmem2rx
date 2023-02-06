@@ -31,6 +31,8 @@
   .nonmem2rx$modelDesc <- NULL
   .nonmem2rx$defdose <- 0L
   .nonmem2rx$defobs <- 0L
+  .nonmem2rx$omegaEst <- data.frame(x=integer(0), y=integer(0))
+  .nonmem2rx$sigmaEst <- data.frame(x=integer(0), y=integer(0))
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -121,6 +123,10 @@
   }, character(1), USE.NAMES = FALSE)
   if (prefix == "t.") {
     .t <- rxui$iniDf$name[!is.na(rxui$iniDf$ntheta)]
+    .w <- which(regexpr("^(omega|sigma)[.][1-9][0-9]*[.][1-9][0-9]*$", .t) != -1)
+    if (length(.w) > 0) {
+      .t <- .t[-.w]
+    }
   } else {
     .t <- rxui$iniDf$name[which(is.na(rxui$iniDf$ntheta) & rxui$iniDf$neta1 == rxui$iniDf$neta2)]
   }
@@ -183,7 +189,7 @@
 #' @return List with new ui and sigma
 #' @noRd
 #' @author Matthew L. Fidler
-.updateRxWithFinalParameters <- function(rxui, file, sigma,lst, ext) {
+.updateRxWithFinalParameters <- function(rxui, file, sigma, lst, ext) {
   .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .extFile <- paste0(tools::file_path_sans_ext(file), ext)
   if (file.exists(.extFile)) {
@@ -206,13 +212,29 @@
     .theta <- .theta[!is.na(.theta)]
     .rx <- rxode2::ini(.rx, .theta)
   }
-  if (!is.null(.fin$eta)) {
-    .eta <- .fin$eta
-    .rx <- rxode2::ini(.rx, .eta)
+  if (!is.null(.fin$omega)) {
+    .omega <- .fin$omega
+    .rx <- rxode2::ini(.rx, .omega)
+    if (length(.nonmem2rx$omegaEst$x) > 0) {
+      for (i in seq_along(.nonmem2rx$omegaEst$x)) {
+        .x <- .nonmem2rx$omegaEst$x[i]
+        .y <- .nonmem2rx$omegaEst$y[i]
+        .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { omega.%d.%d <- %f})",
+                                       .x, .y, .omega[.x, .y])))
+      }
+    }
   }
   .sigma <- sigma
-  if (!is.null(.fin$eps)) {
-    .sigma <- .fin$eps
+  if (!is.null(.fin$sigma)) {
+    .sigma <- .fin$sigma
+    if (length(.nonmem2rx$sigmaEst$x) > 0) {
+      for (i in seq_along(.nonmem2rx$sigmaEst$x)) {
+        .x <- .nonmem2rx$sigmaEst$x[i]
+        .y <- .nonmem2rx$sigmaEst$y[i]
+        .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { sigma.%d.%d <- %f})",
+                                       .x, .y, .sigma[.x, .y])))
+      }
+    }
   }
   list(rx=.rx, sigma=.sigma)
 }
@@ -297,6 +319,28 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     .sigma <- eval(parse(text=paste0("lotri::lotri({\n",
                                 paste(.nonmem2rx$sigma, collapse="\n"),
                                 "\n})")))
+    if (length(.nonmem2rx$sigmaEst$x) > 0) {
+      lapply(seq_along(.nonmem2rx$sigmaEst$x),
+             function(i) {
+               .x <- .nonmem2rx$sigmaEst$x[i]
+               .y <- .nonmem2rx$sigmaEst$y[i]
+               .addIni(sprintf("sigma.%d.%d <- %f", .x, .y, .sigma[.x, .y]))
+             })
+    }
+  }
+  .omega <- NULL
+  if (length(.nonmem2rx$omega) > 0L) {
+    .omega <- eval(parse(text=paste0("lotri::lotri({\n",
+                                paste(.nonmem2rx$omega, collapse="\n"),
+                                "\n})")))
+    if (length(.nonmem2rx$omegaEst$x) > 0) {
+      lapply(seq_along(.nonmem2rx$omegaEst$x),
+             function(i) {
+               .x <- .nonmem2rx$omegaEst$x[i]
+               .y <- .nonmem2rx$omegaEst$y[i]
+               .addIni(sprintf("omega.%d.%d <- %f", .x, .y, .omega[.x, .y]))
+             })
+    }
   }
   .fun <- eval(parse(text=paste0("function() {\n",
                          "rxode2::ini({\n",

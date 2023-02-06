@@ -137,8 +137,8 @@ test_that("test abbrev", {
     .a("A2=A(2)", "A2 <- rxLinCmt1", abbrevLin = 5L)
     .a("S2=V\nA2=A(2)", c("scale2 <- V","A2 <- rxLinCmt1/scale2"), abbrevLin = 5L)
 
-    expect_error(.a("a=SIGMA(1, 1)"), "SIGMA[(]#, #[)]")
-    expect_error(.a("a=OMEGA(1, 1)"), "OMEGA[(]#, #[)]")
+    expect_warning(.a("a=SIGMA(1, 1)", "A <- sigma.1.1"), "SIGMA")
+    expect_warning(.a("a=OMEGA(1, 1)", "A <- omega.1.1"), "OMEGA")
     expect_warning(.a("a=evid+3", "A <- nmevid + 3"), "evid")
     expect_warning(.a("a=sim+3", "A <- nmsim + 3"), "sim")
     expect_warning(.a("a=ipredSim+3", "A <- nmipredsim + 3"), "ipredSim")

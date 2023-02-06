@@ -252,3 +252,19 @@ extern "C" SEXP nonmem2rxPushCmtInfo(int defdose, int defobs) {
   pushCmtInfo(defdose, defobs);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushSigmaEst(int x, int y) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushSigmaEst(".pushSigmaEst", nonmem2rxNs);
+  pushSigmaEst(x, y);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxPushOmegaEst(int x, int y) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushOmegaEst(".pushOmegaEst", nonmem2rxNs);
+  pushOmegaEst(x, y);
+  END_RCPP
+}

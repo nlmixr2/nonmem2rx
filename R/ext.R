@@ -45,6 +45,6 @@ nmext <- function(file) {
     .sigma <- NULL
   }
   list(theta=.theta,
-       eta=.omega,
-       eps=.sigma)
+       omega=.omega,
+       sigma=.sigma)
 }

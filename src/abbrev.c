@@ -471,6 +471,10 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
   }
   return 0;
 }
+
+SEXP nonmem2rxPushSigmaEst(int x, int y);
+SEXP nonmem2rxPushOmegaEst(int x, int y);
+
 int verbWarning = 0;
 int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("verbatimCode", name)) {
@@ -478,6 +482,7 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
       Rf_warning("Verbatim code is not supported in translation\nignored verbatim in %s", abbrevPrefix);
       verbWarning = 1;
     }
+    return 1;
   } else if (!strcmp("exit_line", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'EXIT # #' statements not supported in translation");
@@ -517,11 +522,29 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "PCMT(#) not supported in translation");
   } else if (!strcmp("sigma", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "SIGMA(#, #) not supported in translation");
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    //parseFree(0);
+    int x = atoi(v1), y = atoi(v2);
+    Rf_warning("SIGMA(%d, %d) does not have an equivalent rxode2/nlmixr2 code\nreplacing with a constant from the model translation\nthis will not be updated with simulations",
+                 x, y);
+    sAppend(&curLine, "sigma.%d.%d", x, y);
+    nonmem2rxPushSigmaEst(x, y);
+    return 0;
   } else if (!strcmp("omega", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "OMEGA(#, #) not supported in translation");
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int x = atoi(v1), y = atoi(v2);
+    Rf_warning("OMEGA(%d, %d) does not have an equivalent rxode2/nlmixr2 code\nreplacing with a constant from the model translation\nthis will not be updated with simulations",
+                 x, y);
+    sAppend(&curLine, "omega.%d.%d", x, y);
+    nonmem2rxPushOmegaEst(x, y);
   }
   return 0;
 }

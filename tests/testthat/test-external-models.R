@@ -35,7 +35,11 @@ test_that("test nonemem2R models", {
   
 })
 
-test_that("test NMproject models", {
-  skip_if_not(requireNamespace("NMproject", quietly = TRUE))
-  expect_error(system.file("example/nonmem2R/xgxr001.mod", package="NMproject"), "SIGMA")
+test_that("test NMdata models", {
+  skip_if_not(requireNamespace("NMdata", quietly = TRUE))
+  m <- nonmem2rx(system.file("examples/nonmem/xgxr001.mod", package="NMdata"))
+  expect_length(m$meta$validation, 2L)
+  
+  m <- nonmem2rx(system.file("examples/nonmem/xgxr002.mod", package="NMdata"))
+  
 })

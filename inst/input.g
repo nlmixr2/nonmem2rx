@@ -15,7 +15,7 @@ alias_item: identifier_nm '=' identifier_nm;
 
 reg_item: identifier_nm;
 
-statement: (drop_item | alias_item | reg_item);
+statement: (drop_item | alias_item | reg_item | singleLineComment);
 
 whitespace: ( "[ \t\r\n]+" | singleLineComment)*;
 singleLineComment: ';' "[^\n]*";

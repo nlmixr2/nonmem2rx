@@ -3,10 +3,14 @@
 nonmem2rxRec.ome <- function(x) {
   .x <- x
   class(.x) <- NULL
+  .ini <- .nonmem2rx$ini
+  .nonmem2rx$ini <- NULL
   .Call(`_nonmem2rx_omeganum_reset`)
   for (.cur in .x) {
     .Call(`_nonmem2rx_trans_omega`, .cur, "eta")
   }
+  .nonmem2rx$omega <- .nonmem2rx$ini
+  .nonmem2rx$ini <- c(.ini, .nonmem2rx$ini)
 }
 
 #' @export
