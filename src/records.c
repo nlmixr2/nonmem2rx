@@ -99,7 +99,8 @@ void wprint_node_records(int depth, char *name, char *value, void *client_data) 
 void wprint_parsetree_records(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
-  if (!strcmp("singleLineRecord", name)) {
+  if (!strcmp("singleLineRecord", name) ||
+      !strcmp("problemLineRecord", name)) {
     pushRecord();
     D_ParseNode *xpn = d_get_child(pn,3); // record
     curRecord = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
