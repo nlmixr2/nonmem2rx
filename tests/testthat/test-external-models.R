@@ -41,5 +41,15 @@ test_that("test NMdata models", {
   expect_length(m$meta$validation, 2L)
   
   m <- nonmem2rx(system.file("examples/nonmem/xgxr002.mod", package="NMdata"))
+  expect_length(m$meta$validation, 2L)
+
+  m <- nonmem2rx(system.file("examples/nonmem/xgxr003.mod", package="NMdata"))
+  expect_length(m$meta$validation, 2L)
+
+  m <- nonmem2rx(system.file("examples/nonmem/xgxr014.mod", package="NMdata"))
+  expect_length(m$meta$validation, 2L)
+
+  m <- nonmem2rx(system.file("examples/nonmem/xgxr018.mod", package="NMdata"))
+  expect_length(m$meta$validation, 2L)
   
 })
