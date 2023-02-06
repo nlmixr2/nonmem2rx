@@ -27,7 +27,8 @@ Imports:
     pmxTools,
     tools,
     utils,
-    NMdata
+    NMdata,
+    data.table
 Suggests: 
     devtools,
     testthat (>= 3.0.0),

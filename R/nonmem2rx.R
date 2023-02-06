@@ -284,6 +284,7 @@
 #' @importFrom lotri lotri
 #' @importFrom dparser mkdparse
 #' @importFrom utils read.csv
+#' @import data.table
 #' @examples
 #' 
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
@@ -523,7 +524,7 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     .rx$meta$description <- .nonmem2rx$modelDesc
   }
   if (!is.null(.sigma)) {
-    .rx$meta$sigma <- .sigma
+    .rx$sigma <- .sigma
   }
   rxode2::rxUiCompress(.rx)
 }
