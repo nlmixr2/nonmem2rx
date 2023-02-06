@@ -128,9 +128,6 @@ the model by solving the derived model under pred conditions
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">nonmem2rx</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"run001.mod"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>multiple $PROBLEM statements; only use first $PROBLEM for translation</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading data using fread</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding table numbers to data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> getting rid of non-data rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta1` to `26.2909`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta2` to `1.34809`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta3` to `4.20364`</span>
@@ -204,9 +201,6 @@ the model by solving the derived model under pred conditions
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">nonmem2rx</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>$SUBROUTINES TOL=# ignored</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading data using fread</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding table numbers to data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> getting rid of non-data rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta1` to `1.37034`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta2` to `4.19815`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta3` to `1.38003`</span>
@@ -223,14 +217,8 @@ the model by solving the derived model under pred conditions
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading data using fread</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding table numbers to data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> getting rid of non-data rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading data using fread</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding table numbers to data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> getting rid of non-data rows</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
