@@ -6,6 +6,8 @@
 \usage{
 nonmem2rx(
   file,
+  inputData = NULL,
+  nonmemOutputDir = NULL,
   tolowerLhs = TRUE,
   thetaNames = TRUE,
   etaNames = TRUE,
@@ -19,6 +21,18 @@ nonmem2rx(
 }
 \arguments{
 \item{file}{NONMEM run file}
+
+\item{inputData}{this is a path to the input dataset (or `NULL` to
+determine from the dataset).  Often the input dataset may be
+different from the place it points to in the control stream
+because directories can be created to run NONMEM from a script.
+Because of this, when this is specified the input data will be
+assumed to be from here instead.}
+
+\item{nonmemOutputDir}{This is a path the the nonmem output
+directory.  When not `NULL` it will assume that the diretory for
+the output files is located here instead of where the control
+stream currently exists.}
 
 \item{tolowerLhs}{Boolean to change the lhs to lower case (default:
 `TRUE`)}

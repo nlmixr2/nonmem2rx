@@ -257,6 +257,19 @@
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 #' 
 #' @param file NONMEM run file
+#'
+#'
+#' @param inputData this is a path to the input dataset (or `NULL` to
+#'   determine from the dataset).  Often the input dataset may be
+#'   different from the place it points to in the control stream
+#'   because directories can be created to run NONMEM from a script.
+#'   Because of this, when this is specified the input data will be
+#'   assumed to be from here instead.
+#'
+#' @param nonmemOutputDir This is a path the the nonmem output
+#'   directory.  When not `NULL` it will assume that the diretory for
+#'   the output files is located here instead of where the control
+#'   stream currently exists.
 #' 
 #' @param tolowerLhs Boolean to change the lhs to lower case (default:
 #'   `TRUE`)
@@ -306,7 +319,8 @@
 #'
 #' nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
 #' 
-nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
+nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
+                      tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       cmtNames=TRUE,
                       updateFinal=TRUE,
                       determineError=TRUE,
@@ -314,6 +328,8 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
+  if (!is.null(inputData)) checkmate::assertFileExists(inputData)
+  if (!is.null(inputData)) checkmate::assertDirectoryExists(nonmemOutputDir)
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
@@ -399,15 +415,15 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   }
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
-    .nonmemData <- .readInDataFromNonmem(file)
-    .predData <- .ipredData <- .readInIpredFromTables(file)
+    .nonmemData <- .readInDataFromNonmem(file, inputData=inputData)
+    .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir)
     if (!is.null(.ipredData)) {
-      .etaData <- .readInEtasFromTables(file)
+      .etaData <- .readInEtasFromTables(file, nonmemOutputDir=nonmemOutputDir)
     }
     if (is.null(.predData)) {
-      .predData  <- .readInPredFromTables(file)
+      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir)
     } else if (!any(names(.ipredData) == "PRED")) {
-      .predData  <- .readInPredFromTables(file)
+      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir)
     }
   }
   if (tolowerLhs) {

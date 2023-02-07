@@ -3,14 +3,20 @@
 #' This requires the parsing environment setup
 #'  
 #' @param file this is the file name of the control stream
+#' @param inputData is a flag to use a different input data than
+#'   `file`.  This is the user-specified input data.
 #' @return dataset (as nonmem sees it), where all ignore, accept, and
 #'   records adjustment are done. If the model calls evid in it, it
 #'   also adds a nmevid column
 #' @noRd
 #' @author Matthew L. Fidler
-.readInDataFromNonmem <- function(file) {
+.readInDataFromNonmem <- function(file, inputData) {
   .data <- NULL
-  .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
+  if (is.null(inputData)) {
+    .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
+  } else {
+    .file <- inputData
+  }
   .ext <- tools::file_ext(.file)
   if (.ext == "csv" && file.exists(.file)) {
     .minfo(paste0("read in nonmem input data (for model validation): ", .file))
@@ -74,16 +80,23 @@
 #' This reads in the nonmem output file that has the ipred data in it
 #'  
 #' @param file nonmem control stream file name
+#' @inheritParams nonmem2rx
 #' @return dataset that has nonmem ipred data for validation
 #' @noRd
 #' @author Matthew L. Fidler
-.readInIpredFromTables <- function(file) {
+.readInIpredFromTables <- function(file, nonmemOutputDir=NULL) {
+  if (is.null(nonmemOutputDir)) {
+    .dir <- dirname(file)    
+  } else {
+    .dir <- nonmemOutputDir
+  }
   .w <- which(vapply(seq_along(.nonmem2rx$tables),
                      function(i) {
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$fullData) return(FALSE)
                        if (!.table$hasIpred) return(FALSE)
-                       .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
+                       .file <- file.path(.dir, .table$file)
+                       .file <- .getFileNameIgnoreCase(.file)
                        if (!file.exists(.file)) return(FALSE)
                        TRUE
                      }, logical(1), USE.NAMES=FALSE))
@@ -121,13 +134,18 @@
 #' @return pred data file or null if it doesn't exist or isn't available
 #' @noRd
 #' @author Matthew L. Fidler
-.readInPredFromTables <- function(file) {
+.readInPredFromTables <- function(file, nonmemOutputDir=NULL) {
+  if (is.null(nonmemOutputDir)) {
+    .dir <- dirname(file)    
+  } else {
+    .dir <- nonmemOutputDir
+  }
   .w <- which(vapply(seq_along(.nonmem2rx$tables),
                      function(i) {
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$fullData) return(FALSE)
                        if (!.table$hasPred) return(FALSE)
-                       .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
+                       .file <- .getFileNameIgnoreCase(file.path(.dir, .table$file))
                        if (!file.exists(.file)) return(FALSE)
                        TRUE
                      }, logical(1), USE.NAMES=FALSE))
@@ -148,12 +166,17 @@
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file) {
+.readInEtasFromTables <- function(file, nonmemOutputDir=NULL) {
+  if (is.null(nonmemOutputDir)) {
+    .dir <- dirname(file)    
+  } else {
+    .dir <- nonmemOutputDir
+  }
   .w <- which(vapply(seq_along(.nonmem2rx$tables),
                      function(i) {
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$hasEta) return(FALSE)
-                       .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
+                       .file <- .getFileNameIgnoreCase(file.path(.dir, .table$file))
                        if (!file.exists(.file)) return(FALSE)
                        TRUE
                      }, logical(1), USE.NAMES=FALSE))

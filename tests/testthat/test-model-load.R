@@ -16,4 +16,14 @@ test_that("model loading", {
   f <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                  determineError=FALSE)
   expect_equal(length(f$meta$validation), 4L)
+
+
+  # try explicitly setting the input info
+  f <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 inputData = system.file("mods/cpt/Bolus_2CPT.csv",
+                                         package="nonmem2rx"),
+                 nonmemOutputDir = system.file("mods/cpt", package="nonmem2rx"),
+                 lst=".res")
+  expect_equal(length(f$meta$validation), 4L)
+
 })
