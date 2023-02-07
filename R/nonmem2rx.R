@@ -90,7 +90,8 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .replaceThetaNames <- function(rxui, thetaNames,
-                               label="theta", prefix="t.", df=NULL) {
+                               label="theta", prefix="t.", df=NULL,
+                               dn=NULL) {
   if (length(thetaNames) == 0) return(rxui)
   .minfo(sprintf("replace %s names", label))
   .mv <- rxode2::rxModelVars(rxui)
@@ -140,8 +141,22 @@
     return(rxui)
   }
   .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
+  .t2 <- setNames(.n, .t)
   if (!is.null(df)) {
-      .nonmem2rx$etas <-eval(parse(text=paste0("dplyr::rename(df, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
+    names(df) <- vapply(names(df), function(n) {
+      .ret <- .t2[n]
+      if (is.na(.ret)) return(n)
+      .ret
+    }, character(1), USE.NAMES = FALSE)
+    .nonmem2rx$etas <- df
+  }
+  if (!is.null(dn)) {
+    dn <- vapply(dn, function(n) {
+      .ret <- .t2[n]
+      if (is.na(.ret)) return(n)
+      .ret
+    }, character(1), USE.NAMES = FALSE)
+    .nonmem2rx$dn <- dn
   }
   .minfo("done")
   .ret
@@ -363,10 +378,16 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   }
   .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), ".cov"))
   if (file.exists(.cov)) {
-    .cov <- pmxTools::read_nmcov(.cov)
-    ## print(.cov)
+    .cov <- nmcov(.cov)
+    .dn <- dimnames(.cov)[[2]]
+    .dn <- gsub("THETA", "theta", .dn)
+    .dn <- gsub("OMEGA[(]([1-9][0-9]*),\\1[)]", "eta\\1", .dn)
+    .dn <- gsub("SIGMA[(]([1-9][0-9]*),\\1[)]", "eps\\1", .dn)
+    .dn <- gsub("OMEGA[(]([1-9][0-9]*),([1-9][0-9]*)[)]", "omega.\\1.\\2", .dn)
+    .dn <- gsub("SIGMA[(]([1-9][0-9]*),([1-9][0-9]*)[)]", "sigma.\\1.\\2", .dn)
   } else {
     .cov <- NULL
+    .dn <- NULL
   }
   if (determineError) {
     .rx <- .determineError(.rx)
@@ -387,7 +408,11 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   if (tolowerLhs) {
     .rx <- .toLowerLhs(.rx)
   }
-  .rx <- .replaceThetaNames(.rx, thetaNames)
+  .nonmem2rx$dn <- NULL
+  .rx <- .replaceThetaNames(.rx, thetaNames, dn=.dn)
+  if (!is.null(.nonmem2rx$dn)) {
+    .dn <- .nonmem2rx$dn
+  }
   if (inherits(etaNames, "logical")) {
     checkmate::assertLogical(etaNames, len=1, any.missing=FALSE)
     etaNames <- character(0)
@@ -398,11 +423,15 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     checkmate::assertCharacter(etaNames, any.missing = FALSE)    
   }
   .nonmem2rx$etas <- NULL
+  .nonmem2rx$dn <- NULL
   .rx <-.replaceThetaNames(.rx, etaNames,
                            label="eta", prefix="e.",
-                           df=.etaData)
+                           df=.etaData, dn=.dn)
   if (!is.null(.nonmem2rx$etas)) {
     .etaData <- .nonmem2rx$etas
+  }
+  if (!is.null(.nonmem2rx$dn)) {
+    dimnames(.cov) <- list(.nonmem2rx$dn, .nonmem2rx$dn)
   }
   if (inherits(cmtNames, "logical")) {
     checkmate::assertLogical(cmtNames, len=1, any.missing = FALSE)
@@ -526,6 +555,11 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   if (!is.null(.sigma)) {
     .rx$sigma <- .sigma
   }
-  rxode2::rxUiCompress(.rx)
+  if (!is.null(.cov)) {
+    .rx$thetaMat <- .cov
+  }
+  .ret <- rxode2::rxUiCompress(.rx)
+  class(.ret) <- c("nonmem2rx", class(.ret))
+  .ret
 }
 
