@@ -46,6 +46,8 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nonmem2rx</span><span class="op">(</span></span>
 <span>  <span class="va">file</span>,</span>
+<span>  inputData <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nonmemOutputDir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tolowerLhs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  thetaNames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  etaNames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -62,6 +64,22 @@
     <h2>Arguments</h2>
     <dl><dt>file</dt>
 <dd><p>NONMEM run file</p></dd>
+
+
+<dt>inputData</dt>
+<dd><p>this is a path to the input dataset (or `NULL` to
+determine from the dataset).  Often the input dataset may be
+different from the place it points to in the control stream
+because directories can be created to run NONMEM from a script.
+Because of this, when this is specified the input data will be
+assumed to be from here instead.</p></dd>
+
+
+<dt>nonmemOutputDir</dt>
+<dd><p>This is a path the the nonmem output
+directory.  When not `NULL` it will assume that the diretory for
+the output files is located here instead of where the control
+stream currently exists.</p></dd>
 
 
 <dt>tolowerLhs</dt>
