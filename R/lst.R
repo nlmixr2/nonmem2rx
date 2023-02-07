@@ -105,12 +105,35 @@ nmlst <- function(file) {
     .nsub <- as.numeric(sub(.reg, "", .lst[.w]))
   }
   .w <- which(regexpr("FINAL +PARAMETER +ESTIMATE", .lst) != -1)
-  if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
+  if (length(.w) == 0) {
+    ## run time
+    return(list(theta=NULL,
+                omega=NULL,
+                sigma=NULL,
+                objf=.obj,
+                nobs=.nobs,
+                nsub=.nsub,
+                nmtran=.nmtran,
+                termInfo=.termInfo,
+                nonmem=.nonmem,
+                time=.time))
+  }
   .w <- .w[1]
   .est <- .lst[seq(.w, length(.lst))]
   
   .w <- which(regexpr("(THETA +- +VECTOR|OMEGA +- +COV|SIGMA +- +COV)", .est) != -1)
-  if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
+  if (length(.w) == 0) {
+    return(list(theta=NULL,
+                omega=NULL,
+                sigma=NULL,
+                objf=.obj,
+                nobs=.nobs,
+                nsub=.nsub,
+                nmtran=.nmtran,
+                termInfo=.termInfo,
+                nonmem=.nonmem,
+                time=.time))
+  }
   .w <- .w[1]
   .est <- .est[seq(.w, length(.est))]
   
@@ -118,7 +141,16 @@ nmlst <- function(file) {
   if (length(.w) == 0) {
     .w <- which(regexpr("^ *Elapsed", .est) != -1)
     if (length(.w) == 0) {
-      stop("could not find final parameter estimate in lst file", call.=FALSE)
+      return(list(theta=NULL,
+                  omega=NULL,
+                  sigma=NULL,
+                  objf=.obj,
+                  nobs=.nobs,
+                  nsub=.nsub,
+                  nmtran=.nmtran,
+                  termInfo=.termInfo,
+                  nonmem=.nonmem,
+                  time=.time))
     }
 
   }
