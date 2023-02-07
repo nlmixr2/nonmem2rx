@@ -2,9 +2,10 @@
 statement_list : (comp_statement)+;
 
 ncmt_name: ('NCOMPARTMENTS' | 'ncompartments' | 'NCOMP' | 'ncomp' |
-            'NEQUILIBRIUM' | 'nequilibrium' | 'NPARAMETERS' | 'nparameters');
+            'NEQUILIBRIUM' | 'nequilibrium' | 'NPARAMETERS' | 'nparameters' |
+'NCOMPS' | 'Ncomps' | 'ncomps');
 
-ncpt_statement: ncmt_name '=' decimalint ','?;
+ncpt_statement: ncmt_name '='? decimalint ','?;
 
 comp_name: 'COMP' | 'comp' | 'COMPARTMENT' | 'compartment';
 
