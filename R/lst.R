@@ -9,6 +9,7 @@
 #' nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
+#' nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
 nmlst <- function(file) {
   # run time
   # nmtran message
@@ -51,6 +52,30 @@ nmlst <- function(file) {
     .termInfo <- .termInfo[seq_len(.w)]
     .termInfo <- paste(.termInfo, collapse = "\n")
   }
+
+  .reg <-"^ *[#]TERE[:]"
+  .w <- which(regexpr(.reg, .lst) != -1)
+  .time <- NULL
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    .time <- .lst[-seq_len(.w)]
+    .w <- which(.time == "1")
+    if (length(.w) > 0) {
+      .w <- .w[1]
+      .time <- .time[seq_len(.w-1)]
+      .w <- which(regexpr(":", .time) != -1)
+      if (length(.w) > 0) {
+        .time <- .time[.w]
+        .time <- sum(as.numeric(gsub(".*: +", "", .time)))
+      } else {
+        .time <- NULL
+      }
+    } else {
+      .time <- NULL
+    }
+  }
+  # Fri Aug  5 18:17:19 CEST 2022
+  .time2 <- .lst[2]
 
   .reg <- ".*[(]NONMEM[)] +VERSION +"
   .w <- which(regexpr(.reg, .lst) != -1)
@@ -105,7 +130,8 @@ nmlst <- function(file) {
        nsub=.nsub,
        nmtran=.nmtran,
        termInfo=.termInfo,
-       nonmem=.nonmem)
+       nonmem=.nonmem,
+       time=.time)
 }
 #' Push final estimates
 #'

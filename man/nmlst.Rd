@@ -19,6 +19,7 @@ Reads the NONMEM `.lst` file for final parameter information
 nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
 nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
 nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
+nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
 }
 \author{
 Matthew L. Fidler
