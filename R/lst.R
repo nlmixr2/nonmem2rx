@@ -115,7 +115,13 @@ nmlst <- function(file) {
   .est <- .est[seq(.w, length(.est))]
   
   .w <- which(regexpr("^ *[*][*][*]+", .est) != -1)
-  if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
+  if (length(.w) == 0) {
+    .w <- which(regexpr("^ *Elapsed", .est) != -1)
+    if (length(.w) == 0) {
+      stop("could not find final parameter estimate in lst file", call.=FALSE)
+    }
+
+  }
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
   .est <- paste(.est, collapse="\n")
