@@ -40,7 +40,6 @@ nonmem control stream for the parser to start. For example:
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 #> Warning: multiple $PROBLEM statements; only use first $PROBLEM for translation
-#> Reading /tmp/RtmpTtRIFL/temp_libpath201f5e0d392c/nonmem2rx/run001.ext
 #> ℹ change initial estimate of `theta1` to `26.2909`
 #> ℹ change initial estimate of `theta2` to `1.34809`
 #> ℹ change initial estimate of `theta3` to `4.20364`
@@ -77,8 +76,6 @@ mod
 #>     description <- c(";; 1. Based on:     000", ";; 2. Description:       ", 
 #>         ";;    NONMEM PK example for xpose", "    Parameter estimation", 
 #>         "    Model simulations")
-#>     sigma <- structure(1, dim = c(1L, 1L), dimnames = list("eps1", 
-#>         "eps1"))
 #>     ini({
 #>         t.TVCL <- c(0, 26.2909)
 #>         label("TVCL")
