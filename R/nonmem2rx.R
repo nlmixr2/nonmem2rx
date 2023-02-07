@@ -371,6 +371,11 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
                          "\n})",
                          "}")))
   .rx <- .fun()
+  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
+  .lstInfo <- list()
+  if (file.exists(.lstFile)) {
+    .lstInfo <- nmlst(.lstFile)
+  }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
     .rx <- .tmp$rx
@@ -431,7 +436,10 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
     .etaData <- .nonmem2rx$etas
   }
   if (!is.null(.nonmem2rx$dn)) {
-    dimnames(.cov) <- list(.nonmem2rx$dn, .nonmem2rx$dn)
+    .dn <- .nonmem2rx$dn
+  }
+  if (!is.null(.dn)) {
+    dimnames(.cov) <- list(.dn, .dn)
   }
   if (inherits(cmtNames, "logical")) {
     checkmate::assertLogical(cmtNames, len=1, any.missing = FALSE)
@@ -557,6 +565,12 @@ nonmem2rx <- function(file, tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
   }
   if (!is.null(.cov)) {
     .rx$thetaMat <- .cov
+  }
+  if (inherits(.lstInfo$nsub, "numeric")) {
+    .rx$dfSub <- .lstInfo$nsub
+  }
+  if (inherits(.lstInfo$nobs, "numeric")) {
+    .rx$dfObs <- .lstInfo$nobs
   }
   .ret <- rxode2::rxUiCompress(.rx)
   class(.ret) <- c("nonmem2rx", class(.ret))
