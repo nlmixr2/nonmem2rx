@@ -12,15 +12,73 @@
 nmlst <- function(file) {
   # run time
   # nmtran message
-  .lst <- readLines(file)
+  .lst <- suppressWarnings(readLines(file))
+  if (length(.lst) == 0) {
+    stop("no lines read for file", call.= FALSE)
+  }
 
-  .w <- which(regexpr("^[#]OBJV:", .lst) != -1)
+  .nmtran <- NULL
+  .reg <- "WARNINGS +AND +ERRORS +[(]IF +ANY[)] +FOR +PROBLEM"
+  .w <- which(regexpr(.reg, .lst) != -1)
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    .w2 <- which(regexpr("License", .lst) != -1)
+    if (length(.w2) > 0) {
+      .w2 <- .w2[1]-1
+      .nmtran <- .lst[seq(.w, .w2)]
+      .w2 <- which(regexpr("^ *[*][*][*]*", .nmtran) != -1)
+      if (length(.w2) > 0) {
+        .w2 <- .w2[1]-1
+        .nmtran <- .nmtran[seq_len(.w2-1)]
+        while(regexpr("^ +$",.nmtran[length(.nmtran)]) != -1) {
+          .nmtran <- .nmtran[-length(.nmtran)]
+        }
+      }
+      .nmtran <- paste(.nmtran, collapse="\n")
+    } else {
+      .nmtran <- NULL
+    }
+  }
+
+  .reg <- "^ *[#]TERM[:]"
+  .w <- which(regexpr(.reg, .lst) != -1)
+  .termInfo <- NULL
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    .termInfo <- .lst[-seq_len(.w)]
+    .w <- which(.termInfo == "")
+    .w <- .w[1] - 1
+    .termInfo <- .termInfo[seq_len(.w)]
+    .termInfo <- paste(.termInfo, collapse = "\n")
+  }
+
+  .reg <- ".*[(]NONMEM[)] +VERSION +"
+  .w <- which(regexpr(.reg, .lst) != -1)
+  .nonmem <- NULL
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    .nonmem <- sub(.reg, "", .lst[.w], )
+  }
+  .w <- which(regexpr("^ *[#]OBJV:", .lst) != -1)
   if (length(.w) == 0) {
     .obj <- NULL
   } else {
     .obj <- as.numeric(sub("[^*]*[*]+ *([^* ]*) *[*]*", "\\1",.lst[.w]))
   }
-  
+  .reg <- "TOT[.] +NO[.] +OF +OBS +RECS[:] +"
+  .w <- which(regexpr(.reg, .lst) != -1)
+  if (length(.w) == 0) {
+    .nobs <- NULL
+  } else {
+    .nobs <- as.numeric(sub(.reg, "", .lst[.w]))
+  }
+  .reg <- "TOT[.] +NO[.] +OF +INDIVIDUALS[:] +"
+  .w <- which(regexpr(.reg, .lst) != -1)
+  if (length(.w) == 0) {
+    .nsub <- NULL
+  } else {
+    .nsub <- as.numeric(sub(.reg, "", .lst[.w]))
+  }
   .w <- which(regexpr("FINAL +PARAMETER +ESTIMATE", .lst) != -1)
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
   .w <- .w[1]
@@ -35,13 +93,19 @@ nmlst <- function(file) {
   if (length(.w) == 0) stop("could not find final parameter estimate in lst file", call.=FALSE)
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
-
   .est <- paste(.est, collapse="\n")
   .Call(`_nonmem2rx_trans_lst`, .est)
+
+  ## run time
   list(theta=.nmlst$theta,
        omega=.nmlst$eta,
        sigma=.nmlst$eps,
-       objf=.obj)
+       objf=.obj,
+       nobs=.nobs,
+       nsub=.nsub,
+       nmtran=.nmtran,
+       termInfo=.termInfo,
+       nonmem=.nonmem)
 }
 #' Push final estimates
 #'
