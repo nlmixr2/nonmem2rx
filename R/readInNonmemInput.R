@@ -74,7 +74,7 @@
       .data <- .data[seq_len(.nonmem2rx$dataRecords), ]
     }
   }
-  if (is.null(rename) && !is.null(names(.data))) {
+  if (!is.null(rename) && !is.null(names(.data))) {
     names(.data) <- vapply(names(.data),
                            function(x) {
                              .w <- which(x == rename)
@@ -117,7 +117,7 @@
   .ret <- nmtab(.file)
   .w <- which(names(.ret) == "IPRE")
   if (length(.w) > 0) names(.ret)[.w] <- "IPRED"
-  if (is.null(rename) && !is.null(names(.ret))) {
+  if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                            function(x) {
                              .w <- which(x == rename)
@@ -172,7 +172,7 @@
   .minfo(paste0("read in nonmem PRED data (for model validation): ", .file))
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
-  if (is.null(rename) && !is.null(names(.ret))) {
+  if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
                             .w <- which(x == rename)
@@ -215,7 +215,7 @@
   }
   .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
   .ret <- .ret[,.w]
-  if (is.null(rename) && !is.null(names(.ret))) {
+  if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
                             .w <- which(x == rename)
