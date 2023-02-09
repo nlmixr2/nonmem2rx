@@ -76,6 +76,7 @@ void wprint_node_tab(int depth, char *name, char *value, void *client_data)  {
 extern char * rc_dup_str(const char *s, const char *e);
 
 int tableHasPred=1;
+int tableHasExplicitPred=0;
 int tableFullData=1;
 int tableHasIPred=0;
 int tableHasEta=0;
@@ -92,6 +93,8 @@ void wprint_parsetree_tab(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
       tableHasIPred=1;
     } else if (!nmrxstrcmpi("ipred", v)) {
       tableHasIPred=1;
+    } else if (!nmrxstrcmpi("pred", v)) {
+      tableHasExplicitPred=1;
     } else if (!strncmpci("eta", v, 3)) {
       tableHasEta=1;
     } else if (!nmrxstrcmpi("firstonly", v)) {
@@ -160,10 +163,12 @@ SEXP _nonmem2rx_trans_tab(SEXP in) {
   tableFullData = 1;
   tableHasIPred = 0;
   tableHasEta   = 0;
+  tableHasExplicitPred = 0;
   tableFileName = NULL;
   trans_tab(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   if (tableFileName != NULL) {
+    if (tableHasExplicitPred & !tableHasPred) tableHasPred=1;
     nonmem2rxPushTableInfo(tableFileName, tableHasPred, tableFullData,
                            tableHasIPred, tableHasEta);
   }
