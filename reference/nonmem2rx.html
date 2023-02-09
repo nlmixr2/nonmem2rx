@@ -48,6 +48,7 @@
 <span>  <span class="va">file</span>,</span>
 <span>  inputData <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nonmemOutputDir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tolowerLhs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  thetaNames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  etaNames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -80,6 +81,16 @@ assumed to be from here instead.</p></dd>
 directory.  When not `NULL` it will assume that the diretory for
 the output files is located here instead of where the control
 stream currently exists.</p></dd>
+
+
+<dt>rename</dt>
+<dd><p>When not `NULL` this should be a named character
+vector that contains the parameters that should be renamed.  For
+example, if the model uses the variable `YTYPE` and has `CMT` it
+isn't compatible with `rxode2`/`nlmixr2`. You can change this for
+the input dataset and the model to create a new model that still
+reproduces the NONMEM output by specifying
+`rename=c(dvid="YTYPE")`</p></dd>
 
 
 <dt>tolowerLhs</dt>
