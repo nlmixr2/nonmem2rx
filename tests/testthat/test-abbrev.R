@@ -162,6 +162,6 @@ test_that("test abbrev", {
 
     expect_error(.a("F0=3"), "F0/FO")
 
-    expect_warning(.a("SID=IREP", c("SID <- irep")), "sim.id")
+    expect_warning(.a("SID=IREP", "SID <- irep"), "sim.id")
     
 })
