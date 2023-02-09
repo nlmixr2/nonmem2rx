@@ -26,4 +26,10 @@ test_that("model loading", {
                  lst=".res")
   expect_equal(length(f$meta$validation), 4L)
 
+  # Now try to rename some of the data
+  f <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 rename=c(SSX="SSY"),
+                 lst=".res")
+  expect_equal(length(f$meta$validation), 4L)
+
 })

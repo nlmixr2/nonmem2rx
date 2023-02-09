@@ -397,7 +397,18 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "}")))
   .rx <- .fun()
   if (!is.null(rename)) {
-    .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(rename), "=", setNames(rename, NULL)), collapse=", "),")")))
+    .r <- rename
+    .mv <- rxode2::rxModelVars(.rx)
+    .in <-c(.mv$params, .mv$state, .mv$lhs)
+    .w <- which(vapply(.r,
+                       function(v) {
+                         return(v %in% .in)
+                       }, logical(1), USE.NAMES=FALSE))
+    if (length(.w) > 0) {
+      .r <- .r[.w]
+      .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
+    }
+
   }
   .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
