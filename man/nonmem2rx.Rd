@@ -8,6 +8,7 @@ nonmem2rx(
   file,
   inputData = NULL,
   nonmemOutputDir = NULL,
+  rename = NULL,
   tolowerLhs = TRUE,
   thetaNames = TRUE,
   etaNames = TRUE,
@@ -33,6 +34,14 @@ assumed to be from here instead.}
 directory.  When not `NULL` it will assume that the diretory for
 the output files is located here instead of where the control
 stream currently exists.}
+
+\item{rename}{When not `NULL` this should be a named character
+vector that contains the parameters that should be renamed.  For
+example, if the model uses the variable `YTYPE` and has `CMT` it
+isn't compatible with `rxode2`/`nlmixr2`. You can change this for
+the input dataset and the model to create a new model that still
+reproduces the NONMEM output by specifying
+`rename=c(dvid="YTYPE")`}
 
 \item{tolowerLhs}{Boolean to change the lhs to lower case (default:
 `TRUE`)}

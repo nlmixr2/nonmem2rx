@@ -258,7 +258,6 @@
 #' 
 #' @param file NONMEM run file
 #'
-#'
 #' @param inputData this is a path to the input dataset (or `NULL` to
 #'   determine from the dataset).  Often the input dataset may be
 #'   different from the place it points to in the control stream
@@ -270,6 +269,14 @@
 #'   directory.  When not `NULL` it will assume that the diretory for
 #'   the output files is located here instead of where the control
 #'   stream currently exists.
+#'
+#' @param rename When not `NULL` this should be a named character
+#'   vector that contains the parameters that should be renamed.  For
+#'   example, if the model uses the variable `YTYPE` and has `CMT` it
+#'   isn't compatible with `rxode2`/`nlmixr2`. You can change this for
+#'   the input dataset and the model to create a new model that still
+#'   reproduces the NONMEM output by specifying
+#'   `rename=c(dvid="YTYPE")`
 #' 
 #' @param tolowerLhs Boolean to change the lhs to lower case (default:
 #'   `TRUE`)
@@ -320,7 +327,8 @@
 #' nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
 #' 
 nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
-                      tolowerLhs=TRUE, thetaNames=TRUE, etaNames=TRUE,
+                      rename=NULL, tolowerLhs=TRUE, thetaNames=TRUE,
+                      etaNames=TRUE,
                       cmtNames=TRUE,
                       updateFinal=TRUE,
                       determineError=TRUE,
@@ -330,6 +338,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
   if (!is.null(inputData)) checkmate::assertDirectoryExists(nonmemOutputDir)
+  if (!is.null(rename)) checkmate::assertCharacter(rename, any.missing=FALSE, min.len=1, names="strict")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
@@ -387,6 +396,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})",
                          "}")))
   .rx <- .fun()
+  if (!is.null(rename)) {
+    .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(rename), "=", setNames(rename, NULL)), collapse=", "),")")))
+  }
   .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
   if (file.exists(.lstFile)) {
@@ -415,15 +427,20 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
-    .nonmemData <- .readInDataFromNonmem(file, inputData=inputData)
-    .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir)
+    .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
+                                         rename=rename)
+    .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                                      rename=rename)
     if (!is.null(.ipredData)) {
-      .etaData <- .readInEtasFromTables(file, nonmemOutputDir=nonmemOutputDir)
+      .etaData <- .readInEtasFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                        rename=rename)
     }
     if (is.null(.predData)) {
-      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir)
+      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                          rename=rename)
     } else if (!any(names(.ipredData) == "PRED")) {
-      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir)
+      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                          rename=rename)
     }
   }
   if (tolowerLhs) {

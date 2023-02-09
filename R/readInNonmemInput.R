@@ -10,7 +10,7 @@
 #'   also adds a nmevid column
 #' @noRd
 #' @author Matthew L. Fidler
-.readInDataFromNonmem <- function(file, inputData) {
+.readInDataFromNonmem <- function(file, inputData, rename=NULL) {
   .data <- NULL
   if (is.null(inputData)) {
     .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
@@ -74,6 +74,14 @@
       .data <- .data[seq_len(.nonmem2rx$dataRecords), ]
     }
   }
+  if (is.null(rename) && !is.null(names(.data))) {
+    names(.data) <- vapply(names(.data),
+                           function(x) {
+                             .w <- which(x == rename)
+                             if (length(.w) == 1) return(names(rename)[.w])
+                             x
+                           }, character(1), USE.NAMES=FALSE)
+  }
   .minfo("done")
   .data
 }
@@ -84,7 +92,7 @@
 #' @return dataset that has nonmem ipred data for validation
 #' @noRd
 #' @author Matthew L. Fidler
-.readInIpredFromTables <- function(file, nonmemOutputDir=NULL) {
+.readInIpredFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
@@ -109,6 +117,14 @@
   .ret <- nmtab(.file)
   .w <- which(names(.ret) == "IPRE")
   if (length(.w) > 0) names(.ret)[.w] <- "IPRED"
+  if (is.null(rename) && !is.null(names(.ret))) {
+    names(.ret) <- vapply(names(.ret),
+                           function(x) {
+                             .w <- which(x == rename)
+                             if (length(.w) == 1) return(names(rename)[.w])
+                             x
+                           }, character(1), USE.NAMES=FALSE)
+  }
   .minfo("done")
   .ret
 }
@@ -134,7 +150,7 @@
 #' @return pred data file or null if it doesn't exist or isn't available
 #' @noRd
 #' @author Matthew L. Fidler
-.readInPredFromTables <- function(file, nonmemOutputDir=NULL) {
+.readInPredFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
@@ -156,6 +172,14 @@
   .minfo(paste0("read in nonmem PRED data (for model validation): ", .file))
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
+  if (is.null(rename) && !is.null(names(.ret))) {
+    names(.ret) <- vapply(names(.ret),
+                          function(x) {
+                            .w <- which(x == rename)
+                            if (length(.w) == 1) return(names(rename)[.w])
+                            x
+                          }, character(1), USE.NAMES=FALSE)
+  }
   .minfo("done")
   .ret
 }
@@ -166,7 +190,7 @@
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemOutputDir=NULL) {
+.readInEtasFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
@@ -191,6 +215,14 @@
   }
   .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
   .ret <- .ret[,.w]
+  if (is.null(rename) && !is.null(names(.ret))) {
+    names(.ret) <- vapply(names(.ret),
+                          function(x) {
+                            .w <- which(x == rename)
+                            if (length(.w) == 1) return(names(rename)[.w])
+                            x
+                          }, character(1), USE.NAMES=FALSE)
+  }
   names(.ret)[-1] <- tolower(names(.ret)[-1])
   .minfo("done")
   .ret
