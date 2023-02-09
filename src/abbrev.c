@@ -97,6 +97,7 @@ SEXP nonmem2rxGetScale(int scale);
 
 int evidWarning = 0;
 int icallWarning = 0;
+int irepWarning = 0;
 int simWarning=0;
 int ipredSimWarning = 0;
 
@@ -190,6 +191,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
         icallWarning=1;
       }
       sAppendN(&curLine, "icall", 5);
+      return 1;
+    } else if (!nmrxstrcmpi("IREP", v)) {
+       if (irepWarning == 0) {
+        nonmem2rxPushTheta("irep <- fix(0)", "irep set to 0 (not supported)");
+        Rf_warning("irep found and added as rxode2 parameter to model (=0); 'sim.id' is added to all multi-study simulations and currently cannot be accessed in the simulation code");
+        irepWarning=1;
+      }
+       sAppendN(&curLine, "irep", 4);
       return 1;
     } else if (!nmrxstrcmpi("COMACT", v)) {
       parseFree(0);
@@ -837,6 +846,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   simWarning=0;
   ipredSimWarning=0;
   icallWarning=0;
+  irepWarning=0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   nonmem2rxSetMaxA(maxA);
   parseFree(0);
