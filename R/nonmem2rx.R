@@ -408,7 +408,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .r <- .r[.w]
       .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
     }
-
   }
   .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()

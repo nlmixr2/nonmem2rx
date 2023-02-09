@@ -32,4 +32,8 @@ test_that("model loading", {
                  lst=".res")
   expect_equal(length(f$meta$validation), 4L)
 
+  # Test a rename of variables inside the model:
+  f <- nonmem2rx(system.file("mods/DDMODEL00000301/run3.mod", package="nonmem2rx"), rename=c(GFR2="GFR"))
+  expect_true(any(rxode2::rxModelVars(f)$params == "GFR2"))
+
 })
