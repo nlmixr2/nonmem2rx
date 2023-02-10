@@ -205,7 +205,17 @@ nmlst <- function(file) {
 #' @author Matthew L. Fidler
 .pushLst <- function(type, est, maxElt) {
   if (type == "cov") {
+    .est <- eval(parse(text=paste0("c(",est)))
     .n <- names(.nmlst$theta)
+    .ln <- length(.n)
+    if (length(.est) == .ln*(.ln+1)/2) {
+      .nmlst$eta <- NULL
+      .nmlst$eps <- NULL
+      .nmlst$cov <- eval(parse(text=paste0("lotri::lotri(",
+                                           paste(.n, collapse="+"),
+                                           " ~ ", deparse1(.est), ")")))
+      return(invisible())
+    }
     .d <- dim(.nmlst$eta)[1]
     for (.i in seq_len(.d)) {
       for(.j in seq(.i, .d)) {
@@ -215,6 +225,14 @@ nmlst <- function(file) {
           .n <- c(.n, paste0("omega.", .i, ".", .j))
         }
       }
+    }
+    .ln <- length(.n)
+    if (length(.est) == .ln*(.ln+1)/2) {
+      .nmlst$eps <- NULL
+      .nmlst$cov <- eval(parse(text=paste0("lotri::lotri(",
+                                           paste(.n, collapse="+"),
+                                           " ~ ", deparse1(.est), ")")))
+      return(invisible())
     }
     .d <- dim(.nmlst$eps)[1]
     for (.i in seq_len(.d)) {
@@ -226,19 +244,24 @@ nmlst <- function(file) {
         }
       }
     }
-    .est <- paste0("lotri::lotri(",
-                   paste(.n, collapse="+"),
-                   " ~ c(", est, ")")
-    .est <- eval(parse(text=.est))
-    assign("cov", .est, envir=.nmlst)
+    .ln <- length(.n)
+    if (length(.est) == .ln*(.ln+1)/2) {
+      .est <- paste0("lotri::lotri(",
+                     paste(.n, collapse="+"),
+                     " ~ ", deparse1(.est), ")")
+      .nmlst$cov <- eval(parse(text=.est))
+    }
   } else if (type == "theta") {
     assign("theta", setNames(eval(parse(text=est)), paste0(type,seq(1, maxElt))), envir=.nmlst)
   } else {
-    .est <- paste0("lotri::lotri(",
-                   paste(paste0(type, seq(1, maxElt)), collapse="+"),
-                   " ~ ", est, ")")
-    .est <- eval(parse(text=.est))
-    assign(type, .est, envir=.nmlst)
+    .est <- eval(parse(text=est))
+    if (length(.est) == maxElt*(maxElt+1)/2) {
+      .est <- paste0("lotri::lotri(",
+                     paste(paste0(type, seq(1, maxElt)), collapse="+"),
+                     " ~ ", est, ")")
+      .est <- eval(parse(text=.est))
+      assign(type, .est, envir=.nmlst)
+    }
   }
   invisible()
 }
