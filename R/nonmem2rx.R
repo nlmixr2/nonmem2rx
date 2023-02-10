@@ -355,6 +355,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .w <- .w[1]
     .lines <- .lines[(seq_len(.w-1))]
     .w <- which(regexpr(" *[$][Pr][Rr][Oo]", .lines) != -1)
+    .w <- .w[1]
     while (.w != 1 && regexpr("(^ *;.*$|^ *$)", .lines[.w]) != -1) {
       .w <- .w-1
     }
