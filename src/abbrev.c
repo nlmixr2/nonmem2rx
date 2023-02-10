@@ -78,6 +78,8 @@ extern char * rc_dup_str(const char *s, const char *e);
 SEXP nonmem2rxPushModelLine(const char *item1);
 SEXP nonmem2rxPushScale(int scale);
 SEXP nonmem2rxPushObservedDadt(int a);
+SEXP nonmem2rxPushObservedThetaObs(int a);
+SEXP nonmem2rxPushObservedEtaObs(int a);
 
 int maxA = 0,
   definingScale = 0;
@@ -297,14 +299,18 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "theta%s", v);
+      int num = atoi(v);
+      nonmem2rxPushObservedThetaObs(num);
+      sAppend(&curLine, "theta%d", num);
     }
     return 1;
   } else if (!strcmp("eta", name)) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "eta%s", v);
+      int num = atoi(v);
+      nonmem2rxPushObservedEtaObs(num);
+      sAppend(&curLine, "eta%d", num);
     }
     return 1;
   } else if (!strcmp("eps", name)) {

@@ -19,6 +19,8 @@ nonmem2rxRec.sig <- function(x) {
   .x <- x
   class(.x) <- NULL
   .ini <- .nonmem2rx$ini
+  .etaMax <- .nonmem2rx$etaMax
+  .nonmem2rx$etaMax <- 0L
   .nonmem2rx$ini <- NULL
   .Call(`_nonmem2rx_omeganum_reset`)
   for (.cur in .x) {
@@ -26,6 +28,7 @@ nonmem2rxRec.sig <- function(x) {
   }
   .nonmem2rx$sigma <- .nonmem2rx$ini
   .nonmem2rx$ini <- .ini
+  .nonmem2rx$etaMax <- .etaMax
 }
 #' Get the omega label based on the associated comment in NONMEM
 #'

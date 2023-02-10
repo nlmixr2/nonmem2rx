@@ -34,6 +34,11 @@
   .nonmem2rx$omegaEst <- data.frame(x=integer(0), y=integer(0))
   .nonmem2rx$sigmaEst <- data.frame(x=integer(0), y=integer(0))
   .nonmem2rx$dadt <- integer(0)
+  .nonmem2rx$thetaObs <- integer(0)
+  .nonmem2rx$etaObs <- integer(0)
+  .nonmem2rx$etaMax <- 0L
+  .nonmem2rx$thetaMax <- 0L
+  .nonmem2rx$epsMax <- 0L
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -110,7 +115,7 @@
   .n <- vapply(thetaNames, function(v) {
     if (v == "") return("")
     # They can't even match based on case or it can interfere with linCmt()
-    if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params))) {
+    if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params, "time"))) {
       return(paste0(prefix, v))
     }
     if (.nonmem2rx$abbrevLin != 0L) {
@@ -404,9 +409,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})\n",
                          "rxode2::model({\n",
                          .desPrefix(),
+                         .missingPrefix(),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))
+  print(.fun)
   .rx <- .fun()
   if (!is.null(rename)) {
     .r <- rename
@@ -424,7 +431,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (is.null(.lstFile)) .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
   if (file.exists(.lstFile)) {
-    .lstInfo <- nmlst(.lstFile)
+    .tmp <- try(nmlst(.lstFile), silent=TRUE)
+    if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
   }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
@@ -487,7 +495,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .nonmem2rx$etas <- NULL
   .nonmem2rx$dn <- NULL
-  .rx <-.replaceThetaNames(.rx, etaNames,
+  .rx <- .replaceThetaNames(.rx, etaNames,
                            label="eta", prefix="e.",
                            df=.etaData, dn=.dn)
   if (!is.null(.nonmem2rx$etas)) {

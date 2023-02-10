@@ -145,6 +145,49 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
 }
 
+#' Push observed theta(#) in NONMEM
+#'
+#' @param i compartment number that was observed
+#'
+#' @return nothing, called for side effects
+#'
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedThetaObs <- function(i) {
+  .nonmem2rx$thetaObs <- unique(c(.nonmem2rx$thetaObs, i))
+}
+
+#' Push observed eta(#) in NONMEM
+#'
+#' @param i compartment number that was observed
+#'
+#' @return nothing, called for side effects
+#'
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedEtaObs <- function(i) {
+  .nonmem2rx$etaObs <- unique(c(.nonmem2rx$etaObs, i))
+}
+#' Push the maximum observed ETA
+#'  
+#' @param i eta number
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedMaxEta <- function(i) {
+  .nonmem2rx$etaMax <- max(.nonmem2rx$etaMax, i)
+}
+
+#' Push the maximum observed THETA
+#'  
+#' @param i theta number
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedMaxTheta  <- function(i) {
+  .nonmem2rx$thetaMax <- max(.nonmem2rx$thetaMax, i)
+}
+
 #' Push observed dadt(#) in NONMEM
 #'
 #' @param i compartment number that was observed
@@ -178,4 +221,32 @@ nonmem2rxRec.err <- function(x) {
                    "\n")
   }
   .ret
+}
+#' Puts in any missing parameter definitions
+#'  
+#' @return missing parameters
+#' @noRd
+#' @author Matthew L. Fidler
+.missingPrefix <- function() {
+  .maxTheta <- .nonmem2rx$thetaMax
+  .sl <- seq_len(.maxTheta)
+  .ret <- character(0)
+  .sl <- seq_len(.maxTheta)
+  .df <- setdiff(.sl, .nonmem2rx$thetaObs)
+  if (length(.df) > 0) {
+    .ret <- c(.ret, paste0("theta", .df))
+  }
+  .maxEta <- .nonmem2rx$etaMax
+  .sl <- seq_len(.maxEta)
+  .df <- setdiff(.sl, .nonmem2rx$etaObs)
+  if (length(.df) > 0) {
+    .ret <- c(.ret, paste0("eta", .df))
+  }
+  if (length(.df)) {
+    warning("some thetas/etas are missing in the model. Added to dummy rxMissingVars#",
+            call.=FALSE)
+    .ret <- paste(paste0("rxMissingVars", seq_along(.ret), " <- ", .ret), collapse="\n")
+    return(.ret)
+  }
+  ""
 }

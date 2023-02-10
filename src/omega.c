@@ -298,10 +298,13 @@ void trans_omega(const char* parse){
   }
 }
 
+SEXP nonmem2rxPushObservedMaxEta(int a);
+
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix) {
   curComment=NULL;
   omegaEstPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   trans_omega(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
+  nonmem2rxPushObservedMaxEta(nonmem2rx_omeganum);
   return R_NilValue;
 }

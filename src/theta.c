@@ -226,8 +226,10 @@ void trans_theta(const char* parse){
   }
 }
 
+SEXP nonmem2rxPushObservedMaxTheta(int a);
 SEXP _nonmem2rx_trans_theta(SEXP in) {
   trans_theta(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
+  nonmem2rxPushObservedMaxTheta(nonmem2rx_thetanum);
   return R_NilValue;
 }

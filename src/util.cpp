@@ -276,3 +276,37 @@ extern "C" SEXP nonmem2rxPushObservedDadt(int a) {
   pushObservedDadt(a);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushObservedThetaObs(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedThetaObs(".pushObservedThetaObs", nonmem2rxNs);
+  pushObservedThetaObs(a);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxPushObservedEtaObs(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedEtaObs(".pushObservedEtaObs", nonmem2rxNs);
+  pushObservedEtaObs(a);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxPushObservedMaxEta(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedMaxEta(".pushObservedMaxEta", nonmem2rxNs);
+  pushObservedMaxEta(a);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxPushObservedMaxTheta(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedMaxTheta(".pushObservedMaxTheta", nonmem2rxNs);
+  pushObservedMaxTheta(a);
+  END_RCPP
+}
