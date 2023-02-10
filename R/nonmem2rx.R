@@ -428,6 +428,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .dn <- gsub("SIGMA[(]([1-9][0-9]*),\\1[)]", "eps\\1", .dn)
     .dn <- gsub("OMEGA[(]([1-9][0-9]*),([1-9][0-9]*)[)]", "omega.\\1.\\2", .dn)
     .dn <- gsub("SIGMA[(]([1-9][0-9]*),([1-9][0-9]*)[)]", "sigma.\\1.\\2", .dn)
+  } else if (!is.null(.lstInfo$cov)) {
+    .cov <- .lstInfo$cov
+    .dn <- dimnames(.cov)[[2]]
   } else {
     .cov <- NULL
     .dn <- NULL

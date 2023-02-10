@@ -13,7 +13,7 @@ nmext(file)
 return a list with `$theta`, `$eta` and `$eps`
 }
 \description{
-This uses `pmxTools` for reading the file
+Reads the NONMEM `.ext` file for final parameter information
 }
 \examples{
 

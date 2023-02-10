@@ -21,10 +21,11 @@ statement: identifier_nm
     | npdtype_statement
     ;
 
+etas_paren_name: ('ETAS' | 'Etas' | 'etas' | 'ETA' | 'Eta' | 'eta') ;
 paren_simple: ('ETA' | 'eta' | 'Eta' | 'VECTRA' | 'COM' | 'vectra' | 'com' | 'Vectra' | 'Com' ) '(' decimalintNo0 ')';
 eta_num: (decimalintNo0 | 'LAST' | 'last'| 'Last');
-etas_statement1: ('ETAS' | 'Etas' | 'etas') '(' eta_num (':' | 'to' | 'TO' | 'To') eta_num (('BY' | 'by' | 'By') decimalintNegNo0 )? ')';
-etas_statement2: ('ETAS' | 'Etas' | 'etas') '(' eta_num  (',' eta_num )* ')';
+etas_statement1: etas_paren_name '(' eta_num (':' | 'to' | 'TO' | 'To') eta_num (('BY' | 'by' | 'By') decimalintNegNo0 )? ')';
+etas_statement2: etas_paren_name '(' eta_num  (',' eta_num )* ')';
 format_statement: ('FORMAT' | 'format' | 'Format') '=' fortran_format;
 rformat_statement: ('RFORMAT' | 'LFORMAT' | 'Rformat' | 'Lformat' | 'rformat' | 'lformat') '=' string;
 ranmethod_statement: ('RANMETHOD' | 'Ranmethod' | 'ranmethod') '=' (decimalintNo0 | 'S' decimalintNo0 | 'm' decimalintNo0);

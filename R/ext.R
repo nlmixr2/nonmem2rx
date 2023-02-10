@@ -1,6 +1,5 @@
 #' Reads the NONMEM `.ext` file for final parameter information
 #'
-#' This uses `pmxTools` for reading the file
 #'
 #' @param file File where the list is located
 #' @return return a list with `$theta`, `$eta` and `$eps`
