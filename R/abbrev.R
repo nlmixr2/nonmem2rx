@@ -144,3 +144,38 @@ nonmem2rxRec.err <- function(x) {
   if (length(.w) != 0L) return(invisible()) 
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
 }
+
+#' Push observed dadt(#) in NONMEM
+#'
+#' @param i compartment number that was observed
+#'
+#' @return nothing, called for side effects
+#'
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedDadt <- function(i) {
+  .nonmem2rx$dadt <- unique(c(.nonmem2rx$dadt, i))
+}
+#' Give the des prefix for the model
+#'
+#' This will include the cmt order specification as well as add
+#' missing dadt definitions
+#'
+#' @return String representing the cmt definition
+#' @noRd
+#' @author Matthew L. Fidler
+.desPrefix <- function() {
+  if (.nonmem2rx$abbrevLin != 0L) return("")
+  if (.nonmem2rx$maxa == 0L) return("")
+  .sl <- seq_len(.nonmem2rx$maxa)
+  .df <- setdiff(.sl, .nonmem2rx$dadt)
+  .ret <- paste0(paste(paste0("cmt(rxddta", .sl, ")"),
+                       collapse="\n"), "\n")
+  if (length(.df) > 0) {
+    warning("not all the compartments had DADT(#) defined!",
+            call.=FALSE)
+    .ret <- paste0(.ret, paste(paste0("d/dt(rxddta", .df, ") <- 0"), collapse="\n"),
+                   "\n")
+  }
+  .ret
+}

@@ -33,6 +33,7 @@
   .nonmem2rx$defobs <- 0L
   .nonmem2rx$omegaEst <- data.frame(x=integer(0), y=integer(0))
   .nonmem2rx$sigmaEst <- data.frame(x=integer(0), y=integer(0))
+  .nonmem2rx$dadt <- integer(0)
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -402,10 +403,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          paste(.nonmem2rx$ini, collapse="\n"),
                          "\n})\n",
                          "rxode2::model({\n",
-                         ifelse(.nonmem2rx$abbrevLin == 0L && .nonmem2rx$maxa != 0L,
-                                paste0(paste(paste0("cmt(rxddta", seq_len(.nonmem2rx$maxa), ")"),
-                                             collapse="\n"), "\n"),
-                                ""),
+                         .desPrefix(),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))

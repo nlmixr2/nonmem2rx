@@ -77,6 +77,7 @@ extern char * rc_dup_str(const char *s, const char *e);
 
 SEXP nonmem2rxPushModelLine(const char *item1);
 SEXP nonmem2rxPushScale(int scale);
+SEXP nonmem2rxPushObservedDadt(int a);
 
 int maxA = 0,
   definingScale = 0;
@@ -260,13 +261,14 @@ void writeAinfo(const char *v) {
   // abbrevLin = 4 is linCmt() without ka
   // abbrevLin = 5 is linCmt() with ka
   if (abbrevLin == 0) {
-    maxA = max2(maxA, atoi(v));
+    int num = atoi(v);
+    maxA = max2(maxA, num);
     sAppend(&curLine, "rxddta%s", v);
     return;
   }
   int cur = atoi(v);
   if (abbrevLin == 3) {
-    maxA = max2(maxA, atoi(v));
+    maxA = max2(maxA, cur);
     sAppend(&curLine, "rxddta%s%s", v, CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
     return;
   }
@@ -563,7 +565,9 @@ int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      maxA = max2(maxA, atoi(v));
+      int cur = atoi(v);
+      maxA = max2(maxA, cur);
+      nonmem2rxPushObservedDadt(cur);
       sAppend(&curLine, "d/dt(rxddta%s) <- ", v);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {

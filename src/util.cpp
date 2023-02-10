@@ -268,3 +268,11 @@ extern "C" SEXP nonmem2rxPushOmegaEst(int x, int y) {
   pushOmegaEst(x, y);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushObservedDadt(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedDadt(".pushObservedDadt", nonmem2rxNs);
+  pushObservedDadt(a);
+  END_RCPP
+}
