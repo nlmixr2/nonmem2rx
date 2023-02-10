@@ -40,7 +40,7 @@ nonmem2rxRec.err <- function(x) {
   # volume needs to be divided out
   if (.nonmem2rx$abbrevLin == 1L) {
     if (!is.null(.nonmem2rx$scaleVol[["scale1"]])) {
-      .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale2"]]))
+      .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale1"]]))
     }
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)
   } else if (.nonmem2rx$abbrevLin == 2L) {
