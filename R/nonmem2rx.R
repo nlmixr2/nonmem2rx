@@ -350,7 +350,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .clearNonmem2rx()
   .lines <- suppressWarnings(readLines(file))
   .lstFile <- NULL
-  .w <- which(regexpr("^ *NM-TRAN +MESSAGES *$", .lines)!=-1)
+  .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED)", .lines)!=-1)
   if (length(.w) > 0) {
     .w <- .w[1]
     .lines <- .lines[(seq_len(.w-1))]
@@ -413,7 +413,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))
-  print(.fun)
   .rx <- .fun()
   if (!is.null(rename)) {
     .r <- rename
