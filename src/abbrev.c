@@ -338,55 +338,55 @@ int abbrev_function(char *name, int i, D_ParseNode *pn) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       if (v[0] == 'D' || v[0] == 'd') v++;
-      if (!nmrxstrcmpi("LOG", v)) {
-        sAppendN(&curLine, "log", 3);
+      if (!nmrxstrcmpi("LOG(", v)) {
+        sAppendN(&curLine, "log(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("LOG10", v)) {
-        sAppendN(&curLine, "log10", 5);
+      } else if (!nmrxstrcmpi("LOG10(", v)) {
+        sAppendN(&curLine, "log10(", 6);
         return 1;
-      } else if (!nmrxstrcmpi("EXP", v)) {
-        sAppendN(&curLine, "exp", 3);
+      } else if (!nmrxstrcmpi("EXP(", v)) {
+        sAppendN(&curLine, "exp(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("SQRT", v)) {
-        sAppendN(&curLine, "sqrt", 4);
+      } else if (!nmrxstrcmpi("SQRT(", v)) {
+        sAppendN(&curLine, "sqrt(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("SIN", v)) {
-        sAppendN(&curLine, "sin", 3);
+      } else if (!nmrxstrcmpi("SIN(", v)) {
+        sAppendN(&curLine, "sin(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("COS", v)) {
-        sAppendN(&curLine, "cos", 3);
+      } else if (!nmrxstrcmpi("COS(", v)) {
+        sAppendN(&curLine, "cos(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("ABS", v)) {
-        sAppendN(&curLine, "abs", 3);
+      } else if (!nmrxstrcmpi("ABS(", v)) {
+        sAppendN(&curLine, "abs(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("TAN", v)) {
-        sAppendN(&curLine, "tan", 3);
+      } else if (!nmrxstrcmpi("TAN(", v)) {
+        sAppendN(&curLine, "tan(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("ASIN", v)) {
-        sAppendN(&curLine, "asin", 4);
+      } else if (!nmrxstrcmpi("ASIN(", v)) {
+        sAppendN(&curLine, "asin(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("ACOS", v)) {
-        sAppendN(&curLine, "acos", 4);
+      } else if (!nmrxstrcmpi("ACOS(", v)) {
+        sAppendN(&curLine, "acos(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("ATAN", v)) {
-        sAppendN(&curLine, "atan", 4);
+      } else if (!nmrxstrcmpi("ATAN(", v)) {
+        sAppendN(&curLine, "atan(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("MIN", v)) {
-        sAppendN(&curLine, "min", 3);
+      } else if (!nmrxstrcmpi("MIN(", v)) {
+        sAppendN(&curLine, "min(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("MAX", v)) {
-        sAppendN(&curLine, "max", 3);
+      } else if (!nmrxstrcmpi("MAX(", v)) {
+        sAppendN(&curLine, "max(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("PHI", v)) {
-        sAppendN(&curLine, "phi", 3);
+      } else if (!nmrxstrcmpi("PHI(", v)) {
+        sAppendN(&curLine, "phi(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("GAMLN", v)) {
-        sAppendN(&curLine, "lgamma", 6);
+      } else if (!nmrxstrcmpi("GAMLN(", v)) {
+        sAppendN(&curLine, "lgamma(", 7);
         return 1;
-      } else if (!nmrxstrcmpi("mod", v)) {
+      } else if (!nmrxstrcmpi("mod(", v)) {
         parseFree(0);
         Rf_errorcall(R_NilValue, "'MOD' function not supported in translation");
-      } else if (!nmrxstrcmpi("int", v)) {
+      } else if (!nmrxstrcmpi("int(", v)) {
         parseFree(0);
         Rf_errorcall(R_NilValue, "'INT' function not supported in translation");
       }

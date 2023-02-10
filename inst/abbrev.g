@@ -168,23 +168,23 @@ primary_expression
   | '(' logical_or_expression ')'
   ;
 
-function : function_name '(' (logical_or_expression)*  (',' logical_or_expression)* ')' ;
+function : function_name (logical_or_expression)*  (',' logical_or_expression)* ')' ;
 
-function_name: 'LOG' | 'LOG10' | 'EXP' | 'SQRT' | 'SIN' | 'COS' |
-        'ABS' |'TAN' | 'ASIN' | 'ACOS' | 'ATAN' | 'INT' | 'MIN' |
-        'MAX' |'MOD' | 'PHI'  | 'GAMLN' |
-        'DLOG' |'DLOG10' | 'DEXP' | 'DSQRT' | 'DSIN' | 'DCOS' |
-        'DABS' |'DTAN' | 'DASIN' | 'DACOS' | 'DATAN' | 'DINT' | 'DMIN' |
-        'DMAX' |'DMOD' | 'DPHI'  | 'DGAMLN' |
-        'log' | 'log10' | 'exp' | 'sqrt' | 'sin' | 'cos' |
-        'abs' |'tan' | 'asin' | 'acos' | 'atan' | 'int' | 'min' |
-        'max' |'mod' | 'phi'  | 'gamln' |
-        'dlog' |'dlog10' |'dexp'  | 'dsqrt' | 'dsin' | 'dcos' |
-        'dabs' |'dtan'   |'dasin' | 'dacos' | 'datan' | 'dint' | 'dmin' |
-        'dmax' |'dmod'   |'dphi'  | 'dgamln' |
-        'Log' | 'Log10' | 'Exp' | 'Sqrt' | 'Sin' | 'Cos' |
-        'Abs' |'Tan' | 'Asin' | 'Acos' | 'Atan' | 'Int' | 'Min' |
-        'Max' |'Mod' | 'Phi'  | 'Gamln'
+function_name: 'LOG(' | 'LOG10(' | 'EXP(' | 'SQRT(' | 'SIN(' | 'COS(' |
+        'ABS(' |'TAN(' | 'ASIN(' | 'ACOS(' | 'ATAN(' | 'INT(' | 'MIN(' |
+        'MAX(' |'MOD(' | 'PHI('  | 'GAMLN(' |
+        'DLOG(' |'DLOG10(' | 'DEXP(' | 'DSQRT(' | 'DSIN(' | 'DCOS(' |
+        'DABS(' |'DTAN(' | 'DASIN(' | 'DACOS(' | 'DATAN(' | 'DINT(' | 'DMIN(' |
+        'DMAX(' |'DMOD(' | 'DPHI('  | 'DGAMLN(' |
+        'log(' | 'log10(' | 'exp(' | 'sqrt(' | 'sin(' | 'cos(' |
+        'abs(' |'tan(' | 'asin(' | 'acos(' | 'atan(' | 'int(' | 'min(' |
+        'max(' |'mod(' | 'phi('  | 'gamln(' |
+        'dlog(' |'dlog10(' |'dexp'  | 'dsqrt(' | 'dsin(' | 'dcos(' |
+        'dabs(' |'dtan('   |'dasin(' | 'dacos(' | 'datan(' | 'dint(' | 'dmin(' |
+        'dmax(' |'dmod('   |'dphi'  | 'dgamln(' |
+        'Log(' | 'Log10(' | 'Exp(' | 'Sqrt(' | 'Sin(' | 'Cos(' |
+        'Abs(' |'Tan(' | 'Asin(' | 'Acos(' | 'Atan(' | 'Int(' | 'Min(' |
+        'Max(' |'Mod(' | 'Phi(' | 'Gamln('
     ;
 
 constant : decimalint | float1 | float2;
