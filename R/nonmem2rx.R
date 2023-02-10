@@ -344,11 +344,16 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .clearNonmem2rx()
   .lines <- suppressWarnings(readLines(file))
   .lstFile <- NULL
-  .w <- which(regexpr("^ *NM-TRAN +MESSAGES +$", .lines)!=-1)
+  .w <- which(regexpr("^ *NM-TRAN +MESSAGES *$", .lines)!=-1)
   if (length(.w) > 0) {
     .w <- .w[1]
-    if (.w > 10) {
-      .lines <- .lines[seq(3, .w-1)]
+    .lines <- .lines[(seq_len(.w-1))]
+    .w <- which(regexpr(" *[$][Pr][Rr][Oo]", .lines) != -1)
+    while (.w != 1 && regexpr("(^ *;.*$|^ *$)", .lines[.w]) != -1) {
+      .w <- .w-1
+    }
+    if (.w > 0) {
+      .lines <-.lines[-seq_len(.w)]
       .lstFile <- file
     }
   }
