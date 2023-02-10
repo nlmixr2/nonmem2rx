@@ -343,7 +343,17 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
-  .lines <- paste(suppressWarnings(readLines(file)), collapse = "\n")
+  .lines <- suppressWarnings(readLines(file))
+  .lstFile <- NULL
+  .w <- which(regexpr("^ *NM-TRAN +MESSAGES +$", .lines)!=-1)
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    if (.w > 10) {
+      .lines <- .lines[seq(3, .w-1)]
+      .lstFile <- file
+    }
+  }
+  .lines <- paste(.lines, collapse = "\n")
   .parseRec(.lines)
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
@@ -409,7 +419,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
     }
   }
-  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
+  if (is.null(.lstFile)) .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
   if (file.exists(.lstFile)) {
     .lstInfo <- nmlst(.lstFile)
