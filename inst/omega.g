@@ -1,5 +1,5 @@
 //loop
-statement_list : first? (statement)+ ;
+statement_list : first? fixed? (statement)+ ;
 
 diagonal: ('diagonal' | 'DIAGONAL') '(' decimalint ')';
 

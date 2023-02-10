@@ -125,7 +125,9 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   int isBlockNsame = 0;
-  if (!strcmp("omega_statement", name)) {
+  if (!strcmp("fixed", name)) {
+    nonmem2rx_omegaFixed = 1;
+  } else if (!strcmp("omega_statement", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] != 0) {
