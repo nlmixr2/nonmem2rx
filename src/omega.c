@@ -156,12 +156,14 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       parseFree(0);
       Rf_errorcall(R_NilValue, "Requested BLOCK SAME before a block was defined");
     }
+    curComment=NULL;
     for (int i = 0; i < nonmem2rx_omegaLastBlock; i++) {
       if (i == 0) {
         sAppend(&curOmegaLhs, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
       } else {
         sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
       }
+      pushOmegaComment(); 
       nonmem2rx_omeganum++;
     }
     sAppend(&curOmega, "%s ~ fix%s)", curOmegaLhs.s, curOmegaRhs.s);
