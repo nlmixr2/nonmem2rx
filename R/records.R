@@ -131,7 +131,6 @@
       .content <- substr(r, attr(.m, "match.length")+1, nchar(r))
       .addRec(.rec, .content)
     } else  {
-      
       message(deparse1(r))
       stop("unexpected line", call. = FALSE)
     }

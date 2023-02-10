@@ -359,8 +359,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     while (.w != 1 && regexpr("(^ *;.*$|^ *$)", .lines[.w]) != -1) {
       .w <- .w-1
     }
-    if (.w > 0) {
-      .lines <-.lines[-seq_len(.w)]
+    if (.w > 1) {
+      .lines <-.lines[-seq_len(.w-1)]
       .lstFile <- file
     }
   }
