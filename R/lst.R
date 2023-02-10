@@ -74,7 +74,6 @@ nmlst <- function(file) {
       .time <- NULL
     }
   }
-  # Fri Aug  5 18:17:19 CEST 2022
   .time2 <- .lst[2]
 
   .reg <- ".*[(]NONMEM[)] +VERSION +"
@@ -110,6 +109,7 @@ nmlst <- function(file) {
     return(list(theta=NULL,
                 omega=NULL,
                 sigma=NULL,
+                cov=NULL,
                 objf=.obj,
                 nobs=.nobs,
                 nsub=.nsub,
@@ -144,6 +144,7 @@ nmlst <- function(file) {
       return(list(theta=NULL,
                   omega=NULL,
                   sigma=NULL,
+                  cov=NULL,
                   objf=.obj,
                   nobs=.nobs,
                   nsub=.nsub,
@@ -157,12 +158,35 @@ nmlst <- function(file) {
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
   .est <- paste(.est, collapse="\n")
-  .Call(`_nonmem2rx_trans_lst`, .est)
+  .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
 
+  .w <- which(regexpr("COVARIANCE +MATRIX +OF +ESTIMATE", .lst) != -1)
+  if (length(.w) > 0L) {
+    .w <- .w[1]
+    .cov <- .lst[-(seq_len(.w))]
+    .w <- which(regexpr("CORRELATION +MATRIX +OF +ESTIMATE", .cov) != -1)
+    if (length(.w) > 0L) {
+      .w  <- .w[1]
+      .cov <- .cov[seq_len(.w)]
+      .w <- which(.cov == "1")
+      if (length(.w) > 0L) {
+        .w <- .w[length(.w)]
+        .cov <- .cov[seq_len(.w-1)]
+        .w <- which(regexpr("[*][*][*][*][*][*][*][*]",.cov) != -1)
+        if (length(.w) > 0L) {
+          .w <- .w[length(.w)]
+          .cov <- .cov[-seq_len(.w)]
+          .cov <- paste(.cov, collapse="\n")
+          .Call(`_nonmem2rx_trans_lst`, .cov, TRUE)
+        }
+      }
+    }
+  }
   ## run time
   list(theta=.nmlst$theta,
        omega=.nmlst$eta,
        sigma=.nmlst$eps,
+       cov=.nmlst$cov,
        objf=.obj,
        nobs=.nobs,
        nsub=.nsub,
@@ -180,7 +204,34 @@ nmlst <- function(file) {
 #' @noRd
 #' @author Matthew L. Fidler
 .pushLst <- function(type, est, maxElt) {
-  if (type == "theta") {
+  if (type == "cov") {
+    .n <- names(.nmlst$theta)
+    .d <- dim(.nmlst$eta)[1]
+    for (.i in seq_len(.d)) {
+      for(.j in seq(.i, .d)) {
+        if (.i == .j) {
+          .n <- c(.n, paste0("eta", .i))
+        } else {
+          .n <- c(.n, paste0("omega.", .i, ".", .j))
+        }
+      }
+    }
+    .d <- dim(.nmlst$eps)[1]
+    for (.i in seq_len(.d)) {
+      for (.j in seq(.i, .d)) {
+        if (.i == .j) {
+          .n <- c(.n, paste0("eps", .i))
+        } else {
+          .n <- c(.n, paste0("sigma.", .i, ".", .j))
+        }
+      }
+    }
+    .est <- paste0("lotri::lotri(",
+                   paste(.n, collapse="+"),
+                   " ~ c(", est, ")")
+    .est <- eval(parse(text=.est))
+    assign("cov", .est, envir=.nmlst)
+  } else if (type == "theta") {
     assign("theta", setNames(eval(parse(text=est)), paste0(type,seq(1, maxElt))), envir=.nmlst)
   } else {
     .est <- paste0("lotri::lotri(",

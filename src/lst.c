@@ -89,6 +89,9 @@ void pushList(void) {
   case 3:
     nonmem2rxPushLst("eps", curLine.s, maxLstItem);
     break;
+  case 5:
+    nonmem2rxPushLst("cov", curLine.s, maxLstItem);
+    break;
   }
   lstType=0;
 }
@@ -179,7 +182,10 @@ void trans_lst(const char* parse){
   }
 }
 
-SEXP _nonmem2rx_trans_lst(SEXP in) {
+SEXP _nonmem2rx_trans_lst(SEXP in, SEXP cov) {
+  if (INTEGER(cov)[0]) {
+    lstType = 5;
+  }
   sIni(&curLine);
   trans_lst(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
