@@ -605,7 +605,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx$meta$validation <- .msg
     }
     if (is.null(.ipredData) && is.null(.predData)) {
-      warning("NONMEM input data found but could not find output PRED/IPRED data to validate against")
+      warning("NONMEM input data found but could not find output PRED/IPRED data to validate against", call.=FALSE)
     }
   }
   if (length(.nonmem2rx$modelDesc) > 0) {
