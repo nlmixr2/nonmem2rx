@@ -604,6 +604,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       // a1(0) <- ....
       sAppendN(&curLine, "rxini.", 6);
+      cmtInfoStr=v;
       writeAinfo(v);
       sAppendN(&curLine, ". <- ", 5);
       return 1;
