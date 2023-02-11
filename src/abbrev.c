@@ -67,6 +67,7 @@ void parseFree(int last) {
 }
 extern sbuf curLine;
 const char *abbrevPrefix;
+const char *cmtInfoStr;
 
 // from mkdparse_tree.h
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
@@ -112,30 +113,30 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "f(", 2);
+    sAppendN(&curLine, "rxf.", 4);
     writeAinfo(v + 1);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("alagi", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "alag(", 5);
+    sAppendN(&curLine, "rxalag.", 7);
     writeAinfo(v + 4);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("ratei", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "rate(", 5);
+    sAppendN(&curLine, "rxrate.", 7);
     writeAinfo(v + 1);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("duri", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "dur(", 4);
+    sAppendN(&curLine, "rxdur.", 6);
     writeAinfo(v + 1);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("scalei", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
@@ -602,8 +603,9 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       // a1(0) <- ....
+      sAppendN(&curLine, "rxini.", 6);
       writeAinfo(v);
-      sAppendN(&curLine, "(0) <- ", 7);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {
       return 1;
@@ -621,9 +623,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
         Rf_errorcall(R_NilValue, "F0/FO is not supported in translation");
       }
       // f(a1) <- ....
-      sAppendN(&curLine, "f(", 2);
+      sAppendN(&curLine, "rxf.", 4);
+      cmtInfoStr = v + 1;
       writeAinfo(v + 1);
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -635,6 +638,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppendN(&curLine, "alag(", 5);
       writeAinfo(v + 4);
+      cmtInfoStr = v + 4;
       sAppendN(&curLine, ") <- ", 5);
       return 1;
     } else if (i == 1) {
@@ -645,9 +649,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "rate(", 5);
+      sAppend(&curLine, "rxrate.", 7);
+      cmtInfoStr = v + 1;
       writeAinfo(v + 1);
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -657,9 +662,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppendN(&curLine, "dur(",4);
+      sAppendN(&curLine, "rxdur.", 6);
+      cmtInfoStr = v + 1;
       writeAinfo(v + 1);
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -815,16 +821,55 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   if (!strcmp("assignment", name) ||
       !strcmp("if1", name) ||
       !strcmp("derivative", name) ||
-      !strcmp("ini", name) ||
-      !strcmp("fbio", name) ||
-      !strcmp("alag", name) ||
-      !strcmp("rate", name) ||
-      !strcmp("dur", name) ||
       !strcmp("scale", name) ||
       !strcmp("ifcallrandom", name) ||
       !strcmp("ifcallsimeta", name) ||
       !strcmp("ifcallsimeps", name) ) {
     pushModel();
+  } else if (!strcmp("fbio", name)) {
+    pushModel();
+    sAppendN(&curLine, "f(", 2);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxf.", 9);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("alag", name)) {
+    pushModel();
+    sAppendN(&curLine, "alag(", 5);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxalag.", 12);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("rate", name)) {
+    pushModel();
+    sAppendN(&curLine, "rate(", 5);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxrate.", 12);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("dur", name)) {
+    pushModel();
+    sAppendN(&curLine, "dur(", 4);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxdur.", 11);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("ini", name)) {
+    pushModel();
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, "(0) <- rxini.", 13);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
   }
 }
 
