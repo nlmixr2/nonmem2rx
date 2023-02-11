@@ -175,7 +175,7 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .pushObservedMaxEta <- function(i) {
-  .nonmem2rx$etaMax <- max(.nonmem2rx$etaMax, i)
+  .nonmem2rx$etaMax <- max(.nonmem2rx$etaMax, i-1L)
 }
 
 #' Push the maximum observed THETA
@@ -185,7 +185,7 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .pushObservedMaxTheta  <- function(i) {
-  .nonmem2rx$thetaMax <- max(.nonmem2rx$thetaMax, i)
+  .nonmem2rx$thetaMax <- max(.nonmem2rx$thetaMax, i-1L)
 }
 
 #' Push observed dadt(#) in NONMEM
