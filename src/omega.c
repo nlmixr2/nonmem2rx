@@ -19,6 +19,7 @@
 #define _(String) (String)
 #endif
 #include "omega.g.d_parser.h"
+#include "strncmpi.h"
 
 #define gBuf nonmem2rx_omega_gBuf
 #define gBufFree nonmem2rx_omega_gBufFree
@@ -79,6 +80,9 @@ int nonmem2rx_omegaFixed = 0;
 int nonmem2rx_omegaBlockI = 0;
 int nonmem2rx_omegaBlockJ = 0;
 int nonmem2rx_omegaLastBlock = 0;
+int nonmem2rx_omegaSd=0;
+int nonmem2rx_omegaChol=0;
+int nonmem2rx_omegaCor=0;
 char *omegaEstPrefix;
 
 extern char *curComment;
@@ -100,7 +104,7 @@ SEXP _nonmem2rx_omeganum_reset(void) {
   return R_NilValue;
 }
 
-SEXP nonmem2rxPushOmega(const char *ini);
+SEXP nonmem2rxPushOmega(const char *ini, int sd, int cor, int chol);
 SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefix);
 
 void pushOmega(void) {
@@ -111,7 +115,12 @@ void pushOmega(void) {
   nonmem2rx_omegaBlockI   = 0;
   nonmem2rx_omegaBlockJ   = 0;
   nonmem2rx_omegaBlockCount = 0;
-  nonmem2rxPushOmega(curOmega.s);
+
+  nonmem2rxPushOmega(curOmega.s, nonmem2rx_omegaSd, nonmem2rx_omegaCor,
+                     nonmem2rx_omegaChol);
+  nonmem2rx_omegaSd=0;
+  nonmem2rx_omegaChol=0;
+  nonmem2rx_omegaCor=0;
   sClear(&curOmegaLhs);
   sClear(&curOmega);
 }
@@ -125,7 +134,22 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   int isBlockNsame = 0;
-  if (!strcmp("fixed", name)) {
+  if (!strcmp("diag_type", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    if (v[0] == 'S' || v[0] == 's') {
+      nonmem2rx_omegaSd = 1;
+    }
+  } else if (!strcmp("off_diag_type", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    if (!strncmpci("cor", v, 3)) {
+      nonmem2rx_omegaCor = 1;
+    }
+  } else if (!strcmp("block_chol_type", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    if (v[0] == 'C' || v[0] == 'c') {
+      nonmem2rx_omegaChol = 1;
+    }
+  } else if (!strcmp("fixed", name)) {
     nonmem2rx_omegaFixed = 1;
   } else if (!strcmp("omega_statement", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
@@ -179,13 +203,14 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     Rf_warning("DIAGONAL(%d) does not do anything right now, it is ignored", nonmem2rx_omegaDiagonal);
     nonmem2rx_omegaDiagonal = NA_INTEGER;
   } else if (nonmem2rx_omegaBlockn != 0 && !strcmp("omega1", name)) {
-    if (nonmem2rx_omegaBlockn != 0) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "parenthetical estimates are is not supported in an $OMEGA or $SIGMA BLOCK");
-    }
+    // nonmem 73 supports
   } else if (!strcmp("omega2", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 2);
+    D_ParseNode *xpn = d_get_child(pn, 4);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 2);
+    wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
+    xpn = d_get_child(pn, 4);
+    wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
     // this form is only good for diagonal matrices
     if (nonmem2rx_omegaBlockn != 0) {
       parseFree(0);
@@ -196,10 +221,17 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
     nonmem2rx_omeganum++;
     pushOmega();
+    return;
   } else if (!strcmp("omega0", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    // Parse the block type statements before the estimate to get properties
     xpn = d_get_child(pn, 1);
+    wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
+    xpn = d_get_child(pn, 3);
+    wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
+    // Get the fixed statement
+    xpn = d_get_child(pn, 2);
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (nonmem2rx_omegaBlockn == 0) {
       // This is a regular initialization
@@ -247,6 +279,7 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
         sAppend(&curOmegaRhs, ", %s", v);
       }
     }
+    return;
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {

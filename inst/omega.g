@@ -1,5 +1,6 @@
 //loop
-statement_list : first? fixed? (statement)+ ;
+statement_list :  block_type? first? block_type? fixed?
+        (statement)+ ;
 
 diagonal: ('diagonal' | 'DIAGONAL') '(' decimalint ')';
 
@@ -16,15 +17,16 @@ blocksame : block same;
 first: diagonal | block | blockn | blocknsame | blocksame;
 
 statement: omega_statement  |
+        block_type |
   singleLineComment?;
 
 omega_statement: omega ','* singleLineComment?;
 
 omega: omega0 | omega1 | omega2 ;
 
-omega0: ini_constant fixed?;
+omega0: ini_constant block_type? fixed? block_type?;
 omega1: '(' omega0 ')';
-omega2: '(' fixed  ini_constant ')';
+omega2: '(' block_type? fixed block_type? ini_constant ')';
 
 fixed: 'fixed' | 'FIXED' | 'FIX' | 'fix';
 
@@ -32,6 +34,30 @@ ini_constant: '-'? constant;
 
 constant : decimalint | float1 | float2;
 
+diag_type: ('standard'
+        | 'sd'
+        | 'variance'
+        | 'Standard'
+        | 'Sd'
+        | 'Variance'
+        | 'STANDARD'
+        | 'SD'
+        | 'VARIANCE'
+        );
+off_diag_type: ('COVARIANCE'
+        | 'CORRELATON'
+        | 'CORRELATION'
+        | 'covariance'
+        | 'correlaton'
+        | 'correlation'
+        | 'Covariance'
+        | 'Correlaton'
+        | 'Correlation'
+        );
+
+block_chol_type: 'CHOLESKY';
+
+block_type: off_diag_type? diag_type? | diag_type? off_diag_type? | block_chol_type?;
 
 whitespace: ( "[ \t\r\n]+")*;
 singleLineComment: ';' "[^\n]*";

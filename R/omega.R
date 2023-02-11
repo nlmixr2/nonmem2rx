@@ -70,3 +70,55 @@ nonmem2rxRec.sig <- function(x) {
          envir = .nonmem2rx)
   invisible()
 }
+#' Add omega/sigma ini statement
+#'
+#' This will convert to the covariance matrix before adding the
+#' initial estimates
+#'
+#' @param ini Ini statement from nonmem
+#' @param sd integer representing if the diagonals are standard
+#'   deviations (0L=FALSE)
+#' @param cor integer representing if the off-diagonals are
+#'   correlations (0L=FALSE)
+#' @param chol integer representing if the omega is actually a
+#'   Cholesky decomposition
+#' @return Nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.addOmega <- function(ini, sd, cor, chol) {
+  if (sd == 0L && cor == 0L && chol == 0L) .addIni(ini)
+  .ini <- eval(parse(text=paste0("lotri::lotri(",ini,")")))
+  .dn <- dimnames(.ini)
+  if (cor != 0L) {
+    # correlation matrix
+    .d <- diag(.ini)
+    if (sd == 0L) {
+      .d <- sqrt(.d) # change to sd
+    }
+    diag(.ini) <- 1
+    .D <- diag(length(.d))
+    diag(.D) <- .d
+    .ini <- .D %*% .ini %*% .D
+    dimnames(.ini) <- .dn
+    class(.ini) <- c("lotriFix", class(.ini))
+    .exp <-as.expression(.ini)
+    .addIni(deparse1(.exp[[2]][[2]]))
+    return(invisible())
+  } else if (sd != 0L) {
+    # covariance + sd
+    # convert sd to variance
+    .d <- diag(.ini)^2
+    diag(.ini) <- .d
+    dimnames(.ini) <- .dn
+    class(.ini) <- c("lotriFix", class(.ini))
+    .exp <-as.expression(.ini)
+    .addIni(deparse1(.exp[[2]][[2]]))
+  } else if (chol != 0L) {
+    # cholesky to cov
+    .ini <- .ini %*% t(.ini)
+    dimnames(.ini) <- .dn
+    class(.ini) <- c("lotriFix", class(.ini))
+    .exp <-as.expression(.ini)
+    .addIni(deparse1(.exp[[2]][[2]]))
+  }
+}
