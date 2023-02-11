@@ -48,9 +48,11 @@ nmlst <- function(file) {
     .w <- .w[1]
     .termInfo <- .lst[-seq_len(.w)]
     .w <- which(.termInfo == "")
-    .w <- .w[1] - 1
-    .termInfo <- .termInfo[seq_len(.w)]
-    .termInfo <- paste(.termInfo, collapse = "\n")
+    if (length(.w) > 0) {
+      .w <- .w[1] - 1
+      .termInfo <- .termInfo[seq_len(.w)]
+      .termInfo <- paste(.termInfo, collapse = "\n")
+    }
   }
 
   .reg <-"^ *[#]TERE[:]"
