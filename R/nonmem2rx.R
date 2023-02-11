@@ -349,8 +349,17 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
   .lines <- suppressWarnings(readLines(file))
+  if (length(.lines) == 0L) {
+    .w <- integer(0)
+  } else {
+    .w <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines) != -1)
+  }
+  if (length(.w) == 0) {
+    stop("cannot find a problem statement in the input file",
+         call.=FALSE)
+  }
   .lstFile <- NULL
-  .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED)", .lines)!=-1)
+  .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lines)!=-1)
   if (length(.w) > 0) {
     .w <- .w[1]
     .lines <- .lines[(seq_len(.w-1))]
@@ -362,6 +371,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     if (.w > 1) {
       .lines <-.lines[-seq_len(.w-1)]
       .lstFile <- file
+    } else {
+      if (regexpr(" *[$][Pr][Rr][Oo]", .lines[1]) != -1) {
+        .lstFile <- file
+      } else {
+        stop("model not in listing file, choose the model",
+             call.=FALSE)
+      }
     }
   }
   .lines <- paste(.lines, collapse = "\n")

@@ -1,5 +1,6 @@
 //loop
-statement_list : (statement)+ ;
+statement_list : call_protocol_phrase?
+ (statement)+ ;
 
 // return and exit statements not supported
 
@@ -50,7 +51,21 @@ dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_o
 exit_line: 'EXIT' decimalint decimalint;
 ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
 comresn1: 'COMRES' '=' '-' '1';
-callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1'); 
+callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
+
+call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
+        | 'OBS'
+        | 'OBSERVATION' 'ONLY'
+        | 'OBS' 'ONLY'
+        | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
+        | 'ONCE'
+        | 'IND.' 'REC.'
+        | 'IND' 'REC'
+        | 'EVERY' 'EVENT'
+        | 'EVERY'
+        |'NEW' 'TIME'
+        |'NEW' 'EVENT' 'TIME'
+        ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';

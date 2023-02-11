@@ -511,6 +511,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   } else if (!strcmp("callfl", name)) {
     if (i == 1) Rf_warning("'CALLFL = ' ignored");
     return 1;
+  } else if (!strcmp("call_protocol_phrase", name)) {
+    if (i == 1) {
+      char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+      Rf_warning("NONMEM call protocol phrase ignored\n  %s", v);
+    }
+    return 1; 
   } else if (!strcmp("callpassmode", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'CALL PASS(MODE)' statements not supported in translation");
