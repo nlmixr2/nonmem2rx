@@ -23,7 +23,7 @@ constant_item: est_label | constant | na_item;
 
 na_item: '.........';
 
-est_label: ('TH' | 'ETA' | 'EPS' | 'OM' | 'SG' ) decimalint;
+est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) decimalint;
 
 constant: '-'? (float1 | float2);
 decimalintNo0: "([1-9][0-9]*)" $term -1;
