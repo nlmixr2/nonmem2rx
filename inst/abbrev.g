@@ -5,37 +5,38 @@ statement_list : call_protocol_phrase?
 // return and exit statements not supported
 
 statement 
-  : assignment
-  | if1
-  | ifthen
-  | ifcallrandom
-  | ifcallsimeps
-  | ifcallsimeta
-  | elseif
-  | else
-  | endif
-  | dowhile
-  | enddo
-  | ini       
-  | fbio      
-  | alag      
-  | rate      
-  | dur       
-  | scale     
-  | derivative
-  | da        
-  | dp
-  | callsimeta
-  | callgeteta
-  | callsimeps
-  | callpassmode
-  | callsupp
-  | callrandom
-  | exit_line
-  | comresn1
-  | ifexit
-  | callfl
-  | verbatimCode;
+  : assignment singleLineComment?
+  | if1 singleLineComment?
+  | ifthen singleLineComment?
+  | ifcallrandom singleLineComment?
+  | ifcallsimeps singleLineComment?
+  | ifcallsimeta singleLineComment?
+  | elseif singleLineComment?
+  | else singleLineComment?
+  | endif singleLineComment?
+  | dowhile singleLineComment?
+  | enddo singleLineComment?
+  | ini singleLineComment?
+  | fbio singleLineComment?
+  | alag singleLineComment?     
+  | rate singleLineComment?
+  | dur singleLineComment?
+  | scale singleLineComment?
+  | derivative singleLineComment?
+  | da singleLineComment?
+  | dp singleLineComment?
+  | callsimeta singleLineComment?
+  | callgeteta singleLineComment?
+  | callsimeps singleLineComment?
+  | callpassmode singleLineComment?
+  | callsupp singleLineComment?
+  | callrandom singleLineComment?
+  | exit_line singleLineComment?
+  | comresn1 singleLineComment?
+  | ifexit singleLineComment?
+  | callfl singleLineComment?
+  | verbatimCode singleLineComment?
+  | singleLineComment;
 
 
 ini         :  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
@@ -69,9 +70,9 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
-elseif: 'ELSEIF' '(' logical_or_expression ')' 'THEN';
+elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
 else: 'ELSE';
-endif: 'ENDIF';
+endif: ('ENDIF' | 'END' 'IF');
 dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
 enddo: 'ENDDO';
 
