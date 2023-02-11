@@ -1,9 +1,15 @@
+.isEmptyExpr <- function(x) {
+  .x <- unlist(strsplit(x, "\n"))
+  all(regexpr("^([ \t]*|[ \t]*;.*)$", .x) != -1)
+}
+
 #' @export
 #' @rdname nonmem2rxRec
 nonmem2rxRec.pk <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $PK record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin)
   }
 }
@@ -13,6 +19,7 @@ nonmem2rxRec.pre <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $PRED record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin)
   }
 }
@@ -23,6 +30,7 @@ nonmem2rxRec.des <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $DES record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$DES", .nonmem2rx$abbrevLin)
   }
 }
@@ -53,6 +61,7 @@ nonmem2rxRec.err <- function(x) {
     .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin)
   }
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $ERROR record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin)
   }
 }
