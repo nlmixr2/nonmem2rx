@@ -7,6 +7,7 @@ statement: theta_est_line
     | omega_cor_line
     | sigma_cor_line
     | constant_line
+    | compress_line
     | one_stop_line
     ;
 
@@ -17,10 +18,12 @@ omega_cor_line: 'OMEGA - CORR MATRIX FOR RANDOM EFFECTS - ETAS';
 sigma_cor_line: 'SIGMA - CORR MATRIX FOR RANDOM EFFECTS - EPSILONS';
 one_stop_line: '1';
 
+compress_line: (compress_lab2)+;
+compress_lab2:  compress_lab '|' compress_lab;
+compress_lab: ('TH' decimalint | "OM[0-9][0-9][0-9][0-9]" | "SG[0-9][0-9][0-9][0-9]");
 constant_line: '+'? (constant_item)+;
 
 constant_item: est_label | constant | na_item;
-
 na_item: '.........';
 
 est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) decimalint;
