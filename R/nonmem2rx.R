@@ -312,6 +312,9 @@
 #' @param validate Boolean that this tool will attempt to "validate"
 #'   the model by solving the derived model under pred conditions
 #'   (etas are zero and eps values are zero)
+#'
+#' @param strictLst The list parsing needs to be correct for a
+#'   successful load (default `FALSE`).
 #' 
 #' @param lst the NONMEM output extension, defaults to `.lst`
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
@@ -338,6 +341,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       updateFinal=TRUE,
                       determineError=TRUE,
                       validate=TRUE,
+                      strictLst=FALSE,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -447,8 +451,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (is.null(.lstFile)) .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
   if (file.exists(.lstFile)) {
-    .tmp <- try(nmlst(.lstFile), silent=TRUE)
-    if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
+    if (strictLst) {
+      .lstInfo <- nmlst(.lstFile)
+    } else {
+      .tmp <- try(nmlst(.lstFile), silent=TRUE)
+      if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
+    }
   }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
