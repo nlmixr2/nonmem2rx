@@ -159,7 +159,7 @@ nmlst <- function(file) {
   }
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
-  .w <- which(regexpr("^ *[#]", .est) != -1)
+  .w <- which(regexpr("^( *[#]| *PROBLEM +NO)", .est) != -1)
   if (length(.w) > 0) {
     .w <- .w[1]
     .est <- .est[seq(1, .w - 1)]
