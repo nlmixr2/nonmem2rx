@@ -14,7 +14,10 @@ numberpoints: 'NUMBERPOINTS' | 'NUM' | 'NUMPTS' | 'NUMBERPTS' |
 
 numberpointsLine: numberpoints '=' decimalint singleLineComment?;
 
-theta_statement:  theta singleLineComment?;
+theta_name: identifier '=';
+repeat: "[Xx]" decimalint;
+
+theta_statement: theta_name? theta repeat? singleLineComment?;
 
 theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 | theta6 | theta7;
 
@@ -52,3 +55,4 @@ decimalint: "0|([1-9][0-9]*)" $term -1;
 string: "\"([^\"\\]|\\[^])*\"";
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
+identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;

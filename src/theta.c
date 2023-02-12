@@ -94,7 +94,7 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   if (!strcmp("theta_statement", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 1);
+    D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] == 0) {
       curComment = NULL;
