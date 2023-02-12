@@ -317,5 +317,4 @@ extern "C" SEXP nonmem2xPushOmegaBlockNvalue(int n, const char *v1, const char *
   Function pushOmegaBlockNvalue(".pushOmegaBlockNvalue", nonmem2rxNs);
   pushOmegaBlockNvalue(n, v1, v2, prefix, num);
   END_RCPP
-  
 }

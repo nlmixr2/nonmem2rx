@@ -30,7 +30,9 @@ statement: omega_statement  |
         block_type |
   singleLineComment?;
 
-omega_statement: omega repeat? ','* singleLineComment?;
+omega_name: identifier '=';
+
+omega_statement: omega_name? omega repeat? ','* singleLineComment?;
 
 omega: omega0 | omega1 | omega2 ;
 
@@ -67,13 +69,15 @@ off_diag_type: ('COVARIANCE'
         | 'Correlation'
         );
 
-block_chol_type: 'CHOLESKY';
+block_chol_type: 'CHOLESKY' | 'CHOL' |
+    'cholesky' | 'chol' |
+    'Cholesky' | 'Chol';
 
 block_type: off_diag_type? diag_type? | diag_type? off_diag_type? | block_chol_type?;
 
 whitespace: ( "[ \t\r\n]+")*;
 singleLineComment: ';' "[^\n]*";
-
+identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;

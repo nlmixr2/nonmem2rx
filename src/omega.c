@@ -200,7 +200,7 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   } else if (!strcmp("fixed", name)) {
     nonmem2rx_omegaFixed = 1;
   } else if (!strcmp("omega_statement", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 3);
+    D_ParseNode *xpn = d_get_child(pn, 4);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] != 0) {
       curComment = v;
