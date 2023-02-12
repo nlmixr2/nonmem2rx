@@ -90,6 +90,8 @@ SEXP nonmem2rxPushThetaLabel(const char *comment);
 void pushTheta(void) {
   nonmem2rxPushTheta(curTheta.s, curComment, curLabel);
   sClear(&curTheta);
+  curComment = NULL;
+  curLabel = NULL;
 }
 
 void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
