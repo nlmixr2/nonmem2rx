@@ -141,6 +141,46 @@ void pushOmegaLabel(void) {
   nonmem2rx_omegaLabel = NULL;
 }
 
+void addOmegaBlockItem(const char *v) {
+  if (nonmem2rx_omegaBlockCount >= nonmem2rx_omegaBlockn) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(N) has too many elements");
+  }
+  // This is a block
+  if (nonmem2rx_omegaBlockJ == 0) {
+    pushOmegaLabel();
+  } else if (nonmem2rx_omegaLabel != NULL) {
+    Rf_errorcall(R_NilValue,
+                 "omega label '%s' should be at the beginning of the block line",
+                 nonmem2rx_omegaLabel);
+  }
+  if (nonmem2rx_omegaBlockI == nonmem2rx_omegaBlockJ) {
+    // Diagonal term
+    nonmem2rx_omegaBlockI++;
+    nonmem2rx_omegaBlockJ = 0;
+    if (curOmegaLhs.s[0] == 0) {
+      // not added yet
+      sAppend(&curOmegaLhs, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
+      sClear(&curOmegaRhs);
+    } else {
+      // added, use eta1 + eta2 ...
+      sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
+    }
+    pushOmegaComment();
+    nonmem2rx_omegaBlockCount++;
+    nonmem2rx_omeganum++;
+  } else {
+    nonmem2rx_omegaBlockJ++;
+    curComment = NULL; // comments between estimates are not considered as labels
+  }
+  if (curOmegaRhs.s[0] == 0) {
+    sClear(&curOmegaRhs);
+    sAppend(&curOmegaRhs, "(%s", v);
+  } else {
+    sAppend(&curOmegaRhs, ", %s", v);
+  }
+}
+
 void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
@@ -330,47 +370,10 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
         nonmem2rx_omegaFixed = 1; 
       }
       for (int cur = 0; cur < nonmem2rx_omegaRepeat; cur++) {
-        if (nonmem2rx_omegaBlockCount >= nonmem2rx_omegaBlockn) {
-          parseFree(0);
-          Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(N) has too many elements");
-        }
-        // This is a block
-        if (nonmem2rx_omegaBlockJ == 0) {
-          pushOmegaLabel();
-        } else if (nonmem2rx_omegaLabel != NULL) {
-          Rf_errorcall(R_NilValue,
-                       "omega label '%s' should be at the beginning of the block line",
-                       nonmem2rx_omegaLabel);
-        }
-        if (nonmem2rx_omegaBlockI == nonmem2rx_omegaBlockJ) {
-          // Diagonal term
-          nonmem2rx_omegaBlockI++;
-          nonmem2rx_omegaBlockJ = 0;
-          if (curOmegaLhs.s[0] == 0) {
-            // not added yet
-            sAppend(&curOmegaLhs, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
-            sClear(&curOmegaRhs);
-          } else {
-            // added, use eta1 + eta2 ...
-            sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
-          }
-          pushOmegaComment();
-          nonmem2rx_omegaBlockCount++;
-          nonmem2rx_omeganum++;
-        } else {
-          nonmem2rx_omegaBlockJ++;
-          curComment = NULL; // comments between estimates are not considered as labels
-        }
         if (cur == nonmem2rx_omegaRepeat - 1) {
           nonmem2rx_repeatVal = v;
         }
-        if (curOmegaRhs.s[0] == 0) {
-          sClear(&curOmegaRhs);
-          sAppend(&curOmegaRhs, "(%s", nonmem2rx_repeatVal);
-        } else {
-          sAppend(&curOmegaRhs, ", %s", nonmem2rx_repeatVal);
-        }
-
+        addOmegaBlockItem(nonmem2rx_repeatVal);
       }
       nonmem2rx_omegaRepeat = 1;
     }
