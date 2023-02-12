@@ -1,4 +1,4 @@
-if (!!identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
   .files <-c("PsN/courses/upss/lasso/run2.lst",
              "PsN/courses/upss/lasso/run1.lst",
              "PsN/test_files/mox_sir.lst", # has phi
@@ -230,7 +230,7 @@ if (!!identical(Sys.getenv("NOT_CRAN"), "true")) {
     lapply(.files,
            function(file) {
              test_that(file, {
-               expect_error(suppressWarnings(nonmem2rx(file, strictLst=TRUE)), NA)
+               expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
              })
            })
     
