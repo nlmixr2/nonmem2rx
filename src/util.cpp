@@ -86,6 +86,26 @@ extern "C" SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefi
   END_RCPP  
 }
 
+extern "C" SEXP nonmem2rxPushOmegaLabel(const char *comment, const char *prefix) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  CharacterVector commentC(1);
+  if (comment == NULL) {
+    commentC[0] = "";
+  } else {
+    commentC[0] = Rf_mkChar(comment);
+  }
+  CharacterVector prefixC(1);
+  if (prefix == NULL) {
+    prefixC[0] = "";
+  } else {
+    prefixC[0] = Rf_mkChar(prefix);
+  }
+  Function addOmegaLabel(".addOmegaLabel", nonmem2rxNs);
+  addOmegaLabel(commentC, prefixC);
+  END_RCPP    
+}
+
 extern "C" SEXP nonmem2rxPushModel0(const char *cmtName) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");

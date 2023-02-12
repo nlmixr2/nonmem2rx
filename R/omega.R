@@ -70,6 +70,21 @@ nonmem2rxRec.sig <- function(x) {
          envir = .nonmem2rx)
   invisible()
 }
+#'  Add omega parameter comment to `.nonmem2rx` environment
+#'
+#' @param comment comment for the Omega parameter
+#' @param prefix Prefix of parameter names (currently eta or eps)
+#' @return Nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.addOmegaLabel <- function(label, prefix) {
+  .prefixLabel <- paste0(prefix,"NonmemLabel")
+  if (!exists(.prefixLabel, envir=.nonmem2rx)) assign(.prefixLabel, NULL, envir=.nonmem2rx)
+  assign(.prefixLabel, c(get(.prefixLabel, envir=.nonmem2rx),
+                         label),
+         envir = .nonmem2rx)
+  invisible()
+}
 #' Add omega/sigma ini statement
 #'
 #' This will convert to the covariance matrix before adding the
