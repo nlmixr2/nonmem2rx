@@ -87,6 +87,14 @@ test_that("test omega", {
      c("eta1 ~ 0.3", "eta2 ~ 0.35", "eta3 ~ 0.54", "eta4 ~ 0.67"))
   expect_equal(.nonmem2rx$etaNonmemLabel,
                c("ECL", "EV1", "EQ", "EV2"))
+
+
+  .o("BLOCK(4)\n ECL=  0.3\nEV1=  0.01 0.35\nEQ= (0.01)x2 0.54\nEV2=  (0.01)x4",
+     "eta1 + eta2 + eta3 + eta4 ~ c(0.3, 0.01, 0.35, 0.01, 0.01, 0.54, 0.01, 0.01, 0.01, 0.01)")
+
+  expect_equal(.nonmem2rx$etaNonmemLabel,
+               c("ECL", "EV1", "EQ", "EV2"))
+
   expect_error(.o("garbage"))
 
   

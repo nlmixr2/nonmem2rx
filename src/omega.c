@@ -233,6 +233,10 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       nonmem2rx_omegaRepeat = 1;
     } else {
       nonmem2rx_omegaRepeat = atoi(v);
+      for (int cur = 0; cur <nonmem2rx_omegaRepeat -1; cur++) {
+        addOmegaBlockItem(nonmem2rx_repeatVal);
+      }
+      nonmem2rx_omegaRepeat = 1;
     }
   } else if (!strcmp("diag_type", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
@@ -369,13 +373,8 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       if (fix[0] != 0) {
         nonmem2rx_omegaFixed = 1; 
       }
-      for (int cur = 0; cur < nonmem2rx_omegaRepeat; cur++) {
-        if (cur == nonmem2rx_omegaRepeat - 1) {
-          nonmem2rx_repeatVal = v;
-        }
-        addOmegaBlockItem(nonmem2rx_repeatVal);
-      }
-      nonmem2rx_omegaRepeat = 1;
+      addOmegaBlockItem(v);
+      nonmem2rx_repeatVal = v;
     }
     return;
   }
