@@ -108,6 +108,8 @@ SEXP _nonmem2rx_omeganum_reset(void) {
 
 SEXP nonmem2rxPushOmega(const char *ini, int sd, int cor, int chol);
 SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefix);
+SEXP nonmem2xPushOmegaBlockNvalue(int n, const char *v1, const char *v2,
+                                  const char *prefix, int num);
 
 void pushOmega(void) {
   //nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified
@@ -138,7 +140,18 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   int isBlockNsame = 0;
   int isBlockSameN = 0;
   int isBlockNsameN = 0;
-  if (!strcmp("repeat", name)) {
+  if (!strcmp("blocknvalue", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int n = atoi(v);
+    xpn = d_get_child(pn, 6);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 8);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2xPushOmegaBlockNvalue(n, v, v2, omegaEstPrefix, nonmem2rx_omeganum);
+    nonmem2rx_omeganum+=n;
+    return;
+  } else if (!strcmp("repeat", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (nonmem2rx_omegaBlockn == 0) {

@@ -18,7 +18,13 @@ blocksame : block same;
 
 blocksamen : block same '(' decimalint ')';
 
-first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen;
+value: 'VALUES' | 'VALUE' | 'VAL' |
+        'values' | 'value' | 'val' |
+        'Values' | 'Value' | 'Val' ;
+
+blocknvalue: block '(' decimalint ')' value '(' ini_constant ',' ini_constant ')';
+
+first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen | blocknvalue;
 
 statement: omega_statement  |
         block_type |

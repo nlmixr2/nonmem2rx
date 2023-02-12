@@ -309,3 +309,13 @@ extern "C" SEXP nonmem2rxPushObservedMaxTheta(int a) {
   pushObservedMaxTheta(a);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2xPushOmegaBlockNvalue(int n, const char *v1, const char *v2,
+                                             const char *prefix, int num) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushOmegaBlockNvalue(".pushOmegaBlockNvalue", nonmem2rxNs);
+  pushOmegaBlockNvalue(n, v1, v2, prefix, num);
+  END_RCPP
+  
+}

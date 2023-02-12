@@ -122,3 +122,24 @@ nonmem2rxRec.sig <- function(x) {
     .addIni(deparse1(.exp[[2]][[2]]))
   }
 }
+#' This handles NONMEM's $omega block(n) value(diaVal, odiag) statement
+#'
+#' @param n The dimension of the block matrix
+#' @param diagVal The diagonal value
+#' @param odiag The off diagonal value
+#' @return Nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushOmegaBlockNvalue <- function(n, diagVal, odiag,
+                                  prefix, num) {
+  .dim <- paste0(prefix, seq_len(n)+num-1)
+  .dim <- list(.dim, .dim)
+  .ret <- matrix(rep(as.numeric(odiag), n*n), n,n)
+  diag(.ret) <- rep(as.numeric(diagVal), n)
+  dimnames(.ret) <- .dim
+  class(.ret) <- c("lotriFix", class(.ret))
+  .exp <-as.expression(.ret)
+  .addIni(deparse1(.exp[[2]][[2]]))
+  lapply(seq_len(n), function(...){ .addOmegaComment("", prefix)})
+  invisible()
+}
