@@ -20,13 +20,15 @@ statement: omega_statement  |
         block_type |
   singleLineComment?;
 
-omega_statement: omega ','* singleLineComment?;
+omega_statement: omega repeat? ','* singleLineComment?;
 
 omega: omega0 | omega1 | omega2 ;
 
 omega0: ini_constant block_type? fixed? block_type?;
 omega1: '(' omega0 ')';
 omega2: '(' block_type? fixed block_type? ini_constant ')';
+
+repeat: "[Xx]" decimalint;
 
 fixed: 'fixed' | 'FIXED' | 'FIX' | 'fix';
 

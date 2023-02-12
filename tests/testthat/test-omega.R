@@ -30,7 +30,17 @@ test_that("test omega", {
   expect_error(.o("BLOCK(3) 6. .005 .3 .0002 .006 (fix .4)"))
   expect_warning(.o("DIAGONAL(1) 1", "eta1 ~ 1"))
 
+  .o(" BLOCK(6)\n 0.1\n0.01 0.1\n(0.01)x2 0.1\n(0.01)x3 0.1\n(0.01)x4 0.1\n(0.01)x5 0.1",
+     "eta1 + eta2 + eta3 + eta4 + eta5 + eta6 ~ c(0.1, 0.01, 0.1, 0.01, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.1, 0.1)")
+
+  .o("(0.01)x3 0.1",c("eta1 ~ 0.01", "eta2 ~ 0.01", "eta3 ~ 0.01", "eta4 ~ 0.1"))
+
+  .o("(0.01 FIX)x3 0.1",c("eta1 ~ fix(0.01)", "eta2 ~ fix(0.01)", "eta3 ~ fix(0.01)", "eta4 ~ 0.1"))
+
+  .o("(FIX 0.01)x3 0.1",c("eta1 ~ fix(0.01)", "eta2 ~ fix(0.01)", "eta3 ~ fix(0.01)", "eta4 ~ 0.1"))
+
   expect_error(.o("garbage"))
+
   
 
 })
