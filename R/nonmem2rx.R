@@ -39,6 +39,12 @@
   .nonmem2rx$etaMax <- 0L
   .nonmem2rx$thetaMax <- 0L
   .nonmem2rx$epsMax <- 0L
+  .nonmem2rx$epsLabel <- NULL
+  .nonmem2rx$epsComment <- NULL
+  .nonmem2rx$epsNonmemLabel <- NULL
+  .nonmem2rx$etaLabel <- NULL
+  .nonmem2rx$etaComment <- NULL
+  .nonmem2rx$etaNonmemLabel <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'

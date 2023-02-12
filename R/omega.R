@@ -50,7 +50,6 @@ nonmem2rxRec.sig <- function(x) {
   comment
 }
 #'  Add omega parameter comment to `.nonmem2rx` environment
-#'
 #'  
 #' @param comment comment for the Omega parameter
 #' @param prefix Prefix of parameter names (currently eta or eps)
@@ -60,11 +59,9 @@ nonmem2rxRec.sig <- function(x) {
 .addOmegaComment <- function(comment, prefix) {
   .prefixComment <- paste0(prefix,"Comment")
   .prefixLabel <- paste0(prefix,"Label")
-  if (!exists(.prefixComment, envir=.nonmem2rx)) assign(.prefixComment, NULL, envir=.nonmem2rx)
   assign(.prefixComment, c(get(.prefixComment, envir=.nonmem2rx),
                            comment),
          envir = .nonmem2rx)
-  if (!exists(.prefixLabel, envir=.nonmem2rx)) assign(.prefixLabel, NULL, envir=.nonmem2rx)
   assign(.prefixLabel, c(get(.prefixLabel, envir=.nonmem2rx),
                          .getOmegaLabel(comment)),
          envir = .nonmem2rx)
@@ -79,7 +76,6 @@ nonmem2rxRec.sig <- function(x) {
 #' @author Matthew L. Fidler
 .addOmegaLabel <- function(label, prefix) {
   .prefixLabel <- paste0(prefix,"NonmemLabel")
-  if (!exists(.prefixLabel, envir=.nonmem2rx)) assign(.prefixLabel, NULL, envir=.nonmem2rx)
   assign(.prefixLabel, c(get(.prefixLabel, envir=.nonmem2rx),
                          label),
          envir = .nonmem2rx)
@@ -155,6 +151,8 @@ nonmem2rxRec.sig <- function(x) {
   class(.ret) <- c("lotriFix", class(.ret))
   .exp <-as.expression(.ret)
   .addIni(deparse1(.exp[[2]][[2]]))
-  lapply(seq_len(n), function(...){ .addOmegaComment("", prefix)})
+  lapply(seq_len(n), function(...){
+    .addOmegaComment("", prefix)
+  })
   invisible()
 }

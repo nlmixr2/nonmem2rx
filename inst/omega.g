@@ -30,7 +30,6 @@ name_id: 'NAMES' | 'NAME' |
 
 name_option:  name_id '(' identifier (',' identifier)* ')';
 
-
 blockn_name_value: block '(' decimalint ')' name_option value '(' ini_constant ',' ini_constant ')';
 
 first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen | blocknvalue | blockn_name_value;

@@ -187,7 +187,39 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   int isBlockNsame = 0;
   int isBlockSameN = 0;
   int isBlockNsameN = 0;
-  if (!strcmp("omega_name", name)) {
+  if (!strcmp("name_option", name)) {
+    int nargs = d_get_number_of_children(d_get_child(pn,3))+1;
+    if (nargs != nonmem2rx_omegaBlockn) {
+      Rf_errorcall(R_NilValue,
+                   "number items of NAMES() does not match number of diagonals");
+    }
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    nonmem2rx_omegaLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    pushOmegaLabel();
+    xpn = d_get_child(pn, 3);
+    nargs--;
+    for (int i = 0; i < nargs; i++) {
+      D_ParseNode *ypn = d_get_child(d_get_child(xpn, i), 1);
+      nonmem2rx_omegaLabel = (char*)rc_dup_str(ypn->start_loc.s, ypn->end);
+      pushOmegaLabel();
+    }
+  } else if (!strcmp("blockn_name_value", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rx_omegaBlockn = atoi(v);
+    // parse name_option
+    xpn = d_get_child(pn, 4);
+    wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
+    // Get diag and off diagonal pieces
+    xpn = d_get_child(pn, 7);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 9);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2xPushOmegaBlockNvalue(nonmem2rx_omegaBlockn, v, v2, omegaEstPrefix, nonmem2rx_omeganum);
+    nonmem2rx_omeganum+=nonmem2rx_omegaBlockn;
+    nonmem2rx_omegaBlockn=0;
+    return;
+  } else if (!strcmp("omega_name", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     nonmem2rx_omegaLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
   } else if (!strcmp("blocknvalue", name)) {
@@ -199,6 +231,9 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     xpn = d_get_child(pn, 8);
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2xPushOmegaBlockNvalue(n, v, v2, omegaEstPrefix, nonmem2rx_omeganum);
+    for (int cur = 0; cur < n; cur++) {
+      pushOmegaLabel();      
+    }
     nonmem2rx_omeganum+=n;
     return;
   } else if (!strcmp("repeat", name)) {
@@ -339,6 +374,8 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     sAppend(&curOmega, " ~ fix(%s)", v);
     if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
     nonmem2rx_omeganum++;
+    pushOmegaComment();
+    pushOmegaLabel();
     pushOmega();
     nonmem2rx_repeatVal = v;
     nonmem2rx_omegaRepeat = -1;
@@ -434,7 +471,19 @@ SEXP nonmem2rxPushObservedMaxEta(int a);
 
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix) {
   curComment=NULL;
+  nonmem2rx_omegaFixed = 0;
   nonmem2rx_omegaRepeat = 1;
+  nonmem2rx_omegaDiagonal = 0;
+  nonmem2rx_omegaBlockn = 0;
+  nonmem2rx_omegaBlockCount = 0;
+  nonmem2rx_omegaSame = 0;
+  nonmem2rx_omegaFixed = 0;
+  nonmem2rx_omegaBlockI = 0;
+  nonmem2rx_omegaBlockJ = 0;
+  nonmem2rx_omegaSd=0;
+  nonmem2rx_omegaChol=0;
+  nonmem2rx_omegaCor=0;
+
   omegaEstPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   trans_omega(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
