@@ -12,9 +12,13 @@ same : 'SAME' | 'same';
 
 blocknsame : block '(' decimalint ')'  same;
 
+blocknsamen : block '(' decimalint ')'  same '(' decimalint ')';
+
 blocksame : block same;
 
-first: diagonal | block | blockn | blocknsame | blocksame;
+blocksamen : block same '(' decimalint ')';
+
+first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen;
 
 statement: omega_statement  |
         block_type |

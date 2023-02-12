@@ -136,6 +136,8 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
   int isBlockNsame = 0;
+  int isBlockSameN = 0;
+  int isBlockNsameN = 0;
   if (!strcmp("repeat", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -199,9 +201,11 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     nonmem2rx_omegaBlockJ = 0;
     nonmem2rx_omegaBlockCount = 0;
   } else if (!strcmp("blocksame", name) ||
-             (isBlockNsame = !strcmp("blocknsame", name))) {
+             (isBlockNsame = !strcmp("blocknsame", name)) ||
+             (isBlockNsameN = !strcmp("blocknsamen", name)) ||
+             (isBlockSameN = !strcmp("blocksamen", name))) {
     sClear(&curOmegaLhs);
-    if (isBlockNsame) {
+    if (isBlockNsame || isBlockNsameN) {
       D_ParseNode *xpn = d_get_child(pn, 2);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       int curI = atoi(v);
@@ -216,18 +220,30 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       Rf_errorcall(R_NilValue, "Requested BLOCK SAME before a block was defined");
     }
     curComment=NULL;
-    for (int i = 0; i < nonmem2rx_omegaLastBlock; i++) {
-      if (i == 0) {
-        sAppend(&curOmegaLhs, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
-      } else {
-        sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
-      }
-      pushOmegaComment(); 
-      nonmem2rx_omeganum++;
+    int nsame = 1;
+    if (isBlockNsameN) {
+      D_ParseNode *xpn = d_get_child(pn, 6);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      nsame = atoi(v);
+    } else if (isBlockSameN) {
+      D_ParseNode *xpn = d_get_child(pn, 3);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      nsame = atoi(v);
     }
-    sAppend(&curOmega, "%s ~ fix%s)", curOmegaLhs.s, curOmegaRhs.s);
-    nonmem2rx_omegaSame = 1;
-    pushOmega();
+    for (int cur = 0; cur < nsame; cur++) {
+      for (int i = 0; i < nonmem2rx_omegaLastBlock; i++) {
+        if (i == 0) {
+          sAppend(&curOmegaLhs, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
+        } else {
+          sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
+        }
+        pushOmegaComment(); 
+        nonmem2rx_omeganum++;
+      }
+      sAppend(&curOmega, "%s ~ fix%s)", curOmegaLhs.s, curOmegaRhs.s);
+      nonmem2rx_omegaSame = 1;
+      pushOmega();
+    }
   } else if (!strcmp("diagonal", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);

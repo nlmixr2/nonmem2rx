@@ -39,6 +39,19 @@ test_that("test omega", {
 
   .o("(FIX 0.01)x3 0.1",c("eta1 ~ fix(0.01)", "eta2 ~ fix(0.01)", "eta3 ~ fix(0.01)", "eta4 ~ 0.1"))
 
+
+  .o("BLOCK(2) 6. .005 .3",
+     "eta1 + eta2 ~ c(6., .005, .3)", reset=TRUE)
+
+  .o("BLOCK SAME(2)",
+     c("eta3 + eta4 ~ fix(6., .005, .3)",
+       "eta5 + eta6 ~ fix(6., .005, .3)"), reset=FALSE)
+
+    .o("BLOCK(2) SAME(3)",
+     c("eta7 + eta8 ~ fix(6., .005, .3)",
+       "eta9 + eta10 ~ fix(6., .005, .3)",
+       "eta11 + eta12 ~ fix(6., .005, .3)"), reset=FALSE)
+
   expect_error(.o("garbage"))
 
   
