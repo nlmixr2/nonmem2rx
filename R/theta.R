@@ -35,9 +35,11 @@ nonmem2rxRec.the <- function(x) {
 #' @return Nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.pushTheta <- function(theta, comment) {
+.pushTheta <- function(theta, comment, label) {
   .addIni(theta)
   .handleThetaComment(comment)
+  .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
+                                   label)
 }
 
 #' Creates the theta midpoint estimate info $theta style (low,,hi)

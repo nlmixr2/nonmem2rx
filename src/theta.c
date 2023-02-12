@@ -73,6 +73,7 @@ void wprint_node_theta(int depth, char *token_name, char *token_value, void *cli
 int nonmem2rx_thetanum = 1;
 
 char *curComment = NULL;
+char *curLabel = NULL;
 sbuf curTheta;
 
 SEXP _nonmem2rx_thetanum_reset(void) {
@@ -83,10 +84,11 @@ SEXP _nonmem2rx_thetanum_reset(void) {
 
 SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi);
 
-SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
+SEXP nonmem2rxPushThetaLabel(const char *comment);
 
 void pushTheta(void) {
-  nonmem2rxPushTheta(curTheta.s, curComment);
+  nonmem2rxPushTheta(curTheta.s, curComment, curLabel);
   sClear(&curTheta);
 }
 
@@ -100,6 +102,14 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
       curComment = NULL;
     } else {
       curComment = v;
+    }
+    xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[0] == 0) {
+      curLabel=NULL;
+    } else {
+      xpn = d_get_child(xpn, 0);
+      curLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     }
   } else if (!strcmp("theta0", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);

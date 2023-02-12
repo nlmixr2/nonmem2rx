@@ -45,6 +45,7 @@
   .nonmem2rx$etaLabel <- NULL
   .nonmem2rx$etaComment <- NULL
   .nonmem2rx$etaNonmemLabel <- NULL
+  .nonmem2rx$thetaNonmemLabel <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'

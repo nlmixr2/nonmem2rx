@@ -41,7 +41,7 @@ extern "C" SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi) {
   END_RCPP
 }
 
-extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment) {
+extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label) {
   BEGIN_RCPP
     Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector iniC(1);
@@ -52,8 +52,14 @@ extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment) {
   } else {
     commentS[0] = Rf_mkChar(comment);
   }
+  CharacterVector labelS(1);
+  if (label == NULL) {
+    labelS[0] = "";
+  } else {
+    labelS[0] = Rf_mkChar(label);
+  }
   Function pushTheta(".pushTheta", nonmem2rxNs);
-  pushTheta(ini, commentS);
+  pushTheta(ini, commentS, labelS);
   END_RCPP
 }
 extern "C" SEXP nonmem2rxPushOmega(const char *ini, int sd, int cor, int chol) {
