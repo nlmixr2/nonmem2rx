@@ -24,7 +24,16 @@ value: 'VALUES' | 'VALUE' | 'VAL' |
 
 blocknvalue: block '(' decimalint ')' value '(' ini_constant ',' ini_constant ')';
 
-first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen | blocknvalue;
+name_id: 'NAMES' | 'NAME' |
+        'names' | 'name' |
+        'Names' | 'Name' ;
+
+name_option:  name_id '(' identifier (',' identifier)* ')';
+
+
+blockn_name_value: block '(' decimalint ')' name_option value '(' ini_constant ',' ini_constant ')';
+
+first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen | blocknvalue | blockn_name_value;
 
 statement: omega_statement  |
         block_type |
