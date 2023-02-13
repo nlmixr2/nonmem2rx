@@ -206,6 +206,18 @@ test_that("test abbrev", {
     expect_error(.ae("test = ETA(FUN)"),
                  "FUN")
 
+    .ar <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$epsNonmemLabel <- c("PROP", "ADD")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
 
-    
+    .ar("test = ERR(ADD) + EPS(PROP)",
+        "TEST <- eps2 + eps1")
+
+    expect_error(.ar("test = ERR(EASY) + EPS(PROP)",
+        "TEST <- eps2 + eps1"), "EASY")
+
 })

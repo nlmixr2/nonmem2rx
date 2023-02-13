@@ -373,3 +373,12 @@ extern "C" SEXP nonmem2rxGetEtaNum(const char *v) {
   return getEtaNum(v);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxGetEpsNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getEpsNum(".getEpsNum", nonmem2rxNs);
+  return getEpsNum(v);
+  END_RCPP
+}
+

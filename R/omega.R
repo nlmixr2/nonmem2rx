@@ -92,6 +92,17 @@ nonmem2rxRec.sig <- function(x) {
   if (length(.w) == 1L) return(paste(.w))
   stop(paste0("cannot uniquely determine ETA(", v, ")"), call.=FALSE)
 }
+#' Get the eps number
+#'
+#' @param v string
+#' @return the number (as a string)
+#' @noRd
+#' @author Matthew L. Fidler
+.getEpsNum <- function(v) {
+  .w <- which(tolower(v) == tolower(.nonmem2rx$epsNonmemLabel))
+  if (length(.w) == 1L) return(paste(.w))
+  stop(paste0("cannot uniquely determine EPS(", v, ")"), call.=FALSE)
+}
 #' Add omega/sigma ini statement
 #'
 #' This will convert to the covariance matrix before adding the

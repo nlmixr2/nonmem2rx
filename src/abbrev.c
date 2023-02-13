@@ -84,6 +84,7 @@ SEXP nonmem2rxPushObservedEtaObs(int a);
 SEXP nonmem2rxGetModelNum(const char *v);
 SEXP nonmem2rxGetThetaNum(const char *v);
 SEXP nonmem2rxGetEtaNum(const char *v);
+SEXP nonmem2rxGetEpsNum(const char *v);
 
 int maxA = 0,
   definingScale = 0;
@@ -332,17 +333,29 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "eta%d", num);
     }
     return 1;
-  } else if (!strcmp("eps", name)) {
+  } else if (!strcmp("eps", name) ||
+             (needName = !strcmp("epsI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetEpsNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
-  } else if (!strcmp("err", name)) {
+  } else if (!strcmp("err", name) ||
+             (needName = !strcmp("errI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetEpsNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       // since parser translates  $sigma
       sAppend(&curLine, "eps%s", v);
     }
