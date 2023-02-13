@@ -74,11 +74,13 @@ int nonmem2rx_thetanum = 1;
 
 char *curComment = NULL;
 char *curLabel = NULL;
+sbuf curThetaRhs;
 sbuf curTheta;
 
 SEXP _nonmem2rx_thetanum_reset(void) {
   nonmem2rx_thetanum = 1;
   sIni(&curTheta);
+  sIni(&curThetaRhs);
   return R_NilValue;
 }
 
@@ -90,6 +92,7 @@ SEXP nonmem2rxPushThetaLabel(const char *comment);
 void pushTheta(void) {
   nonmem2rxPushTheta(curTheta.s, curComment, curLabel);
   sClear(&curTheta);
+  sClear(&curThetaRhs);
   curComment = NULL;
   curLabel = NULL;
 }
@@ -97,7 +100,17 @@ void pushTheta(void) {
 void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
-  if (!strcmp("theta_statement", name)) {
+  if (!strcmp("repeat", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int n = atoi(v);
+    for (int i = 0; i < n-1; i++) {
+      sAppend(&curTheta, "theta%d%s",
+              nonmem2rx_thetanum, curThetaRhs.s);
+      pushTheta();
+      nonmem2rx_thetanum++;
+    }
+  } else if (!strcmp("theta_statement", name)) {
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] == 0) {
@@ -106,7 +119,7 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
       curComment = v;
     }
     xpn = d_get_child(pn, 0);
-    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] == 0) {
       curLabel=NULL;
     } else {
@@ -120,9 +133,13 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v2[0] == 0) {
       // not fixed
-      sAppend(&curTheta, "theta%d <- %s", nonmem2rx_thetanum, v);
+      sAppend(&curThetaRhs, " <- %s", v);
+      sAppend(&curTheta, "theta%d%s",
+              nonmem2rx_thetanum, curThetaRhs.s);
     } else {
-      sAppend(&curTheta, "theta%d <- fix(%s)", nonmem2rx_thetanum, v);
+      sAppend(&curThetaRhs, " <- fix(%s)", v);
+      sAppend(&curTheta, "theta%d%s",
+              nonmem2rx_thetanum, curThetaRhs.s);
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -130,7 +147,8 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
   } else if (!strcmp("theta6", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curTheta, "theta%d <- fix(%s)", nonmem2rx_thetanum, v);
+    sAppend(&curThetaRhs, " <- fix(%s)", v);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
@@ -139,7 +157,8 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 3);
     char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curTheta, "theta%d <- fix(%s, %s)", nonmem2rx_thetanum, low, ini);
+    sAppend(&curThetaRhs, " <- fix(%s, %s)", low, ini);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
@@ -152,9 +171,13 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (fix[0] == 0) {
       // not fixed
-      sAppend(&curTheta, "theta%d <- c(%s, %s)", nonmem2rx_thetanum, low, ini);
+      sAppend(&curThetaRhs, " <- c(%s, %s)", low, ini);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum,
+              curThetaRhs.s);
     } else {
-      sAppend(&curTheta, "theta%d <- fix(%s, %s)", nonmem2rx_thetanum, low, ini);
+      sAppend(&curThetaRhs, " <- fix(%s, %s)", low, ini);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum,
+              curThetaRhs.s);
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -166,11 +189,12 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 5);
     char *hi = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curTheta, "theta%d <- fix(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    sAppend(&curThetaRhs, " <- fix(%s, %s, %s)", low, ini, hi);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
-  }  else if (!strcmp("theta5", name)) {
+  } else if (!strcmp("theta5", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 3);
@@ -181,9 +205,11 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (fix[0] == 0) {
       // unfixed
-      sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+      sAppend(&curThetaRhs, " <- c(%s, %s, %s)", low, ini, hi);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     } else {
-      sAppend(&curTheta, "theta%d <- fix(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+      sAppend(&curThetaRhs, " <- fix(%s, %s, %s)", low, ini, hi);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -196,7 +222,8 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     SEXP cur = PROTECT(nonmem2rxThetaGetMiddle(low, hi));
     char *ini = (char*)rc_dup_str(CHAR(STRING_ELT(cur, 0)), 0);
     UNPROTECT(1);
-    sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    sAppend(&curThetaRhs, " <- c(%s, %s, %s)", low, ini, hi);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
