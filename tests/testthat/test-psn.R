@@ -1,4 +1,5 @@
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+  
   .files <-c("PsN/courses/upss/lasso/run2.lst",
              "PsN/courses/upss/lasso/run1.lst",
              "PsN/test_files/mox_sir.lst", # has phi

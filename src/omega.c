@@ -291,7 +291,6 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     }
   } else if (!strcmp("fixed", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
-    REprintf("v: %s\n", v);
     if (v[0] == 'u' || v[0] == 'U') {
       Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
     }

@@ -144,8 +144,6 @@
   } else {
     .t <- rxui$iniDf$name[which(is.na(rxui$iniDf$ntheta) & rxui$iniDf$neta1 == rxui$iniDf$neta2)]
   }
-  print(.n)
-  print(.t)
   .t <- .t[!(.t %in% c("icall", "irep"))]
   .w <- which(.n == "")
   if (length(.w) > 0) {
@@ -154,6 +152,10 @@
   }
   if (length(.n) == 0)  {
     .minfo("done (no labels)")
+    return(rxui)
+  }
+  if (length(.n) != length(.t)) {
+    .minfo("done (not changed due to label mismatch)")
     return(rxui)
   }
   #print(data.frame(.n, .t))
