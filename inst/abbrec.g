@@ -39,7 +39,7 @@ replace: 'REPLACE'  (replace_multiple1
   | replace_direct2
   | replace_direct3);
 
-var_replace: ('THETA' | 'ETA' | 'EPS' | 'ERR');
+var_replace: ('THETA' | 'ETA' | 'EPS' | 'ERR' | 'A' | 'DADT');
 
 dec_arg: '(' decimalintNo0 (',' decimalintNo0)+ ')';
 seq_nm: decimalintNo0 (':' | 'TO' | 'to' | 'To') decimalintNo0

@@ -34,6 +34,11 @@ test_that("test abbrev  record", {
      list(structure(list("ERR", "ECL", 4L), class = "nonmem2rx.rep1")))
   .a("REPLACE EPS(ECL)=EPS(4)",
      list(structure(list("EPS", "ECL", 4L), class = "nonmem2rx.rep1")))
+  .a("REPLACE DADT(DEPOT)=DADT(1)",
+     list(structure(list("DADT", "DEPOT", 1L), class = "nonmem2rx.rep1")))
+  .a("REPLACE A(CENTRAL)=A(2)",
+     list(structure(list("A", "CENTRAL", 2L), class = "nonmem2rx.rep1")))
+  
   expect_error(.a("REPLACE EPS(ECL)=THETA(4)"), "'EPS' to 'THETA'")
 
   .a("REPLACE PI=3.14159265",
