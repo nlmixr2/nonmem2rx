@@ -134,6 +134,7 @@
     }
     v
   }, character(1), USE.NAMES = FALSE)
+  # These are added by the translator don't include them
   if (prefix == "t.") {
     .t <- rxui$iniDf$name[!is.na(rxui$iniDf$ntheta)]
     .w <- which(regexpr("^(omega|sigma)[.][1-9][0-9]*[.][1-9][0-9]*$", .t) != -1)
@@ -143,6 +144,9 @@
   } else {
     .t <- rxui$iniDf$name[which(is.na(rxui$iniDf$ntheta) & rxui$iniDf$neta1 == rxui$iniDf$neta2)]
   }
+  print(.n)
+  print(.t)
+  .t <- .t[!(.t %in% c("icall", "irep"))]
   .w <- which(.n == "")
   if (length(.w) > 0) {
     .n <- .n[-.w]
@@ -152,6 +156,7 @@
     .minfo("done (no labels)")
     return(rxui)
   }
+  #print(data.frame(.n, .t))
   .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
   .t2 <- setNames(.n, .t)
   if (!is.null(df)) {
