@@ -348,3 +348,11 @@ extern "C" SEXP nonmem2xPushOmegaBlockNvalue(int n, const char *v1, const char *
   pushOmegaBlockNvalue(n, v1, v2, prefix, num);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxGetModelNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getModelNum(".getModelNum", nonmem2rxNs);
+  return getModelNum(v);
+  END_RCPP
+}

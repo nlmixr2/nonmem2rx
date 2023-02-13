@@ -81,6 +81,7 @@ SEXP nonmem2rxPushScale(int scale);
 SEXP nonmem2rxPushObservedDadt(int a);
 SEXP nonmem2rxPushObservedThetaObs(int a);
 SEXP nonmem2rxPushObservedEtaObs(int a);
+SEXP nonmem2rxGetModelNum(const char *v);
 
 int maxA = 0,
   definingScale = 0;
@@ -105,7 +106,7 @@ int irepWarning = 0;
 int simWarning=0;
 int ipredSimWarning = 0;
 
-SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 
@@ -190,7 +191,8 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       Rf_errorcall(R_NilValue, "'MIXEST' NONMEM reserved variable is not translated");
     } else if (!nmrxstrcmpi("ICALL", v)) {
       if (icallWarning == 0) {
-        nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation");
+        nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation",
+                           NULL);
         Rf_warning("icall found and added as rxode2 parameter to model; set to 4 to activate simulation code");
         icallWarning=1;
       }
@@ -198,7 +200,8 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     } else if (!nmrxstrcmpi("IREP", v)) {
        if (irepWarning == 0) {
-        nonmem2rxPushTheta("irep <- fix(0)", "irep set to 0 (not supported)");
+         nonmem2rxPushTheta("irep <- fix(0)", "irep set to 0 (not supported)",
+                            NULL);
         Rf_warning("irep found and added as rxode2 parameter to model (=0); 'sim.id' is added to all multi-study simulations and currently cannot be accessed in the simulation code");
         irepWarning=1;
       }
@@ -296,6 +299,7 @@ void writeAinfo(const char *v) {
 }
 
 int abbrev_params(char *name, int i,  D_ParseNode *pn) {
+  int needName=0;
   if (!strcmp("theta", name)) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
@@ -329,10 +333,16 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
-  } else if (!strcmp("amt", name)) {
+  } else if (!strcmp("amt", name) ||
+             (needName = !strcmp("amtI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetModelNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       // since parser translates  $sigma
       writeAinfo(v);
     }
@@ -574,10 +584,17 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
 }
 
 int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
-  if (!strcmp("derivative", name)) {
+  int needName = 0;
+  if (!strcmp("derivative", name) ||
+      (needName = !strcmp("derivativeI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetModelNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       int cur = atoi(v);
       maxA = max2(maxA, cur);
       nonmem2rxPushObservedDadt(cur);
@@ -598,10 +615,17 @@ int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
 }
 
 int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
-  if (!strcmp("ini", name)) {
+  int needName = 0;
+  if (!strcmp("ini", name) ||
+      (needName = !strcmp("iniI", name))) {
     if (i ==0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetModelNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       // a1(0) <- ....
       sAppendN(&curLine, "rxini.", 6);
       cmtInfoStr=v;
@@ -822,6 +846,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   if (!strcmp("assignment", name) ||
       !strcmp("if1", name) ||
       !strcmp("derivative", name) ||
+      !strcmp("derivativeI", name) ||
       !strcmp("scale", name) ||
       !strcmp("ifcallrandom", name) ||
       !strcmp("ifcallsimeta", name) ||
@@ -863,7 +888,8 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     sAppendN(&curLine, ".", 1);
     pushModel();
     cmtInfoStr = NULL;
-  } else if (!strcmp("ini", name)) {
+  } else if (!strcmp("ini", name) ||
+             !strcmp("iniI", name)) {
     pushModel();
     writeAinfo(cmtInfoStr);
     sAppendN(&curLine, "(0) <- rxini.", 13);

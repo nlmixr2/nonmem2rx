@@ -17,12 +17,14 @@ statement
   | dowhile singleLineComment?
   | enddo singleLineComment?
   | ini singleLineComment?
+  | iniI singleLineComment?
   | fbio singleLineComment?
   | alag singleLineComment?     
   | rate singleLineComment?
   | dur singleLineComment?
   | scale singleLineComment?
   | derivative singleLineComment?
+  | derivativeI singleLineComment?
   | da singleLineComment?
   | dp singleLineComment?
   | callsimeta singleLineComment?
@@ -40,12 +42,14 @@ statement
 
 
 ini         :  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
+iniI        :  'A_0(' identifier ')' '=' logical_or_expression;
 fbio        : "[Ff]([0-9]+|O)" '='  logical_or_expression;
 alag        : "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
 rate        : "[Rr][1-9][0-9]*" '=' logical_or_expression;
 dur         : "[Dd][1-9][0-9]*" '=' logical_or_expression;
 scale       : "[Ss]([0-9]+|C|O)" '=' logical_or_expression;
 derivative  : ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
+derivativeI : ('DADT(' | 'dadt(' ) identifier ')' '=' logical_or_expression;
 da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 
@@ -128,6 +132,7 @@ eta   : ('ETA(' | 'eta(') decimalintNo0 ')';
 eps   : ('EPS(' | 'eps(') decimalintNo0 ')';
 err   : ('ERR(' | 'err(') decimalintNo0 ')';
 amt   : ('A(' | 'a(')  decimalintNo0 ')';
+amtI  : ('A(' | 'a(')  identifier ')';
 mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
 mnext : ('MNEXT(' | 'mext(') decimalintNo0 ')';
 mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
@@ -170,6 +175,7 @@ primary_expression
   | err
   | dt
   | amt
+  | amtI
   | mpast
   | mnext
   | mtime

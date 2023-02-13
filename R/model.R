@@ -20,6 +20,22 @@ nonmem2rxRec.mod <- function(x) {
   .nonmem2rx$cmtName <- c(.nonmem2rx$cmtName, x)
   invisible()
 }
+#' Get the model number
+#'  
+#' @param n name of compartment
+#' @return compartment number as a string
+#' @noRd
+#' @author Matthew L. Fidler
+.getModelNum <- function(n) {
+  if (!exists("cmtName", envir=.nonmem2rx)) {
+    stop("requesting compartment named '", n, "' when compartment names are not defined in $MODEL",
+         call.=FALSE)
+  }
+  .w <- which(tolower(n) == tolower(.nonmem2rx$cmtName))
+  if (length(.w) == 1) return(paste(.w))
+  stop("requesting compartment named '", n, "' which is not defined in $MODEL",
+       call.=FALSE)
+}
 
 #' Push the default dose and observation
 #'

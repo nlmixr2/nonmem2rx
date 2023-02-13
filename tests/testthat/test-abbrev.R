@@ -159,5 +159,26 @@ test_that("test abbrev", {
     expect_error(.a("F0=3"), "F0/FO")
 
     expect_warning(.a("SID=IREP", "SID <- irep"), "sim.id")
+
+
+    .am <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $model record
+      .nonmem2rx$cmtName <- c("GUT", "CENTRAL", "PERI")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+
+    .am("DADT(GUT)=-KA*A(GUT)",
+        "d/dt(rxddta1) <-  - KA * rxddta1")
+
+    .am("DADT(CENTRAL)=KA*A(GUT)-(KCP+KC0)*A(CENTRAL)+KPC*A(PERI)",
+        "d/dt(rxddta2) <- KA * rxddta1 - (KCP + KC0) * rxddta2 + KPC * rxddta3")
+
+    .am("DADT(PERI)=KCP*A(CENTRAL)-KPC*A(PERI)",
+        "d/dt(rxddta3) <- KCP * rxddta2 - KPC * rxddta3")
+
+    .am("A_0(PERI)=3",
+        c("rxini.rxddta3. <- 3",  "rxddta3(0) <- rxini.rxddta3."))
     
 })
