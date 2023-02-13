@@ -47,6 +47,67 @@ test_that("test thetas", {
 
   expect_equal(.nonmem2rx$thetaNonmemLabel, c("CL", "V1", "Q", "V2"))
 
+  expect_warning(.t("(1 UNINT)", "theta1 <- fix(1)", 1),
+                 "UNINT")
+
+  expect_warning(.t("(1) UNINT", "theta1 <- fix(1)", 1),
+                 "UNINT")
+
+  expect_warning(.t("(0, 1) UNINT", "theta1 <- fix(0, 1)", 1),
+                 "UNINT")
+  
+  expect_warning(.t("(0, 1 UNINT) ", "theta1 <- fix(0, 1)", 1),
+                 "UNINT")
+
+  expect_warning(.t("(0, 1, 2) UNINT", "theta1 <- fix(0, 1, 2)", 1),
+                 "UNINT")
+  
+  expect_warning(.t("(0, 1, 2 UNINT)", "theta1 <- fix(0, 1, 2)", 1),
+                 "UNINT")
+
+
+  .t("NAMES(V1,CL,Q,V2) (0.0,7.0) (0.0,7.0) (0.0,7.0) 7",
+     c("theta1 <- c(0.0, 7.0)",
+       "theta2 <- c(0.0, 7.0)",
+       "theta3 <- c(0.0, 7.0)",
+       "theta4 <- 7"), 4)
+
+  expect_equal(.nonmem2rx$thetaNonmemLabel,
+               c("V1", "CL", "Q", "V2"))
+
+  expect_warning(
+    .t("NAMES(V1,CL,Q,V2) V20=(0.0,7.0) (0.0,7.0) (0.0,7.0) 7",
+       c("theta1 <- c(0.0, 7.0)",
+         "theta2 <- c(0.0, 7.0)",
+         "theta3 <- c(0.0, 7.0)",
+         "theta4 <- 7"), 4), "V20")
+
+
+  .t("NAMES(V1,CL,Q,V2) (0.0,7.0) (0.0,7.0) (0.0,7.0) 7 V30=8",
+       c("theta1 <- c(0.0, 7.0)",
+         "theta2 <- c(0.0, 7.0)",
+         "theta3 <- c(0.0, 7.0)",
+         "theta4 <- 7",
+         "theta5 <- 8"), 5)
+
+    expect_equal(.nonmem2rx$thetaNonmemLabel,
+                 c("V1", "CL", "Q", "V2", "V30"))
+
+    .t("NAMES(V1,CL,Q,V2) (0.0,7.0) (0.0,7.0) (0.0,7.0) 7 8",
+       c("theta1 <- c(0.0, 7.0)",
+         "theta2 <- c(0.0, 7.0)",
+         "theta3 <- c(0.0, 7.0)",
+         "theta4 <- 7",
+         "theta5 <- 8"), 5)
+
+        expect_equal(.nonmem2rx$thetaNonmemLabel,
+                     c("V1", "CL", "Q", "V2", ""))
+
+        expect_error(.t("NAMES(V1,CL,Q,V2) (0.0,7.0) (0.0,7.0) (0.0,7.0)",
+                        c("theta1 <- c(0.0, 7.0)",
+                          "theta2 <- c(0.0, 7.0)",
+                          "theta3 <- c(0.0, 7.0)"), 3))
+
   expect_error(.t("garbage"))
 
 })

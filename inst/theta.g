@@ -1,10 +1,11 @@
 //loop
 statement_list : (statement)+ ;
 
-statement: theta_statement ','* |
-  numberpointsLine ','* |
-  abortInfo ','* |
-  singleLineComment?;
+statement: name_option ','*
+    | theta_statement ','*
+    | numberpointsLine ','*
+    | abortInfo ','*
+    | singleLineComment?;
 
 abortInfo: 'ABORT' | 'NOABORT' | 'Abort' | 'Noabort' | 'abort' | 'noabort';
 
@@ -34,8 +35,19 @@ theta5: '(' low_ini ','? ini_constant ','? hi_constant fixed? ')' ;
 
 theta7: '(' ini_constant ',' ',' ini_constant ')' ;
 
+name_id: 'NAMES' | 'NAME' |
+        'names' | 'name' |
+        'Names' | 'Name' ;
 
-fixed: 'fixed' | 'FIXED' | 'Fixed' |  'FIX' | 'fix' | 'Fix';
+name_option:  name_id '(' identifier (',' identifier)* ')';
+
+fixed: 'fixed'
+ | 'FIXED'
+ | 'FIX'
+ | 'fix'
+ | 'UNINT'
+ | 'unint'
+ | 'Unint' ;
 
 infinite: 'INF' | 'inf' | 'Inf';
 

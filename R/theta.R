@@ -28,18 +28,28 @@ nonmem2rxRec.the <- function(x) {
   }
 }
 #' This pushes the $theta into the ini({}) block
-#'
 #'  
 #' @param theta theta ini statement
 #' @param comment comment for parsing
+#' @param label is the nonmem defined label (NM75)
+#' @param skipComment for when adding comment/label is skipped (used
+#'   with `NAMES()`)
 #' @return Nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.pushTheta <- function(theta, comment, label) {
-  .addIni(theta)
-  .handleThetaComment(comment)
-  .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
-                                   label)
+.pushTheta <- function(theta, comment, label, skipComment) {
+  if (theta != "") {
+    .addIni(theta)
+    if (skipComment == 0) {
+      .handleThetaComment(comment)
+      .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
+                                       label)
+    }
+  } else {
+    .handleThetaComment(comment)
+    .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
+                                     label)
+  }
 }
 
 #' Creates the theta midpoint estimate info $theta style (low,,hi)
