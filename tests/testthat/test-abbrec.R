@@ -1,9 +1,9 @@
 test_that("test abbrev  record", {
 
-  .a <- function(abbrev, eq=NULL, abbrevLin=0L) {
+  .a <- function(abbrev, eq=list(), abbrevLin=0L) {
     .clearNonmem2rx()
     .Call(`_nonmem2rx_trans_abbrec`, abbrev)
-    expect_equal(NULL, eq)
+    expect_equal(.nonmem2rx$replace, eq)
   }
 
   expect_error(.a("COMRES=2"), NA)
@@ -24,6 +24,24 @@ test_that("test abbrev  record", {
   expect_error(.a("FUNCTION FUNCA(VECTRA,25,5)"), NA)
 
   # now the more interesting examples:
+
+  # direct1
+  .a("REPLACE THETA(CL)=THETA(4)",
+     list(structure(list("THETA", "CL", 4L), class = "nonmem2rx.rep1")))
+  .a("REPLACE ETA(ECL)=ETA(4)",
+     list(structure(list("ETA", "ECL", 4L), class = "nonmem2rx.rep1")))
+  .a("REPLACE ERR(ECL)=ERR(4)",
+     list(structure(list("ERR", "ECL", 4L), class = "nonmem2rx.rep1")))
+  .a("REPLACE EPS(ECL)=EPS(4)",
+     list(structure(list("EPS", "ECL", 4L), class = "nonmem2rx.rep1")))
+  expect_error(.a("REPLACE EPS(ECL)=THETA(4)"), "'EPS' to 'THETA'")
+
+  .a("REPLACE PI=3.14159265",
+     list(structure(list("PI", "3.14159265"), class = "nonmem2rx.rep2")))
+  .a('REPLACE K34="3,4"',
+     list(structure(list("K34", "3,4"), class = "nonmem2rx.rep2")))
+  .a("REPLACE K34='3,4'",
+     list(structure(list("K34", "3,4"), class = "nonmem2rx.rep2")))
   
 
 })

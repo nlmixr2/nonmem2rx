@@ -36,7 +36,8 @@ replace: 'REPLACE'  (replace_multiple1
   | replace_data1
   | replace_data2
   | replace_direct1
-  | replace_direct2) ;
+  | replace_direct2
+  | replace_direct3);
 
 var_replace: ('THETA' | 'ETA' | 'EPS' | 'ERR');
 
@@ -46,8 +47,8 @@ seq_nm: decimalintNo0 (':' | 'TO' | 'to' | 'To') decimalintNo0
 seq_arg: '(' ','* (seq_nm | decimalintNo0)  (',' (seq_nm | decimalintNo0))* ')';
 
 replace_direct1: var_replace '(' identifier_nm_no ')' '=' var_replace '(' decimalintNo0 ')';
-
-replace_direct2: identifier_nm '=' (identifier_nm | constantneg | string );
+replace_direct2: identifier_nm '=' (identifier_nm | constantneg);
+replace_direct3: identifier_nm '=' string;
 
 replace_data1: var_replace '(' identifier_nm_no ')' '=' var_replace dec_arg;
 replace_data2: var_replace '(' identifier_nm_no ')' '=' var_replace seq_arg;

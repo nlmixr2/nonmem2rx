@@ -70,9 +70,63 @@ typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, v
 void wprint_node_abbrec(int depth, char *token_name, char *token_value, void *client_abbrec) {}
 
 extern sbuf curLine;
+int abbrecAddSeq = 0;
+
+SEXP nonmem2rxAddReplaceDirect1(const char *type, const char *var, int num);
+SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with);
+
 void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_abbrec) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
+  int isStr=0;
+  if (!strcmp("seq_nm", name)) {
+    sAppendN(&curLine, "seq(", 4);
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 2);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curLine, "%s, %s", v, v2);
+    xpn = d_get_child(pn, 3);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[0] != 0) {
+      // by statement
+      xpn = d_get_child(xpn, 1);
+      v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, ", by=%s", v);
+    }
+    sAppendN(&curLine, ")", 1);
+  } else if (abbrecAddSeq == 1 && !strcmp("decimalintNo0", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    sAppend(&curLine, "c(%s)", v);
+  } else if (!strcmp("replace_direct1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 5);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (strcmp(v, v2)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
+    }
+    xpn = d_get_child(pn, 2);
+    v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 7);
+    char *v3 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int num = atoi(v3);
+    nonmem2rxAddReplaceDirect1(v, v2, num);
+  } else if (!strcmp("replace_direct2", name) ||
+             (isStr = !strcmp("replace_direct3", name))) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *what = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 2);
+    char *with = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (isStr) {
+      // take off quotes
+      with++;
+      int len = strlen(with);
+      with[len-1] = 0;
+    }
+    nonmem2rxAddReplaceDirect2(what, with);
+  }
   /* if (!strcmp("filename_t3", name)) { */
 
   /* } */

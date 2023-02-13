@@ -382,3 +382,19 @@ extern "C" SEXP nonmem2rxGetEpsNum(const char *v) {
   END_RCPP
 }
 
+
+extern "C" SEXP nonmem2rxAddReplaceDirect1(const char *type, const char *var, int num) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function addReplaceDirect1(".addReplaceDirect1", nonmem2rxNs);
+  return addReplaceDirect1(type, var, num);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function addReplaceDirect2(".addReplaceDirect2", nonmem2rxNs);
+  return addReplaceDirect2(what, with);
+  END_RCPP
+}
