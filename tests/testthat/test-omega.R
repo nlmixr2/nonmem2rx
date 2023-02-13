@@ -136,8 +136,6 @@ test_that("test omega", {
   expect_equal(.nonmem2rx$etaNonmemLabel,
                c("ECL2", "EV12", "EQ2", "EV22"))
 
-  # todo make sure values has the right number of labels, comments and nonmem labels
-
   expect_error(.o("garbage"))
 
   
