@@ -50,7 +50,13 @@ omega2: '(' block_type? fixed block_type? ini_constant ')';
 
 repeat: "[Xx]" decimalint;
 
-fixed: 'fixed' | 'FIXED' | 'FIX' | 'fix';
+fixed: 'fixed'
+ | 'FIXED'
+ | 'FIX'
+ | 'fix'
+ | 'UNINT'
+ | 'unint'
+ | 'Unint' ;
 
 ini_constant: '-'? constant;
 

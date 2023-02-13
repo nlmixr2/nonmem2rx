@@ -84,6 +84,7 @@ int nonmem2rx_omegaSd=0;
 int nonmem2rx_omegaChol=0;
 int nonmem2rx_omegaCor=0;
 int nonmem2rx_omegaRepeat=1;
+
 char *omegaEstPrefix;
 char *nonmem2rx_repeatVal;
 char *nonmem2rx_omegaLabel;
@@ -289,6 +290,11 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       nonmem2rx_omegaChol = 1;
     }
   } else if (!strcmp("fixed", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    REprintf("v: %s\n", v);
+    if (v[0] == 'u' || v[0] == 'U') {
+      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+    }
     nonmem2rx_omegaFixed = 1;
   } else if (!strcmp("omega_statement", name)) {
     D_ParseNode *xpn = d_get_child(pn, 4);
@@ -365,6 +371,11 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
     wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
     xpn = d_get_child(pn, 3);
     wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
+    xpn = d_get_child(pn, 2);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (fix[0] == 'u' || fix[0] == 'U') {
+      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+    }
     // this form is only good for diagonal matrices
     if (nonmem2rx_omegaBlockn != 0) {
       parseFree(0);
@@ -395,6 +406,9 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       // This is a regular initialization
       nonmem2rx_repeatVal = v;
       if (fix[0] != 0) {
+        if (fix[0] == 'u' || fix[0] == 'U') {
+          Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+        }
         sAppend(&curOmega, "%s%d ~ fix(%s)", omegaEstPrefix, nonmem2rx_omeganum, v);
         nonmem2rx_omegaRepeat = -1;
       } else {
@@ -408,6 +422,9 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
       pushOmega();
     } else {
       if (fix[0] != 0) {
+        if (fix[0] == 'u' || fix[0] == 'U') {
+          Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+        }
         nonmem2rx_omegaFixed = 1; 
       }
       addOmegaBlockItem(v);

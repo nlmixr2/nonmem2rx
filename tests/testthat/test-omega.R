@@ -136,6 +136,17 @@ test_that("test omega", {
   expect_equal(.nonmem2rx$etaNonmemLabel,
                c("ECL2", "EV12", "EQ2", "EV22"))
 
+  expect_warning(.o("(1 UNINT)", "eta1 ~ fix(1)", 1),
+                 "UNINT")
+  expect_warning(.o("(1 UNINT)", "eta1 ~ fix(1)", 1),
+                 "UNINT")
+  expect_warning(.o("BLOCK(2) UNINT 0.1\n0.01 0.1",
+                    "eta1 + eta2 ~ fix(0.1, 0.01, 0.1)", 2),
+                 "UNINT")
+expect_warning(.o("(UNINT 1)", "eta1 ~ fix(1)", 1),
+                 "UNINT")
+  
+
   expect_error(.o("garbage"))
 
   
