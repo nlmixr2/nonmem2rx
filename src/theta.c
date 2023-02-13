@@ -92,7 +92,6 @@ SEXP nonmem2rxPushThetaLabel(const char *comment);
 void pushTheta(void) {
   nonmem2rxPushTheta(curTheta.s, curComment, curLabel);
   sClear(&curTheta);
-  sClear(&curThetaRhs);
   curComment = NULL;
   curLabel = NULL;
 }
@@ -111,6 +110,7 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
       nonmem2rx_thetanum++;
     }
   } else if (!strcmp("theta_statement", name)) {
+    sClear(&curThetaRhs);
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] == 0) {

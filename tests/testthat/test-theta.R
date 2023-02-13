@@ -33,6 +33,11 @@ test_that("test thetas", {
        "theta2 <- c(.008, .08, .5)",
        "theta3 <- c(.004, .04, .9)"), 3)
 
+  .t("(2)x4 (0.001,0.1,1000)x3 (0.5 FIXED)x2",
+     c("theta1 <- 2", "theta2 <- 2", "theta3 <- 2", "theta4 <- 2",
+       "theta5 <- c(0.001, 0.1, 1000)", "theta6 <- c(0.001, 0.1, 1000)", "theta7 <- c(0.001, 0.1, 1000)",
+       "theta8 <- fix(0.5)", "theta9 <- fix(0.5)"), 9)
+
   expect_error(.t("garbage"))
 
 })
