@@ -356,3 +356,12 @@ extern "C" SEXP nonmem2rxGetModelNum(const char *v) {
   return getModelNum(v);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxGetThetaNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getThetaNum(".getThetaNum", nonmem2rxNs);
+  return getThetaNum(v);
+  END_RCPP
+}
+

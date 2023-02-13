@@ -128,9 +128,13 @@ multiplicative_expression : unary_expression
 mult_part : ('*' | '/') unary_expression ;
 
 theta : ('THETA(' | 'theta(') decimalintNo0 ')';
+thetaI : ('THETA(' | 'theta(') identifier ')';
 eta   : ('ETA(' | 'eta(') decimalintNo0 ')';
+etaI   : ('ETA(' | 'eta(') identifier ')';
 eps   : ('EPS(' | 'eps(') decimalintNo0 ')';
+epsI   : ('EPS(' | 'eps(') identifier ')';
 err   : ('ERR(' | 'err(') decimalintNo0 ')';
+errI   : ('ERR(' | 'err(') identifier ')';
 amt   : ('A(' | 'a(')  decimalintNo0 ')';
 amtI  : ('A(' | 'a(')  identifier ')';
 mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
@@ -170,9 +174,13 @@ primary_expression
   | scalei
   | identifier
   | theta
+  | thetaI
   | eta
+  | etaI
   | eps
+  | epsI
   | err
+  | errI
   | dt
   | amt
   | amtI

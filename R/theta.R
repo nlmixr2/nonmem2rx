@@ -51,6 +51,17 @@ nonmem2rxRec.the <- function(x) {
                                      label)
   }
 }
+#' Get the theta number
+#'
+#' @param v string
+#' @return the number (as a string)
+#' @noRd
+#' @author Matthew L. Fidler
+.getThetaNum <- function(v) {
+  .w <- which(tolower(v) == tolower(.nonmem2rx$thetaNonmemLabel))
+  if (length(.w) == 1L) return(paste(.w))
+  stop(paste0("cannot uniquely determine THETA(", v, ")"), call.=FALSE)
+}
 
 #' Creates the theta midpoint estimate info $theta style (low,,hi)
 #'  

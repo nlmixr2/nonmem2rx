@@ -180,5 +180,18 @@ test_that("test abbrev", {
 
     .am("A_0(PERI)=3",
         c("rxini.rxddta3. <- 3",  "rxddta3(0) <- rxini.rxddta3."))
+
+    .at <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$thetaNonmemLabel <- c("CL", "V", "KA")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+    .at("test = THETA(CL) + THETA(V) + THETA(KA)",
+        "TEST <- theta1 + theta2 + theta3")
+    expect_error(.at("test = THETA(FUN)"),
+                 "FUN")
+
     
 })
