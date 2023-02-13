@@ -81,6 +81,17 @@ nonmem2rxRec.sig <- function(x) {
          envir = .nonmem2rx)
   invisible()
 }
+#' Get the eta number
+#'
+#' @param v string
+#' @return the number (as a string)
+#' @noRd
+#' @author Matthew L. Fidler
+.getEtaNum <- function(v) {
+  .w <- which(tolower(v) == tolower(.nonmem2rx$etaNonmemLabel))
+  if (length(.w) == 1L) return(paste(.w))
+  stop(paste0("cannot uniquely determine ETA(", v, ")"), call.=FALSE)
+}
 #' Add omega/sigma ini statement
 #'
 #' This will convert to the covariance matrix before adding the

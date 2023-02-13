@@ -365,3 +365,11 @@ extern "C" SEXP nonmem2rxGetThetaNum(const char *v) {
   END_RCPP
 }
 
+
+extern "C" SEXP nonmem2rxGetEtaNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getEtaNum(".getEtaNum", nonmem2rxNs);
+  return getEtaNum(v);
+  END_RCPP
+}

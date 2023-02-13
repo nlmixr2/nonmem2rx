@@ -193,5 +193,19 @@ test_that("test abbrev", {
     expect_error(.at("test = THETA(FUN)"),
                  "FUN")
 
+    .ae <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$etaNonmemLabel <- c("ECL", "EV", "EKA")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+    
+    .ae("test = ETA(ECL) + ETA(EV) + ETA(EKA)",
+        "TEST <- eta1 + eta2 + eta3")
+    expect_error(.ae("test = ETA(FUN)"),
+                 "FUN")
+
+
     
 })

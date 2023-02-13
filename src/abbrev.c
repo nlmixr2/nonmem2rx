@@ -83,6 +83,7 @@ SEXP nonmem2rxPushObservedThetaObs(int a);
 SEXP nonmem2rxPushObservedEtaObs(int a);
 SEXP nonmem2rxGetModelNum(const char *v);
 SEXP nonmem2rxGetThetaNum(const char *v);
+SEXP nonmem2rxGetEtaNum(const char *v);
 
 int maxA = 0,
   definingScale = 0;
@@ -316,10 +317,16 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "theta%d", num);
     }
     return 1;
-  } else if (!strcmp("eta", name)) {
+  } else if (!strcmp("eta", name) ||
+             (needName = !strcmp("etaI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetEtaNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       int num = atoi(v);
       nonmem2rxPushObservedEtaObs(num);
       sAppend(&curLine, "eta%d", num);
