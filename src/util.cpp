@@ -398,3 +398,28 @@ extern "C" SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with) {
   return addReplaceDirect2(what, with);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxReplaceProcessSeq(const char *what) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function processSeq(".processSeq", nonmem2rxNs);
+  return processSeq(what);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxReplaceIsDataItem(const char *what) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function replaceIsDataItem(".replaceIsDataItem", nonmem2rxNs);
+  return replaceIsDataItem(what);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxReplaceDataItem(const char *type, const char *dataItem) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function replaceDataItem(".replaceDataItem", nonmem2rxNs);
+  return replaceDataItem(type, dataItem);
+  END_RCPP
+}
+

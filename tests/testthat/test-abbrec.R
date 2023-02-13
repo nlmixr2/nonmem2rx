@@ -2,6 +2,7 @@ test_that("test abbrev  record", {
 
   .a <- function(abbrev, eq=list(), abbrevLin=0L) {
     .clearNonmem2rx()
+    .nonmem2rx$input <- c(OCC="OCC",SID="SID")
     .Call(`_nonmem2rx_trans_abbrec`, abbrev)
     expect_equal(.nonmem2rx$replace, eq)
   }
@@ -47,6 +48,11 @@ test_that("test abbrev  record", {
      list(structure(list("K34", "3,4"), class = "nonmem2rx.rep2")))
   .a("REPLACE K34='3,4'",
      list(structure(list("K34", "3,4"), class = "nonmem2rx.rep2")))
-  
 
+  .a("REPLACE THETA(OCC)=THETA(4,7)",
+     list(structure(list("THETA", "OCC", c(4, 7)), class = "nonmem2rx.repDI")))
+
+  .a("REPLACE THETA(OCC)=THETA(4 TO 7 BY 2)",
+     list(structure(list("THETA", "OCC", c(4, 6)), class = "nonmem2rx.repDI")))
+  
 })

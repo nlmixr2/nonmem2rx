@@ -8,7 +8,7 @@ nonmem2rxRec.abb <- function(x) {
   }
 }
 #' Add direct replacement type  
-#'  
+#'
 #' @param type Type of variable to replace (theta/eta/eps/err)
 #' @param var nonmem variable name 
 #' @param num nonmem variable number equivalent
@@ -21,7 +21,7 @@ nonmem2rxRec.abb <- function(x) {
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }
 #' Add direct replacement type  
-#'  
+#'
 #' @param type Type of variable to replace (theta/eta/eps/err)
 #' @param var nonmem variable name 
 #' @param num nonmem variable number equivalent
@@ -33,4 +33,39 @@ nonmem2rxRec.abb <- function(x) {
   class(.lst) <-"nonmem2rx.rep2"
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }
-
+#' Process the sequence for the repeat statement
+#'
+#' @param what string with valid R code to add to the `replaceSeq`
+#' @return Nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.processSeq <- function(what) {
+  .eval <- eval(parse(text=what))
+  .nonmem2rx$replaceSeq <- c(.nonmem2rx$replaceSeq, .eval)
+}
+#' Is this a data item
+#'
+#' @param what variable to check if it is a data item
+#' @return integer logical
+#' @noRd
+#' @author Matthew L. Fidler
+.replaceIsDataItem <- function(what) {
+  .inp <- c(setNames(.nonmem2rx$input,NULL), names(.nonmem2rx$input))
+  as.integer(what %in% .inp)
+}
+#' Add a data item replacement
+#'
+#' @param varType Variable type
+#' @param dataItem Data item
+#' @return Nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.replaceDataItem <- function(varType, dataItem) {
+  if (any(duplicated(.nonmem2rx$replaceSeq))) {
+    stop(paste0("the replacement for ", varType, "(", dataItem, ") has duplicate numbers and cannot be processed by nonmem2rx"))
+  }
+  .lst <- list(varType, dataItem, .nonmem2rx$replaceSeq)
+  .nonmem2rx$replaceSeq <- NULL
+  class(.lst) <-"nonmem2rx.repDI"
+  .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
+}

@@ -74,30 +74,46 @@ int abbrecAddSeq = 0;
 
 SEXP nonmem2rxAddReplaceDirect1(const char *type, const char *var, int num);
 SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with);
+SEXP nonmem2rxReplaceProcessSeq(const char *what);
+SEXP nonmem2rxReplaceIsDataItem(const char *what);
+SEXP nonmem2rxReplaceDataItem(const char *type, const char *dataItem);
 
 void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_abbrec) {
   char *name = (char*)pt.symbols[pn->symbol].name;
+  char *varType = NULL;
+  char *dataItem = NULL;
   int nch = d_get_number_of_children(pn);
   int isStr=0;
-  if (!strcmp("seq_nm", name)) {
+  if (!strcmp("decimalintNo0neg", name)) {
+    // This only occurs with the by statement, so finish the by statement parsing
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    sAppend(&curLine, ", by=%s)", v);
+    nonmem2rxReplaceProcessSeq(curLine.s);
+    sClear(&curLine);
+    abbrecAddSeq = 1;
+  } else if (!strcmp("seq_nm", name)) {
     sAppendN(&curLine, "seq(", 4);
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 2);
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curLine, "%s, %s", v, v2);
     xpn = d_get_child(pn, 3);
-    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    if (v[0] != 0) {
-      // by statement
-      xpn = d_get_child(xpn, 1);
-      v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, ", by=%s", v);
+    char *v3 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v3[0] == 0) {
+      // by statement will be processed later
+      sAppend(&curLine, "%s, %s)", v, v2);
+      nonmem2rxReplaceProcessSeq(curLine.s);
+      sClear(&curLine);
+    } else {
+      sAppend(&curLine, "%s, %s", v, v2);
+      abbrecAddSeq = 0;
     }
-    sAppendN(&curLine, ")", 1);
-  } else if (abbrecAddSeq == 1 && !strcmp("decimalintNo0", name)) {
+  } else if (abbrecAddSeq == 1 && (!strcmp("decimalintNo0", name) ||
+                                   !strcmp("decimalint", name))) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     sAppend(&curLine, "c(%s)", v);
+    nonmem2rxReplaceProcessSeq(curLine.s);
+    sClear(&curLine);
   } else if (!strcmp("replace_direct1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -126,6 +142,23 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       with[len-1] = 0;
     }
     nonmem2rxAddReplaceDirect2(what, with);
+  } else if (!strcmp("replace_data", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    varType = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 5); 
+    char *tmp = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (strcmp(varType, tmp)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", varType, tmp);
+    }
+    xpn = d_get_child(pn, 2);
+    dataItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (!INTEGER(nonmem2rxReplaceIsDataItem(dataItem))[0]) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "$ABBREVIATED REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
+    }
+    // parse sequence by continuing parse tree
+    abbrecAddSeq = 1;
   }
   /* if (!strcmp("filename_t3", name)) { */
 
@@ -135,6 +168,11 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       D_ParseNode *xpn = d_get_child(pn, i);
       wprint_parsetree_abbrec(pt, xpn, depth, fn, client_abbrec);
     }
+  }
+  if (!strcmp("replace_data", name)) {
+    nonmem2rxReplaceDataItem(varType, dataItem);
+    abbrecAddSeq = 0;
+    return;
   }
 }
 
