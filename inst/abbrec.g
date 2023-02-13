@@ -11,6 +11,7 @@ statement: comres
     | protect
     | function
     | replace
+    | desfull
     ;
 
 comres: 'COMRES' '='? ('0' | '-' '1' | decimalint);
@@ -22,9 +23,9 @@ checkmu: ('CHECKMU' | 'NOCHECKMU');
 desfull:  'DES' '='? ('COMPACT' |'FULL');
 protect: 'PROTECT';
 
-declare_item: 'INTEGER'? 'DOWHILE'? identifier_nm ('(' "[^,]*" (',' "[^,]*")* ')')?;
+declare_item: 'INTEGER'? 'DOWHILE'? identifier_nm ('(' "[^,)]*" (',' "[^,)]*")* ')')?;
 
-declare: 'DECLARE' (declare_item ','?)+;
+declare: 'DECLARE' (declare_item ','*)+;
 
 function: 'FUNCTION' identifier_nm '(' (identifier_nm | '*') ',' decimalintNo0 (',' decimalintNo0)? ')';
 
@@ -42,7 +43,7 @@ var_replace: ('THETA' | 'ETA' | 'EPS' | 'ERR');
 dec_arg: '(' decimalintNo0 (',' decimalintNo0)+ ')';
 seq_nm: decimalintNo0 (':' | 'TO' | 'to' | 'To') decimalintNo0
         (('BY' | 'By' | 'by') decimalintNo0neg)?;
-seq_arg: '(' ','* seq_nm (',' seq_nm)* ')';
+seq_arg: '(' ','* (seq_nm | decimalintNo0)  (',' (seq_nm | decimalintNo0))* ')';
 
 replace_direct1: var_replace '(' identifier_nm_no ')' '=' var_replace '(' decimalintNo0 ')';
 
