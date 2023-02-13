@@ -20,8 +20,10 @@ SEXP _nonmem2rx_trans_sub(SEXP in);
 SEXP _nonmem2rx_trans_lst(SEXP in, SEXP cov);
 SEXP _nonmem2rx_trans_data(SEXP in);
 SEXP _nonmem2rx_trans_tab(SEXP in);
+SEXP _nonmem2rx_trans_abbrec(SEXP in);
 void R_init_nonmem2rx(DllInfo *info){
   R_CallMethodDef callMethods[]  = {
+    {"_nonmem2rx_trans_abbrec", (DL_FUNC) &_nonmem2rx_trans_abbrec, 1},
     {"_nonmem2rx_trans_input", (DL_FUNC) &_nonmem2rx_trans_input, 1},
     {"_nonmem2rx_trans_omega", (DL_FUNC) &_nonmem2rx_trans_omega, 2},
     {"_nonmem2rx_omeganum_reset", (DL_FUNC) &_nonmem2rx_omeganum_reset, 0},
