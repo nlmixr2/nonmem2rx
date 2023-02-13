@@ -39,13 +39,23 @@
 }
 
 .nonmem2rxBuildAbbrev <- function() {
-  message("Update Parser c for abbrev block")
+  message("Update Parser c for abbreviated code")
   dparser::mkdparse(devtools::package_file("inst/abbrev.g"),
                     devtools::package_file("src/"),
                     grammar_ident="nonmem2rxAbbrev")
   file.rename(devtools::package_file("src/abbrev.g.d_parser.c"),
               devtools::package_file("src/abbrev.g.d_parser.h"))
 }
+
+.nonmem2rxBuildAbbrevRec <- function() {
+  message("Update Parser c for abbreviated record")
+  dparser::mkdparse(devtools::package_file("inst/abbrec.g"),
+                    devtools::package_file("src/"),
+                    grammar_ident="nonmem2rxAbbrevRec")
+  file.rename(devtools::package_file("src/abbrec.g.d_parser.c"),
+              devtools::package_file("src/abbrec.g.d_parser.h"))
+}
+
 
 .nonmem2rxBuildSub <- function() {
   message("Update Parser c for sub block")
@@ -94,6 +104,7 @@
   .nonmem2rxBuildLst()
   .nonmem2rxBuildData()
   .nonmem2rxBuildTab()
+  .nonmem2rxBuildAbbrevRec()
   invisible("")
 }
 ## nocov end
