@@ -99,7 +99,10 @@ void pushTheta(void) {
 void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
-  if (!strcmp("repeat", name)) {
+  if (!strcmp("theta_name", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    curLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+  } else if (!strcmp("repeat", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     int n = atoi(v);
@@ -122,9 +125,6 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] == 0) {
       curLabel=NULL;
-    } else {
-      xpn = d_get_child(xpn, 0);
-      curLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     }
   } else if (!strcmp("theta0", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);

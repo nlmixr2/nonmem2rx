@@ -38,6 +38,15 @@ test_that("test thetas", {
        "theta5 <- c(0.001, 0.1, 1000)", "theta6 <- c(0.001, 0.1, 1000)", "theta7 <- c(0.001, 0.1, 1000)",
        "theta8 <- fix(0.5)", "theta9 <- fix(0.5)"), 9)
 
+  .t("CL=(0.0,7.0)", "theta1 <- c(0.0, 7.0)", 1)
+  expect_equal(.nonmem2rx$thetaNonmemLabel, "CL")
+
+  .t("CL= 0.3\nV1= 0.35\nQ=  0.54\nV2= 0.67",
+     c("theta1 <- 0.3", "theta2 <- 0.35", "theta3 <- 0.54", "theta4 <- 0.67"),
+     4)
+
+  expect_equal(.nonmem2rx$thetaNonmemLabel, c("CL", "V1", "Q", "V2"))
+
   expect_error(.t("garbage"))
 
 })
