@@ -20,14 +20,16 @@
 #' @author Matthew L. Fidler
 .replaceAbbrevCode <- function(code) {
   if (length(.nonmem2rx$replace) == 0) return(code)
-  vapply(strsplit(code, "\n"),
-         function(codeItem) {
-           .ret <- codeItem
+  .code <- strsplit(code, "\n")
+  paste(vapply(seq_along(.code),
+         function(.ci) {
+           .ret <- .code[[.ci]]
            for (.item in .nonmem2rx$replace) {
              .ret <- .repItem(.item, .ret)
            }
            paste(.ret, collapse = "\n")
-         }, character(0), USE.NAMES=FALSE)
+         }, character(1), USE.NAMES=FALSE),
+        collapse="\n")
 }
 #' Create a string for a regular expression where case is ignored
 #'
@@ -79,9 +81,9 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .rep1 <- function(rep1, lines) {
-  .reg <- paste0("\\b", .regexpIgnoreCase(rep1[[1]]), " *[(] *",
+  .reg <- paste0("(\\b|^)", .regexpIgnoreCase(rep1[[1]]), " *[(] *",
                  .regexpIgnoreCase(rep1[[2]])," *[)] *")
-  .with <- paste0(toupper(ret1[[1]]), "(", rep1[[3]], ")")
+  .with <- paste0(toupper(rep1[[1]]), "(", rep1[[3]], ")")
   gsub(.reg, .with, lines, perl=TRUE)
 }
 #' Handle rep2 lines
@@ -107,16 +109,16 @@
                  .regexpIgnoreCase(repDI[[2]])," *[)] *")
   .w <- which(regexpr(.reg, lines) != -1)
   if (length(.w) == 0) return(lines)
-  .elt <- .repDI[[3]]
-  .prefix <- paste0("IF (", repDI[[2]], " .EQ. ", seq_along(.elt), ") ")
+  .elt <- repDI[[3]]
+  .prefix <- paste0("IF (", repDI[[2]], ".EQ.", seq_along(.elt), ") ")
   .w2 <- which(.elt == 0)
   if (length(.w2) > 0) {
     .prefix <- .prefix[-.w2]
     .elt <- .elt[-.w2]
   }
-  strsplit(paste(vapply(seq_len(lines), function(.i) {
+  strsplit(paste(vapply(seq_along(lines), function(.i) {
     .line <- lines[.i]
-    if (!(i %in% .w)) return(.line)
+    if (!(.i %in% .w)) return(.line)
     paste(vapply(seq_along(.elt), function(.j) {
       paste0(.prefix[.j],
              gsub(.reg, paste0(toupper(repDI[[1]]), "(", .elt[.j], ")"),
@@ -134,25 +136,28 @@
 #' @author Matthew L. Fidler
 .repDVI <- function(repDVI, lines) {
   .reg0 <- paste0(.regexpIgnoreCase(repDVI[[1]]), " *[(] *",
-                  .regexpIgnoreCase(repDVI[[2]])," *[)] *")
+                  "(",
+                  .regexpIgnoreCase(paste0(repDVI[[2]], "_", repDVI[[3]])), "|",
+                  .regexpIgnoreCase(paste0(repDVI[[3]], "_", repDVI[[2]])),
+                 ")"," *[)] *")
   .reg <- paste0("^ *",
                  .regexpIgnoreCase(repDVI[[3]]),
                  " *=.*", .reg0)
   .w <- which(regexpr(.reg, lines) != -1)
   if (length(.w) == 0) return(lines)
-  .elt <- .repDI[[3]]
-  .prefix <- paste0("IF (", repDI[[2]], " .EQ. ", seq_along(.elt), ") ")
+  .elt <- repDVI[[4]]
+  .prefix <- paste0("IF (", repDVI[[2]], ".EQ.", seq_along(.elt), ") ")
   .w2 <- which(.elt == 0)
   if (length(.w2) > 0) {
     .prefix <- .prefix[-.w2]
     .elt <- .elt[-.w2]
   }
-  strsplit(paste(vapply(seq_len(lines), function(.i) {
+  strsplit(paste(vapply(seq_along(lines), function(.i) {
     .line <- lines[.i]
-    if (!(i %in% .w)) return(.line)
+    if (!(.i %in% .w)) return(.line)
     paste(vapply(seq_along(.elt), function(.j) {
       paste0(.prefix[.j],
-             gsub(.reg0, paste0(toupper(repDI[[1]]), "(", .elt[.j], ")"),
+             gsub(.reg0, paste0(toupper(repDVI[[1]]), "(", .elt[.j], ")"),
                   .line))
     }, character(1), USE.NAMES=FALSE), collapse = "\n")
   }, character(1), USE.NAMES=FALSE), collapse = "\n"), "\n")[[1]]
