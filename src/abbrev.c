@@ -301,7 +301,7 @@ void writeAinfo(const char *v) {
   Rf_errorcall(R_NilValue, "can only request depot and central compartments for solved systems in rxode2 translations");
 }
 
-int abbrev_params(char *name, int i,  D_ParseNode *pn) {
+int abbrevParamTheta(char *name, int i,  D_ParseNode *pn) {
   int needName=0;
   if (!strcmp("theta", name) ||
       (needName = !strcmp("thetaI", name))) {
@@ -318,8 +318,14 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "theta%d", num);
     }
     return 1;
-  } else if (!strcmp("eta", name) ||
-             (needName = !strcmp("etaI", name))) {
+  }
+  return 0;
+}
+
+int abbrevParamEta(char *name, int i,  D_ParseNode *pn) {
+  int needName=0;
+  if (!strcmp("eta", name) ||
+      (needName = !strcmp("etaI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -333,7 +339,12 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "eta%d", num);
     }
     return 1;
-  } else if (!strcmp("eps", name) ||
+  }
+  return 0;
+}
+int abbrevParamEps(char *name, int i,  D_ParseNode *pn) {
+  int needName = 0;
+  if (!strcmp("eps", name) ||
              (needName = !strcmp("epsI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
@@ -346,8 +357,14 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
-  } else if (!strcmp("err", name) ||
-             (needName = !strcmp("errI", name))) {
+  }
+  return 0;
+}
+
+int abbrevParamErr(char *name, int i,  D_ParseNode *pn) {
+  int needName = 0;
+  if (!strcmp("err", name) ||
+      (needName = !strcmp("errI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -360,7 +377,13 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
-  } else if (!strcmp("amt", name) ||
+  }
+  return 0;
+}
+
+int abbrevParamAmt (char *name, int i,  D_ParseNode *pn) {
+  int needName = 0;
+  if (!strcmp("amt", name) ||
              (needName = !strcmp("amtI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
@@ -376,6 +399,14 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
     return 1;
   }
   return 0;
+}
+
+int abbrev_params(char *name, int i,  D_ParseNode *pn) {
+  return abbrevParamTheta(name, i,  pn) ||
+    abbrevParamEta(name, i,  pn) ||
+    abbrevParamEps(name, i,  pn) ||
+    abbrevParamErr(name, i,  pn) ||
+    abbrevParamAmt(name, i,  pn);
 }
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
