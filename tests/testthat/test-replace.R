@@ -1,15 +1,14 @@
 test_that("test replacement", {
 
-  .r <- function(abbrev, code, eq="no") {
+  .r <- function(abbrev, code="", eq="no") {
     .clearNonmem2rx()
-    .nonmem2rx$input <- c(OCC="OCC",SID="SID")
+    .nonmem2rx$input <- c(OCC="OCC",SID="SID", DOSN="DOSN")
     if (length(code) != 1) code <-paste(code, collapse="\n")
     if (length(eq) != 1) eq <-paste(eq, collapse="\n")
     lapply(abbrev, function(a) {
       .Call(`_nonmem2rx_trans_abbrec`, a)
     })
     .ret <- .replaceAbbrevCode(code)
-    message(.ret)
     expect_equal(.replaceAbbrevCode(code), eq)
   }
 
@@ -45,5 +44,33 @@ test_that("test replacement", {
   .r("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3,4)",
      "ME= THETA(CL)+THETA(V1)+THETA(Q)+THETA(V2)",
      "ME= THETA(1)+THETA(2)+THETA(3)+THETA(4)")
+
+  .r("REPLACE ETA(DOSN)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1) F1=1*EXP(ETA(DOSN))"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))",
+       "IF (DOSN.EQ.3) F1=1*EXP(ETA(3))"))
+
+  .r("REPLACE ETA(DOSN)=ETA(0,2,5)",
+     c("F1=1",
+       "IF (DOSN>2) F1=1*EXP(ETA(DOSN))"),
+     c("F1=1",
+       "IF (DOSN.EQ.3) F1=1*EXP(ETA(5))"))
+
+  expect_warning(.r("REPLACE ETA(DOSN)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN))"),
+     c("F1=1",
+       "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN))")), "DOSN")
+
+  .r("REPLACE ETA(DOSN)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1 .AND. DOSN < 3) F1=1*EXP(ETA(DOSN))"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))"))
+
+  expect_error(.r("REPLACE ETA(NOINP)=ETA(0,2,3)"), "NOINP")
+
   
 })

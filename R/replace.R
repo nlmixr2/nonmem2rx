@@ -57,6 +57,7 @@
 #' @param item replacement item
 #' @param lines lines for replacement
 #' @return replaced line
+#' @export 
 #' @author Matthew L. Fidler
 #' @noRd
 .repItem <- function(item, lines) {
@@ -104,20 +105,59 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .repDI <- function(repDI, lines) {
-  .reg <- paste0("\\b", .regexpIgnoreCase(repDI[[1]]), " *[(] *",
-                 .regexpIgnoreCase(repDI[[2]])," *[)] *")
-  .w <- which(regexpr(.reg, lines) != -1)
-  if (length(.w) == 0) return(lines)
+  .datReg <- .regexpIgnoreCase(repDI[[2]])
+  .datRegB <- paste("\\b", .datReg, "\\b")
+  .typeReg <- .regexpIgnoreCase(repDI[[1]])
+  .regIf <- paste0("^ *IF *[(]([^)]*", .datReg, "[^)]*)[)] *(.*)\\b",
+                   .typeReg, " *[(] *", .datReg, " *[)] *(.*)$")
+
   .elt <- repDI[[3]]
   .prefix <- paste0("IF (", repDI[[2]], ".EQ.", seq_along(.elt), ") ")
-  .w2 <- which(.elt == 0)
-  if (length(.w2) > 0) {
-    .prefix <- .prefix[-.w2]
-    .elt <- .elt[-.w2]
+
+  .w <- which(regexpr(.regIf, lines, perl=TRUE) != -1)
+  if (length(.w) != 0) {
+    lines <- strsplit(paste(vapply(seq_along(lines), function(.i) {
+      .line <- lines[.i]
+      if (!(.i %in% .w)) return(.line)
+      # extract logical expression
+      .lgl <- gsub(.regIf, "\\1", .line, perl=TRUE)
+      # change data item to replacement value
+      .lgl <- gsub(.datReg, ".i", .lgl, perl=TRUE)
+      # now swap fortran logic for R logic
+      .lgl <- gsub(.regexpIgnoreCase(".eq."), "==", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".ne."), "!=", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".lt."), "<", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".gt."), ">", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".le."), "<=", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".ge."), ">=", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".and."), "&&", .lgl)
+      .lgl <- gsub(.regexpIgnoreCase(".or."), "||", .lgl)
+      .lgl <-vapply(.elt, function(.i) {
+        .ret <- try(eval(parse(text=.lgl)), silent=TRUE)
+        if (inherits(.ret, "try-error")) return(NA)
+        .ret
+      }, logical(1), USE.NAMES=FALSE)
+      if (any(is.na(.lgl))) {
+        warning(paste0("line '", .line, "' logical expression cannot be determined with '", repDI[[2]], "' alone, ignoring ", toupper(repDI[[1]]), "(", repDI[[2]], ")"),
+                call.=FALSE)
+        return(.line)
+      }
+      .vec <- vapply(seq_along(.elt), function(.j) {
+        paste0(.prefix[.j],
+               gsub(.regIf, paste0("\\2", toupper(repDI[[1]]), "(", .elt[.j], ")", "\\3"),
+                    .line, perl=TRUE))},
+        character(1), USE.NAMES=FALSE)
+      .vec <- .vec[.lgl]
+      paste(.vec, collapse="\n")
+    }, character(1), USE.NAMES=FALSE), collapse = "\n"), "\n")[[1]]
   }
+  .reg <- paste0("\\b", .typeReg, " *[(] *", .datReg," *[)] *")
+  .w <- which(regexpr(.reg, lines) != -1)
+  if (length(.w) == 0) return(lines)
   strsplit(paste(vapply(seq_along(lines), function(.i) {
     .line <- lines[.i]
     if (!(.i %in% .w)) return(.line)
+    if (regexpr("IF", .line) != -1) return(.line)
     paste(vapply(seq_along(.elt), function(.j) {
       paste0(.prefix[.j],
              gsub(.reg, paste0(toupper(repDI[[1]]), "(", .elt[.j], ")"),
@@ -146,11 +186,6 @@
   if (length(.w) == 0) return(lines)
   .elt <- repDVI[[4]]
   .prefix <- paste0("IF (", repDVI[[2]], ".EQ.", seq_along(.elt), ") ")
-  .w2 <- which(.elt == 0)
-  if (length(.w2) > 0) {
-    .prefix <- .prefix[-.w2]
-    .elt <- .elt[-.w2]
-  }
   strsplit(paste(vapply(seq_along(lines), function(.i) {
     .line <- lines[.i]
     if (!(.i %in% .w)) return(.line)
