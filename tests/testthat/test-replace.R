@@ -22,7 +22,6 @@ test_that("test replacement", {
      c("IF (OCC.EQ.1) TVCL=THETA(4)",
        "IF (OCC.EQ.2) TVCL=THETA(7)"))
 
-
   .r(c("REPLACE THETA(SID_KA)=THETA(4,6)",
        "REPLACE THETA(SID_CL)=THETA(5,7)"),
      c("KA=THETA(SID_KA)",
@@ -52,17 +51,49 @@ test_that("test replacement", {
        "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))",
        "IF (DOSN.EQ.3) F1=1*EXP(ETA(3))"))
 
+  .r("REPLACE ETA(DOSN_F1)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1) F1=1*EXP(ETA(DOSN_F1))"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))",
+       "IF (DOSN.EQ.3) F1=1*EXP(ETA(3))"))
+
+  .r("REPLACE ETA(F1_DOSN)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1) F1=1*EXP(ETA(F1_DOSN))"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))",
+       "IF (DOSN.EQ.3) F1=1*EXP(ETA(3))"))
+
   .r("REPLACE ETA(DOSN)=ETA(0,2,5)",
      c("F1=1",
        "IF (DOSN>2) F1=1*EXP(ETA(DOSN))"),
      c("F1=1",
        "IF (DOSN.EQ.3) F1=1*EXP(ETA(5))"))
 
+  .r("REPLACE ETA(DOSN_F1)=ETA(0,2,5)",
+     c("F1=1",
+       "IF (DOSN>2) F1=1*EXP(ETA(DOSN_F1))"),
+     c("F1=1",
+       "IF (DOSN.EQ.3) F1=1*EXP(ETA(5))"))
+
+  .r("REPLACE ETA(F1_DOSN)=ETA(0,2,5)",
+     c("F1=1",
+       "IF (DOSN>2) F1=1*EXP(ETA(F1_DOSN))"),
+     c("F1=1",
+       "IF (DOSN.EQ.3) F1=1*EXP(ETA(5))"))
+
   expect_warning(.r("REPLACE ETA(DOSN)=ETA(0,2,3)",
-     c("F1=1",
-       "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN))"),
-     c("F1=1",
-       "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN))")), "DOSN")
+                    c("F1=1",
+                      "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN))"),
+                    c("F1=1",
+                      "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN))")), "DOSN")
+
+  expect_warning(.r("REPLACE ETA(DOSN_F1)=ETA(0,2,3)",
+                    c("F1=1",
+                      "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN_F1))"),
+                    c("F1=1",
+                      "IF (DOSN>2 .AND. BAD .EQ. 3) F1=1*EXP(ETA(DOSN_F1))")), "DOSN")
 
   .r("REPLACE ETA(DOSN)=ETA(0,2,3)",
      c("F1=1",
@@ -70,6 +101,25 @@ test_that("test replacement", {
      c("F1=1",
        "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))"))
 
+  .r("REPLACE ETA(DOSN_F1)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1 .AND. DOSN < 3) F1=1*EXP(ETA(DOSN_F1))"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))"))
+
+
+  .r("REPLACE ETA(DOSN_CONFOUND_F1)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1 .AND. DOSN < 3) F1=1*EXP(ETA(DOSN_CONFOUND_F1))"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))"))
+
+
+  .r("REPLACE ETA(DOSN_CONFOUND_F1)=ETA(0,2,3)",
+     c("F1=1",
+       "IF (DOSN>1 .AND. DOSN < 3) F1=1*EXP(ETA(DOSN_CONFOUND_F1))+34"),
+     c("F1=1",
+       "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))+34"))
   expect_error(.r("REPLACE ETA(NOINP)=ETA(0,2,3)"), "NOINP")
 
   
