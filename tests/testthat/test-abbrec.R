@@ -58,6 +58,16 @@ test_that("test abbrev  record", {
   .a("REPLACE THETA(SID_KA)=THETA(4, 6)",
      list(structure(list("THETA", "SID", "KA", c(4, 6)), class = "repDVI")))
 
+  .a("REPLACE THETA(KA_SID)=THETA(4, 6)",
+     list(structure(list("THETA", "SID", "KA", c(4, 6)), class = "repDVI")))
+
+  .a("REPLACE ETA(OCC_ETA_BOV_CL) =ETA(4, 6)",
+     list(structure(list("ETA", "OCC", "ETA_BOV_CL", c(4, 6)), class = "repDVI")))
+
+  .a("REPLACE ETA(ETA_BOV_CL_OCC) =ETA(4, 6)",
+     list(structure(list("ETA", "OCC", "ETA_BOV_CL", c(4, 6)), class = "repDVI")))
+
+
   .a("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3,4)",
      list(structure(list("THETA", "CL", 1), class = "rep1"),
           structure(list("THETA", "V1", 2), class = "rep1"),

@@ -188,7 +188,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/SO/Nock/Nock_2013_Carboplatin_PK_MONOLIX.lst",
              "PsN/test_files/SO/pheno.lst",
              # new bov
-             #           "PsN/test_files/SO/BOV/run3.lst",
+             "PsN/test_files/SO/BOV/run3.lst",
              "PsN/test_files/SO/pheno_sdcorr.lst",
              "PsN/test_files/mox_no_bov.lst",
              "PsN/test_files/postfrem/frem_sir/final_models/model_4.lst",

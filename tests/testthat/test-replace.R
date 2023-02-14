@@ -45,4 +45,5 @@ test_that("test replacement", {
   .r("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3,4)",
      "ME= THETA(CL)+THETA(V1)+THETA(Q)+THETA(V2)",
      "ME= THETA(1)+THETA(2)+THETA(3)+THETA(4)")
+  
 })

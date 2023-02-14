@@ -30,7 +30,6 @@ declare: 'DECLARE' (declare_item ','*)+;
 function: 'FUNCTION' identifier_nm '(' (identifier_nm | '*') ',' decimalintNo0 (',' decimalintNo0)? ')';
 
 replace: 'REPLACE'  (replace_multiple
-  | replace_data_par
   | replace_data
   | replace_direct1
   | replace_direct2
@@ -46,17 +45,14 @@ seq_nm: decimalint (':' | 'TO' | 'to' | 'To') decimalint
         (('BY' | 'By' | 'by') decimalintNo0neg)?;
 seq_arg: '(' ','* (seq_nm | decimalint)  (',' (seq_nm | decimalint))* ')';
 
-replace_direct1: var_replace '(' identifier_nm_no ')' '=' var_replace '(' decimalintNo0 ')';
+replace_direct1: var_replace '(' identifier_nm ')' '=' var_replace '(' decimalintNo0 ')';
 replace_direct2: identifier_nm '=' (identifier_nm | constantneg);
 replace_direct3: identifier_nm '=' string;
 
-replace_data: var_rep2 '(' identifier_nm_no ')' '=' var_rep2 (seq_arg | dec_arg);
+replace_data: var_rep2 '(' identifier_nm ')' '=' var_rep2 (seq_arg | dec_arg);
 
 replace_multiple:  var_replace '(' identifier_nm (',' identifier_nm)+ ')' '='
     var_replace (dec_arg | seq_arg );
-
-replace_data_par: var_rep2 '(' identifier_nm_no '_' identifier_nm_no ')' '='
-     var_rep2 (dec_arg | seq_arg);
 
 constantneg: '-'? constant;
 
@@ -69,7 +65,6 @@ string:  str_t1 | str_t2;
 str_t1: "\'([^\'\\]|\\[^])*\'";
 str_t2: "\"([^\"\\]|\\[^])*\"";
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
-identifier_nm_no: "[a-zA-Z][a-zA-Z0-9]*" $term -4;
 decimalintNo0neg: "([-]?[1-9][0-9]*)" $term -1;
 decimalintNo0: "([1-9][0-9]*)" $term -1;
 decimalint: "0|([1-9][0-9]*)" $term -1;

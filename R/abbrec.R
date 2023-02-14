@@ -81,38 +81,55 @@ nonmem2rxRec.abb <- function(x) {
 #' @author Matthew L. Fidler
 .replaceIsDataItem <- function(what) {
   .inp <- c(setNames(.nonmem2rx$input,NULL), names(.nonmem2rx$input))
-  as.integer(what %in% .inp)
+  .dataReg <- paste0("(",paste(vapply(unique(.inp), .regexpIgnoreCase,
+                                      character(1), USE.NAMES=FALSE),
+                               collapse = "|"),
+                     ")")
+  .reg1 <-  paste0("^", .dataReg, "_([a-zA-Z][a-zA-Z0-9_]*)$")
+  .reg2 <-  paste0("^([a-zA-Z][a-zA-Z0-9_]*)_", .dataReg, "$")
+  if (regexpr(paste0("^", .dataReg, "$"), what) != -1) {
+    .nonmem2rx$replaceDataParItem <- what
+    return(1L)
+  } else if (regexpr(.reg1, what) != -1) {
+    .data <- sub(.reg1, "\\1", what)
+    .par <- sub(.reg1, "\\2", what)
+    .nonmem2rx$replaceDataParItem <- c(.data, .par)
+    return(1L)
+  } else if (regexpr(.reg2, what) != -1) {
+    .data <- sub(.reg2, "\\2", what)
+    .par <- sub(.reg2, "\\1", what)
+    .nonmem2rx$replaceDataParItem <- c(.data, .par)
+    return(1L)
+  }
+  0L
 }
-#' Add a data item replacement
+#' Add a data item or a data item / parameter replacement
 #'
 #' @param varType Variable type
-#' @param dataItem Data item
 #' @return Nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.replaceDataItem <- function(varType, dataItem) {
+.replaceDataItem <- function(varType) {
+  .dataItem <- .nonmem2rx$replaceDataParItem[1]
   if (any(duplicated(.nonmem2rx$replaceSeq))) {
-    stop(paste0("the replacement for ", varType, "(", dataItem, ") has duplicate numbers and cannot be processed by nonmem2rx"))
+    warning(paste0("the replacement for ", varType, "(", dataItem, ") has duplicate numbers, check code"), call.=FALSE)
   }
-  .lst <- list(varType, dataItem, .nonmem2rx$replaceSeq)
-  .nonmem2rx$replaceSeq <- NULL
-  class(.lst) <- "repDI"
-  .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
-}
-#' Add a data item replacement
-#'
-#' @param varType Variable type
-#' @param dataItem Data item
-#' @param varItem Variable item
-#' @return Nothing, called for side effects
-#' @noRd
-#' @author Matthew L. Fidler
-.replaceDataParItem <- function(varType, dataItem, varItem) {
-  if (any(duplicated(.nonmem2rx$replaceSeq))) {
-    stop(paste0("the replacement for ", varType, "(", dataItem, "_", varItem, ") has duplicate numbers and cannot be processed by nonmem2rx"))
+  if (length(.nonmem2rx$replaceDataParItem) == 1L) {
+    .lst <- list(varType, .dataItem, .nonmem2rx$replaceSeq)
+    .nonmem2rx$replaceSeq <- NULL
+    .nonmem2rx$replaceDataParItem <- NULL
+    class(.lst) <- "repDI"
+    .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
+    return(invisible())
+  } else if (length(.nonmem2rx$replaceDataParItem) == 2L) {
+    .varItem <- .nonmem2rx$replaceDataParItem[2]
+    .lst <- list(varType, .dataItem, .varItem, .nonmem2rx$replaceSeq)
+    .nonmem2rx$replaceSeq <- NULL
+    .nonmem2rx$replaceDataParItem <- NULL
+    class(.lst) <- "repDVI"
+    .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
+
+    return(invisible())
   }
-  .lst <- list(varType, dataItem, varItem, .nonmem2rx$replaceSeq)
-  .nonmem2rx$replaceSeq <- NULL
-  class(.lst) <- "repDVI"
-  .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
+  stop(".replaceDataItem error", call.=FALSE)
 }

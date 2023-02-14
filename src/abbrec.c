@@ -77,8 +77,7 @@ SEXP nonmem2rxAddReplaceDirect1(const char *type, const char *var, int num);
 SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with);
 SEXP nonmem2rxReplaceProcessSeq(const char *what);
 SEXP nonmem2rxReplaceIsDataItem(const char *what);
-SEXP nonmem2rxReplaceDataItem(const char *type, const char *dataItem);
-SEXP nonmem2rxReplaceDataParItem(const char *type, const char *dataItem, const char *varItem);
+SEXP nonmem2rxReplaceDataItem(const char *type);
 SEXP nonmem2rxReplaceProcessLabel(const char *label);
 SEXP nonmem2rxReplaceMultiple(const char *type);
 
@@ -86,7 +85,6 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   char *name = (char*)pt.symbols[pn->symbol].name;
   char *varType = NULL;
   char *dataItem = NULL;
-  char *varItem = NULL;
   int nch = d_get_number_of_children(pn);
   int isStr=0;
   if (abbrecAddNameItem == 1 && !strcmp("identifier_nm", name)) {
@@ -167,31 +165,6 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     }
     // parse sequence by continuing parse tree
     abbrecAddSeq = 1;
-  } else if (!strcmp("replace_data_par", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 0);
-    varType = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 7);
-    char *tmp = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    if (strcmp(varType, tmp)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", varType, tmp);
-    }
-    xpn = d_get_child(pn, 2);
-    dataItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 4);
-    varItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    if (!INTEGER(nonmem2rxReplaceIsDataItem(dataItem))[0]) {
-      if (!INTEGER(nonmem2rxReplaceIsDataItem(varItem))[0]) {
-        tmp = varItem;
-        varItem = dataItem;
-        dataItem = tmp;
-      } else {
-        parseFree(0);
-        Rf_errorcall(R_NilValue, "$ABBREVIATED REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
-      }
-    }
-    // parse sequence by continuing parse tree
-    abbrecAddSeq = 1;
   }
   /* if (!strcmp("filename_t3", name)) { */
 
@@ -222,12 +195,9 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     }
   }
   if (!strcmp("replace_data", name)) {
-    nonmem2rxReplaceDataItem(varType, dataItem);
+    nonmem2rxReplaceDataItem(varType);
     abbrecAddSeq = 0;
     return;
-  } else if (!strcmp("replace_data_par", name)) {
-    nonmem2rxReplaceDataParItem(varType, dataItem, varItem);
-    abbrecAddSeq = 0;
   } else if (!strcmp("replace_multiple", name)) {
     nonmem2rxReplaceMultiple(varType);
     abbrecAddSeq = 0;

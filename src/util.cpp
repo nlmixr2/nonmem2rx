@@ -415,21 +415,13 @@ extern "C" SEXP nonmem2rxReplaceIsDataItem(const char *what) {
   END_RCPP
 }
 
-extern "C" SEXP nonmem2rxReplaceDataItem(const char *type, const char *dataItem) {
+extern "C" SEXP nonmem2rxReplaceDataItem(const char *type) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function replaceDataItem(".replaceDataItem", nonmem2rxNs);
-  return replaceDataItem(type, dataItem);
+  return replaceDataItem(type);
   END_RCPP
 }
-extern "C" SEXP nonmem2rxReplaceDataParItem(const char *type, const char *dataItem, const char *varItem) {
-  BEGIN_RCPP
-  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
-  Function replaceDataParItem(".replaceDataParItem", nonmem2rxNs);
-  return replaceDataParItem(type, dataItem, varItem);
-  END_RCPP
-}
-
 extern "C" SEXP nonmem2rxReplaceProcessLabel(const char *label) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");

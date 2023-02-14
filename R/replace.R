@@ -57,7 +57,6 @@
 #' @param item replacement item
 #' @param lines lines for replacement
 #' @return replaced line
-#' @export 
 #' @author Matthew L. Fidler
 #' @noRd
 .repItem <- function(item, lines) {
