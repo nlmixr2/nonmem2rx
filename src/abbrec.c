@@ -204,6 +204,30 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
   return 0;
 }
 
+int abbrecProcessMultipleItem(const char* name, D_ParseNode *pn, int i) {
+  if (!strcmp("replace_multiple", name)) {
+    if (i == 1) return 1;
+    if (i == 4) return 1;
+    if (i == 5) return 1;
+    if (i == 6) return 1;
+    if (i == 0) {
+      abbrecAddNameItem=1;
+      abbrecAddSeq = 1;
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      xpn = d_get_child(pn, 6);
+      char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (strcmp(v, v2)) {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
+      }
+      abbrecVarType = v;
+    }
+  }
+  return 0;
+}
+
+
 void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_abbrec) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
@@ -216,24 +240,8 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     abbrecProcessByStatement(name, pn);
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
-      if (!strcmp("replace_multiple", name)) {
-        if (i == 1) continue;
-        if (i == 4) continue;
-        if (i == 5) continue;
-        if (i == 6) continue;
-        if (i == 0) {
-          abbrecAddNameItem=1;
-          abbrecAddSeq = 1;
-          D_ParseNode *xpn = d_get_child(pn, 0);
-          char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-          xpn = d_get_child(pn, 6);
-          char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-          if (strcmp(v, v2)) {
-            parseFree(0);
-            Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
-          }
-          abbrecVarType = v;
-        }
+      if (abbrecProcessMultipleItem(name, pn, i)) {
+        continue;
       }
       D_ParseNode *xpn = d_get_child(pn, i);
       wprint_parsetree_abbrec(pt, xpn, depth, fn, client_abbrec);
