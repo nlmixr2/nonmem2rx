@@ -179,10 +179,10 @@
   .typeReg <- .regexpIgnoreCase(repDVI[[1]])
   .varReg <- .regexpIgnoreCase(repDVI[[3]])
   .reg00 <- paste0("(?:",.datReg, "_", .varReg, "|", .varReg, "_", .datReg, ")")
-  .reg0 <- paste0(.typeReg, " *[(] *", .reg00, " *[)] *")
-  .reg <- paste0("^ *[A-Za-z][A-Za-z0-9_]* *=",  .reg0)
+  .reg0 <- paste0("\\b", .typeReg, " *[(] *", .reg00, " *[)] *")
+  .reg <- paste0("^ *[A-Za-z][A-Za-z0-9_]* *=.*",  .reg0)
 
-  .regIf <- paste0("^ *IF *[(]([^)]*", .datReg, "[^)]*)[)] *(.*)\\b",
+  .regIf <- paste0("^ *IF *[(]([^)]*", .datReg, "[^)]*)[)] *([A-Za-z][A-Za-z0-9_]* *=.*)",
                    .typeReg, " *[(] *", .reg00, " *[)] *(.*)$")
   .elt <- repDVI[[4]]
   .prefix <- paste0("IF (", repDVI[[2]], ".EQ.", seq_along(.elt), ") ")

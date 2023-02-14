@@ -122,5 +122,40 @@ test_that("test replacement", {
        "IF (DOSN.EQ.2) F1=1*EXP(ETA(2))+34"))
   expect_error(.r("REPLACE ETA(NOINP)=ETA(0,2,3)"), "NOINP")
 
-  
+  .r(c("REPLACE ETA(OCC_ETA_BOV_CL)=ETA(5,9)", 
+       "REPLACE ETA(OCC_ETA_BOV_V)=ETA(6,10)",
+       "REPLACE ETA(OCC_ETA_BOV_KA)=ETA(7,11)", 
+       "REPLACE ETA(OCC_ETA_BOV_TL)=ETA(8,12)"),
+     c("; Could maybe do something like this:",
+       "ETA_BOV_CL = ETA(OCC_ETA_BOV_CL)",
+       "ETA_BOV_V = ETA(OCC_ETA_BOV_V)",
+       "ETA_BOV_KA = ETA(OCC_ETA_BOV_KA)",
+       "ETA_BOV_TL = ETA(OCC_ETA_BOV_TL)"),
+     c("; Could maybe do something like this:",
+       "IF (OCC.EQ.1) ETA_BOV_CL = ETA(5)",
+       "IF (OCC.EQ.2) ETA_BOV_CL = ETA(9)",
+       "IF (OCC.EQ.1) ETA_BOV_V = ETA(6)",
+       "IF (OCC.EQ.2) ETA_BOV_V = ETA(10)",
+       "IF (OCC.EQ.1) ETA_BOV_KA = ETA(7)",
+       "IF (OCC.EQ.2) ETA_BOV_KA = ETA(11)",
+       "IF (OCC.EQ.1) ETA_BOV_TL = ETA(8)",
+       "IF (OCC.EQ.2) ETA_BOV_TL = ETA(12)"))
+
+  .r(c("REPLACE ETA(OCC_ETA_BOV_CL)=ETA(5,9)", 
+       "REPLACE ETA(OCC_ETA_BOV_V)=ETA(6,10)",
+       "REPLACE ETA(OCC_ETA_BOV_KA)=ETA(7,11)", 
+       "REPLACE ETA(OCC_ETA_BOV_TL)=ETA(8,12)"),
+     c("CL = EXP(MU_1 + ETA(1)+ ETA(OCC_ETA_BOV_CL));",
+       "V = EXP(MU_2 + ETA(2)+ ETA(OCC_ETA_BOV_V));",
+       "KA = EXP(MU_3 + ETA(3)+ ETA(OCC_ETA_BOV_KA));",
+       "TL = EXP(MU_4 + ETA(4)+ ETA(OCC_ETA_BOV_TL));"),
+     c("IF (OCC.EQ.1) CL = EXP(MU_1 + ETA(1)+ ETA(5));",
+       "IF (OCC.EQ.2) CL = EXP(MU_1 + ETA(1)+ ETA(9));",
+       "IF (OCC.EQ.1) V = EXP(MU_2 + ETA(2)+ ETA(6));",
+       "IF (OCC.EQ.2) V = EXP(MU_2 + ETA(2)+ ETA(10));",
+       "IF (OCC.EQ.1) KA = EXP(MU_3 + ETA(3)+ ETA(7));",
+       "IF (OCC.EQ.2) KA = EXP(MU_3 + ETA(3)+ ETA(11));",
+       "IF (OCC.EQ.1) TL = EXP(MU_4 + ETA(4)+ ETA(8));",
+       "IF (OCC.EQ.2) TL = EXP(MU_4 + ETA(4)+ ETA(12));"))
+
 })
