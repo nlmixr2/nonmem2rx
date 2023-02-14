@@ -71,20 +71,28 @@ void wprint_node_abbrec(int depth, char *token_name, char *token_value, void *cl
 
 extern sbuf curLine;
 int abbrecAddSeq = 0;
+int abbrecAddNameItem = 0;
 
 SEXP nonmem2rxAddReplaceDirect1(const char *type, const char *var, int num);
 SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with);
 SEXP nonmem2rxReplaceProcessSeq(const char *what);
 SEXP nonmem2rxReplaceIsDataItem(const char *what);
 SEXP nonmem2rxReplaceDataItem(const char *type, const char *dataItem);
+SEXP nonmem2rxReplaceDataParItem(const char *type, const char *dataItem, const char *varItem);
+SEXP nonmem2rxReplaceProcessLabel(const char *label);
+SEXP nonmem2rxReplaceMultiple(const char *type);
 
 void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_abbrec) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   char *varType = NULL;
   char *dataItem = NULL;
+  char *varItem = NULL;
   int nch = d_get_number_of_children(pn);
   int isStr=0;
-  if (!strcmp("decimalintNo0neg", name)) {
+  if (abbrecAddNameItem == 1 && !strcmp("identifier_nm", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    nonmem2rxReplaceProcessLabel(v);
+  } else if (!strcmp("decimalintNo0neg", name)) {
     // This only occurs with the by statement, so finish the by statement parsing
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     sAppend(&curLine, ", by=%s)", v);
@@ -159,12 +167,56 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     }
     // parse sequence by continuing parse tree
     abbrecAddSeq = 1;
+  } else if (!strcmp("replace_data_par", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    varType = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 7);
+    char *tmp = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (strcmp(varType, tmp)) {
+      parseFree(0);
+      Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", varType, tmp);
+    }
+    xpn = d_get_child(pn, 2);
+    dataItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 4);
+    varItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (!INTEGER(nonmem2rxReplaceIsDataItem(dataItem))[0]) {
+      if (!INTEGER(nonmem2rxReplaceIsDataItem(varItem))[0]) {
+        tmp = varItem;
+        varItem = dataItem;
+        dataItem = tmp;
+      } else {
+        parseFree(0);
+        Rf_errorcall(R_NilValue, "$ABBREVIATED REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
+      }
+    }
+    // parse sequence by continuing parse tree
+    abbrecAddSeq = 1;
   }
   /* if (!strcmp("filename_t3", name)) { */
 
   /* } */
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
+      if (!strcmp("replace_multiple", name)) {
+        if (i == 1) continue;
+        if (i == 4) continue;
+        if (i == 5) continue;
+        if (i == 6) continue;
+        if (i == 0) {
+          abbrecAddNameItem=1;
+          abbrecAddSeq = 1;
+          D_ParseNode *xpn = d_get_child(pn, 0);
+          char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+          xpn = d_get_child(pn, 6);
+          char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+          if (strcmp(v, v2)) {
+            parseFree(0);
+            Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
+          }
+          varType = v;
+        }
+      }
       D_ParseNode *xpn = d_get_child(pn, i);
       wprint_parsetree_abbrec(pt, xpn, depth, fn, client_abbrec);
     }
@@ -173,6 +225,13 @@ void wprint_parsetree_abbrec(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     nonmem2rxReplaceDataItem(varType, dataItem);
     abbrecAddSeq = 0;
     return;
+  } else if (!strcmp("replace_data_par", name)) {
+    nonmem2rxReplaceDataParItem(varType, dataItem, varItem);
+    abbrecAddSeq = 0;
+  } else if (!strcmp("replace_multiple", name)) {
+    nonmem2rxReplaceMultiple(varType);
+    abbrecAddSeq = 0;
+    abbrecAddNameItem=0;
   }
 }
 

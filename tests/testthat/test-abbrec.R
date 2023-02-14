@@ -54,5 +54,17 @@ test_that("test abbrev  record", {
 
   .a("REPLACE THETA(OCC)=THETA(4 TO 7 BY 2)",
      list(structure(list("THETA", "OCC", c(4, 6)), class = "nonmem2rx.repDI")))
+
+  .a("REPLACE THETA(SID_KA)=THETA(4, 6)",
+     list(structure(list("THETA", "SID", "KA", c(4, 6)), class = "nonmem2rx.repDVI")))
+
+  .a("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3,4)",
+     list(structure(list("THETA", "CL", 1), class = "nonmem2rx.rep1"),
+          structure(list("THETA", "V1", 2), class = "nonmem2rx.rep1"),
+          structure(list("THETA", "Q", 3), class = "nonmem2rx.rep1"),
+          structure(list("THETA", "V2", 4), class = "nonmem2rx.rep1")))
+
+  expect_error(.a("REPLACE THETA(CL,V1,Q,V2)=ETA(1,2,3,4)"),"'THETA' to 'ETA'")
+  expect_error(.a("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3)"), "same number of labels")
   
 })

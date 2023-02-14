@@ -43,6 +43,36 @@ nonmem2rxRec.abb <- function(x) {
   .eval <- eval(parse(text=what))
   .nonmem2rx$replaceSeq <- c(.nonmem2rx$replaceSeq, .eval)
 }
+#' Add the label to the replacement queue
+#'
+#' @param label Label to add
+#' @return Nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.replaceProcessLabel <- function(label) {
+  .nonmem2rx$replaceLabel <- c(.nonmem2rx$replaceLabel, label)
+}
+#' Create the multiple replacement list to append to the replacement list
+#'
+#' @param varType Type of variable
+#' @return Nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.replaceMultiple <- function(varType) {
+  if (length(.nonmem2rx$replaceLabel) != length(.nonmem2rx$replaceSeq)) {
+    stop("the multiple replacement for '", varType, "' did not have the same number of labels as numbers", call.=FALSE)
+  }
+  .nonmem2rx$replace <- c(.nonmem2rx$replace,
+                          lapply(seq_along(.nonmem2rx$replaceLabel),
+                                 function(i) {
+                                   .lst <- list(varType, .nonmem2rx$replaceLabel[i],
+                                                .nonmem2rx$replaceSeq[i])
+                                   class(.lst) <-"nonmem2rx.rep1"
+                                   .lst
+                                 }))
+  .nonmem2rx$replaceLabel <- NULL
+  .nonmem2rx$replaceSeq <- NULL
+}
 #' Is this a data item
 #'
 #' @param what variable to check if it is a data item
@@ -67,5 +97,22 @@ nonmem2rxRec.abb <- function(x) {
   .lst <- list(varType, dataItem, .nonmem2rx$replaceSeq)
   .nonmem2rx$replaceSeq <- NULL
   class(.lst) <-"nonmem2rx.repDI"
+  .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
+}
+#' Add a data item replacement
+#'
+#' @param varType Variable type
+#' @param dataItem Data item
+#' @param varItem Variable item
+#' @return Nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.replaceDataParItem <- function(varType, dataItem, varItem) {
+  if (any(duplicated(.nonmem2rx$replaceSeq))) {
+    stop(paste0("the replacement for ", varType, "(", dataItem, "_", varItem, ") has duplicate numbers and cannot be processed by nonmem2rx"))
+  }
+  .lst <- list(varType, dataItem, varItem, .nonmem2rx$replaceSeq)
+  .nonmem2rx$replaceSeq <- NULL
+  class(.lst) <-"nonmem2rx.repDVI"
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }

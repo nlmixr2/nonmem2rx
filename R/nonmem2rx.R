@@ -48,6 +48,7 @@
   .nonmem2rx$thetaNonmemLabel <- NULL
   .nonmem2rx$replace <- list()
   .nonmem2rx$replaceSeq <- NULL
+  .nonmem2rx$replaceLabel <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'
