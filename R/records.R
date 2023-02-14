@@ -148,6 +148,8 @@
       .recs <- .recs[-.w]
     }
   }
+  # Replace the abbreaviated code before processing
+  .replaceAbbrev()
   # process the rest of the code
   for(.r in .recs) {
     .ret <- get(.r, envir=.recordEnv)

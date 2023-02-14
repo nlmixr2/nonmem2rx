@@ -17,7 +17,7 @@ nonmem2rxRec.abb <- function(x) {
 #' @author Matthew L. Fidler
 .addReplaceDirect1 <- function(type, var, num) {
   .lst <- list(type, var, num)
-  class(.lst) <-"nonmem2rx.rep1"
+  class(.lst) <-"rep1"
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }
 #' Add direct replacement type  
@@ -30,7 +30,7 @@ nonmem2rxRec.abb <- function(x) {
 #' @author Matthew L. Fidler
 .addReplaceDirect2 <- function(what, with) {
   .lst <- list(what,with)
-  class(.lst) <-"nonmem2rx.rep2"
+  class(.lst) <-"rep2"
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }
 #' Process the sequence for the repeat statement
@@ -67,7 +67,7 @@ nonmem2rxRec.abb <- function(x) {
                                  function(i) {
                                    .lst <- list(varType, .nonmem2rx$replaceLabel[i],
                                                 .nonmem2rx$replaceSeq[i])
-                                   class(.lst) <-"nonmem2rx.rep1"
+                                   class(.lst) <-"rep1"
                                    .lst
                                  }))
   .nonmem2rx$replaceLabel <- NULL
@@ -96,7 +96,7 @@ nonmem2rxRec.abb <- function(x) {
   }
   .lst <- list(varType, dataItem, .nonmem2rx$replaceSeq)
   .nonmem2rx$replaceSeq <- NULL
-  class(.lst) <-"nonmem2rx.repDI"
+  class(.lst) <- "repDI"
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }
 #' Add a data item replacement
@@ -113,6 +113,6 @@ nonmem2rxRec.abb <- function(x) {
   }
   .lst <- list(varType, dataItem, varItem, .nonmem2rx$replaceSeq)
   .nonmem2rx$replaceSeq <- NULL
-  class(.lst) <-"nonmem2rx.repDVI"
+  class(.lst) <- "repDVI"
   .nonmem2rx$replace <- c(.nonmem2rx$replace, list(.lst))
 }

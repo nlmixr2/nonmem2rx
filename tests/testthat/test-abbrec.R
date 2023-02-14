@@ -28,41 +28,41 @@ test_that("test abbrev  record", {
 
   # direct1
   .a("REPLACE THETA(CL)=THETA(4)",
-     list(structure(list("THETA", "CL", 4L), class = "nonmem2rx.rep1")))
+     list(structure(list("THETA", "CL", 4L), class = "rep1")))
   .a("REPLACE ETA(ECL)=ETA(4)",
-     list(structure(list("ETA", "ECL", 4L), class = "nonmem2rx.rep1")))
+     list(structure(list("ETA", "ECL", 4L), class = "rep1")))
   .a("REPLACE ERR(ECL)=ERR(4)",
-     list(structure(list("ERR", "ECL", 4L), class = "nonmem2rx.rep1")))
+     list(structure(list("ERR", "ECL", 4L), class = "rep1")))
   .a("REPLACE EPS(ECL)=EPS(4)",
-     list(structure(list("EPS", "ECL", 4L), class = "nonmem2rx.rep1")))
+     list(structure(list("EPS", "ECL", 4L), class = "rep1")))
   .a("REPLACE DADT(DEPOT)=DADT(1)",
-     list(structure(list("DADT", "DEPOT", 1L), class = "nonmem2rx.rep1")))
+     list(structure(list("DADT", "DEPOT", 1L), class = "rep1")))
   .a("REPLACE A(CENTRAL)=A(2)",
-     list(structure(list("A", "CENTRAL", 2L), class = "nonmem2rx.rep1")))
+     list(structure(list("A", "CENTRAL", 2L), class = "rep1")))
   
   expect_error(.a("REPLACE EPS(ECL)=THETA(4)"), "'EPS' to 'THETA'")
 
   .a("REPLACE PI=3.14159265",
-     list(structure(list("PI", "3.14159265"), class = "nonmem2rx.rep2")))
+     list(structure(list("PI", "3.14159265"), class = "rep2")))
   .a('REPLACE K34="3,4"',
-     list(structure(list("K34", "3,4"), class = "nonmem2rx.rep2")))
+     list(structure(list("K34", "3,4"), class = "rep2")))
   .a("REPLACE K34='3,4'",
-     list(structure(list("K34", "3,4"), class = "nonmem2rx.rep2")))
+     list(structure(list("K34", "3,4"), class = "rep2")))
 
   .a("REPLACE THETA(OCC)=THETA(4,7)",
-     list(structure(list("THETA", "OCC", c(4, 7)), class = "nonmem2rx.repDI")))
+     list(structure(list("THETA", "OCC", c(4, 7)), class = "repDI")))
 
   .a("REPLACE THETA(OCC)=THETA(4 TO 7 BY 2)",
-     list(structure(list("THETA", "OCC", c(4, 6)), class = "nonmem2rx.repDI")))
+     list(structure(list("THETA", "OCC", c(4, 6)), class = "repDI")))
 
   .a("REPLACE THETA(SID_KA)=THETA(4, 6)",
-     list(structure(list("THETA", "SID", "KA", c(4, 6)), class = "nonmem2rx.repDVI")))
+     list(structure(list("THETA", "SID", "KA", c(4, 6)), class = "repDVI")))
 
   .a("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3,4)",
-     list(structure(list("THETA", "CL", 1), class = "nonmem2rx.rep1"),
-          structure(list("THETA", "V1", 2), class = "nonmem2rx.rep1"),
-          structure(list("THETA", "Q", 3), class = "nonmem2rx.rep1"),
-          structure(list("THETA", "V2", 4), class = "nonmem2rx.rep1")))
+     list(structure(list("THETA", "CL", 1), class = "rep1"),
+          structure(list("THETA", "V1", 2), class = "rep1"),
+          structure(list("THETA", "Q", 3), class = "rep1"),
+          structure(list("THETA", "V2", 4), class = "rep1")))
 
   expect_error(.a("REPLACE THETA(CL,V1,Q,V2)=ETA(1,2,3,4)"),"'THETA' to 'ETA'")
   expect_error(.a("REPLACE THETA(CL,V1,Q,V2)=THETA(1,2,3)"), "same number of labels")
