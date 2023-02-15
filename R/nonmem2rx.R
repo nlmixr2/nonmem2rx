@@ -373,22 +373,26 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   on.exit({
     .Call(`_nonmem2rx_r_parseFree`)
   })
+  .minfo(sprintf("reading file '%s'", file))
   .lines <- suppressWarnings(readLines(file))
+  .minfo("done")
   if (length(.lines) == 0L) {
-    .w <- integer(0)
+    .wpro <- integer(0)
   } else {
-    .w <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines) != -1)
+    .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines) != -1)
   }
-  if (length(.w) == 0) {
+  if (length(.wpro) == 0) {
     stop("cannot find a problem statement in the input file",
          call.=FALSE)
   }
   .lstFile <- NULL
+  .minfo("checking if the file is a nonmem output")
   .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lines)!=-1)
   if (length(.w) > 0) {
+    .minfo("listing file, extracting control stream from listing")
     .w <- .w[1]
     .lines <- .lines[(seq_len(.w-1))]
-    .w <- which(regexpr(" *[$][Pr][Rr][Oo]", .lines) != -1)
+    .w <- .wpro
     .w <- .w[1]
     while (.w != 1 && regexpr("(^ *;.*$|^ *$)", .lines[.w]) != -1) {
       .w <- .w-1
@@ -404,6 +408,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
              call.=FALSE)
       }
     }
+    .minfo("done extracting control stream")
+  } else {
+    .minfo("this is control stream")
   }
   .lines <- paste(.lines, collapse = "\n")
   .parseRec(.lines)
@@ -461,7 +468,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})",
                          "}")))
   .rx <- .fun()
+  if (is.null(rename) && ("ytype" %in% tolower(c(.nonmem2rx$input, names(.nonmem2rx$input))))) {
+    .r <- c(RXTYPE="YTYPE")
+    .minfo("since YTYPE is in $INPUT, change to RXTYPE")
+  }
   if (!is.null(rename)) {
+    .minfo("Renaming variables in model and data")
     .r <- rename
     .mv <- rxode2::rxModelVars(.rx)
     .in <-c(.mv$params, .mv$state, .mv$lhs)
@@ -473,16 +485,19 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .r <- .r[.w]
       .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
     }
+    .minfo("done")
   }
   if (is.null(.lstFile)) .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
   if (file.exists(.lstFile)) {
+    .minfo("Getting run information from output")
     if (strictLst) {
       .lstInfo <- nmlst(.lstFile)
     } else {
       .tmp <- try(nmlst(.lstFile), silent=TRUE)
       if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
     }
+    .minfo("done")
   }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)

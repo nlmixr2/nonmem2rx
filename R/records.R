@@ -33,6 +33,36 @@
     aesinitial="aesi", # $aesinitial
     tol="tol")
 
+.transRecordsDisplay <-
+  c(pro="$PROBLEM", # $problem
+    inp="$INPUT", # $input
+    ind="$INDEX", # $index
+    indxs="$INDEX",
+    con="$CONTRA", # $contra
+    dat="$DATA", # $data
+    sub="$SUBROUTINES", # $subroutines
+    abb="$ABBREVITED", # $abbrevited
+    pre="$PRED", # $pred
+    the="$THETA", # $theta
+    ome="$OMEGA", # $omega
+    sig="$SIGMA", # $sigma
+    msf="$MSFI", # $msfi
+    sim="$SIMULATION", # $simulation
+    est="$ESTIMATION", # $estimation
+    estm="$ESTIMATION",
+    cov="$COVARIANCE", # $covariance
+    tab="$TABLE", # $table
+    sca="$SCATTERPLOT", # $scatterplot
+    mod="$MODEL", # $model
+    des="$DES", # $des
+    pk="$PK",   # $pk
+    err="$ERROR", # $error
+    bin="$BIND", # $bind
+    aes="$AES", # $aes
+    aesinitial="$AESINITIAL", # $aesinitial
+    tol="$TOL")
+
+
 #' Get the normalized NONMEM record name
 #'
 #' @param rec input record (excluding `$`)
@@ -122,6 +152,7 @@
 .parseRec <- function(ctl) {
   checkmate::checkString(ctl)
   .clearRecordEnv()
+  .minfo("splitting control stream by records")
   .recs <- strsplit(ctl, "(^|\\n) *[$]")[[1]]
   .addRec("aaa", .recs[1])
   lapply(.recs[-1], function(r) {
@@ -135,6 +166,7 @@
       stop("unexpected line", call. = FALSE)
     }
   })
+  .minfo("done")
   .recs <- .recordEnv$.recs
   # process these records first to make sure abbreaviated code is
   # translated correctly
@@ -176,11 +208,14 @@ nonmem2rxRec <- function(x) {
     print(x)
     stop("record not from nonmem2rx", call.=FALSE)
   }
-  UseMethod("nonmem2rxRec")
+  .minfo(sprintf("Processing record %s", .transRecordsDisplay[class(x)[1]]))
+  .ret <- UseMethod("nonmem2rxRec")
+  .minfo("done")
 }
 
 #' @rdname nonmem2rxRec
 #' @export
 nonmem2rxRec.default <- function(x) {
+  .minfo(sprintf("Ignore record %s", .transRecordsDisplay[class(x)[1]]))
   invisible()
 }
