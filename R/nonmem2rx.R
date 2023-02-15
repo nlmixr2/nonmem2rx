@@ -410,7 +410,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
     if (thetaNames) {
-      thetaNames <- .nonmem2rx$theta
+      thetaNames <- vapply(seq_along(.nonmem2rx$theta),
+                           function(i) {
+                             .lab <- .nonmem2rx$thetaNonmemLabel[i]
+                             if (.lab == "") .lab <- .nonmem2rx$theta[i]
+                             .lab
+                           }, character(1), USE.NAMES=FALSE)
     } else {
       thetaNames <- character(0)
     }
@@ -531,10 +536,17 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   if (inherits(etaNames, "logical")) {
     checkmate::assertLogical(etaNames, len=1, any.missing=FALSE)
-    etaNames <- character(0)
-    if (exists("etaLabel", .nonmem2rx)) {
-      etaNames <- .nonmem2rx$etaLabel
+    if (etaNames) {
+      etaNames <- vapply(seq_along(.nonmem2rx$theta),
+                         function(i) {
+                           .lab <- .nonmem2rx$etaNonmemLabel[i]
+                           if (.lab == "") .lab <- .nonmem2rx$etaLabel[i]
+                           .lab
+                         }, character(1), USE.NAMES=FALSE)      
+    } else {
+      etaNames <- character(0)
     }
+
   } else {
     checkmate::assertCharacter(etaNames, any.missing = FALSE)    
   }
