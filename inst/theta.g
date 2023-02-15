@@ -27,8 +27,8 @@ theta0: ini_constant fixed?;
 theta1: '(' theta0 ')';
 theta6: '(' ini_constant ')' fixed;
 
-theta2: '(' low_ini ','? ini_constant ')' fixed;
-theta3: '(' low_ini ','? ini_constant fixed? ')' ;
+theta2: '(' low_ini ','? ini_constant ','? ')' fixed;
+theta3: '(' low_ini ','? ini_constant ','? fixed? ','? ')' ;
 
 theta4: '(' low_ini ','? ini_constant ','? hi_constant ')' fixed;
 theta5: '(' low_ini ','? ini_constant ','? hi_constant fixed? ')' ;
