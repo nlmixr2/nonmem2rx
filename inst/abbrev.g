@@ -1,62 +1,82 @@
 //loop
-statement_list : (statement)+ ;
+statement_list : call_protocol_phrase?
+ (statement)+ ;
 
 // return and exit statements not supported
 
 statement 
-  : assignment
-  | if1
-  | ifthen
-  | ifcallrandom
-  | ifcallsimeps
-  | ifcallsimeta
-  | elseif
-  | else
-  | endif
-  | dowhile
-  | enddo
-  | ini       
-  | fbio      
-  | alag      
-  | rate      
-  | dur       
-  | scale     
-  | derivative
-  | da        
-  | dp
-  | callsimeta
-  | callgeteta
-  | callsimeps
-  | callpassmode
-  | callsupp
-  | callrandom
-  | exit_line
-  | comresn1
-  | ifexit
-  | callfl
-  | verbatimCode;
+  : assignment singleLineComment?
+  | if1 singleLineComment?
+  | ifthen singleLineComment?
+  | ifcallrandom singleLineComment?
+  | ifcallsimeps singleLineComment?
+  | ifcallsimeta singleLineComment?
+  | elseif singleLineComment?
+  | else singleLineComment?
+  | endif singleLineComment?
+  | dowhile singleLineComment?
+  | enddo singleLineComment?
+  | ini singleLineComment?
+  | iniI singleLineComment?
+  | fbio singleLineComment?
+  | alag singleLineComment?     
+  | rate singleLineComment?
+  | dur singleLineComment?
+  | scale singleLineComment?
+  | derivative singleLineComment?
+  | derivativeI singleLineComment?
+  | da singleLineComment?
+  | dp singleLineComment?
+  | callsimeta singleLineComment?
+  | callgeteta singleLineComment?
+  | callsimeps singleLineComment?
+  | callpassmode singleLineComment?
+  | callsupp singleLineComment?
+  | callrandom singleLineComment?
+  | exit_line singleLineComment?
+  | comresn1 singleLineComment?
+  | ifexit singleLineComment?
+  | callfl singleLineComment?
+  | verbatimCode singleLineComment?
+  | singleLineComment;
 
 
 ini         :  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
+iniI        :  'A_0(' identifier ')' '=' logical_or_expression;
 fbio        : "[Ff]([0-9]+|O)" '='  logical_or_expression;
 alag        : "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
 rate        : "[Rr][1-9][0-9]*" '=' logical_or_expression;
 dur         : "[Dd][1-9][0-9]*" '=' logical_or_expression;
 scale       : "[Ss]([0-9]+|C|O)" '=' logical_or_expression;
 derivative  : ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
+derivativeI : ('DADT(' | 'dadt(' ) identifier ')' '=' logical_or_expression;
 da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 
 exit_line: 'EXIT' decimalint decimalint;
 ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
 comresn1: 'COMRES' '=' '-' '1';
-callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1'); 
+callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
+
+call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
+        | 'OBS'
+        | 'OBSERVATION' 'ONLY'
+        | 'OBS' 'ONLY'
+        | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
+        | 'ONCE'
+        | 'IND.' 'REC.'
+        | 'IND' 'REC'
+        | 'EVERY' 'EVENT'
+        | 'EVERY'
+        |'NEW' 'TIME'
+        |'NEW' 'EVENT' 'TIME'
+        ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
-elseif: 'ELSEIF' '(' logical_or_expression ')' 'THEN';
+elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
 else: 'ELSE';
-endif: 'ENDIF';
+endif: ('ENDIF' | 'END' 'IF');
 dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
 enddo: 'ENDDO';
 
@@ -108,10 +128,15 @@ multiplicative_expression : unary_expression
 mult_part : ('*' | '/') unary_expression ;
 
 theta : ('THETA(' | 'theta(') decimalintNo0 ')';
+thetaI : ('THETA(' | 'theta(') identifier ')';
 eta   : ('ETA(' | 'eta(') decimalintNo0 ')';
+etaI   : ('ETA(' | 'eta(') identifier ')';
 eps   : ('EPS(' | 'eps(') decimalintNo0 ')';
+epsI   : ('EPS(' | 'eps(') identifier ')';
 err   : ('ERR(' | 'err(') decimalintNo0 ')';
+errI   : ('ERR(' | 'err(') identifier ')';
 amt   : ('A(' | 'a(')  decimalintNo0 ')';
+amtI  : ('A(' | 'a(')  identifier ')';
 mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
 mnext : ('MNEXT(' | 'mext(') decimalintNo0 ')';
 mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
@@ -149,11 +174,16 @@ primary_expression
   | scalei
   | identifier
   | theta
+  | thetaI
   | eta
+  | etaI
   | eps
+  | epsI
   | err
+  | errI
   | dt
   | amt
+  | amtI
   | mpast
   | mnext
   | mtime
@@ -168,23 +198,23 @@ primary_expression
   | '(' logical_or_expression ')'
   ;
 
-function : function_name '(' (logical_or_expression)*  (',' logical_or_expression)* ')' ;
+function : function_name (logical_or_expression)*  (',' logical_or_expression)* ')' ;
 
-function_name: 'LOG' | 'LOG10' | 'EXP' | 'SQRT' | 'SIN' | 'COS' |
-        'ABS' |'TAN' | 'ASIN' | 'ACOS' | 'ATAN' | 'INT' | 'MIN' |
-        'MAX' |'MOD' | 'PHI'  | 'GAMLN' |
-        'DLOG' |'DLOG10' | 'DEXP' | 'DSQRT' | 'DSIN' | 'DCOS' |
-        'DABS' |'DTAN' | 'DASIN' | 'DACOS' | 'DATAN' | 'DINT' | 'DMIN' |
-        'DMAX' |'DMOD' | 'DPHI'  | 'DGAMLN' |
-        'log' | 'log10' | 'exp' | 'sqrt' | 'sin' | 'cos' |
-        'abs' |'tan' | 'asin' | 'acos' | 'atan' | 'int' | 'min' |
-        'max' |'mod' | 'phi'  | 'gamln' |
-        'dlog' |'dlog10' |'dexp'  | 'dsqrt' | 'dsin' | 'dcos' |
-        'dabs' |'dtan'   |'dasin' | 'dacos' | 'datan' | 'dint' | 'dmin' |
-        'dmax' |'dmod'   |'dphi'  | 'dgamln' |
-        'Log' | 'Log10' | 'Exp' | 'Sqrt' | 'Sin' | 'Cos' |
-        'Abs' |'Tan' | 'Asin' | 'Acos' | 'Atan' | 'Int' | 'Min' |
-        'Max' |'Mod' | 'Phi'  | 'Gamln'
+function_name: 'LOG(' | 'LOG10(' | 'EXP(' | 'SQRT(' | 'SIN(' | 'COS(' |
+        'ABS(' |'TAN(' | 'ASIN(' | 'ACOS(' | 'ATAN(' | 'INT(' | 'MIN(' |
+        'MAX(' |'MOD(' | 'PHI('  | 'GAMLN(' |
+        'DLOG(' |'DLOG10(' | 'DEXP(' | 'DSQRT(' | 'DSIN(' | 'DCOS(' |
+        'DABS(' |'DTAN(' | 'DASIN(' | 'DACOS(' | 'DATAN(' | 'DINT(' | 'DMIN(' |
+        'DMAX(' |'DMOD(' | 'DPHI('  | 'DGAMLN(' |
+        'log(' | 'log10(' | 'exp(' | 'sqrt(' | 'sin(' | 'cos(' |
+        'abs(' |'tan(' | 'asin(' | 'acos(' | 'atan(' | 'int(' | 'min(' |
+        'max(' |'mod(' | 'phi('  | 'gamln(' |
+        'dlog(' |'dlog10(' |'dexp'  | 'dsqrt(' | 'dsin(' | 'dcos(' |
+        'dabs(' |'dtan('   |'dasin(' | 'dacos(' | 'datan(' | 'dint(' | 'dmin(' |
+        'dmax(' |'dmod('   |'dphi'  | 'dgamln(' |
+        'Log(' | 'Log10(' | 'Exp(' | 'Sqrt(' | 'Sin(' | 'Cos(' |
+        'Abs(' |'Tan(' | 'Asin(' | 'Acos(' | 'Atan(' | 'Int(' | 'Min(' |
+        'Max(' |'Mod(' | 'Phi(' | 'Gamln('
     ;
 
 constant : decimalint | float1 | float2;

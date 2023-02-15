@@ -7,8 +7,8 @@ filename_t1: "\'([^\'\\]|\\[^])*\'";
 filename_t2: "\"([^\"\\]|\\[^])*\"";
 filename_t3: "[^ '\"\n]+";
 
-ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore') '='? "[^\n]";
-ignore_statement: ('IGNORE' | 'ignore' | 'Ignore') '='? logic_bracket;
+ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore' | 'ign' | 'Ign' | 'IGN') '='? "[^\n]";
+ignore_statement: ('IGNORE' | 'ignore' | 'Ignore'| 'ign' | 'Ign' | 'IGN') '='? logic_bracket;
 accept_statement: ('ACCEPT' | 'accept' | 'Accept') '='? logic_bracket;
 null_statement: 'NULL' '='? "[^\n]";
 wide_statement: ('NOWIDE' | 'WIDE' | 'nowide' | 'wide' | 'Nowide' | 'Wide');

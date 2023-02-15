@@ -51,13 +51,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){

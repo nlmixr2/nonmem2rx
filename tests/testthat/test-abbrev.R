@@ -82,42 +82,40 @@ test_that("test abbrev", {
     expect_error(.a("DP(1, 2) = -KEL*A(1)"), "DP[(]#, #[)]")
 
     # cmt properties
-    .a("A_0(1) = 1","rxddta1(0) <- 1")
-    .a("F1 = 1","f(rxddta1) <- 1")
-    .a("R1 = 1","rate(rxddta1) <- 1")
-    .a("D1 = 1","dur(rxddta1) <- 1")
+    .a("A_0(1) = 1",c("rxini.rxddta1. <- 1", "rxddta1(0) <- rxini.rxddta1."))
+    .a("F1 = 1",c("rxf.rxddta1. <- 1", "f(rxddta1) <- rxf.rxddta1."))
+    .a("R1 = 1",c("rxrate.rxddta1. <- 1", "rate(rxddta1) <- rxrate.rxddta1."))
+    .a("D1 = 1",c("rxdur.rxddta1. <- 1", "dur(rxddta1) <- rxdur.rxddta1."))
     .a("S1 = 1","scale1 <- 1")
     .a(" CL      = LOG(A)", "CL <- log(A)")
     .a(" CL      = MIN(C, D)", "CL <- min(C, D)")
     .a(" CL      = MAX(C, D)", "CL <- max(C, D)")
-
     expect_error(.a(" TSCALE      = 4"), "'TSCALE'")
     expect_error(.a(" XSCALE      = 4"), "'XSCALE'")
-
     .a("CALL SIMETA(ETA)", "simeta()")
     .a("CALL SIMEPS(EPS)", "simeps()")
     expect_error(.a("CALL GETETA(ETA)"), "'CALL GETETA")
     expect_error(.a(","), "[$]PRED")
+    
     .a("x=time", "X <- t")
     .a("x=t", "X <- t")
 
     # in the presence of linCmt()
-    .a("f1=1", "f(central) <- 1", abbrevLin=1L)
-    .a("A_0(1) = 1","central(0) <- 1", abbrevLin=1L)
-    .a("R1 = 1","rate(central) <- 1", abbrevLin=1L)
-    .a("D1 = 1","dur(central) <- 1", abbrevLin=1L)
+    .a("f1=1", c("rxf.central. <- 1", "f(central) <- rxf.central."), abbrevLin=1L)
+    .a("A_0(1) = 1",c("rxini.central. <- 1", "central(0) <- rxini.central."), abbrevLin=1L)
+    .a("R1 = 1",c("rxrate.central. <- 1", "rate(central) <- rxrate.central."), abbrevLin=1L)
+    .a("D1 = 1",c("rxdur.central. <- 1", "dur(central) <- rxdur.central."), abbrevLin=1L)
     .a("SC = 1","scale1 <- 1", abbrevLin=1L)
-    expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=1L), "central")
-
-    .a("f1=1", "f(depot) <- 1", abbrevLin=2L)
-    .a("A_0(1) = 1","depot(0) <- 1", abbrevLin=2L)
-    .a("R1 = 1","rate(depot) <- 1", abbrevLin=2L)
-    .a("D1 = 1","dur(depot) <- 1", abbrevLin=2L)
+    expect_error(.a("f3=1", c("rxf.depot. <- 1", "f(depot) <- rxf.depot."), abbrevLin=1L), "central")
+    .a("f1=1", c("rxf.depot. <- 1", "f(depot) <- rxf.depot."), abbrevLin=2L)
+    .a("A_0(1) = 1",c("rxini.depot. <- 1", "depot(0) <- rxini.depot."), abbrevLin=2L)
+    .a("R1 = 1", c("rxrate.depot. <- 1", "rate(depot) <- rxrate.depot."), abbrevLin=2L)
+    .a("D1 = 1",c("rxdur.depot. <- 1", "dur(depot) <- rxdur.depot."), abbrevLin=2L)
     .a("SC = 1","scale2 <- 1", abbrevLin=2L)
-    .a("f2=1", "f(central) <- 1", abbrevLin=2L)
-    .a("A_0(2) = 1","central(0) <- 1", abbrevLin=2L)
-    .a("R2 = 1","rate(central) <- 1", abbrevLin=2L)
-    .a("D2 = 1","dur(central) <- 1", abbrevLin=2L)
+    .a("f2=1", c("rxf.central. <- 1", "f(central) <- rxf.central."), abbrevLin=2L)
+    .a("A_0(2) = 1",c("rxini.central. <- 1", "central(0) <- rxini.central."), abbrevLin=2L)
+    .a("R2 = 1",c("rxrate.central. <- 1", "rate(central) <- rxrate.central."), abbrevLin=2L)
+    .a("D2 = 1",c("rxdur.central. <- 1", "dur(central) <- rxdur.central."), abbrevLin=2L)
     expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=2L), "central")
     expect_warning(.a("S1 = 1\nSC=1", c("scale1 <- 1", "scale1 <- 1"), abbrevLin=1L), "last defined")
     .a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 1L)
@@ -142,12 +140,10 @@ test_that("test abbrev", {
     expect_warning(.a("a=evid+3", "A <- nmevid + 3"), "evid")
     expect_warning(.a("a=sim+3", "A <- nmsim + 3"), "sim")
     expect_warning(.a("a=ipredSim+3", "A <- nmipredsim + 3"), "ipredSim")
-    
-    .a("a=D1", "A <- dur(rxddta1)")
-    .a("a=F1", "A <- f(rxddta1)")
-    .a("a=ALAG1", "A <- alag(rxddta1)")
-    .a("a=R1", "A <- rate(rxddta1)")
-
+    .a("a=D1", "A <- rxdur.rxddta1.")
+    .a("a=F1", "A <- rxf.rxddta1.")
+    .a("a=ALAG1", "A <- rxalag.rxddta1.")
+    .a("a=R1", "A <- rxrate.rxddta1.")
     .a("a=SC", "A <- scalec")
     .a("a=SC", "A <- scale1", abbrevLin=1L)
     .a("a=SC", "A <- scale2", abbrevLin=2L)
@@ -163,5 +159,65 @@ test_that("test abbrev", {
     expect_error(.a("F0=3"), "F0/FO")
 
     expect_warning(.a("SID=IREP", "SID <- irep"), "sim.id")
+
+
+    .am <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $model record
+      .nonmem2rx$cmtName <- c("GUT", "CENTRAL", "PERI")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+
+    .am("DADT(GUT)=-KA*A(GUT)",
+        "d/dt(rxddta1) <-  - KA * rxddta1")
+
+    .am("DADT(CENTRAL)=KA*A(GUT)-(KCP+KC0)*A(CENTRAL)+KPC*A(PERI)",
+        "d/dt(rxddta2) <- KA * rxddta1 - (KCP + KC0) * rxddta2 + KPC * rxddta3")
+
+    .am("DADT(PERI)=KCP*A(CENTRAL)-KPC*A(PERI)",
+        "d/dt(rxddta3) <- KCP * rxddta2 - KPC * rxddta3")
+
+    .am("A_0(PERI)=3",
+        c("rxini.rxddta3. <- 3",  "rxddta3(0) <- rxini.rxddta3."))
+
+    .at <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$thetaNonmemLabel <- c("CL", "V", "KA")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+    .at("test = THETA(CL) + THETA(V) + THETA(KA)",
+        "TEST <- theta1 + theta2 + theta3")
+    expect_error(.at("test = THETA(FUN)"),
+                 "FUN")
+
+    .ae <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$etaNonmemLabel <- c("ECL", "EV", "EKA")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
     
+    .ae("test = ETA(ECL) + ETA(EV) + ETA(EKA)",
+        "TEST <- eta1 + eta2 + eta3")
+    expect_error(.ae("test = ETA(FUN)"),
+                 "FUN")
+
+    .ar <- function(abbrev, eq="no", abbrevLin=0L) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$epsNonmemLabel <- c("PROP", "ADD")
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+
+    .ar("test = ERR(ADD) + EPS(PROP)",
+        "TEST <- eps2 + eps1")
+
+    expect_error(.ar("test = ERR(EASY) + EPS(PROP)",
+        "TEST <- eps2 + eps1"), "EASY")
+
 })

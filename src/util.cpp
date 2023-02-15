@@ -41,29 +41,38 @@ extern "C" SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi) {
   END_RCPP
 }
 
-extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment) {
+extern "C" SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label, int nargs) {
   BEGIN_RCPP
     Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector iniC(1);
-  iniC[0] = Rf_mkChar(ini);
+  if (ini == NULL) {
+    iniC[0] = "";
+  } else {
+    iniC[0] = Rf_mkChar(ini);
+  }
   CharacterVector commentS(1);
   if (comment == NULL) {
     commentS[0] = "";
   } else {
     commentS[0] = Rf_mkChar(comment);
   }
+  CharacterVector labelS(1);
+  if (label == NULL) {
+    labelS[0] = "";
+  } else {
+    labelS[0] = Rf_mkChar(label);
+  }
   Function pushTheta(".pushTheta", nonmem2rxNs);
-  pushTheta(ini, commentS);
+  pushTheta(ini, commentS, labelS, nargs);
   END_RCPP
 }
-
-extern "C" SEXP nonmem2rxPushOmega(const char *ini) {
+extern "C" SEXP nonmem2rxPushOmega(const char *ini, int sd, int cor, int chol) {
   BEGIN_RCPP
-    Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector iniC(1);
   iniC[0] = Rf_mkChar(ini);
-  Function addIni(".addIni", nonmem2rxNs);
-  addIni(iniC);
+  Function addOmega(".addOmega", nonmem2rxNs);
+  addOmega(iniC, sd, cor, chol);
   END_RCPP
 }
 
@@ -85,6 +94,26 @@ extern "C" SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefi
   Function addOmegaComment(".addOmegaComment", nonmem2rxNs);
   addOmegaComment(commentC, prefixC);
   END_RCPP  
+}
+
+extern "C" SEXP nonmem2rxPushOmegaLabel(const char *comment, const char *prefix) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  CharacterVector commentC(1);
+  if (comment == NULL) {
+    commentC[0] = "";
+  } else {
+    commentC[0] = Rf_mkChar(comment);
+  }
+  CharacterVector prefixC(1);
+  if (prefix == NULL) {
+    prefixC[0] = "";
+  } else {
+    prefixC[0] = Rf_mkChar(prefix);
+  }
+  Function addOmegaLabel(".addOmegaLabel", nonmem2rxNs);
+  addOmegaLabel(commentC, prefixC);
+  END_RCPP    
 }
 
 extern "C" SEXP nonmem2rxPushModel0(const char *cmtName) {
@@ -268,3 +297,144 @@ extern "C" SEXP nonmem2rxPushOmegaEst(int x, int y) {
   pushOmegaEst(x, y);
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxPushObservedDadt(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedDadt(".pushObservedDadt", nonmem2rxNs);
+  pushObservedDadt(a);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxPushObservedThetaObs(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedThetaObs(".pushObservedThetaObs", nonmem2rxNs);
+  pushObservedThetaObs(a);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxPushObservedEtaObs(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedEtaObs(".pushObservedEtaObs", nonmem2rxNs);
+  pushObservedEtaObs(a);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxPushObservedMaxEta(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedMaxEta(".pushObservedMaxEta", nonmem2rxNs);
+  pushObservedMaxEta(a);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxPushObservedMaxTheta(int a) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushObservedMaxTheta(".pushObservedMaxTheta", nonmem2rxNs);
+  pushObservedMaxTheta(a);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2xPushOmegaBlockNvalue(int n, const char *v1, const char *v2,
+                                             const char *prefix, int num) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushOmegaBlockNvalue(".pushOmegaBlockNvalue", nonmem2rxNs);
+  pushOmegaBlockNvalue(n, v1, v2, prefix, num);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxGetModelNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getModelNum(".getModelNum", nonmem2rxNs);
+  return getModelNum(v);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxGetThetaNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getThetaNum(".getThetaNum", nonmem2rxNs);
+  return getThetaNum(v);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxGetEtaNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getEtaNum(".getEtaNum", nonmem2rxNs);
+  return getEtaNum(v);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxGetEpsNum(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getEpsNum(".getEpsNum", nonmem2rxNs);
+  return getEpsNum(v);
+  END_RCPP
+}
+
+
+extern "C" SEXP nonmem2rxAddReplaceDirect1(const char *type, const char *var, int num) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function addReplaceDirect1(".addReplaceDirect1", nonmem2rxNs);
+  return addReplaceDirect1(type, var, num);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxAddReplaceDirect2(const char *what, const char *with) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function addReplaceDirect2(".addReplaceDirect2", nonmem2rxNs);
+  return addReplaceDirect2(what, with);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxReplaceProcessSeq(const char *what) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function processSeq(".processSeq", nonmem2rxNs);
+  return processSeq(what);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxReplaceIsDataItem(const char *what) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function replaceIsDataItem(".replaceIsDataItem", nonmem2rxNs);
+  return replaceIsDataItem(what);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxReplaceDataItem(const char *type) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function replaceDataItem(".replaceDataItem", nonmem2rxNs);
+  return replaceDataItem(type);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxReplaceProcessLabel(const char *label) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function replaceProcessLabel(".replaceProcessLabel", nonmem2rxNs);
+  return replaceProcessLabel(label);
+  END_RCPP
+}
+
+extern "C" SEXP nonmem2rxReplaceMultiple(const char *type) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function replaceMultiple(".replaceMultiple", nonmem2rxNs);
+  return replaceMultiple(type);
+  END_RCPP
+}
+

@@ -51,13 +51,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -163,7 +158,6 @@ void trans_data(const char* parse){
 }
 
 SEXP _nonmem2rx_trans_data(SEXP in) {
-  sIni(&curLine);
   sClear(&curLine);
   ignoreAcceptFlag=0;
   trans_data(R_CHAR(STRING_ELT(in, 0)));

@@ -131,12 +131,27 @@
       .content <- substr(r, attr(.m, "match.length")+1, nchar(r))
       .addRec(.rec, .content)
     } else  {
-      
       message(deparse1(r))
       stop("unexpected line", call. = FALSE)
     }
   })
-  for(.r in .recordEnv$.recs) {
+  .recs <- .recordEnv$.recs
+  # process these records first to make sure abbreaviated code is
+  # translated correctly
+  .first <- c("inp", "abb", "mod", "the", "ome", "sig")
+  for (.r in .first) {
+    .w <- which(.recs == .r)
+    if (length(.w) == 1L) {
+      .ret <- get(.r, envir=.recordEnv)
+      class(.ret) <- c(.r, "nonmem2rx")
+      nonmem2rxRec(.ret)
+      .recs <- .recs[-.w]
+    }
+  }
+  # Replace the abbreaviated code before processing
+  .replaceAbbrev()
+  # process the rest of the code
+  for(.r in .recs) {
     .ret <- get(.r, envir=.recordEnv)
     class(.ret) <- c(.r, "nonmem2rx")
     ## print(.ret)

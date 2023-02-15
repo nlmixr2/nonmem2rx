@@ -21,23 +21,46 @@ nonmem2rxRec.the <- function(x) {
   } else {
     .addThetaName("")
   }
-  .reg2 <- "^;+ *(.*) +"
+  .reg2 <- "^;+ *(.*) *$"
   if (regexpr(.reg2, comment) != -1) {
     .comment <- sub(.reg2, "\\1", comment)
     .addIni(paste0("label(", deparse1(.comment), ")"))
   }
 }
 #' This pushes the $theta into the ini({}) block
-#'
 #'  
 #' @param theta theta ini statement
 #' @param comment comment for parsing
+#' @param label is the nonmem defined label (NM75)
+#' @param skipComment for when adding comment/label is skipped (used
+#'   with `NAMES()`)
 #' @return Nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.pushTheta <- function(theta, comment) {
-  .addIni(theta)
-  .handleThetaComment(comment)
+.pushTheta <- function(theta, comment, label, skipComment) {
+  if (theta != "") {
+    .addIni(theta)
+    if (skipComment == 0){
+      .handleThetaComment(comment)
+      .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
+                                       label)
+    }
+  } else {
+    .handleThetaComment(comment)
+    .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
+                                     label)
+  }
+}
+#' Get the theta number
+#'
+#' @param v string
+#' @return the number (as a string)
+#' @noRd
+#' @author Matthew L. Fidler
+.getThetaNum <- function(v) {
+  .w <- which(tolower(v) == tolower(.nonmem2rx$thetaNonmemLabel))
+  if (length(.w) == 1L) return(paste(.w))
+  stop(paste0("cannot uniquely determine THETA(", v, ")"), call.=FALSE)
 }
 
 #' Creates the theta midpoint estimate info $theta style (low,,hi)

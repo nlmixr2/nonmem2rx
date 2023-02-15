@@ -1,9 +1,15 @@
+.isEmptyExpr <- function(x) {
+  .x <- unlist(strsplit(x, "\n"))
+  all(regexpr("^([ \t]*|[ \t]*;.*)$", .x) != -1)
+}
+
 #' @export
 #' @rdname nonmem2rxRec
 nonmem2rxRec.pk <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $PK record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin)
   }
 }
@@ -13,6 +19,7 @@ nonmem2rxRec.pre <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $PRED record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin)
   }
 }
@@ -23,6 +30,7 @@ nonmem2rxRec.des <- function(x) {
   .x <- x
   class(.x) <- NULL
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $DES record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$DES", .nonmem2rx$abbrevLin)
   }
 }
@@ -40,7 +48,7 @@ nonmem2rxRec.err <- function(x) {
   # volume needs to be divided out
   if (.nonmem2rx$abbrevLin == 1L) {
     if (!is.null(.nonmem2rx$scaleVol[["scale1"]])) {
-      .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale2"]]))
+      .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale1"]]))
     }
     .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)
   } else if (.nonmem2rx$abbrevLin == 2L) {
@@ -53,6 +61,7 @@ nonmem2rxRec.err <- function(x) {
     .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin)
   }
   for (.cur in .x) {
+    if (.isEmptyExpr(.cur)) stop("the $ERROR record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin)
   }
 }
@@ -143,4 +152,110 @@ nonmem2rxRec.err <- function(x) {
   .w <- which(.nonmem2rx$omegaEst$x == x && .nonmem2rx$omegaEst$y == y)
   if (length(.w) != 0L) return(invisible()) 
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
+}
+
+#' Push observed theta(#) in NONMEM
+#'
+#' @param i compartment number that was observed
+#'
+#' @return nothing, called for side effects
+#'
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedThetaObs <- function(i) {
+  .nonmem2rx$thetaObs <- unique(c(.nonmem2rx$thetaObs, i))
+}
+
+#' Push observed eta(#) in NONMEM
+#'
+#' @param i compartment number that was observed
+#'
+#' @return nothing, called for side effects
+#'
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedEtaObs <- function(i) {
+  .nonmem2rx$etaObs <- unique(c(.nonmem2rx$etaObs, i))
+}
+#' Push the maximum observed ETA
+#'  
+#' @param i eta number
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedMaxEta <- function(i) {
+  .nonmem2rx$etaMax <- max(.nonmem2rx$etaMax, i-1L)
+}
+
+#' Push the maximum observed THETA
+#'  
+#' @param i theta number
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedMaxTheta  <- function(i) {
+  .nonmem2rx$thetaMax <- max(.nonmem2rx$thetaMax, i-1L)
+}
+
+#' Push observed dadt(#) in NONMEM
+#'
+#' @param i compartment number that was observed
+#'
+#' @return nothing, called for side effects
+#'
+#' @noRd
+#' @author Matthew L. Fidler
+.pushObservedDadt <- function(i) {
+  .nonmem2rx$dadt <- unique(c(.nonmem2rx$dadt, i))
+}
+#' Give the des prefix for the model
+#'
+#' This will include the cmt order specification as well as add
+#' missing dadt definitions
+#'
+#' @return String representing the cmt definition
+#' @noRd
+#' @author Matthew L. Fidler
+.desPrefix <- function() {
+  if (.nonmem2rx$abbrevLin != 0L) return("")
+  if (.nonmem2rx$maxa == 0L) return("")
+  .sl <- seq_len(.nonmem2rx$maxa)
+  .df <- setdiff(.sl, .nonmem2rx$dadt)
+  .ret <- paste0(paste(paste0("cmt(rxddta", .sl, ")"),
+                       collapse="\n"), "\n")
+  if (length(.df) > 0) {
+    warning("not all the compartments had DADT(#) defined!",
+            call.=FALSE)
+    .ret <- paste0(.ret, paste(paste0("d/dt(rxddta", .df, ") <- 0"), collapse="\n"),
+                   "\n")
+  }
+  .ret
+}
+#' Puts in any missing parameter definitions
+#'  
+#' @return missing parameters
+#' @noRd
+#' @author Matthew L. Fidler
+.missingPrefix <- function() {
+  .maxTheta <- .nonmem2rx$thetaMax
+  .sl <- seq_len(.maxTheta)
+  .ret <- character(0)
+  .sl <- seq_len(.maxTheta)
+  .df <- setdiff(.sl, .nonmem2rx$thetaObs)
+  if (length(.df) > 0) {
+    .ret <- c(.ret, paste0("theta", .df))
+  }
+  .maxEta <- .nonmem2rx$etaMax
+  .sl <- seq_len(.maxEta)
+  .df <- setdiff(.sl, .nonmem2rx$etaObs)
+  if (length(.df) > 0) {
+    .ret <- c(.ret, paste0("eta", .df))
+  }
+  if (length(.df)) {
+    warning("some thetas/etas are missing in the model. Added to dummy rxMissingVars#",
+            call.=FALSE)
+    .ret <- paste(paste0("rxMissingVars", seq_along(.ret), " <- ", .ret), collapse="\n")
+    return(paste0(.ret, "\n"))
+  }
+  ""
 }

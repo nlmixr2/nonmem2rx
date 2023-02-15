@@ -48,9 +48,11 @@ nmlst <- function(file) {
     .w <- .w[1]
     .termInfo <- .lst[-seq_len(.w)]
     .w <- which(.termInfo == "")
-    .w <- .w[1] - 1
-    .termInfo <- .termInfo[seq_len(.w)]
-    .termInfo <- paste(.termInfo, collapse = "\n")
+    if (length(.w) > 0) {
+      .w <- .w[1] - 1
+      .termInfo <- .termInfo[seq_len(.w)]
+      .termInfo <- paste(.termInfo, collapse = "\n")
+    }
   }
 
   .reg <-"^ *[#]TERE[:]"
@@ -157,6 +159,11 @@ nmlst <- function(file) {
   }
   .w <- .w[1]
   .est <- .est[seq(1, .w - 1)]
+  .w <- which(regexpr("^( *[#]| *PROBLEM +NO)", .est) != -1)
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    .est <- .est[seq(1, .w - 1)]
+  }
   .est <- paste(.est, collapse="\n")
   .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
 

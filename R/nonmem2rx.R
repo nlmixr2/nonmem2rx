@@ -33,6 +33,23 @@
   .nonmem2rx$defobs <- 0L
   .nonmem2rx$omegaEst <- data.frame(x=integer(0), y=integer(0))
   .nonmem2rx$sigmaEst <- data.frame(x=integer(0), y=integer(0))
+  .nonmem2rx$dadt <- integer(0)
+  .nonmem2rx$thetaObs <- integer(0)
+  .nonmem2rx$etaObs <- integer(0)
+  .nonmem2rx$etaMax <- 0L
+  .nonmem2rx$thetaMax <- 0L
+  .nonmem2rx$epsMax <- 0L
+  .nonmem2rx$epsLabel <- NULL
+  .nonmem2rx$epsComment <- NULL
+  .nonmem2rx$epsNonmemLabel <- NULL
+  .nonmem2rx$etaLabel <- NULL
+  .nonmem2rx$etaComment <- NULL
+  .nonmem2rx$etaNonmemLabel <- NULL
+  .nonmem2rx$thetaNonmemLabel <- NULL
+  .nonmem2rx$replace <- list()
+  .nonmem2rx$replaceSeq <- NULL
+  .nonmem2rx$replaceLabel <- NULL
+  .nonmem2rx$replaceDataParItem <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -109,7 +126,7 @@
   .n <- vapply(thetaNames, function(v) {
     if (v == "") return("")
     # They can't even match based on case or it can interfere with linCmt()
-    if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params))) {
+    if (tolower(v) %in% tolower(c(.mv$lhs, .mv$params, "time"))) {
       return(paste0(prefix, v))
     }
     if (.nonmem2rx$abbrevLin != 0L) {
@@ -119,9 +136,9 @@
         return(paste0(prefix, v))
       }
     }
-      
     v
   }, character(1), USE.NAMES = FALSE)
+  # These are added by the translator don't include them
   if (prefix == "t.") {
     .t <- rxui$iniDf$name[!is.na(rxui$iniDf$ntheta)]
     .w <- which(regexpr("^(omega|sigma)[.][1-9][0-9]*[.][1-9][0-9]*$", .t) != -1)
@@ -131,6 +148,7 @@
   } else {
     .t <- rxui$iniDf$name[which(is.na(rxui$iniDf$ntheta) & rxui$iniDf$neta1 == rxui$iniDf$neta2)]
   }
+  .t <- .t[!(.t %in% c("icall", "irep"))]
   .w <- which(.n == "")
   if (length(.w) > 0) {
     .n <- .n[-.w]
@@ -140,6 +158,11 @@
     .minfo("done (no labels)")
     return(rxui)
   }
+  if (length(.n) != length(.t)) {
+    .minfo("done (not changed due to label mismatch)")
+    return(rxui)
+  }
+  #print(data.frame(.n, .t))
   .ret <-eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .t, sep=""), collapse=", "), ")")))
   .t2 <- setNames(.n, .t)
   if (!is.null(df)) {
@@ -307,6 +330,9 @@
 #' @param validate Boolean that this tool will attempt to "validate"
 #'   the model by solving the derived model under pred conditions
 #'   (etas are zero and eps values are zero)
+#'
+#' @param strictLst The list parsing needs to be correct for a
+#'   successful load (default `FALSE`).
 #' 
 #' @param lst the NONMEM output extension, defaults to `.lst`
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
@@ -333,6 +359,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       updateFinal=TRUE,
                       determineError=TRUE,
                       validate=TRUE,
+                      strictLst=FALSE,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -343,12 +370,52 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
-  .lines <- paste(suppressWarnings(readLines(file)), collapse = "\n")
+  on.exit({
+    .Call(`_nonmem2rx_r_parseFree`)
+  })
+  .lines <- suppressWarnings(readLines(file))
+  if (length(.lines) == 0L) {
+    .w <- integer(0)
+  } else {
+    .w <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines) != -1)
+  }
+  if (length(.w) == 0) {
+    stop("cannot find a problem statement in the input file",
+         call.=FALSE)
+  }
+  .lstFile <- NULL
+  .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lines)!=-1)
+  if (length(.w) > 0) {
+    .w <- .w[1]
+    .lines <- .lines[(seq_len(.w-1))]
+    .w <- which(regexpr(" *[$][Pr][Rr][Oo]", .lines) != -1)
+    .w <- .w[1]
+    while (.w != 1 && regexpr("(^ *;.*$|^ *$)", .lines[.w]) != -1) {
+      .w <- .w-1
+    }
+    if (.w > 1) {
+      .lines <-.lines[-seq_len(.w-1)]
+      .lstFile <- file
+    } else {
+      if (regexpr(" *[$][Pr][Rr][Oo]", .lines[1]) != -1) {
+        .lstFile <- file
+      } else {
+        stop("model not in listing file, choose the model",
+             call.=FALSE)
+      }
+    }
+  }
+  .lines <- paste(.lines, collapse = "\n")
   .parseRec(.lines)
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
     if (thetaNames) {
-      thetaNames <- .nonmem2rx$theta
+      thetaNames <- vapply(seq_along(.nonmem2rx$theta),
+                           function(i) {
+                             .lab <- .nonmem2rx$thetaNonmemLabel[i]
+                             if (.lab == "") .lab <- .nonmem2rx$theta[i]
+                             .lab
+                           }, character(1), USE.NAMES=FALSE)
     } else {
       thetaNames <- character(0)
     }
@@ -388,10 +455,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          paste(.nonmem2rx$ini, collapse="\n"),
                          "\n})\n",
                          "rxode2::model({\n",
-                         ifelse(.nonmem2rx$abbrevLin == 0L && .nonmem2rx$maxa != 0L,
-                                paste0(paste(paste0("cmt(rxddta", seq_len(.nonmem2rx$maxa), ")"),
-                                             collapse="\n"), "\n"),
-                                ""),
+                         .desPrefix(),
+                         .missingPrefix(),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))
@@ -409,10 +474,15 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
     }
   }
-  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
+  if (is.null(.lstFile)) .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .lstInfo <- list()
   if (file.exists(.lstFile)) {
-    .lstInfo <- nmlst(.lstFile)
+    if (strictLst) {
+      .lstInfo <- nmlst(.lstFile)
+    } else {
+      .tmp <- try(nmlst(.lstFile), silent=TRUE)
+      if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
+    }
   }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
@@ -466,16 +536,29 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   if (inherits(etaNames, "logical")) {
     checkmate::assertLogical(etaNames, len=1, any.missing=FALSE)
-    etaNames <- character(0)
-    if (exists("etaLabel", .nonmem2rx)) {
-      etaNames <- .nonmem2rx$etaLabel
+    if (etaNames) {
+      etaNames <- vapply(seq_len(max(length(.nonmem2rx$etaNonmemLabel),
+                                     length(.nonmem2rx$etaLabel))),
+                         function(i) {
+                           if (i > length(.nonmem2rx$etaNonmemLabel)) {
+                             return(.nonmem2rx$etaNonmemLabel[i])
+                           } else if (i > length(.nonmem2rx$etaLabel)) {
+                             return(.nonmem2rx$etaLabel[i])
+                           }
+                           .lab <- .nonmem2rx$etaNonmemLabel[i]
+                           if (.lab == "") .lab <- .nonmem2rx$etaLabel[i]
+                           .lab
+                         }, character(1), USE.NAMES=FALSE)      
+    } else {
+      etaNames <- character(0)
     }
+
   } else {
     checkmate::assertCharacter(etaNames, any.missing = FALSE)    
   }
   .nonmem2rx$etas <- NULL
   .nonmem2rx$dn <- NULL
-  .rx <-.replaceThetaNames(.rx, etaNames,
+  .rx <- .replaceThetaNames(.rx, etaNames,
                            label="eta", prefix="e.",
                            df=.etaData, dn=.dn)
   if (!is.null(.nonmem2rx$etas)) {

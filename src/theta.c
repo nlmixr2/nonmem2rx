@@ -50,13 +50,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -71,35 +66,78 @@ void wprint_node_theta(int depth, char *token_name, char *token_value, void *cli
 }
 
 int nonmem2rx_thetanum = 1;
+int nonmem2rx_names_nargs = 0;
 
 char *curComment = NULL;
+char *curLabel = NULL;
+sbuf curThetaRhs;
 sbuf curTheta;
 
 SEXP _nonmem2rx_thetanum_reset(void) {
   nonmem2rx_thetanum = 1;
-  sIni(&curTheta);
+  sClear(&curTheta);
+  sClear(&curThetaRhs);
   return R_NilValue;
 }
 
 SEXP nonmem2rxThetaGetMiddle(const char *low, const char *hi);
 
-SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label,
+                        int nargs);
 
 void pushTheta(void) {
-  nonmem2rxPushTheta(curTheta.s, curComment);
+  if (curTheta.s[0] != 0 && curLabel != NULL && nonmem2rx_names_nargs != 0) {
+    Rf_warning("Label '%s' ignored because NAMES() is preferred in nonmem2rx translation", curLabel);
+  }
+  nonmem2rxPushTheta(curTheta.s, curComment, curLabel, nonmem2rx_names_nargs);
+  if (curTheta.s[0] != 0 && nonmem2rx_names_nargs) nonmem2rx_names_nargs--;
   sClear(&curTheta);
+  curComment = NULL;
+  curLabel = NULL;
 }
 
 void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
-  if (!strcmp("theta_statement", name)) {
+  if (!strcmp("name_option", name)) {
+    nonmem2rx_names_nargs = d_get_number_of_children(d_get_child(pn,3))+1;
+    int nargs = nonmem2rx_names_nargs;
+    sClear(&curTheta);
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    curLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    pushTheta();
+    xpn = d_get_child(pn, 3);
+    for (int i = 0; i < nargs-1; i++) {
+      D_ParseNode *ypn = d_get_child(d_get_child(xpn, i), 1);
+      curLabel = (char*)rc_dup_str(ypn->start_loc.s, ypn->end);
+      pushTheta();
+    }
+  } else if (!strcmp("theta_name", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    curLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+  } else if (!strcmp("repeat", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int n = atoi(v);
+    for (int i = 0; i < n-1; i++) {
+      sAppend(&curTheta, "theta%d%s",
+              nonmem2rx_thetanum, curThetaRhs.s);
+      pushTheta();
+      nonmem2rx_thetanum++;
+    }
+  } else if (!strcmp("theta_statement", name)) {
+    sClear(&curThetaRhs);
+    D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v[0] == 0) {
       curComment = NULL;
     } else {
       curComment = v;
+    }
+    xpn = d_get_child(pn, 0);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[0] == 0) {
+      curLabel=NULL;
     }
   } else if (!strcmp("theta0", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
@@ -108,9 +146,16 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (v2[0] == 0) {
       // not fixed
-      sAppend(&curTheta, "theta%d <- %s", nonmem2rx_thetanum, v);
+      sAppend(&curThetaRhs, " <- %s", v);
+      sAppend(&curTheta, "theta%d%s",
+              nonmem2rx_thetanum, curThetaRhs.s);
     } else {
-      sAppend(&curTheta, "theta%d <- fix(%s)", nonmem2rx_thetanum, v);
+      if (v2[0] == 'u' || v2[0] == 'U') {
+        Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+      }
+      sAppend(&curThetaRhs, " <- fix(%s)", v);
+      sAppend(&curTheta, "theta%d%s",
+              nonmem2rx_thetanum, curThetaRhs.s);
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -118,7 +163,13 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
   } else if (!strcmp("theta6", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curTheta, "theta%d <- fix(%s)", nonmem2rx_thetanum, v);
+    xpn = d_get_child(pn, 5);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (fix[0] == 'u' || fix[0] == 'U') {
+      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+    }
+    sAppend(&curThetaRhs, " <- fix(%s)", v);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
@@ -127,7 +178,13 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 3);
     char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curTheta, "theta%d <- fix(%s, %s)", nonmem2rx_thetanum, low, ini);
+    xpn = d_get_child(pn, 6);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (fix[0] == 'u' || fix[0] == 'U') {
+      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+    }
+    sAppend(&curThetaRhs, " <- fix(%s, %s)", low, ini);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
@@ -136,13 +193,20 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 3);
     char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 4);
+    xpn = d_get_child(pn, 5);
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (fix[0] == 0) {
       // not fixed
-      sAppend(&curTheta, "theta%d <- c(%s, %s)", nonmem2rx_thetanum, low, ini);
+      sAppend(&curThetaRhs, " <- c(%s, %s)", low, ini);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum,
+              curThetaRhs.s);
     } else {
-      sAppend(&curTheta, "theta%d <- fix(%s, %s)", nonmem2rx_thetanum, low, ini);
+      if (fix[0] == 'u' || fix[0] == 'U') {
+        Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+      }
+      sAppend(&curThetaRhs, " <- fix(%s, %s)", low, ini);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum,
+              curThetaRhs.s);
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -154,11 +218,17 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *ini = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 5);
     char *hi = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppend(&curTheta, "theta%d <- fix(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    xpn = d_get_child(pn, 7);
+    char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (fix[0] == 'u' || fix[0] == 'U') {
+      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+    }
+    sAppend(&curThetaRhs, " <- fix(%s, %s, %s)", low, ini, hi);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
-  }  else if (!strcmp("theta5", name)) {
+  } else if (!strcmp("theta5", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 3);
@@ -169,9 +239,14 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (fix[0] == 0) {
       // unfixed
-      sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+      sAppend(&curThetaRhs, " <- c(%s, %s, %s)", low, ini, hi);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     } else {
-      sAppend(&curTheta, "theta%d <- fix(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+      if (fix[0] == 'u' || fix[0] == 'U') {
+        Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+      }
+      sAppend(&curThetaRhs, " <- fix(%s, %s, %s)", low, ini, hi);
+      sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -184,7 +259,8 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     SEXP cur = PROTECT(nonmem2rxThetaGetMiddle(low, hi));
     char *ini = (char*)rc_dup_str(CHAR(STRING_ELT(cur, 0)), 0);
     UNPROTECT(1);
-    sAppend(&curTheta, "theta%d <- c(%s, %s, %s)", nonmem2rx_thetanum, low, ini, hi);
+    sAppend(&curThetaRhs, " <- c(%s, %s, %s)", low, ini, hi);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
     pushTheta();
     nonmem2rx_thetanum++;
     return;
@@ -226,8 +302,14 @@ void trans_theta(const char* parse){
   }
 }
 
+SEXP nonmem2rxPushObservedMaxTheta(int a);
 SEXP _nonmem2rx_trans_theta(SEXP in) {
   trans_theta(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
+  nonmem2rxPushObservedMaxTheta(nonmem2rx_thetanum);
+  if (nonmem2rx_names_nargs) {
+    Rf_errorcall(R_NilValue, "the NAMES() statement named more parameters than present in this $THETA block, error in translation.");
+    nonmem2rx_names_nargs = 0;
+  }
   return R_NilValue;
 }

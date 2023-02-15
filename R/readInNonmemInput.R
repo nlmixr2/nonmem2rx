@@ -36,9 +36,12 @@
     # need to apply input names
     # 1. Only work with columns specified in $input
     .inp <- .nonmem2rx$input
+    if (length(.data) < length(.inp)) {
+      .inp <- .inp[seq_along(.data)]
+    }
     .data <- .data[,seq_along(.inp)]
     # 2. drop values requested by nonmem
-    names(.data) <- names(.nonmem2rx$input)
+    names(.data) <- names(.inp)
     .w <- which(.inp == "DROP")
     if (length(.w) > 0) {
       .inp <- .inp[-.w]

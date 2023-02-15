@@ -52,13 +52,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -67,6 +62,7 @@ void parseFree(int last) {
 }
 extern sbuf curLine;
 const char *abbrevPrefix;
+const char *cmtInfoStr;
 
 // from mkdparse_tree.h
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
@@ -77,6 +73,13 @@ extern char * rc_dup_str(const char *s, const char *e);
 
 SEXP nonmem2rxPushModelLine(const char *item1);
 SEXP nonmem2rxPushScale(int scale);
+SEXP nonmem2rxPushObservedDadt(int a);
+SEXP nonmem2rxPushObservedThetaObs(int a);
+SEXP nonmem2rxPushObservedEtaObs(int a);
+SEXP nonmem2rxGetModelNum(const char *v);
+SEXP nonmem2rxGetThetaNum(const char *v);
+SEXP nonmem2rxGetEtaNum(const char *v);
+SEXP nonmem2rxGetEpsNum(const char *v);
 
 int maxA = 0,
   definingScale = 0;
@@ -101,7 +104,7 @@ int irepWarning = 0;
 int simWarning=0;
 int ipredSimWarning = 0;
 
-SEXP nonmem2rxPushTheta(const char *ini, const char *comment);
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 
@@ -109,30 +112,30 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "f(", 2);
+    sAppendN(&curLine, "rxf.", 4);
     writeAinfo(v + 1);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("alagi", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "alag(", 5);
+    sAppendN(&curLine, "rxalag.", 7);
     writeAinfo(v + 4);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("ratei", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "rate(", 5);
+    sAppendN(&curLine, "rxrate.", 7);
     writeAinfo(v + 1);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("duri", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    sAppendN(&curLine, "dur(", 4);
+    sAppendN(&curLine, "rxdur.", 6);
     writeAinfo(v + 1);
-    sAppendN(&curLine, ")", 1);
+    sAppendN(&curLine, ".", 1);
     return 1;
   } else if (!strcmp("scalei", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
@@ -186,7 +189,8 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       Rf_errorcall(R_NilValue, "'MIXEST' NONMEM reserved variable is not translated");
     } else if (!nmrxstrcmpi("ICALL", v)) {
       if (icallWarning == 0) {
-        nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation");
+        nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation",
+                           NULL);
         Rf_warning("icall found and added as rxode2 parameter to model; set to 4 to activate simulation code");
         icallWarning=1;
       }
@@ -194,7 +198,8 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     } else if (!nmrxstrcmpi("IREP", v)) {
        if (irepWarning == 0) {
-        nonmem2rxPushTheta("irep <- fix(0)", "irep set to 0 (not supported)");
+         nonmem2rxPushTheta("irep <- fix(0)", "irep set to 0 (not supported)",
+                            NULL);
         Rf_warning("irep found and added as rxode2 parameter to model (=0); 'sim.id' is added to all multi-study simulations and currently cannot be accessed in the simulation code");
         irepWarning=1;
       }
@@ -260,13 +265,14 @@ void writeAinfo(const char *v) {
   // abbrevLin = 4 is linCmt() without ka
   // abbrevLin = 5 is linCmt() with ka
   if (abbrevLin == 0) {
-    maxA = max2(maxA, atoi(v));
+    int num = atoi(v);
+    maxA = max2(maxA, num);
     sAppend(&curLine, "rxddta%s", v);
     return;
   }
   int cur = atoi(v);
   if (abbrevLin == 3) {
-    maxA = max2(maxA, atoi(v));
+    maxA = max2(maxA, cur);
     sAppend(&curLine, "rxddta%s%s", v, CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
     return;
   }
@@ -290,40 +296,98 @@ void writeAinfo(const char *v) {
   Rf_errorcall(R_NilValue, "can only request depot and central compartments for solved systems in rxode2 translations");
 }
 
-int abbrev_params(char *name, int i,  D_ParseNode *pn) {
-  if (!strcmp("theta", name)) {
+int abbrevParamTheta(char *name, int i,  D_ParseNode *pn) {
+  int needName=0;
+  if (!strcmp("theta", name) ||
+      (needName = !strcmp("thetaI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "theta%s", v);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetThetaNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
+      int num = atoi(v);
+      nonmem2rxPushObservedThetaObs(num);
+      sAppend(&curLine, "theta%d", num);
     }
     return 1;
-  } else if (!strcmp("eta", name)) {
+  }
+  return 0;
+}
+
+int abbrevParamEta(char *name, int i,  D_ParseNode *pn) {
+  int needName=0;
+  if (!strcmp("eta", name) ||
+      (needName = !strcmp("etaI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "eta%s", v);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetEtaNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
+      int num = atoi(v);
+      nonmem2rxPushObservedEtaObs(num);
+      sAppend(&curLine, "eta%d", num);
     }
     return 1;
-  } else if (!strcmp("eps", name)) {
+  }
+  return 0;
+}
+int abbrevParamEps(char *name, int i,  D_ParseNode *pn) {
+  int needName = 0;
+  if (!strcmp("eps", name) ||
+             (needName = !strcmp("epsI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetEpsNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
-  } else if (!strcmp("err", name)) {
+  }
+  return 0;
+}
+
+int abbrevParamErr(char *name, int i,  D_ParseNode *pn) {
+  int needName = 0;
+  if (!strcmp("err", name) ||
+      (needName = !strcmp("errI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetEpsNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       // since parser translates  $sigma
       sAppend(&curLine, "eps%s", v);
     }
     return 1;
-  } else if (!strcmp("amt", name)) {
+  }
+  return 0;
+}
+
+int abbrevParamAmt (char *name, int i,  D_ParseNode *pn) {
+  int needName = 0;
+  if (!strcmp("amt", name) ||
+             (needName = !strcmp("amtI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetModelNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       // since parser translates  $sigma
       writeAinfo(v);
     }
@@ -332,61 +396,69 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
   return 0;
 }
 
+int abbrev_params(char *name, int i,  D_ParseNode *pn) {
+  return abbrevParamTheta(name, i,  pn) ||
+    abbrevParamEta(name, i,  pn) ||
+    abbrevParamEps(name, i,  pn) ||
+    abbrevParamErr(name, i,  pn) ||
+    abbrevParamAmt(name, i,  pn);
+}
+
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("function", name)) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       if (v[0] == 'D' || v[0] == 'd') v++;
-      if (!nmrxstrcmpi("LOG", v)) {
-        sAppendN(&curLine, "log", 3);
+      if (!nmrxstrcmpi("LOG(", v)) {
+        sAppendN(&curLine, "log(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("LOG10", v)) {
-        sAppendN(&curLine, "log10", 5);
+      } else if (!nmrxstrcmpi("LOG10(", v)) {
+        sAppendN(&curLine, "log10(", 6);
         return 1;
-      } else if (!nmrxstrcmpi("EXP", v)) {
-        sAppendN(&curLine, "exp", 3);
+      } else if (!nmrxstrcmpi("EXP(", v)) {
+        sAppendN(&curLine, "exp(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("SQRT", v)) {
-        sAppendN(&curLine, "sqrt", 4);
+      } else if (!nmrxstrcmpi("SQRT(", v)) {
+        sAppendN(&curLine, "sqrt(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("SIN", v)) {
-        sAppendN(&curLine, "sin", 3);
+      } else if (!nmrxstrcmpi("SIN(", v)) {
+        sAppendN(&curLine, "sin(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("COS", v)) {
-        sAppendN(&curLine, "cos", 3);
+      } else if (!nmrxstrcmpi("COS(", v)) {
+        sAppendN(&curLine, "cos(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("ABS", v)) {
-        sAppendN(&curLine, "abs", 3);
+      } else if (!nmrxstrcmpi("ABS(", v)) {
+        sAppendN(&curLine, "abs(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("TAN", v)) {
-        sAppendN(&curLine, "tan", 3);
+      } else if (!nmrxstrcmpi("TAN(", v)) {
+        sAppendN(&curLine, "tan(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("ASIN", v)) {
-        sAppendN(&curLine, "asin", 4);
+      } else if (!nmrxstrcmpi("ASIN(", v)) {
+        sAppendN(&curLine, "asin(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("ACOS", v)) {
-        sAppendN(&curLine, "acos", 4);
+      } else if (!nmrxstrcmpi("ACOS(", v)) {
+        sAppendN(&curLine, "acos(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("ATAN", v)) {
-        sAppendN(&curLine, "atan", 4);
+      } else if (!nmrxstrcmpi("ATAN(", v)) {
+        sAppendN(&curLine, "atan(", 5);
         return 1;
-      } else if (!nmrxstrcmpi("MIN", v)) {
-        sAppendN(&curLine, "min", 3);
+      } else if (!nmrxstrcmpi("MIN(", v)) {
+        sAppendN(&curLine, "min(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("MAX", v)) {
-        sAppendN(&curLine, "max", 3);
+      } else if (!nmrxstrcmpi("MAX(", v)) {
+        sAppendN(&curLine, "max(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("PHI", v)) {
-        sAppendN(&curLine, "phi", 3);
+      } else if (!nmrxstrcmpi("PHI(", v)) {
+        sAppendN(&curLine, "phi(", 4);
         return 1;
-      } else if (!nmrxstrcmpi("GAMLN", v)) {
-        sAppendN(&curLine, "lgamma", 6);
+      } else if (!nmrxstrcmpi("GAMLN(", v)) {
+        sAppendN(&curLine, "lgamma(", 7);
         return 1;
-      } else if (!nmrxstrcmpi("mod", v)) {
+      } else if (!nmrxstrcmpi("mod(", v)) {
         parseFree(0);
         Rf_errorcall(R_NilValue, "'MOD' function not supported in translation");
-      } else if (!nmrxstrcmpi("int", v)) {
+      } else if (!nmrxstrcmpi("int(", v)) {
         parseFree(0);
         Rf_errorcall(R_NilValue, "'INT' function not supported in translation");
       }
@@ -503,6 +575,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   } else if (!strcmp("callfl", name)) {
     if (i == 1) Rf_warning("'CALLFL = ' ignored");
     return 1;
+  } else if (!strcmp("call_protocol_phrase", name)) {
+    if (i == 1) {
+      char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+      Rf_warning("NONMEM call protocol phrase ignored\n  %s", v);
+    }
+    return 1; 
   } else if (!strcmp("callpassmode", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'CALL PASS(MODE)' statements not supported in translation");
@@ -559,11 +637,20 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
 }
 
 int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
-  if (!strcmp("derivative", name)) {
+  int needName = 0;
+  if (!strcmp("derivative", name) ||
+      (needName = !strcmp("derivativeI", name))) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      maxA = max2(maxA, atoi(v));
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetModelNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
+      int cur = atoi(v);
+      maxA = max2(maxA, cur);
+      nonmem2rxPushObservedDadt(cur);
       sAppend(&curLine, "d/dt(rxddta%s) <- ", v);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {
@@ -581,13 +668,22 @@ int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
 }
 
 int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
-  if (!strcmp("ini", name)) {
+  int needName = 0;
+  if (!strcmp("ini", name) ||
+      (needName = !strcmp("iniI", name))) {
     if (i ==0) {
       D_ParseNode *xpn = d_get_child(pn, 1);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetModelNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
       // a1(0) <- ....
+      sAppendN(&curLine, "rxini.", 6);
+      cmtInfoStr=v;
       writeAinfo(v);
-      sAppendN(&curLine, "(0) <- ", 7);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {
       return 1;
@@ -605,9 +701,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
         Rf_errorcall(R_NilValue, "F0/FO is not supported in translation");
       }
       // f(a1) <- ....
-      sAppendN(&curLine, "f(", 2);
+      sAppendN(&curLine, "rxf.", 4);
+      cmtInfoStr = v + 1;
       writeAinfo(v + 1);
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -619,6 +716,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppendN(&curLine, "alag(", 5);
       writeAinfo(v + 4);
+      cmtInfoStr = v + 4;
       sAppendN(&curLine, ") <- ", 5);
       return 1;
     } else if (i == 1) {
@@ -629,9 +727,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "rate(", 5);
+      sAppend(&curLine, "rxrate.", 7);
+      cmtInfoStr = v + 1;
       writeAinfo(v + 1);
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -641,9 +740,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppendN(&curLine, "dur(",4);
+      sAppendN(&curLine, "rxdur.", 6);
+      cmtInfoStr = v + 1;
       writeAinfo(v + 1);
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
@@ -799,16 +899,57 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   if (!strcmp("assignment", name) ||
       !strcmp("if1", name) ||
       !strcmp("derivative", name) ||
-      !strcmp("ini", name) ||
-      !strcmp("fbio", name) ||
-      !strcmp("alag", name) ||
-      !strcmp("rate", name) ||
-      !strcmp("dur", name) ||
+      !strcmp("derivativeI", name) ||
       !strcmp("scale", name) ||
       !strcmp("ifcallrandom", name) ||
       !strcmp("ifcallsimeta", name) ||
       !strcmp("ifcallsimeps", name) ) {
     pushModel();
+  } else if (!strcmp("fbio", name)) {
+    pushModel();
+    sAppendN(&curLine, "f(", 2);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxf.", 9);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("alag", name)) {
+    pushModel();
+    sAppendN(&curLine, "alag(", 5);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxalag.", 12);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("rate", name)) {
+    pushModel();
+    sAppendN(&curLine, "rate(", 5);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxrate.", 12);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("dur", name)) {
+    pushModel();
+    sAppendN(&curLine, "dur(", 4);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ") <- rxdur.", 11);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
+  } else if (!strcmp("ini", name) ||
+             !strcmp("iniI", name)) {
+    pushModel();
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, "(0) <- rxini.", 13);
+    writeAinfo(cmtInfoStr);
+    sAppendN(&curLine, ".", 1);
+    pushModel();
+    cmtInfoStr = NULL;
   }
 }
 
@@ -837,7 +978,7 @@ void trans_abbrev(const char* parse){
 SEXP nonmem2rxSetMaxA(int maxa);
 
 SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
-  sIni(&curLine);
+  sClear(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
   verbWarning = 0;
