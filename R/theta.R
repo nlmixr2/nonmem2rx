@@ -21,7 +21,7 @@ nonmem2rxRec.the <- function(x) {
   } else {
     .addThetaName("")
   }
-  .reg2 <- "^;+ *(.*) +"
+  .reg2 <- "^;+ *(.*) *$"
   if (regexpr(.reg2, comment) != -1) {
     .comment <- sub(.reg2, "\\1", comment)
     .addIni(paste0("label(", deparse1(.comment), ")"))
@@ -40,7 +40,7 @@ nonmem2rxRec.the <- function(x) {
 .pushTheta <- function(theta, comment, label, skipComment) {
   if (theta != "") {
     .addIni(theta)
-    if (skipComment == 0) {
+    if (skipComment == 0){
       .handleThetaComment(comment)
       .nonmem2rx$thetaNonmemLabel <- c(.nonmem2rx$thetaNonmemLabel,
                                        label)
