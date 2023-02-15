@@ -3,39 +3,6 @@
 #include <rxode2parseSbuf.h>
 #define _(String) (String)
 
-// Taken from dparser and changed to use Calloc
-int rc_buf_read(const char *pathname, char **buf, int *len) {
-  struct stat sb;
-  int fd;
-  *buf = 0;
-  *len = 0;
-  fd = open(pathname, O_RDONLY);
-  if (fd <= 0)
-    return -1;
-  memset(&sb, 0, sizeof(sb));
-  fstat(fd, &sb);
-  *len = sb.st_size;
-  *buf = R_Calloc(*len + 3,char);
-  // MINGW likes to convert cr lf => lf which messes with the size
-  size_t real_size = read(fd, *buf, *len);
-  (*buf)[real_size] = 0;
-  (*buf)[real_size + 1] = 0;
-  *len = real_size;
-  close(fd);
-  return *len;
-}
-
-// Taken from dparser and changed to use Calloc
-char * rc_sbuf_read(const char *pathname) {
-  char *buf;
-  int len;
-  if (rc_buf_read(pathname, &buf, &len) < 0)
-    return NULL;
-  return buf;
-}
-
-
-
 void sIniTo(sbuf *sbb, int to) {
   if (sbb->s != NULL) R_Free(sbb->s);
   sbb->s    = R_Calloc(to, char);
@@ -85,31 +52,6 @@ void sAppend(sbuf *sbb, const char *format, ...) {
 #endif
   va_end(copy);
   if (sbb->sN <= sbb->o + n + 1) {
-    int mx = sbb->o + n + 1 + SBUF_MXBUF;
-    sbb->s = R_Realloc(sbb->s, mx, char);
-    sbb->sN = mx;
-  }
-  vsnprintf(sbb->s+ sbb->o, sbb->sN - sbb->o, format, argptr);
-  va_end(argptr);
-  sbb->o += n-1;
-}
-
-void sPrint(sbuf *sbb, const char *format, ...) {
-  if (sbb->sN == 0) sIni(sbb);
-  sClear(sbb);
-  if (format == NULL) return;
-  int n = 0;
-  va_list argptr, copy;
-  va_start(argptr, format);
-  va_copy(copy, argptr);
-#if defined(_WIN32) || defined(WIN32)
-  n = vsnprintf(NULL, 0, format, copy) + 1;
-#else
-  char zero[2];
-  n = vsnprintf(zero, 0, format, copy) + 1;
-#endif
-  va_end(copy);
-  if (sbb->sN <= sbb->o + n + 1){
     int mx = sbb->o + n + 1 + SBUF_MXBUF;
     sbb->s = R_Realloc(sbb->s, mx, char);
     sbb->sN = mx;
@@ -194,13 +136,5 @@ void addLine(vLines *sbb, const char *format, ...) {
   sbb->lProp[sbb->n] = -1;
   sbb->lType[sbb->n] = 0;
   sbb->os[sbb->n]= sbb->o;
-}
-
-void curLineProp(vLines *sbb, int propId){
-  sbb->lProp[sbb->n] = propId;
-}
-
-void curLineType(vLines *sbb, int propId) {
-  sbb->lType[sbb->n] = propId;
 }
 
