@@ -163,7 +163,7 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
   } else if (!strcmp("theta6", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 3);
+    xpn = d_get_child(pn, 5);
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (fix[0] == 'u' || fix[0] == 'U') {
       Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");

@@ -24,8 +24,8 @@ theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 | theta6 | theta7;
 
 theta0: ini_constant fixed?;
 
-theta1: '(' theta0 ')';
-theta6: '(' ini_constant ')' fixed;
+theta1: '(' theta0 ','?  ','? ')';
+theta6: '(' ini_constant ','? ','? ')' fixed;
 
 theta2: '(' low_ini ','? ini_constant ','? ')' fixed;
 theta3: '(' low_ini ','? ini_constant ','? fixed? ','? ')' ;
