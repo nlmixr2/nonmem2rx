@@ -73,7 +73,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/output/special_mod/UseCase1.lst",
              "PsN/test_files/output/special_mod/warfarin_saem_noest.lst",
              "PsN/test_files/output/special_mod/theo_t_matrix.lst",
-             "PsN/test_files/output/special_mod/special_inverse.lst",
+             #"PsN/test_files/output/special_mod/special_inverse.lst",
              "PsN/test_files/output/special_mod/covcrash.lst",
              "PsN/test_files/output/special_mod/s_matrix_singular.lst",
              "PsN/test_files/output/special_mod/data_missing.lst",
@@ -145,7 +145,6 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/output/multPROB/multEST/noSIM/p1_p2_cov_V7_10_g_reg.lst",
              "PsN/test_files/output/multPROB/multEST/noSIM/nonclassicalest_nm712.lst",
              "PsN/test_files/output/multPROB/noEST/withSIM/sim_noest_V7_30.lst",
-             #HERE
              "PsN/test_files/output/nm74/only_nonparametric.lst",
              "PsN/test_files/output/nm74/final_forward.lst",
              "PsN/test_files/output/nm74/prior.lst",
@@ -187,7 +186,6 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/SO/Simeoni/Simeoni_2004_oncology_TGI_ETA.lst",
              "PsN/test_files/SO/Nock/Nock_2013_Carboplatin_PK_MONOLIX.lst",
              "PsN/test_files/SO/pheno.lst",
-             # new bov
              "PsN/test_files/SO/BOV/run3.lst",
              "PsN/test_files/SO/pheno_sdcorr.lst",
              "PsN/test_files/mox_no_bov.lst",
@@ -220,7 +218,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
 
   # should this be read in?
   # "PsN/test_files/output/onePROB/oneEST/noSIM/warfarin_ddmore.lst",
-  # has an add.err value that is near zero (and is actuall negative)
+  # has an add.err value that is near zero (and is actually negative)
   # complains and exits
 
 

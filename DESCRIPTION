@@ -14,7 +14,7 @@ Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew
     person("Kajsa", "Harling", role="ctb", comment="PsN tests"),
     person("Rikard", "Nordgren", role="ctb", comment="PsN tests"),
     person("Svetlana", "Freiberga", role="ctb", comment="PsN tests"),
-    person("Yasunori" "Aoki", role="ctb", comment="PsN tests"),
+    person("Yasunori", "Aoki", role="ctb", comment="PsN tests"),
     person("Gabriel", "Staples", role="ctb", comment="string insensitive compare"))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
