@@ -56,6 +56,7 @@
 <span>  updateFinal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  determineError <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  validate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  strictLst <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  lst <span class="op">=</span> <span class="st">".lst"</span>,</span>
 <span>  ext <span class="op">=</span> <span class="st">".ext"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -137,6 +138,11 @@ the model by solving the derived model under pred conditions
 (etas are zero and eps values are zero)</p></dd>
 
 
+<dt>strictLst</dt>
+<dd><p>The list parsing needs to be correct for a
+successful load (default `FALSE`).</p></dd>
+
+
 <dt>lst</dt>
 <dd><p>the NONMEM output extension, defaults to `.lst`</p></dd>
 
@@ -190,8 +196,8 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function() {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- c(";; 1. Based on:     000", ";; 2. Description:       ", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ";;    NONMEM PK example for xpose", "    Parameter estimation", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "    Model simulations")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ";;    NONMEM PK example for xpose", "Parameter estimation", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "Model simulations")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ini({</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         t.TVCL &lt;- c(0, 26.2909)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         label("TVCL")</span>
@@ -202,11 +208,11 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span>         LAG &lt;- c(0, 0.207958)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         label("LAG")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         Prop. &lt;- c(0, 0.20461)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("Prop.Err")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("Prop. Err")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         t.Add. &lt;- c(0, 0.0105527)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("Add.Err")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("Add. Err")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         t.CRCL &lt;- c(0, 0.00717161, 0.02941)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("CRCL onCL")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("CRCL on CL")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         IIV.CL ~ 0.0729525</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         IIV.V ~ 0.0380192</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         IIV.KA ~ 1.90699</span>
@@ -218,6 +224,7 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span>         v &lt;- tvv * exp(IIV.V)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ka &lt;- TVKA * exp(IIV.KA)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         alag(depot) &lt;- LAG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         alag(depot) &lt;- rxalag.depot.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         k &lt;- cl/v</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         rxlincmt1 &lt;- linCmt()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         f &lt;- rxlincmt1</span>
@@ -286,21 +293,22 @@ the model by solving the derived model under pred conditions
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function() {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "    BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7e-06", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "IPRED absolute difference compared to Nonmem IPRED: atol=0.0018; 95% percentile: (2.41e-05, 0.0421)", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.78e-06", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED absolute difference compared to Nonmem PRED: atol=6.78e-06; 95% percentile: (7.31e-07,0.00322)")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ini({</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         theta1 &lt;- 1.37034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("logCl")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("log Cl")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         theta2 &lt;- 4.19815</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("logVc")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("log Vc")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         theta3 &lt;- 1.38003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("logQ")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("log Q")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         theta4 &lt;- 3.87657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         label("logVp")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("log Vp")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         RSV &lt;- c(0, 0.196446, 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         label("RSV")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         eta1 ~ 0.101251</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         eta2 ~ 0.0993872</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         eta3 ~ 0.101303</span>
