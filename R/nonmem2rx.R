@@ -537,8 +537,14 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (inherits(etaNames, "logical")) {
     checkmate::assertLogical(etaNames, len=1, any.missing=FALSE)
     if (etaNames) {
-      etaNames <- vapply(seq_along(.nonmem2rx$theta),
+      etaNames <- vapply(seq_len(max(length(.nonmem2rx$etaNonmemLabel),
+                                     length(.nonmem2rx$etaLabel))),
                          function(i) {
+                           if (i > length(.nonmem2rx$etaNonmemLabel)) {
+                             return(.nonmem2rx$etaNonmemLabel[i])
+                           } else if (i > length(.nonmem2rx$etaLabel)) {
+                             return(.nonmem2rx$etaLabel[i])
+                           }
                            .lab <- .nonmem2rx$etaNonmemLabel[i]
                            if (.lab == "") .lab <- .nonmem2rx$etaLabel[i]
                            .lab
