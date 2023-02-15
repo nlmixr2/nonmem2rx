@@ -6,8 +6,16 @@ Author: Matthew Fidler
 Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
     person("Philip", "Delff", email = "philip@delff.dk",role = c("ctb")),
-    person("Gabriel", "Staples", role="ctb")
-           )
+    person("Lars", "Lindblom", role="ctb", comment="PsN tests"),
+    person("Niclas", "Jonsson", role="ctb", comment="PsN tests"),
+    person("Pontus", "Pihlgren", role="ctb", comment="PsN tests"),
+    person("Mats", "Karlsson", role="ctb", comment="PsN tests"),
+    person("Andrew", "Hooker", role="ctb", comment="PsN tests"),
+    person("Kajsa", "Harling", role="ctb", comment="PsN tests"),
+    person("Rikard", "Nordgren", role="ctb", comment="PsN tests"),
+    person("Svetlana", "Freiberga", role="ctb", comment="PsN tests"),
+    person("Yasunori" "Aoki", role="ctb", comment="PsN tests"),
+    person("Gabriel", "Staples", role="ctb", comment="string insensitive compare"))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL (>= 3) 

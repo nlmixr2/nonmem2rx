@@ -42,7 +42,6 @@ extern vLines _dupStrs;
 void nonmem2rx_full_parseFree(int last) {
   lineFree(&_dupStrs);
   if (last) {
-    REprintf("full free!\n");
     sFree(&curLine);
     sFree(&modelName);
     sFree(&curOmegaLhs);
@@ -51,7 +50,6 @@ void nonmem2rx_full_parseFree(int last) {
     sFree(&curThetaRhs);
     sFree(&curTheta);
   } else {
-    REprintf("partial free!\n");
     sClear(&curLine);
     sClear(&modelName);
     sClear(&curOmegaLhs);
@@ -86,7 +84,6 @@ void nonmem2rx_full_ini() {
     sIni(&curTheta);
     lineIni(&_dupStrs);
     nonmem2rx_full_ini_done = 1;
-    REprintf("full ini!\n");
   }
 }
 
