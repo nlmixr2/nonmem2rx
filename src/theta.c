@@ -50,13 +50,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -80,8 +75,8 @@ sbuf curTheta;
 
 SEXP _nonmem2rx_thetanum_reset(void) {
   nonmem2rx_thetanum = 1;
-  sIni(&curTheta);
-  sIni(&curThetaRhs);
+  sClear(&curTheta);
+  sClear(&curThetaRhs);
   return R_NilValue;
 }
 

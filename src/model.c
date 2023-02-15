@@ -50,13 +50,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -158,7 +153,6 @@ void trans_model(const char* parse){
 
 SEXP nonmem2rxPushCmtInfo(int defdose, int defobs);
 SEXP _nonmem2rx_trans_model(SEXP in) {
-  sIni(&modelName);
   nonmem2rxDefObs = 0;
   nonmem2rxDefDose = 0;
   nonmem2rxDefDepot = 0;
@@ -166,8 +160,7 @@ SEXP _nonmem2rx_trans_model(SEXP in) {
   
   trans_model(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
-  sFree(&modelName);
-  parseFree(0);
+  sClear(&modelName);
   if (nonmem2rxDefObs == 0) nonmem2rxDefObs = nonmem2rxDefCentral;
   if (nonmem2rxDefDose == 0) nonmem2rxDefDose = nonmem2rxDefDepot;
   if (nonmem2rxDefObs == 0) nonmem2rxDefObs = 1;

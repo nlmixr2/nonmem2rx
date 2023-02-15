@@ -56,8 +56,6 @@ void parseFreeLast(void) {
   //sFree(&_bufw);
   //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -281,7 +279,6 @@ void trans_abbrec(const char* parse){
 }
 
 SEXP _nonmem2rx_trans_abbrec(SEXP in) {
-  sIni(&curLine);
   sClear(&curLine);
   trans_abbrec(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);

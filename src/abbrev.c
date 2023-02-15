@@ -52,13 +52,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -983,7 +978,7 @@ void trans_abbrev(const char* parse){
 SEXP nonmem2rxSetMaxA(int maxa);
 
 SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
-  sIni(&curLine);
+  sClear(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
   verbWarning = 0;

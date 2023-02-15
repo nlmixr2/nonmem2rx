@@ -51,13 +51,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -102,9 +97,9 @@ SEXP _nonmem2rx_omeganum_reset(void) {
   nonmem2rx_omegaFixed = 0;
   nonmem2rx_omegaBlockI = 0;
   nonmem2rx_omegaBlockJ = 0;
-  sIni(&curOmegaLhs);
-  sIni(&curOmegaRhs);
-  sIni(&curOmega);
+  sClear(&curOmegaLhs);
+  sClear(&curOmegaRhs);
+  sClear(&curOmega);
   return R_NilValue;
 }
 

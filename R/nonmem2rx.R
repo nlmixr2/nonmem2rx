@@ -370,6 +370,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
+  on.exit({
+    .Call(`_nonmem2rx_r_parseFree`)
+  })
   .lines <- suppressWarnings(readLines(file))
   if (length(.lines) == 0L) {
     .w <- integer(0)

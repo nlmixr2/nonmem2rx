@@ -51,13 +51,8 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
-  //sFree(&sbOut);
   freeP();
-  //sFree(&_bufw);
-  //sFree(&_bufw2);
 }
-//sbuf sbErr1;
-//sbuf sbErr2;
 void parseFree(int last) {
   freeP();
   if (last){
@@ -186,7 +181,7 @@ SEXP _nonmem2rx_trans_lst(SEXP in, SEXP cov) {
   if (INTEGER(cov)[0]) {
     lstType = 5;
   }
-  sIni(&curLine);
+  sClear(&curLine);
   trans_lst(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;
