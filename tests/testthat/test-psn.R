@@ -192,7 +192,8 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/postfrem/frem_sir/final_models/model_4.lst",
              "PsN/test_files/postfrem/frem_covstep/final_models/model_4.lst",
              "PsN/test_files/postfrem/frem_covstep_removed/final_models/model_4.lst",
-             "PsN/test_files/run45.lst")
+             "PsN/test_files/run45.lst",
+             "PsN/test_files/output/onePROB/oneEST/noSIM/warfarin_ddmore.lst",)
 
   # These should be an error:
   # no actual model in listing file
@@ -214,13 +215,6 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
 
   # dummy in pk
   # "PsN/test_files/output/onePROB/oneEST/noSIM/large_s_matrix_cov_fail.lst",
-
-
-  # should this be read in?
-  # "PsN/test_files/output/onePROB/oneEST/noSIM/warfarin_ddmore.lst",
-  # has an add.err value that is near zero (and is actually negative)
-  # complains and exits
-
 
   withr::with_tempdir({
     
