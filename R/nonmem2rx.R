@@ -521,7 +521,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .dn <- NULL
   }
   if (determineError) {
-    .rx <- .determineError(.rx)
+    .tmp <- try(.determineError(.rx), silent = FALSE)
+    if (inherits(.tmp, "try-error")) {
+      .minfo("error converting to full nlmixr2-compatible ui")
+      .minfo("could be due to residual components being negative")
+    } else {
+      .rx <- .tmp
+    }
   }
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
