@@ -10,7 +10,7 @@
 
 SEXP _nonmem2rx_trans_theta(SEXP in);
 SEXP _nonmem2rx_thetanum_reset(void);
-SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix);
+SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix, SEXP unintFix);
 SEXP _nonmem2rx_omeganum_reset(void);
 SEXP _nonmem2rx_trans_model(SEXP in);
 SEXP _nonmem2rx_trans_input(SEXP in);
@@ -31,7 +31,7 @@ void R_init_nonmem2rx(DllInfo *info) {
     {"_nonmem2rx_r_parseIni", (DL_FUNC) &_nonmem2rx_r_parseIni, 0},
     {"_nonmem2rx_trans_abbrec", (DL_FUNC) &_nonmem2rx_trans_abbrec, 1},
     {"_nonmem2rx_trans_input", (DL_FUNC) &_nonmem2rx_trans_input, 1},
-    {"_nonmem2rx_trans_omega", (DL_FUNC) &_nonmem2rx_trans_omega, 2},
+    {"_nonmem2rx_trans_omega", (DL_FUNC) &_nonmem2rx_trans_omega, 3},
     {"_nonmem2rx_omeganum_reset", (DL_FUNC) &_nonmem2rx_omeganum_reset, 0},
     {"_nonmem2rx_trans_theta", (DL_FUNC) &_nonmem2rx_trans_theta, 1},
     {"_nonmem2rx_thetanum_reset", (DL_FUNC) &_nonmem2rx_thetanum_reset, 0},
