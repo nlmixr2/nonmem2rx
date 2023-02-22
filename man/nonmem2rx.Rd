@@ -18,6 +18,7 @@ nonmem2rx(
   validate = TRUE,
   strictLst = FALSE,
   unintFixed = FALSE,
+  nLinesPro = 20L,
   lst = ".lst",
   ext = ".ext"
 )
@@ -79,6 +80,9 @@ the model by solving the derived model under pred conditions
 successful load (default `FALSE`).}
 
 \item{unintFixed}{Treat uninteresting values as fixed parameters (default `FALSE`)}
+
+\item{nLinesPro}{The number of lines to check for the $PROBLEM
+statement.}
 
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
 
