@@ -23,7 +23,6 @@
     }
     .end <- "^( *NM-TRAN +MESSAGES *$| *1NOLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
     if (grepl(.end, line)) {
-      .nmlst$control <- paste(.nmlst$control, collapse="\n")
       .nmlst$section <- .nmlst.nmtran
     } else {
       .nmlst$control <- c(.nmlst$control, line)
@@ -175,12 +174,20 @@
     } else if (!is.null(.nmlst$est) &&
                  grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
       .est <- paste(.nmlst$est, collapse="\n")
-      .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      if (.nmlst$strictLst) {
+        .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      } else {
+        try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
+      }
       .nmlst$section <- .nmlst.cov
     } else if (!is.null(.nmlst$est) &&
                  grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO)", line)) {
       .est <- paste(.nmlst$est, collapse="\n")
-      .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      if (.nmlst$strictLst) {
+        .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      } else {
+        try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
+      }
       .nmlst$section <- .nmlst.cov
       return(NULL)
     } else if (!is.null(.nmlst$est)) {
@@ -189,6 +196,25 @@
     }
   }
   .nmlst$section
+}
+
+.nmlstCov <- function(line) {
+  if (.nmlst$section == .nmlst.cov) {
+    if (!.nmlst$isCov && grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
+      .nmlst$isCov <- TRUE
+      return(NULL)
+    } else if (.nmlst$isCov &&
+                 grepl("^ *(1 *$|CORRELATION MATRIX OF ESTIMATE|Elapsed|[#]|PROBLEM +NO|R MATRIX)", line)) {
+      .nmlst$section <- .nmlst.end
+      return(NULL)
+    } else if (.nmlst$isCov && grepl("********", line, fixed=TRUE)) {
+    } else if (.nmlst$isCov) {
+      .nmlst$covEst <- c(.nmlst$covEst, line)
+    } else {
+      ## print(line)
+    }
+  }
+  .nmlst$secton
 }
 
 .nmlst.fun <- function(line) {
@@ -201,30 +227,20 @@
   if (is.null(.nmlstTere(line))) return(NULL)
   if (is.null(.nmlstObj(line))) return(NULL)
   if (is.null(.nmlstEst(line))) return(NULL)
+  if (is.null(.nmlstCov(line))) return(NULL)
   # final parameter estimates
-  
+
   # covariance
-  if (.nmlst$section == .nmlst.cov) {
-    if (.nmlst$isCov && grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
-      .nmlst$isCov <- TRUE
-      return(NULL)
-    } else if (.nmlst$isCov &&
-                 grepl("^ *(1 *$|CORRELATION MATRIX OF ESTIMATE|Elapsed|[#]|PROBLEM +NO|R MATRIX)", line)) {
-      .nmlst$section <- .nmlst.end
-      return(NULL)
-    } else if (.nmlst$isCov && grepl("********", line, fixed=TRUE)) {
-    } else if (.nmlst$isCov) {
-      .nmlst$covEst <- c(.nmlst$covEst, line)
-    }
-  }
+
   return(NULL)
-  
+
 }
 #' Reads the NONMEM `.lst` file for final parameter information
-#'  
+#'
 #' @param file File where the list is located
 #' @return return a list with `$theta`, `$eta` and `$eps` and other
 #'   information about the control stream
+#' @inheritParams nonmem2rx
 #' @export
 #' @author Matthew L. Fidler
 #' @examples
@@ -232,14 +248,18 @@
 #' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
-nmlst <- function(file) {
+nmlst <- function(file, strictLst=FALSE) {
   # run time
   # nmtran message
-  .lst <- suppressWarnings(readLines(file))
+  if (length(file) == 1L) {
+    .lst <- suppressWarnings(readLines(file))
+  } else {
+    .lst <-file
+  }
   if (length(.lst) == 0) {
     stop("no lines read for file", call.= FALSE)
   }
-
+  .nmlst$strictLst <- strictLst
   .nmlst$section <- .nmlst.control
 
   .nmlst$control <- NULL
@@ -253,8 +273,8 @@ nmlst <- function(file) {
   .nmlst$est <- NULL
   .nmlst$covEst <- NULL
   .nmlst$tere <- NULL
-  
-  
+
+
   .nmlst$theta <- NULL
   .nmlst$eta <- NULL
   .nmlst$sigma <- NULL
@@ -264,14 +284,18 @@ nmlst <- function(file) {
   .nmlst$tere <- FALSE
   .nmlst$isEst <- FALSE
   .nmlst$isCov <- FALSE
-  
+
   lapply(.lst, .nmlst.fun)
 
   if (!is.null(.nmlst$covEst)) {
     .cov <- paste(.nmlst$covEst, collapse="\n")
-    .Call(`_nonmem2rx_trans_lst`, .cov, TRUE)
+    if (.nmlst$strictLst) {
+      .Call(`_nonmem2rx_trans_lst`, .cov, TRUE)
+    } else {
+      try(.Call(`_nonmem2rx_trans_lst`, .cov, TRUE), silent=TRUE)
+    }
   }
-  
+
   ## run time
   list(theta=.nmlst$theta,
        omega=.nmlst$eta,
