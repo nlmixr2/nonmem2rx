@@ -310,21 +310,16 @@ int omegaParseOmeg0(_arg_) {
     // Get the fixed statement
     xpn = d_get_child(pn, 2);
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int unint = 0, fixed = 0;
     if (nonmem2rx_omegaBlockn == 0) {
       // This is a regular initialization
       nonmem2rx_repeatVal = v;
-      if (fix[0] != 0) {
-        int unint = 0;
-        if (fix[0] == 'u' || fix[0] == 'U') {
-          unint = 1;
-        }
-        if (unint && nonmem2rx_unintFix == 0) {
-          sAppend(&curOmega, "%s%d ~ %s", omegaEstPrefix, nonmem2rx_omeganum, v);
-          nonmem2rx_omegaRepeat = -2;
-        } else {
+      fixed = fix[0] != 0;
+      unint = fixed  && (fix[0] == 'u' || fix[0] == 'U');
+      fixed = unint ? nonmem2rx_unintFix : fixed;
+      if (fixed) {
           sAppend(&curOmega, "%s%d ~ fix(%s)", omegaEstPrefix, nonmem2rx_omeganum, v);
           nonmem2rx_omegaRepeat = -1;
-        }
       } else {
         sAppend(&curOmega, "%s%d ~ %s", omegaEstPrefix, nonmem2rx_omeganum, v);
         nonmem2rx_omegaRepeat = -2;
