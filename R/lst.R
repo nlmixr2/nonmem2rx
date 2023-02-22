@@ -277,7 +277,7 @@ nmlst <- function(file, strictLst=FALSE) {
 
   .nmlst$theta <- NULL
   .nmlst$eta <- NULL
-  .nmlst$sigma <- NULL
+  .nmlst$eps <- NULL
   .nmlst$cov <- NULL
 
   .nmlst$term <- FALSE
