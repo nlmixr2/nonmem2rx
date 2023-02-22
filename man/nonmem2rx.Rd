@@ -17,6 +17,7 @@ nonmem2rx(
   determineError = TRUE,
   validate = TRUE,
   strictLst = FALSE,
+  unintFixed = FALSE,
   lst = ".lst",
   ext = ".ext"
 )
@@ -76,6 +77,8 @@ the model by solving the derived model under pred conditions
 
 \item{strictLst}{The list parsing needs to be correct for a
 successful load (default `FALSE`).}
+
+\item{unintFixed}{Treat uninteresting values as fixed parameters (default `FALSE`)}
 
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
 
