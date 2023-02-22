@@ -21,7 +21,7 @@
       }
       return(NULL)
     }
-    .end <- "^( *NM-TRAN +MESSAGES *$| *1NOLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
+    .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
     if (grepl(.end, line)) {
       .nmlst$section <- .nmlst.nmtran
     } else {
