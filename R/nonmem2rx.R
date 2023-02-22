@@ -331,6 +331,8 @@
 #'   the model by solving the derived model under pred conditions
 #'   (etas are zero and eps values are zero)
 #'
+#' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
+#'
 #' @param strictLst The list parsing needs to be correct for a
 #'   successful load (default `FALSE`).
 #' 
@@ -360,6 +362,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       determineError=TRUE,
                       validate=TRUE,
                       strictLst=FALSE,
+                      unintFixed=FALSE,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -370,6 +373,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   .clearNonmem2rx()
+  .nonmem2rx$unintFixed <- unintFixed
   on.exit({
     .Call(`_nonmem2rx_r_parseFree`)
   })

@@ -66,6 +66,7 @@ void wprint_node_omega(int depth, char *token_name, char *token_value, void *cli
   
 }
 
+int nonmem2rx_unintFix = 0;
 int nonmem2rx_omeganum = 1;
 int nonmem2rx_omegaDiagonal = 0;
 int nonmem2rx_omegaBlockn = 0;
@@ -230,9 +231,14 @@ int omegaParseFixed(_arg_) {
   if (!strcmp("fixed", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     if (v[0] == 'u' || v[0] == 'U') {
-      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+      if (nonmem2rx_unintFix) {
+        nonmem2rx_omegaFixed = 1;
+      } else {
+        nonmem2rx_omegaFixed = 0;
+      }
+    } else {
+      nonmem2rx_omegaFixed = 1;
     }
-    nonmem2rx_omegaFixed = 1;
     return 1;
   }
   return 0;
@@ -264,17 +270,22 @@ int omegaParseOmega2(_arg_) {
     xpn = d_get_child(pn, 3);
     wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
     xpn = d_get_child(pn, 2);
+    int unint = 0;
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (fix[0] == 'u' || fix[0] == 'U') {
-      Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+      unint = 1;
     }
     // this form is only good for diagonal matrices
     if (nonmem2rx_omegaBlockn != 0) {
       parseFree(0);
-      Rf_errorcall(R_NilValue, "(FIXED %s) is not supported in an $OMEGA or $SIGMA BLOCK", v);
+      Rf_errorcall(R_NilValue, "(FIXED/UNINT %s) is not supported in an $OMEGA or $SIGMA BLOCK", v);
     }
     sAppend(&curOmega, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
-    sAppend(&curOmega, " ~ fix(%s)", v);
+    if (unint && nonmem2rx_unintFix == 0) {
+      sAppend(&curOmega, " ~ %s", v);
+    } else {
+      sAppend(&curOmega, " ~ fix(%s)", v);
+    }
     if (nonmem2rx_omegaDiagonal != NA_INTEGER) nonmem2rx_omegaDiagonal++;
     nonmem2rx_omeganum++;
     pushOmegaComment();
@@ -299,15 +310,16 @@ int omegaParseOmeg0(_arg_) {
     // Get the fixed statement
     xpn = d_get_child(pn, 2);
     char *fix = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int unint = 0, fixed = 0;
     if (nonmem2rx_omegaBlockn == 0) {
       // This is a regular initialization
       nonmem2rx_repeatVal = v;
-      if (fix[0] != 0) {
-        if (fix[0] == 'u' || fix[0] == 'U') {
-          Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
-        }
-        sAppend(&curOmega, "%s%d ~ fix(%s)", omegaEstPrefix, nonmem2rx_omeganum, v);
-        nonmem2rx_omegaRepeat = -1;
+      fixed = fix[0] != 0;
+      unint = fixed  && (fix[0] == 'u' || fix[0] == 'U');
+      fixed = unint ? nonmem2rx_unintFix : fixed;
+      if (fixed) {
+          sAppend(&curOmega, "%s%d ~ fix(%s)", omegaEstPrefix, nonmem2rx_omeganum, v);
+          nonmem2rx_omegaRepeat = -1;
       } else {
         sAppend(&curOmega, "%s%d ~ %s", omegaEstPrefix, nonmem2rx_omeganum, v);
         nonmem2rx_omegaRepeat = -2;
@@ -319,10 +331,12 @@ int omegaParseOmeg0(_arg_) {
       pushOmega();
     } else {
       if (fix[0] != 0) {
-        if (fix[0] == 'u' || fix[0] == 'U') {
-          Rf_warning("Un-interesting values (UNINT) are treated as fixed in translation");
+        if ((fix[0] == 'u' || fix[0] == 'U')){
+          if (nonmem2rx_unintFix) 
+            nonmem2rx_omegaFixed = 1; 
+        } else {
+          nonmem2rx_omegaFixed = 1; 
         }
-        nonmem2rx_omegaFixed = 1; 
       }
       addOmegaBlockItem(v);
       nonmem2rx_repeatVal = v;
@@ -413,8 +427,9 @@ void trans_omega(const char* parse){
 
 SEXP nonmem2rxPushObservedMaxEta(int a);
 
-SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix) {
+SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix, SEXP unintFix) {
   curComment=NULL;
+  nonmem2rx_unintFix = INTEGER(unintFix)[0];
   nonmem2rx_omegaFixed = 0;
   nonmem2rx_omegaRepeat = 1;
   nonmem2rx_omegaDiagonal = 0;
