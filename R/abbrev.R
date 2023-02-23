@@ -42,13 +42,15 @@ nonmem2rxRec.err <- function(x) {
   class(.x) <- NULL
   # Add F for linear models
   if (.nonmem2rx$abbrevLin != 0L) {
-    if (.nonmem2rx$abbrevLin == 1L && is.null(.nonmem2rx$scaleVol[["scale1"]])) {
-      .minfo("Assuming a central volume of 1")
-      .addModel("V2 <- 1")
-    }
-    if (.nonmem2rx$abbrevLin == 2L && is.null(.nonmem2rx$scaleVol[["scale2"]])) {
-      .minfo("Assuming a central volume of 1")
-      .addModel("V2 <- 1")
+    if (!.nonmem2rx$hasVol) {
+      if (.nonmem2rx$abbrevLin == 1L && is.null(.nonmem2rx$scaleVol[["scale1"]])) {
+        .minfo("Assuming a central volume of 1")
+        .addModel("VC <- 1")
+      }
+      if (.nonmem2rx$abbrevLin == 2L && is.null(.nonmem2rx$scaleVol[["scale2"]])) {
+        .minfo("Assuming a central volume of 1")
+        .addModel("VC <- 1")
+      }
     }
     .addModel("rxLinCmt1 <- linCmt()")
   }
@@ -118,6 +120,14 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .needNmevid <- function() {
   .nonmem2rx$needNmevid <- TRUE
+}
+#' Tells the parser that a volume is in the model
+#'  
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.hasVolume <- function() {
+  .nonmem2rx$hasVol <- TRUE
 }
 #' Push defined volume information in the scaling
 #'  

@@ -50,6 +50,7 @@
   .nonmem2rx$replaceSeq <- NULL
   .nonmem2rx$replaceLabel <- NULL
   .nonmem2rx$replaceDataParItem <- NULL
+  .nonmem2rx$hasVol <- FALSE
 }
 #' Add theta name to .nonmem2rx info
 #'

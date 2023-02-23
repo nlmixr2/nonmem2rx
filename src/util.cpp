@@ -438,3 +438,11 @@ extern "C" SEXP nonmem2rxReplaceMultiple(const char *type) {
   END_RCPP
 }
 
+extern "C" SEXP nonmem2rxHasVolume(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function hasVolume(".hasVolume", nonmem2rxNs);
+  return hasVolume();
+  END_RCPP  
+}
+
