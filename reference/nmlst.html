@@ -44,7 +44,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nmlst</span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nmlst</span><span class="op">(</span><span class="va">file</span>, strictLst <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -52,12 +52,18 @@
     <dl><dt>file</dt>
 <dd><p>File where the list is located</p></dd>
 
+
+<dt>strictLst</dt>
+<dd><p>The list parsing needs to be correct for a
+successful load (default `FALSE`).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>return a list with `$theta`, `$eta` and `$eps`</p>
+<p>return a list with `$theta`, `$eta` and `$eps` and other
+  information about the control stream</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -93,7 +99,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 48</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nmtran</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "WARNINGS AND ERRORS (IF ANY) FOR PROBLEM 1\n\n(WARNING 2) NM-TRAN INFERS THAT THE DATA ARE POPULATION.\n"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "WARNINGS AND ERRORS (IF ANY) FOR PROBLEM 1\n\n(WARNING 2) NM-TRAN INFERS THAT THE DATA ARE POPULATION."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $termInfo</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0MINIMIZATION SUCCESSFUL\nNO. OF FUNCTION EVALUATIONS USED: 120\nNO. OF SIG. DIGITS IN FINAL EST.: 3.1"</span>
@@ -103,6 +109,75 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 68.17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tere</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Elapsed estimation time in seconds: 26.44\n0R MATRIX ALGORITHMICALLY SINGULAR\nAND ALGORITHMICALLY NON-POSITIVE-SEMIDEFINITE\n0R MATRIX IS OUTPUT\n0COVARIANCE STEP ABORTED\nElapsed covariance time in seconds: 41.73"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] ";; Description:"                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] ";; Author: user"                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "$PROBLEM HCQ 1CMT ORAL PK MODEL (BASED ON CARMICHAEL ET AL (2003))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "; ------------dataset------------"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "$INPUT ID SEX WT AGE TIME AMT ADDL II CMT DV MDV EVID"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "$DATA HCQdata5.csv IGNORE=@"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "; ------------model------------"                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "$SUBROUTINE ADVAN2 TRANS2"                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "$PK"                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12] "TVCL=THETA(1)*((WT/80)**THETA(5));*((AGE/57)**THETA(5));"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "TVV=THETA(2)"                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "TVKA=THETA(3)"                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "TVF1=THETA(4)"                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "; TVALAG1=THETA(4)"                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "CL=TVCL*EXP(ETA(1))"                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] "V=TVV*EXP(ETA(2))"                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "KA=TVKA;*EXP(ETA(3))"                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "F1=TVF1;*EXP(ETA(4))"                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "; ALAG1=TVALAG1;*EXP(ETA(3))"                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] "; scaling factor"                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "KE=CL/V"                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "S2=V/1000 ; dose [mg] and conc. [ng/mL]"                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [30] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "$ERROR"                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [32] "Y=F*(1+EPS(1));+EPS(2)"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "W=F"                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [34] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [35] "IPRED=F ; prediction individuelle"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] "IRES=DV-IPRED ; (individual-specific residual)"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "IWRES=IRES/W ; (individual-specific weighted residual)"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [38] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [40] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41] "$THETA (0,14.9207) ; CL"                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [42] "$THETA (0,861.385) ; V"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "$THETA (0,9.3023,10) ; KA"                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [44] "$THETA (0,0.746) FIX ; F1"                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [45] ";$THETA (0,0.00445) ; ALAG1"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "$THETA 1.20407 ; WTonCL"                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [47] "$OMEGA 0.163126 ; IIVCL"                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [48] "0.27101 ; IIVV"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "; 0.94 ; IVVKA"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [50] "; 0.004 FIXED ; IIVF"                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51] "; 0.02 ; IIVALAG"                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [52] "$SIGMA 0.0290039 ; epsPROP1"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [53] ";0.000365773 ; epsADD1"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [54] "$ESTIMATION METHOD=1 INTER MAXEVAL=9999 PRINT=5 SIG=3 POSTHOC"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [55] "; standard error of estimates :"                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [56] "$COVARIANCE"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [57] "$TABLE ID SEX WT AGE TIME DV PRED CPRED IPRED EVID RES WRES IRES"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [58] "IWRES CWRES NPDE ESAMPLE=300 NOPRINT FILE=pred"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [59] "; population and individual predictions and residuals"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [60] "$TABLE ID SEX WT AGE CL V KA ETA(1) ETA(2) NOPRINT NOAPPEND"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "FIRSTONLY FILE=param"                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [62] "; individual PK parameters (bayesiens,posthoc)"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [63] ""                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [64] ""                                                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">nmlst</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/DDMODEL00000302/run1.lst"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $theta</span>
@@ -135,7 +210,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 693</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nmtran</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "WARNINGS AND ERRORS (IF ANY) FOR PROBLEM 1\n\n(WARNING 2) NM-TRAN INFERS THAT THE DATA ARE POPULATION.\n\n(WARNING 3) THERE MAY BE AN ERROR IN THE ABBREVIATED CODE. THE FOLLOWING\nONE OR MORE RANDOM VARIABLES ARE DEFINED WITH \"IF\" STATEMENTS THAT DO NOT\nPROVIDE DEFINITIONS FOR BOTH THE \"THEN\" AND \"ELSE\" CASES. IF ALL\nCONDITIONS FAIL, THE VALUES OF THESE VARIABLES WILL BE ZERO.\n\nY\n\n\n(WARNING 90) WITH \"NUMERICAL\", \"SLOW\" IS ALSO REQUIRED ON $ESTIM RECORD.\nNM-TRAN HAS SUPPLIED THIS OPTION.\n\n(WARNING 97) A RANDOM QUANTITY IS RAISED TO A POWER. IF THE RESULT AFFECTS\nTHE VALUE OF THE OBJECTIVE FUNCTION, THE USER SHOULD ENSURE THAT THE\nRANDOM QUANTITY IS NEVER 0 WHEN THE POWER IS &lt; 1.\n\n(WARNING 48) DES-DEFINED ITEMS ARE COMPUTED ONLY WHEN EVENT TIME\nINCREASES. E.G., DISPLAYED VALUES ASSOCIATED WITH THE FIRST EVENT RECORD\nOF AN INDIVIDUAL RECORD ARE COMPUTED WITH (THE LAST ADVANCE TO) AN EVENT\nTIME OF THE PRIOR INDIVIDUAL RECORD.\n\n(WARNING 27) THE ABBREVIATED CODE CONTAINS A SIMULATION BLOCK BUT THERE IS\nNO $SIMULATION RECORD.\n"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "WARNINGS AND ERRORS (IF ANY) FOR PROBLEM 1\n\n(WARNING 2) NM-TRAN INFERS THAT THE DATA ARE POPULATION.\n\n(WARNING 3) THERE MAY BE AN ERROR IN THE ABBREVIATED CODE. THE FOLLOWING\nONE OR MORE RANDOM VARIABLES ARE DEFINED WITH \"IF\" STATEMENTS THAT DO NOT\nPROVIDE DEFINITIONS FOR BOTH THE \"THEN\" AND \"ELSE\" CASES. IF ALL\nCONDITIONS FAIL, THE VALUES OF THESE VARIABLES WILL BE ZERO.\n\nY\n\n\n(WARNING 90) WITH \"NUMERICAL\", \"SLOW\" IS ALSO REQUIRED ON $ESTIM RECORD.\nNM-TRAN HAS SUPPLIED THIS OPTION.\n\n(WARNING 97) A RANDOM QUANTITY IS RAISED TO A POWER. IF THE RESULT AFFECTS\nTHE VALUE OF THE OBJECTIVE FUNCTION, THE USER SHOULD ENSURE THAT THE\nRANDOM QUANTITY IS NEVER 0 WHEN THE POWER IS &lt; 1.\n\n(WARNING 48) DES-DEFINED ITEMS ARE COMPUTED ONLY WHEN EVENT TIME\nINCREASES. E.G., DISPLAYED VALUES ASSOCIATED WITH THE FIRST EVENT RECORD\nOF AN INDIVIDUAL RECORD ARE COMPUTED WITH (THE LAST ADVANCE TO) AN EVENT\nTIME OF THE PRIOR INDIVIDUAL RECORD.\n\n(WARNING 27) THE ABBREVIATED CODE CONTAINS A SIMULATION BLOCK BUT THERE IS\nNO $SIMULATION RECORD."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $termInfo</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0MINIMIZATION SUCCESSFUL\nHOWEVER, PROBLEMS OCCURRED WITH THE MINIMIZATION.\nREGARD THE RESULTS OF THE ESTIMATION STEP CAREFULLY, AND ACCEPT THEM ONLY\nAFTER CHECKING THAT THE COVARIANCE STEP PRODUCES REASONABLE OUTPUT.\nNO. OF FUNCTION EVALUATIONS USED: 74\nNO. OF SIG. DIGITS IN FINAL EST.: 3.4"</span>
@@ -145,6 +220,193 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tere</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Elapsed estimation time in seconds: 3.72\nElapsed covariance time in seconds: 0.71"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] ";; 1. Based on: run200"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2] ";; 2. Description: Final model, posthoc PK based on published unified model. Prityfied code"                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [3] ";; x1. Author: Matts"                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [4] "$SIZES NO=3000 LIM6=1000"                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [5] "$PROBLEM PN survival model With individual PK"                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [6] "; Implemented flip comments using PsN (e.g. sim_start and sim_end to define code to be used for VPC simulations)."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [8] ";Sim_start"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9] "$INPUT MID TIME DUR RATE AMT EVID CMT DV CENS CENSD STUD ADC NDOS"                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [10] "NAMT_MAX PL_DOSE AV_DOSE CUMDOSE DFREQ ;18"                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11] "RITUX SEXX AGE BW BHT RACE BMI BSA CTYPE ALB BUN BSLD=DROP"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [12] "PDUR=DROP PCPLAT PCTAX PCVINCA PCPROT ;34"                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13] "PPN DIAB ECOG1 DSBUILD=DROP PK ID ET1 ET2 ET3 ET4 ET5 ET6 ;48"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [14] "$DATA nonmem_gr2_Nov13_2018.csv IGNORE=@ IGNORE(TIME.LT.0)"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15] "IGNORE(STUD.EQ.29006) IGNORE(ID.EQ.639)"                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [16] "; 13 patients"                                                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [17] "; Unrealistic PK"                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [18] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19] ";$INPUT MID TIME DUR RATE AMT EVID CMT DV CENS CENSD STUD ADC NDOS NAMT_MAX PL_DOSE AV_DOSE CUMDOSE DFREQ"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [20] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21] "; RITUX SEXX AGE BW BHT RACE BMI BSA CTYPE ALB BUN BSLD=DROP PDUR=DROP PCPLAT PCTAX PCVINCA PCPROT"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [22] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [23] "; PPN DIAB ECOG1 DSBUILD=DROP ET1 ET2 ET3 ET4 ET5 ET6 PK ID"                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [24] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25] ";"                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [26] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [27] "; $DATA ../data/nonmem_gr2_Nov13_2018_sim.csv IGNORE=@"                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [28] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29] "; IGNORE(TIME.LT.0)"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [30] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] "; IGNORE(STUD.EQ.29006) ; 13 patients"                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [32] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [33] "; IGNORE(ID.EQ.639) ; Unrealistic PK"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [34] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [35] ";Sim_end"                                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36] "$SUBROUTINE ADVAN13 TRANS1 TOL=6"                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37] "$MODEL COMP=(central) COMP=(peri) COMP=(effcpt) COMP=(cumhaz)"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38] "COMP=(trcpt) COMP(AUC)"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [39] "$PK"                                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [40] ";for simulation"                                                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41] "RTTE=0"                                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [42] ";end for simulation"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [44] "; Covariate imputations etc"                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [45] "ageRef = 65"                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [46] "albref=4.0"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [47] "bunref=16"                                                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [48] "bodyWeightRef=85 ; Male"                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [50] "IF(SEXX.EQ.1) SEX=1 ; Male"                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51] "IF(SEXX.EQ.2) THEN"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [52] "SEX=0 ; Female"                                                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [53] "bodyWeightRef=68"                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [54] "ENDIF"                                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [56] "BWT=BW"                                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57] "IF(BW.EQ.-99) BWT=bodyWeightRef"                                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [58] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [59] "; PK parameters"                                                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [60] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] "THETA1=0.312;1 CL"                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [62] "THETA2=1.21;2 V1"                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [63] "THETA3= 0.957;3 V2"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [64] "THETA4= -1.02;4 Q"                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [65] "THETA5= 1.48;5 KDES"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [66] "THETA6= 1.02;6 CLT"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67] "THETA7= 0.476;7 WT to CLinf"                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [68] "THETA8= 0.527;8 WT to V1"                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [69] "THETA9= 0.484;9 WT to 2"                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [70] "THETA10= 0.303;10 WT to Q"                                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71] "THETA11= 0.149;11 SEX to V1"                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [72] "THETA12= 0.223;12 SEX to V"                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73] "THETA13= -0.212;13 power NDOS to CL"                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [74] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] "LWT75 = LOG(BWT/75)"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [76] "MUX1 = THETA1+THETA7*LWT75 +THETA13*LOG(NDOS/2.4)"                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [77] "MUX2 = THETA2+THETA8*LWT75+THETA11*SEX"                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [78] "MUX3 = THETA3+THETA9*LWT75+THETA12*SEX"                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79] "MUX4 = THETA4+THETA10*LWT75"                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [80] "MUX5 = THETA5"                                                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81] "MUX6 = THETA6"                                                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [82] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [83] "CLINF = EXP(MUX1+ET1)"                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [84] "V1 = EXP(MUX2+ET2)"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] "V2 = EXP(MUX3+ET3)"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [86] "Q = EXP(MUX4+ET4)"                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [87] "KDES = EXP(MUX5+ET5)"                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [88] "CLT = EXP(MUX6+ET6)"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [89] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [90] "S1 = V1/1000"                                                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [92] ";Reparameterization"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [93] "K12 = Q/V1"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [94] "K21 = Q/V2"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [95] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [96] "; PD parameters"                                                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97] "LOGKTR = THETA(1)+ETA(1) ; Eta1 Fixed to zero"                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [98] "KTR = EXP(LOGKTR) ; first order transit rate to and from transit and effect compartment"                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99] "ALPHA = EXP(THETA(2)) ; slope of drug effect"                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [100] "BETA = EXP(THETA(3)) ; weibul function parameter"                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [101] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [102] "covar = THETA(4) * (BWT - 75) + THETA(5) * PPN ; covariate effects on Hazard"                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [103] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [104] "$DES"                                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [105] "; PK model"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106] "CL = CLT * EXP(-KDES * T) + CLINF"                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [107] "K10 = CL / V1"                                                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [108] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [109] "DADT(1) = K21 * A(2) - K12 * A(1) - K10 * A(1)"                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [110] "DADT(2) = -K21 * A(2) + K12 * A(1)"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [111] "CPT = A(1) / S1"                                                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [112] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113] "; PD model"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [114] "DADT(5) = KTR * CPT - KTR * A(5) ; Transit compartment"                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [115] "DADT(3) = KTR * A(5) - KTR * A(3) ; Effect compartment"                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [116] "A5=A(5)"                                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [117] "A3=A(3)"                                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [118] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [119] "EDRUGT = ALPHA * A(3)"                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [120] "HAZT = 0"                                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121] "IF(T &gt; 0) HAZT = BETA * (EDRUGT**BETA) * (T**(BETA - 1)) * EXP(covar); WEIBULL (not defined at time zero)"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [122] "DADT(4) = HAZT ; Cumulative Hazard"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [123] "DADT(6) = CPT ; Cumulative AUC"                                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [124] "AUCT=A(6) ; AUC up to time T"                                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [125] "CAV=AUCT/T ; Average concentration up to time T"                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [126] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127] "$ERROR"                                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [128] "CP = A(1) / S1"                                                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [129] "EDRUG = ALPHA * A(3) ; Drug effect"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [130] "HAZ = 0 ; redefine Hazard in $Error. Needed to compute pdf"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [131] "IF(TIME &gt; 0) HAZ = BETA * (EDRUG**BETA) * (TIME**(BETA - 1)) * EXP(covar); WEIBULL"                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [132] "SURV = EXP(-A(4)) ; Survival probability"                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [133] "PDF=SURV*HAZ"                                                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [134] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [135] ";Estimation (defined by sim start and end)"                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [136] ";Sim_start"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [137] "IF(DV.EQ.0) THEN"                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [138] "Y=SURV"                                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [139] "CHLAST=A(4)"                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [140] "ELSE"                                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141] "CHLAST=CHLAST ; Keep nmtran happy"                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [142] "ENDIF"                                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [143] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [144] "IF(DV.EQ.1) THEN"                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [145] "Y=PDF ;pdf"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [146] "ENDIF"                                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [147] ";Sim_end"                                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [148] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [149] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [150] ";Simulation"                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [151] "IF(ICALL.EQ.4) THEN"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [152] "IF (NEWIND.NE.2) CALL RANDOM (2,R) ; random uniform distribution"                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [153] "DV=0 ; NO EVENT OCCURS"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [154] "RTTE=0 ; NO EVENT OCCURS"                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155] "IF(CENS.EQ.1) RTTE=1 ; RTTE set to 1 for censoring and event rows"                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [156] "IF(R.GT.SURV) THEN ; Event when R &gt; SURV"                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [157] "DV=1 ; DV set to 1 at time of event"                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [158] "RTTE=1 ; RTTE set to 1 for censoring and event rows"                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [159] "ENDIF"                                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [160] "Y=DV"                                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [161] "ENDIF"                                                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [162] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [163] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [164] "$THETA -4.53 ; 1 LOGKE0"                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [165] "-9.69 ; 2 LOGALPHA"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [166] "-0.327 ; 3 LOGBETA"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [167] "0.0145 ; 4 BWT"                                                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [168] "0.434 ; 5 PPN 1/0"                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169] "$OMEGA 0 FIX"                                                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [170] ";Sim_start"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [171] ";$SIGMA"                                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [172] ";0 FIXED"                                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [173] "$ESTIMATION MAXEVAL=9999 PRINT=1 LIKE METHOD=1 LAPLACE NUMERICAL"                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [174] "NOABORT SIG=3"                                                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [175] ";$SIMULATION(123456) (23000 UNIFORM) ONLYSIM ; Uncomment this for VPC generation"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [177] ";Sim_end"                                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [178] "$COVARIANCE MATRIX=S UNCONDITIONAL"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [179] "$TABLE TIME ID MID EVID AV_DOSE CAV AUCT CP A5 A3 HAZ SURV"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [180] "FORMAT=s1PE15.9 ONEHEADER NOPRINT FILE=HZtab202"                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [181] ""                                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [182] ""                                                                                                                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">nmlst</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/DDMODEL00000301/run3.lst"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $theta</span>
@@ -165,114 +427,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> eps3 0.000 0.000 0.404</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $cov</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              theta1    theta2    theta3    theta4    theta5   theta6    theta7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1     0.155000 -7.29e-03  0.129000  2.97e-02 -0.030400 -0.12300  0.102000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2    -0.007290  4.05e-03  0.006240  4.62e-03  0.008840 -0.00968  0.002040</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3     0.129000  6.24e-03  0.724000  2.09e-02  0.006660  0.07080 -0.086700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4     0.029700  4.62e-03  0.020900  8.20e-02  0.132000  0.01000  0.007590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    -0.030400  8.84e-03  0.006660  1.32e-01  1.510000  1.17000 -1.240000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta6    -0.123000 -9.68e-03  0.070800  1.00e-02  1.170000  1.86000 -1.440000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta7     0.102000  2.04e-03 -0.086700  7.59e-03 -1.240000 -1.44000  2.240000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta8     0.099100  4.44e-04  0.005030 -2.91e-02 -1.600000 -1.55000  2.080000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta9     0.071800 -1.93e-02  0.161000 -7.43e-02 -0.206000  0.06610 -0.552000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta10   -0.791000  4.54e-01 -3.280000  1.02e+00  1.770000 -5.58000 -1.120000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1      -0.001510  3.30e-04  0.000857 -9.02e-05 -0.003990 -0.00301  0.005230</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2       0.003030 -9.03e-05  0.013100  2.31e-03 -0.022400 -0.02290  0.026600</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3       0.073400 -6.95e-03  0.135000 -3.17e-03 -0.234000 -0.37100  0.367000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      -0.004400  3.74e-04 -0.014900  6.82e-03  0.040500  0.01580 -0.033800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1       0.000409  1.49e-05  0.001130  1.31e-04 -0.000076 -0.00118  0.000368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.2  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.3  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps2      -0.007780 -1.21e-03 -0.018900 -6.45e-03 -0.007420  0.01620 -0.014200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.2.3  0.000000  0.00e+00  0.000000  0.00e+00  0.000000  0.00000  0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps3       0.005000  6.03e-04  0.023200  1.43e-03 -0.020900 -0.02600  0.043100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              theta8    theta9   theta10      eta1 omega.1.2 omega.1.3 omega.1.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1     0.099100  0.071800  -0.79100 -1.51e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2     0.000444 -0.019300   0.45400  3.30e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3     0.005030  0.161000  -3.28000  8.57e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4    -0.029100 -0.074300   1.02000 -9.02e-05         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    -1.600000 -0.206000   1.77000 -3.99e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta6    -1.550000  0.066100  -5.58000 -3.01e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta7     2.080000 -0.552000  -1.12000  5.23e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta8     2.430000 -0.488000   1.73000  8.19e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta9    -0.488000  1.410000  -7.15000 -2.96e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta10    1.730000 -7.150000 581.00000  1.90e-01         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1       0.008190 -0.002960   0.19000  5.62e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2       0.036700  0.000379   0.03200  2.44e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3       0.426000  0.231000   0.27700  4.98e-03         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      -0.046700  0.008560   0.26600 -3.07e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1       0.000030  0.000583  -0.00324 -1.36e-05         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.2  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.3  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps2      -0.003640 -0.004310   0.18500  1.26e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.2.3  0.000000  0.000000   0.00000  0.00e+00         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps3       0.043800  0.005950  -0.54700  2.83e-04         0         0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                eta2 omega.2.3 omega.2.4     eta3 omega.3.4      eta4      eps1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1     3.03e-03         0         0  0.07340         0 -4.40e-03  4.09e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2    -9.03e-05         0         0 -0.00695         0  3.74e-04  1.49e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3     1.31e-02         0         0  0.13500         0 -1.49e-02  1.13e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4     2.31e-03         0         0 -0.00317         0  6.82e-03  1.31e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    -2.24e-02         0         0 -0.23400         0  4.05e-02 -7.60e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta6    -2.29e-02         0         0 -0.37100         0  1.58e-02 -1.18e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta7     2.66e-02         0         0  0.36700         0 -3.38e-02  3.68e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta8     3.67e-02         0         0  0.42600         0 -4.67e-02  3.00e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta9     3.79e-04         0         0  0.23100         0  8.56e-03  5.83e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta10    3.20e-02         0         0  0.27700         0  2.66e-01 -3.24e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1       2.44e-04         0         0  0.00498         0 -3.07e-04 -1.36e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2       2.21e-03         0         0  0.01410         0 -4.78e-04  2.81e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3       1.41e-02         0         0  0.52300         0 -3.16e-03  4.90e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      -4.78e-04         0         0 -0.00316         0  1.11e-02  4.51e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1       2.81e-05         0         0  0.00049         0  4.51e-05  8.04e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.2  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.3  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps2      -9.34e-04         0         0 -0.00918         0 -1.87e-03 -9.34e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.2.3  0.00e+00         0         0  0.00000         0  0.00e+00  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps3       2.19e-03         0         0  0.02660         0 -1.91e-03  3.38e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           sigma.1.2 sigma.1.3      eps2 sigma.2.3      eps3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1            0         0 -7.78e-03         0  5.00e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2            0         0 -1.21e-03         0  6.03e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3            0         0 -1.89e-02         0  2.32e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4            0         0 -6.45e-03         0  1.43e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5            0         0 -7.42e-03         0 -2.09e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta6            0         0  1.62e-02         0 -2.60e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta7            0         0 -1.42e-02         0  4.31e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta8            0         0 -3.64e-03         0  4.38e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta9            0         0 -4.31e-03         0  5.95e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta10           0         0  1.85e-01         0 -5.47e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1              0         0  1.26e-04         0  2.83e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2              0         0 -9.34e-04         0  2.19e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3              0         0 -9.18e-03         0  2.66e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4              0         0 -1.87e-03         0 -1.91e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1              0         0 -9.34e-05         0  3.38e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.2         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.1.3         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps2              0         0  4.56e-03         0 -1.76e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma.2.3         0         0  0.00e+00         0  0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps3              0         0 -1.76e-03         0  7.39e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $objf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1488.719</span>
@@ -284,7 +439,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 60</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nmtran</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] " WARNINGS AND ERRORS (IF ANY) FOR PROBLEM    1\n             \n (WARNING  2) NM-TRAN INFERS THAT THE DATA ARE POPULATION.\n"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] " WARNINGS AND ERRORS (IF ANY) FOR PROBLEM    1\n             \n (WARNING  2) NM-TRAN INFERS THAT THE DATA ARE POPULATION."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $termInfo</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0MINIMIZATION SUCCESSFUL\n NO. OF FUNCTION EVALUATIONS USED:     1024\n NO. OF SIG. DIGITS IN FINAL EST.:  3.6"</span>
@@ -294,6 +449,99 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 41.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tere</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] " Elapsed estimation time in seconds:    14.83\n Elapsed covariance time in seconds:    26.77"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] ";; 1. based on run1.mod "                                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] ";; 2. Description: covariate model + WT on V2 + CPRED in pred3 ($TABLE)"                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] ";; x1. Author: user"                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "$PROBLEM    MEROPENEM IV INFUSION 3COMP DESCRIPTION PLASMA AND ELF"                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] ";           CONCENTRATIONS FINAL COV MODEL"                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "; ------------dataset------------"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "$INPUT      ID AGE WT GFRC GFR DV TIME MDV CMT AMT RATE SS II EVID GRP"                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "; WT [kg], GFRC [0: poor hepatic function, 1: good hepatic function], "                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "; GFR [mL/min], DV [mg/L], TIME [h], CMT [1: plasma conc., 2: ELF conc],"                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "; AMT (DOSE) [g], RATE (K) [g/h], II (T) [h], GRP=AMT/RATE (delta) [h]"                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "; CL [L/h], V1 V2 V3 [L], Q2 Q3 [L/h], S1 S2 [L]"                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "$DATA      promessePK1.csv IGNORE=@"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "; ------------model------------"                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "$SUBROUTINE ADVAN11 TRANS4"                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18] "$PK    "                                                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "    ; parmacokinetic parameters"                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] "\tTVCL=THETA(1)*((GFR/65)**THETA(2)) ; CENTRAL"                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "\tTVV1=THETA(3)*((WT/75)**THETA(4))"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "    TVQ2=THETA(5)                      ; ELF"                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "\tTVV2=THETA(6)*((WT/75)**THETA(9))"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24] "\tTVQ3=THETA(7)                      ; PERIPHERAL"                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "\tTVV3=THETA(8)"                                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "\t; interindividual variance model"                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "\tCL=TVCL*EXP(ETA(1))"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "\tV1=TVV1*EXP(ETA(2))"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [30] "\tQ2=TVQ2"                                                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "\tV2=TVV2*EXP(ETA(3))"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [32] "\tQ3=TVQ3*EXP(ETA(4))"                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "\tV3=TVV3 "                                                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [34] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [35] "\t; scaling factor"                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] "\tS1=V1/1000 ; dose [g] and conc. [mg/L]"                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "\tS2=V2/THETA(10)"                                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [38] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [40] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [41] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [42] "$ERROR  "                                                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "; calcultate de result (i.e. model prediction) "                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [44] "\tH1=0"                                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [45] "\tH2=0"                                                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "\tIF(CMT.EQ.1) H1=1"                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [47] "\tIF(CMT.EQ.2) H2=1"                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [48] "\tY=H1*(F*(1+EPS(1))+EPS(2))+H2*(F*(1+EPS(3)))   ; +EPS(4)"                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "\tW=F"                                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [50] "\t"                                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [51] "\tIPRED=F ; prediction individuelle "                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [52] "\tIRES=DV-IPRED ; (individual-specific residual) "                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [53] "\tIWRES=IRES/W ;  (individual-specific weighted residual)"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [54] "\t"                                                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [55] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [56] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [57] "; Initial estimates"                                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [58] "$THETA  (0,9.81355436018442) ; CL"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [59] "$THETA  0.653109400662184    ; GFRCL"                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [60] "$THETA  (0,4.53480721643241) ; V1"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "$THETA  1.12475365584077     ; WTV1"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [62] "$THETA  (0,11.7186301905937) ; Q2; ELF"                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [63] "$THETA  (0,9.69726252224871) ; V2"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [64] "$THETA  (0,8.41511798967717) ; Q3; PERIPHERAL"                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [65] "$THETA  (0,10.8162112974179) ; V3"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [66] "$THETA  0.805863122538834    ; WTV2"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [67] "$THETA  231.229833848399     ; V2/S2"                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [68] "$OMEGA  BLOCK(4)"                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [69] " 0.19808195049767  ;      IIVCL"                                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [70] " 0 0.195893036337555  ;      IIVV1"                                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [71] " 0 0 0.184676645216004  ;      IIVV2"                                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [72] " 0 0 0 0.181094660002612  ;      IIVQ3"                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "$SIGMA  0.0198701414556805  ;   epsPROP1"                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [74] " 0.203004721167207  ;    epsADD1"                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [75] " 0.501989282726501  ;   epsPROP2"                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [76] "$ESTIMATION METHOD=1 INTER MAXEVAL=9999 SIGDIGITS=3 POSTHOC PRINT=5 ; PRINT=1 ; "                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [77] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [78] "; precision des estimation? standard error of estimates &amp; matrice de correlation"                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [79] "$COVARIANCE PRINT=E  "                                                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [80] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [81] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [82] "$TABLE      ID AGE WT GFRC GFR TIME MDV CMT RATE PRED CPRED RES WRES"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [83] "            IPRED IRES IWRES CWRES EVID NOPRINT FILE=pred3 ; population and individual predictions and residuals"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [84] "$TABLE      ID AGE WT GFRC GFR CL V1 Q2 V2 Q3 V3 ETA(1) ETA(2) ETA(3)"                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [85] "            ETA(4) TVCL TVV1 TVQ2 TVV2 TVQ3 TVV3 NOPRINT NOAPPEND"                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [86] "            FIRSTONLY FILE=param3 ; individual PK parameters (bayesiens,posthoc)"                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [87] ""                                                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [88] ""                                                                                                                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">nmlst</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.res"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $theta</span>
@@ -384,6 +632,50 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $time</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 100.76</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tere</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] " Elapsed estimation  time in seconds:    71.95\n Elapsed covariance  time in seconds:    28.38\n Elapsed postprocess time in seconds:     0.43"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "$PROB    BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "$INPUT   ID TIME DV LNDV MDV AMT EVID DOSE V1I CLI QI V2I SSX IIX SD CMT"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "$DATA    BOLUS_2CPT.csv IGNORE=@ IGNORE (SD.EQ.0)"                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "$SUBR    ADVAN13 TOL=6"                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "$MODEL"                                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "         COMP=(CENTRAL,DEFOBS,DEFDOSE)"                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "         COMP=(PERI)"                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "$PK"                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "         CL=EXP(THETA(1)+ETA(1))"                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "         V=EXP(THETA(2)+ETA(2))"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "         Q=EXP(THETA(3)+ETA(3))"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12] "         V2=EXP(THETA(4)+ETA(4))"                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "         V1=V"                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "         S1=V"                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "\t\t K21=Q/V2"                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "\t\t K12=Q/V"                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "$DES"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18] "         DADT(1)= K21*A(2)-K12*A(1)-CL*A(1)/V1"                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "         DADT(2)=-K21*A(2)+K12*A(1)  \t\t "                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] "$ERROR   "                                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "         IPRED = F     "                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "         RESCV = THETA(5) "                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "         W     = IPRED*RESCV"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24] "         IRES  = DV-IPRED"                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "         IWRES = IRES/W"                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] "         Y     = IPRED+W*EPS(1)"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "$THETA   1.6       ;log Cl"                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "$THETA   4.5       ;log Vc"                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "$THETA   1.6       ;log Q"                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [30] "$THETA   4         ;log Vp"                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "$THETA   (0,0.3,1) ;RSV"                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [32] "$OMEGA   0.15 0.15 0.15 0.15"                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "$SIGMA   1 FIX"                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [34] "$EST     NSIG=2 SIGL=6 PRINT=5 MAX=9999 NOABORT POSTHOC METHOD=COND INTER NOOBT"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [35] "$COV"                                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] "$TABLE  ID TIME LNDV MDV AMT EVID DOSE V1I CLI QI V2I CL V Q V2 ETA1 ETA2 ETA3 ETA4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "        IPRED IRES IWRES CWRESI"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [38] "        ONEHEADER NOPRINT FILE=runODE032.csv   "                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] "   "                                                                                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
