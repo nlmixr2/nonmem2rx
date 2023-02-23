@@ -93,7 +93,20 @@ test_that("test omega", {
      c("eta1 + eta2 + eta3 + eta4 + eta5 + eta6 ~ c(0.1, 0.01, 0.1, 0.01, 0.01, 0.1, 0.01, 0.01, 0.01, 0.1, 0.01, 0.01, 0.01, 0.01, 0.1, 0.01, 0.01, 0.01, 0.01, 0.01, 0.1)",
        "eta7 ~ 0.02"), 7)
 
-  expect_error(.o("BLOCK(4)\n ECL=  0.3\n 0.01 EV1=0.35\nEQ=   0.01 0.01 0.54\nEV2=  0.01 0.01 0.01 0.67"), "EV1")
+  # can be anywhere (at least in this parser)
+  .o("BLOCK(4)\n ECL=  0.3\n 0.01 EV1=0.35\nEQ=   0.01 0.01 0.54\nEV2=  0.01 0.01 0.01 0.67",
+     "eta1 + eta2 + eta3 + eta4 ~ c(0.3, 0.01, 0.35, 0.01, 0.01, 0.54, 0.01, 0.01, 0.01, 0.67)", 4)
+
+  expect_equal(.nonmem2rx$etaNonmemLabel,
+               c("ECL", "EV1", "EQ", "EV2"))
+
+  # can be anywhere (at least in this parser)
+  expect_warning(.o("BLOCK(4)\n ECL=  0.3\n EVD=0.01 EV1=0.35\nEQ=   0.01 0.01 0.54\nEV2=  0.01 0.01 0.01 0.67",
+                    "eta1 + eta2 + eta3 + eta4 ~ c(0.3, 0.01, 0.35, 0.01, 0.01, 0.54, 0.01, 0.01, 0.01, 0.67)", 4),
+                 "'EVD' was changed to 'EV1'")
+
+  expect_equal(.nonmem2rx$etaNonmemLabel,
+               c("ECL", "EV1", "EQ", "EV2"))
 
 
   .o("BLOCK(4)\n ECL=  0.3\nEV1=  0.01 0.35\nEQ=   0.01 0.01 0.54\nEV2=  0.01 0.01 0.01 0.67",
@@ -117,6 +130,11 @@ test_that("test omega", {
   .o("V1=(0.01)x3 0.1",c("eta1 ~ 0.01", "eta2 ~ 0.01", "eta3 ~ 0.01", "eta4 ~ 0.1"), 4)
   expect_equal(.nonmem2rx$etaNonmemLabel,
                c("V1", "", "", ""))
+
+  .o("BLOCK(3)  KA=6 .005 UNNECESSARILYLONGK=.0002 .3 .006 UNNECESSARILYLONGCL=4",
+     "eta1 + eta2 + eta3 ~ c(6, .005, .0002, .3, .006, 4)", 3)
+  expect_equal(.nonmem2rx$etaNonmemLabel,
+               c("KA", "UNNECESSARILYLONGK", "UNNECESSARILYLONGCL"))
 
   .o("ECL= 0.3\nEV1= 0.35\nEQ=  0.54\nEV2= 0.67",
      c("eta1 ~ 0.3", "eta2 ~ 0.35", "eta3 ~ 0.54", "eta4 ~ 0.67"), 4)
