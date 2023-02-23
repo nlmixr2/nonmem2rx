@@ -332,13 +332,16 @@ nmlst <- function(file, strictLst=FALSE) {
                                            " ~ ", deparse1(.est), ")")))
       return(invisible())
     }
-    .d <- dim(.nmlst$eta)[1]
-    for (.i in seq_len(.d)) {
-      for(.j in seq(.i, .d)) {
-        if (.i == .j) {
-          .n <- c(.n, paste0("eta", .i))
-        } else {
-          .n <- c(.n, paste0("omega.", .i, ".", .j))
+    .d <- dim(.nmlst$eta)
+    if (!is.null(.d)) {
+      .d <- .d[1]
+      for (.i in seq_len(.d)) {
+        for(.j in seq(.i, .d)) {
+          if (.i == .j) {
+            .n <- c(.n, paste0("eta", .i))
+          } else {
+            .n <- c(.n, paste0("omega.", .i, ".", .j))
+          }
         }
       }
     }
@@ -350,16 +353,20 @@ nmlst <- function(file, strictLst=FALSE) {
                                            " ~ ", deparse1(.est), ")")))
       return(invisible())
     }
-    .d <- dim(.nmlst$eps)[1]
-    for (.i in seq_len(.d)) {
-      for (.j in seq(.i, .d)) {
-        if (.i == .j) {
-          .n <- c(.n, paste0("eps", .i))
-        } else {
-          .n <- c(.n, paste0("sigma.", .i, ".", .j))
+    .d <- dim(.nmlst$eps)
+    if (is.null(.d)) {
+      .d <- d[1]
+      for (.i in seq_len(.d)) {
+        for (.j in seq(.i, .d)) {
+          if (.i == .j) {
+            .n <- c(.n, paste0("eps", .i))
+          } else {
+            .n <- c(.n, paste0("sigma.", .i, ".", .j))
+          }
         }
       }
     }
+
     .ln <- length(.n)
     if (length(.est) == .ln*(.ln+1)/2) {
       .est <- paste0("lotri::lotri(",
