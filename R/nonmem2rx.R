@@ -538,13 +538,14 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
+    .model <- .rx$simulationModel
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
                                          rename=rename)
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
-      .etaData <- .readInEtasFromTables(file, nonmemOutputDir=nonmemOutputDir,
-                                        rename=rename)
+      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename)
     }
     if (is.null(.predData)) {
       .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,

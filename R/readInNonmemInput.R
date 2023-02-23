@@ -190,10 +190,13 @@
 #' Read in the etas from the nonmem dataest
 #'  
 #' @param file control stream name
+#' @param nonmemData represents the input nonmem data
+#' @param rxModel represents the classic `rxode2` simulation model
+#'   that will be run for validation
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
+.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
@@ -218,6 +221,8 @@
   }
   .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
   .ret <- .ret[,.w]
+  # here drop any etas that are non influential
+  .ret <- .getValidationEtas(.ret, nonmemData, rxModel)
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
