@@ -49,3 +49,22 @@
   .inputData[,.wtime] <- .new
   .inputData
 }
+#' Get the nonmem observation data indexes
+#'
+#' @param inputData nonmem input data
+#' @return nonmem observation data
+#' @noRd
+#' @author Matthew L. Fidler
+.nonmemObsIndex <- function(inputData) {
+  .wevid <- which(tolower(names(inputData)) == "evid")
+  if (length(.wevid) == 1L) {
+    .evid <- inputData[,.wevid]
+    return(which(.evid == 0 | .evid == 2))
+  }
+  .wmdv <- which(tolower(names(inputData)) == "mdv")
+  if (length(.wmdv) == 1L) {
+    .mdv <- inputData[,.wmdv]
+    return(which(.mdv == 0))
+  }
+  seq_along(inputData[,1])
+}
