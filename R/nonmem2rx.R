@@ -51,6 +51,7 @@
   .nonmem2rx$replaceLabel <- NULL
   .nonmem2rx$replaceDataParItem <- NULL
   .nonmem2rx$hasVol <- FALSE
+  .nonmem2rx$needYtype <- FALSE
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -425,6 +426,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .lines <- paste(.lines, collapse = "\n")
   .parseRec(.lines)
+  if (.nonmem2rx$needYtype) {
+    warning("'ytype' variable has special meaning in rxode2, renamed to 'nmytype', rename/copy in your data too",
+            call.=FALSE)
+  }
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
     if (thetaNames) {
@@ -479,10 +484,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})",
                          "}")))
   .rx <- .fun()
-  if (is.null(rename) && ("ytype" %in% tolower(c(.nonmem2rx$input, names(.nonmem2rx$input))))) {
-    .r <- c(RXTYPE="YTYPE")
-    .minfo("since YTYPE is in $INPUT, change to RXTYPE")
-  }
   if (!is.null(rename)) {
     .minfo("Renaming variables in model and data")
     .r <- rename

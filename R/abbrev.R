@@ -121,6 +121,14 @@ nonmem2rxRec.err <- function(x) {
 .needNmevid <- function() {
   .nonmem2rx$needNmevid <- TRUE
 }
+#' Sets the flag that we need ytype renamed to rxytype
+#'
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.needYtype <- function() {
+  .nonmem2rx$needYtype <- TRUE
+}
 #' Tells the parser that a volume is in the model
 #'  
 #' @return nothing, called for side effects
