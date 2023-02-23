@@ -16,6 +16,7 @@
 #' @author Matthew L. Fidler
 #' @examples 
 .getValidationEtas <- function(etaData, inputData, model) {
+  if (is.null(inputData)) return(NULL)
   .eid <- unique(etaData$ID)
   .m <- rxode2::etTrans(inputData, model)
   .id <- as.numeric(levels(.m$ID))
