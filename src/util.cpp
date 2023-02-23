@@ -210,11 +210,11 @@ extern "C" SEXP nonmem2rxSetMaxA(int maxa) {
   END_RCPP
 }
 
-extern "C" SEXP nonmem2rxPushLst(const char* type, const char *est, int maxV) {
+extern "C" SEXP nonmem2rxPushLst(const char* type, const char *est) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function pushLst(".pushLst", nonmem2rxNs);
-  return pushLst(type, est, maxV);
+  return pushLst(type, est);
   END_RCPP
 }
 

@@ -181,7 +181,7 @@
       }
       .nmlst$section <- .nmlst.cov
     } else if (!is.null(.nmlst$est) &&
-                 grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO)", line)) {
+                 grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO|^0|^1$)", line)) {
       .est <- paste(.nmlst$est, collapse="\n")
       if (.nmlst$strictLst) {
         .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
@@ -315,11 +315,10 @@ nmlst <- function(file, strictLst=FALSE) {
 #'
 #' @param type Type of element ("theta", "eta", "eps")
 #' @param est R code for the estimates (need to apply names and lotri)
-#' @param maxElt maximum number of the element type
 #' @return nothing called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.pushLst <- function(type, est, maxElt) {
+.pushLst <- function(type, est) {
   if (type == "cov") {
     .est <- eval(parse(text=paste0("c(",est)))
     .n <- names(.nmlst$theta)
@@ -375,16 +374,18 @@ nmlst <- function(file, strictLst=FALSE) {
       .nmlst$cov <- eval(parse(text=.est))
     }
   } else if (type == "theta") {
-    assign("theta", setNames(eval(parse(text=est)), paste0(type,seq(1, maxElt))), envir=.nmlst)
+    .est <- eval(parse(text=est))
+    .maxElt <- length(.est)
+    assign("theta", setNames(.est, paste0(type,seq_len(.maxElt))), envir=.nmlst)
   } else {
     .est <- eval(parse(text=est))
-    if (length(.est) == maxElt*(maxElt+1)/2) {
-      .est <- paste0("lotri::lotri(",
-                     paste(paste0(type, seq(1, maxElt)), collapse="+"),
-                     " ~ ", est, ")")
-      .est <- eval(parse(text=.est))
-      assign(type, .est, envir=.nmlst)
-    }
+    .lest <- length(.est)
+    .maxElt <- sqrt(1 + .lest * 8)/2 - 1/2
+    .est <- paste0("lotri::lotri(",
+                     paste(paste0(type, seq_len(.maxElt)), collapse="+"),
+                     " ~ ", deparse1(.est), ")")
+    .est <- eval(parse(text=.est))
+    assign(type, .est, envir=.nmlst)
   }
   invisible()
 }
