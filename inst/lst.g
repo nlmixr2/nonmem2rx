@@ -23,10 +23,19 @@ compress_lab2:  compress_lab '|' compress_lab;
 compress_lab: ('TH' decimalint | "OM[0-9][0-9][0-9][0-9]" | "SG[0-9][0-9][0-9][0-9]");
 constant_line: '+'? (constant_item)+;
 
-constant_item: est_label | constant | na_item;
+constant_item: est_label | est_label_new | constant | na_item;
 na_item: '.........';
 
 est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) decimalint;
+
+est_label_new: ('THETA' '(' identifier_nm ')' 
+  | 'ETA' '(' identifier_nm ')'
+  | 'EPS' '(' identifier_nm ')'
+  | 'ERR' '(' identifier_nm ')'
+  | 'ET_' identifier_nm
+  | 'TH_' identifier_nm
+  | 'EP_' identifier_nm
+);
 
 constant: '-'? (float1 | float2);
 decimalintNo0: "([1-9][0-9]*)" $term -1;
@@ -34,4 +43,4 @@ decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 whitespace: "[ \t\r\n*]+";
-
+identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
