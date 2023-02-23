@@ -181,7 +181,7 @@
       }
       .nmlst$section <- .nmlst.cov
     } else if (!is.null(.nmlst$est) &&
-                 grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO|^0|^1$)", line)) {
+                 grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO|^0|.*CORR MATRIX FOR RANDOM EFFECTS)", line)) {
       .est <- paste(.nmlst$est, collapse="\n")
       if (.nmlst$strictLst) {
         .Call(`_nonmem2rx_trans_lst`, .est, FALSE)

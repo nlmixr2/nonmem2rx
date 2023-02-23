@@ -404,7 +404,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .lstInfo <- nmlst(.lines, strictLst = TRUE)
     } else {
       .tmp <- try(nmlst(.lines, strictLst = FALSE), silent=TRUE)
-      if (!inherits(tmp, "try-error")) .lstInfo <- tmp
+      if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
     }
     .minfo("done")
     if (is.null(.lstInfo$control)) {
