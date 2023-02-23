@@ -4,13 +4,17 @@
 \alias{nmlst}
 \title{Reads the NONMEM `.lst` file for final parameter information}
 \usage{
-nmlst(file)
+nmlst(file, strictLst = FALSE)
 }
 \arguments{
 \item{file}{File where the list is located}
+
+\item{strictLst}{The list parsing needs to be correct for a
+successful load (default `FALSE`).}
 }
 \value{
-return a list with `$theta`, `$eta` and `$eps`
+return a list with `$theta`, `$eta` and `$eps` and other
+  information about the control stream
 }
 \description{
 Reads the NONMEM `.lst` file for final parameter information

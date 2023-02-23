@@ -1,206 +1,315 @@
 .nmlst <- new.env(parent=emptyenv())
+.nmlst.control <- 1L
+.nmlst.nmtran  <- 2L
+.nmlst.version <- 3L
+.nmlst.nobs    <- 4L
+.nmlst.nsub    <- 5L
+.nmlst.term    <- 6L
+.nmlst.tere    <- 7L
+.nmlst.obj     <- 8L
+.nmlst.est     <- 9L
+.nmlst.cov     <- 10L
+.nmlst.end     <- 12L
+
+.nmlstControl <- function(line) {
+  if (.nmlst$section == .nmlst.control) {
+    # search for control stream, typically found at the beginning of the file
+    if (is.null(.nmlst$control)) {
+      .begin <- "^ *([$][Pp][Rr][Oo]| *;.*)"
+      if (grepl(.begin, line)) {
+        .nmlst$control <- line
+      }
+      return(NULL)
+    }
+    .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
+    if (grepl(.end, line)) {
+      .nmlst$section <- .nmlst.nmtran
+    } else {
+      .nmlst$control <- c(.nmlst$control, line)
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstNmtran <- function(line) {
+  if (.nmlst$section == .nmlst.nmtran) {
+    if (is.null(.nmlst$nmtran)) {
+      .begin <- "WARNINGS AND ERRORS (IF ANY) FOR PROBLEM"
+      if (grepl(.begin, line, fixed =TRUE)) {
+        .nmlst$nmtran <- line
+      }
+      return(NULL)
+    }
+    .end <- "(License|^ *[*][*][*]*|[(]NONMEM[)] VERSION)"
+    if (grepl(.end, line)) {
+      while(grepl("^ *$",.nmlst$nmtran[length(.nmlst$nmtran)])) {
+        .nmlst$nmtran <- .nmlst$nmtran[-length(.nmlst$nmtran)]
+      }
+      .nmlst$nmtran <- paste(.nmlst$nmtran, collapse="\n")
+      .nmlst$section <- .nmlst.version
+    } else {
+      .nmlst$nmtran <- c(.nmlst$nmtran, line)
+      return(NULL)
+    }
+  }
+  return(.nmlst$section)
+}
+
+.nmlstVersion <- function(line) {
+  if (.nmlst$section == .nmlst.version) {
+    .begin <- ".*[(]NONMEM[)] +VERSION +"
+    if (grepl(.begin, line)) {
+      .nmlst$nonmem <- sub(.begin, "", line)
+      .nmlst$section <- .nmlst.nobs
+      return(NULL)
+    } else if (grepl("TOT. NO. OF OBS RECS:", line, fixed=TRUE)){
+      .nmlst$section <- .nmlst.nobs
+    } else {
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+.nmlstNobs <- function(line) {
+  if (.nmlst$section == .nmlst.nobs) {
+    if (grepl("TOT. NO. OF OBS RECS:", line, fixed=TRUE)) {
+      .nmlst$nobs <- as.numeric(sub("TOT. NO. OF OBS RECS:", "", line, fixed=TRUE))
+      .nmlst$section <- .nmlst.nsub
+      return(NULL)
+    } else if (grepl("TOT. NO. OF INDIVIDUALS:", line, fixed=TRUE)) {
+      .nmlst$section <- .nmlst.nsub
+    } else {
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstNsub <- function(line) {
+  # Number of subjects
+  if (.nmlst$section == .nmlst.nsub) {
+    if (grepl("TOT. NO. OF INDIVIDUALS:", line, fixed=TRUE)) {
+      .nmlst$nsub <- as.numeric(sub("TOT. NO. OF INDIVIDUALS:", "", line, fixed = TRUE))
+      .nmlst$section <- .nmlst.term
+      return(NULL)
+    } else if (grepl("#TERM:", line, fixed=TRUE)) {
+      .nmlst$section <- .nmlst.term
+    } else {
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstTerm <- function(line) {
+  if (.nmlst$section == .nmlst.term) {
+    if (!.nmlst$term && grepl("#TERM:", line, fixed=TRUE)) {
+      .nmlst$term <- TRUE
+      return(NULL)
+    } else if (.nmlst$term && grepl("^ *$",line)) {
+      .nmlst$termInfo <- paste(.nmlst$termInfo, collapse="\n")
+      .nmlst$section <- .nmlst.tere
+      return(NULL)
+    } else if (.nmlst$term) {
+      .nmlst$termInfo <- c(.nmlst$termInfo, line)
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstTere  <- function(line) {
+  if (.nmlst$section == .nmlst.tere) {
+    if (!.nmlst$tere && grepl("#TERE:", line, fixed=TRUE)) {
+      .nmlst$tere <- TRUE
+      return(NULL)
+    } else if (.nmlst$tere) {
+      if (grepl("^ *1 *$", line)) {
+        .nmlst$tere <- paste(.nmlst$time, collapse="\n")
+        .w <- which(regexpr(":", .nmlst$time) != -1)
+        if (length(.w) > 0) {
+          .nmlst$time <- .nmlst$time[.w]
+          .nmlst$time <- sum(as.numeric(gsub(".*: +", "", .nmlst$time)))
+        } else {
+          .nmlst$time <- NULL
+        }
+        .nmlst$section <- .nmlst.obj
+        return(NULL)
+      } else if (.nmlst$tere && grepl("#OBJV:", line, fixed=TRUE)) {
+        .nmlst$section <- .nmlst.obj
+      } else if (.nmlst$tere) {
+        .nmlst$time <- c(.nmlst$time, line)
+        return(NULL)
+      }
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstObj  <- function(line) {
+  if (.nmlst$section == .nmlst.obj) {
+    if (grepl("#OBJV:", line, fixed=TRUE)) {
+      .nmlst$obj <- as.numeric(sub("[^*]*[*]+ *([^* ]*) *[*]*", "\\1", line))
+      .nmlst$section <- .nmlst.est
+      return(NULL)
+    } else if (grepl("FINAL PARAMETER ESTIMATE", line, fixed=TRUE)) {
+      .nmlst$section <- .nmlst.est
+    } else {
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstEst <- function(line) {
+  if (.nmlst$section == .nmlst.est) {
+    if (!.nmlst$isEst && grepl("FINAL PARAMETER ESTIMATE", line, fixed=TRUE)) {
+      .nmlst$isEst <- TRUE
+      return(NULL)
+    } else if (is.null(.nmlst$est) &&
+                 .nmlst$isEst && grepl("(THETA +- +VECTOR|OMEGA +- +COV|SIGMA +- +COV)", line)) {
+      .nmlst$est <- line
+      return(NULL)
+    } else if (!is.null(.nmlst$est) &&
+                 grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
+      .est <- paste(.nmlst$est, collapse="\n")
+      if (.nmlst$strictLst) {
+        .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      } else {
+        try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
+      }
+      .nmlst$section <- .nmlst.cov
+    } else if (!is.null(.nmlst$est) &&
+                 grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO)", line)) {
+      .est <- paste(.nmlst$est, collapse="\n")
+      if (.nmlst$strictLst) {
+        .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      } else {
+        try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
+      }
+      .nmlst$section <- .nmlst.cov
+      return(NULL)
+    } else if (!is.null(.nmlst$est)) {
+      .nmlst$est <- c(.nmlst$est, line)
+      return(NULL)
+    }
+  }
+  .nmlst$section
+}
+
+.nmlstCov <- function(line) {
+  if (.nmlst$section == .nmlst.cov) {
+    if (!.nmlst$isCov && grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
+      .nmlst$isCov <- TRUE
+      return(NULL)
+    } else if (.nmlst$isCov &&
+                 grepl("^ *(1 *$|CORRELATION MATRIX OF ESTIMATE|Elapsed|[#]|PROBLEM +NO|R MATRIX)", line)) {
+      .nmlst$section <- .nmlst.end
+      return(NULL)
+    } else if (.nmlst$isCov && grepl("********", line, fixed=TRUE)) {
+    } else if (.nmlst$isCov) {
+      .nmlst$covEst <- c(.nmlst$covEst, line)
+    } else {
+      ## print(line)
+    }
+  }
+  .nmlst$secton
+}
+
+.nmlst.fun <- function(line) {
+  if (is.null(.nmlstControl(line))) return(NULL)
+  if (is.null(.nmlstNmtran(line))) return(NULL)
+  if (is.null(.nmlstVersion(line))) return(NULL)
+  if (is.null(.nmlstNobs(line))) return(NULL)
+  if (is.null(.nmlstNsub(line))) return(NULL)
+  if (is.null(.nmlstTerm(line))) return(NULL)
+  if (is.null(.nmlstTere(line))) return(NULL)
+  if (is.null(.nmlstObj(line))) return(NULL)
+  if (is.null(.nmlstEst(line))) return(NULL)
+  if (is.null(.nmlstCov(line))) return(NULL)
+  # final parameter estimates
+
+  # covariance
+
+  return(NULL)
+
+}
 #' Reads the NONMEM `.lst` file for final parameter information
-#'  
+#'
 #' @param file File where the list is located
-#' @return return a list with `$theta`, `$eta` and `$eps`
-#' @export 
+#' @return return a list with `$theta`, `$eta` and `$eps` and other
+#'   information about the control stream
+#' @inheritParams nonmem2rx
+#' @export
 #' @author Matthew L. Fidler
 #' @examples
 #' nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
 #' nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
-nmlst <- function(file) {
+nmlst <- function(file, strictLst=FALSE) {
   # run time
   # nmtran message
-  .lst <- suppressWarnings(readLines(file))
+  if (length(file) == 1L) {
+    .lst <- suppressWarnings(readLines(file))
+  } else {
+    .lst <-file
+  }
   if (length(.lst) == 0) {
     stop("no lines read for file", call.= FALSE)
   }
+  .nmlst$strictLst <- strictLst
+  .nmlst$section <- .nmlst.control
 
-  .nmtran <- NULL
-  .reg <- "WARNINGS +AND +ERRORS +[(]IF +ANY[)] +FOR +PROBLEM"
-  .w <- which(regexpr(.reg, .lst) != -1)
-  if (length(.w) > 0) {
-    .w <- .w[1]
-    .w2 <- which(regexpr("License", .lst) != -1)
-    if (length(.w2) > 0) {
-      .w2 <- .w2[1]-1
-      .nmtran <- .lst[seq(.w, .w2)]
-      .w2 <- which(regexpr("^ *[*][*][*]*", .nmtran) != -1)
-      if (length(.w2) > 0) {
-        .w2 <- .w2[1]-1
-        .nmtran <- .nmtran[seq_len(.w2-1)]
-        while(regexpr("^ +$",.nmtran[length(.nmtran)]) != -1) {
-          .nmtran <- .nmtran[-length(.nmtran)]
-        }
-      }
-      .nmtran <- paste(.nmtran, collapse="\n")
+  .nmlst$control <- NULL
+  .nmlst$nmtran <- NULL
+  .nmlst$nonmem <- NULL
+  .nmlst$nobs <- NULL
+  .nmlst$nsub <- NULL
+  .nmlst$time <- NULL
+  .nmlst$termInfo <- NULL
+  .nmlst$obj <- NULL
+  .nmlst$est <- NULL
+  .nmlst$covEst <- NULL
+  .nmlst$tere <- NULL
+
+
+  .nmlst$theta <- NULL
+  .nmlst$eta <- NULL
+  .nmlst$eps <- NULL
+  .nmlst$cov <- NULL
+
+  .nmlst$term <- FALSE
+  .nmlst$tere <- FALSE
+  .nmlst$isEst <- FALSE
+  .nmlst$isCov <- FALSE
+
+  lapply(.lst, .nmlst.fun)
+
+  if (!is.null(.nmlst$covEst)) {
+    .cov <- paste(.nmlst$covEst, collapse="\n")
+    if (.nmlst$strictLst) {
+      .Call(`_nonmem2rx_trans_lst`, .cov, TRUE)
     } else {
-      .nmtran <- NULL
+      try(.Call(`_nonmem2rx_trans_lst`, .cov, TRUE), silent=TRUE)
     }
   }
 
-  .reg <- "^ *[#]TERM[:]"
-  .w <- which(regexpr(.reg, .lst) != -1)
-  .termInfo <- NULL
-  if (length(.w) > 0) {
-    .w <- .w[1]
-    .termInfo <- .lst[-seq_len(.w)]
-    .w <- which(.termInfo == "")
-    if (length(.w) > 0) {
-      .w <- .w[1] - 1
-      .termInfo <- .termInfo[seq_len(.w)]
-      .termInfo <- paste(.termInfo, collapse = "\n")
-    }
-  }
-
-  .reg <-"^ *[#]TERE[:]"
-  .w <- which(regexpr(.reg, .lst) != -1)
-  .time <- NULL
-  if (length(.w) > 0) {
-    .w <- .w[1]
-    .time <- .lst[-seq_len(.w)]
-    .w <- which(.time == "1")
-    if (length(.w) > 0) {
-      .w <- .w[1]
-      .time <- .time[seq_len(.w-1)]
-      .w <- which(regexpr(":", .time) != -1)
-      if (length(.w) > 0) {
-        .time <- .time[.w]
-        .time <- sum(as.numeric(gsub(".*: +", "", .time)))
-      } else {
-        .time <- NULL
-      }
-    } else {
-      .time <- NULL
-    }
-  }
-  .time2 <- .lst[2]
-
-  .reg <- ".*[(]NONMEM[)] +VERSION +"
-  .w <- which(regexpr(.reg, .lst) != -1)
-  .nonmem <- NULL
-  if (length(.w) > 0) {
-    .w <- .w[1]
-    .nonmem <- sub(.reg, "", .lst[.w], )
-  }
-  .w <- which(regexpr("^ *[#]OBJV:", .lst) != -1)
-  if (length(.w) == 0) {
-    .obj <- NULL
-  } else {
-    .obj <- as.numeric(sub("[^*]*[*]+ *([^* ]*) *[*]*", "\\1",.lst[.w]))
-  }
-  .reg <- "TOT[.] +NO[.] +OF +OBS +RECS[:] +"
-  .w <- which(regexpr(.reg, .lst) != -1)
-  if (length(.w) == 0) {
-    .nobs <- NULL
-  } else {
-    .nobs <- as.numeric(sub(.reg, "", .lst[.w]))
-  }
-  .reg <- "TOT[.] +NO[.] +OF +INDIVIDUALS[:] +"
-  .w <- which(regexpr(.reg, .lst) != -1)
-  if (length(.w) == 0) {
-    .nsub <- NULL
-  } else {
-    .nsub <- as.numeric(sub(.reg, "", .lst[.w]))
-  }
-  .w <- which(regexpr("FINAL +PARAMETER +ESTIMATE", .lst) != -1)
-  if (length(.w) == 0) {
-    ## run time
-    return(list(theta=NULL,
-                omega=NULL,
-                sigma=NULL,
-                cov=NULL,
-                objf=.obj,
-                nobs=.nobs,
-                nsub=.nsub,
-                nmtran=.nmtran,
-                termInfo=.termInfo,
-                nonmem=.nonmem,
-                time=.time))
-  }
-  .w <- .w[1]
-  .est <- .lst[seq(.w, length(.lst))]
-  
-  .w <- which(regexpr("(THETA +- +VECTOR|OMEGA +- +COV|SIGMA +- +COV)", .est) != -1)
-  if (length(.w) == 0) {
-    return(list(theta=NULL,
-                omega=NULL,
-                sigma=NULL,
-                objf=.obj,
-                nobs=.nobs,
-                nsub=.nsub,
-                nmtran=.nmtran,
-                termInfo=.termInfo,
-                nonmem=.nonmem,
-                time=.time))
-  }
-  .w <- .w[1]
-  .est <- .est[seq(.w, length(.est))]
-  
-  .w <- which(regexpr("^ *[*][*][*]+", .est) != -1)
-  if (length(.w) == 0) {
-    .w <- which(regexpr("^ *Elapsed", .est) != -1)
-    if (length(.w) == 0) {
-      return(list(theta=NULL,
-                  omega=NULL,
-                  sigma=NULL,
-                  cov=NULL,
-                  objf=.obj,
-                  nobs=.nobs,
-                  nsub=.nsub,
-                  nmtran=.nmtran,
-                  termInfo=.termInfo,
-                  nonmem=.nonmem,
-                  time=.time))
-    }
-
-  }
-  .w <- .w[1]
-  .est <- .est[seq(1, .w - 1)]
-  .w <- which(regexpr("^( *[#]| *PROBLEM +NO)", .est) != -1)
-  if (length(.w) > 0) {
-    .w <- .w[1]
-    .est <- .est[seq(1, .w - 1)]
-  }
-  .est <- paste(.est, collapse="\n")
-  .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
-
-  .w <- which(regexpr("COVARIANCE +MATRIX +OF +ESTIMATE", .lst) != -1)
-  if (length(.w) > 0L) {
-    .w <- .w[1]
-    .cov <- .lst[-(seq_len(.w))]
-    .w <- which(regexpr("CORRELATION +MATRIX +OF +ESTIMATE", .cov) != -1)
-    if (length(.w) > 0L) {
-      .w  <- .w[1]
-      .cov <- .cov[seq_len(.w)]
-      .w <- which(.cov == "1")
-      if (length(.w) > 0L) {
-        .w <- .w[length(.w)]
-        .cov <- .cov[seq_len(.w-1)]
-        .w <- which(regexpr("[*][*][*][*][*][*][*][*]",.cov) != -1)
-        if (length(.w) > 0L) {
-          .w <- .w[length(.w)]
-          .cov <- .cov[-seq_len(.w)]
-          .cov <- paste(.cov, collapse="\n")
-          .Call(`_nonmem2rx_trans_lst`, .cov, TRUE)
-        }
-      }
-    }
-  }
   ## run time
   list(theta=.nmlst$theta,
        omega=.nmlst$eta,
        sigma=.nmlst$eps,
        cov=.nmlst$cov,
-       objf=.obj,
-       nobs=.nobs,
-       nsub=.nsub,
-       nmtran=.nmtran,
-       termInfo=.termInfo,
-       nonmem=.nonmem,
-       time=.time)
+       objf=.nmlst$obj,
+       nobs=.nmlst$nobs,
+       nsub=.nmlst$nsub,
+       nmtran=.nmlst$nmtran,
+       termInfo=.nmlst$termInfo,
+       nonmem=.nmlst$nonmem,
+       time=.nmlst$time,
+       tere=.nmlst$tere,
+       control=.nmlst$control)
 }
 #' Push final estimates
 #'

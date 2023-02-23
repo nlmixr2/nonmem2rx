@@ -208,9 +208,15 @@ nonmem2rxRec <- function(x) {
     print(x)
     stop("record not from nonmem2rx", call.=FALSE)
   }
-  .minfo(sprintf("Processing record %s", .transRecordsDisplay[class(x)[1]]))
-  .ret <- UseMethod("nonmem2rxRec")
-  .minfo("done")
+  .a <- class(x)[1]
+  if (.a == "aaa") {
+    UseMethod("nonmem2rxRec")
+  } else {
+    .minfo(sprintf("Processing record %s", .transRecordsDisplay[class(x)[1]]))
+    .ret <- UseMethod("nonmem2rxRec")
+    .minfo("done")
+    .ret
+  }
 }
 
 #' @rdname nonmem2rxRec

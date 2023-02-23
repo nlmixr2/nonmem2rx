@@ -1,11 +1,11 @@
-.minfo <- function (text, ..., .envir = parent.frame()) 
+.minfo <- function (text, ..., .envir = parent.frame())
 {
     cli::cli_alert_info(gettext(text), ..., .envir = .envir)
 }
 
 .nonmem2rx <- new.env(parent=emptyenv())
 #' Clear the .nonmem2rx environment
-#'  
+#'
 #' @return Nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
@@ -100,7 +100,7 @@
 }
 
 #' Replace theta names
-#'  
+#'
 #' @param rxui rxode2 ui
 #' @param thetaNames theta names that will be replaced in the model
 #' @return New ui with theta replaced
@@ -185,7 +185,7 @@
   .ret
 }
 #' Replace compartment names
-#'  
+#'
 #' @param rxui ui
 #' @param cmtName compartment names to replace
 #' @return updated ui with the compartment names replaced
@@ -220,7 +220,7 @@
 }
 
 #'  Update the input model with final parmeter estimates
-#'  
+#'
 #' @param rxui ui
 #' @inheritParams nonmem2rx
 #' @param cmtName compartment names to replace
@@ -278,7 +278,7 @@
 }
 
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
-#' 
+#'
 #' @param file NONMEM run file
 #'
 #' @param inputData this is a path to the input dataset (or `NULL` to
@@ -300,29 +300,29 @@
 #'   the input dataset and the model to create a new model that still
 #'   reproduces the NONMEM output by specifying
 #'   `rename=c(dvid="YTYPE")`
-#' 
+#'
 #' @param tolowerLhs Boolean to change the lhs to lower case (default:
 #'   `TRUE`)
-#' 
+#'
 #' @param thetaNames this could be a boolean indicating that the theta
 #'   names should be changed to the comment-labeled names (default:
 #'   `TRUE`). This could also be a character vector of the theta names
 #'   (in order) to be replaced.
-#' 
+#'
 #' @param etaNames this could be a boolean indicating that the eta
 #'   names should be changed to the comment-labeled names (default:
 #'   `TRUE`). This could also be a character vector of the theta names
 #'   (in order) to be replaced.
-#' 
+#'
 #' @param cmtNames this could be a boolean indicating that the
 #'   compartment names should be changed to the named compartments in
 #'   the `$MODEL` by `COMP = (name)` (default: `TRUE`). This could
 #'   also be a character vector of the compartment names (in order) to
 #'   be replaced.
-#' 
+#'
 #' @param updateFinal Update the parsed model with the model estimates
 #'   from the `.lst` output file.
-#' 
+#'
 #' @param determineError Boolean to try to determine the `nlmixr2`-style residual
 #'   error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
 #'   not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)
@@ -335,7 +335,10 @@
 #'
 #' @param strictLst The list parsing needs to be correct for a
 #'   successful load (default `FALSE`).
-#' 
+#'
+#' @param nLinesPro The number of lines to check for the $PROBLEM
+#'   statement.
+#'
 #' @param lst the NONMEM output extension, defaults to `.lst`
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
 #' @return rxode2 function
@@ -349,11 +352,11 @@
 #' @importFrom utils read.csv
 #' @import data.table
 #' @examples
-#' 
+#'
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
 #'
 #' nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#' 
+#'
 nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       rename=NULL, tolowerLhs=TRUE, thetaNames=TRUE,
                       etaNames=TRUE,
@@ -363,6 +366,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       validate=TRUE,
                       strictLst=FALSE,
                       unintFixed=FALSE,
+                      nLinesPro=20L,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -372,6 +376,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
+  checkmate::assertIntegerish(nLinesPro, len=1, lower=1)
   .clearNonmem2rx()
   .nonmem2rx$unintFixed <- unintFixed
   on.exit({
@@ -380,39 +385,30 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .minfo(sprintf("reading file '%s'", file))
   .lines <- suppressWarnings(readLines(file))
   .minfo("done")
-  if (length(.lines) == 0L) {
+  .llines <- length(.lines)
+  if (.llines == 0L) {
     .wpro <- integer(0)
   } else {
-    .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines) != -1)
+    .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines[seq_len(min(.llines, nLinesPro))]) != -1)
   }
   if (length(.wpro) == 0) {
     stop("cannot find a problem statement in the input file",
          call.=FALSE)
   }
-  .lstFile <- NULL
+  .lstInfo <- list()
   .minfo("checking if the file is a nonmem output")
   .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lines)!=-1)
   if (length(.w) > 0) {
-    .minfo("listing file, extracting control stream from listing")
-    .w <- .w[1]
-    .lines <- .lines[(seq_len(.w-1))]
-    .w <- .wpro
-    .w <- .w[1]
-    while (.w != 1 && regexpr("(^ *;.*$|^ *$)", .lines[.w]) != -1) {
-      .w <- .w-1
-    }
-    if (.w > 1) {
-      .lines <-.lines[-seq_len(.w-1)]
-      .lstFile <- file
+    .minfo("listing file, getting run information from output")
+    .lstInfo <- nmlst(.lines)
+    .minfo("done")
+    if (is.null(.lstInfo$control)) {
+      stop("model not in listing file, choose the model",
+           call.=FALSE)
     } else {
-      if (regexpr(" *[$][Pr][Rr][Oo]", .lines[1]) != -1) {
-        .lstFile <- file
-      } else {
-        stop("model not in listing file, choose the model",
-             call.=FALSE)
-      }
+      .minfo("done extracting control stream")
+      .lines <- .lstInfo$control
     }
-    .minfo("done extracting control stream")
   } else {
     .minfo("this is control stream")
   }
@@ -491,17 +487,18 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
     .minfo("done")
   }
-  if (is.null(.lstFile)) .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
-  .lstInfo <- list()
-  if (file.exists(.lstFile)) {
-    .minfo("Getting run information from output")
-    if (strictLst) {
-      .lstInfo <- nmlst(.lstFile)
-    } else {
-      .tmp <- try(nmlst(.lstFile), silent=TRUE)
-      if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
+  if (length(.lstInfo) == 0L) {
+    .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
+    if (file.exists(.lstFile)) {
+      .minfo("Getting run information from output")
+      if (strictLst) {
+        .lstInfo <- nmlst(.lstFile)
+      } else {
+        .tmp <- try(nmlst(.lstFile, strictLst=TRUE), silent=TRUE)
+        if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
+      }
+      .minfo("done")
     }
-    .minfo("done")
   }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
@@ -573,13 +570,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                            .lab <- .nonmem2rx$etaNonmemLabel[i]
                            if (.lab == "") .lab <- .nonmem2rx$etaLabel[i]
                            .lab
-                         }, character(1), USE.NAMES=FALSE)      
+                         }, character(1), USE.NAMES=FALSE)
     } else {
       etaNames <- character(0)
     }
 
   } else {
-    checkmate::assertCharacter(etaNames, any.missing = FALSE)    
+    checkmate::assertCharacter(etaNames, any.missing = FALSE)
   }
   .nonmem2rx$etas <- NULL
   .nonmem2rx$dn <- NULL
@@ -735,4 +732,3 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   class(.ret) <- c("nonmem2rx", class(.ret))
   .ret
 }
-
