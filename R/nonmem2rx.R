@@ -332,16 +332,20 @@
 #'   the model by solving the derived model under pred conditions
 #'   (etas are zero and eps values are zero)
 #'
-#' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
-#'
 #' @param strictLst The list parsing needs to be correct for a
 #'   successful load (default `FALSE`).
+#'
+#' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
 #'
 #' @param nLinesPro The number of lines to check for the $PROBLEM
 #'   statement.
 #'
+#' @param delta this is the offset for NONMEM times that are tied
+#'
 #' @param lst the NONMEM output extension, defaults to `.lst`
+#'
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -368,6 +372,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       strictLst=FALSE,
                       unintFixed=FALSE,
                       nLinesPro=20L,
+                      delta=1e-4,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -540,7 +545,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (validate)  {
     .model <- .rx$simulationModel
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
-                                         rename=rename)
+                                         rename=rename, delta=delta)
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {

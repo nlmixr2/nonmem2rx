@@ -5,12 +5,14 @@
 #' @param file this is the file name of the control stream
 #' @param inputData is a flag to use a different input data than
 #'   `file`.  This is the user-specified input data.
+#' @param rename rename parameters
+#' @param delta Delta offset for ties
 #' @return dataset (as nonmem sees it), where all ignore, accept, and
 #'   records adjustment are done. If the model calls evid in it, it
 #'   also adds a nmevid column
 #' @noRd
 #' @author Matthew L. Fidler
-.readInDataFromNonmem <- function(file, inputData, rename=NULL) {
+.readInDataFromNonmem <- function(file, inputData, rename=NULL, delta=1e-4) {
   .data <- NULL
   if (is.null(inputData)) {
     .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
@@ -86,7 +88,7 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
-  .data
+  .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it
 #'  
