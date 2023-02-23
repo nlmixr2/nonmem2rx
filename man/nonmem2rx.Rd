@@ -19,6 +19,7 @@ nonmem2rx(
   strictLst = FALSE,
   unintFixed = FALSE,
   nLinesPro = 20L,
+  delta = 1e-04,
   lst = ".lst",
   ext = ".ext"
 )
@@ -83,6 +84,8 @@ successful load (default `FALSE`).}
 
 \item{nLinesPro}{The number of lines to check for the $PROBLEM
 statement.}
+
+\item{delta}{this is the offset for NONMEM times that are tied}
 
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
 

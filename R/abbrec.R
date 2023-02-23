@@ -112,7 +112,7 @@ nonmem2rxRec.abb <- function(x) {
 .replaceDataItem <- function(varType) {
   .dataItem <- .nonmem2rx$replaceDataParItem[1]
   if (any(duplicated(.nonmem2rx$replaceSeq))) {
-    warning(paste0("the replacement for ", varType, "(", dataItem, ") has duplicate numbers, check code"), call.=FALSE)
+    warning(paste0("the replacement for ", varType, "(", .dataItem, ") has duplicate numbers, check code"), call.=FALSE)
   }
   if (length(.nonmem2rx$replaceDataParItem) == 1L) {
     .lst <- list(varType, .dataItem, .nonmem2rx$replaceSeq)

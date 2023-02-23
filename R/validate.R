@@ -22,7 +22,7 @@
   .ret <- etaData
   .d <- setdiff(.eid, .id)
   if (length(.d) > 0) {
-    .id.minfo(paste0("observation only ETAs are ignored: ", paste(.d, collapse=", ")))
+    .minfo(paste0("observation only ETAs are ignored: ", paste(.d, collapse=", ")))
     return(.ret[.ret$ID %in% .id,])
   }
   return(etaData)
