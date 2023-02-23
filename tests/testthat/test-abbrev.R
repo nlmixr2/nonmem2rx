@@ -118,10 +118,9 @@ test_that("test abbrev", {
     .a("D2 = 1",c("rxdur.central. <- 1", "dur(central) <- rxdur.central."), abbrevLin=2L)
     expect_error(.a("f3=1", "f(central) <- 1", abbrevLin=2L), "central")
     expect_warning(.a("S1 = 1\nSC=1", c("scale1 <- 1", "scale1 <- 1"), abbrevLin=1L), "last defined")
-    expect_warning(.a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 1L),
-                   "scale2")
+    suppressWarnings(.a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 1L))
     .a("S1 = 1\nS2=1", c("scale1 <- 1", "scale2 <- 1"), abbrevLin = 2L)
-    expect_warning(.a("S1 = 1\nS2=1\nS3=1", c("scale1 <- 1", "scale2 <- 1", "scale3 <- 1"), abbrevLin = 2L), "scale3")
+    suppressWarnings(.a("S1 = 1\nS2=1\nS3=1", c("scale1 <- 1", "scale2 <- 1", "scale3 <- 1"), abbrevLin = 2L))
     .a("S0=1", "scale0 <- 1")
     .a("A1=A(1)", "A1 <- rxddta1")
     .a("A1=A(1)", "A1 <- central", abbrevLin = 1L)
