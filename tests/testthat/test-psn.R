@@ -73,7 +73,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/output/special_mod/UseCase1.lst",
              "PsN/test_files/output/special_mod/warfarin_saem_noest.lst",
              "PsN/test_files/output/special_mod/theo_t_matrix.lst",
-             #"PsN/test_files/output/special_mod/special_inverse.lst",
+             "PsN/test_files/output/special_mod/special_inverse.lst",
              "PsN/test_files/output/special_mod/covcrash.lst",
              "PsN/test_files/output/special_mod/s_matrix_singular.lst",
              "PsN/test_files/output/special_mod/data_missing.lst",
