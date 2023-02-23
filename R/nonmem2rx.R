@@ -621,6 +621,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
 
   # now try to validate
   if (!is.null(.nonmemData)) {
+    .rx$nonmemData <- .nonmemData
     .model <- .rx$simulationModel
     .theta <- .rx$theta
     .ci0 <- .ci <- 0.95
