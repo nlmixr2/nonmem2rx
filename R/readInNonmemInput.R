@@ -220,7 +220,8 @@
     .ret <- .ret[!duplicated(.ret$ID),]
   }
   .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
-  .ret <- .ret[,.w]
+  if (length(.w) <= 1) return(NULL)
+  .ret <- .ret[,.w, drop=FALSE]
   # here drop any etas that are non influential
   .ret <- .getValidationEtas(.ret, nonmemData, rxModel)
   if (!is.null(rename) && !is.null(names(.ret))) {
