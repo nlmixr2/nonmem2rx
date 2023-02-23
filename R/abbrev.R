@@ -42,6 +42,14 @@ nonmem2rxRec.err <- function(x) {
   class(.x) <- NULL
   # Add F for linear models
   if (.nonmem2rx$abbrevLin != 0L) {
+    if (.nonmem2rx$abbrevLin == 1L && is.null(.nonmem2rx$scaleVol[["scale1"]])) {
+      .minfo("Assuming a central volume of 1")
+      .addModel("V2 <- 1")
+    }
+    if (.nonmem2rx$abbrevLin == 2L && is.null(.nonmem2rx$scaleVol[["scale2"]])) {
+      .minfo("Assuming a central volume of 1")
+      .addModel("V2 <- 1")
+    }
     .addModel("rxLinCmt1 <- linCmt()")
   }
   # in rxode2 scale is automatically calculated for linear models based on volume
