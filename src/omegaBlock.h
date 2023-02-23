@@ -46,7 +46,12 @@ int omegaParseBlocknNameValue(_arg_) {
 int omegaParseOmegaName(_arg_) {
   if (!strcmp("omega_name", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = nonmem2rx_omegaLabel;
     nonmem2rx_omegaLabel = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v != NULL) {
+      Rf_warning("label '%s' was changed to '%s', check control stream",
+                 v, nonmem2rx_omegaLabel);
+    }
     return 1;
   }
   return 0;

@@ -50,6 +50,7 @@
   .nonmem2rx$replaceSeq <- NULL
   .nonmem2rx$replaceLabel <- NULL
   .nonmem2rx$replaceDataParItem <- NULL
+  .nonmem2rx$hasVol <- FALSE
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -400,7 +401,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lines)!=-1)
   if (length(.w) > 0) {
     .minfo("listing file, getting run information from output")
-    .lstInfo <- nmlst(.lines)
+    if (strictLst) {
+      .lstInfo <- nmlst(.lines, strictLst = TRUE)
+    } else {
+      .tmp <- try(nmlst(.lines, strictLst = FALSE), silent=TRUE)
+      if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
+    }
     .minfo("done")
     if (is.null(.lstInfo$control)) {
       stop("model not in listing file, choose the model",
@@ -492,9 +498,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     if (file.exists(.lstFile)) {
       .minfo("Getting run information from output")
       if (strictLst) {
-        .lstInfo <- nmlst(.lstFile)
+        .lstInfo <- nmlst(.lstFile, strictLst = TRUE)
       } else {
-        .tmp <- try(nmlst(.lstFile, strictLst=TRUE), silent=TRUE)
+        .tmp <- try(nmlst(.lstFile, strictLst=FALSE), silent=TRUE)
         if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
       }
       .minfo("done")

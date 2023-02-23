@@ -107,6 +107,7 @@ int ipredSimWarning = 0;
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
+SEXP nonmem2rxHasVolume(void);
 
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
@@ -246,7 +247,11 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       v[i] = toupper(v[i]);
       i++;
     }
-    if (definingScale && v[0] == 'V') {
+    int hasV = v[0] == 'V';
+    if (hasV) {
+      nonmem2rxHasVolume();
+    }
+    if (definingScale && hasV) {
       nonmem2rxPushScaleVolume(definingScale-1, v);
     }
     sAppend(&curLine, v);

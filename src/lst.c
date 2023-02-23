@@ -71,21 +71,20 @@ void sExchangeParen(sbuf *sbb) {
   cur[0] = ')';
 }
 int lstType = 0;
-int maxLstItem = 0;
-SEXP nonmem2rxPushLst(const char* type, const char *est, int maxV);
+SEXP nonmem2rxPushLst(const char* type, const char *est);
 void pushList(void) {
   switch(lstType) {
   case 1:
-    nonmem2rxPushLst("theta", curLine.s, maxLstItem);
+    nonmem2rxPushLst("theta", curLine.s);
     break;
   case 2:
-    nonmem2rxPushLst("eta", curLine.s, maxLstItem);
+    nonmem2rxPushLst("eta", curLine.s);
     break;
   case 3:
-    nonmem2rxPushLst("eps", curLine.s, maxLstItem);
+    nonmem2rxPushLst("eps", curLine.s);
     break;
   case 5:
-    nonmem2rxPushLst("cov", curLine.s, maxLstItem);
+    nonmem2rxPushLst("cov", curLine.s);
     break;
   }
   lstType=0;
@@ -100,10 +99,7 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     xpn = d_get_child(pn, 1);
     v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sAppend(&curLine, "%s,", v);
-  } else if (!strcmp("est_label", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 1);
-    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    maxLstItem = max2(maxLstItem, atoi(v));
+  /* } else if (!strcmp("est_label", name)) { */
   } else if (!strcmp("na_item", name)) {
     if (lstType == 1) {
       sAppendN(&curLine, "NA,", 3);
@@ -111,7 +107,6 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
       sAppendN(&curLine, "0.0,", 4);
     }
   } else if (!strcmp("theta_est_line", name)) {
-    maxLstItem=0;
     lstType=1;
     sClear(&curLine);
     sAppendN(&curLine, "c(", 2);
@@ -120,14 +115,12 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     pushList();
     lstType=2;
     sClear(&curLine);
-    maxLstItem=0;
     sAppendN(&curLine, "c(", 2);
   } else if (!strcmp("sigma_est_line", name)) {
     sExchangeParen(&curLine);
     pushList();
     lstType=3;
     sClear(&curLine);
-    maxLstItem=0;
     sAppendN(&curLine, "c(", 2);
   } else if (!strcmp("omega_cor_line", name)) {
     sExchangeParen(&curLine);
@@ -140,7 +133,6 @@ void wprint_parsetree_lst(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     pushList();
     lstType=4;
     sClear(&curLine);
-    maxLstItem=0;
     sAppendN(&curLine, "c(", 2);
   }
   if (nch != 0) {

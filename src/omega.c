@@ -144,13 +144,6 @@ void addOmegaBlockItem(const char *v) {
     Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(N) has too many elements");
   }
   // This is a block
-  if (nonmem2rx_omegaBlockJ == 0) {
-    pushOmegaLabel();
-  } else if (nonmem2rx_omegaLabel != NULL) {
-    Rf_errorcall(R_NilValue,
-                 "omega label '%s' should be at the beginning of the block line",
-                 nonmem2rx_omegaLabel);
-  }
   if (nonmem2rx_omegaBlockI == nonmem2rx_omegaBlockJ) {
     // Diagonal term
     nonmem2rx_omegaBlockI++;
@@ -163,6 +156,7 @@ void addOmegaBlockItem(const char *v) {
       // added, use eta1 + eta2 ...
       sAppend(&curOmegaLhs, " + %s%d", omegaEstPrefix, nonmem2rx_omeganum);
     }
+    pushOmegaLabel();
     pushOmegaComment();
     nonmem2rx_omegaBlockCount++;
     nonmem2rx_omeganum++;
