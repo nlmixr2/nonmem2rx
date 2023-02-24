@@ -60,6 +60,11 @@
 <span>  unintFixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nLinesPro <span class="op">=</span> <span class="fl">20L</span>,</span>
 <span>  delta <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  usePhi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  useExt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  useCov <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cov <span class="op">=</span> <span class="st">".cov"</span>,</span>
+<span>  phi <span class="op">=</span> <span class="st">".phi"</span>,</span>
 <span>  lst <span class="op">=</span> <span class="st">".lst"</span>,</span>
 <span>  ext <span class="op">=</span> <span class="st">".ext"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -157,6 +162,31 @@ statement.</p></dd>
 
 <dt>delta</dt>
 <dd><p>this is the offset for NONMEM times that are tied</p></dd>
+
+
+<dt>usePhi</dt>
+<dd><p>if present, use the NONMEM phi file to extract etas
+(default `TRUE`), otherwise defaults to etas in the tables (if
+present)</p></dd>
+
+
+<dt>useExt</dt>
+<dd><p>if present, use the NONMEM ext file to extract
+parameter estimates (default `TRUE`), otherwise defaults to
+parameter estimates extracted in the NONMEM output</p></dd>
+
+
+<dt>useCov</dt>
+<dd><p>if present, use the NONMEM cov file to import the
+covariance, otherwise import the covariance with list file</p></dd>
+
+
+<dt>cov</dt>
+<dd><p>the NONMEM covariance file extension, defaults to `.cov`</p></dd>
+
+
+<dt>phi</dt>
+<dd><p>the NONMEM eta/phi file extension, defaults to `.phi`</p></dd>
 
 
 <dt>lst</dt>
@@ -318,7 +348,7 @@ statement.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in phi file for etas</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
@@ -363,8 +393,8 @@ statement.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function() {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.99e-06", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.29e-05, 0.042); atol=0.00174", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.4e-06", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0422); atol=0.00167", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=7.26e-06", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (9.23e-07,0.00384) atol=7.26e-06")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ini({</span>
