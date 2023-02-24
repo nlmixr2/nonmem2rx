@@ -413,7 +413,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       ext=".ext") {
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
-  if (!is.null(inputData)) checkmate::assertDirectoryExists(nonmemOutputDir)
+  if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
   if (!is.null(rename)) checkmate::assertCharacter(rename, any.missing=FALSE, min.len=1, names="strict")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
