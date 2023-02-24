@@ -61,7 +61,7 @@
     if (length(.nonmem2rx$dataCond) > 0) {
       .cond <- paste0("-which(",
                      ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
-                     paste(.nonmem2rx$dataCond, collapse=" || "),
+                     paste(.nonmem2rx$dataCond, collapse=" | "),
                      "))")
       .minfo(paste0("subsetting accept/ignore filters code: .data[", .cond, ",]"))
       .w <- eval(parse(text=.cond))
