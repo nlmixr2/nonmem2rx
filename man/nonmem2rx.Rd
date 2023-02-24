@@ -20,6 +20,7 @@ nonmem2rx(
   unintFixed = FALSE,
   nLinesPro = 20L,
   delta = 1e-04,
+  usePhi = TRUE,
   lst = ".lst",
   ext = ".ext"
 )
@@ -86,6 +87,8 @@ successful load (default `FALSE`).}
 statement.}
 
 \item{delta}{this is the offset for NONMEM times that are tied}
+
+\item{usePhi}{use the NONMEM phi file to extract etas (default TRUE)}
 
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
 

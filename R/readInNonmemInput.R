@@ -200,15 +200,45 @@
 #' @param nonmemData represents the input nonmem data
 #' @param rxModel represents the classic `rxode2` simulation model
 #'   that will be run for validation
+#' @param usePhi use the phi file instead of tables
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL) {
+.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL, usePhi=TRUE) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
     .dir <- nonmemOutputDir
   }
+  if (usePhi) {
+    .phi <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), ".phi"))
+    if (file.exists(.phi)) {
+      .minfo("read in phi file for etas")
+      .phi <- nmtab(.phi)
+      .phi <- .phi[,which(regexpr("(ID|ETA[(])", names(.phi)) != -1)]
+      names(.phi) <- vapply(names(.phi),
+                            function(n) {
+                              if (n == "ID") return("ID")
+                              paste0("eta",substr(n, 5, nchar(n)-1))
+                            }, character(1), USE.NAMES=FALSE)
+      .minfo("done")
+      return(.phi)
+    }
+  }
+  .etaLab1 <- paste0("ETA(", .nonmem2rx$etaNonmemLabel, ")")
+  .etaLab2 <- vapply(paste0("ET_", .nonmem2rx$etaNonmemLabel),
+                     function(i) {
+                       .nc <- min(nchar(i), 9L)
+                       substr(i, 1, .nc)
+                     }, character(1), USE.NAMES=FALSE)
+  .etaLab2t <- .etaLab2[.etaLab2 != "ET_"]
+  if (length(.etaLab2t) != 0) {
+    if (any(duplicated(.etaLab2))) {
+      .minfo("duplicate eta labels, can't read etas from output tables")
+      return(NULL)
+    }
+  }
+
   .w <- which(vapply(seq_along(.nonmem2rx$tables),
                      function(i) {
                        .table <- .nonmem2rx$tables[[i]]
@@ -226,7 +256,7 @@
   if (.table$fullData) {
     .ret <- .ret[!duplicated(.ret$ID),]
   }
-  .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
+  .w <- which(regexpr("^(ID|ET)", names(.ret)) != -1)
   if (length(.w) <= 1) return(NULL)
   .ret <- .ret[,.w, drop=FALSE]
   # here drop any etas that are non influential
@@ -234,6 +264,12 @@
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
+                            # change nonmem 7.5 labels to ETA#
+                            .w <- which(x == .etaLab1)
+                            if (length(.w) == 1L) x <- paste0("ETA", .w)
+                            .w <- which(x == .etaLab2)
+                            if (length(.w) == 1L) x <- paste0("ETA", .w)
+                            # rename if needed
                             .w <- which(x == rename)
                             if (length(.w) == 1) return(names(rename)[.w])
                             x

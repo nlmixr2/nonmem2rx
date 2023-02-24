@@ -18,6 +18,11 @@ test_that("model loading", {
   f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
   expect_equal(length(f$meta$validation), 4L)
 
+  f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                  lst=".res", usePhi=FALSE)
+  expect_equal(length(f$meta$validation), 4L)
+
+
   f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                  determineError=FALSE)
   expect_equal(length(f$meta$validation), 4L)

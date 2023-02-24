@@ -347,6 +347,8 @@
 #'
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
 #'
+#' @param usePhi use the NONMEM phi file to extract etas (default TRUE)
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -374,6 +376,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       unintFixed=FALSE,
                       nLinesPro=20L,
                       delta=1e-4,
+                      usePhi=TRUE,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -551,7 +554,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
       .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                        nonmemOutputDir=nonmemOutputDir,rename=rename)
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename,
+                                        usePhi=usePhi)
     }
     if (is.null(.predData)) {
       .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
@@ -648,17 +652,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
       .wid <- which(tolower(names(.params)) == "id")
       if (length(.wid) == 1L) .params <- .params[,-.wid]
-      .nonmemData2 <- .nonmemData
-      .nonmemData2$ID <- paste0("n",.nonmemData2$ID)
       .minfo("solving ipred problem")
-      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
+      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
                                  addDosing = FALSE))
-      .ipredSolve$id <- vapply(.ipredSolve$id,
-                               function(id) {
-                                 .cid <- paste(id)
-                                 as.integer(substr(.cid, 2, nchar(.cid)))
-                               }, integer(1), USE.NAMES=FALSE)
       .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
