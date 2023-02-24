@@ -228,9 +228,6 @@
   if (is.null(.nmlstObj(line))) return(NULL)
   if (is.null(.nmlstEst(line))) return(NULL)
   if (is.null(.nmlstCov(line))) return(NULL)
-  # final parameter estimates
-
-  # covariance
 
   return(NULL)
 
@@ -315,6 +312,30 @@ nmlst <- function(file, strictLst=FALSE) {
        tere=.nmlst$tere,
        control=.nmlst$control)
 }
+#' Get the matrix based covariance names
+#'
+#'  
+#' @param mat omega/sigma matrix
+#' @param type type of matrix
+#' @return names of parsed list matrix for the cov calculation
+#' @noRd
+#' @author Matthew L. Fidler
+#' @examples 
+.getMatCovNames <- function(mat, type=c("omega", "sigma")) {
+  if (is.null(mat)) return(NULL)
+  type <- match.arg(type)
+  .matC <- mat
+  .matR <- mat
+  for (.i in seq_len(dim(.matC)[1])) {
+    .matC[,.i] <- .i
+    .matR[.i,] <- .i
+  }
+  .matB <- paste0(type, .matC, ".", .matR)
+  dim(.matB) <- dim(.matC)
+  dimnames(.matB) <- dimnames(.matC)
+  diag(.matB) <- dimnames(.matC)[[1]]
+  .matB[lower.tri(.matB, diag=TRUE)]
+}
 #' Push final estimates
 #'
 #' @param type Type of element ("theta", "eta", "eps")
@@ -325,57 +346,15 @@ nmlst <- function(file, strictLst=FALSE) {
 .pushLst <- function(type, est) {
   if (type == "cov") {
     .est <- eval(parse(text=paste0("c(",est)))
-    .n <- names(.nmlst$theta)
+    .n <- c(names(.nmlst$theta),
+            .getMatCovNames(.nmlst$eta, type="omega"),
+            .getMatCovNames(.nmlst$eps, type="sigma"))
     .ln <- length(.n)
     if (length(.est) == .ln*(.ln+1)/2) {
-      .nmlst$eta <- NULL
-      .nmlst$eps <- NULL
       .nmlst$cov <- eval(parse(text=paste0("lotri::lotri(",
                                            paste(.n, collapse="+"),
                                            " ~ ", deparse1(.est), ")")))
       return(invisible())
-    }
-    .d <- dim(.nmlst$eta)
-    if (!is.null(.d)) {
-      .d <- .d[1]
-      for (.i in seq_len(.d)) {
-        for(.j in seq(.i, .d)) {
-          if (.i == .j) {
-            .n <- c(.n, paste0("eta", .i))
-          } else {
-            .n <- c(.n, paste0("omega.", .i, ".", .j))
-          }
-        }
-      }
-    }
-    .ln <- length(.n)
-    if (length(.est) == .ln*(.ln+1)/2) {
-      .nmlst$eps <- NULL
-      .nmlst$cov <- eval(parse(text=paste0("lotri::lotri(",
-                                           paste(.n, collapse="+"),
-                                           " ~ ", deparse1(.est), ")")))
-      return(invisible())
-    }
-    .d <- dim(.nmlst$eps)
-    if (is.null(.d)) {
-      .d <- .d[1]
-      for (.i in seq_len(.d)) {
-        for (.j in seq(.i, .d)) {
-          if (.i == .j) {
-            .n <- c(.n, paste0("eps", .i))
-          } else {
-            .n <- c(.n, paste0("sigma.", .i, ".", .j))
-          }
-        }
-      }
-    }
-
-    .ln <- length(.n)
-    if (length(.est) == .ln*(.ln+1)/2) {
-      .est <- paste0("lotri::lotri(",
-                     paste(.n, collapse="+"),
-                     " ~ ", deparse1(.est), ")")
-      .nmlst$cov <- eval(parse(text=.est))
     }
   } else if (type == "theta") {
     .est <- eval(parse(text=est))
