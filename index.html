@@ -77,7 +77,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ reading file '/tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ reading file '/tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ checking if the file is a nonmem output</span></span>
 <span><span class="co">#&gt; ℹ this is control stream</span></span>
@@ -111,14 +111,14 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101303`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730498`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -215,19 +215,55 @@
 <p>From the modified returned <code>ui</code> object you can look at the rtol, atol as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">ipredAtol</span></span>
+<span><span class="co">#&gt;         50% </span></span>
+<span><span class="co">#&gt; 0.001735466</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">ipredRtol</span></span>
+<span><span class="co">#&gt;          50% </span></span>
+<span><span class="co">#&gt; 6.994654e-06</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span></span>
-<span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span></span></code></pre></div>
+<span><span class="co">#&gt;          50% </span></span>
+<span><span class="co">#&gt; 7.263317e-06</span></span>
+<span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span></span>
+<span><span class="co">#&gt;          50% </span></span>
+<span><span class="co">#&gt; 7.263317e-06</span></span></code></pre></div>
 <p>You can see they do not exactly match. You can explore these difference further if you wish by looking at the <code>ipredCompare</code> and <code>predCompare</code> datasets:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ipredCompare</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   ID TIME nonmemIPRED    IPRED</span></span>
+<span><span class="co">#&gt; 1  1 0.25      1215.4 1215.362</span></span>
+<span><span class="co">#&gt; 2  1 0.50      1191.9 1191.928</span></span>
+<span><span class="co">#&gt; 3  1 0.75      1169.2 1169.168</span></span>
+<span><span class="co">#&gt; 4  1 1.00      1147.1 1147.061</span></span>
+<span><span class="co">#&gt; 5  1 1.50      1104.7 1104.724</span></span>
+<span><span class="co">#&gt; 6  1 2.00      1064.8 1064.762</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predCompare</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predCompare</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   ID TIME nonmemPRED     PRED</span></span>
+<span><span class="co">#&gt; 1  1 0.25     1750.3 1750.289</span></span>
+<span><span class="co">#&gt; 2  1 0.50     1699.8 1699.833</span></span>
+<span><span class="co">#&gt; 3  1 0.75     1651.3 1651.348</span></span>
+<span><span class="co">#&gt; 4  1 1.00     1604.8 1604.752</span></span>
+<span><span class="co">#&gt; 5  1 1.50     1516.9 1516.912</span></span>
+<span><span class="co">#&gt; 6  1 2.00     1435.7 1435.723</span></span></code></pre></div>
 <p>In these cases you can see that NONMEM seems to round the values for the output (though I am not clear what the rounding rules are), but rxode2 seems to keep the entire number.</p>
 <p>Note this is the <strong>observation data only</strong> that is compared. Dosing predictions are excluded from these comparisons.</p>
 <p>You can also explore the NONMEM input dataset that was used to make the validation predictions (dosing and observations) by the <code>$nonmemData</code> item:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">nonmemData</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">nonmemData</span><span class="op">)</span> <span class="co"># with nlme loaded you can also use getData(mod)</span></span>
+<span><span class="co">#&gt;   ID TIME     DV   LNDV MDV    AMT EVID   DOSE   V1I  CLI   QI   V2I SSX IIX SD</span></span>
+<span><span class="co">#&gt; 1  1 0.00    0.0 0.0000   1 120000    1 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
+<span><span class="co">#&gt; 2  1 0.25 1040.7 6.9476   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
+<span><span class="co">#&gt; 3  1 0.50 1629.0 7.3957   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
+<span><span class="co">#&gt; 4  1 0.75  877.8 6.7774   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
+<span><span class="co">#&gt; 5  1 1.00 1247.2 7.1286   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
+<span><span class="co">#&gt; 6  1 1.50 1225.1 7.1107   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
+<span><span class="co">#&gt;   CMT</span></span>
+<span><span class="co">#&gt; 1   1</span></span>
+<span><span class="co">#&gt; 2   1</span></span>
+<span><span class="co">#&gt; 3   1</span></span>
+<span><span class="co">#&gt; 4   1</span></span>
+<span><span class="co">#&gt; 5   1</span></span>
+<span><span class="co">#&gt; 6   1</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="simulating-from-the-model">Simulating from the model<a class="anchor" aria-label="anchor" href="#simulating-from-the-model"></a>
@@ -235,9 +271,62 @@
 <p>Unlike the traditional <code>rxode2</code> <code>ui</code> objects, this contains information about the model that can be used for simulation with uncertainty: theta covariance, number of subjects and number of observations. You can see them below if you wish:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">dfSub</span> <span class="co"># Number of subjects</span></span>
+<span><span class="co">#&gt; [1] 120</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">dfObs</span> <span class="co"># Number of observations</span></span>
+<span><span class="co">#&gt; [1] 2280</span></span>
 <span><span class="co"># Covariance of the thetas (and omegas in this case)</span></span>
-<span><span class="va">mod</span><span class="op">$</span><span class="va">thetaMat</span></span></code></pre></div>
+<span><span class="va">mod</span><span class="op">$</span><span class="va">thetaMat</span></span>
+<span><span class="co">#&gt;                 theta1       theta2       theta3       theta4          RSV eps1</span></span>
+<span><span class="co">#&gt; theta1     8.87681e-04 -1.05510e-04  1.84416e-04 -1.20234e-04  5.27830e-08    0</span></span>
+<span><span class="co">#&gt; theta2    -1.05510e-04  8.71409e-04 -1.06195e-04 -5.06663e-05 -1.56562e-05    0</span></span>
+<span><span class="co">#&gt; theta3     1.84416e-04 -1.06195e-04  2.99336e-03  1.65252e-04  5.99331e-06    0</span></span>
+<span><span class="co">#&gt; theta4    -1.20234e-04 -5.06663e-05  1.65252e-04  1.21347e-03 -2.53991e-05    0</span></span>
+<span><span class="co">#&gt; RSV        5.27830e-08 -1.56562e-05  5.99331e-06 -2.53991e-05  9.94218e-06    0</span></span>
+<span><span class="co">#&gt; eps1       0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; eta1      -4.71273e-05  4.69667e-05 -3.64271e-05  2.54796e-05 -8.16885e-06    0</span></span>
+<span><span class="co">#&gt; omega.2.1  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; eta2      -7.37156e-05  2.56634e-05 -8.08349e-05  1.37000e-05 -4.36564e-06    0</span></span>
+<span><span class="co">#&gt; omega.3.1  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; omega.3.2  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; eta3       6.63383e-05 -8.19002e-05  5.48985e-04  1.68356e-04  1.59122e-06    0</span></span>
+<span><span class="co">#&gt; omega.4.1  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; omega.4.2  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; omega.4.3  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0</span></span>
+<span><span class="co">#&gt; eta4      -9.49661e-06  1.10108e-04 -3.06537e-04 -9.12897e-05  3.18770e-06    0</span></span>
+<span><span class="co">#&gt;                   eta1 omega.2.1         eta2 omega.3.1 omega.3.2         eta3</span></span>
+<span><span class="co">#&gt; theta1    -4.71273e-05         0 -7.37156e-05         0         0  6.63383e-05</span></span>
+<span><span class="co">#&gt; theta2     4.69667e-05         0  2.56634e-05         0         0 -8.19002e-05</span></span>
+<span><span class="co">#&gt; theta3    -3.64271e-05         0 -8.08349e-05         0         0  5.48985e-04</span></span>
+<span><span class="co">#&gt; theta4     2.54796e-05         0  1.37000e-05         0         0  1.68356e-04</span></span>
+<span><span class="co">#&gt; RSV       -8.16885e-06         0 -4.36564e-06         0         0  1.59122e-06</span></span>
+<span><span class="co">#&gt; eps1       0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta1       1.69296e-04         0  8.75181e-06         0         0  3.48714e-05</span></span>
+<span><span class="co">#&gt; omega.2.1  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta2       8.75181e-06         0  1.51250e-04         0         0  4.31593e-07</span></span>
+<span><span class="co">#&gt; omega.3.1  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; omega.3.2  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta3       3.48714e-05         0  4.31593e-07         0         0  9.59029e-04</span></span>
+<span><span class="co">#&gt; omega.4.1  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; omega.4.2  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; omega.4.3  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta4       1.36628e-05         0 -1.95096e-05         0         0 -1.29770e-04</span></span>
+<span><span class="co">#&gt;           omega.4.1 omega.4.2 omega.4.3         eta4</span></span>
+<span><span class="co">#&gt; theta1            0         0         0 -9.49661e-06</span></span>
+<span><span class="co">#&gt; theta2            0         0         0  1.10108e-04</span></span>
+<span><span class="co">#&gt; theta3            0         0         0 -3.06537e-04</span></span>
+<span><span class="co">#&gt; theta4            0         0         0 -9.12897e-05</span></span>
+<span><span class="co">#&gt; RSV               0         0         0  3.18770e-06</span></span>
+<span><span class="co">#&gt; eps1              0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta1              0         0         0  1.36628e-05</span></span>
+<span><span class="co">#&gt; omega.2.1         0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta2              0         0         0 -1.95096e-05</span></span>
+<span><span class="co">#&gt; omega.3.1         0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; omega.3.2         0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta3              0         0         0 -1.29770e-04</span></span>
+<span><span class="co">#&gt; omega.4.1         0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; omega.4.2         0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; omega.4.3         0         0         0  0.00000e+00</span></span>
+<span><span class="co">#&gt; eta4              0         0         0  5.10190e-04</span></span></code></pre></div>
 </div>
 </div>
 </div>
