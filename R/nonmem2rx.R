@@ -226,13 +226,14 @@
 #' @param rxui ui
 #' @inheritParams nonmem2rx
 #' @param cmtName compartment names to replace
+#' @param useExt Use the ext file
 #' @return List with new ui and sigma
 #' @noRd
 #' @author Matthew L. Fidler
-.updateRxWithFinalParameters <- function(rxui, file, sigma, lst, ext) {
+.updateRxWithFinalParameters <- function(rxui, file, sigma, lst, ext, useExt=TRUE) {
   .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
   .extFile <- paste0(tools::file_path_sans_ext(file), ext)
-  if (file.exists(.extFile)) {
+  if (useExt && file.exists(.extFile)) {
     .fin <- try(nmext(.extFile), silent=TRUE)
     if (inherits(.fin, "try-error") && file.exists(.lstFile)) {
       .fin <- try(nmlst(.lstFile), silent=TRUE)
@@ -347,6 +348,21 @@
 #'
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
 #'
+#' @param cov the NONMEM covariance file extension, defaults to `.cov`
+#'
+#' @param phi the NONMEM eta/phi file extension, defaults to `.phi`
+#'
+#' @param useCov if present, use the NONMEM cov file to import the
+#'   covariance, otherwise import the covariance with list file
+#'
+#' @param usePhi if present, use the NONMEM phi file to extract etas
+#'   (default `TRUE`), otherwise defaults to etas in the tables (if
+#'   present)
+#'
+#' @param useExt if present, use the NONMEM ext file to extract
+#'   parameter estimates (default `TRUE`), otherwise defaults to
+#'   parameter estimates extracted in the NONMEM output
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -374,6 +390,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       unintFixed=FALSE,
                       nLinesPro=20L,
                       delta=1e-4,
+                      usePhi=TRUE,
+                      useExt=TRUE,
+                      useCov=TRUE,
+                      cov=".cov",
+                      phi=".phi",
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -513,12 +534,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
   }
   if (updateFinal) {
-    .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext)
+    .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext, useExt=useExt)
     .rx <- .tmp$rx
     if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
   }
-  .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), ".cov"))
-  if (file.exists(.cov)) {
+  .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), cov))
+  if (useCov && file.exists(.cov)) {
     .cov <- nmcov(.cov)
     .dn <- dimnames(.cov)[[2]]
     .dn <- gsub("THETA", "theta", .dn)
@@ -551,7 +572,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
       .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                        nonmemOutputDir=nonmemOutputDir,rename=rename)
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename,
+                                        phi=phi,
+                                        usePhi=usePhi)
     }
     if (is.null(.predData)) {
       .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
@@ -648,17 +671,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
       .wid <- which(tolower(names(.params)) == "id")
       if (length(.wid) == 1L) .params <- .params[,-.wid]
-      .nonmemData2 <- .nonmemData
-      .nonmemData2$ID <- paste0("n",.nonmemData2$ID)
       .minfo("solving ipred problem")
-      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
+      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
                                  addDosing = FALSE))
-      .ipredSolve$id <- vapply(.ipredSolve$id,
-                               function(id) {
-                                 .cid <- paste(id)
-                                 as.integer(substr(.cid, 2, nchar(.cid)))
-                               }, integer(1), USE.NAMES=FALSE)
       .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {

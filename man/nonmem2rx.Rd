@@ -20,6 +20,11 @@ nonmem2rx(
   unintFixed = FALSE,
   nLinesPro = 20L,
   delta = 1e-04,
+  usePhi = TRUE,
+  useExt = TRUE,
+  useCov = TRUE,
+  cov = ".cov",
+  phi = ".phi",
   lst = ".lst",
   ext = ".ext"
 )
@@ -86,6 +91,21 @@ successful load (default `FALSE`).}
 statement.}
 
 \item{delta}{this is the offset for NONMEM times that are tied}
+
+\item{usePhi}{if present, use the NONMEM phi file to extract etas
+(default `TRUE`), otherwise defaults to etas in the tables (if
+present)}
+
+\item{useExt}{if present, use the NONMEM ext file to extract
+parameter estimates (default `TRUE`), otherwise defaults to
+parameter estimates extracted in the NONMEM output}
+
+\item{useCov}{if present, use the NONMEM cov file to import the
+covariance, otherwise import the covariance with list file}
+
+\item{cov}{the NONMEM covariance file extension, defaults to `.cov`}
+
+\item{phi}{the NONMEM eta/phi file extension, defaults to `.phi`}
 
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
 
