@@ -72,7 +72,8 @@ int ignoreAcceptFlag=0;
 void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
-  if (!strcmp("filename_t3", name)) {
+  if (!strcmp("filename_t3", name) ||
+      !strcmp("filename_t4", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     nonmem2rxPushDataFile(v);
     return;

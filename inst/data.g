@@ -2,10 +2,11 @@
 statement_list : filename
         (statement)*;
 
-filename: filename_t1 | filename_t2 | filename_t3;
+filename: filename_t1 | filename_t2 | filename_t3 | filename_t4;
 filename_t1: "\'([^\'\\]|\\[^])*\'";
 filename_t2: "\"([^\"\\]|\\[^])*\"";
 filename_t3: "[^ '\"\n]+";
+filename_t4: ("[^ .\n]+")+ '.'  "[A-Za-z0-9_]+";
 
 ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore' | 'ign' | 'Ign' | 'IGN') '='? "[^\n]";
 ignore_statement: ('IGNORE' | 'ignore' | 'Ignore'| 'ign' | 'Ign' | 'IGN') '='? logic_bracket;
