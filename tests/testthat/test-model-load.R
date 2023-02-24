@@ -4,7 +4,7 @@
 }
 
 test_that("model loading", {
-  
+
   expect_error(.nonmem2rx(system.file("mods/DDMODEL00000301/run3.mod", package="nonmem2rx")), NA)
   ## expect_error(.nonmem2rx(system.file("mods/DDMODEL00000311/zebrafish.mod", package="nonmem2rx"))
   ##                        "SIGMA(#, #)")
@@ -35,6 +35,9 @@ test_that("model loading", {
   expect_equal(length(f$meta$validation), 4L)
 
   # try explicitly setting the input info
+  f <- nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
+  expect_true(inherits(f$cov, "matrix"))
+
   f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                  inputData = system.file("mods/cpt/Bolus_2CPT.csv",
                                          package="nonmem2rx"),

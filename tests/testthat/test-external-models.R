@@ -1,6 +1,7 @@
 .nonmem2rx <- function(...) {
   suppressWarnings(suppressMessages(nonmem2rx(...)))
 }
+
 test_that("test nonmemica models", {
   skip_if_not(requireNamespace("nonmemica", quietly = TRUE))
   
@@ -37,19 +38,23 @@ test_that("test nonemem2R models", {
 
 test_that("test NMdata models", {
   skip_if_not(requireNamespace("NMdata", quietly = TRUE))
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr001.mod", package="NMdata"))
+  .dat1 <- system.file("examples/data/xgxr1.csv", package="NMdata")
+  .dat2 <- system.file("examples/data/xgxr2.csv", package="NMdata")
+  .dat4 <- system.file("examples/data/xgxr4.csv", package="NMdata")
+  m <- .nonmem2rx(system.file("examples/nonmem/xgxr001.mod", package="NMdata"),
+                  inputData=.dat1)
   expect_length(m$meta$validation, 2L)
   
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr002.mod", package="NMdata"))
+  m <- .nonmem2rx(system.file("examples/nonmem/xgxr002.mod", package="NMdata"), inputData=.dat1)
   expect_length(m$meta$validation, 2L)
 
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr003.mod", package="NMdata"))
+  m <- .nonmem2rx(system.file("examples/nonmem/xgxr003.mod", package="NMdata"), inputData=.dat1)
   expect_length(m$meta$validation, 2L)
 
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr014.mod", package="NMdata"))
+  m <- .nonmem2rx(system.file("examples/nonmem/xgxr014.mod", package="NMdata"), inputData=.dat2)
   expect_length(m$meta$validation, 2L)
 
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr018.mod", package="NMdata"))
+  m <- .nonmem2rx(system.file("examples/nonmem/xgxr018.mod", package="NMdata"), inputData=.dat4)
   expect_length(m$meta$validation, 2L)
   
 })

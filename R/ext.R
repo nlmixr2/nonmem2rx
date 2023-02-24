@@ -11,7 +11,20 @@
 nmext <- function(file) {
   checkmate::assertFile(file)
   .lst <- nmtab(file)
+  if (is.null(.lst)) {
+    return(list(theta=NULL,
+                omega=NULL,
+                sigma=NULL,
+                objf=NULL))
+
+  }
   .lst <- .lst[.lst$NMREP == 1 & .lst$ITERATION == -1e+09,]
+  if (length(.lst$OBJ) == 0L) {
+    return(list(theta=NULL,
+                omega=NULL,
+                sigma=NULL,
+                objf=NULL))
+  }
   .w <- which(regexpr("THETA[1-9][0-9]*",names(.lst)) != -1)
   if (length(.w) > 0) {
     .theta <- unlist(.lst[,.w])
