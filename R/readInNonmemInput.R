@@ -125,6 +125,7 @@
   .minfo(paste0("read in nonmem IPRED data (for model validation): ", .file))
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
+  if (is.null(.ret)) return(NULL)
   .w <- which(names(.ret) == "IPRE")
   if (length(.w) > 0) names(.ret)[.w] <- "IPRED"
   if (!is.null(rename) && !is.null(names(.ret))) {
@@ -182,6 +183,7 @@
   .minfo(paste0("read in nonmem PRED data (for model validation): ", .file))
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
+  if (is.null(.ret)) return(NULL)
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
@@ -237,6 +239,7 @@
   .file <- .getFileNameIgnoreCase(file.path(dirname(file), .table$file))
   .minfo(paste0("read in nonmem ETA data (for model validation): ", .file))
   .ret <- nmtab(.file)
+  if (is.null(.ret)) return(NULL)
   if (.table$fullData) {
     .ret <- .ret[!duplicated(.ret$ID),]
   }

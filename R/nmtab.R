@@ -16,6 +16,7 @@ nmtab <- function (file, ...)
   dt1 <- fread(file, fill = TRUE, header = TRUE, skip = 1, 
                ...)
   cnames <- colnames(dt1)
+  if (length(cnames) == 0L) return(NULL)
   dt1[grep("^TABLE", as.character(get(cnames[1])), invert = FALSE, 
            perl = TRUE), `:=`(TABLE, get(cnames[1]))]
   dt1[, `:=`(NMREP, cumsum(!is.na(TABLE)) + 1)]
