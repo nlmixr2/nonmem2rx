@@ -646,9 +646,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       if (!is.null(.rx$predDf)) {
         .params[[paste0("err.", .rx$predDf$var)]] <- 0
       }
+      .minfo("solving ipred problem")
       .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
                                  addDosing = FALSE))
+      .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.ipredSolve)) == "y")
@@ -699,9 +701,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       if (!is.null(.rx$predDf)) {
         .params <- c(.params, setNames(0, paste0("err.", .rx$predDf$var)))
       }
+      .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
                                 addDosing = FALSE))
+      .minfo("done")
       if (!inherits(.predSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.predSolve)) == "y")
