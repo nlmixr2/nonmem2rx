@@ -235,30 +235,8 @@
   return(NULL)
 
 }
-#' Reads the NONMEM `.lst` file for final parameter information
-#'
-#' @param file File where the list is located
-#' @return return a list with `$theta`, `$eta` and `$eps` and other
-#'   information about the control stream
-#' @inheritParams nonmem2rx
-#' @export
-#' @author Matthew L. Fidler
-#' @examples
-#' nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
-#' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
-#' nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
-#' nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
-nmlst <- function(file, strictLst=FALSE) {
-  # run time
-  # nmtran message
-  if (length(file) == 1L) {
-    .lst <- suppressWarnings(readLines(file))
-  } else {
-    .lst <-file
-  }
-  if (length(.lst) == 0) {
-    stop("no lines read for file", call.= FALSE)
-  }
+
+.resetLst <- function(strictLst) {
   .nmlst$strictLst <- strictLst
   .nmlst$section <- .nmlst.control
 
@@ -284,6 +262,32 @@ nmlst <- function(file, strictLst=FALSE) {
   .nmlst$tere <- FALSE
   .nmlst$isEst <- FALSE
   .nmlst$isCov <- FALSE
+}
+#' Reads the NONMEM `.lst` file for final parameter information
+#'
+#' @param file File where the list is located
+#' @return return a list with `$theta`, `$eta` and `$eps` and other
+#'   information about the control stream
+#' @inheritParams nonmem2rx
+#' @export
+#' @author Matthew L. Fidler
+#' @examples
+#' nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))
+#' nmlst(system.file("mods/DDMODEL00000302/run1.lst", package="nonmem2rx"))
+#' nmlst(system.file("mods/DDMODEL00000301/run3.lst", package="nonmem2rx"))
+#' nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
+nmlst <- function(file, strictLst=FALSE) {
+  # run time
+  # nmtran message
+  if (length(file) == 1L) {
+    .lst <- suppressWarnings(readLines(file))
+  } else {
+    .lst <-file
+  }
+  if (length(.lst) == 0) {
+    stop("no lines read for file", call.= FALSE)
+  }
+  .resetLst(strictLst)
 
   lapply(.lst, .nmlst.fun)
 
