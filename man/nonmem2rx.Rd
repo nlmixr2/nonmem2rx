@@ -23,9 +23,13 @@ nonmem2rx(
   usePhi = TRUE,
   useExt = TRUE,
   useCov = TRUE,
+  useXml = TRUE,
+  useLst = TRUE,
+  mod = ".mod",
   cov = ".cov",
   phi = ".phi",
   lst = ".lst",
+  xml = ".xml",
   ext = ".ext"
 )
 }
@@ -103,11 +107,21 @@ parameter estimates extracted in the NONMEM output}
 \item{useCov}{if present, use the NONMEM cov file to import the
 covariance, otherwise import the covariance with list file}
 
+\item{useXml}{if present, use the NONMEM xml file to import much of
+the NONMEM information}
+
+\item{useLst}{if present, use the NONMEM lst file to extract NONMEM
+information}
+
+\item{mod}{the NONMEM output extension, defaults to `.mod`}
+
 \item{cov}{the NONMEM covariance file extension, defaults to `.cov`}
 
 \item{phi}{the NONMEM eta/phi file extension, defaults to `.phi`}
 
 \item{lst}{the NONMEM output extension, defaults to `.lst`}
+
+\item{xml}{the NONMEM xml file extension , defaults to `.xml`}
 
 \item{ext}{the NONMEM ext file extension, defaults to `.ext`}
 }

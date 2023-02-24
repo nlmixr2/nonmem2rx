@@ -200,30 +200,14 @@
 #' @param nonmemData represents the input nonmem data
 #' @param rxModel represents the classic `rxode2` simulation model
 #'   that will be run for validation
-#' @param usePhi use the phi file instead of tables
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL, phi=".phi", usePhi=TRUE) {
+.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
     .dir <- nonmemOutputDir
-  }
-  if (usePhi) {
-    .phi <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), phi))
-    if (file.exists(.phi)) {
-      .minfo("read in phi file for etas")
-      .phi <- nmtab(.phi)
-      .phi <- .phi[,which(regexpr("(ID|ETA[(])", names(.phi)) != -1)]
-      names(.phi) <- vapply(names(.phi),
-                            function(n) {
-                              if (n == "ID") return("ID")
-                              paste0("eta",substr(n, 5, nchar(n)-1))
-                            }, character(1), USE.NAMES=FALSE)
-      .minfo("done")
-      return(.phi)
-    }
   }
   .etaLab1 <- paste0("ETA(", .nonmem2rx$etaNonmemLabel, ")")
   .etaLab2 <- vapply(paste0("ET_", .nonmem2rx$etaNonmemLabel),

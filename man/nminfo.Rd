@@ -6,6 +6,7 @@
 \usage{
 nminfo(
   file,
+  mod = ".mod",
   xml = ".xml",
   ext = ".ext",
   cov = ".cov",
@@ -16,7 +17,8 @@ nminfo(
   useCov = TRUE,
   usePhi = TRUE,
   useLst = TRUE,
-  strictLst = FALSE
+  strictLst = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -24,6 +26,40 @@ nminfo(
 will remove the extension to try to get the right information.
 It preferentially selects the most accurate estimates from the
 file.}
+
+\item{mod}{the NONMEM output extension, defaults to `.mod`}
+
+\item{xml}{the NONMEM xml file extension , defaults to `.xml`}
+
+\item{ext}{the NONMEM ext file extension, defaults to `.ext`}
+
+\item{cov}{the NONMEM covariance file extension, defaults to `.cov`}
+
+\item{phi}{the NONMEM eta/phi file extension, defaults to `.phi`}
+
+\item{lst}{the NONMEM output extension, defaults to `.lst`}
+
+\item{useXml}{if present, use the NONMEM xml file to import much of
+the NONMEM information}
+
+\item{useExt}{if present, use the NONMEM ext file to extract
+parameter estimates (default `TRUE`), otherwise defaults to
+parameter estimates extracted in the NONMEM output}
+
+\item{useCov}{if present, use the NONMEM cov file to import the
+covariance, otherwise import the covariance with list file}
+
+\item{usePhi}{if present, use the NONMEM phi file to extract etas
+(default `TRUE`), otherwise defaults to etas in the tables (if
+present)}
+
+\item{useLst}{if present, use the NONMEM lst file to extract NONMEM
+information}
+
+\item{strictLst}{The list parsing needs to be correct for a
+successful load (default `FALSE`).}
+
+\item{verbose}{this is a flag to be more verbose when reading information in, by default this is `FALSE`}
 }
 \value{
 list of NONMEM information

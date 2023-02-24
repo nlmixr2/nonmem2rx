@@ -344,6 +344,8 @@
 #'
 #' @param delta this is the offset for NONMEM times that are tied
 #'
+#' @param mod the NONMEM output extension, defaults to `.mod`
+#'
 #' @param lst the NONMEM output extension, defaults to `.lst`
 #'
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
@@ -351,6 +353,11 @@
 #' @param cov the NONMEM covariance file extension, defaults to `.cov`
 #'
 #' @param phi the NONMEM eta/phi file extension, defaults to `.phi`
+#'
+#' @param xml the NONMEM xml file extension , defaults to `.xml`
+#'
+#' @param useXml if present, use the NONMEM xml file to import much of
+#'   the NONMEM information
 #'
 #' @param useCov if present, use the NONMEM cov file to import the
 #'   covariance, otherwise import the covariance with list file
@@ -362,6 +369,9 @@
 #' @param useExt if present, use the NONMEM ext file to extract
 #'   parameter estimates (default `TRUE`), otherwise defaults to
 #'   parameter estimates extracted in the NONMEM output
+#'
+#' @param useLst if present, use the NONMEM lst file to extract NONMEM
+#'   information
 #'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
@@ -393,9 +403,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       usePhi=TRUE,
                       useExt=TRUE,
                       useCov=TRUE,
+                      useXml=TRUE,
+                      useLst=TRUE,
+                      mod=".mod",
                       cov=".cov",
                       phi=".phi",
                       lst=".lst",
+                      xml=".xml",
                       ext=".ext") {
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
@@ -410,41 +424,16 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   on.exit({
     .Call(`_nonmem2rx_r_parseFree`)
   })
-  .minfo(sprintf("reading file '%s'", file))
-  .lines <- suppressWarnings(readLines(file))
+  .minfo(sprintf("getting information from  '%s'", file))
+  .lstInfo <- nminfo(file, mod=mod, xml=xml, ext=ext, cov=cov, phi=phi, lst=lst,
+                     useXml = useXml, useExt = useExt, useCov=useCov, usePhi=usePhi, useLst=useLst,
+                     strictLst=strictLst, verbose=TRUE)
   .minfo("done")
-  .llines <- length(.lines)
-  if (.llines == 0L) {
-    .wpro <- integer(0)
-  } else {
-    .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .lines[seq_len(min(.llines, nLinesPro))]) != -1)
-  }
-  if (length(.wpro) == 0) {
-    stop("cannot find a problem statement in the input file",
+  if (is.null(.lstInfo$control)) {
+    stop("cannot find control stream",
          call.=FALSE)
   }
-  .lstInfo <- list()
-  .minfo("checking if the file is a nonmem output")
-  .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lines)!=-1)
-  if (length(.w) > 0) {
-    .minfo("listing file, getting run information from output")
-    if (strictLst) {
-      .lstInfo <- nmlst(.lines, strictLst = TRUE)
-    } else {
-      .tmp <- try(nmlst(.lines, strictLst = FALSE), silent=TRUE)
-      if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
-    }
-    .minfo("done")
-    if (is.null(.lstInfo$control)) {
-      stop("model not in listing file, choose the model",
-           call.=FALSE)
-    } else {
-      .minfo("done extracting control stream")
-      .lines <- .lstInfo$control
-    }
-  } else {
-    .minfo("this is control stream")
-  }
+  .lines <- .lstInfo$control
   .lines <- paste(.lines, collapse = "\n")
   .parseRec(.lines)
   if (.nonmem2rx$needYtype) {
@@ -567,10 +556,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
-      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                        nonmemOutputDir=nonmemOutputDir,rename=rename,
-                                        phi=phi,
-                                        usePhi=usePhi)
+      if (!is.null(.lstInfo$eta)) {
+        .etaData <- .lstInfo$eta
+      } else {
+        .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+                                          nonmemOutputDir=nonmemOutputDir,rename=rename)
+      }
     }
     if (is.null(.predData)) {
       .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
