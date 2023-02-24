@@ -240,6 +240,7 @@
                           }, character(1), USE.NAMES=FALSE)
   }
   names(.ret)[-1] <- tolower(names(.ret)[-1])
+  .ret <- .ret[order(.ret$ID),]
   .minfo("done")
   .ret
 }
