@@ -635,6 +635,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         .ipredData <- .ipredData[.obsIdx,]
       }
       .params <- .etaData
+      .rx$etaData <- .etaData
       for (.i in seq_along(.theta)) {
         .params[[names(.theta)[.i]]] <- .theta[.i]
       }
