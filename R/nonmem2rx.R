@@ -646,10 +646,19 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       if (!is.null(.rx$predDf)) {
         .params[[paste0("err.", .rx$predDf$var)]] <- 0
       }
+      .wid <- which(tolower(names(.params)) == "id")
+      if (length(.wid) == 1L) .params <- .params[,-.wid]
+      .nonmemData2 <- .nonmemData
+      .nonmemData2$ID <- paste0("n",.nonmemData2$ID)
       .minfo("solving ipred problem")
-      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
+      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
                                  covsInterpolation="nocb",
                                  addDosing = FALSE))
+      .ipredSolve$id <- vapply(.ipredSolve$id,
+                               function(id) {
+                                 .cid <- paste(id)
+                                 as.integer(substr(.cid, 2, nchar(.cid)))
+                               }, integer(1), USE.NAMES=FALSE)
       .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
