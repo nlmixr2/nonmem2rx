@@ -42,6 +42,7 @@ Suggests:
     nonmemica,
     NMdata,
     nonmem2R,
-    withr
+    withr,
+    nlme
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
