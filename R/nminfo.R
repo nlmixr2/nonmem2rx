@@ -159,13 +159,13 @@ nminfo <- function(file,
         if (!.hasCov) {
           .ret$cov <- .lst$cov
         }
-        .ret$nobs <- .xml$nobs
-        .ret$nsub <- .xml$nsub
-        .ret$nmtran <- .xml$nmtran
-        .ret$termInfo <- .xml$termInfo
-        .ret$nonmem <- .xml$nonmem
-        .ret$time <- .xml$time
-        .ret$control <- .xml$control
+        .ret$nobs <- .lst$nobs
+        .ret$nsub <- .lst$nsub
+        .ret$nmtran <- .lst$nmtran
+        .ret$termInfo <- .lst$termInfo
+        .ret$nonmem <- .lst$nonmem
+        .ret$time <- .lst$time
+        .ret$control <- .lst$control
         if (verbose) .minfo("done")
         
       }
