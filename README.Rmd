@@ -85,7 +85,7 @@ NONMEM and rxode2.
 
 From the modified returned `ui` object you can look at the rtol, atol as follows:
 
-```r
+```{r tol}
 mod$ipredAtol
 mod$ipredRtol
 mod$predAtol
@@ -96,7 +96,7 @@ You can see they do not exactly match. You can explore these
 difference further if you wish by looking at the `ipredCompare` and
 `predCompare` datasets:
 
-```r
+```{r compare}
 head(mod$ipredCompare)
 
 head(mod$predCompare)
@@ -113,8 +113,8 @@ You can also explore the NONMEM input dataset that was used to make
 the validation predictions (dosing and observations) by the
 `$nonmemData` item:
 
-```r
-head(mod$nonmemData)
+```{r nonmemData}
+head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 ```
 
 ### Simulating from the model
@@ -124,7 +124,7 @@ information about the model that can be used for simulation with
 uncertainty: theta covariance, number of subjects and number of
 observations.  You can see them below if you wish:
 
-```r
+```{r simInfo}
 mod$dfSub # Number of subjects
 mod$dfObs # Number of observations
 # Covariance of the thetas (and omegas in this case)

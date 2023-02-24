@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ reading file '/tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ reading file '/tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ done
 #> ℹ checking if the file is a nonmem output
 #> ℹ this is control stream
@@ -73,14 +73,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -201,9 +201,17 @@ follows:
 
 ``` r
 mod$ipredAtol
+#>         50% 
+#> 0.001735466
 mod$ipredRtol
+#>          50% 
+#> 6.994654e-06
 mod$predAtol
+#>          50% 
+#> 7.263317e-06
 mod$predAtol
+#>          50% 
+#> 7.263317e-06
 ```
 
 You can see they do not exactly match. You can explore these difference
@@ -212,8 +220,22 @@ datasets:
 
 ``` r
 head(mod$ipredCompare)
+#>   ID TIME nonmemIPRED    IPRED
+#> 1  1 0.25      1215.4 1215.362
+#> 2  1 0.50      1191.9 1191.928
+#> 3  1 0.75      1169.2 1169.168
+#> 4  1 1.00      1147.1 1147.061
+#> 5  1 1.50      1104.7 1104.724
+#> 6  1 2.00      1064.8 1064.762
 
 head(mod$predCompare)
+#>   ID TIME nonmemPRED     PRED
+#> 1  1 0.25     1750.3 1750.289
+#> 2  1 0.50     1699.8 1699.833
+#> 3  1 0.75     1651.3 1651.348
+#> 4  1 1.00     1604.8 1604.752
+#> 5  1 1.50     1516.9 1516.912
+#> 6  1 2.00     1435.7 1435.723
 ```
 
 In these cases you can see that NONMEM seems to round the values for the
@@ -228,7 +250,21 @@ validation predictions (dosing and observations) by the `$nonmemData`
 item:
 
 ``` r
-head(mod$nonmemData)
+head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
+#>   ID TIME     DV   LNDV MDV    AMT EVID   DOSE   V1I  CLI   QI   V2I SSX IIX SD
+#> 1  1 0.00    0.0 0.0000   1 120000    1 120000 101.5 3.57 6.99 59.19  99   0  1
+#> 2  1 0.25 1040.7 6.9476   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1
+#> 3  1 0.50 1629.0 7.3957   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1
+#> 4  1 0.75  877.8 6.7774   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1
+#> 5  1 1.00 1247.2 7.1286   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1
+#> 6  1 1.50 1225.1 7.1107   0      0    0 120000 101.5 3.57 6.99 59.19  99   0  1
+#>   CMT
+#> 1   1
+#> 2   1
+#> 3   1
+#> 4   1
+#> 5   1
+#> 6   1
 ```
 
 ### Simulating from the model
@@ -240,7 +276,60 @@ them below if you wish:
 
 ``` r
 mod$dfSub # Number of subjects
+#> [1] 120
 mod$dfObs # Number of observations
+#> [1] 2280
 # Covariance of the thetas (and omegas in this case)
 mod$thetaMat
+#>                 theta1       theta2       theta3       theta4          RSV eps1
+#> theta1     8.87681e-04 -1.05510e-04  1.84416e-04 -1.20234e-04  5.27830e-08    0
+#> theta2    -1.05510e-04  8.71409e-04 -1.06195e-04 -5.06663e-05 -1.56562e-05    0
+#> theta3     1.84416e-04 -1.06195e-04  2.99336e-03  1.65252e-04  5.99331e-06    0
+#> theta4    -1.20234e-04 -5.06663e-05  1.65252e-04  1.21347e-03 -2.53991e-05    0
+#> RSV        5.27830e-08 -1.56562e-05  5.99331e-06 -2.53991e-05  9.94218e-06    0
+#> eps1       0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> eta1      -4.71273e-05  4.69667e-05 -3.64271e-05  2.54796e-05 -8.16885e-06    0
+#> omega.2.1  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> eta2      -7.37156e-05  2.56634e-05 -8.08349e-05  1.37000e-05 -4.36564e-06    0
+#> omega.3.1  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> omega.3.2  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> eta3       6.63383e-05 -8.19002e-05  5.48985e-04  1.68356e-04  1.59122e-06    0
+#> omega.4.1  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> omega.4.2  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> omega.4.3  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00  0.00000e+00    0
+#> eta4      -9.49661e-06  1.10108e-04 -3.06537e-04 -9.12897e-05  3.18770e-06    0
+#>                   eta1 omega.2.1         eta2 omega.3.1 omega.3.2         eta3
+#> theta1    -4.71273e-05         0 -7.37156e-05         0         0  6.63383e-05
+#> theta2     4.69667e-05         0  2.56634e-05         0         0 -8.19002e-05
+#> theta3    -3.64271e-05         0 -8.08349e-05         0         0  5.48985e-04
+#> theta4     2.54796e-05         0  1.37000e-05         0         0  1.68356e-04
+#> RSV       -8.16885e-06         0 -4.36564e-06         0         0  1.59122e-06
+#> eps1       0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> eta1       1.69296e-04         0  8.75181e-06         0         0  3.48714e-05
+#> omega.2.1  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> eta2       8.75181e-06         0  1.51250e-04         0         0  4.31593e-07
+#> omega.3.1  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> omega.3.2  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> eta3       3.48714e-05         0  4.31593e-07         0         0  9.59029e-04
+#> omega.4.1  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> omega.4.2  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> omega.4.3  0.00000e+00         0  0.00000e+00         0         0  0.00000e+00
+#> eta4       1.36628e-05         0 -1.95096e-05         0         0 -1.29770e-04
+#>           omega.4.1 omega.4.2 omega.4.3         eta4
+#> theta1            0         0         0 -9.49661e-06
+#> theta2            0         0         0  1.10108e-04
+#> theta3            0         0         0 -3.06537e-04
+#> theta4            0         0         0 -9.12897e-05
+#> RSV               0         0         0  3.18770e-06
+#> eps1              0         0         0  0.00000e+00
+#> eta1              0         0         0  1.36628e-05
+#> omega.2.1         0         0         0  0.00000e+00
+#> eta2              0         0         0 -1.95096e-05
+#> omega.3.1         0         0         0  0.00000e+00
+#> omega.3.2         0         0         0  0.00000e+00
+#> eta3              0         0         0 -1.29770e-04
+#> omega.4.1         0         0         0  0.00000e+00
+#> omega.4.2         0         0         0  0.00000e+00
+#> omega.4.3         0         0         0  0.00000e+00
+#> eta4              0         0         0  5.10190e-04
 ```
