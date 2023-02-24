@@ -124,7 +124,7 @@
     if (!.nmlst$tere && grepl("#TERE:", line, fixed=TRUE)) {
       .nmlst$tere <- TRUE
       return(NULL)
-    } else if (.nmlst$tere) {
+    } else if (isTRUE(.nmlst$tere)) {
       if (grepl("^ *1 *$", line)) {
         .nmlst$tere <- paste(.nmlst$time, collapse="\n")
         .w <- which(regexpr(":", .nmlst$time) != -1)
@@ -135,9 +135,11 @@
           .nmlst$time <- NULL
         }
         .nmlst$section <- .nmlst.obj
+        if (.nmlst$tereOnly) .nmlst$section <- .nmlst.end
         return(NULL)
       } else if (.nmlst$tere && grepl("#OBJV:", line, fixed=TRUE)) {
         .nmlst$section <- .nmlst.obj
+        if (.nmlst$tereOnly) .nmlst$section <- .nmlst.end
       } else if (.nmlst$tere) {
         .nmlst$time <- c(.nmlst$time, line)
         return(NULL)
@@ -259,6 +261,7 @@
   .nmlst$tere <- FALSE
   .nmlst$isEst <- FALSE
   .nmlst$isCov <- FALSE
+  .nmlst$tereOnly <- FALSE
 }
 #' Reads the NONMEM `.lst` file for final parameter information
 #'
@@ -320,7 +323,6 @@ nmlst <- function(file, strictLst=FALSE) {
 #' @return names of parsed list matrix for the cov calculation
 #' @noRd
 #' @author Matthew L. Fidler
-#' @examples 
 .getMatCovNames <- function(mat, type=c("omega", "sigma")) {
   if (is.null(mat)) return(NULL)
   type <- match.arg(type)
