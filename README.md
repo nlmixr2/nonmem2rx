@@ -38,77 +38,125 @@ nonmem control stream for the parser to start. For example:
 
 ``` r
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
-#> Warning: multiple $PROBLEM statements; only use first $PROBLEM for translation
-#> ℹ change initial estimate of `theta1` to `26.2909`
-#> ℹ change initial estimate of `theta2` to `1.34809`
-#> ℹ change initial estimate of `theta3` to `4.20364`
-#> ℹ change initial estimate of `theta4` to `0.207958`
-#> ℹ change initial estimate of `theta5` to `0.20461`
-#> ℹ change initial estimate of `theta6` to `0.0105527`
-#> ℹ change initial estimate of `theta7` to `0.00717161`
-#> ℹ change initial estimate of `eta1` to `0.0729525`
-#> ℹ change initial estimate of `eta2` to `0.0380192`
-#> ℹ change initial estimate of `eta3` to `1.90699`
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+#> ℹ reading file '/tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ done
+#> ℹ checking if the file is a nonmem output
+#> ℹ this is control stream
+#> ℹ splitting control stream by records
+#> ℹ done
+#> ℹ Processing record $INPUT
+#> ℹ Processing record $MODEL
+#> ℹ Processing record $THETA
+#> ℹ Processing record $OMEGA
+#> ℹ Processing record $SIGMA
+#> ℹ Processing record $PROBLEM
+#> ℹ Processing record $DATA
+#> ℹ Processing record $SUBROUTINES
+#> Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored
+#> ℹ Processing record $PK
+#> ℹ Processing record $DES
+#> ℹ Processing record $ERROR
+#> ℹ Processing record $ESTIMATION
+#> ℹ Ignore record $ESTIMATION
+#> ℹ Processing record $COVARIANCE
+#> ℹ Ignore record $COVARIANCE
+#> ℹ Processing record $TABLE
+#> ℹ Getting run information from output
+#> ℹ done
+#> ℹ change initial estimate of `theta1` to `1.37034`
+#> ℹ change initial estimate of `theta2` to `4.19815`
+#> ℹ change initial estimate of `theta3` to `1.38003`
+#> ℹ change initial estimate of `theta4` to `3.87657`
+#> ℹ change initial estimate of `theta5` to `0.196446`
+#> ℹ change initial estimate of `eta1` to `0.101251`
+#> ℹ change initial estimate of `eta2` to `0.0993872`
+#> ℹ change initial estimate of `eta3` to `0.101303`
+#> ℹ change initial estimate of `eta4` to `0.0730498`
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ applying names specified by $INPUT
+#> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
+#> ℹ done
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ done
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmprZp9wS/temp_libpath16fde75a86264/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
 #> ℹ replace theta names
+#> Warning: there are duplicate theta names, not renaming duplicate parameters
 #> ℹ done
 #> ℹ replace eta names
+#> Warning: there are duplicate eta names, not renaming duplicate parameters
+#> ℹ done (no labels)
+#> ℹ renaming compartments
 #> ℹ done
 mod 
-#>  ── rxode2-based solved PK 1-compartment model with first-order absorption ────── 
+#>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
 #>  ── Initalization: ──  
 #> Fixed Effects ($theta): 
-#>      t.TVCL       t.TVV        TVKA         LAG       Prop.      t.Add. 
-#> 26.29090000  1.34809000  4.20364000  0.20795800  0.20461000  0.01055270 
-#>      t.CRCL 
-#>  0.00717161 
+#>   theta1   theta2   theta3   theta4      RSV 
+#> 1.370340 4.198150 1.380030 3.876570 0.196446 
 #> 
 #> Omega ($omega): 
-#>           IIV.CL     IIV.V  IIV.KA
-#> IIV.CL 0.0729525 0.0000000 0.00000
-#> IIV.V  0.0000000 0.0380192 0.00000
-#> IIV.KA 0.0000000 0.0000000 1.90699
+#>          eta1      eta2     eta3      eta4
+#> eta1 0.101251 0.0000000 0.000000 0.0000000
+#> eta2 0.000000 0.0993872 0.000000 0.0000000
+#> eta3 0.000000 0.0000000 0.101303 0.0000000
+#> eta4 0.000000 0.0000000 0.000000 0.0730498
+#> 
+#> States ($state or $stateDf): 
+#>   Compartment Number Compartment Name
+#> 1                  1          CENTRAL
+#> 2                  2             PERI
+#>  ── μ-referencing ($muRefTable): ──  
+#>    theta  eta level
+#> 1 theta1 eta1    id
+#> 2 theta2 eta2    id
+#> 3 theta3 eta3    id
+#> 4 theta4 eta4    id
+#> 
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
-#>     description <- c(";; 1. Based on:     000", ";; 2. Description:       ", 
-#>         ";;    NONMEM PK example for xpose", "    Parameter estimation", 
-#>         "    Model simulations")
+#>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.99e-06", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.29e-05, 0.042); atol=0.00174", 
+#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=7.26e-06", 
+#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (9.23e-07,0.00384) atol=7.26e-06")
 #>     ini({
-#>         t.TVCL <- c(0, 26.2909)
-#>         label("TVCL")
-#>         t.TVV <- c(0, 1.34809)
-#>         label("TVV")
-#>         TVKA <- c(0, 4.20364)
-#>         label("TVKA")
-#>         LAG <- c(0, 0.207958)
-#>         label("LAG")
-#>         Prop. <- c(0, 0.20461)
-#>         label("Prop.Err")
-#>         t.Add. <- c(0, 0.0105527)
-#>         label("Add.Err")
-#>         t.CRCL <- c(0, 0.00717161, 0.02941)
-#>         label("CRCL onCL")
-#>         IIV.CL ~ 0.0729525
-#>         IIV.V ~ 0.0380192
-#>         IIV.KA ~ 1.90699
+#>         theta1 <- 1.37034
+#>         label("log Cl")
+#>         theta2 <- 4.19815
+#>         label("log Vc")
+#>         theta3 <- 1.38003
+#>         label("log Q")
+#>         theta4 <- 3.87657
+#>         label("log Vp")
+#>         RSV <- c(0, 0.196446, 1)
+#>         label("RSV")
+#>         eta1 ~ 0.101251
+#>         eta2 ~ 0.0993872
+#>         eta3 ~ 0.101303
+#>         eta4 ~ 0.0730498
 #>     })
 #>     model({
-#>         tvcl <- t.TVCL * (1 + t.CRCL * (CLCR - 65))
-#>         tvv <- t.TVV * WT
-#>         cl <- tvcl * exp(IIV.CL)
-#>         v <- tvv * exp(IIV.V)
-#>         ka <- TVKA * exp(IIV.KA)
-#>         alag(depot) <- LAG
-#>         k <- cl/v
-#>         rxlincmt1 <- linCmt()
-#>         f <- rxlincmt1
-#>         a1 <- depot
-#>         a2 <- central
-#>         ipred <- a2/v
-#>         ipred ~ add(t.Add.) + prop(Prop.) + combined1()
+#>         cmt(CENTRAL)
+#>         cmt(PERI)
+#>         cl <- exp(theta1 + eta1)
+#>         v <- exp(theta2 + eta2)
+#>         q <- exp(theta3 + eta3)
+#>         v2 <- exp(theta4 + eta4)
+#>         v1 <- v
+#>         scale1 <- v
+#>         k21 <- q/v2
+#>         k12 <- q/v
+#>         d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+#>         d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+#>         f <- CENTRAL/scale1
+#>         ipred <- f
+#>         rescv <- RSV
+#>         ipred ~ prop(RSV)
 #>     })
 #> }
 ```
@@ -142,3 +190,57 @@ The process steps are below:
 
   - Replaces the compartment names with the defined compartment names in
     the control stream (ie `COMP=(compartmenName)`)
+
+### Comparing differences between `NONMEM` and `rxode2`
+
+You may wish to see where the differences in predictions are between
+NONMEM and rxode2.
+
+From the modified returned `ui` object you can look at the rtol, atol as
+follows:
+
+``` r
+mod$ipredAtol
+mod$ipredRtol
+mod$predAtol
+mod$predAtol
+```
+
+You can see they do not exactly match. You can explore these difference
+further if you wish by looking at the `ipredCompare` and `predCompare`
+datasets:
+
+``` r
+head(mod$ipredCompare)
+
+head(mod$predCompare)
+```
+
+In these cases you can see that NONMEM seems to round the values for the
+output (though I am not clear what the rounding rules are), but rxode2
+seems to keep the entire number.
+
+Note this is the **observation data only** that is compared. Dosing
+predictions are excluded from these comparisons.
+
+You can also explore the NONMEM input dataset that was used to make the
+validation predictions (dosing and observations) by the `$nonmemData`
+item:
+
+``` r
+head(mod$nonmemData)
+```
+
+### Simulating from the model
+
+Unlike the traditional `rxode2` `ui` objects, this contains information
+about the model that can be used for simulation with uncertainty: theta
+covariance, number of subjects and number of observations. You can see
+them below if you wish:
+
+``` r
+mod$dfSub # Number of subjects
+mod$dfObs # Number of observations
+# Covariance of the thetas (and omegas in this case)
+mod$thetaMat
+```

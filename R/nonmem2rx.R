@@ -657,7 +657,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         }
         if (length(.ipredData$IPRED) == length(.ipredSolve[[.y]])) {
           .wid  <- which(tolower(names(.ipredData)) == "id")
-          .cmp <- data.frame(ID=.ipredData[,.wid], nonmemIPRED=.ipredData$IPRED,
+          .wtime  <- which(tolower(names(.ipredData)) == "time")
+          .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
+                             nonmemIPRED=.ipredData$IPRED,
                              IPRED=.ipredSolve[[.y]])
           .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
@@ -708,7 +710,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         }
         if (length(.predData$PRED) == length(.predSolve[[.y]])) {
           .wid  <- which(tolower(names(.predData)) == "id")
-          .cmp <- data.frame(ID=.predData[,.wid],
+          .wtime  <- which(tolower(names(.predData)) == "time")
+          .cmp <- data.frame(ID=.predData[,.wid], TIME=.predData[,.wtime],
                              nonmemPRED=.predData$PRED,
                              PRED=.predSolve[[.y]])
           .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)

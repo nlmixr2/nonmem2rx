@@ -44,7 +44,7 @@ nonmem control stream for the parser to start.  For example:
 
 ```{r example}
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
 mod 
 ```
 
@@ -77,4 +77,56 @@ The process steps are below:
   
 - Replaces the compartment names with the defined compartment names in
   the control stream (ie `COMP=(compartmenName)`)
+  
+### Comparing differences between `NONMEM` and `rxode2`
 
+You may wish to see where the differences in predictions are between
+NONMEM and rxode2.
+
+From the modified returned `ui` object you can look at the rtol, atol as follows:
+
+```r
+mod$ipredAtol
+mod$ipredRtol
+mod$predAtol
+mod$predAtol
+```
+
+You can see they do not exactly match. You can explore these
+difference further if you wish by looking at the `ipredCompare` and
+`predCompare` datasets:
+
+```r
+head(mod$ipredCompare)
+
+head(mod$predCompare)
+```
+
+In these cases you can see that NONMEM seems to round the values for
+the output (though I am not clear what the rounding rules are), but
+rxode2 seems to keep the entire number.
+
+Note this is the **observation data only** that is compared.  Dosing
+predictions are excluded from these comparisons.
+
+You can also explore the NONMEM input dataset that was used to make
+the validation predictions (dosing and observations) by the
+`$nonmemData` item:
+
+```r
+head(mod$nonmemData)
+```
+
+### Simulating from the model
+
+Unlike the traditional `rxode2` `ui` objects, this contains
+information about the model that can be used for simulation with
+uncertainty: theta covariance, number of subjects and number of
+observations.  You can see them below if you wish:
+
+```r
+mod$dfSub # Number of subjects
+mod$dfObs # Number of observations
+# Covariance of the thetas (and omegas in this case)
+mod$thetaMat
+```
