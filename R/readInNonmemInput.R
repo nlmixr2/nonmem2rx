@@ -93,7 +93,10 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
-  .data <- .data[order(.data$ID),]
+  .data$..row <- seq_along(.data$ID)
+  .data <- .data[order(.data$ID, .data$..row),]
+  .w <- which(names(.data) == "..row")
+  .data <- .data[,-.w]
   .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it
@@ -128,6 +131,10 @@
   .ret <- nmtab(.file)
   .w <- which(names(.ret) == "IPRE")
   if (length(.w) > 0) names(.ret)[.w] <- "IPRED"
+  .ret$..row <- seq_along(.ret$ID)
+  .ret <- .ret[order(.ret$ID, .ret$..row),]
+  .w <- which(names(.ret) == "..row")
+  .ret <- .ret[,-.w]
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                            function(x) {
@@ -183,6 +190,10 @@
   .minfo(paste0("read in nonmem PRED data (for model validation): ", .file))
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
+  .ret$..row <- seq_along(.ret$ID)
+  .ret <- .ret[order(.ret$ID, .ret$..row),]
+  .w <- which(names(.ret) == "..row")
+  .ret <- .ret[,-.w]
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
