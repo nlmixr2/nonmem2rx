@@ -204,14 +204,14 @@
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL, usePhi=TRUE) {
+.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL, phi=".phi", usePhi=TRUE) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
     .dir <- nonmemOutputDir
   }
   if (usePhi) {
-    .phi <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), ".phi"))
+    .phi <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), phi))
     if (file.exists(.phi)) {
       .minfo("read in phi file for etas")
       .phi <- nmtab(.phi)

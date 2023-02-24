@@ -22,11 +22,17 @@ test_that("model loading", {
                   lst=".res", usePhi=FALSE)
   expect_equal(length(f$meta$validation), 4L)
 
+  f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                  lst=".res", useCov=FALSE)
+  expect_equal(length(f$meta$validation), 4L)
+
+  f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                  lst=".res", useExt=FALSE)
+  expect_equal(length(f$meta$validation), 4L)
 
   f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                  determineError=FALSE)
   expect_equal(length(f$meta$validation), 4L)
-
 
   # try explicitly setting the input info
   f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
