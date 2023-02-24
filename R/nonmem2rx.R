@@ -509,19 +509,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
     .minfo("done")
   }
-  if (length(.lstInfo) == 0L) {
-    .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
-    if (file.exists(.lstFile)) {
-      .minfo("Getting run information from output")
-      if (strictLst) {
-        .lstInfo <- nmlst(.lstFile, strictLst = TRUE)
-      } else {
-        .tmp <- try(nmlst(.lstFile, strictLst=FALSE), silent=TRUE)
-        if (!inherits(.tmp, "try-error")) .lstInfo <- .tmp
-      }
-      .minfo("done")
-    }
-  }
   if (updateFinal) {
     .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext, useExt=useExt)
     .rx <- .tmp$rx
