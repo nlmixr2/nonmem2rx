@@ -18,7 +18,7 @@ extern "C" SEXP nonmem2rxPushRecord(const char *rec, const char *info) {
     Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   CharacterVector recS(1);
   if (rec == NULL) {
-    recS[0] = Rf_mkChar("aaa");     
+    recS[0] = Rf_mkChar("aaa");
   } else {
     recS[0] = Rf_mkChar(rec);
   }
@@ -93,7 +93,7 @@ extern "C" SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefi
   }
   Function addOmegaComment(".addOmegaComment", nonmem2rxNs);
   addOmegaComment(commentC, prefixC);
-  END_RCPP  
+  END_RCPP
 }
 
 extern "C" SEXP nonmem2rxPushOmegaLabel(const char *comment, const char *prefix) {
@@ -113,7 +113,7 @@ extern "C" SEXP nonmem2rxPushOmegaLabel(const char *comment, const char *prefix)
   }
   Function addOmegaLabel(".addOmegaLabel", nonmem2rxNs);
   addOmegaLabel(commentC, prefixC);
-  END_RCPP    
+  END_RCPP
 }
 
 extern "C" SEXP nonmem2rxPushModel0(const char *cmtName) {
@@ -241,7 +241,7 @@ extern "C" SEXP nonmem2rxPushDataRecords(int nrec) {
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function pushDataRecords(".pushDataRecords", nonmem2rxNs);
   pushDataRecords(nrec);
-  END_RCPP  
+  END_RCPP
 }
 
 
@@ -250,7 +250,7 @@ extern "C" SEXP nonmem2rxNeedNmevid(void) {
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function needNmevid(".needNmevid", nonmem2rxNs);
   needNmevid();
-  END_RCPP  
+  END_RCPP
 }
 
 
@@ -263,7 +263,7 @@ extern "C" SEXP nonmem2rxPushTableInfo(const char *file, int hasPred, int fullDa
                 LogicalVector::create(fullData),
                 LogicalVector::create(hasIpred),
                 LogicalVector::create(hasEta));
-  END_RCPP  
+  END_RCPP
 }
 
 extern "C" SEXP nonmem2rxPushScaleVolume(int scale, const char *v) {
@@ -271,7 +271,7 @@ extern "C" SEXP nonmem2rxPushScaleVolume(int scale, const char *v) {
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function pushScaleVolume(".pushScaleVolume", nonmem2rxNs);
   pushScaleVolume(scale, v);
-  END_RCPP    
+  END_RCPP
 }
 
 extern "C" SEXP nonmem2rxPushCmtInfo(int defdose, int defobs) {
@@ -443,6 +443,13 @@ extern "C" SEXP nonmem2rxHasVolume(void) {
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function hasVolume(".hasVolume", nonmem2rxNs);
   return hasVolume();
-  END_RCPP  
+  END_RCPP
 }
 
+extern "C" SEXP nonmem2rxNeedYtype(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needYtype(".needYtype", nonmem2rxNs);
+  return needYtype();
+  END_RCPP
+}

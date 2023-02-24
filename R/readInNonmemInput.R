@@ -5,12 +5,14 @@
 #' @param file this is the file name of the control stream
 #' @param inputData is a flag to use a different input data than
 #'   `file`.  This is the user-specified input data.
+#' @param rename rename parameters
+#' @param delta Delta offset for ties
 #' @return dataset (as nonmem sees it), where all ignore, accept, and
 #'   records adjustment are done. If the model calls evid in it, it
 #'   also adds a nmevid column
 #' @noRd
 #' @author Matthew L. Fidler
-.readInDataFromNonmem <- function(file, inputData, rename=NULL) {
+.readInDataFromNonmem <- function(file, inputData, rename=NULL, delta=1e-4) {
   .data <- NULL
   if (is.null(inputData)) {
     .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
@@ -71,6 +73,11 @@
       .minfo("adding nmevid to dataset")
       .data$nmevid <- .data[, which(tolower(names(.data)) == "evid")]
     }
+    if (.nonmem2rx$needYtype) {
+      .minfo("renaming 'ytype' to 'nmytype'")
+      .wyt <- which(tolower(names(.data)) == "ytype")
+      names(.data) <- "nmytype"
+    }
     # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
     if (!is.na(.nonmem2rx$dataRecords)) {
       .minfo(sprintf("subsetting to %d records after filters", .nonmem2rx$dataRecords))
@@ -86,7 +93,7 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
-  .data
+  .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it
 #'  
@@ -190,10 +197,13 @@
 #' Read in the etas from the nonmem dataest
 #'  
 #' @param file control stream name
+#' @param nonmemData represents the input nonmem data
+#' @param rxModel represents the classic `rxode2` simulation model
+#'   that will be run for validation
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
+.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
@@ -217,7 +227,10 @@
     .ret <- .ret[!duplicated(.ret$ID),]
   }
   .w <- which(regexpr("^(ID|ETA.*)", names(.ret)) != -1)
-  .ret <- .ret[,.w]
+  if (length(.w) <= 1) return(NULL)
+  .ret <- .ret[,.w, drop=FALSE]
+  # here drop any etas that are non influential
+  .ret <- .getValidationEtas(.ret, nonmemData, rxModel)
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {

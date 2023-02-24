@@ -51,6 +51,7 @@
   .nonmem2rx$replaceLabel <- NULL
   .nonmem2rx$replaceDataParItem <- NULL
   .nonmem2rx$hasVol <- FALSE
+  .nonmem2rx$needYtype <- FALSE
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -332,16 +333,20 @@
 #'   the model by solving the derived model under pred conditions
 #'   (etas are zero and eps values are zero)
 #'
-#' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
-#'
 #' @param strictLst The list parsing needs to be correct for a
 #'   successful load (default `FALSE`).
+#'
+#' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
 #'
 #' @param nLinesPro The number of lines to check for the $PROBLEM
 #'   statement.
 #'
+#' @param delta this is the offset for NONMEM times that are tied
+#'
 #' @param lst the NONMEM output extension, defaults to `.lst`
+#'
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -368,6 +373,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       strictLst=FALSE,
                       unintFixed=FALSE,
                       nLinesPro=20L,
+                      delta=1e-4,
                       lst=".lst",
                       ext=".ext") {
   checkmate::assertFileExists(file)
@@ -420,6 +426,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .lines <- paste(.lines, collapse = "\n")
   .parseRec(.lines)
+  if (.nonmem2rx$needYtype) {
+    warning("'ytype' variable has special meaning in rxode2, renamed to 'nmytype', rename/copy in your data too",
+            call.=FALSE)
+  }
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)
     if (thetaNames) {
@@ -474,10 +484,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})",
                          "}")))
   .rx <- .fun()
-  if (is.null(rename) && ("ytype" %in% tolower(c(.nonmem2rx$input, names(.nonmem2rx$input))))) {
-    .r <- c(RXTYPE="YTYPE")
-    .minfo("since YTYPE is in $INPUT, change to RXTYPE")
-  }
   if (!is.null(rename)) {
     .minfo("Renaming variables in model and data")
     .r <- rename
@@ -538,13 +544,14 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .ipredData <- .predData <- .etaData <- NULL
   if (validate)  {
+    .model <- .rx$simulationModel
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
-                                         rename=rename)
+                                         rename=rename, delta=delta)
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
-      .etaData <- .readInEtasFromTables(file, nonmemOutputDir=nonmemOutputDir,
-                                        rename=rename)
+      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename)
     }
     if (is.null(.predData)) {
       .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
@@ -614,15 +621,19 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
 
   # now try to validate
   if (!is.null(.nonmemData)) {
+    .rx$nonmemData <- .nonmemData
     .model <- .rx$simulationModel
     .theta <- .rx$theta
     .ci0 <- .ci <- 0.95
     .sigdig <- 3
     .ci <- (1 - .ci) / 2
     .q <- c(0, .ci, 0.5, 1 - .ci, 1)
-
+    .obsIdx <- .nonmemObsIndex(.nonmemData)
     .msg <- NULL
     if (!is.null(.etaData) && !is.null(.ipredData)) {
+      if (length(.ipredData[,1]) == length(.nonmemData[,1])) {
+        .ipredData <- .ipredData[.obsIdx,]
+      }
       .params <- .etaData
       for (.i in seq_along(.theta)) {
         .params[[names(.theta)[.i]]] <- .theta[.i]
@@ -636,7 +647,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
       .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
-                                 addDosing = TRUE))
+                                 addDosing = FALSE))
       if (!inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.ipredSolve)) == "y")
@@ -645,7 +656,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
           .y <- "sim"
         }
         if (length(.ipredData$IPRED) == length(.ipredSolve[[.y]])) {
-          .cmp <- data.frame(nonmemIPRED=.ipredData$IPRED,
+          .wid  <- which(tolower(names(.ipredData)) == "id")
+          .wtime  <- which(tolower(names(.ipredData)) == "time")
+          .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
+                             nonmemIPRED=.ipredData$IPRED,
                              IPRED=.ipredSolve[[.y]])
           .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
@@ -655,10 +669,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                            "%; ", .ci0 * 100,"% percentile: (",
                            round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
                            signif(.qi[3] / 100, digits=.sigdig)),
-                    paste0("IPRED absolute difference compared to Nonmem IPRED: atol=",
-                           signif(.qai[3], .sigdig),
-                           "; ", .ci0 * 100,"% percentile: (",
-                           signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), ")"))
+                    paste0("IPRED absolute difference compared to Nonmem IPRED: ", .ci0 * 100,"% percentile: (",
+                           signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), "); atol=",
+                           signif(.qai[3], .sigdig)))
+          .rx$ipredAtol <- .qai[3]
+          .rx$ipredRtol <- .qi[3]/100
+          .rx$ipredCompare <- .cmp
         } else {
           .minfo(sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
                          length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
@@ -667,6 +683,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
     }
     if (!is.null(.predData)) {
+      if (length(.predData[,1]) == length(.nonmemData[,1])) {
+        .predData <- .predData[.obsIdx,]
+      }
       .params <- c(.theta,
                    vapply(dimnames(.rx$omega)[[1]],
                           function(x) {
@@ -681,7 +700,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
-                                addDosing = TRUE))
+                                addDosing = FALSE))
       if (!inherits(.predSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.predSolve)) == "y")
@@ -690,7 +709,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
           .y <- "sim"
         }
         if (length(.predData$PRED) == length(.predSolve[[.y]])) {
-          .cmp <- data.frame(nonmemPRED=.predData$PRED,
+          .wid  <- which(tolower(names(.predData)) == "id")
+          .wtime  <- which(tolower(names(.predData)) == "time")
+          .cmp <- data.frame(ID=.predData[,.wid], TIME=.predData[,.wtime],
+                             nonmemPRED=.predData$PRED,
                              PRED=.predSolve[[.y]])
           .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
@@ -700,10 +722,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                            round(.qp[2], 2), "%,", round(.qp[4], 2), "%); rtol=",
                            signif(.qp[3] / 100,
                                   digits=.sigdig)),
-                    paste0("PRED absolute difference compared to Nonmem PRED: atol=",
-                           signif(.qap[3], .sigdig),
-                           "; ", .ci0 * 100,"% percentile: (",
-                           signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ")"))
+                    paste0("PRED absolute difference compared to Nonmem PRED: ",
+                           .ci0 * 100,"% percentile: (",
+                           signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ") atol=",
+                           signif(.qap[3], .sigdig)))
+          .rx$predAtol <- .qap[3]
+          .rx$predRtol <- .qp[3]/100
+          .rx$predCompare <- .cmp
         } else {
           .minfo(sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
                          length(.predSolve[[.y]]),

@@ -354,7 +354,7 @@ nmlst <- function(file, strictLst=FALSE) {
     }
     .d <- dim(.nmlst$eps)
     if (is.null(.d)) {
-      .d <- d[1]
+      .d <- .d[1]
       for (.i in seq_len(.d)) {
         for (.j in seq(.i, .d)) {
           if (.i == .j) {

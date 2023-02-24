@@ -106,6 +106,7 @@ int ipredSimWarning = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
+SEXP nonmem2rxNeedYtype(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 SEXP nonmem2rxHasVolume(void);
 
@@ -226,6 +227,12 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       }
       sAppendN(&curLine, "nmevid", 6);
       return 1;
+    } else if (!nmrxstrcmpi("amt", v)) {
+      // make sure amt is lower case; works around a parser bug in rxode2parse
+      sAppendN(&curLine, "amt", 3);
+    } else if (!nmrxstrcmpi("ytype", v)) {
+      nonmem2rxNeedYtype();
+      sAppendN(&curLine, "nmytype", 7);
     } else if (!nmrxstrcmpi("sim", v)) {
       if (simWarning == 0) {
         Rf_warning("'sim' variable is used in rxode2 simulations, renamed to 'nmsim'");
