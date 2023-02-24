@@ -76,7 +76,7 @@
     if (.nonmem2rx$needYtype) {
       .minfo("renaming 'ytype' to 'nmytype'")
       .wyt <- which(tolower(names(.data)) == "ytype")
-      names(.data) <- "nmytype"
+      names(.data)[.wyt] <- "nmytype"
     }
     # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
     if (!is.na(.nonmem2rx$dataRecords)) {
