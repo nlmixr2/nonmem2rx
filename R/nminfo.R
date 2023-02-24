@@ -1,6 +1,6 @@
-#' Get the most accurate information you can get from NONMEM  
+#' Get the most accurate information you can get from NONMEM
 #'
-#'  
+#'
 #' @param file nonmem file, like control stream, phi.  This function
 #'   will remove the extension to try to get the right information.
 #'   It preferentially selects the most accurate estimates from the
@@ -89,7 +89,7 @@ nminfo <- function(file,
       .uses <- c(.uses, "cov")
       .hasCov <- TRUE
       if (verbose) .minfo("done")
-      
+
     }
   }
   if (usePhi) {
@@ -146,7 +146,7 @@ nminfo <- function(file,
         lapply(.l, .nmlst.fun)
         .ret$tere <- .nmlst$tere
         if (verbose) .minfo("done")
-        
+
       } else {
         if (verbose) .minfo("getting information from lst file")
         .lst <- nmlst(.lstFile, strictLst=strictLst)
@@ -154,10 +154,18 @@ nminfo <- function(file,
           .ret$theta <- .lst$theta
           .ret$omega <- .lst$omega
           .ret$sigma <- .lst$sigma
-          .ret$objf <- .lst$objf          
+          .ret$objf <- .lst$objf
+        } else {
+          if (is.null(.ret$theta)) .ret$theta <- .lst$theta
+          if (is.null(.ret$omega)) .ret$omega <- .lst$omega
+          if (is.null(.ret$sigma)) .ret$sigma <- .lst$sigma
+          if (is.null(.ret$objf)) .ret$objf <- .lst$objf
+
         }
         if (!.hasCov) {
           .ret$cov <- .lst$cov
+        } else {
+          if (is.null(.ret$cov)) .ret$cov <- .lst$cov
         }
         .ret$nobs <- .lst$nobs
         .ret$nsub <- .lst$nsub
@@ -167,7 +175,7 @@ nminfo <- function(file,
         .ret$time <- .lst$time
         .ret$control <- .lst$control
         if (verbose) .minfo("done")
-        
+
       }
       .uses <- c(.uses, "lst")
     }
