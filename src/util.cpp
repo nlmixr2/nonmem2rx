@@ -452,6 +452,4 @@ extern "C" SEXP nonmem2rxNeedYtype(void) {
   Function needYtype(".needYtype", nonmem2rxNs);
   return needYtype();
   END_RCPP
-
-
 }
