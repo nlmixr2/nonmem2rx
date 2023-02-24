@@ -93,6 +93,7 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
+  .data <- .data[order(.data$ID),]
   .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it
