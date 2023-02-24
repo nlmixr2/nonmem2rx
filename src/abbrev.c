@@ -230,9 +230,11 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     } else if (!nmrxstrcmpi("amt", v)) {
       // make sure amt is lower case; works around a parser bug in rxode2parse
       sAppendN(&curLine, "amt", 3);
+      return 1;
     } else if (!nmrxstrcmpi("ytype", v)) {
       nonmem2rxNeedYtype();
       sAppendN(&curLine, "nmytype", 7);
+      return 1;
     } else if (!nmrxstrcmpi("sim", v)) {
       if (simWarning == 0) {
         Rf_warning("'sim' variable is used in rxode2 simulations, renamed to 'nmsim'");
