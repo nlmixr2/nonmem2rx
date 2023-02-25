@@ -122,24 +122,35 @@ head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 The validation of the model uses the best data available for NONMEM
 estimates.  This is:
 
+#### Non-eta parameters:
+
 - XML parameter estimates
-- `.phi` estimates for etas (better than table outputs)
+  `focei` (better than table outputs)
 
 On some systems, the `xml` may be broken (or not present), then we use:
 
 - `.ext`, and `.cov` parameter estimates
-- `.phi` estimates for etas (better than table outputs)
-
-If the `phi` isn't available, it will use the output from the tables
-(if they include `ETAs`)
-
 If none of these are available, then it will use the `.lst` file
 estimates.
 
 In the last (most desperate) case we will use the control
 stream's initial estimates when the `.lst` file isn't available.
 
-For the comparison we use the `PRED` and `IPRED` output in the table.
+### Eta parameters:
+
+When using a classical method, like `focei`, the default is to use the
+`.phi` file which has a bit more precision than the standard table
+output.
+
+However with `saem` or when the `phi` file is not present, this
+translator uses the `eta` outputs.
+
+### What NONMEM and rxode2 compare
+
+For the comparison we use the `PRED` and `IPRED` output in the tables
+from NONMEM.
+
+### What do the values mean
 
 Depending on the precision the validation numbers can be quite
 different.  For example:

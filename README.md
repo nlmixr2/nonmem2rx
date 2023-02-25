@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -76,14 +76,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -279,24 +279,33 @@ head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 The validation of the model uses the best data available for NONMEM
 estimates. This is:
 
-  - XML parameter estimates
-  - `.phi` estimates for etas (better than table outputs)
+#### Non-eta parameters:
+
+  - XML parameter estimates `focei` (better than table outputs)
 
 On some systems, the `xml` may be broken (or not present), then we use:
 
-  - `.ext`, and `.cov` parameter estimates
-  - `.phi` estimates for etas (better than table outputs)
-
-If the `phi` isn’t available, it will use the output from the tables (if
-they include `ETAs`)
-
-If none of these are available, then it will use the `.lst` file
-estimates.
+  - `.ext`, and `.cov` parameter estimates If none of these are
+    available, then it will use the `.lst` file estimates.
 
 In the last (most desperate) case we will use the control stream’s
 initial estimates when the `.lst` file isn’t available.
 
-For the comparison we use the `PRED` and `IPRED` output in the table.
+### Eta parameters:
+
+When using a classical method, like `focei`, the default is to use the
+`.phi` file which has a bit more precision than the standard table
+output.
+
+However with `saem` or when the `phi` file is not present, this
+translator uses the `eta` outputs.
+
+### What NONMEM and rxode2 compare
+
+For the comparison we use the `PRED` and `IPRED` output in the tables
+from NONMEM.
+
+### What do the values mean
 
 Depending on the precision the validation numbers can be quite
 different. For example:
