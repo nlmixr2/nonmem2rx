@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -76,14 +76,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -347,7 +347,7 @@ print(mod$ipredRtol)
 You can see that using less precise values will lead to larger
 differences between the NONMEM model predictions and the rxode2 model
 predictions. The key to validating models is to use the most precision
-possible.
+in parameter estimates (thetas and etas).
 
 You can have situations where the model validates for the most precise
 estimates, the population predictions, but doesn’t seem to do a good job

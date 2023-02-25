@@ -168,7 +168,7 @@ print(mod$ipredRtol)
 You can see that using less precise values will lead to larger
 differences between the NONMEM model predictions and the rxode2 model
 predictions. The key to validating models is to use the most precision
-possible. 
+in parameter estimates (thetas and etas).
 
 You can have situations where the model validates for the most precise
 estimates, the population predictions, but doesn't seem to do a good
