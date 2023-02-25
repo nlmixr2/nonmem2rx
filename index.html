@@ -77,7 +77,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -114,14 +114,14 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101303`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730498`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmprgmMu1/temp_libpath102b41babeb42/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -276,22 +276,42 @@
 <h3 id="notes-on-validation">Notes on validation<a class="anchor" aria-label="anchor" href="#notes-on-validation"></a>
 </h3>
 <p>The validation of the model uses the best data available for NONMEM estimates. This is:</p>
+<div class="section level4">
+<h4 id="non-eta-parameters">Non-eta parameters:<a class="anchor" aria-label="anchor" href="#non-eta-parameters"></a>
+</h4>
 <ul>
-<li>XML parameter estimates</li>
-<li>
-<code>.phi</code> estimates for etas (better than table outputs)</li>
+<li>XML parameter estimates <code>focei</code> (better than table outputs)</li>
 </ul>
 <p>On some systems, the <code>xml</code> may be broken (or not present), then we use:</p>
 <ul>
 <li>
-<code>.ext</code>, and <code>.cov</code> parameter estimates</li>
-<li>
-<code>.phi</code> estimates for etas (better than table outputs)</li>
+<code>.ext</code>, and <code>.cov</code> parameter estimates If none of these are available, then it will use the <code>.lst</code> file estimates.</li>
 </ul>
-<p>If the <code>phi</code> isn’t available, it will use the output from the tables (if they include <code>ETAs</code>)</p>
-<p>If none of these are available, then it will use the <code>.lst</code> file estimates.</p>
 <p>In the last (most desperate) case we will use the control stream’s initial estimates when the <code>.lst</code> file isn’t available.</p>
-<p>For the comparison we use the <code>PRED</code> and <code>IPRED</code> output in the table.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="eta-parameters">Eta parameters:<a class="anchor" aria-label="anchor" href="#eta-parameters"></a>
+</h3>
+<p>When using a classical method, like <code>focei</code>, the default is to use the <code>.phi</code> file which has a bit more precision than the standard table output.</p>
+<p>However with <code>saem</code> or when the <code>phi</code> file is not present, this translator uses the <code>eta</code> outputs.</p>
+</div>
+<div class="section level3">
+<h3 id="what-nonmem-and-rxode2-compare">What NONMEM and rxode2 compare<a class="anchor" aria-label="anchor" href="#what-nonmem-and-rxode2-compare"></a>
+</h3>
+<p>For the comparison we use the <code>PRED</code> and <code>IPRED</code> output in the tables from NONMEM.</p>
+</div>
+<div class="section level3">
+<h3 id="using-format-in-nonmem">Using <code>FORMAT</code> in nonmem<a class="anchor" aria-label="anchor" href="#using-format-in-nonmem"></a>
+</h3>
+<p>If you wish to be more precise for the <code>IPRED</code> and <code>ETA</code> values output in your tables you can change the FORTRAN format to a something a bit higher.</p>
+<p>The default for tables is <code>FORMAT=s1PE11.4</code>, if you really want to increase the precision for the output you could use <code>FORMAT=s1PE17.9</code> or something similar, this can help with validation of individuals if you get in a situation where it is important.</p>
+<p>See <a href="mail-archive.com/nmusers@globomaxnm.com/msg05466.html">discussion on nmusers</a>.</p>
+<p>That being said, a verification on the population level and a verification from a vpc is likely sufficient.</p>
+</div>
+<div class="section level3">
+<h3 id="what-do-the-values-mean">What do the values mean<a class="anchor" aria-label="anchor" href="#what-do-the-values-mean"></a>
+</h3>
 <p>Depending on the precision the validation numbers can be quite different. For example:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># full parameter precision</span></span>
