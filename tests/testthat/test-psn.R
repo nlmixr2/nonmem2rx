@@ -206,11 +206,9 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
                   "PsN/test_files/output/special_mod/objv_infinity.lst",
                   "PsN/test_files/output/special_mod/interrupted_at_eigen.lst",
                   "PsN/test_files/output/nm74/sparse_matrix_bug.lst",
-                  "PsN/test_files/output/onePROB/oneEST/noSIM/large_s_matrix_cov_fail.lst")
+                  "PsN/test_files/output/onePROB/oneEST/noSIM/large_s_matrix_cov_fail.lst",
+                  "PsN/test_files/output/special_mod/two_prob_second_fail.lst")
 
-  # dummy in pk
-  # never loads...:
-  # "PsN/test_files/output/special_mod/two_prob_second_fail.lst"
 
   withr::with_tempdir({
     
@@ -227,6 +225,13 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
            function(file) {
              test_that(paste0("error for ", file), {
                expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))))
+             })
+           })
+
+    lapply(.fileError,
+           function(file) {
+             test_that("list for error file", {
+               expect_error(suppressMessages(suppressWarnings(nmlst(file, strictLst=TRUE))), NA)
              })
            })
   })

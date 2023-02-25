@@ -164,6 +164,140 @@
   .nmlst$section
 }
 
+.prepareEstTheta <- function(line) {
+  if (isFALSE(.nmlst$thetaLgl) && grepl("THETA - VECTOR OF FIXED EFFECTS PARAMETERS", line, fixed=TRUE)) {
+    .nmlst$thetaLgl <- TRUE
+    return(NULL)
+  }
+  if (isTRUE(.nmlst$thetaLgl)) {
+    # exit if needed
+    if (grepl("OMEGA - COV MATRIX FOR RANDOM EFFECTS - ETAS", line, fixed=TRUE)) {
+      .nmlst$thetaLgl <- NA
+      return(TRUE)
+    }
+    if (grepl("SIGMA - COV MATRIX FOR RANDOM EFFECTS - EPSILONS", line, fixed=TRUE)) {
+      .nmlst$thetaLgl <- NA
+      return(TRUE)
+    }
+    if (grepl("OMEGA - CORR MATRIX FOR RANDOM EFFECTS - ETAS", line, fixed=TRUE)) {
+      .nmlst$thetaLgl <- NA
+      return(TRUE)
+    }
+    if (grepl("SIGMA - CORR MATRIX FOR RANDOM EFFECTS - EPSILONS", line, fixed=TRUE)) {
+      .nmlst$thetaLgl <- NA
+      return(TRUE)
+    }
+    #
+    if (!grepl("TH", line, fixed=TRUE)) {
+      if (!grepl("^ *1? *$", line)) {
+        .nmlst$thetaEst <- c(.nmlst$thetaEst, line)
+      }
+    }
+    return(NULL)
+  }
+  # next op
+  TRUE
+}
+.prepareEstEta <- function(line) {
+  if (isFALSE(.nmlst$etaLgl) && grepl("OMEGA - COV MATRIX FOR RANDOM EFFECTS - ETAS", line, fixed=TRUE)) {
+    .nmlst$etaLgl <- TRUE
+    return(NULL)
+  }
+  if (isTRUE(.nmlst$etaLgl)) {
+    # exit if needed
+    if (grepl("SIGMA - COV MATRIX FOR RANDOM EFFECTS - EPSILONS", line, fixed=TRUE)) {
+      .nmlst$etaLgl <- NA
+      return(TRUE)
+    }
+    if (grepl("OMEGA - CORR MATRIX FOR RANDOM EFFECTS - ETAS", line, fixed=TRUE)) {
+      .nmlst$etaLgl <- NA
+      return(TRUE)
+    }
+    if (grepl("SIGMA - CORR MATRIX FOR RANDOM EFFECTS - EPSILONS", line, fixed=TRUE)) {
+      .nmlst$etaLgl <- NA
+      return(TRUE)
+    }
+    #
+    if (!grepl("ET", line, fixed=TRUE)) {
+      if (!grepl("^ *1? *$", line)) {
+        .nmlst$etaEst <- c(.nmlst$etaEst, sub("^[+]", "", line))
+      }
+    }
+    return(NULL)
+  }
+  return(TRUE)
+}
+
+
+.prepareEstEps <- function(line) {
+  if (isFALSE(.nmlst$epsLgl) && grepl("SIGMA - COV MATRIX FOR RANDOM EFFECTS - EPSILONS", line, fixed=TRUE)) {
+    .nmlst$epsLgl <- TRUE
+    return(NULL)
+  }
+  if (isTRUE(.nmlst$epsLgl)) {
+    # exit if needed
+    if (grepl("OMEGA - CORR MATRIX FOR RANDOM EFFECTS - ETAS", line, fixed=TRUE)) {
+      .nmlst$epsLgl <- NA
+      return(TRUE)
+    }
+    if (grepl("SIGMA - CORR MATRIX FOR RANDOM EFFECTS - EPSILONS", line, fixed=TRUE)) {
+      .nmlst$epsLgl <- NA
+      return(TRUE)
+    }
+    #
+    if (!grepl("EP", line, fixed=TRUE)) {
+      if (!grepl("^ *1? *$", line)) {
+        .nmlst$epsEst <- c(.nmlst$epsEst, sub("^[+]", "", line))
+      }
+    }
+    return(NULL)
+  }
+  return(TRUE)
+}
+
+.prepareEst <- function() {
+  .est <- .nmlst$est
+  .est <- .est[.est != "1"]
+  .nmlst$thetaLgl <- FALSE
+  .nmlst$thetaEst <- NULL
+
+  .nmlst$etaLgl <- FALSE
+  .nmlst$etaEst <- NULL
+
+  .nmlst$epsLgl <- FALSE
+  .nmlst$epsEst <- NULL
+  lapply(.est,
+         function(line) {
+           if (!isTRUE(.prepareEstTheta(line))) return(NULL)
+           if (!isTRUE(.prepareEstEta(line))) return(NULL)
+           if (!isTRUE(.prepareEstEps(line))) return(NULL)
+           NULL
+         })
+  if (length(.nmlst$thetaEst) != 0) {
+    .theta <- paste(.nmlst$thetaEst, collapse = " ")
+    .theta <- strsplit(.theta, " +")[[1]]
+    .theta[.theta == "........."] <- "NA"
+    .theta <- paste0("c(",paste(.theta[.theta != ""], collapse=","),")")
+    .pushLst("theta", .theta)
+  }
+
+  if (length(.nmlst$etaEst)!= 0) {
+    .eta <- paste(.nmlst$etaEst, collapse = " ")
+    .eta <- strsplit(.eta, " +")[[1]]
+    .eta[.eta == "........."] <- "NA"
+    .eta <- paste0("c(",paste(.eta[.eta != ""], collapse=","),")")
+    .pushLst("eta", .eta)
+  }
+
+  if (length(.nmlst$epsEst) != 0) {
+    .eps <- paste(.nmlst$epsEst, collapse = " ")
+    .eps <- strsplit(.eps, " +")[[1]]
+    .eps[.eps == "........."] <- "NA"
+    .eps <- paste0("c(",paste(.eps[.eps != ""], collapse=","),")")
+    .pushLst("eps", .eps)
+  }
+}
+
 .nmlstEst <- function(line) {
   if (.nmlst$section == .nmlst.est) {
     if (!.nmlst$isEst && grepl("FINAL PARAMETER ESTIMATE", line, fixed=TRUE)) {
@@ -175,21 +309,21 @@
       return(NULL)
     } else if (!is.null(.nmlst$est) &&
                  grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
-      .est <- paste(.nmlst$est, collapse="\n")
-      if (.nmlst$strictLst) {
-        .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
-      } else {
-        try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
-      }
+      .est <- .prepareEst()
+      ## if (.nmlst$strictLst) {
+      ##   .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      ## } else {
+      ##   try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
+      ## }
       .nmlst$section <- .nmlst.cov
     } else if (!is.null(.nmlst$est) &&
                  grepl("^ *([*][*][*]+|Elapsed|[#]|PROBLEM +NO|^0|.*CORR MATRIX FOR RANDOM EFFECTS)", line)) {
-      .est <- paste(.nmlst$est, collapse="\n")
-      if (.nmlst$strictLst) {
-        .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
-      } else {
-        try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
-      }
+      .est <- .prepareEst()
+      ## if (.nmlst$strictLst) {
+      ##   .Call(`_nonmem2rx_trans_lst`, .est, FALSE)
+      ## } else {
+      ##   try(.Call(`_nonmem2rx_trans_lst`, .est, FALSE), silent=TRUE)
+      ## }
       .nmlst$section <- .nmlst.cov
       return(NULL)
     } else if (!is.null(.nmlst$est)) {
@@ -285,7 +419,20 @@ nmlst <- function(file, strictLst=FALSE) {
     .lst <-file
   }
   if (length(.lst) == 0) {
-    stop("no lines read for file", call.= FALSE)
+    warning("no lines read for file", call.= FALSE)
+    return(list(theta=.nmlst$theta,
+                omega=.nmlst$eta,
+                sigma=.nmlst$eps,
+                cov=.nmlst$cov,
+                objf=.nmlst$obj,
+                nobs=.nmlst$nobs,
+                nsub=.nmlst$nsub,
+                nmtran=.nmlst$nmtran,
+                termInfo=.nmlst$termInfo,
+                nonmem=.nmlst$nonmem,
+                time=.nmlst$time,
+                tere=.nmlst$tere,
+                control=.nmlst$control))
   }
   .resetLst(strictLst)
 
@@ -317,7 +464,7 @@ nmlst <- function(file, strictLst=FALSE) {
 }
 #' Get the matrix based covariance names
 #'
-#'  
+#'
 #' @param mat omega/sigma matrix
 #' @param type type of matrix
 #' @return names of parsed list matrix for the cov calculation
