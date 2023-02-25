@@ -103,29 +103,34 @@
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")
     }
-    if (missing(dfSub)) {
-      if (!is.null(object$dfSub)){
-        dfSub <- object$dfSub
-        .minfo(paste0("using dfSub=", dfSub, " from NONMEM"))
+    if (!missing(nStud)) {
+      if (missing(dfSub)) {
+        if (!is.null(object$dfSub)){
+          dfSub <- object$dfSub
+          .minfo(paste0("using dfSub=", dfSub, " from NONMEM"))
+        }
       }
-    }
-    if (missing(dfObs)) {
-      if (!is.null(object$dfObs)){
-        dfSub <- object$dfObs
-        .minfo(paste0("using dfObs=", dfObs, " from NONMEM"))
+      if (missing(dfObs)) {
+        if (!is.null(object$dfObs)){
+          dfObs <- object$dfObs
+          .minfo(paste0("using dfObs=", dfObs, " from NONMEM"))
+        }
       }
-    }
-    if (missing(thetaMat)) {
-      if (!is.null(object$thetaMat)){
-        dfSub <- object$dfObs
-        .minfo(paste0("using thetaMat from NONMEM"))
+      if (missing(thetaMat)) {
+        if (!is.null(object$thetaMat)){
+          thetaMat <- object$thetaMat
+          .minfo(paste0("using thetaMat from NONMEM"))
+        }
       }
     }
     # The theta/omega comes from the ui
     if (missing(sigma)) {
-      if (!is.null(object$thetaMat)){
-        omega <- object$omega
-        .minfo(paste0("using sigma from NONMEM"))
+      if (is.null(object$predDf)) {
+        # if a true nlmixr2 model, this is not needed
+        if (!is.null(object$sigma)){
+          sigma <- object$sigma
+          .minfo(paste0("using sigma from NONMEM"))
+        }
       }
     }
     if ((missing(events) && missing(params))) {
