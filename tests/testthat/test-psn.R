@@ -193,28 +193,24 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/postfrem/frem_covstep/final_models/model_4.lst",
              "PsN/test_files/postfrem/frem_covstep_removed/final_models/model_4.lst",
              "PsN/test_files/run45.lst",
-             "PsN/test_files/output/onePROB/oneEST/noSIM/warfarin_ddmore.lst")
+             "PsN/test_files/output/onePROB/oneEST/noSIM/warfarin_ddmore.lst",
+             "PsN/test_files/output/special_mod/rounding_errors.lst")
 
-  # These should be an error:
-  # no actual model in listing file
-  #"PsN/test_files/output/special_mod/missingmodel.lst",
-  #"PsN/test_files/output/special_mod/empty.lst",
-  # "PsN/test_files/output/special_mod/empty_lines.lst",
-  # bad adavn
-  # "PsN/test_files/output/special_mod/two_digit_cov_index.lst",
-  # "PsN/test_files/output/nm6/nm61_1.lst",
-  # exit 
-  # "PsN/test_files/output/special_mod/rounding_errors.lst",
-  # can't determine linCmt() which is a user error in this case
-  # "PsN/test_files/output/special_mod/objv_infinity.lst",
-
-  #pred/pk is empty
-  # "PsN/test_files/output/special_mod/two_prob_second_fail.lst",
-  # "PsN/test_files/output/special_mod/interrupted_at_eigen.lst",
-  # "PsN/test_files/output/nm74/sparse_matrix_bug.lst",
+  .fileError <- c("PsN/test_files/output/special_mod/missingmodel.lst",
+                  "PsN/test_files/output/special_mod/empty.lst",
+                  "PsN/test_files/output/special_mod/empty_lines.lst",
+                  #bad advan
+                  "PsN/test_files/output/special_mod/two_digit_cov_index.lst",
+                  "PsN/test_files/output/nm6/nm61_1.lst",
+                  # bad lincmt
+                  "PsN/test_files/output/special_mod/objv_infinity.lst",
+                  "PsN/test_files/output/special_mod/interrupted_at_eigen.lst",
+                  "PsN/test_files/output/nm74/sparse_matrix_bug.lst",
+                  "PsN/test_files/output/onePROB/oneEST/noSIM/large_s_matrix_cov_fail.lst")
 
   # dummy in pk
-  # "PsN/test_files/output/onePROB/oneEST/noSIM/large_s_matrix_cov_fail.lst",
+  # never loads...:
+  # "PsN/test_files/output/special_mod/two_prob_second_fail.lst"
 
   withr::with_tempdir({
     
@@ -226,6 +222,12 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
                expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
              })
            })
-    
+
+    lapply(.fileError,
+           function(file) {
+             test_that(paste0("error for ", file), {
+               expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))))
+             })
+           })
   })
 }

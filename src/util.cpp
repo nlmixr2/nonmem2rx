@@ -453,3 +453,12 @@ extern "C" SEXP nonmem2rxNeedYtype(void) {
   return needYtype();
   END_RCPP
 }
+
+
+extern "C" SEXP nonmem2rxNeedExit(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needExit(".needExit", nonmem2rxNs);
+  return needExit();
+  END_RCPP
+}
