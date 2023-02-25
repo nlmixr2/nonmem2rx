@@ -77,7 +77,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -114,14 +114,14 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101303`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730498`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -290,6 +290,7 @@
 </ul>
 <p>If the <code>phi</code> isn’t available, it will use the output from the tables (if they include <code>ETAs</code>)</p>
 <p>If none of these are available, then it will use the <code>.lst</code> file estimates.</p>
+<p>In the last (most desperate) case we will use the control stream’s initial estimates when the <code>.lst</code> file isn’t available.</p>
 <p>For the comparison we use the <code>PRED</code> and <code>IPRED</code> output in the table.</p>
 <p>Depending on the precision the validation numbers can be quite different. For example:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
