@@ -19,10 +19,16 @@
     <loc>/reference/nmext.html</loc>
   </url>
   <url>
+    <loc>/reference/nminfo.html</loc>
+  </url>
+  <url>
     <loc>/reference/nmlst.html</loc>
   </url>
   <url>
     <loc>/reference/nmtab.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nmxml.html</loc>
   </url>
   <url>
     <loc>/reference/nonmem2rx.html</loc>
