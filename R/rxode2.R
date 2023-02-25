@@ -59,3 +59,4 @@ model.nonmem2rx <- function(x, ..., append = FALSE,
                                  append = append, auto = auto, envir = envir)
   .dressAndSaveObj(.ret, .tmp[[1]])
 }
+
