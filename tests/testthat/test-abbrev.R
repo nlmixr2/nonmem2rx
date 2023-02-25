@@ -58,8 +58,10 @@ test_that("test abbrev", {
 
     # Unsupported lines
     expect_warning(.a("\"FIRST", NULL), "Verbatim")
-    expect_error(.a("EXIT 1 2"), "'EXIT # #'")
-    expect_error(.a("IF (B .LT. 0) EXIT 1 2"), "'IF \\(\\) EXIT # #'")
+    
+    .a("EXIT 1 2", "ierprdu <- 1*100000+2")
+
+    .a("IF (B .LT. 0) EXIT 1 2", "if (B < 0) ierprdu <- 100000 * 1 + 2")
     expect_warning(.a("COMRES = -1", NULL), "'COMRES = -1' ignored")
     expect_warning(.a("CALLFL = -1", NULL), "'CALLFL = ' ignored")
     expect_error(.a("CALL PASS(MODE)"), "'CALL PASS")

@@ -285,3 +285,11 @@ nonmem2rxRec.err <- function(x) {
   }
   ""
 }
+#' Needs variable for exit statement  
+#'  
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.needExit <- function() {
+  .nonmem2rx$needExit <- TRUE
+}

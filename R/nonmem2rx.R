@@ -52,6 +52,7 @@
   .nonmem2rx$replaceDataParItem <- NULL
   .nonmem2rx$hasVol <- FALSE
   .nonmem2rx$needYtype <- FALSE
+  .nonmem2rx$needExit <- FALSE
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -490,6 +491,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "rxode2::model({\n",
                          .desPrefix(),
                          .missingPrefix(),
+                         ifelse(.nonmem2rx$needExit, "ierprdu <- -1\n", ""),
                          paste(.nonmem2rx$model, collapse="\n"),
                          "\n})",
                          "}")))

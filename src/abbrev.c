@@ -109,6 +109,7 @@ SEXP nonmem2rxNeedNmevid(void);
 SEXP nonmem2rxNeedYtype(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 SEXP nonmem2rxHasVolume(void);
+SEXP nonmem2rxNeedExit(void);
 
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("fbioi", name)) {
@@ -540,6 +541,22 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     return 0;
+  } else if (!strcmp("ifexit", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "if (", 4);
+      return 1;
+    } else if (i == 1 || i == 4 || i == 5 || i == 6) {
+      return 1;
+    } else if (i == 3) {
+      D_ParseNode *xpn = d_get_child(pn, 5);
+      char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      xpn = d_get_child(pn, 6);
+      char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, ") ierprdu <- 100000 * %s + %s", v1, v2);
+      nonmem2rxNeedExit();
+      return 1;
+    }
+    return 0;
   } else if (!strcmp("if1", name)) {
     if (i == 0) {
       sAppendN(&curLine, "if (", 4);
@@ -578,12 +595,6 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
       verbWarning = 1;
     }
     return 1;
-  } else if (!strcmp("exit_line", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'EXIT # #' statements not supported in translation");
-  } else if (!strcmp("ifexit", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'IF () EXIT # #' statements not supported in translation");
   } else if (!strcmp("comresn1", name)) {
     if (i ==0) Rf_warning("'COMRES = -1' ignored");
   } else if (!strcmp("callfl", name)) {
@@ -894,6 +905,18 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   } else if (!strcmp("callgeteta", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "'CALL GETETA(ETA)' not supported in translation");
+  } else if (!strcmp("exit_line", name)) {
+    /* With NONMEM 7.4.2, there is a new variable, IERPRDU.  Both n and k are */
+    /* stored in IERPRDU.  k must be between 0 and 999. The value  stored  is */
+    /* n*10000+k.  E.g., "EXIT 1 500" is stored in IERPRDU as 10500. */
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 2);
+    char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curLine, "ierprdu <- %s*100000+%s", v1, v2);
+    nonmem2rxNeedExit();
+    pushModel();
+    return;
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
@@ -911,6 +934,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     }
   }
   if (!strcmp("assignment", name) ||
+      !strcmp("ifexit", name) ||
       !strcmp("if1", name) ||
       !strcmp("derivative", name) ||
       !strcmp("derivativeI", name) ||
