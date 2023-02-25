@@ -39,10 +39,15 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ reading file '/tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ reading in xml file
 #> ℹ done
-#> ℹ checking if the file is a nonmem output
-#> ℹ this is control stream
+#> ℹ reading in phi file
+#> ℹ problems reading phi file
+#> ℹ reading in lst file
+#> ℹ abbreviated list parsing
+#> ℹ done
+#> ℹ done
 #> ℹ splitting control stream by records
 #> ℹ done
 #> ℹ Processing record $INPUT
@@ -62,8 +67,6 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ Processing record $COVARIANCE
 #> ℹ Ignore record $COVARIANCE
 #> ℹ Processing record $TABLE
-#> ℹ Getting run information from output
-#> ℹ done
 #> ℹ change initial estimate of `theta1` to `1.37034`
 #> ℹ change initial estimate of `theta2` to `4.19815`
 #> ℹ change initial estimate of `theta3` to `1.38003`
@@ -73,14 +76,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp1QCvcm/temp_libpath180d240eb1d2b/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -91,6 +94,10 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 #> ℹ done (no labels)
 #> ℹ renaming compartments
+#> ℹ done
+#> ℹ solving ipred problem
+#> ℹ done
+#> ℹ solving pred problem
 #> ℹ done
 mod 
 #>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
@@ -266,6 +273,92 @@ head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 #> 5   1
 #> 6   1
 ```
+
+### Notes on validation
+
+The validation of the model uses the best data available for NONMEM
+estimates. This is:
+
+  - XML parameter estimates
+  - `.phi` estimates for etas (better than table outputs)
+
+On some systems, the `xml` may be broken (or not present), then we use:
+
+  - `.ext`, and `.cov` parameter estimates
+  - `.phi` estimates for etas (better than table outputs)
+
+If the `phi` isn’t available, it will use the output from the tables (if
+they include `ETAs`)
+
+If none of these are available, then it will use the `.lst` file
+estimates.
+
+For the comparison we use the `PRED` and `IPRED` output in the table.
+
+Depending on the precision the validation numbers can be quite
+different. For example:
+
+``` r
+# full parameter precision
+mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res"))
+#> Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored
+#> Warning: there are duplicate theta names, not renaming duplicate parameters
+#> Warning: there are duplicate eta names, not renaming duplicate parameters
+
+print(mod$ipredAtol)
+#>         50% 
+#> 0.001735466
+print(mod$ipredRtol)
+#>          50% 
+#> 6.994654e-06
+
+print(mod$predAtol)
+#>          50% 
+#> 7.263317e-06
+print(mod$predRtol)
+#>          50% 
+#> 7.263317e-06
+
+# now reduce precision by using table/lst output only
+mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
+                                  useXml=FALSE, useExt=FALSE,usePhi=FALSE))
+#> Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored
+#> Warning: there are duplicate theta names, not renaming duplicate parameters
+#> Warning: there are duplicate eta names, not renaming duplicate parameters
+
+print(mod$predAtol)
+#>         50% 
+#> 0.001258165
+print(mod$predRtol)
+#>         50% 
+#> 0.001258165
+
+print(mod$ipredAtol)
+#>       50% 
+#> 0.2199907
+print(mod$ipredRtol)
+#>         50% 
+#> 0.001273287
+```
+
+You can see that using less precise values will lead to larger
+differences between the NONMEM model predictions and the rxode2 model
+predictions. The key to validating models is to use the most precision
+possible.
+
+You can have situations where the model validates for the most precise
+estimates, the population predictions, but doesn’t seem to do a good job
+for the individual estimates (which are a bit less precise since they
+are not captured in the xml file). This could mean that one or more
+`eta` values are highly sensitive to rounding.
+
+Another possibility is that there are slight differences in how NONMEM
+and rxode2 protects from division from zero and other possibilities that
+can lead to `NaN` values.
+
+If these model parameters are not as precise as you wish, try to get
+more files, or maybe see if it still predicts the data accurately enough
+by using the model to perform a `vpc`.
 
 ### Simulating from the model
 

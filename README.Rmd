@@ -117,6 +117,70 @@ the validation predictions (dosing and observations) by the
 head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 ```
 
+### Notes on validation
+
+The validation of the model uses the best data available for NONMEM
+estimates.  This is:
+
+- XML parameter estimates
+- `.phi` estimates for etas (better than table outputs)
+
+On some systems, the `xml` may be broken (or not present), then we use:
+
+- `.ext`, and `.cov` parameter estimates
+- `.phi` estimates for etas (better than table outputs)
+
+If the `phi` isn't available, it will use the output from the tables
+(if they include `ETAs`)
+
+If none of these are available, then it will use the `.lst` file
+estimates.
+
+For the comparison we use the `PRED` and `IPRED` output in the table.
+
+Depending on the precision the validation numbers can be quite
+different.  For example:
+
+```{r validation}
+# full parameter precision
+mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res"))
+
+print(mod$ipredAtol)
+print(mod$ipredRtol)
+
+print(mod$predAtol)
+print(mod$predRtol)
+
+# now reduce precision by using table/lst output only
+mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
+                                  useXml=FALSE, useExt=FALSE,usePhi=FALSE))
+
+print(mod$predAtol)
+print(mod$predRtol)
+
+print(mod$ipredAtol)
+print(mod$ipredRtol)
+```
+
+You can see that using less precise values will lead to larger
+differences between the NONMEM model predictions and the rxode2 model
+predictions. The key to validating models is to use the most precision
+possible. 
+
+You can have situations where the model validates for the most precise
+estimates, the population predictions, but doesn't seem to do a good
+job for the individual estimates (which are a bit less precise since
+they are not captured in the xml file). This could mean that one or more
+`eta` values are highly sensitive to rounding.
+
+Another possibility is that there are slight differences in how NONMEM
+and rxode2 protects from division from zero and other possibilities that
+can lead to `NaN` values.
+
+If these model parameters are not as precise as you wish, try to get
+more files, or maybe see if it still predicts the data accurately
+enough by using the model to perform a `vpc`.
+
 ### Simulating from the model
 
 Unlike the traditional `rxode2` `ui` objects, this contains
