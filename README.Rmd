@@ -136,6 +136,9 @@ If the `phi` isn't available, it will use the output from the tables
 If none of these are available, then it will use the `.lst` file
 estimates.
 
+In the last (most desperate) case we will use the control
+stream's initial estimates when the `.lst` file isn't available.
+
 For the comparison we use the `PRED` and `IPRED` output in the table.
 
 Depending on the precision the validation numbers can be quite

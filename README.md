@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -76,14 +76,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a1ca001c2/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp8kLrbm/temp_libpathfe9a4de2ca63/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -292,6 +292,9 @@ they include `ETAs`)
 
 If none of these are available, then it will use the `.lst` file
 estimates.
+
+In the last (most desperate) case we will use the control stream’s
+initial estimates when the `.lst` file isn’t available.
 
 For the comparison we use the `PRED` and `IPRED` output in the table.
 
