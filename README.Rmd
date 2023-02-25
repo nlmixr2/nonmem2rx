@@ -150,6 +150,22 @@ translator uses the `eta` outputs.
 For the comparison we use the `PRED` and `IPRED` output in the tables
 from NONMEM.
 
+### Using `FORMAT` in nonmem
+
+If you wish to be more precise for the `IPRED` and `ETA` values output
+in your tables you can change the FORTRAN format to a something a bit
+higher.
+
+The default for tables is `FORMAT=s1PE11.4`, if you really want to
+increase the precision for the output you could use `FORMAT=s1PE17.9`
+or something similar, this can help with validation of individuals if
+you get in a situation where it is important.
+
+See [discussion on nmusers](mail-archive.com/nmusers@globomaxnm.com/msg05466.html).
+
+That being said, a verification on the population level and a
+verification from a vpc is likely sufficient.
+
 ### What do the values mean
 
 Depending on the precision the validation numbers can be quite

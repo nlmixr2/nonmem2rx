@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -76,14 +76,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp129szf/temp_libpath14f34f1387a5/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -304,6 +304,23 @@ translator uses the `eta` outputs.
 
 For the comparison we use the `PRED` and `IPRED` output in the tables
 from NONMEM.
+
+### Using `FORMAT` in nonmem
+
+If you wish to be more precise for the `IPRED` and `ETA` values output
+in your tables you can change the FORTRAN format to a something a bit
+higher.
+
+The default for tables is `FORMAT=s1PE11.4`, if you really want to
+increase the precision for the output you could use `FORMAT=s1PE17.9` or
+something similar, this can help with validation of individuals if you
+get in a situation where it is important.
+
+See [discussion on
+nmusers](mail-archive.com/nmusers@globomaxnm.com/msg05466.html).
+
+That being said, a verification on the population level and a
+verification from a vpc is likely sufficient.
 
 ### What do the values mean
 
