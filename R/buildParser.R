@@ -103,6 +103,37 @@
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")
     }
+    if (missing(dfSub)) {
+      if (!is.null(object$dfSub)){
+        dfSub <- object$dfSub
+        .minfo(paste0("using dfSub=", dfSub, " from NONMEM"))
+      }
+    }
+    if (missing(dfObs)) {
+      if (!is.null(object$dfObs)){
+        dfSub <- object$dfObs
+        .minfo(paste0("using dfObs=", dfObs, " from NONMEM"))
+      }
+    }
+    if (missing(thetaMat)) {
+      if (!is.null(object$thetaMat)){
+        dfSub <- object$dfObs
+        .minfo(paste0("using thetaMat from NONMEM"))
+      }
+    }
+    # The theta/omega comes from the ui
+    if (missing(sigma)) {
+      if (!is.null(object$thetaMat)){
+        omega <- object$omega
+        .minfo(paste0("using sigma from NONMEM"))
+      }
+    }
+    if ((missing(events) && missing(params))) {
+      if (!is.null(object$nonmemData)) {
+        events <- object$nonmemData
+        .minfo(paste0("using NONMEM's data for solving"))
+      }
+    }
     .cls <- class(object)
     class(object) <- .cls[-which(.cls == "nonmem2rx")]
   })
