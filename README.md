@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -76,14 +76,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872`
 #> ℹ change initial estimate of `eta3` to `0.101303`
 #> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmphKmBZ5/temp_libpath1cd93af6df94/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -246,7 +246,7 @@ head(mod$predCompare)
 ```
 
 In these cases you can see that NONMEM seems to round the values for the
-output (though I am not clear what the rounding rules are), but rxode2
+output (the rounding rules are based on the `FORMAT` option), but rxode2
 seems to keep the entire number.
 
 Note this is the **observation data only** that is compared. Dosing
@@ -279,26 +279,59 @@ head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 The validation of the model uses the best data available for NONMEM
 estimates. This is:
 
-#### Non-eta parameters:
+  - `theta` or population parameters
+  - `eta` or individual parameters
 
-  - XML parameter estimates `focei` (better than table outputs)
+The `omega` and `sigma` matrices are captured but do not contribute to
+the validation. Also the overall covariance is captured, but not used in
+the validation.
 
-On some systems, the `xml` may be broken (or not present), then we use:
+#### `theta` parameters:
 
-  - `.ext`, and `.cov` parameter estimates If none of these are
-    available, then it will use the `.lst` file estimates.
+This section discusses the source of the `theta` parameters. Often it is
+the same source of the `omega` and `sigma` matrices as well. In many
+cases it is the source of the overall covariance too. So the sources of
+all these data will be mentioned.
 
-In the last (most desperate) case we will use the control stream’s
-initial estimates when the `.lst` file isn’t available.
+In order of preference, the model run parameters are gathered from:
 
-### Eta parameters:
+  - XML parameter estimates (which are the most accurate). On some
+    systems, the `xml` may be broken (or not present). This also gets
+    the covariance, `omega`, `sigma` values.
 
-When using a classical method, like `focei`, the default is to use the
-`.phi` file which has a bit more precision than the standard table
-output.
+  - `.ext` is the next source of the `theta`, `sigma` and `omega`
+    matrices, and is slightly less accurate than the `xml` file. If the
+    covariance file `.cov` exists the overall covariance is read from
+    this file when the `xml` file is not present.
 
-However with `saem` or when the `phi` file is not present, this
-translator uses the `eta` outputs.
+  - The NONMEM output file is the next source of information for the
+    `theta` values. This is the least accurate, but may be useful for
+    models in libraries like the ddmore repository since often the
+    `xml`, `ext` and `cov` files are not present.
+
+  - The model control stream is the last source of parameter estimates,
+    and may not even reflect the minimum value of the model. In common
+    practice many people adjust parameters close to the final parameter
+    estimates so this may be close enough, or a starting place to start
+    your own estimation with `nlmxir2`.
+
+### Eta parameters
+
+The `eta` parameters come from 2 different sources.
+
+  - The first file (which is preferred) is used for classical estimation
+    methods like `focei`. In these circumstances the `.phi` file
+    contains more accurate estimate information than the table files
+    (without a `FORMAT` specifier).
+
+  - The next source of the `eta` parameters come from the tables. The
+    tables by default are not very accurate compared to the `xml` or
+    `ext` files above. The accuracy can be increased by changing the
+    `FORMAT` option in the NONMEM tables.
+
+Since these values are not as accurate as the population parameters,
+these are much more likely to have a mismatch between `rxode2` and
+`NONMEM`. You can compare the predictions if you wish.
 
 ### What NONMEM and rxode2 compare
 
