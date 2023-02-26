@@ -83,17 +83,21 @@ model.nonmem2rx <- function(x, ..., append = FALSE,
 
 #'@export
 rxRename.nonmem2rx <- function(.data, ...) {
-  .tmp <- .stripAndSaveObj(.data)
-  .ret <- .tmp[[2]]
-  .callInfo <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)])
   .lst <- as.list(match.call()[-1])
-  .lst$.data <- .ret
-  .ret <- .dressAndSaveObj(do.call(rxode2::.rxRename, c(.lst, list(envir = parent.frame(2)))),
-                           .tmp[[1]], compress=FALSE)
+  .modelLines <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)])
+  .tmp <- .stripAndSaveObj(.data)
+  .lst$.data <- .tmp[[2]]
+  .rxui <- .tmp[[2]]
+  .vars <- unique(c(.rxui$mv0$state, .rxui$mv0$params, .rxui$mv0$lhs, .rxui$predDf$var, .rxui$predDf$cond, .rxui$iniDf$name))
+  .rxui <- .dressAndSaveObj(do.call(rxode2::.rxRename, c(.lst, list(envir = parent.frame(2)))),
+                            .tmp[[1]], compress=FALSE)
+  .lst <- lapply(seq_along(.modelLines), function(i) {
+    rxode2::.assertRenameErrorModelLine(.modelLines[[i]], .vars)
+  })
   ## now use call information to rename any other variables in `thetaMat` and `sigma`
   lapply(seq_along(.lst), function(i) {
-    .rxnmRename1(.ret, .lst[[i]])
+    .rxnmRename1(.rxui, .lst[[i]])
   })
-  rxode2::rxUiCompress(.ret)
+  rxode2::rxUiCompress(.rxui)
 }
 
