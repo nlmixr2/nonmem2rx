@@ -550,11 +550,16 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
+      .digs <- 0L
       if (!is.null(.lstInfo$eta)) {
+        .digs <- 5L # seems to be the default for phi files
+      }
+      # get ETA data if it has better digits than the phi file (or isn't present yet)
+      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename,
+                                        digits=.digs)
+      if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
         .etaData <- .lstInfo$eta
-      } else {
-        .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                          nonmemOutputDir=nonmemOutputDir,rename=rename)
       }
     }
     if (is.null(.predData)) {

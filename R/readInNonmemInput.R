@@ -205,7 +205,8 @@
 #' @return etas renamed to be lower case with IDs added
 #' @noRd
 #' @author Matthew L. Fidler
-.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL) {
+.readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL,
+                                  digits=0L) {
   if (is.null(nonmemOutputDir)) {
     .dir <- dirname(file)    
   } else {
@@ -229,6 +230,7 @@
                      function(i) {
                        .table <- .nonmem2rx$tables[[i]]
                        if (!.table$hasEta) return(FALSE)
+                       if (.table$digits <= digits) return(FALSE) # may already have a better solution.
                        .file <- .getFileNameIgnoreCase(file.path(.dir, .table$file))
                        if (!file.exists(.file)) return(FALSE)
                        TRUE

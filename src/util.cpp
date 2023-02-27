@@ -255,14 +255,15 @@ extern "C" SEXP nonmem2rxNeedNmevid(void) {
 
 
 extern "C" SEXP nonmem2rxPushTableInfo(const char *file, int hasPred, int fullData,
-                                       int hasIpred, int hasEta) {
+                                       int hasIpred, int hasEta, const char *fortranFormat) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function pushTableInfo(".pushTableInfo", nonmem2rxNs);
   pushTableInfo(file, LogicalVector::create(hasPred),
                 LogicalVector::create(fullData),
                 LogicalVector::create(hasIpred),
-                LogicalVector::create(hasEta));
+                LogicalVector::create(hasEta),
+                fortranFormat);
   END_RCPP
 }
 
