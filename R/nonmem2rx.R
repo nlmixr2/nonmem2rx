@@ -226,37 +226,23 @@
 #'
 #' @param rxui ui
 #' @inheritParams nonmem2rx
-#' @param cmtName compartment names to replace
-#' @param useExt Use the ext file
 #' @return List with new ui and sigma
 #' @noRd
 #' @author Matthew L. Fidler
-.updateRxWithFinalParameters <- function(rxui, file, sigma, lst, ext, useExt=TRUE) {
-  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
-  .extFile <- paste0(tools::file_path_sans_ext(file), ext)
-  if (useExt && file.exists(.extFile)) {
-    .fin <- try(nmext(.extFile), silent=TRUE)
-    if (inherits(.fin, "try-error") && file.exists(.lstFile)) {
-      .fin <- try(nmlst(.lstFile), silent=TRUE)
-    }
-  } else if (file.exists(.lstFile)) {
-    .fin <- try(nmlst(.lstFile), silent=TRUE)
-  } else {
-    return(list(rx=rxui, sigma=NULL))
-  }
+.updateRxWithFinalParameters <- function(rxui, lstInfo) {
   .rx <- rxui
-  if (inherits(.fin, "try-error")) {
-    warning("error reading estimates from output", call.=FALSE)
-    .fin <- list(theta=NULL, eta=NULL, eps=NULL)
-  }
-  if (!is.null(.fin$theta)) {
-    .theta <- .fin$theta
+  .update.theta <- FALSE
+  if (!is.null(lstInfo$theta)) {
+    .theta <- lstInfo$theta
     .theta <- .theta[!is.na(.theta)]
     .rx <- rxode2::ini(.rx, .theta)
+    .update.theta <- TRUE
   }
-  if (!is.null(.fin$omega)) {
-    .omega <- .fin$omega
+  .update.omega <- FALSE
+  if (!is.null(lstInfo$omega)) {
+    .omega <- lstInfo$omega
     .rx <- rxode2::ini(.rx, .omega)
+    .update.omega <- TRUE
     if (length(.nonmem2rx$omegaEst$x) > 0) {
       for (i in seq_along(.nonmem2rx$omegaEst$x)) {
         .x <- .nonmem2rx$omegaEst$x[i]
@@ -267,8 +253,9 @@
     }
   }
   .sigma <- sigma
-  if (!is.null(.fin$sigma)) {
-    .sigma <- .fin$sigma
+  .update.sigma <- FALSE
+  if (!is.null(lstInfo$sigma)) {
+    .sigma <- lstInfo$sigma
     if (length(.nonmem2rx$sigmaEst$x) > 0) {
       for (i in seq_along(.nonmem2rx$sigmaEst$x)) {
         .x <- .nonmem2rx$sigmaEst$x[i]
@@ -277,8 +264,10 @@
                                        .x, .y, .sigma[.x, .y])))
       }
     }
+    .update.sigma <- TRUE
   }
-  list(rx=.rx, sigma=.sigma)
+  list(rx=.rx, sigma=.sigma,
+       update=.update.theta && .update.omega && .update.sigma)
 }
 
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
@@ -496,6 +485,21 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})",
                          "}")))
   .rx <- .fun()
+  .update <- FALSE
+  if (updateFinal) {
+    .tmp <- try(.updateRxWithFinalParameters(.rx, .lstInfo), silent=TRUE)
+    if (!inherits(.tmp, "try-error")) {
+      .rx <- .tmp$rx
+      if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
+      .update <- .tmp$update
+    }
+  }
+  if (!.update) {
+    if (validate) {
+      .minfo("final parameters not updated, will skip validation")
+      validate <- FALSE
+    }
+  }
   if (!is.null(rename)) {
     .minfo("Renaming variables in model and data")
     .r <- rename
@@ -510,11 +514,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
     }
     .minfo("done")
-  }
-  if (updateFinal) {
-    .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext, useExt=useExt)
-    .rx <- .tmp$rx
-    if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
   }
   .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), cov))
   if (useCov && file.exists(.cov)) {
@@ -537,7 +536,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- .tmp
     }
   }
-  .ipredData <- .predData <- .etaData <- NULL
+  .ipredData <- .predData <- .etaData  <- .nonmemData <- NULL
   if (validate)  {
     .model <- .rx$simulationModel
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
