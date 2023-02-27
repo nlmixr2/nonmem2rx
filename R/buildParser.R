@@ -139,6 +139,22 @@
         .minfo(paste0("using NONMEM's data for solving"))
       }
     }
+    if (missing(atol)) {
+      atol <- object$atol
+      .minfo(paste0("using NONMEM specified atol=", atol))
+    }
+    if (missing(rtol)) {
+      rtol <- object$rtol
+      .minfo(paste0("using NONMEM specified rtol=", rtol))
+    }
+    if (missing(ssRtol)) {
+      ssRtol <- object$ssRtol
+      .minfo(paste0("using NONMEM specified ssRtol=", ssRtol))
+    }
+    if (missing(ssAtol)) {
+      ssAtol <- object$ssAtol
+      .minfo(paste0("using NONMEM specified ssAtol=", ssAtol))
+    }
     .cls <- class(object)
     class(object) <- .cls[-which(.cls == "nonmem2rx")]
   })

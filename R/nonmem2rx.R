@@ -53,6 +53,12 @@
   .nonmem2rx$hasVol <- FALSE
   .nonmem2rx$needYtype <- FALSE
   .nonmem2rx$needExit <- FALSE
+  .nonmem2rx$atol <- 1e-12
+  .nonmem2rx$rtol <- 1e-12
+  .nonmem2rx$ssAtolSet <- FALSE
+  .nonmem2rx$ssAtol <- 1e-12
+  .nonmem2rx$ssRtolSet <- FALSE
+  .nonmem2rx$ssRtol <- 1e-12
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -252,7 +258,6 @@
       }
     }
   }
-  .sigma <- sigma
   .update.sigma <- FALSE
   if (!is.null(lstInfo$sigma)) {
     .sigma <- lstInfo$sigma
@@ -544,11 +549,16 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
+      .digs <- 0L
       if (!is.null(.lstInfo$eta)) {
+        .digs <- 5L # seems to be the default for phi files
+      }
+      # get ETA data if it has better digits than the phi file (or isn't present yet)
+      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename,
+                                        digits=.digs)
+      if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
         .etaData <- .lstInfo$eta
-      } else {
-        .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                          nonmemOutputDir=nonmemOutputDir,rename=rename)
       }
     }
     if (is.null(.predData)) {
@@ -649,6 +659,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving ipred problem")
       .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
+                                 atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                 ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
                                  addDosing = FALSE))
       .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
@@ -704,6 +716,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
+                                atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
                                 addDosing = FALSE))
       .minfo("done")
       if (!inherits(.predSolve, "try-error")) {
@@ -764,6 +778,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (inherits(.lstInfo$nobs, "numeric")) {
     .rx$dfObs <- .lstInfo$nobs
   }
+  .rx$atol <- .nonmem2rx$atol
+  .rx$rtol <- .nonmem2rx$rtol
+  .rx$ssAtol <- .nonmem2rx$ssAtol
+  .rx$ssRtol <- .nonmem2rx$ssRtol
   .ret <- rxode2::rxUiCompress(.rx)
   class(.ret) <- c("nonmem2rx", class(.ret))
   .ret

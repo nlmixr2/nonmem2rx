@@ -55,6 +55,12 @@ nonmem2rxRec.sub <- function(x) {
                    .nonmem2rx$advan, .nonmem2rx$trans))
     }
   }
+  if (!.nonmem2rx$ssAtolSet) {
+    .nonmem2rx$ssAtol <- .nonmem2rx$atol
+  }
+  if (!.nonmem2rx$ssRtolSet) {
+    .nonmem2rx$ssRtol <- .nonmem2rx$rtol
+  }
 
 }
 #' Set the advan number for model
@@ -76,4 +82,22 @@ nonmem2rxRec.sub <- function(x) {
 .setTrans <- function(trans) {
   .nonmem2rx$trans <- trans
   invisible()
+}
+
+.setAtol <- function(tol) {
+  .nonmem2rx$atol <- 10^(-tol)
+}
+
+.setRtol <- function(tol) {
+  .nonmem2rx$rtol <- 10^(-tol)
+}
+
+.setSsRtol <- function(tol) {
+  .nonmem2rx$ssRtolSet <- TRUE
+  .nonmem2rx$ssRtol <-10^(-tol)
+}
+
+.setSsAtol <- function(tol) {
+  .nonmem2rx$ssAtolSet <- TRUE
+  .nonmem2rx$ssAtol <- 10^(-tol)
 }
