@@ -124,13 +124,24 @@ void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     Rf_errorcall(R_NilValue, "$SUBROUTINES '%s' unsupported for translation", v);
     return;
   }
+  if (!strcmp("atol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'ATOL' subroutine from external fortran unsupported for translation");
+    return;
+  }
+  if (!strcmp("ssatol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSATOL' subroutine from external fortran unsupported for translation");
+    return;
+  }
+  if (!strcmp("ssrtol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSRTOL' subroutine from external fortran unsupported for translation");
+    return;
+  }
   if (!strcmp("tol_statement2", name)) {
     parseFree(0);
     Rf_errorcall(R_NilValue, "$SUBROUTINES 'TOL' subroutine from external fortran unsupported for translation");
-    return;
-  }
-  if (!strcmp("tol_statement1", name)) {
-    Rf_warning("$SUBROUTINES TOL=# ignored");
     return;
   }
   if (!strcmp("trans_statement1", name)) {
