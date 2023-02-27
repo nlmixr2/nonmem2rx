@@ -258,7 +258,6 @@
       }
     }
   }
-  .sigma <- sigma
   .update.sigma <- FALSE
   if (!is.null(lstInfo$sigma)) {
     .sigma <- lstInfo$sigma
