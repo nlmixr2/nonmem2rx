@@ -22,6 +22,10 @@ rxode2::ini
 #' @export
 rxode2::model
 
+#' @importFrom rxode2 rxRename
+#' @export
+rxode2::rxRename
+
 #' @importFrom rxode2 rxSolve
 #' @export
 rxode2::rxSolve

@@ -9,6 +9,7 @@
 \alias{\%>\%}
 \alias{ini}
 \alias{model}
+\alias{rxRename}
 \alias{rxSolve}
 \title{Objects exported from other packages}
 \keyword{internal}
@@ -19,6 +20,6 @@ below to see their documentation.
 \describe{
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
-  \item{rxode2}{\code{\link[rxode2]{ini}}, \code{\link[rxode2]{model}}, \code{\link[rxode2:rxode2]{rxode}}, \code{\link[rxode2:rxode2]{RxODE}}, \code{\link[rxode2]{rxode2}}, \code{\link[rxode2]{rxSolve}}}
+  \item{rxode2}{\code{\link[rxode2]{ini}}, \code{\link[rxode2]{model}}, \code{\link[rxode2:rxode2]{rxode}}, \code{\link[rxode2:rxode2]{RxODE}}, \code{\link[rxode2]{rxode2}}, \code{\link[rxode2]{rxRename}}, \code{\link[rxode2]{rxSolve}}}
 }}
 
