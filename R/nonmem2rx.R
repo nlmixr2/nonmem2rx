@@ -653,6 +653,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving ipred problem")
       .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
+                                 atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                 ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
                                  addDosing = FALSE))
       .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
@@ -708,6 +710,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
+                                atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
                                 addDosing = FALSE))
       .minfo("done")
       if (!inherits(.predSolve, "try-error")) {
@@ -768,6 +772,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (inherits(.lstInfo$nobs, "numeric")) {
     .rx$dfObs <- .lstInfo$nobs
   }
+  .rx$atol <- .nonmem2rx$atol
+  .rx$rtol <- .nonmem2rx$rtol
+  .rx$ssAtol <- .nonmem2rx$ssAtol
+  .rx$ssRtol <- .nonmem2rx$ssRtol
   .ret <- rxode2::rxUiCompress(.rx)
   class(.ret) <- c("nonmem2rx", class(.ret))
   .ret
