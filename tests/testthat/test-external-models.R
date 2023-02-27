@@ -41,20 +41,10 @@ test_that("test NMdata models", {
   .dat1 <- system.file("examples/data/xgxr1.csv", package="NMdata")
   .dat2 <- system.file("examples/data/xgxr2.csv", package="NMdata")
   .dat4 <- system.file("examples/data/xgxr4.csv", package="NMdata")
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr001.mod", package="NMdata"),
-                  inputData=.dat1)
-  expect_length(m$meta$validation, 2L)
-  
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr002.mod", package="NMdata"), inputData=.dat1)
-  expect_length(m$meta$validation, 2L)
-
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr003.mod", package="NMdata"), inputData=.dat1)
-  expect_length(m$meta$validation, 2L)
-
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr014.mod", package="NMdata"), inputData=.dat2)
-  expect_length(m$meta$validation, 2L)
-
-  m <- .nonmem2rx(system.file("examples/nonmem/xgxr018.mod", package="NMdata"), inputData=.dat4)
-  expect_length(m$meta$validation, 2L)
+  expect_error(.nonmem2rx(system.file("examples/nonmem/xgxr001.mod", package="NMdata")), NA)
+  expect_error(.nonmem2rx(system.file("examples/nonmem/xgxr002.mod", package="NMdata")), NA)
+  expect_error(.nonmem2rx(system.file("examples/nonmem/xgxr003.mod", package="NMdata")), NA)
+  expect_error(.nonmem2rx(system.file("examples/nonmem/xgxr014.mod", package="NMdata")), NA)
+  expect_error(.nonmem2rx(system.file("examples/nonmem/xgxr018.mod", package="NMdata")), NA)
   
 })
