@@ -53,6 +53,10 @@
   .nonmem2rx$hasVol <- FALSE
   .nonmem2rx$needYtype <- FALSE
   .nonmem2rx$needExit <- FALSE
+  .nonmem2rx$atol <- 1e-12
+  .nonmem2rx$rtol <- 1e-12
+  .nonmem2rx$ssAtol <- 1e-12
+  .nonmem2rx$ssRtol <- 1e-12
 }
 #' Add theta name to .nonmem2rx info
 #'

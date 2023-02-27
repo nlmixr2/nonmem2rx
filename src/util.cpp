@@ -462,3 +462,32 @@ extern "C" SEXP nonmem2rxNeedExit(void) {
   return needExit();
   END_RCPP
 }
+
+extern "C" SEXP nonmem2rxSetAtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needExit(".setAtol", nonmem2rxNs);
+  return setAtol(tol);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxSetRtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needExit(".setRtol", nonmem2rxNs);
+  return setRtol(tol);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxSetSsAtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needExit(".setSsAtol", nonmem2rxNs);
+  return setSsAtol(tol);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxSetSsRtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needExit(".setSsRtol", nonmem2rxNs);
+  return setSsRtol(tol);
+  END_RCPP  
+}

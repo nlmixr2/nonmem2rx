@@ -77,3 +77,19 @@ nonmem2rxRec.sub <- function(x) {
   .nonmem2rx$trans <- trans
   invisible()
 }
+
+.setAtol <- function(tol) {
+  .nonmem2rx$atol <- 10^(-tol)
+}
+
+.setRtol <- function(tol) {
+  .nonmem2rx$rtol <- 10^(-tol)
+}
+
+.setSsRtol <- function(tol) {
+  .nonmem2rx$ssRtol <-10^(-tol)
+}
+
+.setSsAtol <- function(tol) {
+  .nonmem2rx$ssAtol <- 10^(-tol)
+}

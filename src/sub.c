@@ -73,8 +73,38 @@ extern char * rc_dup_str(const char *s, const char *e);
 SEXP nonmem2rxSetAdvan(int advan);
 SEXP nonmem2rxSetTrans(int trans);
 
+SEXP nonmem2rxSetAtol(int tol);
+SEXP nonmem2rxSetRtol(int tol);
+SEXP nonmem2rxSetSsAtol(int tol);
+SEXP nonmem2rxSetSsRtol(int tol);
+
+
 void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
+  if (!strcmp("tol_statement1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetRtol(atoi(v));
+    return;
+  }
+  if (!strcmp("atol_statement1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetAtol(atoi(v));
+    return;
+  }
+  if (!strcmp("ssatol_statement1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetSsAtol(atoi(v));
+    return;
+  }
+  if (!strcmp("ssrtol_statement1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetSsRtol(atoi(v));
+    return;
+  }
   if (!strcmp("advan_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
