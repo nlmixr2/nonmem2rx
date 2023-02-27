@@ -78,31 +78,72 @@ SEXP nonmem2rxSetRtol(int tol);
 SEXP nonmem2rxSetSsAtol(int tol);
 SEXP nonmem2rxSetSsRtol(int tol);
 
-
-void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
-  char *name = (char*)pt.symbols[pn->symbol].name;
+static inline int nonmem2rx_getSubTol(const char* name, D_ParseNode *pn) {
   if (!strcmp("tol_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetRtol(atoi(v));
-    return;
+    return 1;
   }
   if (!strcmp("atol_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetAtol(atoi(v));
-    return;
+    return 1;
   }
   if (!strcmp("ssatol_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetSsAtol(atoi(v));
-    return;
+    return 1;
   }
   if (!strcmp("ssrtol_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetSsRtol(atoi(v));
+    return 1;
+  }
+  return 0;
+}
+
+static inline int nonmem2rx_sub_unsupported(const char* name, D_ParseNode *pn) {
+  if (!strcmp("unsupported_statement", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES '%s' unsupported for translation", v);
+    return 1;
+  }
+  if (!strcmp("atol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'ATOL' subroutine from external fortran unsupported for translation");
+    return 1;
+  }
+  if (!strcmp("ssatol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSATOL' subroutine from external fortran unsupported for translation");
+    return 1;
+  }
+  if (!strcmp("ssrtol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSRTOL' subroutine from external fortran unsupported for translation");
+    return 1;
+  }
+  if (!strcmp("tol_statement2", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$SUBROUTINES 'TOL' subroutine from external fortran unsupported for translation");
+    return 1;
+  }
+  return 0;
+}
+
+
+void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
+  char *name = (char*)pt.symbols[pn->symbol].name;
+  if (nonmem2rx_getSubTol(name, pn)) {
+    return;
+  }
+  if (nonmem2rx_sub_unsupported(name, pn)) {
     return;
   }
   if (!strcmp("advan_statement1", name)) {
@@ -115,33 +156,6 @@ void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetAdvan(atoi(v));
-    return;
-  }
-  if (!strcmp("unsupported_statement", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 0);
-    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES '%s' unsupported for translation", v);
-    return;
-  }
-  if (!strcmp("atol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'ATOL' subroutine from external fortran unsupported for translation");
-    return;
-  }
-  if (!strcmp("ssatol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSATOL' subroutine from external fortran unsupported for translation");
-    return;
-  }
-  if (!strcmp("ssrtol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSRTOL' subroutine from external fortran unsupported for translation");
-    return;
-  }
-  if (!strcmp("tol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'TOL' subroutine from external fortran unsupported for translation");
     return;
   }
   if (!strcmp("trans_statement1", name)) {
