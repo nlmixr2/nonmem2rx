@@ -1,6 +1,7 @@
 test_that("test abbrev  record", {
 
   .a <- function(abbrev, eq=list(), abbrevLin=0L) {
+    .Call(`_nonmem2rx_setRecord`, "$ABBREV")
     .clearNonmem2rx()
     .nonmem2rx$input <- c(OCC="OCC",SID="SID")
     .Call(`_nonmem2rx_trans_abbrec`, abbrev)
