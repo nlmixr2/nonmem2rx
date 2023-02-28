@@ -170,7 +170,7 @@ int abbrecProcessDirect1(const char* name, D_ParseNode *pn) {
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (strcmp(v, v2)) {
       sClear(&sbTransErr);
-      sAppend(&sbTransErr, "compartment '%s' needs differential equations defined", v);
+      sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", v, v2);
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
       return 1;
@@ -216,7 +216,7 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
     char *tmp = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (strcmp(abbrecVarType, tmp)) {
       sClear(&sbTransErr);
-      sAppend(&sbTransErr, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", abbrecVarType, tmp);
+      sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", abbrecVarType, tmp);
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
       return 1;
@@ -225,7 +225,7 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
     dataItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (!INTEGER(nonmem2rxReplaceIsDataItem(dataItem))[0]) {
       sClear(&sbTransErr);
-      sAppend(&sbTransErr, "$ABBREVIATED REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
+      sAppend(&sbTransErr, "REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
       return 1;
@@ -252,7 +252,7 @@ int abbrecProcessMultipleItem(const char* name, D_ParseNode *pn, int i) {
       char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       if (strcmp(v, v2)) {
         sClear(&sbTransErr);
-        sAppend(&sbTransErr, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
+        sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", v, v2);
         updateSyntaxCol();
         trans_syntax_error_report_fn0(sbTransErr.s);
       }

@@ -363,27 +363,29 @@ void updateSyntaxCol(void) {
 }
 
 static inline void finalizeSyntaxError(void) {
-  if(!rx_suppress_syntax_info){
-    if (eBuf[eBufLast] != '\0'){
-      eBufLast++;
-      Rprintf("\n:%03d: ", lastSyntaxErrorLine);
-      while (eBufLast != 0 && eBuf[eBufLast] != '\n') {
-        eBufLast--;
-      }
-      for (; eBuf[eBufLast] != '\0'; eBufLast++){
-        if (eBuf[eBufLast] == '\n'){
-          Rprintf("\n:%03d: ", ++lastSyntaxErrorLine);
-        } else{
-          Rprintf("%c", eBuf[eBufLast]);
+  if (firstErr.s[0] != '\0') {
+    if(!rx_suppress_syntax_info){
+      if (eBuf[eBufLast] != '\0'){
+        eBufLast++;
+        Rprintf("\n:%03d: ", lastSyntaxErrorLine);
+        while (eBufLast != 0 && eBuf[eBufLast] != '\n') {
+          eBufLast--;
+        }
+        for (; eBuf[eBufLast] != '\0'; eBufLast++){
+          if (eBuf[eBufLast] == '\n'){
+            Rprintf("\n:%03d: ", ++lastSyntaxErrorLine);
+          } else{
+            Rprintf("%c", eBuf[eBufLast]);
+          }
         }
       }
+      if (isEsc){
+        Rprintf("\n\033[1m================================================================================\033[0m\n");
+      }
+      else {
+        Rprintf("\n================================================================================\n");
+      }
     }
-    if (isEsc){
-      Rprintf("\n\033[1m================================================================================\033[0m\n");
-    }
-    else {
-      Rprintf("\n================================================================================\n");
-    }
+    Rf_errorcall(R_NilValue, firstErr.s);
   }
-  Rf_errorcall(R_NilValue, firstErr.s);
 }
