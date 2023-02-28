@@ -41,8 +41,6 @@ extern int syntaxErrorExtra;
 extern int isEsc;
 extern int rx_suppress_syntax_info;
 extern int lastSyntaxErrorLine;
-extern int rx_syntax_error;
-extern int firstErrD;
 extern sbuf firstErr;
 extern D_Parser *errP;
 extern int lastSyntaxErrorLine;
@@ -73,11 +71,10 @@ void trans_syntax_error_report_fn0(char *err){
     else {
       Rprintf("\n:ERR: %s:\n", err);
     }
-    if (firstErr.s[0] == 0) {
-      sAppend(&firstErr, _("%s"), err);
-    }
   }
-  rx_syntax_error = 1;
+  if (firstErr.s[0] == 0) {
+    sAppend(&firstErr, "%s", err);
+  }
 }
 
 static inline void printSyntaxErrorHeader(void) {
@@ -189,7 +186,9 @@ void trans_syntax_error_report_fn(char *err) {
     printErrorInfo(p, err, 0, 1);
     Rprintf("%s", sbErr1.s);
   }
-  rx_syntax_error = 1;
+  if (firstErr.s[0] == 0) {
+    sAppend(&firstErr, "%s", err);
+  }
 }
 
 static inline void printLineNumberAlone(Parser *p) {
@@ -199,7 +198,7 @@ static inline void printLineNumberAlone(Parser *p) {
   else {
     sAppend(&sbErr1, ":%03d: ", p->user.loc.line);
   }
-  if (firstErrD == 0) {
+  if (firstErr.s[0] == 0) {
     sAppend(&sbErr2, ":%03d: ", p->user.loc.line);
   }
 }
@@ -208,7 +207,7 @@ static inline void printErrorLineHighlight1(Parser *p, char *buf, char *after, i
   int i;
   for (i = 0; i < p->user.loc.col; i++){
     sAppend(&sbErr1, "%c", buf[i]);
-    if (firstErrD == 0) {
+    if (firstErr.s[0] == 0) {
       sAppend(&sbErr2, "%c", buf[i]);
     }
     if (i == len-2) { i++; break;}
@@ -219,12 +218,12 @@ static inline void printErrorLineHighlight1(Parser *p, char *buf, char *after, i
   else {
     sAppend(&sbErr1, "%c", buf[i++]);
   }
-  if (firstErrD == 0) {
+  if (firstErr.s[0] == 0) {
     sAppend(&sbErr2, "%c", buf[i-1]);
   }
   for (; i < len; i++){
     sAppend(&sbErr1, "%c", buf[i]);
-    if (firstErrD == 0) {
+    if (firstErr.s[0] == 0) {
       sAppend(&sbErr2, "%c", buf[i]);
     }
   }
@@ -234,7 +233,7 @@ static inline int printErrorLineHighligt2afterCol(Parser *p, char *buf, char *af
   if (!col || col == len) return 0;
   for (int i = 0; i < col; i++){
     sAppend(&sbErr1, " ");
-    if (firstErrD == 0) {
+    if (firstErr.s[0] == 0) {
       sAppendN(&sbErr2, " ", 1);
     }
     if (i == len-2) { i++; break;}
@@ -244,7 +243,7 @@ static inline int printErrorLineHighligt2afterCol(Parser *p, char *buf, char *af
     for (int i = len; i--;) {
       sAppend(&sbErr1, "~");
       _rxode2_reallyHasAfter=1;
-      if (firstErrD == 0) {
+      if (firstErr.s[0] == 0) {
         sAppendN(&sbErr2, "~", 1);
       }
     }
@@ -255,7 +254,7 @@ static inline int printErrorLineHighligt2afterCol(Parser *p, char *buf, char *af
   else {
     sAppend(&sbErr1, "^");
   }
-  if (firstErrD == 0) {
+  if (firstErr.s[0] == 0) {
     sAppendN(&sbErr2, "^", 1);
   }
   return 1;
@@ -268,7 +267,7 @@ static inline void printErrorLineHighligt2after(Parser *p, char *buf, char *afte
   if (!printErrorLineHighligt2afterCol(p, buf, after, len, col)) {
     for (int i = 0; i < p->user.loc.col; i++){
       sAppend(&sbErr1, " ");
-      if (firstErrD == 0) {
+      if (firstErr.s[0] == 0) {
         sAppendN(&sbErr2, " ", 1);
       }
       if (i == len-2) { i++; break;}
@@ -279,7 +278,7 @@ static inline void printErrorLineHighligt2after(Parser *p, char *buf, char *afte
     else {
       sAppend(&sbErr1, "^");
     }
-    if (firstErrD == 0) {
+    if (firstErr.s[0] == 0) {
       sAppendN(&sbErr2, "^", 1);
     }
   }
@@ -287,7 +286,7 @@ static inline void printErrorLineHighligt2after(Parser *p, char *buf, char *afte
 
 static inline void printErrorLineHighlight2(Parser *p, char *buf, char *after, int len) {
   sAppend(&sbErr1, "\n      ");
-  if (firstErrD == 0) {
+  if (firstErr.s[0] == 0) {
     sAppendN(&sbErr2, "\n      ", 7);
   }
   if (_rxode2_reallyHasAfter == 1 && after){
@@ -295,7 +294,7 @@ static inline void printErrorLineHighlight2(Parser *p, char *buf, char *after, i
   } else {
     for (int i = 0; i < p->user.loc.col; i++){
       sAppendN(&sbErr1, " ", 1);
-      if (firstErrD == 0) {
+      if (firstErr.s[0] == 0) {
         sAppendN(&sbErr2, " ", 1);
       }
       if (i == len-2) { i++; break;}
@@ -306,7 +305,7 @@ static inline void printErrorLineHighlight2(Parser *p, char *buf, char *after, i
     else {
       sAppendN(&sbErr1, "^", 1);
     }
-    if (firstErrD == 0) {
+    if (firstErr.s[0] == 0) {
       sAppendN(&sbErr2, "^", 1);
     }
   }
@@ -340,13 +339,11 @@ static void nonmem2rxSyntaxError(struct D_Parser *ap) {
     printErrorLineHiglightRegion(p, after);
     printErrorInfo(p, 0, after, 0);
     Rprintf("%s", sbErr1.s);
-    if (firstErrD == 0) {
-      firstErrD = 1;
+    if (firstErr.s[0] == 0) {
       sAppend(&firstErr, "\n%s", sbErr2.s);
       sAppendN(&firstErr, "\nmore errors could be listed above", 34);
     }
   }
-  rx_syntax_error = 1;
 }
 
 void updateSyntaxCol(void) {
@@ -366,29 +363,27 @@ void updateSyntaxCol(void) {
 }
 
 static inline void finalizeSyntaxError(void) {
-  if (firstErr.s[0] != 0){
-    if(!rx_suppress_syntax_info){
-      if (eBuf[eBufLast] != '\0'){
-        eBufLast++;
-        Rprintf("\n:%03d: ", lastSyntaxErrorLine);
-        while (eBufLast != 0 && eBuf[eBufLast] != '\n') {
-          eBufLast--;
-        }
-        for (; eBuf[eBufLast] != '\0'; eBufLast++){
-          if (eBuf[eBufLast] == '\n'){
-            Rprintf("\n:%03d: ", ++lastSyntaxErrorLine);
-          } else{
-            Rprintf("%c", eBuf[eBufLast]);
-          }
-        }
+  if(!rx_suppress_syntax_info){
+    if (eBuf[eBufLast] != '\0'){
+      eBufLast++;
+      Rprintf("\n:%03d: ", lastSyntaxErrorLine);
+      while (eBufLast != 0 && eBuf[eBufLast] != '\n') {
+        eBufLast--;
       }
-      if (isEsc){
-        Rprintf("\n\033[1m================================================================================\033[0m\n");
-      }
-      else {
-        Rprintf("\n================================================================================\n");
+      for (; eBuf[eBufLast] != '\0'; eBufLast++){
+        if (eBuf[eBufLast] == '\n'){
+          Rprintf("\n:%03d: ", ++lastSyntaxErrorLine);
+        } else{
+          Rprintf("%c", eBuf[eBufLast]);
+        }
       }
     }
-    Rf_errorcall(R_NilValue, firstErr.s);
+    if (isEsc){
+      Rprintf("\n\033[1m================================================================================\033[0m\n");
+    }
+    else {
+      Rprintf("\n================================================================================\n");
+    }
   }
+  Rf_errorcall(R_NilValue, firstErr.s);
 }

@@ -41,8 +41,6 @@ int eBufFree=0;
 int eBufLast=0;
 int syntaxErrorExtra = 0;
 int isEsc=0;
-int rx_syntax_error = 0;
-int firstErrD=0;
 int lastSyntaxErrorLine=0;
 extern const char *lastStr;
 extern int lastStrLoc;
@@ -309,12 +307,9 @@ void trans_abbrec(const char* parse){
   gBuf = (char*)(parse);
   eBuf = gBuf;
   eBufLast = 0;
-  sClear(&firstErr);
-  firstErrD=0;
   gBufFree=0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
-    rx_syntax_error = 1;
   } else {
     wprint_parsetree_abbrec(parser_tables_nonmem2rxAbbrevRec , _pn, 0, wprint_node_abbrec, NULL);
   }
@@ -323,6 +318,7 @@ void trans_abbrec(const char* parse){
 
 SEXP _nonmem2rx_trans_abbrec(SEXP in) {
   sClear(&curLine);
+  sClear(&firstErr);
   trans_abbrec(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;

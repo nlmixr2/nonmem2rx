@@ -2,6 +2,7 @@ test_that("test replacement", {
 
   .r <- function(abbrev, code="", eq="no") {
     .clearNonmem2rx()
+    .Call(`_nonmem2rx_setRecord`, "$ABBREV")
     .nonmem2rx$input <- c(OCC="OCC",SID="SID", DOSN="DOSN")
     if (length(code) != 1) code <-paste(code, collapse="\n")
     if (length(eq) != 1) eq <-paste(eq, collapse="\n")
