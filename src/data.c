@@ -29,8 +29,13 @@
 #define freeP nonmem2rx_data_freeP
 #define parseFreeLast nonmem2rx_data_parseFreeLast
 #define parseFree nonmem2rx_data_parseFree
+#include "parseSyntaxErrors.h"
 
 extern D_ParserTables parser_tables_nonmem2rxData;
+
+extern char *eBuf;
+extern int eBufLast;
+extern sbuf sbTransErr;
 
 char *gBuf;
 int gBufFree=0;
@@ -142,20 +147,23 @@ void trans_data(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
+  
+  eBuf = gBuf;
+  eBufLast = 0;
+  errP = curP;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error $DATA record");
   } else {
     wprint_parsetree_data(parser_tables_nonmem2rxData, _pn, 0, wprint_node_data, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP _nonmem2rx_trans_data(SEXP in) {
