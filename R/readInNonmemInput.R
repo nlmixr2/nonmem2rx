@@ -93,12 +93,7 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
-  .ret <- .fixNonmemTies(.data, delta)
-  .wid <- which(tolower(names(.ret)) == "id")
-  .ret$.rownum <- seq_along(.ret[,.wid])
-  .ret <- .ret[order(.ret[,.wid], .ret$.rownum),]
-  .ret <- .ret[,names(.ret) != ".rownum"]
-  .ret
+  .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it
 #'  
@@ -141,7 +136,6 @@
                              x
                            }, character(1), USE.NAMES=FALSE)
   }
-  # for some nonmem output, the id and time are not in order
   .minfo("done")
   .ret
 }
@@ -255,10 +249,6 @@
   if (length(.w) <= 1) return(NULL)
   .ret <- .ret[,.w, drop=FALSE]
   # here drop any etas that are non influential
-    # for some nonmem output, the id and time are not in order
-  .wid <- which(tolower(names(.ret)) == "id")
-  if (length(.wid) != 1L) return(NULL)
-  .wtime <- which(tolower(names(.ret)) == "time")
   .ret <- .getValidationEtas(.ret, nonmemData, rxModel)
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),

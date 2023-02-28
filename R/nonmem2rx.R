@@ -657,20 +657,26 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .wid <- which(tolower(names(.params)) == "id")
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
-        .params <- .params[order(.params[, .wid]), ]
         .widNm <- which(tolower(names(.nonmemData)) == "id")
         if (.widNm == 1L) {
           .idNm <- unique(.nonmemData[,.widNm])
+          .params <- do.call("rbind",
+                  lapply(.idNm, function(id) {
+                    return(.params[.params[,.wid] == id,])
+                  }))
           if (!all(.idNm == .params[,.wid])) {
             .minfo("id values between input and output do not match, skipping IPRED check")
             .doIpred <- FALSE
           }
         }
         .params <- .params[,-.wid]
+        .nonmemData2 <- .nonmemData
+        # dummy id to match the .params
+        .nonmemData2[,.wid] <- as.integer(factor(paste(.nonmemData2[,.wid])))
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
-        .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
+        .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
                                    covsInterpolation="nocb",
                                    atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
                                    ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
