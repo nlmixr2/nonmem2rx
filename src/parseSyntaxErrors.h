@@ -35,9 +35,8 @@ char *getLine (char *src, int line, int *lloc) {
 
 extern sbuf sbErr1;
 extern sbuf sbErr2;
-extern char *gBuf;
-extern int gBufFree;
-extern int gBufLast;
+extern char *eBuf;
+extern int eBufLast;
 extern int syntaxErrorExtra;
 extern int isEsc;
 extern int rx_suppress_syntax_info;
@@ -74,6 +73,9 @@ void trans_syntax_error_report_fn0(char *err){
     else {
       Rprintf("\n:ERR: %s:\n", err);
     }
+    if (firstErr.s[0] == 0) {
+      sAppend(&firstErr, _("%s"), err);
+    }
   }
   rx_syntax_error = 1;
 }
@@ -93,7 +95,7 @@ static inline void printSyntaxErrorHeader(void) {
 static inline void printPriorLines(Parser *p) {
   char *buf;
   for (; lastSyntaxErrorLine < p->user.loc.line; lastSyntaxErrorLine++){
-    buf = getLine(gBuf, lastSyntaxErrorLine, &gBufLast);
+    buf = getLine(eBuf, lastSyntaxErrorLine, &eBufLast);
     Rprintf("\n:%03d: %s", lastSyntaxErrorLine, buf);
     R_Free(buf);
   }
@@ -119,7 +121,7 @@ static inline void printErrorInfo(Parser *p, char *err, char *after, int printLi
       else {
         Rprintf(_("\n\n%s syntax error after '%s'\n"),  record, after);
       }
-      if (firstErrD == 0) {
+      if (firstErr.s[0] == 0) {
         sAppend(&firstErr, _("%s syntax error after '%s':\n"), record, after);
       }
     }
@@ -130,7 +132,7 @@ static inline void printErrorInfo(Parser *p, char *err, char *after, int printLi
       else{
         Rprintf(_("\n\n%s syntax error:\n"), record);
       }
-      if (firstErrD == 0) {
+      if (firstErr.s[0] == 0) {
         sAppend(&firstErr, "%s syntax error:\n", record);
       }
     }
@@ -138,7 +140,7 @@ static inline void printErrorInfo(Parser *p, char *err, char *after, int printLi
 }
 
 static inline void printErrorLineHighlightPoint(Parser *p) {
-  char *buf = getLine(gBuf, p->user.loc.line, &gBufLast);
+  char *buf = getLine(eBuf, p->user.loc.line, &eBufLast);
   sAppend(&sbErr1, "      ");
   int i, len = strlen(buf);
   for (i = 0; i < p->user.loc.col; i++){
@@ -311,7 +313,7 @@ static inline void printErrorLineHighlight2(Parser *p, char *buf, char *after, i
 }
 
 static inline void printErrorLineHiglightRegion(Parser *p, char *after) {
-  char *buf = getLine(gBuf, p->user.loc.line, &gBufLast);
+  char *buf = getLine(eBuf, p->user.loc.line, &eBufLast);
   if (lastSyntaxErrorLine < p->user.loc.line) lastSyntaxErrorLine++;
   printLineNumberAlone(p);
   int len= strlen(buf);
@@ -349,8 +351,8 @@ static void nonmem2rxSyntaxError(struct D_Parser *ap) {
 
 void updateSyntaxCol(void) {
   int i = lastStrLoc, lineNum=1, colNum=0;
-  for(i = 0; gBuf[i] != '\0' && lastStr != gBuf + i; i++){
-    if(gBuf[i] == '\n'){
+  for(i = 0; eBuf[i] != '\0' && lastStr != eBuf + i; i++){
+    if(eBuf[i] == '\n'){
       lineNum++;
       colNum=0;
     } else {
@@ -361,4 +363,32 @@ void updateSyntaxCol(void) {
   Parser *p = (Parser *)errP;
   p->user.loc.line=lineNum;
   p->user.loc.col=colNum;
+}
+
+static inline void finalizeSyntaxError(void) {
+  if (firstErr.s[0] != 0){
+    if(!rx_suppress_syntax_info){
+      if (eBuf[eBufLast] != '\0'){
+        eBufLast++;
+        Rprintf("\n:%03d: ", lastSyntaxErrorLine);
+        while (eBufLast != 0 && eBuf[eBufLast] != '\n') {
+          eBufLast--;
+        }
+        for (; eBuf[eBufLast] != '\0'; eBufLast++){
+          if (eBuf[eBufLast] == '\n'){
+            Rprintf("\n:%03d: ", ++lastSyntaxErrorLine);
+          } else{
+            Rprintf("%c", eBuf[eBufLast]);
+          }
+        }
+      }
+      if (isEsc){
+        Rprintf("\n\033[1m================================================================================\033[0m\n");
+      }
+      else {
+        Rprintf("\n================================================================================\n");
+      }
+    }
+    Rf_errorcall(R_NilValue, firstErr.s);
+  }
 }

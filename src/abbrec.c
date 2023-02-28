@@ -36,8 +36,9 @@ sbuf sbErr1;
 sbuf sbErr2;
 sbuf sbTransErr;
 sbuf firstErr;
-char *gBuf;
-int gBufFree=0;
+char *eBuf;
+int eBufFree=0;
+int eBufLast=0;
 int syntaxErrorExtra = 0;
 int isEsc=0;
 int rx_syntax_error = 0;
@@ -45,7 +46,6 @@ int firstErrD=0;
 int lastSyntaxErrorLine=0;
 extern const char *lastStr;
 extern int lastStrLoc;
-
 
 int _rxode2_reallyHasAfter = 0;
 int rx_suppress_syntax_info = 0;
@@ -59,7 +59,9 @@ SEXP _nonmem2rx_setRecord(SEXP rec) {
 
 extern D_ParserTables nonmem2rxAbbrevRec;
 
+char* gBuf;
 int gBufLast = 0;
+int gBufFree = 0;
 D_Parser *curP=NULL;
 D_Parser *errP=NULL;
 D_ParseNode *_pn = 0;
@@ -305,16 +307,18 @@ void trans_abbrec(const char* parse){
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
+  eBuf = gBuf;
+  eBufLast = 0;
+  sClear(&firstErr);
+  firstErrD=0;
   gBufFree=0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
-    //rx_syntax_error = 1;
-    Rprintf("\n");
-    parseFree(0);
-    Rf_errorcall(R_NilValue, firstErr.s);
+    rx_syntax_error = 1;
   } else {
     wprint_parsetree_abbrec(parser_tables_nonmem2rxAbbrevRec , _pn, 0, wprint_node_abbrec, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP _nonmem2rx_trans_abbrec(SEXP in) {
