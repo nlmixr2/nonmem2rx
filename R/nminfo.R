@@ -105,9 +105,12 @@ nminfo <- function(file,
                                   if (n == "ID") return("ID")
                                   paste0("eta",substr(n, 5, nchar(n)-1))
                                 }, character(1), USE.NAMES=FALSE)
-          .ret$eta <- .phi
-          .uses <- c(.uses, "phi")
-        } else if (verbose) {
+          .wid <- which(tolower(names(.phi)) == "ID")
+          if (length(.wid) == 1L) {
+            .phi <- .phi[order(.phi),]
+            .ret$eta <- .phi
+            .uses <- c(.uses, "phi")
+          }
           .minfo("phi file does not contain etas")
         }
         if (verbose) .minfo("done")
