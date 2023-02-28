@@ -107,7 +107,7 @@ nminfo <- function(file,
                                 }, character(1), USE.NAMES=FALSE)
           .wid <- which(tolower(names(.phi)) == "ID")
           if (length(.wid) == 1L) {
-            .phi <- .phi[order(.phi),]
+            .phi <- .phi[order(.phi[,.wid]),]
             .ret$eta <- .phi
             .uses <- c(.uses, "phi")
           }
