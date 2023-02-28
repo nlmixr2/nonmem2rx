@@ -93,7 +93,13 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
-  .fixNonmemTies(.data, delta)
+  .ret <- .fixNonmemTies(.data, delta)
+  .wid <- which(tolower(names(.ret)) == "id")
+  if (length(.wid) != 1L) return(NULL)
+  .wtime <- which(tolower(names(.ret)) == "time")
+  if (length(.wtime) != 1L) return(NULL)
+  .ret <- .ret[order(.ret[,.wid], .ret[,.wtime]),]
+  .ret
 }
 #' This reads in the nonmem output file that has the ipred data in it
 #'  
