@@ -3,7 +3,11 @@
 nonmem2rxRec.abb <- function(x) {
   .x <- x
   class(.x) <- NULL
+  .i <- 1
+  .rec <- .transRecordsDisplay[class(x)[1]]
+  .ln <- length(.x)
   for (.cur in .x) {
+    if (.ln > 1) .Call(`_nonmem2rx_setRecord`, paste0(.rec, " #", .i))
     .Call(`_nonmem2rx_trans_abbrec`, .cur)
   }
 }

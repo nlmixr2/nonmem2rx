@@ -173,6 +173,7 @@ int abbrecProcessDirect1(const char* name, D_ParseNode *pn) {
       sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", v, v2);
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
       return 1;
     }
     xpn = d_get_child(pn, 2);
@@ -219,6 +220,7 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
       sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", abbrecVarType, tmp);
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
       return 1;
     }
     xpn = d_get_child(pn, 2);
@@ -228,6 +230,7 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
       sAppend(&sbTransErr, "REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
       return 1;
     }
     // parse sequence by continuing parse tree
@@ -255,6 +258,7 @@ int abbrecProcessMultipleItem(const char* name, D_ParseNode *pn, int i) {
         sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", v, v2);
         updateSyntaxCol();
         trans_syntax_error_report_fn0(sbTransErr.s);
+        finalizeSyntaxError();
       }
       abbrecVarType = v;
     }

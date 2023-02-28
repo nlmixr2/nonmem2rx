@@ -363,9 +363,9 @@ void updateSyntaxCol(void) {
 }
 
 static inline void finalizeSyntaxError(void) {
-  if (firstErr.s[0] != '\0') {
+  if (firstErr.s[0] != 0) {
     if(!rx_suppress_syntax_info){
-      if (eBuf[eBufLast] != '\0'){
+      if (eBuf[eBufLast] != 0){
         eBufLast++;
         Rprintf("\n:%03d: ", lastSyntaxErrorLine);
         while (eBufLast != 0 && eBuf[eBufLast] != '\n') {
@@ -386,6 +386,8 @@ static inline void finalizeSyntaxError(void) {
         Rprintf("\n================================================================================\n");
       }
     }
-    Rf_errorcall(R_NilValue, firstErr.s);
+    char *v= rc_dup_str(firstErr.s, 0);
+    sClear(&firstErr);
+    Rf_errorcall(R_NilValue, v);
   }
 }
