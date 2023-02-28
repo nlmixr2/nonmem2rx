@@ -20,7 +20,7 @@
 #define isEsc nonmem2rx_isEsc
 #define syntaxErrorExtra nonmem2rx_syntaxErrorExtra
 
-char *getLine (char *src, int line, int *lloc) {
+static inline char *getLine (char *src, int line, int *lloc) {
   int cur = 1, col=0, i;
   for(i = 0; src[i] != '\0' && cur != line; i++){
     if(src[i] == '\n') cur++;
@@ -53,7 +53,7 @@ extern int _rxode2_reallyHasAfter;
 
 extern const char *record;
 
-void trans_syntax_error_report_fn0(char *err){
+static inline void trans_syntax_error_report_fn0(char *err){
   if (!rx_suppress_syntax_info){
     if (lastSyntaxErrorLine == 0){
       if (isEsc) {
@@ -174,7 +174,7 @@ static inline void printErrorLineHighlightPoint(Parser *p) {
   syntaxErrorExtra=0;
 }
 
-void trans_syntax_error_report_fn(char *err) {
+static inline void trans_syntax_error_report_fn(char *err) {
   if (!rx_suppress_syntax_info){
     printSyntaxErrorHeader();
     Parser *p = (Parser *)errP;
@@ -322,7 +322,7 @@ static inline void printErrorLineHiglightRegion(Parser *p, char *after) {
 }
 
 
-static void nonmem2rxSyntaxError(struct D_Parser *ap) {
+static inline void nonmem2rxSyntaxError(struct D_Parser *ap) {
   if (!rx_suppress_syntax_info){
     printSyntaxErrorHeader();
     Parser *p = (Parser *)ap;
@@ -346,7 +346,7 @@ static void nonmem2rxSyntaxError(struct D_Parser *ap) {
   }
 }
 
-void updateSyntaxCol(void) {
+static inline void updateSyntaxCol(void) {
   int i = lastStrLoc, lineNum=1, colNum=0;
   for(i = 0; eBuf[i] != '\0' && lastStr != eBuf + i; i++){
     if(eBuf[i] == '\n'){

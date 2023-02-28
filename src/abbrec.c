@@ -25,7 +25,6 @@
 #define gBufFree nonmem2rx_abbrec_gBufFree
 #define gBufLast nonmem2rx_abbrec_gBufLast
 #define curP nonmem2rx_abbrec_curP
-#define errP nonmem2rx_curP
 #define _pn nonmem2rx_abbrec__pn
 #define freeP nonmem2rx_abbrec_freeP
 #define parseFreeLast nonmem2rx_abbrec_parseFreeLast
@@ -305,11 +304,11 @@ void trans_abbrec(const char* parse){
   curP->initial_scope = NULL;
   curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
-  errP=curP;
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   eBuf = gBuf;
+  errP = curP;
   eBufLast = 0;
   gBufFree=0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
