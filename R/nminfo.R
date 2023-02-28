@@ -107,7 +107,6 @@ nminfo <- function(file,
                                 }, character(1), USE.NAMES=FALSE)
           .ret$eta <- .phi
           .uses <- c(.uses, "phi")
-        } else if (verbose) {
           .minfo("phi file does not contain etas")
         }
         if (verbose) .minfo("done")

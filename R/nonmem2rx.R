@@ -655,15 +655,35 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         .params[[paste0("err.", .rx$predDf$var)]] <- 0
       }
       .wid <- which(tolower(names(.params)) == "id")
-      if (length(.wid) == 1L) .params <- .params[,-.wid]
-      .minfo("solving ipred problem")
-      .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
-                                 covsInterpolation="nocb",
-                                 atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
-                                 ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
-                                 addDosing = FALSE))
-      .minfo("done")
-      if (!inherits(.ipredSolve, "try-error")) {
+      .doIpred <- TRUE
+      if (length(.wid) == 1L) {
+        .widNm <- which(tolower(names(.nonmemData)) == "id")
+        if (.widNm == 1L) {
+          .idNm <- unique(.nonmemData[,.widNm])
+          .params <- do.call("rbind",
+                  lapply(.idNm, function(id) {
+                    return(.params[.params[,.wid] == id,])
+                  }))
+          if (!all(.idNm == .params[,.wid])) {
+            .minfo("id values between input and output do not match, skipping IPRED check")
+            .doIpred <- FALSE
+          }
+        }
+        .params <- .params[,-.wid]
+        .nonmemData2 <- .nonmemData
+        # dummy id to match the .params
+        .nonmemData2[,.wid] <- as.integer(factor(paste(.nonmemData2[,.wid])))
+      }
+      if (.doIpred) {
+        .minfo("solving ipred problem")
+        .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
+                                   covsInterpolation="nocb",
+                                   atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                   ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
+                                   addDosing = FALSE))
+        .minfo("done")
+      }
+      if (.doIpred && !inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.ipredSolve)) == "y")
           .y <- names(.ipredSolve)[.w]
