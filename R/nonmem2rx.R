@@ -657,6 +657,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .wid <- which(tolower(names(.params)) == "id")
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
+        .params <- .params[order(.params[, .wid]), ]
         .widNm <- which(tolower(names(.nonmemData)) == "id")
         if (.widNm == 1L) {
           .idNm <- unique(.nonmemData[,.widNm])
