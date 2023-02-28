@@ -142,11 +142,6 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   # for some nonmem output, the id and time are not in order
-  .wid <- which(tolower(names(.ret)) == "id")
-  if (length(.wid) != 1L) return(NULL)
-  .wtime <- which(tolower(names(.ret)) == "time")
-  if (length(.wtime) != 1L) return(NULL)
-  .ret <- .ret[order(.ret[,.wid], .ret[,.wtime]),]
   .minfo("done")
   .ret
 }
@@ -203,12 +198,6 @@
                             x
                           }, character(1), USE.NAMES=FALSE)
   }
-  # for some nonmem output, the id and time are not in order
-  .wid <- which(tolower(names(.ret)) == "id")
-  if (length(.wid) != 1L) return(NULL)
-  .wtime <- which(tolower(names(.ret)) == "time")
-  if (length(.wtime) != 1L) return(NULL)
-  .ret <- .ret[order(.ret[,.wid], .ret[,.wtime]),]
   .minfo("done")
   .ret
 }
@@ -270,11 +259,6 @@
   .wid <- which(tolower(names(.ret)) == "id")
   if (length(.wid) != 1L) return(NULL)
   .wtime <- which(tolower(names(.ret)) == "time")
-  if (length(.wtime) == 1L) {
-    .ret <- .ret[order(.ret[,.wid], .ret[,.wtime]),]
-  } else {
-    .ret <- .ret[order(.ret[,.wid]),]
-  }
   .ret <- .getValidationEtas(.ret, nonmemData, rxModel)
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
