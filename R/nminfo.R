@@ -98,14 +98,18 @@ nminfo <- function(file,
       if (verbose) .minfo("reading in phi file")
       .phi <- nmtab(.phiFile)
       if (is.null(.phi)) {
-        .phi <- .phi[,which(regexpr("(ID|ETA[(])", names(.phi)) != -1)]
-        names(.phi) <- vapply(names(.phi),
-                              function(n) {
-                                if (n == "ID") return("ID")
-                                paste0("eta",substr(n, 5, nchar(n)-1))
-                              }, character(1), USE.NAMES=FALSE)
-        .ret$eta <- .phi
-        .uses <- c(.uses, "phi")
+        .phi <- .phi[,which(regexpr("(ID|ETA[(])", names(.phi)) != -1), drop=FALSE]
+        if (length(.phi) > 1) {
+          names(.phi) <- vapply(names(.phi),
+                                function(n) {
+                                  if (n == "ID") return("ID")
+                                  paste0("eta",substr(n, 5, nchar(n)-1))
+                                }, character(1), USE.NAMES=FALSE)
+          .ret$eta <- .phi
+          .uses <- c(.uses, "phi")
+        } else if (verbose) {
+          .minfo("phi file does not contain etas")
+        }
         if (verbose) .minfo("done")
       } else if (verbose) {
         .minfo("problems reading phi file")

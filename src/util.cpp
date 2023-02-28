@@ -255,14 +255,15 @@ extern "C" SEXP nonmem2rxNeedNmevid(void) {
 
 
 extern "C" SEXP nonmem2rxPushTableInfo(const char *file, int hasPred, int fullData,
-                                       int hasIpred, int hasEta) {
+                                       int hasIpred, int hasEta, const char *fortranFormat) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function pushTableInfo(".pushTableInfo", nonmem2rxNs);
   pushTableInfo(file, LogicalVector::create(hasPred),
                 LogicalVector::create(fullData),
                 LogicalVector::create(hasIpred),
-                LogicalVector::create(hasEta));
+                LogicalVector::create(hasEta),
+                fortranFormat);
   END_RCPP
 }
 
@@ -461,4 +462,33 @@ extern "C" SEXP nonmem2rxNeedExit(void) {
   Function needExit(".needExit", nonmem2rxNs);
   return needExit();
   END_RCPP
+}
+
+extern "C" SEXP nonmem2rxSetAtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function setAtol(".setAtol", nonmem2rxNs);
+  return setAtol(tol);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxSetRtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function setRtol(".setRtol", nonmem2rxNs);
+  return setRtol(tol);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxSetSsAtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function setSsAtol(".setSsAtol", nonmem2rxNs);
+  return setSsAtol(tol);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxSetSsRtol(int tol) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function setSsRtol(".setSsRtol", nonmem2rxNs);
+  return setSsRtol(tol);
+  END_RCPP  
 }

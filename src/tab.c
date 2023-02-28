@@ -77,10 +77,17 @@ int tableHasIPred=0;
 int tableHasEta=0;
 char *tableFileName = NULL;
 
+const char *nonmem2rx_defaultFormat="s1PE11.4";
+const char *nonmem2rx_tableFormat = NULL;
+
 void wprint_parsetree_tab(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
-  if (!strcmp("identifier_nm", name)) {
+  if (!strcmp("format_statement", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rx_tableFormat = v;
+  } else if (!strcmp("identifier_nm", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     if (!nmrxstrcmpi("noappend", v)) {
       tableHasPred=0;
@@ -151,13 +158,14 @@ void trans_tab(const char* parse){
 }
 
 SEXP nonmem2rxPushTableInfo(const char *file, int hasPred, int fullData,
-                             int hasIpred, int hasEta);
+                            int hasIpred, int hasEta, const char *fortranFormat);
 
 SEXP _nonmem2rx_trans_tab(SEXP in) {
   tableHasPred  = 1;
   tableFullData = 1;
   tableHasIPred = 0;
   tableHasEta   = 0;
+  nonmem2rx_tableFormat = nonmem2rx_defaultFormat;
   tableHasExplicitPred = 0;
   tableFileName = NULL;
   trans_tab(R_CHAR(STRING_ELT(in, 0)));
@@ -165,7 +173,7 @@ SEXP _nonmem2rx_trans_tab(SEXP in) {
   if (tableFileName != NULL) {
     if (tableHasExplicitPred & !tableHasPred) tableHasPred=1;
     nonmem2rxPushTableInfo(tableFileName, tableHasPred, tableFullData,
-                           tableHasIPred, tableHasEta);
+                           tableHasIPred, tableHasEta, nonmem2rx_tableFormat);
   }
   return R_NilValue;
 }

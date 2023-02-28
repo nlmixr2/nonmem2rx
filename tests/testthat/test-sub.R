@@ -1,9 +1,13 @@
 test_that("test sub", {
 
-  .s <- function(sub, eq="no") {
+  .s <- function(sub, eq="no", tol=10, atol=12, ssTol=12, ssAtol=12) {
     .clearNonmem2rx()
     nonmem2rxRec.sub(sub)
     expect_equal(c(advan=.nonmem2rx$advan, trans=.nonmem2rx$trans, abbrevLin=.nonmem2rx$abbrevLin), eq)
+    expect_equal(.nonmem2rx$rtol, 10^(-tol))
+    expect_equal(.nonmem2rx$atol, 10^(-atol))
+    expect_equal(.nonmem2rx$ssRtol, 10^(-ssTol))
+    expect_equal(.nonmem2rx$ssAtol, 10^(-ssAtol))
   }
 
   .s("ADVAN1 TRANS1", c(advan=1L, trans=1L, abbrevLin=1L))
@@ -15,8 +19,24 @@ test_that("test sub", {
   expect_error(.s("ADVAN7"), "General Linear model translation not supported")
   expect_error(.s("ADVAN9"), "Differential Algebra Equations")
   expect_error(.s("ADVAN15"), "Differential Algebra Equations")
+
   expect_error(.s("INFN=matt.f"), "SUBROUTINES 'INFN'")
   expect_error(.s("TOL=matt.f"), "SUBROUTINES 'TOL'")
-  expect_warning(.s("ADVAN13 TOL=10", c(advan=13L, trans=0L, abbrevLin=0L)),
-                 "SUBROUTINES TOL=")  
+  expect_error(.s("ATOL=matt.f"), "SUBROUTINES 'ATOL'")
+  expect_error(.s("SSATOL=matt.f"), "SUBROUTINES 'SSATOL'")
+
+  #expect_error(.s("SSTOL=matt.f"), "SUBROUTINES 'SSTOL'")
+
+  .s("ADVAN13 TOL=10", c(advan=13L, trans=0L, abbrevLin=0L),
+     tol=10, ssTol=10)
+
+  .s("ADVAN13 TOL=10 SSTOL=12", c(advan=13L, trans=0L, abbrevLin=0L),
+     tol=10, ssTol=12)
+
+  .s("ADVAN13 ATOL=10", c(advan=13L, trans=0L, abbrevLin=0L),
+     tol=10, ssAtol=10)
+
+  .s("ADVAN13 TOL=10 SSATOL=12", c(advan=13L, trans=0L, abbrevLin=0L),
+     tol=10, ssAtol=12)
+
 })

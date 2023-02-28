@@ -45,11 +45,11 @@ nmxml <- function(xml) {
                                    paste(paste0("eta", seq_len(.maxElt)), collapse="+"),
                                    "~", deparse1(.omega), "})")))
 
-    .sigma <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:sigma"),"nm:row/nm:col"))
+  .sigma <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:sigma"),"nm:row/nm:col"))
 
   .maxElt <- sqrt(1 + length(.sigma) * 8)/2 - 1/2
   .sigma <- eval(parse(text=paste0("lotri::lotri({",
-                                   paste(paste0("eta", seq_len(.maxElt)), collapse="+"),
+                                   paste(paste0("eps", seq_len(.maxElt)), collapse="+"),
                                    "~", deparse1(.sigma), "})")))
 
   .cov <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"),"nm:row/nm:col"))

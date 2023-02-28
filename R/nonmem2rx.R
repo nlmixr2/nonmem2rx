@@ -53,6 +53,12 @@
   .nonmem2rx$hasVol <- FALSE
   .nonmem2rx$needYtype <- FALSE
   .nonmem2rx$needExit <- FALSE
+  .nonmem2rx$atol <- 1e-12
+  .nonmem2rx$rtol <- 1e-12
+  .nonmem2rx$ssAtolSet <- FALSE
+  .nonmem2rx$ssAtol <- 1e-12
+  .nonmem2rx$ssRtolSet <- FALSE
+  .nonmem2rx$ssRtol <- 1e-12
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -226,37 +232,23 @@
 #'
 #' @param rxui ui
 #' @inheritParams nonmem2rx
-#' @param cmtName compartment names to replace
-#' @param useExt Use the ext file
 #' @return List with new ui and sigma
 #' @noRd
 #' @author Matthew L. Fidler
-.updateRxWithFinalParameters <- function(rxui, file, sigma, lst, ext, useExt=TRUE) {
-  .lstFile <- paste0(tools::file_path_sans_ext(file), lst)
-  .extFile <- paste0(tools::file_path_sans_ext(file), ext)
-  if (useExt && file.exists(.extFile)) {
-    .fin <- try(nmext(.extFile), silent=TRUE)
-    if (inherits(.fin, "try-error") && file.exists(.lstFile)) {
-      .fin <- try(nmlst(.lstFile), silent=TRUE)
-    }
-  } else if (file.exists(.lstFile)) {
-    .fin <- try(nmlst(.lstFile), silent=TRUE)
-  } else {
-    return(list(rx=rxui, sigma=NULL))
-  }
+.updateRxWithFinalParameters <- function(rxui, lstInfo) {
   .rx <- rxui
-  if (inherits(.fin, "try-error")) {
-    warning("error reading estimates from output", call.=FALSE)
-    .fin <- list(theta=NULL, eta=NULL, eps=NULL)
-  }
-  if (!is.null(.fin$theta)) {
-    .theta <- .fin$theta
+  .update.theta <- FALSE
+  if (!is.null(lstInfo$theta)) {
+    .theta <- lstInfo$theta
     .theta <- .theta[!is.na(.theta)]
     .rx <- rxode2::ini(.rx, .theta)
+    .update.theta <- TRUE
   }
-  if (!is.null(.fin$omega)) {
-    .omega <- .fin$omega
+  .update.omega <- FALSE
+  if (!is.null(lstInfo$omega)) {
+    .omega <- lstInfo$omega
     .rx <- rxode2::ini(.rx, .omega)
+    .update.omega <- TRUE
     if (length(.nonmem2rx$omegaEst$x) > 0) {
       for (i in seq_along(.nonmem2rx$omegaEst$x)) {
         .x <- .nonmem2rx$omegaEst$x[i]
@@ -266,9 +258,9 @@
       }
     }
   }
-  .sigma <- sigma
-  if (!is.null(.fin$sigma)) {
-    .sigma <- .fin$sigma
+  .update.sigma <- FALSE
+  if (!is.null(lstInfo$sigma)) {
+    .sigma <- lstInfo$sigma
     if (length(.nonmem2rx$sigmaEst$x) > 0) {
       for (i in seq_along(.nonmem2rx$sigmaEst$x)) {
         .x <- .nonmem2rx$sigmaEst$x[i]
@@ -277,8 +269,10 @@
                                        .x, .y, .sigma[.x, .y])))
       }
     }
+    .update.sigma <- TRUE
   }
-  list(rx=.rx, sigma=.sigma)
+  list(rx=.rx, sigma=.sigma,
+       update=.update.theta && .update.omega && .update.sigma)
 }
 
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
@@ -496,6 +490,21 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                          "\n})",
                          "}")))
   .rx <- .fun()
+  .update <- FALSE
+  if (updateFinal) {
+    .tmp <- try(.updateRxWithFinalParameters(.rx, .lstInfo), silent=TRUE)
+    if (!inherits(.tmp, "try-error")) {
+      .rx <- .tmp$rx
+      if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
+      .update <- .tmp$update
+    }
+  }
+  if (!.update) {
+    if (validate) {
+      .minfo("final parameters not updated, will skip validation")
+      validate <- FALSE
+    }
+  }
   if (!is.null(rename)) {
     .minfo("Renaming variables in model and data")
     .r <- rename
@@ -510,11 +519,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- eval(parse(text=paste0("rxode2::rxRename(.rx, ", paste(paste0(names(.r), "=", setNames(.r, NULL)), collapse=", "),")")))
     }
     .minfo("done")
-  }
-  if (updateFinal) {
-    .tmp <- .updateRxWithFinalParameters(.rx, file, .sigma, lst, ext, useExt=useExt)
-    .rx <- .tmp$rx
-    if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
   }
   .cov <- .getFileNameIgnoreCase(paste0(tools::file_path_sans_ext(file), cov))
   if (useCov && file.exists(.cov)) {
@@ -537,7 +541,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- .tmp
     }
   }
-  .ipredData <- .predData <- .etaData <- NULL
+  .ipredData <- .predData <- .etaData  <- .nonmemData <- NULL
   if (validate)  {
     .model <- .rx$simulationModel
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
@@ -545,11 +549,16 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
+      .digs <- 0L
       if (!is.null(.lstInfo$eta)) {
+        .digs <- 5L # seems to be the default for phi files
+      }
+      # get ETA data if it has better digits than the phi file (or isn't present yet)
+      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+                                        nonmemOutputDir=nonmemOutputDir,rename=rename,
+                                        digits=.digs)
+      if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
         .etaData <- .lstInfo$eta
-      } else {
-        .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                          nonmemOutputDir=nonmemOutputDir,rename=rename)
       }
     }
     if (is.null(.predData)) {
@@ -650,6 +659,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving ipred problem")
       .ipredSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                  covsInterpolation="nocb",
+                                 atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                 ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
                                  addDosing = FALSE))
       .minfo("done")
       if (!inherits(.ipredSolve, "try-error")) {
@@ -705,6 +716,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
+                                atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
+                                ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
                                 addDosing = FALSE))
       .minfo("done")
       if (!inherits(.predSolve, "try-error")) {
@@ -765,6 +778,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (inherits(.lstInfo$nobs, "numeric")) {
     .rx$dfObs <- .lstInfo$nobs
   }
+  .rx$atol <- .nonmem2rx$atol
+  .rx$rtol <- .nonmem2rx$rtol
+  .rx$ssAtol <- .nonmem2rx$ssAtol
+  .rx$ssRtol <- .nonmem2rx$ssRtol
   .ret <- rxode2::rxUiCompress(.rx)
   class(.ret) <- c("nonmem2rx", class(.ret))
   .ret
