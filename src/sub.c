@@ -29,9 +29,13 @@
 #define freeP nonmem2rx_sub_freeP
 #define parseFreeLast nonmem2rx_sub_parseFreeLast
 #define parseFree nonmem2rx_sub_parseFree
-
+#include "parseSyntaxErrors.h"
 
 extern D_ParserTables parser_tables_nonmem2rxSub;
+
+extern char *eBuf;
+extern int eBufLast;
+extern sbuf sbTransErr;
 
 char *gBuf;
 int gBufFree=0;
@@ -110,28 +114,43 @@ static inline int nonmem2rx_sub_unsupported(const char* name, D_ParseNode *pn) {
   if (!strcmp("unsupported_statement", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES '%s' unsupported for translation", v);
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$SUBROUTINES '%s' unsupported for translation", v);
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
     return 1;
   }
   if (!strcmp("atol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'ATOL' subroutine from external fortran unsupported for translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$SUBROUTINES 'ATOL' subroutine from external fortran unsupported for translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
     return 1;
   }
   if (!strcmp("ssatol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSATOL' subroutine from external fortran unsupported for translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$SUBROUTINES 'SSATOL' subroutine from external fortran unsupported for translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
     return 1;
   }
   if (!strcmp("ssrtol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'SSRTOL' subroutine from external fortran unsupported for translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$SUBROUTINES 'SSRTOL' subroutine from external fortran unsupported for translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
     return 1;
   }
   if (!strcmp("tol_statement2", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$SUBROUTINES 'TOL' subroutine from external fortran unsupported for translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$SUBROUTINES 'TOL' subroutine from external fortran unsupported for translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
     return 1;
   }
   return 0;
@@ -185,20 +204,23 @@ void trans_sub(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
+  
+  eBuf = gBuf;
+  eBufLast = 0;
+  errP = curP;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error in $SUBROUTINES");
   } else {
     wprint_parsetree_sub(parser_tables_nonmem2rxSub, _pn, 0, wprint_node_sub, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP _nonmem2rx_trans_sub(SEXP in) {

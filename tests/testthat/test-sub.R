@@ -1,6 +1,7 @@
 test_that("test sub", {
 
   .s <- function(sub, eq="no", tol=10, atol=12, ssTol=12, ssAtol=12) {
+    .Call(`_nonmem2rx_setRecord`, "$SUB")
     .clearNonmem2rx()
     nonmem2rxRec.sub(sub)
     expect_equal(c(advan=.nonmem2rx$advan, trans=.nonmem2rx$trans, abbrevLin=.nonmem2rx$abbrevLin), eq)
@@ -9,6 +10,8 @@ test_that("test sub", {
     expect_equal(.nonmem2rx$ssRtol, 10^(-ssTol))
     expect_equal(.nonmem2rx$ssAtol, 10^(-ssAtol))
   }
+
+  expect_error(.s("tranvan1"))
 
   .s("ADVAN1 TRANS1", c(advan=1L, trans=1L, abbrevLin=1L))
   .s("ADVAN1 TRANS2", c(advan=1L, trans=2L, abbrevLin=1L))
