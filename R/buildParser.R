@@ -202,7 +202,8 @@
              "rtol"="rtol imported from translation",
              "ssRtol"="ssRtol imported from translation",
              "ssAtol"="ssRtol imported from translation")
-  .ret <- paste(c("# This is built from buildParser.R, edit there",
+  .ret <- paste(c("## nocov start",
+                  "# This is built from buildParser.R, edit there",
                   vapply(seq_along(.meth), function(i) {
                     .name <- names(.meth)[i]
                     .desc <- setNames(.meth[i], NULL)
@@ -219,7 +220,8 @@
                     .name <- names(.meth)[i]
                     sprintf("  rxode2::.s3register(\"rxode2::rxUiGet\", \"%s\")", .name)
                   }, character(1), USE.NAMES=TRUE),
-                  "}"), collapse="\n")
+                  "}",
+                  "## nocov end"), collapse="\n")
   writeLines(.ret, devtools::package_file("R/rxUiGetGen.R"))
   message("done")
 }

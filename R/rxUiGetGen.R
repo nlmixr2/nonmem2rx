@@ -1,3 +1,4 @@
+## nocov start
 # This is built from buildParser.R, edit there
 
 rxUiGet.nonmemData <- function(x, ...) {
@@ -113,3 +114,4 @@ attr(rxUiGet.ssAtol, "desc=") <- "ssRtol imported from translation"
   rxode2::.s3register("rxode2::rxUiGet", "ssRtol")
   rxode2::.s3register("rxode2::rxUiGet", "ssAtol")
 }
+## nocov end
