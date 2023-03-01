@@ -184,6 +184,49 @@
   message("done")
 }
 
+.nonmem2rxRxUiGetMethods <- function() {
+  message("build rxUiGet options to allow str() and dollar completion")
+  .meth <- c("nonmemData"="NONMEM input data from nonmem2rx",
+             "etaData"="NONMEM etas input from nonmem2rx",
+             "ipredAtol"="50th percentile of the IPRED atol comparison between rxode2 and model import",
+             "ipredRtol"="50th percentile of the IPRED rtol comparison between rxode2 and model import",
+             "ipredCompare"="Dataset comparing ID, TIME and the IPREDs between rxode2 and model import",
+             "predAtol"="50th percentile of the PRED atol comparison between rxode2 and model import",
+             "predRtol"="50th percentile of the PRED rtol comparison between rxode2 and model import",
+             "predCompare"="Dataset comparing ID, TIME and the PREDs between rxode2 and model import",
+             "sigma"="sigma matrix from model import",
+             "thetaMat"="covariance matrix",
+             "dfSub"="Number of subjects",
+             "dfObs"="Number of observations",
+             "atol"="atol imported from translation",
+             "rtol"="rtol imported from translation",
+             "ssRtol"="ssRtol imported from translation",
+             "ssAtol"="ssRtol imported from translation")
+  .ret <- paste(c("## nocov start",
+                  "# This is built from buildParser.R, edit there",
+                  vapply(seq_along(.meth), function(i) {
+                    .name <- names(.meth)[i]
+                    .desc <- setNames(.meth[i], NULL)
+                    .ret <- c("",
+                              sprintf("rxUiGet.%s <- function(x, ...) {", .name),
+                              sprintf("  if (!exists(\"%s\", envir=x[[1]])) return(NULL)", .name),
+                              sprintf("  get(\"%s\", envir=x[[1]])", .name),
+                              "}",
+                              sprintf("attr(rxUiGet.%s, \"desc=\") <- %s", .name, deparse1(.desc)))
+                    .ret <- paste(.ret, collapse="\n")
+                  }, character(1), USE.NAMES=TRUE),
+                  ".rxUiGetRegister <- function() {",
+                  vapply(seq_along(.meth), function(i) {
+                    .name <- names(.meth)[i]
+                    sprintf("  rxode2::.s3register(\"rxode2::rxUiGet\", \"%s\")", .name)
+                  }, character(1), USE.NAMES=TRUE),
+                  "}",
+                  "## nocov end"), collapse="\n")
+  writeLines(.ret, devtools::package_file("R/rxUiGetGen.R"))
+  message("done")
+}
+
+
 
 .nonmem2rxBuildGram <- function() {
   .nonmem2rxBuildTheta()
@@ -197,6 +240,7 @@
   .nonmem2rxBuildTab()
   .nonmem2rxBuildAbbrevRec()
   .nonmem2rxBuildRxSolve()
+  .nonmem2rxRxUiGetMethods()
   invisible("")
 }
 ## nocov end
