@@ -210,9 +210,12 @@ nonmem2rxRec <- function(x) {
   }
   .a <- class(x)[1]
   if (.a == "aaa") {
+    .Call(`_nonmem2rx_setRecord`, "Text before $PROBLEM")
     UseMethod("nonmem2rxRec")
   } else {
-    .minfo(sprintf("Processing record %s", .transRecordsDisplay[class(x)[1]]))
+    .rec <- .transRecordsDisplay[class(x)[1]]
+    .Call(`_nonmem2rx_setRecord`, .rec)
+    .minfo(sprintf("Processing record %s", .rec))
     .ret <- UseMethod("nonmem2rxRec")
     .minfo("done")
     .ret

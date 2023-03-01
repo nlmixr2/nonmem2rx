@@ -30,6 +30,10 @@ void nonmem2rx_sub_parseFree(int last);
 void nonmem2rx_tab_parseFree(int last);
 void nonmem2rx_theta_parseFree(int last);
 
+extern sbuf firstErr;
+extern sbuf sbErr1;
+extern sbuf sbErr2;
+extern sbuf sbTransErr;
 extern sbuf curLine;
 extern sbuf modelName;
 extern sbuf curOmegaLhs;
@@ -42,6 +46,10 @@ extern vLines _dupStrs;
 void nonmem2rx_full_parseFree(int last) {
   lineFree(&_dupStrs);
   if (last) {
+    sFree(&firstErr);
+    sFree(&sbTransErr);
+    sFree(&sbErr1);
+    sFree(&sbErr2);
     sFree(&curLine);
     sFree(&modelName);
     sFree(&curOmegaLhs);
@@ -50,6 +58,10 @@ void nonmem2rx_full_parseFree(int last) {
     sFree(&curThetaRhs);
     sFree(&curTheta);
   } else {
+    sClear(&firstErr);
+    sClear(&sbTransErr);
+    sClear(&sbErr1);
+    sClear(&sbErr2);
     sClear(&curLine);
     sClear(&modelName);
     sClear(&curOmegaLhs);
@@ -75,6 +87,10 @@ void nonmem2rx_full_parseFree(int last) {
 int nonmem2rx_full_ini_done = 0;
 void nonmem2rx_full_ini() {
   if (nonmem2rx_full_ini_done == 0) {
+    sIni(&firstErr);
+    sIni(&sbTransErr);
+    sIni(&sbErr1);
+    sIni(&sbErr2);
     sIni(&curLine);
     sIni(&modelName);
     sIni(&curOmegaLhs);

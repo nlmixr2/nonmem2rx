@@ -6,7 +6,11 @@ nonmem2rxRec.ome <- function(x) {
   .ini <- .nonmem2rx$ini
   .nonmem2rx$ini <- NULL
   .Call(`_nonmem2rx_omeganum_reset`)
+  .i <- 1
+  .ln <- length(.x)
   for (.cur in .x) {
+    if (.ln > 1) .Call(`_nonmem2rx_setRecord`, paste0("$OMEGA #", .i))
+    .i <- .i + 1
     .Call(`_nonmem2rx_trans_omega`, .cur, "eta", as.integer(.nonmem2rx$unintFixed))
   }
   .nonmem2rx$omega <- .nonmem2rx$ini
@@ -23,7 +27,11 @@ nonmem2rxRec.sig <- function(x) {
   .nonmem2rx$etaMax <- 0L
   .nonmem2rx$ini <- NULL
   .Call(`_nonmem2rx_omeganum_reset`)
+  .i <- 1
+  .ln <- length(.x)
   for (.cur in .x) {
+    if (.ln > 1) .Call(`_nonmem2rx_setRecord`, paste0("$SIGMA #", .i))
+    .i <- .i + 1
     .Call(`_nonmem2rx_trans_omega`, .cur, "eps", as.integer(.nonmem2rx$unintFixed))
   }
   .nonmem2rx$sigma <- .nonmem2rx$ini

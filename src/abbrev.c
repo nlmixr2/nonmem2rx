@@ -30,9 +30,13 @@
 #define parseFreeLast nonmem2rx_abbrev_parseFreeLast
 #define parseFree nonmem2rx_abbrev_parseFree
 #define max2( a , b )  ( (a) > (b) ? (a) : (b) )
+#include "parseSyntaxErrors.h"
 
 extern D_ParserTables parser_tables_nonmem2rxAbbrev;
 
+extern char *eBuf;
+extern int eBufLast;
+extern sbuf sbTransErr;
 char *gBuf;
 int gBufFree=0;
 int gBufLast = 0;
@@ -162,11 +166,18 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     sAppend(&curLine, "%s", v+1);
     return 1;
   } else if (!strcmp("avar", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'A#' NONMEM reserved variable is not translated");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "'A#' NONMEM reserved variable is not translated");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
+    return 1;
   } else if (!strcmp("cvar", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'C#' NONMEM reserved variable is not translated");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "'C#' NONMEM reserved variable is not translated");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("constant", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -185,11 +196,17 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       sAppendN(&curLine, "newind", 6);
       return 1;
     } else if (!nmrxstrcmpi("MIXNUM", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'MIXNUM' NONMEM reserved variable is not translated");
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'MIXNUM' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("MIXEST", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'MIXEST' NONMEM reserved variable is not translated");
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'MIXEST' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("ICALL", v)) {
       if (icallWarning == 0) {
         nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation",
@@ -209,17 +226,29 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
        sAppendN(&curLine, "irep", 4);
       return 1;
     } else if (!nmrxstrcmpi("COMACT", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'COMACT' NONMEM reserved variable is not translated");
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'COMACT' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("COMSAV", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'COMSAV' NONMEM reserved variable is not translated");
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'COMSAV' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("tscale", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'TSCALE' NONMEM reserved variable is not translated");
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'TSCALE' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("xscale", v)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "'XSCALE' NONMEM reserved variable is not translated");
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'XSCALE' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("evid", v)) {
       if (evidWarning == 0) {
         Rf_warning("'evid' variable is not supported in rxode2, renamed to 'nmevid', rename/copy in your data too");
@@ -307,8 +336,11 @@ void writeAinfo(const char *v) {
     sAppend(&curLine, "rxLinCmt1%s", CHAR(STRING_ELT(nonmem2rxGetScale(cur), 0)));
     return;
   }
-  parseFree(0);
-  Rf_errorcall(R_NilValue, "can only request depot and central compartments for solved systems in rxode2 translations");
+  sClear(&sbTransErr);
+  sAppend(&sbTransErr, "can only request depot and central compartments for solved systems in rxode2 translations");
+  updateSyntaxCol();
+  trans_syntax_error_report_fn0(sbTransErr.s);
+  finalizeSyntaxError();
 }
 
 int abbrevParamTheta(char *name, int i,  D_ParseNode *pn) {
@@ -471,11 +503,17 @@ int abbrev_function(char *name, int i, D_ParseNode *pn) {
         sAppendN(&curLine, "lgamma(", 7);
         return 1;
       } else if (!nmrxstrcmpi("mod(", v)) {
-        parseFree(0);
-        Rf_errorcall(R_NilValue, "'MOD' function not supported in translation");
+        sClear(&sbTransErr);
+        sAppend(&sbTransErr, "'MOD' function not supported in translation");
+        updateSyntaxCol();
+        trans_syntax_error_report_fn0(sbTransErr.s);
+        finalizeSyntaxError();
       } else if (!nmrxstrcmpi("int(", v)) {
-        parseFree(0);
-        Rf_errorcall(R_NilValue, "'INT' function not supported in translation");
+        sClear(&sbTransErr);
+        sAppend(&sbTransErr, "'INT' function not supported in translation");
+        updateSyntaxCol();
+        trans_syntax_error_report_fn0(sbTransErr.s);
+        finalizeSyntaxError();
       }
     }
     return 0;
@@ -607,32 +645,59 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     }
     return 1; 
   } else if (!strcmp("callpassmode", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'CALL PASS(MODE)' statements not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "'CALL PASS(MODE)' statements not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("callsupp", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "'CALL SUPP(# , #)' statements not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "'CALL SUPP(# , #)' statements not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("dt", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "DT(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "DT(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("mtime", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "MTIME(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "MTIME(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("mnext", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "MNEXT(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "MNEXT(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("mpast", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "MPAST(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "MPAST(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("mixp", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "MIXP(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "MIXP(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("com", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "COM(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "COM(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("pcmt", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "PCMT(#) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "PCMT(#) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("sigma", name)) {
     if (i != 0) return 1;
     D_ParseNode *xpn = d_get_child(pn, 1);
@@ -683,11 +748,17 @@ int abbrev_cmt_ddt_related(char *name, int i, D_ParseNode *pn) {
     }
     return 0;
   } else if (!strcmp("da", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "DA(#, #) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "DA(#, #) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else if (!strcmp("dp", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "DP(#, #) not supported in translation");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "DP(#, #) not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   }
   return 0;
 }
@@ -722,8 +793,11 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       if (v[1] == 'O' || v[1] == '0') {
-        parseFree(0);
-        Rf_errorcall(R_NilValue, "F0/FO is not supported in translation");
+        sClear(&sbTransErr);
+        sAppend(&sbTransErr, "F0/FO is not supported in translation");
+        updateSyntaxCol();
+        trans_syntax_error_report_fn0(sbTransErr.s);
+        finalizeSyntaxError();
       }
       // f(a1) <- ....
       sAppendN(&curLine, "rxf.", 4);
@@ -903,8 +977,12 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     pushModel();
     return;
   } else if (!strcmp("callgeteta", name)) {
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "'CALL GETETA(ETA)' not supported in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
     parseFree(0);
-    Rf_errorcall(R_NilValue, "'CALL GETETA(ETA)' not supported in translation");
   } else if (!strcmp("exit_line", name)) {
     /* With NONMEM 7.4.2, there is a new variable, IERPRDU.  Both n and k are */
     /* stored in IERPRDU.  k must be between 0 and 999. The value  stored  is */
@@ -997,20 +1075,22 @@ void trans_abbrev(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
+  eBuf = gBuf;
+  eBufLast = 0;
+  errP = curP;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error with abbreviated code in %s", abbrevPrefix);
   } else {
     wprint_parsetree_abbrev(parser_tables_nonmem2rxAbbrev, _pn, 0, wprint_node_abbrev, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP nonmem2rxSetMaxA(int maxa);

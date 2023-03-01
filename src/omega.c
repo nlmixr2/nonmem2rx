@@ -29,8 +29,13 @@
 #define freeP nonmem2rx_omega_freeP
 #define parseFreeLast nonmem2rx_omega_parseFreeLast
 #define parseFree nonmem2rx_omega_parseFree
+#include "parseSyntaxErrors.h"
 
 extern D_ParserTables parser_tables_nonmem2rxOmega;
+
+extern char *eBuf;
+extern int eBufLast;
+extern sbuf sbTransErr;
 
 char *gBuf;
 int gBufFree=0;
@@ -140,8 +145,11 @@ void pushOmegaLabel(void) {
 
 void addOmegaBlockItem(const char *v) {
   if (nonmem2rx_omegaBlockCount >= nonmem2rx_omegaBlockn) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(N) has too many elements");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$OMEGA or $SIGMA BLOCK(N) has too many elements");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   }
   // This is a block
   if (nonmem2rx_omegaBlockI == nonmem2rx_omegaBlockJ) {
@@ -271,8 +279,11 @@ int omegaParseOmega2(_arg_) {
     }
     // this form is only good for diagonal matrices
     if (nonmem2rx_omegaBlockn != 0) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "(FIXED/UNINT %s) is not supported in an $OMEGA or $SIGMA BLOCK", v);
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "(FIXED/UNINT %s) is not supported in an $OMEGA or $SIGMA BLOCK", v);
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     }
     sAppend(&curOmega, "%s%d", omegaEstPrefix, nonmem2rx_omeganum);
     if (unint && nonmem2rx_unintFix == 0) {
@@ -345,7 +356,7 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
 #define _arg_ name, pn, pt, depth, fn, client_data
-  int doRet = omegaParseOmeg0(_arg_)
+  omegaParseOmeg0(_arg_)
     || omegaParseOmega1(_arg_)
     || omegaParseOmega2(_arg_)
     || omegaParseFixed(_arg_)
@@ -382,7 +393,7 @@ void trans_omega(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
@@ -395,19 +406,25 @@ void trans_omega(const char* parse){
   nonmem2rx_omegaBlockI     = 0;
   nonmem2rx_omegaBlockJ     = 0;
   nonmem2rx_omegaBlockCount = 0;
+
+  eBuf = gBuf;
+  eBufLast = 0;
+  errP = curP;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error in $OMEGA");
   } else {
     wprint_parsetree_omega(parser_tables_nonmem2rxOmega, _pn, 0, wprint_node_omega, NULL);
   }
+  finalizeSyntaxError();
   if (nonmem2rx_omegaBlockn == 0) {
   } else if (nonmem2rx_omegaSame == 1) {
   } else if (nonmem2rx_omegaBlockCount < nonmem2rx_omegaBlockn) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$OMEGA or $SIGMA BLOCK(N) does not have enough elements");
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "$OMEGA or $SIGMA BLOCK(N) does not have enough elements");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   } else {
     // push block
     if (nonmem2rx_omegaFixed == 0) {

@@ -3,7 +3,12 @@
 nonmem2rxRec.inp <- function(x) {
   .x <- x
   class(.x) <- NULL
+  .rec <- .transRecordsDisplay[class(x)[1]]
+  .ln <- length(.x)
+  .i <- 1
   for (.cur in .x) {
+    if (.ln > 1) .Call(`_nonmem2rx_setRecord`, paste0(.rec, " #", .i))
+    .i <- .i + 1
     .Call(`_nonmem2rx_trans_input`, .cur)
   }
 }

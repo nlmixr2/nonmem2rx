@@ -1,10 +1,14 @@
 test_that("test data", {
 
   .f <- function(data, eq="no") {
+    .Call(`_nonmem2rx_setRecord`, "$DATA")
     .clearNonmem2rx()
     .Call(`_nonmem2rx_trans_data`, data)
     expect_equal(.nonmem2rx$dataFile, eq)
   }
+
+  expect_error(.f("matt.csv matt=.csv"))
+  
   .f(" matt.csv\n", "matt.csv")
   .f(" 'matt \"s file with spaces.csv'", "matt \"s file with spaces.csv")
   .f(' "matt \'s file with spaces.csv"', "matt 's file with spaces.csv")

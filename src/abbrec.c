@@ -29,13 +29,38 @@
 #define freeP nonmem2rx_abbrec_freeP
 #define parseFreeLast nonmem2rx_abbrec_parseFreeLast
 #define parseFree nonmem2rx_abbrec_parseFree
+#include "parseSyntaxErrors.h"
+
+sbuf sbErr1;
+sbuf sbErr2;
+sbuf sbTransErr;
+sbuf firstErr;
+char *eBuf;
+int eBufFree=0;
+int eBufLast=0;
+int syntaxErrorExtra = 0;
+int isEsc=0;
+int lastSyntaxErrorLine=0;
+extern const char *lastStr;
+extern int lastStrLoc;
+
+int _rxode2_reallyHasAfter = 0;
+int rx_suppress_syntax_info = 0;
+const char *record;
+
+SEXP _nonmem2rx_setRecord(SEXP rec) {
+  record = (char*)rc_dup_str(CHAR(STRING_ELT(rec, 0)), 0);
+  return R_NilValue;
+}
+
 
 extern D_ParserTables nonmem2rxAbbrevRec;
 
-char *gBuf;
-int gBufFree=0;
+char* gBuf;
 int gBufLast = 0;
+int gBufFree = 0;
 D_Parser *curP=NULL;
+D_Parser *errP=NULL;
 D_ParseNode *_pn = 0;
 
 void freeP(void){
@@ -143,8 +168,12 @@ int abbrecProcessDirect1(const char* name, D_ParseNode *pn) {
     xpn = d_get_child(pn, 5);
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (strcmp(v, v2)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", v, v2);
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
+      return 1;
     }
     xpn = d_get_child(pn, 2);
     v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -186,14 +215,22 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
     xpn = d_get_child(pn, 5); 
     char *tmp = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (strcmp(abbrecVarType, tmp)) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", abbrecVarType, tmp);
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", abbrecVarType, tmp);
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
+      return 1;
     }
     xpn = d_get_child(pn, 2);
     dataItem = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (!INTEGER(nonmem2rxReplaceIsDataItem(dataItem))[0]) {
-      parseFree(0);
-      Rf_errorcall(R_NilValue, "$ABBREVIATED REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "REPLACE requesting data item replacement for '%s' which is not defined in the $INPUT record", dataItem);
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
+      return 1;
     }
     // parse sequence by continuing parse tree
     abbrecAddSeq = 1;
@@ -216,8 +253,11 @@ int abbrecProcessMultipleItem(const char* name, D_ParseNode *pn, int i) {
       xpn = d_get_child(pn, 6);
       char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       if (strcmp(v, v2)) {
-        parseFree(0);
-        Rf_errorcall(R_NilValue, "$ABBREVIATED nonmem2rx will not change var type from '%s' to '%s'", v, v2);
+        sClear(&sbTransErr);
+        sAppend(&sbTransErr, "will not change var type from '%s' to '%s'", v, v2);
+        updateSyntaxCol();
+        trans_syntax_error_report_fn0(sbTransErr.s);
+        finalizeSyntaxError();
       }
       abbrecVarType = v;
     }
@@ -262,24 +302,26 @@ void trans_abbrec(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
+  eBuf = gBuf;
+  errP = curP;
+  eBufLast = 0;
   gBufFree=0;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
-    //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error $ABBREVIATED record");
   } else {
     wprint_parsetree_abbrec(parser_tables_nonmem2rxAbbrevRec , _pn, 0, wprint_node_abbrec, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP _nonmem2rx_trans_abbrec(SEXP in) {
   sClear(&curLine);
+  sClear(&firstErr);
   trans_abbrec(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   return R_NilValue;

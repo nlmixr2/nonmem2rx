@@ -1,12 +1,11 @@
 test_that("test input", {
   
   .i <- function(input, eq="no") {
+    .Call(`_nonmem2rx_setRecord`, "$INPUT")
     .clearNonmem2rx()
     .Call(`_nonmem2rx_trans_input`, input)
     expect_equal(.nonmem2rx$input, eq)
   }
-
-  expect_error(.i(","))
 
   .i("date=drop", c(date="DROP"))
   .i("date=skip", c(date="DROP"))
@@ -31,5 +30,7 @@ test_that("test input", {
   .i("b=ba", c(b="ba"))
   .i("a=b c=d", c(a="b", c="d"))
   .i("a=b c=d;comment\ne=f drop matt", c(a="b", c="d", e="f", DROP="DROP", matt="matt"))
+
+  expect_error(.i("matt~1"))
   
 })

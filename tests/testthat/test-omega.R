@@ -1,6 +1,7 @@
 test_that("test omega", {
   
   .o <- function(omega, eq="no", len=0, reset=TRUE, unintFixed=TRUE) {
+    .Call(`_nonmem2rx_setRecord`, "$OMEGA")
     if (reset) {
       .clearNonmem2rx()
       .Call(`_nonmem2rx_omeganum_reset`)
