@@ -8,6 +8,7 @@ nonmem2rxRec.abb <- function(x) {
   .ln <- length(.x)
   for (.cur in .x) {
     if (.ln > 1) .Call(`_nonmem2rx_setRecord`, paste0(.rec, " #", .i))
+    .i <- .i + 1
     .Call(`_nonmem2rx_trans_abbrec`, .cur)
   }
 }
