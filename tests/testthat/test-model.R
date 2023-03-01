@@ -1,6 +1,7 @@
 test_that("test model", {
   
   .m <- function(model, eq="no", reset=TRUE) {
+    .Call(`_nonmem2rx_setRecord`, "$MODEL")
     .clearNonmem2rx()
     .Call(`_nonmem2rx_trans_model`, model)
     expect_equal(.nonmem2rx$cmtName, eq)
@@ -35,5 +36,6 @@ test_that("test model", {
 
   .m("COMP=('depot compartment with spaces',INITIALOFF,DEFDOSE) COMP=(CENTRAL,DEFOBS,NOOFF)",
      c("depot compartment with spaces", "CENTRAL"))
+
   
 })

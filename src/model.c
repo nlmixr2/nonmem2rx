@@ -29,8 +29,14 @@
 #define freeP nonmem2rx_model_freeP
 #define parseFreeLast nonmem2rx_model_parseFreeLast
 #define parseFree nonmem2rx_model_parseFree
+#include "parseSyntaxErrors.h"
 
 extern D_ParserTables parser_tables_nonmem2rxModel;
+
+extern char *eBuf;
+extern int eBufLast;
+extern sbuf sbTransErr;
+
 char *gBuf;
 int gBufFree=0;
 int gBufLast = 0;
@@ -133,7 +139,7 @@ void trans_model(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
@@ -141,14 +147,17 @@ void trans_model(const char* parse){
   gBufFree=0;
   nonmem2rx_model_cmt = 1;
   nonmem2rx_model_warn_npar = 0;
+
+  eBuf = gBuf;
+  eBufLast = 0;
+  errP = curP;
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "error parsing $MODEL statement");
   } else {
     wprint_parsetree_model(parser_tables_nonmem2rxModel, _pn, 0, wprint_node_model, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP nonmem2rxPushCmtInfo(int defdose, int defobs);
@@ -157,7 +166,7 @@ SEXP _nonmem2rx_trans_model(SEXP in) {
   nonmem2rxDefDose = 0;
   nonmem2rxDefDepot = 0;
   nonmem2rxDefCentral = 0;
-  
+
   trans_model(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   sClear(&modelName);
@@ -165,7 +174,7 @@ SEXP _nonmem2rx_trans_model(SEXP in) {
   if (nonmem2rxDefDose == 0) nonmem2rxDefDose = nonmem2rxDefDepot;
   if (nonmem2rxDefObs == 0) nonmem2rxDefObs = 1;
   if (nonmem2rxDefDose == 0) nonmem2rxDefDose = 1;
-  
-  nonmem2rxPushCmtInfo(nonmem2rxDefDose, nonmem2rxDefObs);  
+
+  nonmem2rxPushCmtInfo(nonmem2rxDefDose, nonmem2rxDefObs);
   return R_NilValue;
 }
