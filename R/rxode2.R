@@ -3,6 +3,9 @@
                              "sigma", "thetaMat", "dfSub", "dfObs", "atol", "rtol",
                              "ssRtol", "ssAtol")
 
+# This gives the rxUiGet methods to add them to the expansion and
+# description
+
 .nonmem2rxExtraSaveMin <- c("nonmemData", "sigma","atol", "rtol", "ssRtol", "ssAtol")
 
 .nonmem2rxExtraFullOnly <-  setdiff(.nonmem2rxExtraSaveFull, .nonmem2rxExtraSaveMin)
@@ -138,3 +141,4 @@ rxRename.nonmem2rx <- function(.data, ...) {
 }
 
 rename.nonmem2rx <- rxRename.nonmem2rx
+

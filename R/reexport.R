@@ -29,3 +29,8 @@ rxode2::rxRename
 #' @importFrom rxode2 rxSolve
 #' @export
 rxode2::rxSolve
+
+#' @importFrom rxode2 rxUiGet
+#' @export
+rxode2::rxUiGet
+

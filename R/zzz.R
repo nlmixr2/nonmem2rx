@@ -6,6 +6,7 @@
   if (requireNamespace("dplyr", quietly=TRUE)) {
     rxode2::.s3register("dplyr::rename", "nonmem2rx")
   }
+  .rxUiGetRegister()
 
 }
 .onAttach <- function(libname,pkgname){
