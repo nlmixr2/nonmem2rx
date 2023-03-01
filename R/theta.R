@@ -4,7 +4,10 @@ nonmem2rxRec.the <- function(x) {
   .x <- x
   class(.x) <- NULL
   .Call(`_nonmem2rx_thetanum_reset`)
+  .i <- 1
+  .ln <- length(.x)
   for (.cur in .x) {
+    if (.ln > 1) .Call(`_nonmem2rx_setRecord`, paste0("$THETA #", .i))
     .Call(`_nonmem2rx_trans_theta`, .cur, as.integer(.nonmem2rx$unintFixed))
   }
 }

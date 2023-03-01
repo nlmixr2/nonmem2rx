@@ -1,6 +1,7 @@
 test_that("test thetas", {
 
   .t <- function(theta, eq="no", len=-1, unintFixed=TRUE) {
+    .Call(`_nonmem2rx_setRecord`, "$THETA")
     .clearNonmem2rx()
     .Call(`_nonmem2rx_thetanum_reset`)
     lapply(theta, function(x) {

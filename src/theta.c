@@ -28,8 +28,13 @@
 #define freeP nonmem2rx_theta_freeP
 #define parseFreeLast nonmem2rx_theta_parseFreeLast
 #define parseFree nonmem2rx_theta_parseFree
+#include "parseSyntaxErrors.h"
 
 extern D_ParserTables parser_tables_nonmem2rxTheta;
+
+extern char *eBuf;
+extern int eBufLast;
+extern sbuf sbTransErr;
 
 char *gBuf;
 int gBufFree=0;
@@ -62,7 +67,7 @@ void parseFree(int last) {
 extern char * rc_dup_str(const char *s, const char *e);
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
 void wprint_node_theta(int depth, char *token_name, char *token_value, void *client_data) {
-  
+
 }
 
 int nonmem2rx_thetanum = 1;
@@ -233,7 +238,7 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
         sAppend(&curThetaRhs, " <- fix(%s, %s)", low, ini);
         sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum,
                 curThetaRhs.s);
-      } 
+      }
     }
     pushTheta();
     nonmem2rx_thetanum++;
@@ -289,7 +294,7 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     }
     pushTheta();
     nonmem2rx_thetanum++;
-    return;    
+    return;
   } else if (!strcmp("theta7", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
     char *low = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -325,20 +330,23 @@ void trans_theta(const char* parse){
   curP->save_parse_tree = 1;
   curP->error_recovery = 1;
   curP->initial_scope = NULL;
-  //curP->syntax_error_fn = rxSyntaxError;
+  curP->syntax_error_fn = nonmem2rxSyntaxError;
   if (gBufFree) R_Free(gBuf);
   // Should be able to use gBuf directly, but I believe it cause
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
+
+  eBuf = gBuf;
+  eBufLast = 0;
+  errP = curP;
+
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
-    //rx_syntax_error = 1;
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "parsing error in $THETA");
   } else {
     wprint_parsetree_theta(parser_tables_nonmem2rxTheta, _pn, 0, wprint_node_theta, NULL);
   }
+  finalizeSyntaxError();
 }
 
 SEXP nonmem2rxPushObservedMaxTheta(int a);
@@ -348,8 +356,12 @@ SEXP _nonmem2rx_trans_theta(SEXP in, SEXP unintFix) {
   parseFree(0);
   nonmem2rxPushObservedMaxTheta(nonmem2rx_thetanum);
   if (nonmem2rx_names_nargs) {
-    Rf_errorcall(R_NilValue, "the NAMES() statement named more parameters than present in this $THETA block, error in translation.");
     nonmem2rx_names_nargs = 0;
+    sClear(&sbTransErr);
+    sAppend(&sbTransErr, "the NAMES() statement named more parameters than present in this $THETA block, error in translation");
+    updateSyntaxCol();
+    trans_syntax_error_report_fn0(sbTransErr.s);
+    finalizeSyntaxError();
   }
   return R_NilValue;
 }
