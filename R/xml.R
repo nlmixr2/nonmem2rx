@@ -39,24 +39,37 @@ nmxml <- function(xml) {
   names(.theta) <- paste0("theta", seq_along(.theta))
 
   .omega <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:omega"),"nm:row/nm:col"))
+  if (length(.omega) > 0) {
+    .maxElt <- sqrt(1 + length(.omega) * 8)/2 - 1/2
+    .omega <- eval(parse(text=paste0("lotri::lotri({",
+                                     paste(paste0("eta", seq_len(.maxElt)), collapse="+"),
+                                     "~", deparse1(.omega), "})")))
+  } else {
+    .omgea <- NULL
+  }
 
-  .maxElt <- sqrt(1 + length(.omega) * 8)/2 - 1/2
-  .omega <- eval(parse(text=paste0("lotri::lotri({",
-                                   paste(paste0("eta", seq_len(.maxElt)), collapse="+"),
-                                   "~", deparse1(.omega), "})")))
 
   .sigma <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:sigma"),"nm:row/nm:col"))
+  if (length(.sigma) > 0) {
+    .maxElt <- sqrt(1 + length(.sigma) * 8)/2 - 1/2
+    .sigma <- eval(parse(text=paste0("lotri::lotri({",
+                                     paste(paste0("eps", seq_len(.maxElt)), collapse="+"),
+                                     "~", deparse1(.sigma), "})")))
+  } else {
+    .sigma <- NULL
+  }
 
-  .maxElt <- sqrt(1 + length(.sigma) * 8)/2 - 1/2
-  .sigma <- eval(parse(text=paste0("lotri::lotri({",
-                                   paste(paste0("eps", seq_len(.maxElt)), collapse="+"),
-                                   "~", deparse1(.sigma), "})")))
+
 
   .cov <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"),"nm:row/nm:col"))
-  .names <-  .replaceNmDimNames(setNames(unlist(xml2::xml_attrs(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"), "nm:row"))), NULL))
-  .cov <- eval(parse(text=paste0("lotri({", paste(.names, collapse = " + "),
-                                 "~", deparse1(.cov),
-                                 "})")))
+  if (length(.cov) > 0) {
+    .names <-  .replaceNmDimNames(setNames(unlist(xml2::xml_attrs(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"), "nm:row"))), NULL))
+    .cov <- eval(parse(text=paste0("lotri({", paste(.names, collapse = " + "),
+                                   "~", deparse1(.cov),
+                                   "})")))    
+  } else {
+    .cov <- NULL
+  }
   
   list(theta=.theta,
        omega=.omega,
