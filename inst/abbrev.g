@@ -6,16 +6,8 @@ statement_list : call_protocol_phrase?
 
 statement 
   : assignment singleLineComment?
-  | if1ini singleLineComment?
-  | if1iniI singleLineComment?
-  | if1fbio singleLineComment?
-  | if1alag singleLineComment?
-  | if1rate singleLineComment?
-  | if1dur singleLineComment?
-  | if1scale singleLineComment?
-  | if1derivative singleLineComment?
-  | if1derivativeI singleLineComment?
   | if1 singleLineComment?
+  | if1other singleLineComment?
   | ifthen singleLineComment?
   | ifcallrandom singleLineComment?
   | ifcallsimeps singleLineComment?
@@ -82,16 +74,8 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
+if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp);
 
-if1ini         :  'IF' '(' logical_or_expression ')'  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
-if1iniI        :  'IF' '(' logical_or_expression ')'  'A_0(' identifier ')' '=' logical_or_expression;
-if1fbio        :  'IF' '(' logical_or_expression ')' "[Ff]([0-9]+|O)" '='  logical_or_expression;
-if1alag        :  'IF' '(' logical_or_expression ')'  "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
-if1rate        :  'IF' '(' logical_or_expression ')'  "[Rr][1-9][0-9]*" '=' logical_or_expression;
-if1dur         :  'IF' '(' logical_or_expression ')'  "[Dd][1-9][0-9]*" '=' logical_or_expression;
-if1scale       :  'IF' '(' logical_or_expression ')' "[Ss]([0-9]+|C|O)" '=' logical_or_expression;
-if1derivative  :  'IF' '(' logical_or_expression ')'  ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
-if1derivativeI :  'IF' '(' logical_or_expression ')'  ('DADT(' | 'dadt(' ) identifier ')' '=' logical_or_expression;
 
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
 elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
