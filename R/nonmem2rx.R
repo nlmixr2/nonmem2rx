@@ -556,27 +556,31 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   if (validate)  {
     .model <- .rx$simulationModel
-    .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
-                                                      rename=rename)
+    .predData <- .ipredData <- try(.readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                                          rename=rename))
+    if (inherits(.ipredData, "try-error")) .predData <- .ipredData <- NULL
     if (!is.null(.ipredData)) {
       .digs <- 0L
       if (!is.null(.lstInfo$eta)) {
         .digs <- 5L # seems to be the default for phi files
       }
       # get ETA data if it has better digits than the phi file (or isn't present yet)
-      .etaData <- .readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
+      .etaData <- try(.readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
                                         nonmemOutputDir=nonmemOutputDir,rename=rename,
-                                        digits=.digs)
+                                        digits=.digs))
+      if (inherits(.etaData, "try-error")) .etaData <- NULL
       if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
         .etaData <- .lstInfo$eta
       }
     }
     if (is.null(.predData)) {
-      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
-                                          rename=rename)
+      .predData  <- try(.readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                              rename=rename))
+      if (inherits(.predData, "try-error")) .predData <- NULL
     } else if (!any(names(.ipredData) == "PRED")) {
-      .predData  <- .readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
-                                          rename=rename)
+      .predData  <- try(.readInPredFromTables(file, nonmemOutputDir=nonmemOutputDir,
+                                              rename=rename))
+      if (inherits(.predData, "try-error")) .predData <- NULL
     }
   }
   if (tolowerLhs) {
