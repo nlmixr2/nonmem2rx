@@ -308,6 +308,14 @@ void wprint_parsetree_theta(D_ParserTables pt, D_ParseNode *pn, int depth, print
     pushTheta();
     nonmem2rx_thetanum++;
     return;
+  } else if (!strcmp("theta8", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *cur = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    sAppend(&curThetaRhs, " <- fix(%s)", cur);
+    sAppend(&curTheta, "theta%d%s", nonmem2rx_thetanum, curThetaRhs.s);
+    pushTheta();
+    nonmem2rx_thetanum++;
+    return;
   } else if (!strcmp("abortInfo", name)) {
     Rf_warning(_("ABORT / NOABORT ignored in $THETA ignored"));
     return;

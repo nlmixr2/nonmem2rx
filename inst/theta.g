@@ -20,7 +20,7 @@ repeat: "[Xx]" decimalint;
 
 theta_statement: theta_name? theta repeat? singleLineComment?;
 
-theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 | theta6 | theta7;
+theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 | theta6 | theta7 | theta8;
 
 theta0: ini_constant fixed?;
 
@@ -34,6 +34,8 @@ theta4: '(' low_ini ','? ini_constant ','? hi_constant ')' fixed;
 theta5: '(' low_ini ','? ini_constant ','? hi_constant fixed? ')' ;
 
 theta7: '(' ini_constant ',' ',' ini_constant ')' ;
+
+theta8: '(' ini_constant ',' ','? fixed ')';
 
 name_id: 'NAMES' | 'NAME' |
         'names' | 'name' |

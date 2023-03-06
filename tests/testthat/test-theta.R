@@ -23,6 +23,9 @@ test_that("test thetas", {
   .t("(1, 2.0, 3.0)", "theta1 <- c(1, 2.0, 3.0)", 1)
   .t("(1, 2.0, 3.0 fix)", "theta1 <- fix(1, 2.0, 3.0)", 1)
   .t("(1, 2.0, 3.0) fix", "theta1 <- fix(1, 2.0, 3.0)", 1)
+  .t("(20,  FIX)", "theta1 <- fix(20)", 1)
+  .t("(20,  , FIX)", "theta1 <- fix(20)", 1)
+  .t("(20,  , ) FIX", "theta1 <- fix(20)", 1)
 
   expect_warning(.t("(1,, 3.0)", "theta1 <- c(1, 2, 3.0)", 1))
 
