@@ -56,6 +56,7 @@
 <span>  updateFinal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  determineError <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  validate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nonmemData <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  strictLst <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  unintFixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nLinesPro <span class="op">=</span> <span class="fl">20L</span>,</span>
@@ -148,6 +149,14 @@ not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)</p></dd>
 <dd><p>Boolean that this tool will attempt to "validate"
 the model by solving the derived model under pred conditions
 (etas are zero and eps values are zero)</p></dd>
+
+
+<dt>nonmemData</dt>
+<dd><p>Boolean that tells `nonmem2rx` to read in the
+nonmem data (if possible) even if the model will not be validated
+(like if it is a simulation run or missing final parameter
+estimates).  By default this is `FALSE`, nonmem data will not be
+integrated into the nonmem2rx ui.</p></dd>
 
 
 <dt>strictLst</dt>
@@ -265,9 +274,9 @@ information</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta1` to `0.0729525`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta2` to `0.0380192`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `1.90699`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> replace theta names</span>
@@ -366,13 +375,13 @@ information</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta2` to `0.0993872449483344`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `0.101302674763154`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta4` to `0.0730497519364148`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
