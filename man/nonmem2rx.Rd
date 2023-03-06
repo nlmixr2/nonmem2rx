@@ -16,6 +16,7 @@ nonmem2rx(
   updateFinal = TRUE,
   determineError = TRUE,
   validate = TRUE,
+  nonmemData = FALSE,
   strictLst = FALSE,
   unintFixed = FALSE,
   nLinesPro = 20L,
@@ -85,6 +86,12 @@ not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)}
 \item{validate}{Boolean that this tool will attempt to "validate"
 the model by solving the derived model under pred conditions
 (etas are zero and eps values are zero)}
+
+\item{nonmemData}{Boolean that tells `nonmem2rx` to read in the
+nonmem data (if possible) even if the model will not be validated
+(like if it is a simulation run or missing final parameter
+estimates).  By default this is `FALSE`, nonmem data will not be
+integrated into the nonmem2rx ui.}
 
 \item{strictLst}{The list parsing needs to be correct for a
 successful load (default `FALSE`).}

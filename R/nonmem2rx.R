@@ -329,6 +329,12 @@
 #'   the model by solving the derived model under pred conditions
 #'   (etas are zero and eps values are zero)
 #'
+#' @param nonmemData Boolean that tells `nonmem2rx` to read in the
+#'   nonmem data (if possible) even if the model will not be validated
+#'   (like if it is a simulation run or missing final parameter
+#'   estimates).  By default this is `FALSE`, nonmem data will not be
+#'   integrated into the nonmem2rx ui.
+#'
 #' @param strictLst The list parsing needs to be correct for a
 #'   successful load (default `FALSE`).
 #'
@@ -391,6 +397,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       updateFinal=TRUE,
                       determineError=TRUE,
                       validate=TRUE,
+                      nonmemData=FALSE,
                       strictLst=FALSE,
                       unintFixed=FALSE,
                       nLinesPro=20L,
@@ -542,10 +549,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
   }
   .ipredData <- .predData <- .etaData  <- .nonmemData <- NULL
-  if (validate)  {
-    .model <- .rx$simulationModel
+  if (validate || nonmemData) {
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
                                          rename=rename, delta=delta)
+  }
+  if (validate)  {
+    .model <- .rx$simulationModel
     .predData <- .ipredData <- .readInIpredFromTables(file, nonmemOutputDir=nonmemOutputDir,
                                                       rename=rename)
     if (!is.null(.ipredData)) {
@@ -630,6 +639,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   # now try to validate
   if (!is.null(.nonmemData)) {
     .rx$nonmemData <- .nonmemData
+  }
+  if (!is.null(.nonmemData) && validate) {
     .model <- .rx$simulationModel
     .theta <- .rx$theta
     .ci0 <- .ci <- 0.95
