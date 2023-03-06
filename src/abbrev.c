@@ -112,7 +112,7 @@ SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label)
 SEXP nonmem2rxNeedNmevid(void);
 SEXP nonmem2rxNeedYtype(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
-SEXP nonmem2rxHasVolume(void);
+SEXP nonmem2rxHasVolume(const char *v);
 SEXP nonmem2rxNeedExit(void);
 
 int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
@@ -288,7 +288,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     }
     int hasV = v[0] == 'V';
     if (hasV) {
-      nonmem2rxHasVolume();
+      nonmem2rxHasVolume(v);
     }
     if (definingScale && hasV) {
       nonmem2rxPushScaleVolume(definingScale-1, v);

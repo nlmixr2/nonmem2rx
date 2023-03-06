@@ -53,6 +53,9 @@ nonmem2rxRec.err <- function(x) {
       }
     }
     .addModel("rxLinCmt1 <- linCmt()")
+    if (length(.nonmem2rx$allVol) == 1L) {
+      .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol))
+    }
   }
   # in rxode2 scale is automatically calculated for linear models based on volume
   # volume needs to be divided out
@@ -131,10 +134,12 @@ nonmem2rxRec.err <- function(x) {
 }
 #' Tells the parser that a volume is in the model
 #'  
+#' @param vol volume
 #' @return nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.hasVolume <- function() {
+.hasVolume <- function(vol) {
+  .nonmem2rx$allVol <- unique(c(.nonmem2rx$allVol, vol))
   .nonmem2rx$hasVol <- TRUE
 }
 #' Push defined volume information in the scaling
