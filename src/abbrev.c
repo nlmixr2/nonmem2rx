@@ -521,6 +521,34 @@ int abbrev_function(char *name, int i, D_ParseNode *pn) {
   return 0;
 }
 
+int abbrev_if1_clauses(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("if1", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "if (", 4);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    } else if (i == 3) {
+      sAppendN(&curLine, ") ", 2);
+      return 1;
+    }
+    return 0;
+  } else if (!strcmp("if1other", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "if (", 4);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    } else if (i == 3) {
+      sAppendN(&curLine, ") {", 3);
+      pushModel();
+      return 1;
+    }
+    return 0;
+  }
+  return 0;
+}
+
 int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("ifthen", name)) {
     if (i == 0) {
@@ -592,17 +620,6 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
       char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       sAppend(&curLine, ") ierprdu <- 100000 * %s + %s", v1, v2);
       nonmem2rxNeedExit();
-      return 1;
-    }
-    return 0;
-  } else if (!strcmp("if1", name)) {
-    if (i == 0) {
-      sAppendN(&curLine, "if (", 4);
-      return 1;
-    } else if (i == 1) {
-      return 1;
-    } else if (i == 3) {
-      sAppendN(&curLine, ") ", 2);
       return 1;
     }
     return 0;
@@ -1001,6 +1018,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       if (abbrev_identifier_or_constant(name, i, pn) ||
           abbrev_params(name, i,  pn) ||
           abbrev_if_while_clause(name, i, pn) ||
+          abbrev_if1_clauses(name, i, pn) ||
           abbrev_cmt_ddt_related(name, i, pn) ||
           abbrev_cmt_properties(name, i, pn) ||
           abbrev_function(name, i, pn) ||
@@ -1020,6 +1038,10 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       !strcmp("ifcallrandom", name) ||
       !strcmp("ifcallsimeta", name) ||
       !strcmp("ifcallsimeps", name) ) {
+    pushModel();
+  } else if (!strcmp("if1other", name)) {
+    pushModel();
+    sAppendN(&curLine, "}", 1);
     pushModel();
   } else if (!strcmp("fbio", name)) {
     pushModel();

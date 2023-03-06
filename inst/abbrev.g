@@ -7,6 +7,7 @@ statement_list : call_protocol_phrase?
 statement 
   : assignment singleLineComment?
   | if1 singleLineComment?
+  | if1other singleLineComment?
   | ifthen singleLineComment?
   | ifcallrandom singleLineComment?
   | ifcallsimeps singleLineComment?
@@ -73,6 +74,9 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
+if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp);
+
+
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
 elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
 else: 'ELSE';
