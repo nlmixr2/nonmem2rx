@@ -89,6 +89,7 @@ test_that("test abbrev", {
     .a("F1 = 1",c("rxf.rxddta1. <- 1", "f(rxddta1) <- rxf.rxddta1."))
     .a("R1 = 1",c("rxrate.rxddta1. <- 1", "rate(rxddta1) <- rxrate.rxddta1."))
     .a("D1 = 1",c("rxdur.rxddta1. <- 1", "dur(rxddta1) <- rxdur.rxddta1."))
+    .a("ALAG1 = 1", c("rxalag.rxddta1. <- 1", "alag(rxddta1) <- rxalag.rxddta1."))
     .a("S1 = 1","scale1 <- 1")
     .a(" CL      = LOG(A)", "CL <- log(A)")
     .a(" CL      = MIN(C, D)", "CL <- min(C, D)")

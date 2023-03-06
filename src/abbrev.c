@@ -813,10 +813,10 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppendN(&curLine, "alag(", 5);
+      sAppendN(&curLine, "rxalag.", 7);
       writeAinfo(v + 4);
       cmtInfoStr = v + 4;
-      sAppendN(&curLine, ") <- ", 5);
+      sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1) {
       return 1;
