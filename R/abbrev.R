@@ -42,17 +42,38 @@ nonmem2rxRec.err <- function(x) {
   class(.x) <- NULL
   # Add F for linear models
   if (.nonmem2rx$abbrevLin != 0L) {
+    .vcOne <- FALSE
     if (!.nonmem2rx$hasVol) {
       if (.nonmem2rx$abbrevLin == 1L && is.null(.nonmem2rx$scaleVol[["scale1"]])) {
         .minfo("Assuming a central volume of 1")
         .addModel("VC <- 1")
+        .vcOne <- TRUE
       }
       if (.nonmem2rx$abbrevLin == 2L && is.null(.nonmem2rx$scaleVol[["scale2"]])) {
         .minfo("Assuming a central volume of 1")
         .addModel("VC <- 1")
+        .vcOne <- TRUE
       }
     }
     .addModel("rxLinCmt1 <- linCmt()")
+    if (.vcOne || length(.nonmem2rx$allVol) == 0L) {
+      .addModel(paste0("central <- rxLinCmt1"))
+    } else {
+      # can be v or v1/v2 depending on the advan/trans combo
+      .w <- which(tolower(.nonmem2rx$allVol) == "v")
+      if (length(.w) == 1L) {
+        .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
+      } else {
+        # v1/v2 determined by abbrevLin
+        .w <- which(tolower(.nonmem2rx$allVol) == paste0("v", .nonmem2rx$abbrevLin))
+        if (length(.w) == 1L) {
+          .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
+        } else {
+          .minfo("cannot determine volume assuming central=linear compartment model")
+          .addModel(paste0("central <- rxLinCmt1"))
+        }        
+      }
+    }
   }
   # in rxode2 scale is automatically calculated for linear models based on volume
   # volume needs to be divided out
@@ -131,10 +152,12 @@ nonmem2rxRec.err <- function(x) {
 }
 #' Tells the parser that a volume is in the model
 #'  
+#' @param vol volume
 #' @return nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
-.hasVolume <- function() {
+.hasVolume <- function(vol) {
+  .nonmem2rx$allVol <- unique(c(.nonmem2rx$allVol, vol))
   .nonmem2rx$hasVol <- TRUE
 }
 #' Push defined volume information in the scaling
