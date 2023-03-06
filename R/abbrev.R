@@ -42,7 +42,7 @@ nonmem2rxRec.err <- function(x) {
   class(.x) <- NULL
   # Add F for linear models
   if (.nonmem2rx$abbrevLin != 0L) {
-    .vcOne <- FALSES
+    .vcOne <- FALSE
     if (!.nonmem2rx$hasVol) {
       if (.nonmem2rx$abbrevLin == 1L && is.null(.nonmem2rx$scaleVol[["scale1"]])) {
         .minfo("Assuming a central volume of 1")
