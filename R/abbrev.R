@@ -71,7 +71,7 @@ nonmem2rxRec.err <- function(x) {
         } else {
           .minfo("cannot determine volume assuming central=linear compartment model")
           .addModel(paste0("central <- rxLinCmt1"))
-        }        
+        }
       }
     }
   }
@@ -112,8 +112,8 @@ nonmem2rxRec.err <- function(x) {
   }
   invisible()
 }
-#' Get scale for compartment (if defined) 
-#'  
+#' Get scale for compartment (if defined)
+#'
 #' @param scale integer for compartment
 #' @param des is this an ODE system
 #' @return string "/scale#" if present  an empty string "" if not present
@@ -126,7 +126,7 @@ nonmem2rxRec.err <- function(x) {
 
 #' Set maximum number of compartments
 #'
-#' @param maxa maximum 
+#' @param maxa maximum
 #' @return nothing called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
@@ -151,7 +151,7 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$needYtype <- TRUE
 }
 #' Tells the parser that a volume is in the model
-#'  
+#'
 #' @param vol volume
 #' @return nothing, called for side effects
 #' @noRd
@@ -161,8 +161,8 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$hasVol <- TRUE
 }
 #' Push defined volume information in the scaling
-#'  
-#' @param scale Scale integer representing 
+#'
+#' @param scale Scale integer representing
 #' @param volume volume defined while defining scale
 #' @return none, called for side effects
 #' @noRd
@@ -190,8 +190,8 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$sigmaEst <- rbind(.nonmem2rx$sigmaEst, data.frame(x=x, y=y))
 }
 
-#' Push observed omega(#, #) into translation queue  
-#'  
+#' Push observed omega(#, #) into translation queue
+#'
 #' @param x integer of the row of the omega matrix
 #' @param y integer of the column of the omega matrix
 #' @return nothing, called for side effects
@@ -199,7 +199,7 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .pushOmegaEst <- function(x, y) {
   .w <- which(.nonmem2rx$omegaEst$x == x && .nonmem2rx$omegaEst$y == y)
-  if (length(.w) != 0L) return(invisible()) 
+  if (length(.w) != 0L) return(invisible())
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
 }
 
@@ -227,7 +227,7 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$etaObs <- unique(c(.nonmem2rx$etaObs, i))
 }
 #' Push the maximum observed ETA
-#'  
+#'
 #' @param i eta number
 #' @return nothing, called for side effects
 #' @noRd
@@ -237,7 +237,7 @@ nonmem2rxRec.err <- function(x) {
 }
 
 #' Push the maximum observed THETA
-#'  
+#'
 #' @param i theta number
 #' @return nothing, called for side effects
 #' @noRd
@@ -281,7 +281,7 @@ nonmem2rxRec.err <- function(x) {
   .ret
 }
 #' Puts in any missing parameter definitions
-#'  
+#'
 #' @return missing parameters
 #' @noRd
 #' @author Matthew L. Fidler
@@ -308,11 +308,20 @@ nonmem2rxRec.err <- function(x) {
   }
   ""
 }
-#' Needs variable for exit statement  
-#'  
+#' Needs variable for exit statement
+#'
 #' @return nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
 .needExit <- function() {
   .nonmem2rx$needExit <- TRUE
+}
+#' Track that NONMEM defined a variable
+#'
+#' @param lhs variable being defined
+#' @return
+#' @noRd
+#' @author Matthew L. Fidler
+.addLhsVar <- function(lhs) {
+  .nonmem2rx$lhsDef <- c(.nonmem2rx$lhsDef, lhs)
 }

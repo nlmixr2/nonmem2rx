@@ -490,5 +490,12 @@ extern "C" SEXP nonmem2rxSetSsRtol(int tol) {
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");
   Function setSsRtol(".setSsRtol", nonmem2rxNs);
   return setSsRtol(tol);
-  END_RCPP  
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxAddLhsVar(const char* v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function addLhsVar(".addLhsVar", nonmem2rxNs);
+  return addLhsVar(v);
+  END_RCPP
 }

@@ -84,6 +84,7 @@ SEXP nonmem2rxGetModelNum(const char *v);
 SEXP nonmem2rxGetThetaNum(const char *v);
 SEXP nonmem2rxGetEtaNum(const char *v);
 SEXP nonmem2rxGetEpsNum(const char *v);
+SEXP nonmem2rxAddLhsVar(const char* v);
 
 int maxA = 0,
   definingScale = 0;
@@ -1012,6 +1013,15 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     nonmem2rxNeedExit();
     pushModel();
     return;
+  } else if (!strcmp("assignment", name) ||
+             !strcmp("fbio", name) ||
+             !strcmp("alag", name) ||
+             !strcmp("rate", name) ||
+             !strcmp("dur", name)  ||
+             !strcmp("scale", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxAddLhsVar(v);
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {

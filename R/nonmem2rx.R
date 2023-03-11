@@ -60,6 +60,7 @@
   .nonmem2rx$ssRtolSet <- FALSE
   .nonmem2rx$ssRtol <- 1e-12
   .nonmem2rx$allVol <- NULL
+  .nonmem2rx$lhsDef <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'
