@@ -123,7 +123,7 @@ nminfo <- function(file,
       if (file.exists(file)) {
         if (verbose) .minfo("seeing if file argument is actually lst file")
         .fileLines <- suppressWarnings(readLines(file))
-        .w <- which(regexpr("^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +)", .lstFile)!=-1)
+        .w <- which(regexpr("^( *NM-TRAN +MESSAGES *| *1NONLINEAR *MIXED|License +Registered +to: +)", .fileLines)!=-1)
         if (length(.w) == 0L) {
           .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
           if (length(.wpro) != 0L) {
