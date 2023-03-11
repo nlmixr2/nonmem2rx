@@ -14,9 +14,11 @@ comp_option: identifier_nm ','?;
 comp_statement_1: comp_name '='? '(' identifier_nm ','?  comp_option* ')' ','? ;
 comp_statement_2: comp_name ','? ;
 comp_statement_3: comp_name '='? '(' string ','?  comp_option* ')' ','? ;
+comp_statement_4: comp_name '='? ;
 
 
-comp_statement: (comp_statement_1 | comp_statement_2 | comp_statement_3 | ncpt_statement | link_statement);
+comp_statement: (comp_statement_1 | comp_statement_2 | comp_statement_3 | comp_statement_4 |
+            ncpt_statement | link_statement);
 
 link_statement: link_keyword link_cmt to_keyword? link_cmt by_keyword decimalint decimalint?;
 link_cmt: identifier_nm | decimalint;
