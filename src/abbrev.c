@@ -283,12 +283,11 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
-    if (curLine.s[0] != 0) {
+    if (strstr(curLine.s, "<-") == NULL) {
       char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
       if (strcmp(v, v2)) {
-        // different variable
-        sAppend(&curLine, v2);
-        return 1;
+        // different variable, swap and continue
+        v = v2;
       }
     }
     int i = 0;
