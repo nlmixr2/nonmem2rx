@@ -180,6 +180,14 @@ extern "C" SEXP nonmem2rxGetScale(int scale) {
   END_RCPP
 }
 
+extern "C" SEXP nonmem2rxGetExtendedVar(const char *v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function getExtendedVar(".getExtendedVar", nonmem2rxNs);
+  return getExtendedVar(v);
+  END_RCPP
+}
+
 extern "C" SEXP nonmem2rxSetAdvan(int advan) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");

@@ -85,6 +85,7 @@ SEXP nonmem2rxGetThetaNum(const char *v);
 SEXP nonmem2rxGetEtaNum(const char *v);
 SEXP nonmem2rxGetEpsNum(const char *v);
 SEXP nonmem2rxAddLhsVar(const char* v);
+SEXP nonmem2rxGetExtendedVar(const char *v);
 
 int maxA = 0,
   definingScale = 0;
@@ -282,6 +283,12 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
+    char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
+    if (strcmp(v, v2)) {
+      // different variable
+      sAppend(&curLine, v2);
+      return 1;
+    }
     int i = 0;
     while(v[i] != 0) {
       v[i] = toupper(v[i]);

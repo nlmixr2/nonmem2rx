@@ -325,3 +325,35 @@ nonmem2rxRec.err <- function(x) {
 .addLhsVar <- function(lhs) {
   .nonmem2rx$lhsDef <- c(.nonmem2rx$lhsDef, lhs)
 }
+#' Get the variable name considering extended control streams
+#'
+#' @param var Variable to consider
+#' @return variable (if nothing changed) or theta/eta/eps
+#' @noRd
+#' @author Matthew L. Fidler
+.getExtendedVar <- function(var) {
+  .lhs <- .nonmem2rx$lhsDef
+  if (length(.lhs) > 1) {
+    .lhs <- .lhs[-length(.lhs)]
+    if (var %in% .lhs) return(var)
+  }
+  .v <- tolower(var)
+  .w <- which(.v == tolower(.nonmem2rx$theta))
+  if (length(.w) == 1L) {
+    .pushObservedThetaObs(.w)
+    .ret <- paste0("theta", .w)
+    return(.ret)
+  }
+  .w <- which(.v == tolower(.nonmem2rx$etaLabel))
+  if (length(.w) == 1L) {
+    .pushObservedEtaObs(.w)
+    .ret <- paste0("eta", .w)
+    return(.ret)
+  }
+  .w <- which(.v == tolower(.nonmem2rx$epsLabel))
+  if (length(.w) == 1L) {
+    .ret <- paste0("eps", .w)
+    return(.ret)
+  }
+  var
+}
