@@ -496,17 +496,18 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
              })
     }
   }
-  .fun <- eval(parse(text=paste0("function() {\n",
-                         "rxode2::ini({\n",
-                         paste(.nonmem2rx$ini, collapse="\n"),
-                         "\n})\n",
-                         "rxode2::model({\n",
-                         .desPrefix(),
-                         .missingPrefix(),
-                         ifelse(.nonmem2rx$needExit, "ierprdu <- -1\n", ""),
-                         paste(.nonmem2rx$model, collapse="\n"),
-                         "\n})",
-                         "}")))
+  .txt <- paste0("function() {\n",
+                 "rxode2::ini({\n",
+                 paste(.nonmem2rx$ini, collapse="\n"),
+                 "\n})\n",
+                 "rxode2::model({\n",
+                 .desPrefix(),
+                 .missingPrefix(),
+                 ifelse(.nonmem2rx$needExit, "ierprdu <- -1\n", ""),
+                 paste(.nonmem2rx$model, collapse="\n"),
+                 "\n})",
+                 "}")
+  .fun <- eval(parse(text=.txt))
   .rx <- .fun()
   .update <- FALSE
   if (updateFinal) {

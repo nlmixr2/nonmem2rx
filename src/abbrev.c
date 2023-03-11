@@ -258,7 +258,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
         idWarning = 1;
         nonmem2rxNeedNmid();
       }
-      sAppendN(&curLine, "nmid", 6);
+      sAppendN(&curLine, "nmid", 4);
       return 1;
     } else if (!nmrxstrcmpi("evid", v)) {
       if (evidWarning == 0) {
