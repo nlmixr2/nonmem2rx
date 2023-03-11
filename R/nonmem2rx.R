@@ -510,6 +510,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (!.update) {
     if (validate) {
       .minfo("final parameters not updated, will skip validation")
+      .msg <- "final parameters not updated, validation skipped"
       validate <- FALSE
     }
   }
@@ -645,6 +646,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (!is.null(.nonmemData)) {
     .rx$nonmemData <- .nonmemData
   }
+  if (is.null(.nonmemData) && validate) {
+    .msg <- "could not read in input data; validation skipped"
+  }
   if (!is.null(.nonmemData) && validate) {
     .model <- .rx$simulationModel
     .theta <- .rx$theta
@@ -683,6 +687,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
           if (!all(.idNm == .params[,.wid])) {
             .minfo("id values between input and output do not match, skipping IPRED check")
             .doIpred <- FALSE
+            .msg <- "id values between input and output do not match, skipping IPRED validation"
           }
         }
         .params <- .params[,-.wid]
@@ -727,9 +732,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
           .rx$ipredRtol <- .qi[3]/100
           .rx$ipredCompare <- .cmp
         } else {
-          .minfo(sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
-                         length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
-                         length(.nonmemData[,1])))
+          .msg <- sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
+                          length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
+                          length(.nonmemData[,1]))
+          .minfo(.msg)
         }
       }
     }
@@ -785,19 +791,22 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
           .rx$predRtol <- .qp[3]/100
           .rx$predCompare <- .cmp
         } else {
-          .minfo(sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
-                         length(.predSolve[[.y]]),
-                         length(.predData$PRED),
-                         length(.nonmemData[,1])))
+          .msg <- c(.msg,
+                    sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
+                            length(.predSolve[[.y]]),
+                            length(.predData$PRED),
+                            length(.nonmemData[,1])))
+          .minfo(.msg[length(.msg)])
         }
       }
     }
-    if (!is.null(.msg)) {
-      .rx$meta$validation <- .msg
-    }
     if (is.null(.ipredData) && is.null(.predData)) {
+      .msg <- "NONMEM input data found but could not find output PRED/IPRED data to validate against"
       warning("NONMEM input data found but could not find output PRED/IPRED data to validate against", call.=FALSE)
     }
+  }
+  if (!is.null(.msg)) {
+    .rx$meta$validation <- .msg
   }
   if (length(.nonmem2rx$modelDesc) > 0) {
     .rx$meta$description <- .nonmem2rx$modelDesc
