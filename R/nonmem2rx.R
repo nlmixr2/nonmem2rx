@@ -97,8 +97,17 @@
 .toLowerLhs <- function(rxui) {
   .minfo("changing most variables to lower case")
   .mv <- rxode2::rxModelVars(rxui)
-  .lhs <- tolower(.mv$lhs)
   .rhs <- .mv$lhs
+  .w <- which(.rhs %in% .mv$params)
+  if (length(.w) > 0)  {
+    .rhs <- .rhs[-.w]
+  }
+  .lhs <- tolower(.rhs)
+  .w <- which(.lhs %in% .mv$params)
+  if (length(.w) > 0)  {
+    .rhs <- .rhs[-.w]
+    .lhs <- .lhs[-.w]
+  }
   .w <- which(.lhs == .rhs)
   if (length(.w) > 0) {
     .lhs <- .lhs[-.w]
