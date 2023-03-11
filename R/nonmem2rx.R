@@ -61,6 +61,7 @@
   .nonmem2rx$ssRtol <- 1e-12
   .nonmem2rx$allVol <- NULL
   .nonmem2rx$lhsDef <- NULL
+  .nonmem2rx$extendedCtl <- TRUE
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -342,6 +343,9 @@
 #'
 #' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
 #'
+#' @param extended Translate extended control streams from tools like
+#'   wings for NONMEM (default `TRUE`)
+#'
 #' @param nLinesPro The number of lines to check for the $PROBLEM
 #'   statement.
 #'
@@ -402,6 +406,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       nonmemData=FALSE,
                       strictLst=FALSE,
                       unintFixed=FALSE,
+                      extended=TRUE,
                       nLinesPro=20L,
                       delta=1e-4,
                       usePhi=TRUE,
@@ -421,9 +426,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (!is.null(rename)) checkmate::assertCharacter(rename, any.missing=FALSE, min.len=1, names="strict")
   checkmate::assertLogical(tolowerLhs, len=1, any.missing = FALSE)
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
+  checkmate::assertLogical(unintFixed, len=1, any.missing= FALSE)
+  checkmate::assertLogical(extended, len=1, any.missing= FALSE)
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   checkmate::assertIntegerish(nLinesPro, len=1, lower=1)
   .clearNonmem2rx()
+  .nonmem2rx$extendedCtl <- extended
   .nonmem2rx$unintFixed <- unintFixed
   on.exit({
     .Call(`_nonmem2rx_r_parseFree`)

@@ -319,7 +319,7 @@ nonmem2rxRec.err <- function(x) {
 #' Track that NONMEM defined a variable
 #'
 #' @param lhs variable being defined
-#' @return
+#' @return nothing called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
 .addLhsVar <- function(lhs) {
@@ -332,6 +332,7 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .getExtendedVar <- function(var) {
+  if (!.nonmem2rx$extendedCtl) return(var)
   .lhs <- .nonmem2rx$lhsDef
   if (length(.lhs) > 1) {
     .lhs <- .lhs[-length(.lhs)]
