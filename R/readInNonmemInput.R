@@ -73,6 +73,10 @@
       .minfo("adding nmevid to dataset")
       .data$nmevid <- .data[, which(tolower(names(.data)) == "evid")]
     }
+    if (.nonmem2rx$needNmid) {
+      .minfo("adding nmid to dataset")
+      .data$nmid <- .data[, which(tolower(names(.data)) == "id")]
+    }
     if (.nonmem2rx$needYtype) {
       .minfo("renaming 'ytype' to 'nmytype'")
       .wyt <- which(tolower(names(.data)) == "ytype")

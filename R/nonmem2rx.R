@@ -26,6 +26,7 @@
   .nonmem2rx$dataIgnore1 <- NULL
   .nonmem2rx$dataRecords <- NA_integer_
   .nonmem2rx$needNmevid <- FALSE
+  .nonmem2rx$needNmid <- FALSE
   .nonmem2rx$tables <- list()
   .nonmem2rx$scaleVol <- list()
   .nonmem2rx$modelDesc <- NULL

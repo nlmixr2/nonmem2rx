@@ -142,6 +142,14 @@ nonmem2rxRec.err <- function(x) {
 .needNmevid <- function() {
   .nonmem2rx$needNmevid <- TRUE
 }
+#' If called, sets the flag that we need nmid in the dataset
+#'
+#' @return none, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.needNmid <- function() {
+  .nonmem2rx$needNmid <- TRUE
+}
 #' Sets the flag that we need ytype renamed to rxytype
 #'
 #' @return nothing, called for side effects

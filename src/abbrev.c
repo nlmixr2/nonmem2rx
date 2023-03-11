@@ -103,6 +103,7 @@ int abbrevLin = 0;
 SEXP nonmem2rxGetScale(int scale);
 
 int evidWarning = 0;
+int idWarning = 0;
 int icallWarning = 0;
 int irepWarning = 0;
 int simWarning=0;
@@ -110,6 +111,8 @@ int ipredSimWarning = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
+SEXP nonmem2rxNeedNmid(void);
+SEXP nonmem2rxNeedNmid(void);
 SEXP nonmem2rxNeedYtype(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 SEXP nonmem2rxHasVolume(const char *v);
@@ -249,6 +252,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
       finalizeSyntaxError();
+    } else if (!nmrxstrcmpi("id", v)) {
+      if (idWarning == 0) {
+        Rf_warning("'id' variable is supported differently rxode2, renamed to 'nmid', rename/copy in your data too");
+        idWarning = 1;
+        nonmem2rxNeedNmid();
+      }
+      sAppendN(&curLine, "nmid", 6);
+      return 1;
     } else if (!nmrxstrcmpi("evid", v)) {
       if (evidWarning == 0) {
         Rf_warning("'evid' variable is not supported in rxode2, renamed to 'nmevid', rename/copy in your data too");
@@ -1124,6 +1135,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   verbWarning = 0;
   maxA = 0;
   evidWarning=0;
+  idWarning=0;
   simWarning=0;
   ipredSimWarning=0;
   icallWarning=0;
