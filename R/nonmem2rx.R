@@ -62,6 +62,7 @@
   .nonmem2rx$allVol <- NULL
   .nonmem2rx$lhsDef <- NULL
   .nonmem2rx$extendedCtl <- TRUE
+  .nonmem2rx$finalInput <- TRUE
 }
 #' Add theta name to .nonmem2rx info
 #'

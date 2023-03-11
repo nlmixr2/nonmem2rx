@@ -325,6 +325,18 @@ nonmem2rxRec.err <- function(x) {
 .addLhsVar <- function(lhs) {
   .nonmem2rx$lhsDef <- c(.nonmem2rx$lhsDef, lhs)
 }
+#'  Calulate the final covariates or nonmem input data items
+#'
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.calcFinalInputNames <- function() {
+  .inp <- .nonmem2rx$input
+  .w <- which(.inp == "DROP")
+  .inp <- .inp[-.w]
+  .inp <- unique(c(names(.inp), setNames(.inp, NULL)))
+  .nonmem2rx$finalInput <- tolower(.inp)
+}
 #' Get the variable name considering extended control streams
 #'
 #' @param var Variable to consider
@@ -333,12 +345,20 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .getExtendedVar <- function(var) {
   if (!.nonmem2rx$extendedCtl) return(var)
-  .lhs <- .nonmem2rx$lhsDef
+  .v <- tolower(var)
+  .lhs <- tolower(.nonmem2rx$lhsDef)
   if (length(.lhs) > 1) {
     .lhs <- .lhs[-length(.lhs)]
-    if (var %in% .lhs) return(var)
+    if (.v %in% .lhs) return(var)
   }
-  .v <- tolower(var)
+  .cmt <- tolower(.nonmem2rx$cmtName)
+  if (length(.cmt) > 0) {
+    if (.v %in% .cmt) return(var)
+  }
+  if (is.null(.nonmem2rx$finalInput)) {
+    .calcFinalInputNames()
+  }
+  if (.v %in% .nonmem2rx$finalInput) return(var)
   .w <- which(.v == tolower(.nonmem2rx$theta))
   if (length(.w) == 1L) {
     .pushObservedThetaObs(.w)

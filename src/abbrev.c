@@ -283,11 +283,13 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
-    char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
-    if (strcmp(v, v2)) {
-      // different variable
-      sAppend(&curLine, v2);
-      return 1;
+    if (curLine.s[0] != 0) {
+      char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
+      if (strcmp(v, v2)) {
+        // different variable
+        sAppend(&curLine, v2);
+        return 1;
+      }
     }
     int i = 0;
     while(v[i] != 0) {
@@ -668,7 +670,7 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
       char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
       Rf_warning("NONMEM call protocol phrase ignored\n  %s", v);
     }
-    return 1; 
+    return 1;
   } else if (!strcmp("callpassmode", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "'CALL PASS(MODE)' statements not supported in translation");
