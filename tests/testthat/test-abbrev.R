@@ -6,6 +6,8 @@ test_that("test abbrev", {
     .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
     expect_equal(.nonmem2rx$model, eq)
   }
+
+  .a("TVCL  = A_0(1) + 3", "TVCL <- rxini.rxddta1. + 3")
   
   .a("TVCL    = matt", "TVCL <- MATT")
   .a("TVCL    = matt+3",

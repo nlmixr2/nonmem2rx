@@ -354,6 +354,30 @@ void writeAinfo(const char *v) {
   finalizeSyntaxError();
 }
 
+int abbrevParamA0(char *name, int i,  D_ParseNode *pn) {
+  int needName=0;
+  if (!strcmp("a0", name) ||
+      (needName = !strcmp("a0I", name))) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetThetaNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
+      int num = atoi(v);
+      sAppendN(&curLine, "rxini.", 6);
+      cmtInfoStr=v;
+      writeAinfo(v);
+      sAppendN(&curLine, ".", 1);
+    }
+    return 1;
+  }
+  return 0;
+}
+
+
 int abbrevParamTheta(char *name, int i,  D_ParseNode *pn) {
   int needName=0;
   if (!strcmp("theta", name) ||
@@ -459,7 +483,8 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
     abbrevParamEta(name, i,  pn) ||
     abbrevParamEps(name, i,  pn) ||
     abbrevParamErr(name, i,  pn) ||
-    abbrevParamAmt(name, i,  pn);
+    abbrevParamAmt(name, i,  pn) ||
+    abbrevParamA0(name, i,  pn);
 }
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {

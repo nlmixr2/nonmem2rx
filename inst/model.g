@@ -14,7 +14,7 @@ comp_option: identifier_nm ','?;
 comp_statement_1: comp_name '='? '(' identifier_nm ','?  comp_option* ')' ','? ;
 comp_statement_2: comp_name ','? ;
 comp_statement_3: comp_name '='? '(' string ','?  comp_option* ')' ','? ;
-comp_statement_4: comp_name '='? ;
+comp_statement_4: comp_name '=' ;
 
 
 comp_statement: (comp_statement_1 | comp_statement_2 | comp_statement_3 | comp_statement_4 |

@@ -141,6 +141,8 @@ err   : ('ERR(' | 'err(') decimalintNo0 ')';
 errI   : ('ERR(' | 'err(') identifier ')';
 amt   : ('A(' | 'a(')  decimalintNo0 ')';
 amtI  : ('A(' | 'a(')  identifier ')';
+a0   : "[Aa][_][0][(]" decimalintNo0 ')';
+a0i  : "[Aa][_][0][(]" identifier ')';
 mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
 mnext : ('MNEXT(' | 'mext(') decimalintNo0 ')';
 mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
@@ -171,6 +173,8 @@ scalei       : "[Ss]([0-9]+|C|O)";
 
 primary_expression 
   : constant
+  | a0
+  | a0i
   | fbioi
   | alagi
   | ratei
