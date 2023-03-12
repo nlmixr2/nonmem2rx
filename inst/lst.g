@@ -26,7 +26,7 @@ constant_line: '+'? (constant_item)+;
 constant_item: est_label | est_label_new | constant | na_item;
 na_item: '.........';
 
-est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) "[0-9]+";
+est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) decimalintY0;
 
 est_label_new: ('THETA' '(' identifier_nm ')' 
   | 'ETA' '(' identifier_nm ')'
@@ -40,6 +40,7 @@ est_label_new: ('THETA' '(' identifier_nm ')'
 constant: '-'? (float1 | float2);
 decimalintNo0: "([1-9][0-9]*)" $term -1;
 decimalint: "0|([1-9][0-9]*)" $term -1;
+decimalintY0: "([0-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 whitespace: "[ \t\r\n*]+";
