@@ -26,7 +26,7 @@ constant_line: '+'? (constant_item)+;
 constant_item: est_label | est_label_new | constant | na_item;
 na_item: '.........';
 
-est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) decimalint;
+est_label: ('TH' | 'ETA' | 'ET' | 'EPS' | 'EP' | 'OM' | 'SG' ) "[0-9]+";
 
 est_label_new: ('THETA' '(' identifier_nm ')' 
   | 'ETA' '(' identifier_nm ')'

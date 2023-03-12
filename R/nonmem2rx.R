@@ -526,7 +526,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                  "\n})",
                  "}")
   .fun <- eval(parse(text=.txt))
-  print(.fun)
   .rx <- .fun()
   .update <- FALSE
   if (updateFinal) {
