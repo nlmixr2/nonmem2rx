@@ -105,6 +105,10 @@ void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushModel(v);
+  } else if (!strcmp("comp_statement_5", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxPushModel(v);
   } else if (!strcmp("comp_statement_2", name) ||
              !strcmp("comp_statement_4", name)) {
     sClear(&modelName);
