@@ -660,6 +660,7 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
     return 0;
   } else if (!strcmp("dowhile", name)) {
     if (i == 0) {
+      sClear(&curLine);
       sAppendN(&curLine, "while (", 7);
       return 1;
     } else if (i == 1 || i == 2) {

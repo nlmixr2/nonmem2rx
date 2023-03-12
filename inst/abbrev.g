@@ -85,7 +85,7 @@ elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
 else: 'ELSE';
 endif: ('ENDIF' | 'END' 'IF');
 dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
-enddo: 'ENDDO';
+enddo: ('ENDDO' | 'END' 'DO');
 
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
 ifcallsimeta: 'IF' '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';

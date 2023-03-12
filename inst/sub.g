@@ -13,12 +13,14 @@ statement: advan_statement
 advan_keyword: 'advan' | 'ADVAN' | 'Advan';
 advan_statement1: advan_keyword '=' advan_keyword decimalintNo0;
 advan_statement2: advan_keyword decimalintNo0;
-advan_statement:  advan_statement1 | advan_statement2;
+advan_statement3: advan_keyword '=' decimalintNo0;
+advan_statement:  advan_statement1 | advan_statement2 | advan_statement3;
 
 trans_keyword: 'tran' | 'TRAN' | 'Tran' | 'trans' | 'TRANS' | 'Trans';
 trans_statement1: trans_keyword '=' trans_keyword decimalintNo0;
 trans_statement2: trans_keyword decimalintNo0;
-trans_statement:  trans_statement1 | trans_statement2;
+trans_statement3: trans_keyword '=' decimalintNo0;
+trans_statement:  trans_statement1 | trans_statement2 | trans_statement3;
 
 tol_keyword:  'TOL' | 'tol' | 'Tol';
 tol_statement1: tol_keyword '=' decimalintNo0;
