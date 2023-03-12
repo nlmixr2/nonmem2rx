@@ -91,41 +91,37 @@ SEXP nonmem2rxPushModel(const char *cmtName) {
   return nonmem2rxPushModel0(cmtName);
 }
 
-void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
-  char *name = (char*)pt.symbols[pn->symbol].name;
-  int nch = d_get_number_of_children(pn);
-  if (!strcmp("ncpt_statement", name)) {
-    if (nonmem2rx_model_warn_npar ==0)
-      Rf_warning("$MODEL NCOMPARTMENTS/NEQUILIBRIUM/NPARAMETERS statement(s) ignored");
-    nonmem2rx_model_warn_npar = 1;
-  } else if (!strcmp("link_statement", name)) {
-    parseFree(0);
-    Rf_errorcall(R_NilValue, "$MODEL statements with LINK are not currently translated");
-  } else if (!strcmp("comp_statement_1", name)) {
+int model_comp_handle(char *name, D_ParseNode *pn) {
+  if (!strcmp("comp_statement_1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushModel(v);
+    return 1;
   } else if (!strcmp("comp_statement_5", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushModel(v);
+    return 1;
   } else if (!strcmp("comp_statement_7", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sClear(&modelName);
     sAppend(&modelName, "rxddta%s", v);
     nonmem2rxPushModel(modelName.s);
+    return 1;
   } else if (!strcmp("comp_statement_6", name)) {
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     sClear(&modelName);
     sAppend(&modelName, "rxddta%s", v);
     nonmem2rxPushModel(modelName.s);
+    return 1;
   } else if (!strcmp("comp_statement_2", name) ||
              !strcmp("comp_statement_4", name)) {
     sClear(&modelName);
     sAppend(&modelName, "rxddta%d", nonmem2rx_model_cmt);
     nonmem2rxPushModel(modelName.s);
+    return 1;
   } else if (!strcmp("comp_statement_3", name)) {
     sClear(&modelName);
     D_ParseNode *xpn = d_get_child(pn, 3);
@@ -134,7 +130,23 @@ void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print
     int len = strlen(v);
     v[len-1] = 0;
     nonmem2rxPushModel(v);
-  } else if (!strcmp("identifier_nm", name)) {
+    return 1;
+  }
+  return 0;
+}
+
+void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
+  char *name = (char*)pt.symbols[pn->symbol].name;
+  int nch = d_get_number_of_children(pn);
+  if (model_comp_handle(name, pn)) {
+  } else if (!strcmp("ncpt_statement", name)) {
+    if (nonmem2rx_model_warn_npar ==0)
+      Rf_warning("$MODEL NCOMPARTMENTS/NEQUILIBRIUM/NPARAMETERS statement(s) ignored");
+    nonmem2rx_model_warn_npar = 1;
+  } else if (!strcmp("link_statement", name)) {
+    parseFree(0);
+    Rf_errorcall(R_NilValue, "$MODEL statements with LINK are not currently translated");
+  } else  if (!strcmp("identifier_nm", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     if (!nmrxstrcmpi("defdose", v)) {
       nonmem2rxDefDose = nonmem2rx_model_cmt - 1;
