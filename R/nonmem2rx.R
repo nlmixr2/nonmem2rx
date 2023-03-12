@@ -264,8 +264,13 @@
       for (i in seq_along(.nonmem2rx$omegaEst$x)) {
         .x <- .nonmem2rx$omegaEst$x[i]
         .y <- .nonmem2rx$omegaEst$y[i]
-        .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { omega.%d.%d <- %f})",
-                                       .x, .y, .omega[.x, .y])))
+        if (.y == -1L) {
+          .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { omega.%d. <- %f})",
+                                         .x, .omega[.x, .x])))
+        } else {
+          .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { omega.%d.%d <- %f})",
+                                         .x, .y, .omega[.x, .y])))
+        }
       }
     }
   }
@@ -276,8 +281,13 @@
       for (i in seq_along(.nonmem2rx$sigmaEst$x)) {
         .x <- .nonmem2rx$sigmaEst$x[i]
         .y <- .nonmem2rx$sigmaEst$y[i]
-        .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { sigma.%d.%d <- %f})",
-                                       .x, .y, .sigma[.x, .y])))
+        if (.y == -1L) {
+          .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { sigma.%d. <- %f})",
+                                         .x, .sigma[.x, .x])))
+        } else {
+          .rx <- eval(parse(text=sprintf("rxode2::ini(.rx, { sigma.%d.%d <- %f})",
+                                         .x, .y, .sigma[.x, .y])))
+        }
       }
     }
     .update.sigma <- TRUE
@@ -478,7 +488,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
              function(i) {
                .x <- .nonmem2rx$sigmaEst$x[i]
                .y <- .nonmem2rx$sigmaEst$y[i]
-               .addIni(sprintf("sigma.%d.%d <- %f", .x, .y, .sigma[.x, .y]))
+               if (.y == -1) {
+                 .addIni(sprintf("sigma.%d. <- %f", .x, .sigma[.x, .x]))
+               } else {
+                 .addIni(sprintf("sigma.%d.%d <- %f", .x, .y, .sigma[.x, .y]))
+               }
              })
     }
   }
@@ -492,7 +506,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
              function(i) {
                .x <- .nonmem2rx$omegaEst$x[i]
                .y <- .nonmem2rx$omegaEst$y[i]
-               .addIni(sprintf("omega.%d.%d <- %f", .x, .y, .omega[.x, .y]))
+               if (.y == -1) {
+                 .addIni(sprintf("omega.%d. <- %f", .x, .omega[.x, .x]))
+               } else {
+                 .addIni(sprintf("omega.%d.%d <- %f", .x, .y, .omega[.x, .y]))
+               }
              })
     }
   }
@@ -508,6 +526,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                  "\n})",
                  "}")
   .fun <- eval(parse(text=.txt))
+  print(.fun)
   .rx <- .fun()
   .update <- FALSE
   if (updateFinal) {

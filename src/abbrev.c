@@ -366,7 +366,6 @@ int abbrevParamA0(char *name, int i,  D_ParseNode *pn) {
         v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
         UNPROTECT(1);
       }
-      int num = atoi(v);
       sAppendN(&curLine, "rxini.", 6);
       cmtInfoStr=v;
       writeAinfo(v);
@@ -764,6 +763,18 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     sAppend(&curLine, "sigma.%d.%d", x, y);
     nonmem2rxPushSigmaEst(x, y);
     return 0;
+  } else if (!strcmp("sigma1", name)) {
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    //parseFree(0);
+    int x = atoi(v1);
+    Rf_warning("SIGMA(%d) does not have an equivalent rxode2/nlmixr2 code\nreplacing with a constant from the model translation\nthis will not be updated with simulations",
+               x);
+    sAppend(&curLine, "sigma.%d.", x);
+    nonmem2rxPushSigmaEst(x, -1);
+    return 0;
   } else if (!strcmp("omega", name)) {
     if (i != 0) return 1;
     D_ParseNode *xpn = d_get_child(pn, 1);
@@ -775,6 +786,15 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
                  x, y);
     sAppend(&curLine, "omega.%d.%d", x, y);
     nonmem2rxPushOmegaEst(x, y);
+  } else if (!strcmp("omega1", name)) {
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int x = atoi(v1);
+    Rf_warning("OMEGA(%d) does not have an equivalent rxode2/nlmixr2 code\nreplacing with a constant from the model translation\nthis will not be updated with simulations",
+                 x);
+    sAppend(&curLine, "omega.%d.", x);
+    nonmem2rxPushOmegaEst(x, -1);
   }
   return 0;
 }

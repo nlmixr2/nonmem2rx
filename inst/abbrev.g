@@ -151,6 +151,8 @@ com   : ('COM(' | 'com(') decimalintNo0 ')';
 pcmt  : ('PCMT(' | 'pcmt(') decimalintNo0 ')';
 sigma  : ('SIGMA(' | 'sigma(') decimalintNo0 ',' decimalintNo0 ')';
 omega  : ('OMEGA(' | 'omega(') decimalintNo0 ',' decimalintNo0 ')';
+sigma1  : ('SIGMA(' | 'sigma(') decimalintNo0 ')';
+omega1  : ('OMEGA(' | 'omega(') decimalintNo0 ')';
 
 avar:  "[Aa][0-9][0-9][0-9][0-9][0-9]";
 cvar:  "[Cc][0-9][0-9][0-9][0-9][0-9]";
@@ -202,6 +204,8 @@ primary_expression
   | pcmt
   | sigma
   | omega
+  | sigma1
+  | omega1
   | function
   | '(' logical_or_expression ')'
   ;
