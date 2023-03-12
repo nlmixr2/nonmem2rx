@@ -86,8 +86,8 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "ddmore/218/Output_simulated_OS.lst",
              "ddmore/218/Output_real_OS.lst",
              "ddmore/218/Executable_OS.mod",
-             "ddmore/248/Output_simulated_OriginalModel Code.lst",
              ## advan
+             ## "ddmore/248/Output_simulated_OriginalModel Code.lst",
              ## "ddmore/248/Executable_OriginalModelCode.mod"
              ## "ddmore/248/Output_real_run4.lst",
              "ddmore/222/Output_real_Fatigue_GIST.lst_Fatigue_PSP_2014",
@@ -109,8 +109,10 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "ddmore/212/Output_simulated_tamoxifen.lst",
              "ddmore/215/Output_simulated_Pimasertib_AeDropout.lst",
              "ddmore/215/Output_real_Pimasertib_AeDropout.lst",
-             "ddmore/215/Executable_Pimasertib_AeDropout.mod",
-             "ddmore/239/Executable_P241.ctl")
+             "ddmore/215/Executable_Pimasertib_AeDropout.mod"
+             # mtime
+             ## "ddmore/239/Executable_P241.ctl"
+             )
 
 
   # mixture models
