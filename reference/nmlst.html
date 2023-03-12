@@ -622,7 +622,7 @@ successful load (default `FALSE`).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 120</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nmtran</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] " WARNINGS AND ERRORS (IF ANY) FOR PROBLEM    1\n             \n (WARNING  2) NM-TRAN INFERS THAT THE DATA ARE POPULATION."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $termInfo</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0MINIMIZATION SUCCESSFUL\n NO. OF FUNCTION EVALUATIONS USED:      320\n NO. OF SIG. DIGITS IN FINAL EST.:  2.5"</span>
@@ -637,45 +637,7 @@ successful load (default `FALSE`).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] " Elapsed estimation  time in seconds:    71.95\n Elapsed covariance  time in seconds:    28.38\n Elapsed postprocess time in seconds:     0.43"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $control</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "$PROB    BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "$INPUT   ID TIME DV LNDV MDV AMT EVID DOSE V1I CLI QI V2I SSX IIX SD CMT"           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "$DATA    BOLUS_2CPT.csv IGNORE=@ IGNORE (SD.EQ.0)"                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "$SUBR    ADVAN13 TOL=6"                                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "$MODEL"                                                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "         COMP=(CENTRAL,DEFOBS,DEFDOSE)"                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "         COMP=(PERI)"                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "$PK"                                                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "         CL=EXP(THETA(1)+ETA(1))"                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "         V=EXP(THETA(2)+ETA(2))"                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "         Q=EXP(THETA(3)+ETA(3))"                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12] "         V2=EXP(THETA(4)+ETA(4))"                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "         V1=V"                                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "         S1=V"                                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "\t\t K21=Q/V2"                                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "\t\t K12=Q/V"                                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "$DES"                                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18] "         DADT(1)= K21*A(2)-K12*A(1)-CL*A(1)/V1"                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "         DADT(2)=-K21*A(2)+K12*A(1)  \t\t "                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20] "$ERROR   "                                                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "         IPRED = F     "                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "         RESCV = THETA(5) "                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "         W     = IPRED*RESCV"                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24] "         IRES  = DV-IPRED"                                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "         IWRES = IRES/W"                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] "         Y     = IPRED+W*EPS(1)"                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "$THETA   1.6       ;log Cl"                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "$THETA   4.5       ;log Vc"                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "$THETA   1.6       ;log Q"                                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [30] "$THETA   4         ;log Vp"                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "$THETA   (0,0.3,1) ;RSV"                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [32] "$OMEGA   0.15 0.15 0.15 0.15"                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "$SIGMA   1 FIX"                                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [34] "$EST     NSIG=2 SIGL=6 PRINT=5 MAX=9999 NOABORT POSTHOC METHOD=COND INTER NOOBT"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [35] "$COV"                                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36] "$TABLE  ID TIME LNDV MDV AMT EVID DOSE V1I CLI QI V2I CL V Q V2 ETA1 ETA2 ETA3 ETA4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "        IPRED IRES IWRES CWRESI"                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [38] "        ONEHEADER NOPRINT FILE=runODE032.csv   "                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39] "   "                                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
