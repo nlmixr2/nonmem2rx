@@ -16,10 +16,12 @@ comp_statement_2: comp_name ','? ;
 comp_statement_3: comp_name '='? '(' string ','?  comp_option* ')' ','? ;
 comp_statement_4: comp_name '=' ;
 comp_statement_5: comp_name '='? identifier_nm;
-
+comp_statement_6: comp_name '='? '(' identifier_any ','?  comp_option* ')' ','? ;
+comp_statement_7: comp_name '='? identifier_any;
 
 comp_statement: (comp_statement_1 | comp_statement_2 | comp_statement_3 | comp_statement_4 |
-            comp_statement_5 | ncpt_statement | link_statement);
+            comp_statement_5 | comp_statement_6 | comp_statement_7 | ncpt_statement |
+            link_statement);
 
 link_statement: link_keyword link_cmt to_keyword? link_cmt by_keyword decimalint decimalint?;
 link_cmt: identifier_nm | decimalint;
@@ -37,6 +39,7 @@ string2: "\"([^\"\\]|\\[^])*\"";
 whitespace: ( "[ \t\r\n]+" | singleLineComment)*;
 singleLineComment: ';' "[^\n]*";
 
+identifier_any: "[0-9_][a-zA-Z0-9_]*" $term -5;
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;

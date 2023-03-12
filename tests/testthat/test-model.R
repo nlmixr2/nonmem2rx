@@ -37,5 +37,6 @@ test_that("test model", {
   .m("COMP=('depot compartment with spaces',INITIALOFF,DEFDOSE) COMP=(CENTRAL,DEFOBS,NOOFF)",
      c("depot compartment with spaces", "CENTRAL"))
 
+  .m("COMP=(26XYL)", "rxddta26XYL")
   
 })
