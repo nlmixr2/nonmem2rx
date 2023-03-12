@@ -8,8 +8,10 @@ filename_t2: "\"([^\"\\]|\\[^])*\"";
 filename_t3: "[^ '\"\n]+";
 filename_t4: ("[^ .\n]+")+ '.'  "[A-Za-z0-9_]+";
 
-ignore1_statement: ('IGNORE' | 'ignore' | 'Ignore' | 'ign' | 'Ign' | 'IGN') '='? "[^\n]";
-ignore_statement: ('IGNORE' | 'ignore' | 'Ignore'| 'ign' | 'Ign' | 'IGN') '='? logic_bracket;
+ignore_name: ('IGNORE' | 'ignore' | 'Ignore' | 'ign' | 'Ign' | 'IGN');
+ignore1_statement: ignore_name '='? "[^\n]";
+ignore1a_statement: ignore_name '='? "['\"]" "[^\n]" "['\"]";
+ignore_statement: ignore_name '='? logic_bracket;
 accept_statement: ('ACCEPT' | 'accept' | 'Accept') '='? logic_bracket;
 null_statement: 'NULL' '='? "[^\n]";
 wide_statement: ('NOWIDE' | 'WIDE' | 'nowide' | 'wide' | 'Nowide' | 'Wide');
@@ -37,6 +39,7 @@ le_expression_nm: '<='| '.le.' | '.LE.';
 
 
 statement: ignore1_statement
+    | ignore1a_statement
     | ignore_statement
     | accept_statement
     | null_statement
