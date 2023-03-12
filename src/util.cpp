@@ -253,6 +253,13 @@ extern "C" SEXP nonmem2rxNeedNmevid(void) {
   END_RCPP
 }
 
+extern "C" SEXP nonmem2rxNeedNmid(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needNmid(".needNmid", nonmem2rxNs);
+  needNmid();
+  END_RCPP
+}
 
 extern "C" SEXP nonmem2rxPushTableInfo(const char *file, int hasPred, int fullData,
                                        int hasIpred, int hasEta, const char *fortranFormat) {

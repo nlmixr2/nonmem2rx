@@ -36,7 +36,11 @@ nmxml <- function(xml) {
   lapply(.lst, .nmlst.fun)
 
   .theta <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:theta"), "nm:val"))
-  names(.theta) <- paste0("theta", seq_along(.theta))
+  if (length(.theta) > 0) {
+    names(.theta) <- paste0("theta", seq_along(.theta))
+  } else {
+    .theta <- NULL
+  }
 
   .omega <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:omega"),"nm:row/nm:col"))
   if (length(.omega) > 0) {

@@ -1,12 +1,14 @@
 test_that("test abbrev", {
-  
+
   .a <- function(abbrev, eq="no", abbrevLin=0L) {
     .clearNonmem2rx()
     .Call(`_nonmem2rx_setRecord`, "$PRED")
     .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
     expect_equal(.nonmem2rx$model, eq)
   }
-  
+
+  .a("TVCL  = A_0(1) + 3", "TVCL <- rxini.rxddta1. + 3")
+
   .a("TVCL    = matt", "TVCL <- MATT")
   .a("TVCL    = matt+3",
      "TVCL <- MATT + 3")
@@ -16,7 +18,7 @@ test_that("test abbrev", {
        "TVCL <- theta1 * (1 + theta7 * (CLCR - 65))")
     .a(" CL      = TVCL*DEXP(ETA(1))",
        "CL <- TVCL * exp(eta1)")
-    
+
     .a(" CL      = TVCL*EXP(ETA(1))",
        "CL <- TVCL * exp(eta1)")
 
@@ -59,7 +61,7 @@ test_that("test abbrev", {
 
     # Unsupported lines
     expect_warning(.a("\"FIRST", NULL), "Verbatim")
-    
+
     .a("EXIT 1 2", "ierprdu <- 1*100000+2")
 
     .a("IF (B .LT. 0) EXIT 1 2", "if (B < 0) ierprdu <- 100000 * 1 + 2")
@@ -100,7 +102,7 @@ test_that("test abbrev", {
     .a("CALL SIMEPS(EPS)", "simeps()")
     expect_error(.a("CALL GETETA(ETA)"), "'CALL GETETA")
     expect_error(.a(","), "[$]PRED")
-    
+
     .a("x=time", "X <- t")
     .a("x=t", "X <- t")
 
@@ -141,6 +143,10 @@ test_that("test abbrev", {
 
     expect_warning(.a("a=SIGMA(1, 1)", "A <- sigma.1.1"), "SIGMA")
     expect_warning(.a("a=OMEGA(1, 1)", "A <- omega.1.1"), "OMEGA")
+
+    expect_warning(.a("a=SIGMA(1)", "A <- sigma.1."), "SIGMA")
+    expect_warning(.a("a=OMEGA(1)", "A <- omega.1."), "OMEGA")
+
     expect_warning(.a("a=evid+3", "A <- nmevid + 3"), "evid")
     expect_warning(.a("a=sim+3", "A <- nmsim + 3"), "sim")
     expect_warning(.a("a=ipredSim+3", "A <- nmipredsim + 3"), "ipredSim")
@@ -210,7 +216,7 @@ test_that("test abbrev", {
       .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
       expect_equal(.nonmem2rx$model, eq)
     }
-    
+
     .ae("test = ETA(ECL) + ETA(EV) + ETA(EKA)",
         "TEST <- eta1 + eta2 + eta3")
     expect_error(.ae("test = ETA(FUN)"),
