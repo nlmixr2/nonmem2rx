@@ -14,14 +14,17 @@
 .nmlstControl <- function(line) {
   if (.nmlst$section == .nmlst.control) {
     # search for control stream, typically found at the beginning of the file
+    .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
     if (is.null(.nmlst$control)) {
       .begin <- "^ *([$][Pp][Rr][Oo]| *;.*)"
       if (grepl(.begin, line)) {
         .nmlst$control <- line
+      } else if (grepl(.end, line)) {
+        .nmlst$section <- .nmlst.nmtran
+        return(.nmlst$section)
       }
       return(NULL)
     }
-    .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
     if (grepl(.end, line)) {
       .nmlst$section <- .nmlst.nmtran
     } else {
@@ -34,14 +37,18 @@
 
 .nmlstNmtran <- function(line) {
   if (.nmlst$section == .nmlst.nmtran) {
+    .end <- "(License|^ *[*][*][*]*|[(]NONMEM[)] VERSION)"
     if (is.null(.nmlst$nmtran)) {
       .begin <- "WARNINGS AND ERRORS (IF ANY) FOR PROBLEM"
       if (grepl(.begin, line, fixed =TRUE)) {
         .nmlst$nmtran <- line
+      } else if (grepl(.end, line)) {
+        .nmlst$nmtran <- NULL
+        .nmlst$section <- .nmlst.version
+        return(.nmlst$section)
       }
       return(NULL)
     }
-    .end <- "(License|^ *[*][*][*]*|[(]NONMEM[)] VERSION)"
     if (grepl(.end, line)) {
       while(grepl("^ *$",.nmlst$nmtran[length(.nmlst$nmtran)])) {
         .nmlst$nmtran <- .nmlst$nmtran[-length(.nmlst$nmtran)]
