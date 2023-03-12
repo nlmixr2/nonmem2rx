@@ -896,7 +896,7 @@ unsigned char d_scanner_4_0_0_nonmem2rxAbbrev[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 
 };
 
 unsigned char d_scanner_4_0_1_nonmem2rxAbbrev[SCANNER_BLOCK_SIZE] = {
@@ -1548,7 +1548,7 @@ unsigned char d_scanner_7_0_0_nonmem2rxAbbrev[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 
 };
 
 unsigned char d_scanner_7_1_0_nonmem2rxAbbrev[SCANNER_BLOCK_SIZE] = {
@@ -2114,7 +2114,7 @@ unsigned char d_scanner_45_0_0_nonmem2rxAbbrev[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 
 };
 
 D_Shift * d_accepts_diff_53_0_nonmem2rxAbbrev[] = {0};
@@ -12393,7 +12393,7 @@ D_Symbol d_symbols_nonmem2rxAbbrev[] = {
 {D_SYMBOL_REGEX, "[0-9]+[eE][\\\\-\\\\+]?[0-9]+", 29, -1},
 {D_SYMBOL_REGEX, "[a-zA-Z][a-zA-Z0-9_]*", 21, -1},
 {D_SYMBOL_REGEX, "[ \\t\\r\\n]+", 13, -1},
-{D_SYMBOL_STRING, ";", 1, -1},
+{D_SYMBOL_REGEX, "[;:]", 4, -1},
 {D_SYMBOL_REGEX, "[^\\n]*", 7, -1},
 {D_SYMBOL_STRING, "\\\"", 4, -1},
 {D_SYMBOL_REGEX, "[^\\n]*", 7, -1},
