@@ -48,7 +48,6 @@ test_that("test data", {
 
   expect_error(nonmem2rxRex.dat(c("a", "b")))
 
-
   .f <- function(data, eq="no") {
     .clearNonmem2rx()
     .Call(`_nonmem2rx_trans_data`, data)

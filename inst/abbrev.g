@@ -134,8 +134,9 @@ multiplicative_expression : unary_expression
 
 mult_part : ('*' | '/') unary_expression ;
 
-theta : ('THETA(' | 'theta(') decimalintNo0 ')';
-thetaI : ('THETA(' | 'theta(') identifier ')';
+theta_start: ('THETA(' | 'theta(' | "THETA +[(]");
+theta : theta_start decimalintNo0 ')';
+thetaI : theta_start identifier ')';
 eta   : ('ETA(' | 'eta(') decimalintNo0 ')';
 etaI   : ('ETA(' | 'eta(') identifier ')';
 eps   : ('EPS(' | 'eps(') decimalintNo0 ')';
