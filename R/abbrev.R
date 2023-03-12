@@ -308,7 +308,7 @@ nonmem2rxRec.err <- function(x) {
   if (length(.df) > 0) {
     .ret <- c(.ret, paste0("eta", .df))
   }
-  if (length(.df)) {
+  if (length(.ret) > 0) {
     warning("some thetas/etas are missing in the model. Added to dummy rxMissingVars#",
             call.=FALSE)
     .ret <- paste(paste0("rxMissingVars", seq_along(.ret), " <- ", .ret), collapse="\n")

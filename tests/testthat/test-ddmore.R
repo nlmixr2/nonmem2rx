@@ -44,8 +44,8 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              ## "ddmore/261/Output_real_SAEM_KPD_CTC.count_PSA.lst",
              ## "ddmore/261/Output_real_COV_KPD_CTC.count_PSA.lst",
              # in ini but not in model block
-             #"ddmore/261/Executable_simulated_KPD_CTC.count_PSA.mod",
-             #"ddmore/261/Output_simulated_KPD_CTC.count_PSA.lst",
+             "ddmore/261/Executable_simulated_KPD_CTC.count_PSA.mod",
+             "ddmore/261/Output_simulated_KPD_CTC.count_PSA.lst",
              "ddmore/256/Output_simulated_OriginalModelCode.lst",
              "ddmore/256/Executable_OriginalModelCode.mod",
              "ddmore/256/Output_real_run522.lst",
