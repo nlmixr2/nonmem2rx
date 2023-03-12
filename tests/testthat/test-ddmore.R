@@ -2,6 +2,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
   files <- c("ddmore/267/Output_simulated_OriginalModelCode.lst",
              "ddmore/267/Executable_OriginalModelCode.mod",
              "ddmore/267/Output_real_OriginalModelCode.lst",
+             "ddmore/198/Executable_TGI_GIST.mod",
              "ddmore/238/Executable_run35b_ddm2.mod",
              "ddmore/238/Output_real_run35b.lst",
              "ddmore/243/Output_simulated_runEV1_201.res",
@@ -131,7 +132,6 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
     "ddmore/259/Output_simulated_MTP-GPDI.lst",
     "ddmore/259/Executable_MTP-GPDI.mod",
     # bad formed $theta
-    "ddmore/198/Executable_TGI_GIST.mod",
     # bad advan
     "ddmore/220/Executable_run32150.mod",
     "ddmore/220/Finmod_7_3.lst",
