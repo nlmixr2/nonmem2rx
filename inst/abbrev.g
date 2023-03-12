@@ -1,11 +1,12 @@
 //loop
-statement_list : call_protocol_phrase?
+statement_list : 
  (statement)+ ;
 
 // return and exit statements not supported
 
 statement 
-  : assignment singleLineComment?
+  : call_protocol_phrase singleLineComment?
+  | assignment singleLineComment?
   | if1 singleLineComment?
   | if1other singleLineComment?
   | ifthen singleLineComment?
@@ -62,6 +63,8 @@ callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
 call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         | 'OBS'
         | 'OBSERVATION' 'ONLY'
+        | 'ONLY' 'OBSERVATION' 
+        | 'ONLY' 'OBSERVATIONS' 
         | 'OBS' 'ONLY'
         | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
         | 'ONCE'
@@ -69,8 +72,8 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         | 'IND' 'REC'
         | 'EVERY' 'EVENT'
         | 'EVERY'
-        |'NEW' 'TIME'
-        |'NEW' 'EVENT' 'TIME'
+        | 'NEW' 'TIME'
+        | 'NEW' 'EVENT' 'TIME'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
