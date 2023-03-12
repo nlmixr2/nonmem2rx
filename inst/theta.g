@@ -24,24 +24,24 @@ theta: theta0 | theta1 | theta2 | theta3 | theta4 | theta5 | theta6 | theta7 | t
 
 theta0: ini_constant fixed?;
 
-theta1: '(' theta0 ','?  ','? ')';
-theta6: '(' ini_constant ','? ','? ')' fixed;
+theta1: '(' theta0 ','?  ','? ')'?;
+theta6: '(' ini_constant ','? ','? ')'? fixed;
 
-theta2: '(' low_ini ','? ini_constant ','? ')' fixed;
-theta3: '(' low_ini ','? ini_constant ','? fixed? ','? ')' ;
+theta2: '(' low_ini ','? ini_constant ','? ')'? fixed;
+theta3: '(' low_ini ','? ini_constant ','? fixed? ','? ')'? ;
 
-theta4: '(' low_ini ','? ini_constant ','? hi_constant ')' fixed;
-theta5: '(' low_ini ','? ini_constant ','? hi_constant fixed? ')' ;
+theta4: '(' low_ini ','? ini_constant ','? hi_constant ')'? fixed;
+theta5: '(' low_ini ','? ini_constant ','? hi_constant fixed? ')'? ;
 
-theta7: '(' ini_constant ',' ',' ini_constant ')' ;
+theta7: '(' ini_constant ',' ',' ini_constant ')'? ;
 
-theta8: '(' ini_constant ',' ','? fixed ')';
+theta8: '(' ini_constant ',' ','? fixed ')'?;
 
 name_id: 'NAMES' | 'NAME' |
         'names' | 'name' |
         'Names' | 'Name' ;
 
-name_option:  name_id '(' identifier (',' identifier)* ')';
+name_option:  name_id '(' identifier (',' identifier)* ')'?;
 
 fixed: 'fixed'
  | 'FIXED'
