@@ -112,15 +112,25 @@
   }, logical(1), USE.NAMES=FALSE))
   # at this point there shouldn't be an endpoint
   if (!is.null(.ret$predDf)) stop("at this point there shouldn't be an endpoint", call.=FALSE) #nocov
-  .ret$lstExpr <- lapply(seq_along(.lstExpr)[-.w],
-                         function(i) {
-                           x <- .lstExpr[[i]]
-                           if (length(.ret)== 3L && identical(x[[1]], quote(`<-`)) &&
-                                 identical(x[[2]], quote(`centralLin`))) {
-                             x[[2]] <- str2lang("central")
-                           }
-                           x
-                         })
-  .ret <- model(.ret, {rxLinCmt1 <- linCmt()})
-  .ret
+  .model <- lapply(seq_along(.lstExpr)[-.w],
+                   function(i) {
+                     x <- .lstExpr[[i]]
+                     if (length(x)== 3L && identical(x[[1]], quote(`<-`))) {
+                       print(x)
+                       if (identical(x[[2]], quote(`centralLin`))) {
+                         x[[2]] <- str2lang("central")
+                       } else if (identical(x[[2]], quote(`rxLinCmt1`))) {
+                         x[[3]] <- str2lang("linCmt()")
+                       }
+                     }
+                     x
+                   })
+  .ini <- as.expression(lotri::as.lotri(.ret$iniDf))
+  .ini[[1]] <- str2lang("ini")
+  .model <- as.call(c(list(quote(`{`)), .model))
+  .model <- as.call(c(list(quote(`model`)), .model))
+  .fun0 <- as.call(c(list(quote(`{`)), .ini, .model))
+  .fun <- function() {}
+  body(.fun) <- .fun0
+  .fun()
 }
