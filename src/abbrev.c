@@ -101,6 +101,7 @@ void pushModel(void) {
 void writeAinfo(const char *v);
 
 int abbrevLin = 0;
+int extendedCtrlInt = 0;
 
 SEXP nonmem2rxGetScale(int scale);
 
@@ -294,7 +295,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
-    if (strstr(curLine.s, "<-") == NULL) {
+    if (extendedCtrlInt && strstr(curLine.s, "<-") == NULL) {
       char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
       if (strcmp(v, v2)) {
         // different variable, swap and continue
@@ -1192,10 +1193,11 @@ void trans_abbrev(const char* parse){
 
 SEXP nonmem2rxSetMaxA(int maxa);
 
-SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
+SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP extendedCtrlSEXP) {
   sClear(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
+  extendedCtrlInt = INTEGER(extendedCtrlSEXP)[0];
   verbWarning = 0;
   maxA = 0;
   evidWarning=0;

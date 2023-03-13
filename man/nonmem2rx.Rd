@@ -19,7 +19,7 @@ nonmem2rx(
   nonmemData = FALSE,
   strictLst = FALSE,
   unintFixed = FALSE,
-  extended = TRUE,
+  extended = FALSE,
   nLinesPro = 20L,
   delta = 1e-04,
   usePhi = TRUE,

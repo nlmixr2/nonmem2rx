@@ -1,9 +1,9 @@
 test_that("test abbrev", {
 
-  .a <- function(abbrev, eq="no", abbrevLin=0L) {
+  .a <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
     .clearNonmem2rx()
     .Call(`_nonmem2rx_setRecord`, "$PRED")
-    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
     expect_equal(.nonmem2rx$model, eq)
   }
 

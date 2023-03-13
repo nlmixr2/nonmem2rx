@@ -10,7 +10,7 @@ nonmem2rxRec.pk <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $PK record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 #' @export
@@ -20,7 +20,7 @@ nonmem2rxRec.pre <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $PRED record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 
@@ -31,7 +31,7 @@ nonmem2rxRec.des <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $DES record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$DES", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$DES", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 
@@ -82,19 +82,19 @@ nonmem2rxRec.err <- function(x) {
     if (!is.null(.nonmem2rx$scaleVol[["scale1"]])) {
       .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale1"]]))
     }
-    .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+    .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L, as.integer(.nonmem2rx$extendedCtl))
   } else if (.nonmem2rx$abbrevLin == 2L) {
     if (!is.null(.nonmem2rx$scaleVol[["scale2"]])) {
       .addModel(paste0("scale2 <- scale2/", .nonmem2rx$scaleVol[["scale2"]]))
     }
-    .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+    .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L, as.integer(.nonmem2rx$extendedCtl))
   } else {
     .cmt <- .nonmem2rx$defobs
-    .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $ERROR record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 #' Add the parameters scaled for rode2 translation

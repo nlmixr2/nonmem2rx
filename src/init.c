@@ -14,7 +14,7 @@ SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix, SEXP unintFix);
 SEXP _nonmem2rx_omeganum_reset(void);
 SEXP _nonmem2rx_trans_model(SEXP in);
 SEXP _nonmem2rx_trans_input(SEXP in);
-SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP linCmt);
+SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP linCmt, SEXP extended);
 SEXP _nonmem2rx_parse_strncmpci(void);
 SEXP _nonmem2rx_trans_sub(SEXP in);
 SEXP _nonmem2rx_trans_lst(SEXP in, SEXP cov);
@@ -40,7 +40,7 @@ void R_init_nonmem2rx(DllInfo *info) {
     {"_nonmem2rx_trans_theta", (DL_FUNC) &_nonmem2rx_trans_theta, 2},
     {"_nonmem2rx_thetanum_reset", (DL_FUNC) &_nonmem2rx_thetanum_reset, 0},
     {"_nonmem2rx_trans_model", (DL_FUNC) &_nonmem2rx_trans_model, 1},
-    {"_nonmem2rx_trans_abbrev", (DL_FUNC) &_nonmem2rx_trans_abbrev, 3},
+    {"_nonmem2rx_trans_abbrev", (DL_FUNC) &_nonmem2rx_trans_abbrev, 4},
     {"_nonmem2rx_parse_strncmpci", (DL_FUNC) &_nonmem2rx_parse_strncmpci, 0},
     {"_nonmem2rx_trans_sub", (DL_FUNC) &_nonmem2rx_trans_sub, 1},
     {"_nonmem2rx_trans_lst", (DL_FUNC) &_nonmem2rx_trans_lst, 2},
