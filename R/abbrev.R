@@ -55,22 +55,23 @@ nonmem2rxRec.err <- function(x) {
         .vcOne <- TRUE
       }
     }
-    .addModel("rxLinCmt1 <- linCmt()")
+    .addModel("rxLinCmt1 <- linCmtFun")
+    .nonmem2rx$vcOne <- .vcOne
     if (.vcOne || length(.nonmem2rx$allVol) == 0L) {
-      .addModel(paste0("central <- rxLinCmt1"))
+      .addModel(paste0("centralLin <- rxLinCmt1"))
     } else {
       # can be v or v1/v2 depending on the advan/trans combo
       .w <- which(tolower(.nonmem2rx$allVol) == "v")
       if (length(.w) == 1L) {
-        .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
+        .addModel(paste0("centralLin <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
       } else {
         # v1/v2 determined by abbrevLin
         .w <- which(tolower(.nonmem2rx$allVol) == paste0("v", .nonmem2rx$abbrevLin))
         if (length(.w) == 1L) {
-          .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
+          .addModel(paste0("centralLin <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
         } else {
           .minfo("cannot determine volume assuming central=linear compartment model")
-          .addModel(paste0("central <- rxLinCmt1"))
+          .addModel(paste0("centralLin <- rxLinCmt1"))
         }
       }
     }
@@ -141,6 +142,14 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .needNmevid <- function() {
   .nonmem2rx$needNmevid <- TRUE
+}
+#' If called, sets the flag that we need nmid in the dataset
+#'
+#' @return none, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.needNmid <- function() {
+  .nonmem2rx$needNmid <- TRUE
 }
 #' Sets the flag that we need ytype renamed to rxytype
 #'
@@ -300,7 +309,7 @@ nonmem2rxRec.err <- function(x) {
   if (length(.df) > 0) {
     .ret <- c(.ret, paste0("eta", .df))
   }
-  if (length(.df)) {
+  if (length(.ret) > 0) {
     warning("some thetas/etas are missing in the model. Added to dummy rxMissingVars#",
             call.=FALSE)
     .ret <- paste(paste0("rxMissingVars", seq_along(.ret), " <- ", .ret), collapse="\n")

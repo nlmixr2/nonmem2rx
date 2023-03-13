@@ -105,6 +105,7 @@ int abbrevLin = 0;
 SEXP nonmem2rxGetScale(int scale);
 
 int evidWarning = 0;
+int idWarning = 0;
 int icallWarning = 0;
 int irepWarning = 0;
 int simWarning=0;
@@ -112,6 +113,8 @@ int ipredSimWarning = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
+SEXP nonmem2rxNeedNmid(void);
+SEXP nonmem2rxNeedNmid(void);
 SEXP nonmem2rxNeedYtype(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 SEXP nonmem2rxHasVolume(const char *v);
@@ -251,6 +254,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       updateSyntaxCol();
       trans_syntax_error_report_fn0(sbTransErr.s);
       finalizeSyntaxError();
+    } else if (!nmrxstrcmpi("id", v)) {
+      if (idWarning == 0) {
+        Rf_warning("'id' variable is supported differently rxode2, renamed to 'nmid', rename/copy in your data too");
+        idWarning = 1;
+        nonmem2rxNeedNmid();
+      }
+      sAppendN(&curLine, "nmid", 4);
+      return 1;
     } else if (!nmrxstrcmpi("evid", v)) {
       if (evidWarning == 0) {
         Rf_warning("'evid' variable is not supported in rxode2, renamed to 'nmevid', rename/copy in your data too");
@@ -351,6 +362,29 @@ void writeAinfo(const char *v) {
   trans_syntax_error_report_fn0(sbTransErr.s);
   finalizeSyntaxError();
 }
+
+int abbrevParamA0(char *name, int i,  D_ParseNode *pn) {
+  int needName=0;
+  if (!strcmp("a0", name) ||
+      (needName = !strcmp("a0I", name))) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (needName) {
+        SEXP namePar = PROTECT(nonmem2rxGetThetaNum(v));
+        v  = (char*)rc_dup_str(CHAR(STRING_ELT(namePar, 0)), 0);
+        UNPROTECT(1);
+      }
+      sAppendN(&curLine, "rxini.", 6);
+      cmtInfoStr=v;
+      writeAinfo(v);
+      sAppendN(&curLine, ".", 1);
+    }
+    return 1;
+  }
+  return 0;
+}
+
 
 int abbrevParamTheta(char *name, int i,  D_ParseNode *pn) {
   int needName=0;
@@ -457,7 +491,8 @@ int abbrev_params(char *name, int i,  D_ParseNode *pn) {
     abbrevParamEta(name, i,  pn) ||
     abbrevParamEps(name, i,  pn) ||
     abbrevParamErr(name, i,  pn) ||
-    abbrevParamAmt(name, i,  pn);
+    abbrevParamAmt(name, i,  pn) ||
+    abbrevParamA0(name, i,  pn);
 }
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
@@ -634,6 +669,7 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
     return 0;
   } else if (!strcmp("dowhile", name)) {
     if (i == 0) {
+      sClear(&curLine);
       sAppendN(&curLine, "while (", 7);
       return 1;
     } else if (i == 1 || i == 2) {
@@ -737,6 +773,18 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     sAppend(&curLine, "sigma.%d.%d", x, y);
     nonmem2rxPushSigmaEst(x, y);
     return 0;
+  } else if (!strcmp("sigma1", name)) {
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 3);
+    //parseFree(0);
+    int x = atoi(v1);
+    Rf_warning("SIGMA(%d) does not have an equivalent rxode2/nlmixr2 code\nreplacing with a constant from the model translation\nthis will not be updated with simulations",
+               x);
+    sAppend(&curLine, "sigma.%d.", x);
+    nonmem2rxPushSigmaEst(x, -1);
+    return 0;
   } else if (!strcmp("omega", name)) {
     if (i != 0) return 1;
     D_ParseNode *xpn = d_get_child(pn, 1);
@@ -748,6 +796,15 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
                  x, y);
     sAppend(&curLine, "omega.%d.%d", x, y);
     nonmem2rxPushOmegaEst(x, y);
+  } else if (!strcmp("omega1", name)) {
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int x = atoi(v1);
+    Rf_warning("OMEGA(%d) does not have an equivalent rxode2/nlmixr2 code\nreplacing with a constant from the model translation\nthis will not be updated with simulations",
+                 x);
+    sAppend(&curLine, "omega.%d.", x);
+    nonmem2rxPushOmegaEst(x, -1);
   }
   return 0;
 }
@@ -1142,6 +1199,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
   verbWarning = 0;
   maxA = 0;
   evidWarning=0;
+  idWarning=0;
   simWarning=0;
   ipredSimWarning=0;
   icallWarning=0;

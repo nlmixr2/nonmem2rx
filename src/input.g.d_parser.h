@@ -358,14 +358,14 @@ d_accepts_diff_25_0_nonmem2rxInput
 unsigned char d_scanner_25_0_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 
 };
 
 unsigned char d_scanner_25_1_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 };
 
@@ -926,7 +926,7 @@ D_Symbol d_symbols_nonmem2rxInput[] = {
 {D_SYMBOL_STRING, "=", 1, -1},
 {D_SYMBOL_STRING, "=", 1, -1},
 {D_SYMBOL_STRING, "=", 1, -1},
-{D_SYMBOL_REGEX, "[ \\t\\r\\n]+", 13, -1},
+{D_SYMBOL_REGEX, "[ \\t\\r\\n,]+", 14, -1},
 {D_SYMBOL_STRING, ";", 1, -1},
 {D_SYMBOL_REGEX, "[^\\n]*", 7, -1},
 {D_SYMBOL_REGEX, "[a-zA-Z][a-zA-Z0-9_]*", 21, -1},

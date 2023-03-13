@@ -123,6 +123,11 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushDataCond(v);
     return;
+  } else if (!strcmp("ignore1a_statement", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 3);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxPushDataCond(v);
+    return;
   } else if (!strcmp("records_statement", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);

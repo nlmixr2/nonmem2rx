@@ -95,14 +95,32 @@ static inline int nonmem2rx_getSubTol(const char* name, D_ParseNode *pn) {
     nonmem2rxSetAtol(atoi(v));
     return 1;
   }
+  if (!strcmp("atol_statement3", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetAtol(atoi(v));
+    return 1;
+  }
   if (!strcmp("ssatol_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetSsAtol(atoi(v));
     return 1;
   }
+  if (!strcmp("ssatol_statement3", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetSsAtol(atoi(v));
+    return 1;
+  }
   if (!strcmp("ssrtol_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetSsRtol(atoi(v));
+    return 1;
+  }
+  if (!strcmp("ssrtol_statement3", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 1);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetSsRtol(atoi(v));
     return 1;
@@ -177,6 +195,12 @@ void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     nonmem2rxSetAdvan(atoi(v));
     return;
   }
+  if (!strcmp("advan_statement3", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetAdvan(atoi(v));
+    return;
+  }
   if (!strcmp("trans_statement1", name)) {
     D_ParseNode *xpn = d_get_child(pn, 3);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
@@ -185,6 +209,12 @@ void wprint_parsetree_sub(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
   }
   if (!strcmp("trans_statement2", name)) {
     D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxSetTrans(atoi(v));
+    return;
+  }
+  if (!strcmp("trans_statement3", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxSetTrans(atoi(v));
     return;

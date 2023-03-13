@@ -1,11 +1,12 @@
 //loop
-statement_list : call_protocol_phrase?
+statement_list : 
  (statement)+ ;
 
 // return and exit statements not supported
 
 statement 
-  : assignment singleLineComment?
+  : call_protocol_phrase singleLineComment?
+  | assignment singleLineComment?
   | if1 singleLineComment?
   | if1other singleLineComment?
   | ifthen singleLineComment?
@@ -62,6 +63,8 @@ callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
 call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         | 'OBS'
         | 'OBSERVATION' 'ONLY'
+        | 'ONLY' 'OBSERVATION' 
+        | 'ONLY' 'OBSERVATIONS' 
         | 'OBS' 'ONLY'
         | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
         | 'ONCE'
@@ -69,8 +72,8 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         | 'IND' 'REC'
         | 'EVERY' 'EVENT'
         | 'EVERY'
-        |'NEW' 'TIME'
-        |'NEW' 'EVENT' 'TIME'
+        | 'NEW' 'TIME'
+        | 'NEW' 'EVENT' 'TIME'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
@@ -82,7 +85,7 @@ elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
 else: 'ELSE';
 endif: ('ENDIF' | 'END' 'IF');
 dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
-enddo: 'ENDDO';
+enddo: ('ENDDO' | 'END' 'DO');
 
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
 ifcallsimeta: 'IF' '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';
@@ -131,8 +134,9 @@ multiplicative_expression : unary_expression
 
 mult_part : ('*' | '/') unary_expression ;
 
-theta : ('THETA(' | 'theta(') decimalintNo0 ')';
-thetaI : ('THETA(' | 'theta(') identifier ')';
+theta_start: ('THETA(' | 'theta(' | "THETA +[(]");
+theta : theta_start decimalintNo0 ')';
+thetaI : theta_start identifier ')';
 eta   : ('ETA(' | 'eta(') decimalintNo0 ')';
 etaI   : ('ETA(' | 'eta(') identifier ')';
 eps   : ('EPS(' | 'eps(') decimalintNo0 ')';
@@ -141,6 +145,8 @@ err   : ('ERR(' | 'err(') decimalintNo0 ')';
 errI   : ('ERR(' | 'err(') identifier ')';
 amt   : ('A(' | 'a(')  decimalintNo0 ')';
 amtI  : ('A(' | 'a(')  identifier ')';
+a0   : "[Aa][_][0][(]" decimalintNo0 ')';
+a0i  : "[Aa][_][0][(]" identifier ')';
 mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
 mnext : ('MNEXT(' | 'mext(') decimalintNo0 ')';
 mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
@@ -149,6 +155,8 @@ com   : ('COM(' | 'com(') decimalintNo0 ')';
 pcmt  : ('PCMT(' | 'pcmt(') decimalintNo0 ')';
 sigma  : ('SIGMA(' | 'sigma(') decimalintNo0 ',' decimalintNo0 ')';
 omega  : ('OMEGA(' | 'omega(') decimalintNo0 ',' decimalintNo0 ')';
+sigma1  : ('SIGMA(' | 'sigma(') decimalintNo0 ')';
+omega1  : ('OMEGA(' | 'omega(') decimalintNo0 ')';
 
 avar:  "[Aa][0-9][0-9][0-9][0-9][0-9]";
 cvar:  "[Cc][0-9][0-9][0-9][0-9][0-9]";
@@ -171,6 +179,8 @@ scalei       : "[Ss]([0-9]+|C|O)";
 
 primary_expression 
   : constant
+  | a0
+  | a0i
   | fbioi
   | alagi
   | ratei
@@ -198,6 +208,8 @@ primary_expression
   | pcmt
   | sigma
   | omega
+  | sigma1
+  | omega1
   | function
   | '(' logical_or_expression ')'
   ;
@@ -232,6 +244,6 @@ float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: "[;:]" "[^\n]*";
 verbatimCode: '"' "[^\n]*";
 
