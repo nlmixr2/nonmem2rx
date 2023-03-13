@@ -152,7 +152,7 @@
     if (.nonmem2rx$abbrevLin != 0L) {
       # linear compartment protection by making sure parameters won't
       # collide ie Vc and V1 in the model
-      if (regexpr("^[kvcqabg]", tolower(v)) != -1) {
+      if (grepl(.linCmtParReg, toupper(v))) {
         return(paste0(prefix, v))
       }
     }
@@ -521,12 +521,18 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                  "rxode2::model({\n",
                  .desPrefix(),
                  .missingPrefix(),
+                 # need to add d/dt(depot) and d/dt(central) for
+                 # linear compartment shenanigans
+                 ifelse(.nonmem2rx$abbrevLin == 0L,"",
+                        "d/dt(depot)=0\nd/dt(central)=0\n"),
                  ifelse(.nonmem2rx$needExit, "ierprdu <- -1\n", ""),
                  paste(.nonmem2rx$model, collapse="\n"),
+                 
                  "\n})",
                  "}")
   .fun <- eval(parse(text=.txt))
   .rx <- .fun()
+  .rx <- .getLinCmtModel(.rx, advan=.nonmem2rx$advan, trans=.nonmem2rx$trans)
   .update <- FALSE
   if (updateFinal) {
     .tmp <- try(.updateRxWithFinalParameters(.rx, .lstInfo), silent=TRUE)
