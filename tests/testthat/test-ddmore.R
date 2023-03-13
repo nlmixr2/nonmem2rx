@@ -43,7 +43,6 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              # does not work in ci
              ## "ddmore/261/Output_real_SAEM_KPD_CTC.count_PSA.lst",
              ## "ddmore/261/Output_real_COV_KPD_CTC.count_PSA.lst",
-             # in ini but not in model block
              "ddmore/261/Executable_simulated_KPD_CTC.count_PSA.mod",
              "ddmore/261/Output_simulated_KPD_CTC.count_PSA.lst",
              "ddmore/256/Output_simulated_OriginalModelCode.lst",
@@ -162,9 +161,8 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
   # "ddmore/173/Output_simulated_ColistinMeropenem_Interaction.lst"
   # "ddmore/173/Executable_ColistinMeropenem_Interaction.mod",
   # "ddmore/173/Output_real_ColistinMeropenem_interaction.lst",
-  # ddmore/261/Executable_simulated_KPD_CTC.count_PSA.mod
 
-  # probably won't support
+  # probably won't support; has thetas that are defined by math
   # "ddmore/247/Executable_OriginalModelCode.mod",
 
 
