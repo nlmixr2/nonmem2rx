@@ -10,8 +10,8 @@
        c(0L, 1L), #8
        c(0L, 1L), #9
        c(0L, 1L), #10
-       c(0L, 1L, 4L, 6L), #11
-       c(0L, 1L, 4L, 6L), #12
+       c(0L, 1L, 4L), #11 , 6L not supported
+       c(0L, 1L, 4L), #12, , 6L not supported
        c(0L, 1L), #13
        c(0L, 1L), #14
        c(0L, 1L)) #15
