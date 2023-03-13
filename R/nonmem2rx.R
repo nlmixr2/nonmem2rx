@@ -152,7 +152,7 @@
     if (.nonmem2rx$abbrevLin != 0L) {
       # linear compartment protection by making sure parameters won't
       # collide ie Vc and V1 in the model
-      if (regexpr("^[kvcqabg]", tolower(v)) != -1) {
+      if (grepl(.linCmtParReg, toupper(v))) {
         return(paste0(prefix, v))
       }
     }

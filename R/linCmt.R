@@ -36,14 +36,27 @@
 .linCmtAdvan$`12` <- new.env(parent=emptyenv())
 .linCmtAdvan$`12`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "K24"="k24", "K42"="k42", "#"="vc")
 .linCmtAdvan$`12`$`2` <- c("CL"="cl", "V2"="Vc", "Q3"="q1", "V3"="Vp1", "Q4"="q2", "V4"="Vp2", "KA"="ka")
-
+#' Get the translation of rxode2 to NONMEM
+#'
+#' @param advan advan of NONMEM
+#' @param trans trans of NONMEM
+#' @return Gives translations for nonmem->rxode2
+#' @noRd
+#' @author Matthew L. Fidler
 .getLinCmt <- function(advan=1, trans=1) {
   if (!exists(paste(advan), envir=.linCmtAdvan)) return(NULL)
   .advan <- get(paste(advan), envir=.linCmtAdvan)
   if (!exists(paste(trans), envir=.advan)) return(NULL)
   get(paste(trans), envir=.advan)
 }
-
+#'  Get the linear compartment model with blessed params
+#'
+#' @param model rxode2 model
+#' @param advan advan of NONMEM
+#' @param trans trans of NONMEM
+#' @return Model with blessed parameters
+#' @noRd
+#' @author Matthew L. Fidler
 .getLinCmtModel <- function(model, advan=1, trans=1) {
   .rep <- .getLinCmt(advan=advan, trans=trans)
   if (is.null(.rep)) return(model)
@@ -71,7 +84,7 @@
             .w2 <- which(.nchar == .min)[1]
             names(.rep)[.w] <- .nonmem2rx$allVol[.w2]
           } else {
-           stop("can't figure out volume for linCmt() model", call.=FALSE) #nocov 
+           stop("can't figure out volume for linCmt() model", call.=FALSE) #nocov
           }
         }
       }
@@ -116,7 +129,6 @@
                    function(i) {
                      x <- .lstExpr[[i]]
                      if (length(x)== 3L && identical(x[[1]], quote(`<-`))) {
-                       print(x)
                        if (identical(x[[2]], quote(`centralLin`))) {
                          x[[2]] <- str2lang("central")
                        } else if (identical(x[[2]], quote(`rxLinCmt1`))) {
