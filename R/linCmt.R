@@ -12,29 +12,29 @@
 
 .linCmtAdvan$`2` <- new.env(parent=emptyenv())
 .linCmtAdvan$`2`$`1` <- c("KA"="ka", "K"="k", "V"="v")
-.linCmtAdvan$`2`$`2` <- c("KA"="ka", "Cl"="cl", "V"="v")
+.linCmtAdvan$`2`$`2` <- c("KA"="ka", "CL"="cl", "V"="v")
 
 .linCmtAdvan$`3` <- new.env(parent=emptyenv())
 # #1 = volume associated with cmt1
-.linCmtAdvan$`3`$`1` <- c("K"="k", "K12"="k12", "K21"="k21", "#1"="vc")
+.linCmtAdvan$`3`$`1` <- c("K"="k", "K12"="k12", "K21"="k21", "#"="vc")
 .linCmtAdvan$`3`$`3` <- c("CL"="cl", "V"="v", "Q"="q", "VSS"="vss")
 .linCmtAdvan$`3`$`4` <- c("CL"="cl", "V1"="v1", "Q"="q", "V2"="v2")
-.linCmtAdvan$`3`$`5` <- c("AOB"="aob", "ALPHA"="alpha", "BETA"="beta","#1"="vc")
-.linCmtAdvan$`3`$`6` <- c("ALPHA"="alpha", "BETA"="beta", "K21"="k21", "#1"="vc")
+.linCmtAdvan$`3`$`5` <- c("AOB"="aob", "ALPHA"="alpha", "BETA"="beta","#"="vc")
+.linCmtAdvan$`3`$`6` <- c("ALPHA"="alpha", "BETA"="beta", "K21"="k21", "#"="vc")
 
 .linCmtAdvan$`4` <- new.env(parent=emptyenv())
 # #2 = volume associated with cmt2
-.linCmtAdvan$`4`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "#2"="vc")
+.linCmtAdvan$`4`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "#"="vc")
 .linCmtAdvan$`4`$`3` <- c("CL"="cl", "V"="v", "Q"="q", "VSS"="vss", "KA"="ka")
 .linCmtAdvan$`4`$`4` <- c("CL"="cl", "V2"="v2", "Q"="q", "V3"="v3", "KA"="ka")
-.linCmtAdvan$`4`$`5` <- c("AOB"="aob", "ALPHA"="alpha", "BETA"="beta", "KA"="ka", "#2"="vc")
+.linCmtAdvan$`4`$`5` <- c("AOB"="aob", "ALPHA"="alpha", "BETA"="beta", "KA"="ka", "#"="vc")
 
 .linCmtAdvan$`11` <- new.env(parent=emptyenv())
-.linCmtAdvan$`11`$`1` <- c("K"="k", "K12"="k12", "K21"="k21", "K13"="k13","K31"="k31", "#1"="vc")
+.linCmtAdvan$`11`$`1` <- c("K"="k", "K12"="k12", "K21"="k21", "K13"="k13","K31"="k31", "#"="vc")
 .linCmtAdvan$`11`$`4` <- c(	"CL"="cl", "V1"="v1", "Q2"="q2", "V2"="v2", "Q3"="q3", "V3"="v3")
 
 .linCmtAdvan$`12` <- new.env(parent=emptyenv())
-.linCmtAdvan$`12`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "K24"="k24", "K42"="k42", "#2"="vc")
+.linCmtAdvan$`12`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "K24"="k24", "K42"="k42", "#"="vc")
 .linCmtAdvan$`12`$`2` <- c("CL"="cl", "V2"="Vc", "Q3"="q1", "V3"="Vp1", "Q4"="q2", "V4"="Vp2", "KA"="ka")
 
 .getLinCmt <- function(advan=1, trans=1) {
@@ -45,8 +45,39 @@
 }
 
 .getLinCmtModel <- function(model, advan=1, trans=1) {
-  .mv <- rxode2::rxModelVars(model)
   .rep <- .getLinCmt(advan=advan, trans=trans)
+  if (is.null(.rep)) return(model)
+  .w <- which(names(.rep) == "#")
+  if (length(.w) == 1L) {
+    if (.nonmem2rx$vcOne) {
+      names(.rep)[.w] <- "VC"
+    } else {
+      .w2 <- which(tolower(.nonmem2rx$allVol) == "v")
+      if (length(.w2) == 1L) {
+        names(.rep)[.w] <- "V"
+      } else {
+        .w2 <- which(tolower(.nonmem2rx$allVol) == "vc")
+        if (length(.w2) == 1L) {
+          names(.rep)[.w] <- "V"
+        } else {
+          .w2 <- which(tolower(.nonmem2rx$allVol) == paste0("v", .nonmem2rx$abbrevLin))
+          if (length(.w2) == 1) {
+            names(.rep)[.w] <- paste0("V", .nonmem2rx$abbrevLin)
+          } else if (length(.nonmem2rx$allVol) > 0) {
+            .nchar <- vapply(.nonmem2rx$allVol, function(i){
+              nchar(.nonmem2rx$allVol[i])
+            }, integer(1), USE.NAMES=FALSE)
+            .min <- min(.nchar)
+            .w2 <- which(.nchar == .min)[1]
+            names(.rep)[.w] <- .nonmem2rx$allVol[.w2]
+          } else {
+           stop("can't figure out volume for linCmt() model", call.=FALSE) #nocov 
+          }
+        }
+      }
+    }
+  }
+  .mv <- rxode2::rxModelVars(model)
   .lhs <- toupper(.mv$lhs)
   .rest <- setdiff(.lhs, names(.rep))
   .w <- which(.rest %in% toupper(.lhs))
@@ -62,7 +93,34 @@
   .w <- which(.lhsIn != .lhsOut)
   .lhsIn <- .lhsIn[.w]
   .lhsOut <- .lhsOut[.w]
-  model(eval(parse(text=paste0("rxRename(model,",paste(paste0(.lhsOut, "=", .lhsIn), collapse=", "),")"))), {rxLinCmt1 <- linCmt()})
-  
-  
+  .ret <- eval(parse(text=paste0("rxode2::rxRename(model,",paste(paste0(.lhsOut, "=", .lhsIn), collapse=", "),")")))
+  .ret <- rxode2::rxUiDecompress(.ret)
+  .lstExpr <- .ret$lstExpr
+  .w <- which(vapply(seq_along(.lstExpr), function(y) {
+    x <- .lstExpr[[y]]
+    if (length(x) == 3L && identical(x[[1]], quote(`=`))) {
+      if (identical(x[[2]],str2lang("d/dt(depot)")) &&
+            identical(x[[3]], 0)) {
+        return(TRUE)
+      }
+      if (identical(x[[2]],str2lang("d/dt(central)")) &&
+            identical(x[[3]], 0)) {
+        return(TRUE)
+      }
+    }
+    FALSE
+  }, logical(1), USE.NAMES=FALSE))
+  # at this point there shouldn't be an endpoint
+  if (!is.null(.ret$predDf)) stop("at this point there shouldn't be an endpoint", call.=FALSE) #nocov
+  .ret$lstExpr <- lapply(seq_along(.lstExpr)[-.w],
+                         function(i) {
+                           x <- .lstExpr[[i]]
+                           if (length(.ret)== 3L && identical(x[[1]], quote(`<-`)) &&
+                                 identical(x[[2]], quote(`centralLin`))) {
+                             x[[2]] <- str2lang("central")
+                           }
+                           x
+                         })
+  .ret <- model(.ret, {rxLinCmt1 <- linCmt()})
+  .ret
 }

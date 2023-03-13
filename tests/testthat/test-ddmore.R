@@ -1,4 +1,5 @@
 if (identical(Sys.getenv("NOT_CRAN"), "true")) {
+
   files <- c("ddmore/267/Output_simulated_OriginalModelCode.lst",
              "ddmore/267/Executable_OriginalModelCode.mod",
              "ddmore/267/Output_real_OriginalModelCode.lst",
@@ -26,8 +27,8 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "ddmore/197/Output_real_Biomarker_GIST.lst",
              "ddmore/197/Executable_Biomarker_GIST.mod",
              # Can't figure out central
-             #"ddmore/284/Output_simulated_SIMNIVO_PPK.lst",
-             #"ddmore/284/Output_real_Nivo-PPK.lst",
+             "ddmore/284/Output_simulated_SIMNIVO_PPK.lst",
+             "ddmore/284/Output_real_Nivo-PPK.lst",
              "ddmore/280/TB_Rifampicin_PK_Wilkins_2008_simulated.lst",
              "ddmore/280/Executable_real_TB_Rifampicin_PK_Wilkins_2008.mod",
              "ddmore/280/Executable_simulated_TB_Rifampicin_PK_Wilkins_2008.mod",
@@ -167,7 +168,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
 
 
   # shouldn't work bad theta
-  # 
+  #
 
   withr::with_tempdir({
     unzip(system.file("ddmore.zip", package="nonmem2rx"))
@@ -178,4 +179,3 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
     })
   })
 }
-

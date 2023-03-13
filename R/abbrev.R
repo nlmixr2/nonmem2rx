@@ -55,22 +55,23 @@ nonmem2rxRec.err <- function(x) {
         .vcOne <- TRUE
       }
     }
-    .addModel("rxLinCmt1 <- linCmt()")
+    .addModel("rxLinCmt1 <- linCmtFun")
+    .nonmem2rx$vcOne <- .vcOne
     if (.vcOne || length(.nonmem2rx$allVol) == 0L) {
-      .addModel(paste0("central <- rxLinCmt1"))
+      .addModel(paste0("centralLin <- rxLinCmt1"))
     } else {
       # can be v or v1/v2 depending on the advan/trans combo
       .w <- which(tolower(.nonmem2rx$allVol) == "v")
       if (length(.w) == 1L) {
-        .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
+        .addModel(paste0("centralLin <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
       } else {
         # v1/v2 determined by abbrevLin
         .w <- which(tolower(.nonmem2rx$allVol) == paste0("v", .nonmem2rx$abbrevLin))
         if (length(.w) == 1L) {
-          .addModel(paste0("central <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
+          .addModel(paste0("centralLin <- rxLinCmt1*", .nonmem2rx$allVol[.w]))
         } else {
           .minfo("cannot determine volume assuming central=linear compartment model")
-          .addModel(paste0("central <- rxLinCmt1"))
+          .addModel(paste0("centralLin <- rxLinCmt1"))
         }        
       }
     }
