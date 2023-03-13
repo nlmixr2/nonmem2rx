@@ -36,3 +36,33 @@
 .linCmtAdvan$`12` <- new.env(parent=emptyenv())
 .linCmtAdvan$`12`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "K24"="k24", "K42"="k42", "#2"="vc")
 .linCmtAdvan$`12`$`2` <- c("CL"="cl", "V2"="Vc", "Q3"="q1", "V3"="Vp1", "Q4"="q2", "V4"="Vp2", "KA"="ka")
+
+.getLinCmt <- function(advan=1, trans=1) {
+  if (!exists(paste(advan), envir=.linCmtAdvan)) return(NULL)
+  .advan <- get(paste(advan), envir=.linCmtAdvan)
+  if (!exists(paste(trans), envir=.advan)) return(NULL)
+  get(paste(trans), envir=.advan)
+}
+
+.getLinCmtModel <- function(model, advan=1, trans=1) {
+  .mv <- rxode2::rxModelVars(model)
+  .rep <- .getLinCmt(advan=advan, trans=trans)
+  .lhs <- toupper(.mv$lhs)
+  .rest <- setdiff(.lhs, names(.rep))
+  .w <- which(.rest %in% toupper(.lhs))
+  .lhsIn <- .mv$lhs[.w]
+  .lhsOut <- vapply(.lhsIn, function(x) {
+    .up <- toupper(x)
+    if (.up %in% names(.rep)) return(.rep[.up])
+    if (grepl(.linCmtParReg, x, perl=TRUE)) {
+      return(paste0("rxm.", x))
+    }
+    x
+  }, character(1), USE.NAMES=TRUE)
+  .w <- which(.lhsIn != .lhsOut)
+  .lhsIn <- .lhsIn[.w]
+  .lhsOut <- .lhsOut[.w]
+  model(eval(parse(text=paste0("rxRename(model,",paste(paste0(.lhsOut, "=", .lhsIn), collapse=", "),")"))), {rxLinCmt1 <- linCmt()})
+  
+  
+}
