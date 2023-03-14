@@ -445,6 +445,9 @@
 #' - `nonmem2rx.load` - should nonmem2rx load a saved model instead of
 #'    translating and validating again? (default `TRUE`)
 #'
+#' - `nonmem2rx.extended` - should nonmem2rx support extended control
+#'    streams? (default `FALSE`)
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -471,7 +474,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       nonmemData=FALSE,
                       strictLst=FALSE,
                       unintFixed=FALSE,
-                      extended=FALSE,
+                      extended=getOption("nonmem2rx.extended",FALSE),
                       nLinesPro=20L,
                       delta=1e-4,
                       usePhi=TRUE,

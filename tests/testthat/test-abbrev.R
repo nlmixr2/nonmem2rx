@@ -257,11 +257,13 @@ test_that("test abbrev", {
     .ae("pope0=pope0*EXP(etae0)", "POPE0 <- theta1 * exp(eta1)", "pope0")
     # test if1
     .ae("IF (EMAX>0) pope0=pope0*EXP(etae0)", "if (EMAX > 0) POPE0 <- theta1 * exp(eta1)", "pope0")
-    .ext <- nonmem2rx(system.file("TheopdExt.ctl", package="nonmem2rx"), extended=TRUE)
-    .nonExt <- nonmem2rx(system.file("Theopd.ctl", package="nonmem2rx"))
-    .ext1 <- sub("extended", "compare", deparse(as.function(.ext)))
-    .ext2 <- sub("standard", "compare",deparse(as.function(.nonExt)))
-    expect_equal(.ext1, .ext2)
+    withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE),{
+      .ext <- nonmem2rx(system.file("TheopdExt.ctl", package="nonmem2rx"), extended=TRUE)
+      .nonExt <- nonmem2rx(system.file("Theopd.ctl", package="nonmem2rx"))
+      .ext1 <- sub("extended", "compare", deparse(as.function(.ext)))
+      .ext2 <- sub("standard", "compare",deparse(as.function(.nonExt)))
+      expect_equal(.ext1, .ext2)
+    })
 
     # now test dups
     .ae <- function(abbrev, eq="no", lhs, abbrevLin=0L, extended=1L,

@@ -169,13 +169,27 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
 
   # shouldn't work bad theta
   #
+  withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,
+                           nonmem2rx.extended=FALSE),{
+                             withr::with_tempdir({
+                               unzip(system.file("ddmore.zip", package="nonmem2rx"))
+                               lapply(files,function(x) {
+                                 test_that(paste(x, ", regular"), {
+                                   expect_error(suppressMessages(suppressWarnings(nonmem2rx(x))), NA)
+                                 })
+                               })
+                             })
+                           })
 
-  withr::with_tempdir({
-    unzip(system.file("ddmore.zip", package="nonmem2rx"))
-    lapply(files,function(x) {
-      test_that(x, {
-        expect_error(suppressMessages(suppressWarnings(nonmem2rx(x))), NA)
-      })
-    })
-  })
+  withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,
+                           nonmem2rx.extended=TRUE),{
+                             withr::with_tempdir({
+                               unzip(system.file("ddmore.zip", package="nonmem2rx"))
+                               lapply(files,function(x) {
+                                 test_that(paste(x, ", extended"), {
+                                   expect_error(suppressMessages(suppressWarnings(nonmem2rx(x))), NA)
+                                 })
+                               })
+                             })
+                           })
 }

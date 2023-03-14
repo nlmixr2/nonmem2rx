@@ -1,5 +1,5 @@
 if (identical(Sys.getenv("NOT_CRAN"), "true")) {
-  
+
   .files <-c("PsN/courses/upss/lasso/run2.lst",
              "PsN/courses/upss/lasso/run1.lst",
              "PsN/test_files/mox_sir.lst", # has phi
@@ -209,30 +209,46 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
                   "PsN/test_files/output/onePROB/oneEST/noSIM/large_s_matrix_cov_fail.lst",
                   "PsN/test_files/output/special_mod/two_prob_second_fail.lst")
 
-
   withr::with_tempdir({
-    
+
     unzip(system.file("PsN.zip", package="nonmem2rx"))
-    
-    lapply(.files,
-           function(file) {
-             test_that(file, {
-               expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
-             })
-           })
 
-    lapply(.fileError,
-           function(file) {
-             test_that(paste0("error for ", file), {
-               expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))))
-             })
-           })
+    withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,
+                             nonmem2rx.extended=FALSE),
+    {
 
-    lapply(.fileError,
-           function(file) {
-             test_that("list for error file", {
-               expect_error(suppressMessages(suppressWarnings(nmlst(file, strictLst=TRUE))), NA)
+      lapply(.files,
+             function(file) {
+               test_that(file, {
+                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
+               })
              })
-           })
+
+      lapply(.fileError,
+             function(file) {
+               test_that(paste0("error for ", file), {
+                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))))
+               })
+             })
+
+      lapply(.fileError,
+             function(file) {
+               test_that("list for error file", {
+                 expect_error(suppressMessages(suppressWarnings(nmlst(file, strictLst=TRUE))), NA)
+               })
+             })
+
+    })
+
+    withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,
+                             nonmem2rx.extended=TRUE),
+    {
+      lapply(.files,
+             function(file) {
+               test_that(file, {
+                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
+               })
+             })
+    })
   })
 }
