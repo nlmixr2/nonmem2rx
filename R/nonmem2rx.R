@@ -496,7 +496,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertLogical(unintFixed, len=1, any.missing= FALSE)
   checkmate::assertLogical(extended, len=1, any.missing= FALSE)
-  qzxccheckmate::assertLogical(overwrite, len=1, any.missing = FALSE)
+  checkmate::assertLogical(overwrite, len=1, any.missing = FALSE)
   checkmate::assertLogical(load, len=1, any.missing = FALSE)
   if (is.logical(save)) {
     checkmate::assertLogical(save, len=1, any.missing=FALSE)
