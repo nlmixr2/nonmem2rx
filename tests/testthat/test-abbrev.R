@@ -177,11 +177,11 @@ test_that("test abbrev", {
     expect_warning(.a("SID=IREP", "SID <- irep"), "sim.id")
 
 
-    .am <- function(abbrev, eq="no", abbrevLin=0L) {
+    .am <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $model record
       .nonmem2rx$cmtName <- c("GUT", "CENTRAL", "PERI")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
       expect_equal(.nonmem2rx$model, eq)
     }
 
@@ -197,11 +197,11 @@ test_that("test abbrev", {
     .am("A_0(PERI)=3",
         c("rxini.rxddta3. <- 3",  "rxddta3(0) <- rxini.rxddta3."))
 
-    .at <- function(abbrev, eq="no", abbrevLin=0L) {
+    .at <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $theta record
       .nonmem2rx$thetaNonmemLabel <- c("CL", "V", "KA")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended=extended)
       expect_equal(.nonmem2rx$model, eq)
     }
     .at("test = THETA(CL) + THETA(V) + THETA(KA)",
@@ -209,11 +209,11 @@ test_that("test abbrev", {
     expect_error(.at("test = THETA(FUN)"),
                  "FUN")
 
-    .ae <- function(abbrev, eq="no", abbrevLin=0L) {
+    .ae <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $theta record
       .nonmem2rx$etaNonmemLabel <- c("ECL", "EV", "EKA")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended=extended)
       expect_equal(.nonmem2rx$model, eq)
     }
 
@@ -222,11 +222,11 @@ test_that("test abbrev", {
     expect_error(.ae("test = ETA(FUN)"),
                  "FUN")
 
-    .ar <- function(abbrev, eq="no", abbrevLin=0L) {
+    .ar <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $theta record
       .nonmem2rx$epsNonmemLabel <- c("PROP", "ADD")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
       expect_equal(.nonmem2rx$model, eq)
     }
 
