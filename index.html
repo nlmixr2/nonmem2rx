@@ -77,7 +77,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -96,7 +96,6 @@
 <span><span class="co">#&gt; ℹ Processing record $PROBLEM</span></span>
 <span><span class="co">#&gt; ℹ Processing record $DATA</span></span>
 <span><span class="co">#&gt; ℹ Processing record $SUBROUTINES</span></span>
-<span><span class="co">#&gt; Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored</span></span>
 <span><span class="co">#&gt; ℹ Processing record $PK</span></span>
 <span><span class="co">#&gt; ℹ Processing record $DES</span></span>
 <span><span class="co">#&gt; ℹ Processing record $ERROR</span></span>
@@ -105,23 +104,23 @@
 <span><span class="co">#&gt; ℹ Processing record $COVARIANCE</span></span>
 <span><span class="co">#&gt; ℹ Ignore record $COVARIANCE</span></span>
 <span><span class="co">#&gt; ℹ Processing record $TABLE</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `theta1` to `1.37034`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `theta2` to `4.19815`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `theta3` to `1.38003`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `theta4` to `3.87657`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `theta5` to `0.196446`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `eta1` to `0.101251`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101303`</span></span>
-<span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730498`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta1` to `1.37034036528946`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta2` to `4.19814911033061`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta3` to `1.38003493562413`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta4` to `3.87657341967489`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta5` to `0.196446108190896`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta1` to `0.101251418415006`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -141,15 +140,15 @@
 <span><span class="co">#&gt;  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── </span></span>
 <span><span class="co">#&gt;  ── Initalization: ──  </span></span>
 <span><span class="co">#&gt; Fixed Effects ($theta): </span></span>
-<span><span class="co">#&gt;   theta1   theta2   theta3   theta4      RSV </span></span>
-<span><span class="co">#&gt; 1.370340 4.198150 1.380030 3.876570 0.196446 </span></span>
+<span><span class="co">#&gt;    theta1    theta2    theta3    theta4       RSV </span></span>
+<span><span class="co">#&gt; 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Omega ($omega): </span></span>
-<span><span class="co">#&gt;          eta1      eta2     eta3      eta4</span></span>
-<span><span class="co">#&gt; eta1 0.101251 0.0000000 0.000000 0.0000000</span></span>
-<span><span class="co">#&gt; eta2 0.000000 0.0993872 0.000000 0.0000000</span></span>
-<span><span class="co">#&gt; eta3 0.000000 0.0000000 0.101303 0.0000000</span></span>
-<span><span class="co">#&gt; eta4 0.000000 0.0000000 0.000000 0.0730498</span></span>
+<span><span class="co">#&gt;           eta1       eta2      eta3       eta4</span></span>
+<span><span class="co">#&gt; eta1 0.1012514 0.00000000 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta2 0.0000000 0.09938724 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta3 0.0000000 0.00000000 0.1013027 0.00000000</span></span>
+<span><span class="co">#&gt; eta4 0.0000000 0.00000000 0.0000000 0.07304975</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; States ($state or $stateDf): </span></span>
 <span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
@@ -165,25 +164,25 @@
 <span><span class="co">#&gt;  ── Model (Normalized Syntax): ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
-<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.99e-06", </span></span>
-<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.29e-05, 0.042); atol=0.00174", </span></span>
-<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=7.26e-06", </span></span>
-<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (9.23e-07,0.00384) atol=7.26e-06")</span></span>
+<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", </span></span>
+<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", </span></span>
+<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", </span></span>
+<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")</span></span>
 <span><span class="co">#&gt;     ini({</span></span>
-<span><span class="co">#&gt;         theta1 &lt;- 1.37034</span></span>
+<span><span class="co">#&gt;         theta1 &lt;- 1.37034036528946</span></span>
 <span><span class="co">#&gt;         label("log Cl")</span></span>
-<span><span class="co">#&gt;         theta2 &lt;- 4.19815</span></span>
+<span><span class="co">#&gt;         theta2 &lt;- 4.19814911033061</span></span>
 <span><span class="co">#&gt;         label("log Vc")</span></span>
-<span><span class="co">#&gt;         theta3 &lt;- 1.38003</span></span>
+<span><span class="co">#&gt;         theta3 &lt;- 1.38003493562413</span></span>
 <span><span class="co">#&gt;         label("log Q")</span></span>
-<span><span class="co">#&gt;         theta4 &lt;- 3.87657</span></span>
+<span><span class="co">#&gt;         theta4 &lt;- 3.87657341967489</span></span>
 <span><span class="co">#&gt;         label("log Vp")</span></span>
-<span><span class="co">#&gt;         RSV &lt;- c(0, 0.196446, 1)</span></span>
+<span><span class="co">#&gt;         RSV &lt;- c(0, 0.196446108190896, 1)</span></span>
 <span><span class="co">#&gt;         label("RSV")</span></span>
-<span><span class="co">#&gt;         eta1 ~ 0.101251</span></span>
-<span><span class="co">#&gt;         eta2 ~ 0.0993872</span></span>
-<span><span class="co">#&gt;         eta3 ~ 0.101303</span></span>
-<span><span class="co">#&gt;         eta4 ~ 0.0730498</span></span>
+<span><span class="co">#&gt;         eta1 ~ 0.101251418415006</span></span>
+<span><span class="co">#&gt;         eta2 ~ 0.0993872449483344</span></span>
+<span><span class="co">#&gt;         eta3 ~ 0.101302674763154</span></span>
+<span><span class="co">#&gt;         eta4 ~ 0.0730497519364148</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     model({</span></span>
 <span><span class="co">#&gt;         cmt(CENTRAL)</span></span>
@@ -223,34 +222,34 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">ipredAtol</span></span>
 <span><span class="co">#&gt;         50% </span></span>
-<span><span class="co">#&gt; 0.001735466</span></span>
+<span><span class="co">#&gt; 0.001770218</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">ipredRtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 6.994654e-06</span></span>
+<span><span class="co">#&gt; 6.886608e-06</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 7.263317e-06</span></span>
+<span><span class="co">#&gt; 6.406839e-06</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 7.263317e-06</span></span></code></pre></div>
+<span><span class="co">#&gt; 6.406839e-06</span></span></code></pre></div>
 <p>You can see they do not exactly match. You can explore these difference further if you wish by looking at the <code>ipredCompare</code> and <code>predCompare</code> datasets:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ipredCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemIPRED    IPRED</span></span>
-<span><span class="co">#&gt; 1  1 0.25      1215.4 1215.362</span></span>
-<span><span class="co">#&gt; 2  1 0.50      1191.9 1191.928</span></span>
-<span><span class="co">#&gt; 3  1 0.75      1169.2 1169.168</span></span>
-<span><span class="co">#&gt; 4  1 1.00      1147.1 1147.061</span></span>
+<span><span class="co">#&gt; 1  1 0.25      1215.4 1215.363</span></span>
+<span><span class="co">#&gt; 2  1 0.50      1191.9 1191.929</span></span>
+<span><span class="co">#&gt; 3  1 0.75      1169.2 1169.169</span></span>
+<span><span class="co">#&gt; 4  1 1.00      1147.1 1147.062</span></span>
 <span><span class="co">#&gt; 5  1 1.50      1104.7 1104.724</span></span>
 <span><span class="co">#&gt; 6  1 2.00      1064.8 1064.762</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemPRED     PRED</span></span>
-<span><span class="co">#&gt; 1  1 0.25     1750.3 1750.289</span></span>
-<span><span class="co">#&gt; 2  1 0.50     1699.8 1699.833</span></span>
-<span><span class="co">#&gt; 3  1 0.75     1651.3 1651.348</span></span>
+<span><span class="co">#&gt; 1  1 0.25     1750.3 1750.290</span></span>
+<span><span class="co">#&gt; 2  1 0.50     1699.8 1699.834</span></span>
+<span><span class="co">#&gt; 3  1 0.75     1651.3 1651.349</span></span>
 <span><span class="co">#&gt; 4  1 1.00     1604.8 1604.752</span></span>
-<span><span class="co">#&gt; 5  1 1.50     1516.9 1516.912</span></span>
+<span><span class="co">#&gt; 5  1 1.50     1516.9 1516.913</span></span>
 <span><span class="co">#&gt; 6  1 2.00     1435.7 1435.723</span></span></code></pre></div>
 <p>In these cases you can see that NONMEM seems to round the values for the output (the rounding rules are based on the <code>FORMAT</code> option), but rxode2 seems to keep the entire number.</p>
 <p>Note this is the <strong>observation data only</strong> that is compared. Dosing predictions are excluded from these comparisons.</p>
@@ -327,29 +326,28 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># full parameter precision</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored</span></span>
 <span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
 <span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ipredAtol</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         50% </span></span>
-<span><span class="co">#&gt; 0.001735466</span></span>
+<span><span class="co">#&gt; 0.001770218</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ipredRtol</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 6.994654e-06</span></span>
+<span><span class="co">#&gt; 6.886608e-06</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 7.263317e-06</span></span>
+<span><span class="co">#&gt; 6.406839e-06</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predRtol</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 7.263317e-06</span></span>
+<span><span class="co">#&gt; 6.406839e-06</span></span>
 <span></span>
 <span><span class="co"># now reduce precision by using table/lst output only</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>,</span>
 <span>                                  useXml<span class="op">=</span><span class="cn">FALSE</span>, useExt<span class="op">=</span><span class="cn">FALSE</span>,usePhi<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored</span></span>
 <span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
+<span></span>
 <span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span><span class="op">)</span></span>
