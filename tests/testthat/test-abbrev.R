@@ -234,6 +234,27 @@ test_that("test abbrev", {
         "TEST <- eps2 + eps1")
 
     expect_error(.ar("test = ERR(EASY) + EPS(PROP)",
-        "TEST <- eps2 + eps1"), "EASY")
+                     "TEST <- eps2 + eps1"), "EASY")
+
+    # now testing extended control stream
+    .ae <- function(abbrev, eq="no", lhs, abbrevLin=0L, extended=1L,
+                    lhsDef=NULL) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$theta <- c("popE0", "popEMAX", "popEC50")
+      .nonmem2rx$etaLabel <- c("etaE0", "etaEMAX", "etaEC50")
+      .nonmem2rx$epsLabel <- "errSD"
+      .nonmem2rx$lhsDef <- lhsDef
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
+      expect_equal(.nonmem2rx$lhsDef, lhs)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+
+    .ae("E0=pope0*EXP(etae0)", "E0 <- theta1 * exp(eta1)", "E0")
+    .ae("EMAX=popemax*EXP(etaemax)", "EMAX <- theta2 * exp(eta2)", "EMAX")
+    .ae("EC50=popec50*EXP(etaec50)", "EC50 <- theta3 * exp(eta3)", "EC50")
+    .ae("Y = E0 + EMAX*THEO/(THEO+EC50) + errsd", "Y <- E0 + EMAX * THEO / (THEO + EC50) + eps1",
+        c("E0", "EMAX", "EC50", "Y"), lhsDef = c("E0", "EMAX", "EC50"))
+    .ae("pope0=pope0*EXP(etae0)", "POPE0 <- theta1 * exp(eta1)", "pope0")
 
 })

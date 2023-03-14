@@ -295,11 +295,12 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
-    if (extendedCtrlInt && strstr(curLine.s, "<-") == NULL) {
+    if (extendedCtrlInt && strstr(curLine.s, "<-") != NULL) {
       char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
       if (strcmp(v, v2)) {
         // different variable, swap and continue
-        v = v2;
+        sAppend(&curLine, v2);
+        return 1;
       }
     }
     int i = 0;
@@ -1079,7 +1080,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     nonmem2rxNeedExit();
     pushModel();
     return;
-  } else if (extendedCtrlInt == 1 &&
+  } else if (extendedCtrlInt &&
               (!strcmp("assignment", name) ||
                !strcmp("fbio", name) ||
                !strcmp("alag", name) ||
@@ -1087,6 +1088,11 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
                !strcmp("dur", name)  ||
                !strcmp("scale", name))) {
     D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxAddLhsVar(v);
+  } else if (extendedCtrlInt &&
+             !strcmp("if1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 4);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxAddLhsVar(v);
   }

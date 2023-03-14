@@ -341,10 +341,17 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .calcFinalInputNames <- function() {
   .inp <- .nonmem2rx$input
-  .w <- which(.inp == "DROP")
-  .inp <- .inp[-.w]
-  .inp <- unique(c(names(.inp), setNames(.inp, NULL)))
-  .nonmem2rx$finalInput <- tolower(.inp)
+  if (is.null(.inp)) {
+    .nonmem2rx$finalInput <- character(0)
+  } else {
+    .w <- which(.inp == "DROP")
+    .inp <- .inp[-.w]
+    .inp <- unique(c(names(.inp), setNames(.inp, NULL)))
+    .nonmem2rx$finalInput <- tolower(.inp)
+  }
+  .nonmem2rx$thetaLow <- tolower(.nonmem2rx$theta)
+  .nonmem2rx$etaLabelLow <- tolower(.nonmem2rx$etaLabel)
+  .nonmem2rx$epsLabelLow <- tolower(.nonmem2rx$epsLabel)
 }
 #' Get the variable name considering extended control streams
 #'
@@ -360,27 +367,24 @@ nonmem2rxRec.err <- function(x) {
     .lhs <- .lhs[-length(.lhs)]
     if (.v %in% .lhs) return(var)
   }
-  .cmt <- tolower(.nonmem2rx$cmtName)
-  if (length(.cmt) > 0) {
-    if (.v %in% .cmt) return(var)
-  }
-  if (is.null(.nonmem2rx$finalInput)) {
+  if (!is.character(.nonmem2rx$finalInput)) {
     .calcFinalInputNames()
   }
+  .calcFinalInputNames()
   if (.v %in% .nonmem2rx$finalInput) return(var)
-  .w <- which(.v == tolower(.nonmem2rx$theta))
+  .w <- which(.v == .nonmem2rx$thetaLow)
   if (length(.w) == 1L) {
     .pushObservedThetaObs(.w)
     .ret <- paste0("theta", .w)
     return(.ret)
   }
-  .w <- which(.v == tolower(.nonmem2rx$etaLabel))
+  .w <- which(.v == .nonmem2rx$etaLabelLow)
   if (length(.w) == 1L) {
     .pushObservedEtaObs(.w)
     .ret <- paste0("eta", .w)
     return(.ret)
   }
-  .w <- which(.v == tolower(.nonmem2rx$epsLabel))
+  .w <- which(.v == .nonmem2rx$epsLabelLow)
   if (length(.w) == 1L) {
     .ret <- paste0("eps", .w)
     return(.ret)
