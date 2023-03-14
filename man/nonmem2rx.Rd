@@ -32,11 +32,15 @@ nonmem2rx(
   phi = ".phi",
   lst = ".lst",
   xml = ".xml",
-  ext = ".ext"
+  ext = ".ext",
+  save = FALSE,
+  overwrite = FALSE,
+  load = TRUE
 )
 }
 \arguments{
-\item{file}{NONMEM run file}
+\item{file}{NONMEM run file, like an `.xml` or `.lst` file or even
+a control stream}
 
 \item{inputData}{this is a path to the input dataset (or `NULL` to
 determine from the dataset).  Often the input dataset may be
@@ -100,7 +104,7 @@ successful load (default `FALSE`).}
 \item{unintFixed}{Treat uninteresting values as fixed parameters (default `FALSE`)}
 
 \item{extended}{Translate extended control streams from tools like
-wings for NONMEM (default `TRUE`)}
+wings for NONMEM}
 
 \item{nLinesPro}{The number of lines to check for the $PROBLEM
 statement.}
@@ -135,6 +139,30 @@ information}
 \item{xml}{the NONMEM xml file extension , defaults to `.xml`}
 
 \item{ext}{the NONMEM ext file extension, defaults to `.ext`}
+
+\item{save}{This can be:
+
+- a `NULL` (meaning don't save),
+
+- a logical (default `FALSE`, don't save) that when `TRUE` will use
+  the base name of the control stream, append `.qs` and save the file
+  using `qs::qsave()`
+
+- A path to a file to write
+
+  Note that this file will be saved with qs::qsave() and can be
+  loaded with qs::qread()}
+
+\item{overwrite}{is a boolean to allow overwriting the save file
+(see `load` for more information).}
+
+\item{load}{a boolean that says to load the save file (if it
+exists) instead of re-running the translation and validation.
+Note if `overwrite=TRUE` and `load=TRUE` then this will overwrite
+based on time stamp of the files.  If the save file is newer than
+the input file, then load that file, otherwise regenerate and
+overwrite.  This works best if you point to an output file, like
+a `.xml` or listing file instead of the control stream}
 }
 \value{
 rxode2 function

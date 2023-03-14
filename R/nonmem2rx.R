@@ -303,7 +303,8 @@
 
 #' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
 #'
-#' @param file NONMEM run file
+#' @param file NONMEM run file, like an `.xml` or `.lst` file or even
+#'   a control stream
 #'
 #' @param inputData this is a path to the input dataset (or `NULL` to
 #'   determine from the dataset).  Often the input dataset may be
@@ -403,6 +404,30 @@
 #' @param useLst if present, use the NONMEM lst file to extract NONMEM
 #'   information
 #'
+#' @param save This can be:
+#'
+#' - a `NULL` (meaning don't save),
+#'
+#' - a logical (default `FALSE`, don't save) that when `TRUE` will use
+#'   the base name of the control stream, append `.qs` and save the file
+#'   using `qs::qsave()`
+#'
+#' - A path to a file to write
+#'
+#'   Note that this file will be saved with qs::qsave() and can be
+#'   loaded with qs::qread()
+#'
+#' @param overwrite is a boolean to allow overwriting the save file
+#'   (see `load` for more information).
+#'
+#' @param load a boolean that says to load the save file (if it
+#'   exists) instead of re-running the translation and validation.
+#'   Note if `overwrite=TRUE` and `load=TRUE` then this will overwrite
+#'   based on time stamp of the files.  If the save file is newer than
+#'   the input file, then load that file, otherwise regenerate and
+#'   overwrite.  This works best if you point to an output file, like
+#'   a `.xml` or listing file instead of the control stream
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -442,7 +467,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       phi=".phi",
                       lst=".lst",
                       xml=".xml",
-                      ext=".ext") {
+                      ext=".ext",
+                      save=FALSE,
+                      overwrite=FALSE,
+                      load=TRUE) {
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
   if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
@@ -451,6 +479,30 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertLogical(unintFixed, len=1, any.missing= FALSE)
   checkmate::assertLogical(extended, len=1, any.missing= FALSE)
+  checkmate::assertLogical(overwrite, len=1, any.missing = FALSE)
+  checkmate::assertLogical(load, len=1, any.missing = FALSE)
+  if (is.logical(save)) {
+    checkmate::assertLogical(save, len=1, any.missing=FALSE)
+    if (save) {
+      save <- paste0(tools::file_path_sans_ext(file),".qs")
+    } else {
+      save <- NULL
+    }
+  }
+  if (!is.null(save)) {
+    if (load && overwrite) {
+      if (utils::file_test("-nt", file, save)) {
+        .minfo("input file newer than save, overwriting instead of loading")
+        load <- FALSE
+      } else {
+        overwrite <- FALSE
+      }
+    }
+    if (load && file.exists(save)) {
+      return(qs::qread(save))
+    }
+    checkmate::assertPathForOutput(save, overwrite=overwrite)
+  }
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   checkmate::assertIntegerish(nLinesPro, len=1, lower=1)
   .clearNonmem2rx()
@@ -881,5 +933,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .rx$ssRtol <- .nonmem2rx$ssRtol
   .ret <- rxode2::rxUiCompress(.rx)
   class(.ret) <- c("nonmem2rx", class(.ret))
+  if (!is.null(save)) {
+    qs::qsave(.ret, save)
+  }
   .ret
 }
