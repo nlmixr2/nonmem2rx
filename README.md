@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -486,3 +486,27 @@ mod$thetaMat
 #> omega.4.3         0         0         0  0.00000e+00
 #> eta4              0         0         0  5.10190e-04
 ```
+
+# External contributors (and notes on validation)
+
+This was validated against the `PsN` library test suite of NONMEM
+listings (<https://github.com/UUPharmacometrics/PsN/tree/master/test>)
+and the ddmore model scrapings
+(<https://github.com/dpastoor/ddmore_scraping>).
+
+Due to the sheer size of the zipped models for these two nonmem control
+stream sources these are excluded to keep the binary below 3 mgs as
+required by CRAN.
+
+However, I would like to acknowledge all who helped in these projects.
+With these projects the NONMEM conversion to rxode2 has been made much
+more robust.
+
+However, even though they are not/will not be in the CRAN binaries, you
+can test them yourself by:
+
+1.  Downloading this repository
+2.  Running the tests `devtools::test()`
+
+Note these are only excluded when building the library and are still
+available for you to test if you wish.

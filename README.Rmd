@@ -255,3 +255,28 @@ mod$dfObs # Number of observations
 # Covariance of the thetas (and omegas in this case)
 mod$thetaMat
 ```
+
+# External contributors (and notes on validation)
+
+This was validated against the `PsN` library test suite of NONMEM
+listings (https://github.com/UUPharmacometrics/PsN/tree/master/test)
+and the ddmore model scrapings
+(https://github.com/dpastoor/ddmore_scraping).
+
+Due to the sheer size of the zipped models for these two nonmem
+control stream sources these are excluded to keep the binary below 3
+mgs as required by CRAN.
+
+However, I would like to acknowledge all who helped in these projects.
+With these projects the NONMEM conversion to rxode2 has been made much
+more robust.
+
+However, even though they are not/will not be in the CRAN binaries,
+you can test them yourself by:
+
+1. Downloading this repository
+2. Running the tests `devtools::test()` 
+
+Note these are only excluded when building the library and are still
+available for you to test if you wish.
+
