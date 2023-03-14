@@ -249,12 +249,17 @@ test_that("test abbrev", {
       expect_equal(.nonmem2rx$lhsDef, lhs)
       expect_equal(.nonmem2rx$model, eq)
     }
-
     .ae("E0=pope0*EXP(etae0)", "E0 <- theta1 * exp(eta1)", "E0")
     .ae("EMAX=popemax*EXP(etaemax)", "EMAX <- theta2 * exp(eta2)", "EMAX")
     .ae("EC50=popec50*EXP(etaec50)", "EC50 <- theta3 * exp(eta3)", "EC50")
     .ae("Y = E0 + EMAX*THEO/(THEO+EC50) + errsd", "Y <- E0 + EMAX * THEO / (THEO + EC50) + eps1",
         c("E0", "EMAX", "EC50", "Y"), lhsDef = c("E0", "EMAX", "EC50"))
     .ae("pope0=pope0*EXP(etae0)", "POPE0 <- theta1 * exp(eta1)", "pope0")
-
+    # test if1
+    .ae("IF (EMAX>0) pope0=pope0*EXP(etae0)", "if (EMAX > 0) POPE0 <- theta1 * exp(eta1)", "pope0")
+    .ext <- nonmem2rx(system.file("TheopdExt.ctl", package="nonmem2rx"), extended=TRUE)
+    .nonExt <- nonmem2rx(system.file("Theopd.ctl", package="nonmem2rx"))
+    .ext1 <- sub("extended", "compare", deparse(as.function(.ext)))
+    .ext2 <- sub("standard", "compare",deparse(as.function(.nonExt)))
+    expect_equal(.ext1, .ext2)
 })
