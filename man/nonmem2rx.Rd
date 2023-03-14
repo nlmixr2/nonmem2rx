@@ -15,7 +15,7 @@ nonmem2rx(
   cmtNames = TRUE,
   updateFinal = TRUE,
   determineError = TRUE,
-  validate = TRUE,
+  validate = getOption("nonmem2rx.validate", TRUE),
   nonmemData = FALSE,
   strictLst = FALSE,
   unintFixed = FALSE,
@@ -30,19 +30,19 @@ nonmem2rx(
   mod = ".mod",
   cov = ".cov",
   phi = ".phi",
-  lst = ".lst",
+  lst = getOption("nonmem2rx.lst", ".lst"),
   xml = ".xml",
   ext = ".ext",
-  save = FALSE,
-  overwrite = FALSE,
-  load = TRUE
+  save = getOption("nonmem2rx.save", TRUE),
+  overwrite = getOption("nonmem2rx.overwrite", TRUE),
+  load = getOption("nonmem2rx.load", TRUE)
 )
 }
 \arguments{
-\item{file}{NONMEM run file, like an `.xml` or `.lst` file or even
+\item{file}{NONMEM run file, like an \code{.xml} or \code{.lst} file or even
 a control stream}
 
-\item{inputData}{this is a path to the input dataset (or `NULL` to
+\item{inputData}{this is a path to the input dataset (or \code{NULL} to
 determine from the dataset).  Often the input dataset may be
 different from the place it points to in the control stream
 because directories can be created to run NONMEM from a script.
@@ -50,58 +50,58 @@ Because of this, when this is specified the input data will be
 assumed to be from here instead.}
 
 \item{nonmemOutputDir}{This is a path the the nonmem output
-directory.  When not `NULL` it will assume that the diretory for
+directory.  When not \code{NULL} it will assume that the diretory for
 the output files is located here instead of where the control
 stream currently exists.}
 
-\item{rename}{When not `NULL` this should be a named character
+\item{rename}{When not \code{NULL} this should be a named character
 vector that contains the parameters that should be renamed.  For
-example, if the model uses the variable `YTYPE` and has `CMT` it
-isn't compatible with `rxode2`/`nlmixr2`. You can change this for
+example, if the model uses the variable \code{YTYPE} and has \code{CMT} it
+isn't compatible with \code{rxode2}/\code{nlmixr2}. You can change this for
 the input dataset and the model to create a new model that still
 reproduces the NONMEM output by specifying
-`rename=c(dvid="YTYPE")`}
+\code{rename=c(dvid="YTYPE")}}
 
 \item{tolowerLhs}{Boolean to change the lhs to lower case (default:
-`TRUE`)}
+\code{TRUE})}
 
 \item{thetaNames}{this could be a boolean indicating that the theta
 names should be changed to the comment-labeled names (default:
-`TRUE`). This could also be a character vector of the theta names
+\code{TRUE}). This could also be a character vector of the theta names
 (in order) to be replaced.}
 
 \item{etaNames}{this could be a boolean indicating that the eta
 names should be changed to the comment-labeled names (default:
-`TRUE`). This could also be a character vector of the theta names
+\code{TRUE}). This could also be a character vector of the theta names
 (in order) to be replaced.}
 
 \item{cmtNames}{this could be a boolean indicating that the
 compartment names should be changed to the named compartments in
-the `$MODEL` by `COMP = (name)` (default: `TRUE`). This could
+the \verb{$MODEL} by \code{COMP = (name)} (default: \code{TRUE}). This could
 also be a character vector of the compartment names (in order) to
 be replaced.}
 
 \item{updateFinal}{Update the parsed model with the model estimates
-from the `.lst` output file.}
+from the \code{.lst} output file.}
 
-\item{determineError}{Boolean to try to determine the `nlmixr2`-style residual
-error model (like `ipred ~ add(add.sd)`), otherwise endpoints are
-not defined in the `rxode2`/`nlmixr2` model (default: `TRUE`)}
+\item{determineError}{Boolean to try to determine the \code{nlmixr2}-style residual
+error model (like \code{ipred ~ add(add.sd)}), otherwise endpoints are
+not defined in the \code{rxode2}/\code{nlmixr2} model (default: \code{TRUE})}
 
 \item{validate}{Boolean that this tool will attempt to "validate"
 the model by solving the derived model under pred conditions
 (etas are zero and eps values are zero)}
 
-\item{nonmemData}{Boolean that tells `nonmem2rx` to read in the
+\item{nonmemData}{Boolean that tells \code{nonmem2rx} to read in the
 nonmem data (if possible) even if the model will not be validated
 (like if it is a simulation run or missing final parameter
-estimates).  By default this is `FALSE`, nonmem data will not be
+estimates).  By default this is \code{FALSE}, nonmem data will not be
 integrated into the nonmem2rx ui.}
 
 \item{strictLst}{The list parsing needs to be correct for a
-successful load (default `FALSE`).}
+successful load (default \code{FALSE}).}
 
-\item{unintFixed}{Treat uninteresting values as fixed parameters (default `FALSE`)}
+\item{unintFixed}{Treat uninteresting values as fixed parameters (default \code{FALSE})}
 
 \item{extended}{Translate extended control streams from tools like
 wings for NONMEM}
@@ -112,11 +112,11 @@ statement.}
 \item{delta}{this is the offset for NONMEM times that are tied}
 
 \item{usePhi}{if present, use the NONMEM phi file to extract etas
-(default `TRUE`), otherwise defaults to etas in the tables (if
+(default \code{TRUE}), otherwise defaults to etas in the tables (if
 present)}
 
 \item{useExt}{if present, use the NONMEM ext file to extract
-parameter estimates (default `TRUE`), otherwise defaults to
+parameter estimates (default \code{TRUE}), otherwise defaults to
 parameter estimates extracted in the NONMEM output}
 
 \item{useCov}{if present, use the NONMEM cov file to import the
@@ -128,47 +128,59 @@ the NONMEM information}
 \item{useLst}{if present, use the NONMEM lst file to extract NONMEM
 information}
 
-\item{mod}{the NONMEM output extension, defaults to `.mod`}
+\item{mod}{the NONMEM output extension, defaults to \code{.mod}}
 
-\item{cov}{the NONMEM covariance file extension, defaults to `.cov`}
+\item{cov}{the NONMEM covariance file extension, defaults to \code{.cov}}
 
-\item{phi}{the NONMEM eta/phi file extension, defaults to `.phi`}
+\item{phi}{the NONMEM eta/phi file extension, defaults to \code{.phi}}
 
-\item{lst}{the NONMEM output extension, defaults to `.lst`}
+\item{lst}{the NONMEM output extension, defaults to \code{.lst}}
 
-\item{xml}{the NONMEM xml file extension , defaults to `.xml`}
+\item{xml}{the NONMEM xml file extension , defaults to \code{.xml}}
 
-\item{ext}{the NONMEM ext file extension, defaults to `.ext`}
+\item{ext}{the NONMEM ext file extension, defaults to \code{.ext}}
 
 \item{save}{This can be:
+\itemize{
+\item a \code{NULL} (meaning don't save),
+\item a logical (default \code{FALSE}, don't save) that when \code{TRUE} will use
+the base name of the control stream, append \code{.qs} and save the file
+using \code{qs::qsave()}
+\item A path to a file to write
 
-- a `NULL` (meaning don't save),
-
-- a logical (default `FALSE`, don't save) that when `TRUE` will use
-  the base name of the control stream, append `.qs` and save the file
-  using `qs::qsave()`
-
-- A path to a file to write
-
-  Note that this file will be saved with qs::qsave() and can be
-  loaded with qs::qread()}
+Note that this file will be saved with qs::qsave() and can be
+loaded with qs::qread()
+}}
 
 \item{overwrite}{is a boolean to allow overwriting the save file
-(see `load` for more information).}
+(see \code{load} for more information).}
 
 \item{load}{a boolean that says to load the save file (if it
 exists) instead of re-running the translation and validation.
-Note if `overwrite=TRUE` and `load=TRUE` then this will overwrite
+Note if \code{overwrite=TRUE} and \code{load=TRUE} then this will overwrite
 based on time stamp of the files.  If the save file is newer than
 the input file, then load that file, otherwise regenerate and
 overwrite.  This works best if you point to an output file, like
-a `.xml` or listing file instead of the control stream}
+a \code{.xml} or listing file instead of the control stream}
 }
 \value{
 rxode2 function
 }
 \description{
 Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+}
+\details{
+Since some of these options you may want to set per project, the
+following options are queried:
+\itemize{
+\item \code{nonmem2rx.validate} - boolean to validate the model (default: \code{TRUE})
+\item \code{nonmem2rx.lst} - default extension for output (default: \code{.lst})
+\item \code{nonmem2rx.save} - should nonmem2rx save the model output?
+\item \code{nonmem2rx.overwrite} - should nonmem2rx save output be
+overwritten (default \code{TRUE})
+\item \code{nonmem2rx.load} - should nonmem2rx load a saved model instead of
+translating and validating again? (default \code{TRUE})
+}
 }
 \examples{
 

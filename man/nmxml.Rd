@@ -2,7 +2,7 @@
 % Please edit documentation in R/xml.R
 \name{nmxml}
 \alias{nmxml}
-\title{Read a nonmem xml and create output similar to the `nmlst()`}
+\title{Read a nonmem xml and create output similar to the \code{nmlst()}}
 \usage{
 nmxml(xml)
 }
@@ -13,7 +13,7 @@ nmxml(xml)
 list of nonmem information
 }
 \description{
-Read a nonmem xml and create output similar to the `nmlst()`
+Read a nonmem xml and create output similar to the \code{nmlst()}
 }
 \examples{
 nmxml(system.file("mods/cpt/runODE032.xml", package="nonmem2rx"))

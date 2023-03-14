@@ -9,7 +9,7 @@ nmcov(file, ...)
 \arguments{
 \item{file}{file name to read the results from}
 
-\item{...}{other parameters passed to `data.table::fread`}
+\item{...}{other parameters passed to \code{data.table::fread}}
 }
 \description{
 Read in data file

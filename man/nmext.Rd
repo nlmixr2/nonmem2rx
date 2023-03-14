@@ -2,7 +2,7 @@
 % Please edit documentation in R/ext.R
 \name{nmext}
 \alias{nmext}
-\title{Reads the NONMEM `.ext` file for final parameter information}
+\title{Reads the NONMEM \code{.ext} file for final parameter information}
 \usage{
 nmext(file)
 }
@@ -10,10 +10,10 @@ nmext(file)
 \item{file}{File where the list is located}
 }
 \value{
-return a list with `$theta`, `$eta` and `$eps`
+return a list with \verb{$theta}, \verb{$eta} and \verb{$eps}
 }
 \description{
-Reads the NONMEM `.ext` file for final parameter information
+Reads the NONMEM \code{.ext} file for final parameter information
 }
 \examples{
 

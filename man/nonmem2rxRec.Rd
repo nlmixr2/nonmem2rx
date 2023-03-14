@@ -58,7 +58,7 @@ nonmem2rxRec(x)
 \arguments{
 \item{x}{Nonmem record data item, should be of class c(stdRec,
 "nonmem2rx") where the stdRec is the standardized record (pro for
-`$PROBLEM`, etc)}
+\verb{$PROBLEM}, etc)}
 }
 \value{
 Nothing, called for side effects

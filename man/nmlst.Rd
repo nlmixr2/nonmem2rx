@@ -2,7 +2,7 @@
 % Please edit documentation in R/lst.R
 \name{nmlst}
 \alias{nmlst}
-\title{Reads the NONMEM `.lst` file for final parameter information}
+\title{Reads the NONMEM \code{.lst} file for final parameter information}
 \usage{
 nmlst(file, strictLst = FALSE)
 }
@@ -10,14 +10,14 @@ nmlst(file, strictLst = FALSE)
 \item{file}{File where the list is located}
 
 \item{strictLst}{The list parsing needs to be correct for a
-successful load (default `FALSE`).}
+successful load (default \code{FALSE}).}
 }
 \value{
-return a list with `$theta`, `$eta` and `$eps` and other
-  information about the control stream
+return a list with \verb{$theta}, \verb{$eta} and \verb{$eps} and other
+information about the control stream
 }
 \description{
-Reads the NONMEM `.lst` file for final parameter information
+Reads the NONMEM \code{.lst} file for final parameter information
 }
 \examples{
 nmlst(system.file("mods/DDMODEL00000322/HCQ1CMT.lst", package="nonmem2rx"))

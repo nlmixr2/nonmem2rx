@@ -428,6 +428,23 @@
 #'   overwrite.  This works best if you point to an output file, like
 #'   a `.xml` or listing file instead of the control stream
 #'
+#' @details
+#'
+#' Since some of these options you may want to set per project, the
+#' following options are queried:
+#'
+#' - `nonmem2rx.validate` - boolean to validate the model (default: `TRUE`)
+#'
+#' - `nonmem2rx.lst` - default extension for output (default: `.lst`)
+#'
+#' - `nonmem2rx.save` - should nonmem2rx save the model output?
+#'
+#' - `nonmem2rx.overwrite` - should nonmem2rx save output be
+#'    overwritten (default `TRUE`)
+#'
+#' - `nonmem2rx.load` - should nonmem2rx load a saved model instead of
+#'    translating and validating again? (default `TRUE`)
+#'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
 #' @export
@@ -450,7 +467,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       cmtNames=TRUE,
                       updateFinal=TRUE,
                       determineError=TRUE,
-                      validate=TRUE,
+                      validate=getOption("nonmem2rx.validate",TRUE),
                       nonmemData=FALSE,
                       strictLst=FALSE,
                       unintFixed=FALSE,
@@ -465,12 +482,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       mod=".mod",
                       cov=".cov",
                       phi=".phi",
-                      lst=".lst",
+                      lst=getOption("nonmem2rx.lst", ".lst"),
                       xml=".xml",
                       ext=".ext",
-                      save=FALSE,
-                      overwrite=FALSE,
-                      load=TRUE) {
+                      save=getOption("nonmem2rx.save", TRUE),
+                      overwrite=getOption("nonmem2rx.overwrite", TRUE),
+                      load=getOption("nonmem2rx.load", TRUE)) {
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
   if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
@@ -479,7 +496,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
   checkmate::assertLogical(unintFixed, len=1, any.missing= FALSE)
   checkmate::assertLogical(extended, len=1, any.missing= FALSE)
-  checkmate::assertLogical(overwrite, len=1, any.missing = FALSE)
+  qzxccheckmate::assertLogical(overwrite, len=1, any.missing = FALSE)
   checkmate::assertLogical(load, len=1, any.missing = FALSE)
   if (is.logical(save)) {
     checkmate::assertLogical(save, len=1, any.missing=FALSE)
@@ -499,6 +516,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
     }
     if (load && file.exists(save)) {
+      .minfo(paste0("loading save file '", save, "'"))
       return(qs::qread(save))
     }
     checkmate::assertPathForOutput(save, overwrite=overwrite)
@@ -596,7 +614,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                         "d/dt(depot)=0\nd/dt(central)=0\n"),
                  ifelse(.nonmem2rx$needExit, "ierprdu <- -1\n", ""),
                  paste(.nonmem2rx$model, collapse="\n"),
-                 
+
                  "\n})",
                  "}")
   .fun <- eval(parse(text=.txt))
