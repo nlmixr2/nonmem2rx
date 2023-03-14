@@ -19,6 +19,7 @@ nonmem2rx(
   nonmemData = FALSE,
   strictLst = FALSE,
   unintFixed = FALSE,
+  extended = FALSE,
   nLinesPro = 20L,
   delta = 1e-04,
   usePhi = TRUE,
@@ -97,6 +98,9 @@ integrated into the nonmem2rx ui.}
 successful load (default `FALSE`).}
 
 \item{unintFixed}{Treat uninteresting values as fixed parameters (default `FALSE`)}
+
+\item{extended}{Translate extended control streams from tools like
+wings for NONMEM (default `TRUE`)}
 
 \item{nLinesPro}{The number of lines to check for the $PROBLEM
 statement.}

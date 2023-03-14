@@ -10,7 +10,7 @@ nonmem2rxRec.pk <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $PK record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 #' @export
@@ -20,7 +20,7 @@ nonmem2rxRec.pre <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $PRED record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 
@@ -31,7 +31,7 @@ nonmem2rxRec.des <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $DES record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$DES", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$DES", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 
@@ -72,7 +72,7 @@ nonmem2rxRec.err <- function(x) {
         } else {
           .minfo("cannot determine volume assuming central=linear compartment model")
           .addModel(paste0("centralLin <- rxLinCmt1"))
-        }        
+        }
       }
     }
   }
@@ -82,19 +82,19 @@ nonmem2rxRec.err <- function(x) {
     if (!is.null(.nonmem2rx$scaleVol[["scale1"]])) {
       .addModel(paste0("scale1 <- scale1/", .nonmem2rx$scaleVol[["scale1"]]))
     }
-    .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+    .Call(`_nonmem2rx_trans_abbrev`, "F = A(1)", "$ERROR", .nonmem2rx$abbrevLin+3L, as.integer(.nonmem2rx$extendedCtl))
   } else if (.nonmem2rx$abbrevLin == 2L) {
     if (!is.null(.nonmem2rx$scaleVol[["scale2"]])) {
       .addModel(paste0("scale2 <- scale2/", .nonmem2rx$scaleVol[["scale2"]]))
     }
-    .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L)
+    .Call(`_nonmem2rx_trans_abbrev`, "F = A(2)", "$ERROR", .nonmem2rx$abbrevLin+3L, as.integer(.nonmem2rx$extendedCtl))
   } else {
     .cmt <- .nonmem2rx$defobs
-    .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, sprintf("F = A(%d)%s",.cmt, .getScale(.cmt, des=TRUE)), "$ERROR", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $ERROR record is empty", call.=FALSE)
-    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, .cur, "$ERROR", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
 }
 #' Add the parameters scaled for rode2 translation
@@ -113,8 +113,8 @@ nonmem2rxRec.err <- function(x) {
   }
   invisible()
 }
-#' Get scale for compartment (if defined) 
-#'  
+#' Get scale for compartment (if defined)
+#'
 #' @param scale integer for compartment
 #' @param des is this an ODE system
 #' @return string "/scale#" if present  an empty string "" if not present
@@ -127,7 +127,7 @@ nonmem2rxRec.err <- function(x) {
 
 #' Set maximum number of compartments
 #'
-#' @param maxa maximum 
+#' @param maxa maximum
 #' @return nothing called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
@@ -160,7 +160,7 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$needYtype <- TRUE
 }
 #' Tells the parser that a volume is in the model
-#'  
+#'
 #' @param vol volume
 #' @return nothing, called for side effects
 #' @noRd
@@ -170,8 +170,8 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$hasVol <- TRUE
 }
 #' Push defined volume information in the scaling
-#'  
-#' @param scale Scale integer representing 
+#'
+#' @param scale Scale integer representing
 #' @param volume volume defined while defining scale
 #' @return none, called for side effects
 #' @noRd
@@ -199,8 +199,8 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$sigmaEst <- rbind(.nonmem2rx$sigmaEst, data.frame(x=x, y=y))
 }
 
-#' Push observed omega(#, #) into translation queue  
-#'  
+#' Push observed omega(#, #) into translation queue
+#'
 #' @param x integer of the row of the omega matrix
 #' @param y integer of the column of the omega matrix
 #' @return nothing, called for side effects
@@ -208,7 +208,7 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .pushOmegaEst <- function(x, y) {
   .w <- which(.nonmem2rx$omegaEst$x == x && .nonmem2rx$omegaEst$y == y)
-  if (length(.w) != 0L) return(invisible()) 
+  if (length(.w) != 0L) return(invisible())
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
 }
 
@@ -236,7 +236,7 @@ nonmem2rxRec.err <- function(x) {
   .nonmem2rx$etaObs <- unique(c(.nonmem2rx$etaObs, i))
 }
 #' Push the maximum observed ETA
-#'  
+#'
 #' @param i eta number
 #' @return nothing, called for side effects
 #' @noRd
@@ -246,7 +246,7 @@ nonmem2rxRec.err <- function(x) {
 }
 
 #' Push the maximum observed THETA
-#'  
+#'
 #' @param i theta number
 #' @return nothing, called for side effects
 #' @noRd
@@ -290,7 +290,7 @@ nonmem2rxRec.err <- function(x) {
   .ret
 }
 #' Puts in any missing parameter definitions
-#'  
+#'
 #' @return missing parameters
 #' @noRd
 #' @author Matthew L. Fidler
@@ -317,11 +317,89 @@ nonmem2rxRec.err <- function(x) {
   }
   ""
 }
-#' Needs variable for exit statement  
-#'  
+#' Needs variable for exit statement
+#'
 #' @return nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
 .needExit <- function() {
   .nonmem2rx$needExit <- TRUE
+}
+#' Track that NONMEM defined a variable
+#'
+#' @param lhs variable being defined
+#' @return nothing called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.addLhsVar <- function(lhs) {
+  .nonmem2rx$lhsDef <- c(.nonmem2rx$lhsDef, lhs)
+}
+.normalizeEsnLabel <- function(theta) {
+  .theta <- tolower(theta)
+  .dups <- unique(.theta[duplicated(.theta)])
+  if (length(.dups) > 0) {
+    .nonmem2rx$esnDups <- c(.nonmem2rx$esnDups, .dups)
+    .theta[.theta %in% .dups] <- NA_character_
+  }
+  .theta
+}
+#'  Calulate the final covariates or nonmem input data items
+#'
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.calcFinalInputNames <- function() {
+  .inp <- .nonmem2rx$input
+  if (is.null(.inp)) {
+    .nonmem2rx$finalInput <- character(0)
+  } else {
+    .w <- which(.inp == "DROP")
+    .inp <- .inp[-.w]
+    .inp <- unique(c(names(.inp), setNames(.inp, NULL)))
+    .nonmem2rx$finalInput <- tolower(.inp)
+  }
+  .theta <- tolower(.nonmem2rx$theta)
+  .dups <- unique(.theta[duplicated(.theta)])
+  .theta[.theta %in% .dups] <- NA_character_
+  .nonmem2rx$thetaLow <- .normalizeEsnLabel(.nonmem2rx$theta)
+  .nonmem2rx$etaLabelLow <- .normalizeEsnLabel(.nonmem2rx$etaLabel)
+  .nonmem2rx$epsLabelLow <- .normalizeEsnLabel(.nonmem2rx$epsLabel)
+  .nonmem2rx$needExtCalc <- FALSE
+}
+#' Get the variable name considering extended control streams
+#'
+#' @param var Variable to consider
+#' @return variable (if nothing changed) or theta/eta/eps
+#' @noRd
+#' @author Matthew L. Fidler
+.getExtendedVar <- function(var) {
+  if (!.nonmem2rx$extendedCtl) return(var)
+  .v <- tolower(var)
+  .lhs <- tolower(.nonmem2rx$lhsDef)
+  if (length(.lhs) > 1) {
+    .lhs <- .lhs[-length(.lhs)]
+    if (.v %in% .lhs) return(var)
+  }
+  if (.nonmem2rx$needExtCalc) {
+    .calcFinalInputNames()
+  }
+  if (.v %in% .nonmem2rx$finalInput) return(var)
+  .w <- which(.v == .nonmem2rx$thetaLow)
+  if (length(.w) == 1L) {
+    .pushObservedThetaObs(.w)
+    .ret <- paste0("theta", .w)
+    return(.ret)
+  }
+  .w <- which(.v == .nonmem2rx$etaLabelLow)
+  if (length(.w) == 1L) {
+    .pushObservedEtaObs(.w)
+    .ret <- paste0("eta", .w)
+    return(.ret)
+  }
+  .w <- which(.v == .nonmem2rx$epsLabelLow)
+  if (length(.w) == 1L) {
+    .ret <- paste0("eps", .w)
+    return(.ret)
+  }
+  var
 }

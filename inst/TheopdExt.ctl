@@ -1,4 +1,4 @@
-$PROB theophylline pharmacodynamics standard control stream
+$PROB theophylline pharmacodynamics extended control stream
 $DATA theopd.dat IGNORE #
 $INPUT ID TIME THEO AGE WT SEX RACE DIAG DV
 $ESTIM METHOD=ZERO POSTHOC
@@ -8,7 +8,7 @@ $THETA
 
 (0,150.,) ; POP_E0 1
 (0,200.,) ; POP_EMAX 2
-(.001,10,) ; POP_C50 3
+(.001,10,) ;POP_C50 3
 $OMEGA
 
 0.5 ; PPV_E0 1
@@ -20,10 +20,10 @@ $SIGMA
 
 
 $PRED
-E0=THETA(1)*EXP(ETA(1))
-EMAX=THETA(2)*EXP(ETA(2))
-EC50=THETA(3)*EXP(ETA(3))
-Y = E0 + EMAX*THEO/(THEO+EC50) + ERR(1)
+E0=POP_E0*EXP(PPV_E0)
+EMAX=POP_EMAX*EXP(PPV_EMAX)
+EC50=POP_C50*EXP(PPV_C50)
+Y = E0 + EMAX*THEO/(THEO+EC50) + RUV_SD
 $TABLE ID TIME THEO AGE WT SEX RACE DIAG
 E0 EMAX C50 Y
 NOPRINT ONEHEADER FILE=theopd.fit

@@ -1,9 +1,9 @@
 test_that("test abbrev", {
 
-  .a <- function(abbrev, eq="no", abbrevLin=0L) {
+  .a <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
     .clearNonmem2rx()
     .Call(`_nonmem2rx_setRecord`, "$PRED")
-    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
     expect_equal(.nonmem2rx$model, eq)
   }
 
@@ -177,11 +177,11 @@ test_that("test abbrev", {
     expect_warning(.a("SID=IREP", "SID <- irep"), "sim.id")
 
 
-    .am <- function(abbrev, eq="no", abbrevLin=0L) {
+    .am <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $model record
       .nonmem2rx$cmtName <- c("GUT", "CENTRAL", "PERI")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
       expect_equal(.nonmem2rx$model, eq)
     }
 
@@ -197,11 +197,11 @@ test_that("test abbrev", {
     .am("A_0(PERI)=3",
         c("rxini.rxddta3. <- 3",  "rxddta3(0) <- rxini.rxddta3."))
 
-    .at <- function(abbrev, eq="no", abbrevLin=0L) {
+    .at <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $theta record
       .nonmem2rx$thetaNonmemLabel <- c("CL", "V", "KA")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended=extended)
       expect_equal(.nonmem2rx$model, eq)
     }
     .at("test = THETA(CL) + THETA(V) + THETA(KA)",
@@ -209,11 +209,11 @@ test_that("test abbrev", {
     expect_error(.at("test = THETA(FUN)"),
                  "FUN")
 
-    .ae <- function(abbrev, eq="no", abbrevLin=0L) {
+    .ae <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $theta record
       .nonmem2rx$etaNonmemLabel <- c("ECL", "EV", "EKA")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended=extended)
       expect_equal(.nonmem2rx$model, eq)
     }
 
@@ -222,11 +222,11 @@ test_that("test abbrev", {
     expect_error(.ae("test = ETA(FUN)"),
                  "FUN")
 
-    .ar <- function(abbrev, eq="no", abbrevLin=0L) {
+    .ar <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
       .clearNonmem2rx()
       # spoof parsed $theta record
       .nonmem2rx$epsNonmemLabel <- c("PROP", "ADD")
-      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin)
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
       expect_equal(.nonmem2rx$model, eq)
     }
 
@@ -234,6 +234,49 @@ test_that("test abbrev", {
         "TEST <- eps2 + eps1")
 
     expect_error(.ar("test = ERR(EASY) + EPS(PROP)",
-        "TEST <- eps2 + eps1"), "EASY")
+                     "TEST <- eps2 + eps1"), "EASY")
+
+    # now testing extended control stream
+    .ae <- function(abbrev, eq="no", lhs, abbrevLin=0L, extended=1L,
+                    lhsDef=NULL) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$theta <- c("popE0", "popEMAX", "popEC50")
+      .nonmem2rx$etaLabel <- c("etaE0", "etaEMAX", "etaEC50")
+      .nonmem2rx$epsLabel <- "errSD"
+      .nonmem2rx$lhsDef <- lhsDef
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
+      expect_equal(.nonmem2rx$lhsDef, lhs)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+    .ae("E0=pope0*EXP(etae0)", "E0 <- theta1 * exp(eta1)", "E0")
+    .ae("EMAX=popemax*EXP(etaemax)", "EMAX <- theta2 * exp(eta2)", "EMAX")
+    .ae("EC50=popec50*EXP(etaec50)", "EC50 <- theta3 * exp(eta3)", "EC50")
+    .ae("Y = E0 + EMAX*THEO/(THEO+EC50) + errsd", "Y <- E0 + EMAX * THEO / (THEO + EC50) + eps1",
+        c("E0", "EMAX", "EC50", "Y"), lhsDef = c("E0", "EMAX", "EC50"))
+    .ae("pope0=pope0*EXP(etae0)", "POPE0 <- theta1 * exp(eta1)", "pope0")
+    # test if1
+    .ae("IF (EMAX>0) pope0=pope0*EXP(etae0)", "if (EMAX > 0) POPE0 <- theta1 * exp(eta1)", "pope0")
+    .ext <- nonmem2rx(system.file("TheopdExt.ctl", package="nonmem2rx"), extended=TRUE)
+    .nonExt <- nonmem2rx(system.file("Theopd.ctl", package="nonmem2rx"))
+    .ext1 <- sub("extended", "compare", deparse(as.function(.ext)))
+    .ext2 <- sub("standard", "compare",deparse(as.function(.nonExt)))
+    expect_equal(.ext1, .ext2)
+
+    # now test dups
+    .ae <- function(abbrev, eq="no", lhs, abbrevLin=0L, extended=1L,
+                    lhsDef=NULL) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$theta <- c("popE0", "popE0", "popEC50")
+      .nonmem2rx$etaLabel <- c("etaE0", "etaE0", "etaEC50")
+      .nonmem2rx$epsLabel <- "errSD"
+      .nonmem2rx$lhsDef <- lhsDef
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
+      expect_equal(.nonmem2rx$lhsDef, lhs)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+
+    .ae("E0=pope0*EXP(etae0)", "E0 <- POPE0 * exp(ETAE0)", "E0")
 
 })

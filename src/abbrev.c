@@ -84,6 +84,8 @@ SEXP nonmem2rxGetModelNum(const char *v);
 SEXP nonmem2rxGetThetaNum(const char *v);
 SEXP nonmem2rxGetEtaNum(const char *v);
 SEXP nonmem2rxGetEpsNum(const char *v);
+SEXP nonmem2rxAddLhsVar(const char* v);
+SEXP nonmem2rxGetExtendedVar(const char *v);
 
 int maxA = 0,
   definingScale = 0;
@@ -99,6 +101,7 @@ void pushModel(void) {
 void writeAinfo(const char *v);
 
 int abbrevLin = 0;
+int extendedCtrlInt = 0;
 
 SEXP nonmem2rxGetScale(int scale);
 
@@ -292,6 +295,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
+    if (extendedCtrlInt && strstr(curLine.s, "<-") != NULL) {
+      char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
+      if (strcmp(v, v2)) {
+        // different variable, swap and continue
+        sAppend(&curLine, v2);
+        return 1;
+      }
+    }
     int i = 0;
     while(v[i] != 0) {
       v[i] = toupper(v[i]);
@@ -696,7 +707,7 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
       char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
       Rf_warning("NONMEM call protocol phrase ignored\n  %s", v);
     }
-    return 1; 
+    return 1;
   } else if (!strcmp("callpassmode", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "'CALL PASS(MODE)' statements not supported in translation");
@@ -1069,6 +1080,21 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     nonmem2rxNeedExit();
     pushModel();
     return;
+  } else if (extendedCtrlInt &&
+              (!strcmp("assignment", name) ||
+               !strcmp("fbio", name) ||
+               !strcmp("alag", name) ||
+               !strcmp("rate", name) ||
+               !strcmp("dur", name)  ||
+               !strcmp("scale", name))) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxAddLhsVar(v);
+  } else if (extendedCtrlInt &&
+             !strcmp("if1", name)) {
+    D_ParseNode *xpn = d_get_child(pn, 4);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    nonmem2rxAddLhsVar(v);
   }
   if (nch != 0) {
     for (int i = 0; i < nch; i++) {
@@ -1174,10 +1200,11 @@ void trans_abbrev(const char* parse){
 
 SEXP nonmem2rxSetMaxA(int maxa);
 
-SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP) {
+SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP extendedCtrlSEXP) {
   sClear(&curLine);
   abbrevPrefix = (char*)rc_dup_str(R_CHAR(STRING_ELT(prefix, 0)), 0);
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
+  extendedCtrlInt = INTEGER(extendedCtrlSEXP)[0];
   verbWarning = 0;
   maxA = 0;
   evidWarning=0;
