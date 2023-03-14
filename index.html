@@ -56,6 +56,7 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div class="section level1">
 <div class="page-header"><h1 id="nonmem2rx">nonmem2rx<a class="anchor" aria-label="anchor" href="#nonmem2rx"></a>
 </h1></div>
@@ -77,7 +78,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -113,14 +114,14 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDfan3x/temp_libpath5f0622e605f6/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -433,6 +434,21 @@
 </div>
 </div>
 </div>
+<div class="section level1">
+<h1 id="external-contributors-and-notes-on-validation">External contributors (and notes on validation)<a class="anchor" aria-label="anchor" href="#external-contributors-and-notes-on-validation"></a>
+</h1>
+<p>This was validated against the <code>PsN</code> library test suite of NONMEM listings (<a href="https://github.com/UUPharmacometrics/PsN/tree/master/test" class="external-link uri">https://github.com/UUPharmacometrics/PsN/tree/master/test</a>) and the ddmore model scrapings (<a href="https://github.com/dpastoor/ddmore_scraping" class="external-link uri">https://github.com/dpastoor/ddmore_scraping</a>).</p>
+<p>Due to the sheer size of the zipped models for these two nonmem control stream sources these are excluded to keep the binary below 3 mgs as required by CRAN.</p>
+<p>However, I would like to acknowledge all who helped in these projects. With these projects the NONMEM conversion to rxode2 has been made much more robust.</p>
+<p>However, even though they are not/will not be in the CRAN binaries, you can test them yourself by:</p>
+<ol style="list-style-type: decimal">
+<li>Downloading this repository</li>
+<li>Running the tests <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code>
+</li>
+</ol>
+<p>Note these are only excluded when building the library and are still available for you to test if you wish.</p>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
