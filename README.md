@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-#> ℹ getting information from  '/tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -58,7 +58,6 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ Processing record $PROBLEM
 #> ℹ Processing record $DATA
 #> ℹ Processing record $SUBROUTINES
-#> Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored
 #> ℹ Processing record $PK
 #> ℹ Processing record $DES
 #> ℹ Processing record $ERROR
@@ -67,23 +66,23 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ Processing record $COVARIANCE
 #> ℹ Ignore record $COVARIANCE
 #> ℹ Processing record $TABLE
-#> ℹ change initial estimate of `theta1` to `1.37034`
-#> ℹ change initial estimate of `theta2` to `4.19815`
-#> ℹ change initial estimate of `theta3` to `1.38003`
-#> ℹ change initial estimate of `theta4` to `3.87657`
-#> ℹ change initial estimate of `theta5` to `0.196446`
-#> ℹ change initial estimate of `eta1` to `0.101251`
-#> ℹ change initial estimate of `eta2` to `0.0993872`
-#> ℹ change initial estimate of `eta3` to `0.101303`
-#> ℹ change initial estimate of `eta4` to `0.0730498`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ change initial estimate of `theta1` to `1.37034036528946`
+#> ℹ change initial estimate of `theta2` to `4.19814911033061`
+#> ℹ change initial estimate of `theta3` to `1.38003493562413`
+#> ℹ change initial estimate of `theta4` to `3.87657341967489`
+#> ℹ change initial estimate of `theta5` to `0.196446108190896`
+#> ℹ change initial estimate of `eta1` to `0.101251418415006`
+#> ℹ change initial estimate of `eta2` to `0.0993872449483344`
+#> ℹ change initial estimate of `eta3` to `0.101302674763154`
+#> ℹ change initial estimate of `eta4` to `0.0730497519364148`
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmps9ZnWQ/temp_libpath115e2a3a319c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpblrYW9/temp_libpath5b278577d79/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -103,15 +102,15 @@ mod
 #>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
 #>  ── Initalization: ──  
 #> Fixed Effects ($theta): 
-#>   theta1   theta2   theta3   theta4      RSV 
-#> 1.370340 4.198150 1.380030 3.876570 0.196446 
+#>    theta1    theta2    theta3    theta4       RSV 
+#> 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 
 #> 
 #> Omega ($omega): 
-#>          eta1      eta2     eta3      eta4
-#> eta1 0.101251 0.0000000 0.000000 0.0000000
-#> eta2 0.000000 0.0993872 0.000000 0.0000000
-#> eta3 0.000000 0.0000000 0.101303 0.0000000
-#> eta4 0.000000 0.0000000 0.000000 0.0730498
+#>           eta1       eta2      eta3       eta4
+#> eta1 0.1012514 0.00000000 0.0000000 0.00000000
+#> eta2 0.0000000 0.09938724 0.0000000 0.00000000
+#> eta3 0.0000000 0.00000000 0.1013027 0.00000000
+#> eta4 0.0000000 0.00000000 0.0000000 0.07304975
 #> 
 #> States ($state or $stateDf): 
 #>   Compartment Number Compartment Name
@@ -127,25 +126,25 @@ mod
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
-#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.99e-06", 
-#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.29e-05, 0.042); atol=0.00174", 
-#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=7.26e-06", 
-#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (9.23e-07,0.00384) atol=7.26e-06")
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", 
+#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
+#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
-#>         theta1 <- 1.37034
+#>         theta1 <- 1.37034036528946
 #>         label("log Cl")
-#>         theta2 <- 4.19815
+#>         theta2 <- 4.19814911033061
 #>         label("log Vc")
-#>         theta3 <- 1.38003
+#>         theta3 <- 1.38003493562413
 #>         label("log Q")
-#>         theta4 <- 3.87657
+#>         theta4 <- 3.87657341967489
 #>         label("log Vp")
-#>         RSV <- c(0, 0.196446, 1)
+#>         RSV <- c(0, 0.196446108190896, 1)
 #>         label("RSV")
-#>         eta1 ~ 0.101251
-#>         eta2 ~ 0.0993872
-#>         eta3 ~ 0.101303
-#>         eta4 ~ 0.0730498
+#>         eta1 ~ 0.101251418415006
+#>         eta2 ~ 0.0993872449483344
+#>         eta3 ~ 0.101302674763154
+#>         eta4 ~ 0.0730497519364148
 #>     })
 #>     model({
 #>         cmt(CENTRAL)
@@ -209,16 +208,16 @@ follows:
 ``` r
 mod$ipredAtol
 #>         50% 
-#> 0.001735466
+#> 0.001770218
 mod$ipredRtol
 #>          50% 
-#> 6.994654e-06
+#> 6.886608e-06
 mod$predAtol
 #>          50% 
-#> 7.263317e-06
+#> 6.406839e-06
 mod$predAtol
 #>          50% 
-#> 7.263317e-06
+#> 6.406839e-06
 ```
 
 You can see they do not exactly match. You can explore these difference
@@ -228,20 +227,20 @@ datasets:
 ``` r
 head(mod$ipredCompare)
 #>   ID TIME nonmemIPRED    IPRED
-#> 1  1 0.25      1215.4 1215.362
-#> 2  1 0.50      1191.9 1191.928
-#> 3  1 0.75      1169.2 1169.168
-#> 4  1 1.00      1147.1 1147.061
+#> 1  1 0.25      1215.4 1215.363
+#> 2  1 0.50      1191.9 1191.929
+#> 3  1 0.75      1169.2 1169.169
+#> 4  1 1.00      1147.1 1147.062
 #> 5  1 1.50      1104.7 1104.724
 #> 6  1 2.00      1064.8 1064.762
 
 head(mod$predCompare)
 #>   ID TIME nonmemPRED     PRED
-#> 1  1 0.25     1750.3 1750.289
-#> 2  1 0.50     1699.8 1699.833
-#> 3  1 0.75     1651.3 1651.348
+#> 1  1 0.25     1750.3 1750.290
+#> 2  1 0.50     1699.8 1699.834
+#> 3  1 0.75     1651.3 1651.349
 #> 4  1 1.00     1604.8 1604.752
-#> 5  1 1.50     1516.9 1516.912
+#> 5  1 1.50     1516.9 1516.913
 #> 6  1 2.00     1435.7 1435.723
 ```
 
@@ -363,29 +362,28 @@ different. For example:
 ``` r
 # full parameter precision
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res"))
-#> Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored
 #> Warning: there are duplicate theta names, not renaming duplicate parameters
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 
 print(mod$ipredAtol)
 #>         50% 
-#> 0.001735466
+#> 0.001770218
 print(mod$ipredRtol)
 #>          50% 
-#> 6.994654e-06
+#> 6.886608e-06
 
 print(mod$predAtol)
 #>          50% 
-#> 7.263317e-06
+#> 6.406839e-06
 print(mod$predRtol)
 #>          50% 
-#> 7.263317e-06
+#> 6.406839e-06
 
 # now reduce precision by using table/lst output only
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                                   useXml=FALSE, useExt=FALSE,usePhi=FALSE))
-#> Warning in nonmem2rxRec.sub(.ret): $SUBROUTINES TOL=# ignored
 #> Warning: there are duplicate theta names, not renaming duplicate parameters
+
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 
 print(mod$predAtol)
