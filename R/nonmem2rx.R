@@ -460,9 +460,9 @@
 #' @import data.table
 #' @examples
 #'
-#' nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+#' nonmem2rx(system.file("run001.mod", package="nonmem2rx"), save=FALSE)
 #'
-#' nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+#' nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 #'
 nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       rename=NULL, tolowerLhs=TRUE, thetaNames=TRUE,

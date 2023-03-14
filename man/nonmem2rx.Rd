@@ -19,7 +19,7 @@ nonmem2rx(
   nonmemData = FALSE,
   strictLst = FALSE,
   unintFixed = FALSE,
-  extended = FALSE,
+  extended = getOption("nonmem2rx.extended", FALSE),
   nLinesPro = 20L,
   delta = 1e-04,
   usePhi = TRUE,
@@ -180,12 +180,14 @@ following options are queried:
 overwritten (default \code{TRUE})
 \item \code{nonmem2rx.load} - should nonmem2rx load a saved model instead of
 translating and validating again? (default \code{TRUE})
+\item \code{nonmem2rx.extended} - should nonmem2rx support extended control
+streams? (default \code{FALSE})
 }
 }
 \examples{
 
-nonmem2rx(system.file("run001.mod", package="nonmem2rx"))
+nonmem2rx(system.file("run001.mod", package="nonmem2rx"), save=FALSE)
 
-nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 
 }
