@@ -63,7 +63,9 @@
   .nonmem2rx$allVol <- NULL
   .nonmem2rx$lhsDef <- NULL
   .nonmem2rx$extendedCtl <- TRUE
-  .nonmem2rx$finalInput <- TRUE
+  .nonmem2rx$finalInput <- NULL
+  .nonmem2rx$esnDups <- NULL
+  .nonmem2rx$needExtCalc <- TRUE
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -365,7 +367,7 @@
 #' @param unintFixed Treat uninteresting values as fixed parameters (default `FALSE`)
 #'
 #' @param extended Translate extended control streams from tools like
-#'   wings for NONMEM (default `TRUE`)
+#'   wings for NONMEM
 #'
 #' @param nLinesPro The number of lines to check for the $PROBLEM
 #'   statement.
@@ -427,7 +429,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       nonmemData=FALSE,
                       strictLst=FALSE,
                       unintFixed=FALSE,
-                      extended=FALSE,
+                      extended=TRUE,
                       nLinesPro=20L,
                       delta=1e-4,
                       usePhi=TRUE,
@@ -472,6 +474,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (.nonmem2rx$needYtype) {
     warning("'ytype' variable has special meaning in rxode2, renamed to 'nmytype', rename/copy in your data too",
             call.=FALSE)
+  }
+  if (length(.nonmem2rx$esnDups) > 0) {
+    warning("extended control stream labels are duplicated and ignored for: '",
+            paste(.nonmem2rx$esnDups, collapse="', '"),
+            "'", call=FALSE)
   }
   if (inherits(thetaNames, "logical")) {
     checkmate::assertLogical(thetaNames, len=1, any.missing = FALSE)

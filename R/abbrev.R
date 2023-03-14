@@ -334,6 +334,15 @@ nonmem2rxRec.err <- function(x) {
 .addLhsVar <- function(lhs) {
   .nonmem2rx$lhsDef <- c(.nonmem2rx$lhsDef, lhs)
 }
+.normalizeEsnLabel <- function(theta) {
+  .theta <- tolower(theta)
+  .dups <- unique(.theta[duplicated(.theta)])
+  if (length(.dups) > 0) {
+    .nonmem2rx$esnDups <- c(.nonmem2rx$esnDups, .dups)
+    .theta[.theta %in% .dups] <- NA_character_
+  }
+  .theta
+}
 #'  Calulate the final covariates or nonmem input data items
 #'
 #' @return nothing, called for side effects
@@ -349,9 +358,13 @@ nonmem2rxRec.err <- function(x) {
     .inp <- unique(c(names(.inp), setNames(.inp, NULL)))
     .nonmem2rx$finalInput <- tolower(.inp)
   }
-  .nonmem2rx$thetaLow <- tolower(.nonmem2rx$theta)
-  .nonmem2rx$etaLabelLow <- tolower(.nonmem2rx$etaLabel)
-  .nonmem2rx$epsLabelLow <- tolower(.nonmem2rx$epsLabel)
+  .theta <- tolower(.nonmem2rx$theta)
+  .dups <- unique(.theta[duplicated(.theta)])
+  .theta[.theta %in% .dups] <- NA_character_
+  .nonmem2rx$thetaLow <- .normalizeEsnLabel(.nonmem2rx$theta)
+  .nonmem2rx$etaLabelLow <- .normalizeEsnLabel(.nonmem2rx$etaLabel)
+  .nonmem2rx$epsLabelLow <- .normalizeEsnLabel(.nonmem2rx$epsLabel)
+  .nonmem2rx$needExtCalc <- FALSE
 }
 #' Get the variable name considering extended control streams
 #'
@@ -367,10 +380,9 @@ nonmem2rxRec.err <- function(x) {
     .lhs <- .lhs[-length(.lhs)]
     if (.v %in% .lhs) return(var)
   }
-  if (!is.character(.nonmem2rx$finalInput)) {
+  if (.nonmem2rx$needExtCalc) {
     .calcFinalInputNames()
   }
-  .calcFinalInputNames()
   if (.v %in% .nonmem2rx$finalInput) return(var)
   .w <- which(.v == .nonmem2rx$thetaLow)
   if (length(.w) == 1L) {

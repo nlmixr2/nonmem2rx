@@ -262,4 +262,21 @@ test_that("test abbrev", {
     .ext1 <- sub("extended", "compare", deparse(as.function(.ext)))
     .ext2 <- sub("standard", "compare",deparse(as.function(.nonExt)))
     expect_equal(.ext1, .ext2)
+
+    # now test dups
+    .ae <- function(abbrev, eq="no", lhs, abbrevLin=0L, extended=1L,
+                    lhsDef=NULL) {
+      .clearNonmem2rx()
+      # spoof parsed $theta record
+      .nonmem2rx$theta <- c("popE0", "popE0", "popEC50")
+      .nonmem2rx$etaLabel <- c("etaE0", "etaE0", "etaEC50")
+      .nonmem2rx$epsLabel <- "errSD"
+      .nonmem2rx$lhsDef <- lhsDef
+      .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
+      expect_equal(.nonmem2rx$lhsDef, lhs)
+      expect_equal(.nonmem2rx$model, eq)
+    }
+
+    .ae("E0=pope0*EXP(etae0)", "E0 <- POPE0 * exp(ETAE0)", "E0")
+
 })
