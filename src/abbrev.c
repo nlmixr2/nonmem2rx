@@ -1079,12 +1079,13 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     nonmem2rxNeedExit();
     pushModel();
     return;
-  } else if (!strcmp("assignment", name) ||
-             !strcmp("fbio", name) ||
-             !strcmp("alag", name) ||
-             !strcmp("rate", name) ||
-             !strcmp("dur", name)  ||
-             !strcmp("scale", name)) {
+  } else if (extendedCtrlInt == 1 &&
+              (!strcmp("assignment", name) ||
+               !strcmp("fbio", name) ||
+               !strcmp("alag", name) ||
+               !strcmp("rate", name) ||
+               !strcmp("dur", name)  ||
+               !strcmp("scale", name))) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxAddLhsVar(v);
