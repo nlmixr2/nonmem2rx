@@ -12,6 +12,7 @@
 \alias{rxRename}
 \alias{rxSolve}
 \alias{rxUiGet}
+\alias{lotri}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -19,6 +20,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{lotri}{\code{\link[lotri]{lotri}}}
+
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
   \item{rxode2}{\code{\link[rxode2]{ini}}, \code{\link[rxode2]{model}}, \code{\link[rxode2:rxode2]{rxode}}, \code{\link[rxode2:rxode2]{RxODE}}, \code{\link[rxode2]{rxode2}}, \code{\link[rxode2]{rxRename}}, \code{\link[rxode2]{rxSolve}}, \code{\link[rxode2]{rxUiGet}}}

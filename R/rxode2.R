@@ -17,16 +17,16 @@
   }
 }
 
-
 #'@export
 rxRename.nonmem2rx <- function(.data, ...) {
   .modelLines <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)])
-  .lst <- as.list(match.call()[-1])
-  .lst$.data <- .data
-  .rxui <- do.call(rxode2::.rxRename, c(.lst, list(envir=parent.frame(2))))
+  .lst0 <- as.list(match.call()[-1])
+  .lst0$.data <- .data
+  .vars <- unique(c(.data$mv0$state, .data$mv0$params, .data$mv0$lhs, .data$predDf$var, .data$predDf$cond, .data$iniDf$name))
   .lst <- lapply(seq_along(.modelLines), function(i) {
     rxode2::.assertRenameErrorModelLine(.modelLines[[i]], .vars)
   })
+  .rxui <- do.call(rxode2::.rxRename, c(.lst0, list(envir=parent.frame(2))))
   ## now use call information to rename any other variables in `thetaMat` and `sigma`
   lapply(seq_along(.lst), function(i) {
     .rxnmRename1(.rxui, .lst[[i]])
