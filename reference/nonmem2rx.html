@@ -75,7 +75,8 @@
 <span>  ext <span class="op">=</span> <span class="st">".ext"</span>,</span>
 <span>  save <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.save"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.overwrite"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.load"</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.load"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  compress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.compress"</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -263,6 +264,14 @@ the input file, then load that file, otherwise regenerate and
 overwrite.  This works best if you point to an output file, like
 a <code>.xml</code> or listing file instead of the control stream</p></dd>
 
+
+<dt>compress</dt>
+<dd><p>a boolean indicating if the UI should be a
+compressed UI.  If you are using this for simulation with old
+versions of rxode2, the compressed ui is not supported, so this
+should be <code>FALSE</code>. Otherwise use <code>TRUE</code> if you are using a newer
+rxode2.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -282,6 +291,8 @@ overwritten (default <code>TRUE</code>)</p></li>
 translating and validating again? (default <code>TRUE</code>)</p></li>
 <li><p><code>nonmem2rx.extended</code> - should nonmem2rx support extended control
 streams? (default <code>FALSE</code>)</p></li>
+<li><p><code>nonmem2rx.compress</code> - should the ui be compressed or
+uncompressed (default: <code>TRUE</code>)</p></li>
 </ul></div>
 
     <div id="ref-examples">
