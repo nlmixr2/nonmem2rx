@@ -65,10 +65,10 @@ ini.nonmem2rx <- function(x, ..., envir = parent.frame(), append = NULL) {
     .pre <- .iniDf[,c("name", "est")]
     names(.pre)[2] <- "estPre"
   }
-  .iniLines <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)], 
+  .iniLines <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)],
                                            envir = envir, iniDf = .iniDf)
   lapply(.iniLines, function(line) {
-    rxode2::.iniHandleLine(expr = line, rxui = .ret, envir = envir, 
+    rxode2::.iniHandleLine(expr = line, rxui = .ret, envir = envir,
                            append = append)
   })
   if (.hasFull) {
@@ -90,9 +90,9 @@ model.nonmem2rx <- function(x, ..., append = FALSE,
   # save information from the nonmem2rx
   .tmp <- .stripAndSaveObj(x)
   .ret <- .tmp[[2]]
-  .modelLines <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)], 
+  .modelLines <- rxode2::.quoteCallInfoLines(match.call(expand.dots = TRUE)[-(1:2)],
                                              envir = envir)
-  rxode2::.modelHandleModelLines(.modelLines, .ret, modifyIni = FALSE, 
+  rxode2::.modelHandleModelLines(.modelLines, .ret, modifyIni = FALSE,
                                  append = append, auto = auto, envir = envir)
   # always drop extra model information
   .dressAndSaveObj(.ret, .tmp[[1]], full=FALSE)
@@ -141,4 +141,3 @@ rxRename.nonmem2rx <- function(.data, ...) {
 }
 
 rename.nonmem2rx <- rxRename.nonmem2rx
-
