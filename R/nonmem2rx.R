@@ -777,10 +777,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   .rx <- .replaceCmtNames(.rx, cmtNames)
   .rx <- rxode2::rxUiDecompress(.rx)
-
+  .rx$sticky <- NULL
   # now try to validate
   if (!is.null(.nonmemData)) {
     .rx$nonmemData <- .nonmemData
+    .rx$sticky <- "nonmemData"
   }
   if (is.null(.nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
@@ -949,6 +950,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   if (!is.null(.sigma)) {
     .rx$sigma <- .sigma
+    .rx$sticky <- c(.rx$sticky, "sigma")
   }
   if (!is.null(.cov)) {
     .rx$thetaMat <- .cov
@@ -963,6 +965,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .rx$rtol <- .nonmem2rx$rtol
   .rx$ssAtol <- .nonmem2rx$ssAtol
   .rx$ssRtol <- .nonmem2rx$ssRtol
+  .rx$sticky <- c(.rx$sticky, "atol", "rtol", "ssAtol", "ssRtol")
   if (compress) {
     .ret <- rxode2::rxUiCompress(.rx)
   } else {
