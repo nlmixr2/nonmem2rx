@@ -428,6 +428,12 @@
 #'   overwrite.  This works best if you point to an output file, like
 #'   a `.xml` or listing file instead of the control stream
 #'
+#' @param compress a boolean indicating if the UI should be a
+#'   compressed UI.  If you are using this for simulation with old
+#'   versions of rxode2, the compressed ui is not supported, so this
+#'   should be `FALSE`. Otherwise use `TRUE` if you are using a newer
+#'   rxode2.
+#'
 #' @details
 #'
 #' Since some of these options you may want to set per project, the
@@ -447,6 +453,9 @@
 #'
 #' - `nonmem2rx.extended` - should nonmem2rx support extended control
 #'    streams? (default `FALSE`)
+#'
+#' - `nonmem2rx.compress` - should the ui be compressed or
+#' uncompressed (default: `TRUE`)
 #'
 #' @return rxode2 function
 #' @eval .nonmem2rxBuildGram()
@@ -490,7 +499,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       ext=".ext",
                       save=getOption("nonmem2rx.save", TRUE),
                       overwrite=getOption("nonmem2rx.overwrite", TRUE),
-                      load=getOption("nonmem2rx.load", TRUE)) {
+                      load=getOption("nonmem2rx.load", TRUE),
+                      compress=getOption("nonmem2rx.compress", TRUE)) {
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
   if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
@@ -501,6 +511,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(extended, len=1, any.missing= FALSE)
   checkmate::assertLogical(overwrite, len=1, any.missing = FALSE)
   checkmate::assertLogical(load, len=1, any.missing = FALSE)
+  checkmate::assertLogical(compress, len=1, any.missing = FALSE)
   if (is.logical(save)) {
     checkmate::assertLogical(save, len=1, any.missing=FALSE)
     if (save) {
@@ -952,7 +963,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .rx$rtol <- .nonmem2rx$rtol
   .rx$ssAtol <- .nonmem2rx$ssAtol
   .rx$ssRtol <- .nonmem2rx$ssRtol
-  .ret <- rxode2::rxUiCompress(.rx)
+  if (compress) {
+    .ret <- rxode2::rxUiCompress(.rx)
+  } else {
+    .ret <- .rx
+  }
   class(.ret) <- c("nonmem2rx", class(.ret))
   if (!is.null(save)) {
     qs::qsave(.ret, save)

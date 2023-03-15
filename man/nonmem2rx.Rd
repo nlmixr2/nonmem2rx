@@ -35,7 +35,8 @@ nonmem2rx(
   ext = ".ext",
   save = getOption("nonmem2rx.save", TRUE),
   overwrite = getOption("nonmem2rx.overwrite", TRUE),
-  load = getOption("nonmem2rx.load", TRUE)
+  load = getOption("nonmem2rx.load", TRUE),
+  compress = getOption("nonmem2rx.compress", TRUE)
 )
 }
 \arguments{
@@ -162,6 +163,12 @@ based on time stamp of the files.  If the save file is newer than
 the input file, then load that file, otherwise regenerate and
 overwrite.  This works best if you point to an output file, like
 a \code{.xml} or listing file instead of the control stream}
+
+\item{compress}{a boolean indicating if the UI should be a
+compressed UI.  If you are using this for simulation with old
+versions of rxode2, the compressed ui is not supported, so this
+should be \code{FALSE}. Otherwise use \code{TRUE} if you are using a newer
+rxode2.}
 }
 \value{
 rxode2 function
@@ -182,6 +189,8 @@ overwritten (default \code{TRUE})
 translating and validating again? (default \code{TRUE})
 \item \code{nonmem2rx.extended} - should nonmem2rx support extended control
 streams? (default \code{FALSE})
+\item \code{nonmem2rx.compress} - should the ui be compressed or
+uncompressed (default: \code{TRUE})
 }
 }
 \examples{
