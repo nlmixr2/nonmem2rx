@@ -27,6 +27,7 @@ Imports:
     tools,
     utils,
     data.table,
+    qs,
     xml2
 Suggests: 
     devtools,
