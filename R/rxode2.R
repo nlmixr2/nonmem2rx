@@ -26,7 +26,7 @@ rxRename.nonmem2rx <- function(.data, ...) {
   .lst <- lapply(seq_along(.modelLines), function(i) {
     rxode2::.assertRenameErrorModelLine(.modelLines[[i]], .vars)
   })
-  .rxui <- do.call(rxode2::.rxRename, c(.lst0, list(envir=parent.frame(2))))
+  .rxui <- rxode2::rxUiDecompress(do.call(rxode2::.rxRename, c(.lst0, list(envir=parent.frame(2)))))
   ## now use call information to rename any other variables in `thetaMat` and `sigma`
   lapply(seq_along(.lst), function(i) {
     .rxnmRename1(.rxui, .lst[[i]])
