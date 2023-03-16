@@ -33,6 +33,7 @@ LinkingTo:
     rxode2parse
 Imports: 
     checkmate,
+    digest,
     dparser,
     lotri,
     Rcpp,

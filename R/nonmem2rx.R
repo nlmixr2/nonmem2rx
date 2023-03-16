@@ -520,6 +520,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       save <- NULL
     }
   }
+  .digest <- digest::digest(list(utils::packageVersion("nonmem2rx"), file, inputData, nonmemOutputDir,
+                                 rename, tolowerLhs, thetaNames, etaNames, cmtNames, updateFinal,
+                                 determineError, validate, nonmemData, strictLst, unintFixed,
+                                 extended, nLinesPro, delta, usePhi, useExt, useCov, useXml,
+                                 useLst, mod, cov, phi, lst, xml, ext))
   if (!is.null(save)) {
     if (load && overwrite) {
       if (utils::file_test("-nt", file, save)) {
@@ -531,7 +536,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
     if (load && file.exists(save)) {
       .minfo(paste0("loading save file '", save, "'"))
-      return(qs::qread(save))
+      .ret <- qs::qread(save)
+      if (.ret$digest == .digest) {
+        return(.ret)
+      } else {
+        .minfo(paste0("different options for import, ignoring save file '", save, "'"))
+      }
     }
     checkmate::assertPathForOutput(save, overwrite=overwrite)
   }
@@ -966,6 +976,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .rx$ssAtol <- .nonmem2rx$ssAtol
   .rx$ssRtol <- .nonmem2rx$ssRtol
   .rx$sticky <- c(.rx$sticky, "atol", "rtol", "ssAtol", "ssRtol")
+  .rx$digest <- .digest
   if (compress) {
     .ret <- rxode2::rxUiCompress(.rx)
   } else {

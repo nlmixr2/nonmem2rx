@@ -245,7 +245,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
     {
       lapply(.files,
              function(file) {
-               test_that(file, {
+               test_that(paste0(file, " extended"), {
                  expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
                })
              })
