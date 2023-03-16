@@ -14,11 +14,11 @@ Description: 'NONMEM' has been a tool for running nonlinear mixed
     <doi:10.1002/psp4.12052>) and with simple models 'nlmixr2' syntax
     (Fidler et al (2019) <doi:10.1002/psp4.12445>). The 'nlmixr2'
     syntax requires the residual specification to be included and it
-    is not always translated. If availble, the 'rxode2' model will
+    is not always translated. If available, the 'rxode2' model will
     read in the 'NONMEM' data and compare the simulation for the
     population model ('PRED') and the individual model ('IPRED') to
     immediately show how well the translation is performing. This
-    saves the model development time for people who are developming a
+    saves the model development time for people who are creating a
     'rxode2' model manually.  Additionally, this package reads in all
     the information to allow simulation with uncertainty (that is the
     number of observations, the number of subjects, and the covariance
