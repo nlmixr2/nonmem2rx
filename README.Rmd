@@ -44,7 +44,7 @@ nonmem control stream for the parser to start.  For example:
 
 ```{r example}
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 mod 
 ```
 
