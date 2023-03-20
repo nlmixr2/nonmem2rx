@@ -42,13 +42,14 @@ nonmem2rxRec.mix <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $MIX record is empty", call.=FALSE)
+    message(.cur)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$MIX", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
   .nonmem2rx$mixp <- sort(unique(.nonmem2rx$mixp))
   if (length(.nonmem2rx$mixp) != .nonmem2rx$nspop) {
     stop(paste0("specified ", .nonmem2rx$nspop,
                 " mixture probabilities but only provided probability for ",
-                length(.nonmem2rx$mixp), "populations"),
+                length(.nonmem2rx$mixp), " populations"),
          call.=FALSE)
   }
   if (!all(diff(.nonmem2rx$mixp) == 1L)) {

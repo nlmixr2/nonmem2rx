@@ -831,6 +831,7 @@ int abbrev_mix_related(char *name, int i, D_ParseNode *pn) {
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       int p = atoi(v);
       nonmem2rxMixP(p);
+      sAppend(&curLine, "%s", v);
       sAppendN(&curLine, ". <- ", 5);
       return 1;
     } else if (i == 1 || i == 2 || i == 3) {
@@ -838,7 +839,7 @@ int abbrev_mix_related(char *name, int i, D_ParseNode *pn) {
     }
   } else if (!strcmp("nspop", name)) {
     if (i == 0) {
-      D_ParseNode *xpn = d_get_child(pn, 1);
+      D_ParseNode *xpn = d_get_child(pn, 2);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
       int p = atoi(v);
       nonmem2rxNspop(p);
