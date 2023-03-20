@@ -207,6 +207,7 @@ primary_expression
   | mnext
   | mtime
   | mixp
+  | mixpc
   | avar
   | cvar
   | com
