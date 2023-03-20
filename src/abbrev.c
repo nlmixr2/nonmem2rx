@@ -86,6 +86,8 @@ SEXP nonmem2rxGetEtaNum(const char *v);
 SEXP nonmem2rxGetEpsNum(const char *v);
 SEXP nonmem2rxAddLhsVar(const char* v);
 SEXP nonmem2rxGetExtendedVar(const char *v);
+SEXP nonmem2rxMixP(int p);
+SEXP nonmem2rxNspop(int nspop);
 
 int maxA = 0,
   definingScale = 0;
@@ -202,17 +204,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       sAppendN(&curLine, "newind", 6);
       return 1;
     } else if (!nmrxstrcmpi("MIXNUM", v)) {
-      sClear(&sbTransErr);
-      sAppend(&sbTransErr, "'MIXNUM' NONMEM reserved variable is not translated");
-      updateSyntaxCol();
-      trans_syntax_error_report_fn0(sbTransErr.s);
-      finalizeSyntaxError();
+      sAppendN(&curLine, "MIXNUM", 6);
+      return 1;
     } else if (!nmrxstrcmpi("MIXEST", v)) {
-      sClear(&sbTransErr);
-      sAppend(&sbTransErr, "'MIXEST' NONMEM reserved variable is not translated");
-      updateSyntaxCol();
-      trans_syntax_error_report_fn0(sbTransErr.s);
-      finalizeSyntaxError();
+      sAppendN(&curLine, "MIXNUM", 6);
+      return 1;
+    } else if (!nmrxstrcmpi("MIXP", v)) {
+      sAppendN(&curLine, "cur.mixp", 8);
+      return 1;
     } else if (!nmrxstrcmpi("ICALL", v)) {
       if (icallWarning == 0) {
         nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation",
@@ -488,13 +487,32 @@ int abbrevParamAmt (char *name, int i,  D_ParseNode *pn) {
   return 0;
 }
 
+int abbrevParamMixp(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("mixp", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      sAppend(&curLine, "rxp.%s.", v);
+      return 1;
+    }
+    return 1;
+  } else if (!strcmp("mixpc", name)) {
+    if (i == 0) {
+      sAppendN(&curLine, "cur.mixp", 8);
+    }
+    return 1;
+  }
+  return 0;
+}
+
 int abbrev_params(char *name, int i,  D_ParseNode *pn) {
   return abbrevParamTheta(name, i,  pn) ||
     abbrevParamEta(name, i,  pn) ||
     abbrevParamEps(name, i,  pn) ||
     abbrevParamErr(name, i,  pn) ||
     abbrevParamAmt(name, i,  pn) ||
-    abbrevParamA0(name, i,  pn);
+    abbrevParamA0(name, i,  pn) ||
+    abbrevParamMixp(name, i, pn);
 }
 
 int abbrev_function(char *name, int i, D_ParseNode *pn) {
@@ -744,12 +762,6 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     updateSyntaxCol();
     trans_syntax_error_report_fn0(sbTransErr.s);
     finalizeSyntaxError();
-  } else if (!strcmp("mixp", name)) {
-    sClear(&sbTransErr);
-    sAppend(&sbTransErr, "MIXP(#) not supported in translation");
-    updateSyntaxCol();
-    trans_syntax_error_report_fn0(sbTransErr.s);
-    finalizeSyntaxError();
   } else if (!strcmp("com", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "COM(#) not supported in translation");
@@ -807,6 +819,33 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
                  x);
     sAppend(&curLine, "omega.%d.", x);
     nonmem2rxPushOmegaEst(x, -1);
+  }
+  return 0;
+}
+
+int abbrev_mix_related(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("prob", name)) {
+    if (i ==0) {
+      sAppendN(&curLine, "rxp.", 4);
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      int p = atoi(v);
+      nonmem2rxMixP(p);
+      sAppendN(&curLine, ". <- ", 5);
+      return 1;
+    } else if (i == 1 || i == 2 || i == 3) {
+      return 1;
+    }
+  } else if (!strcmp("nspop", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      int p = atoi(v);
+      nonmem2rxNspop(p);
+      return 1;
+    } else {
+      return 1;
+    }
   }
   return 0;
 }
@@ -1105,7 +1144,8 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
           abbrev_cmt_ddt_related(name, i, pn) ||
           abbrev_cmt_properties(name, i, pn) ||
           abbrev_function(name, i, pn) ||
-          abbrev_unsupported_lines(name, i ,pn)) {
+          abbrev_unsupported_lines(name, i ,pn) ||
+          abbrev_mix_related(name, i, pn)) {
         continue;
       }
       D_ParseNode *xpn = d_get_child(pn, i);
@@ -1120,7 +1160,8 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       !strcmp("scale", name) ||
       !strcmp("ifcallrandom", name) ||
       !strcmp("ifcallsimeta", name) ||
-      !strcmp("ifcallsimeps", name) ) {
+      !strcmp("ifcallsimeps", name) ||
+      !strcmp("prob", name)) {
     pushModel();
   } else if (!strcmp("if1other", name)) {
     pushModel();

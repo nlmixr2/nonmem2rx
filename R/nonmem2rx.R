@@ -66,6 +66,8 @@
   .nonmem2rx$finalInput <- NULL
   .nonmem2rx$esnDups <- NULL
   .nonmem2rx$needExtCalc <- TRUE
+  .nonmem2rx$mixp <- integer(0)
+  .nonmem2rx$nspop <- 0L
 }
 #' Add theta name to .nonmem2rx info
 #'

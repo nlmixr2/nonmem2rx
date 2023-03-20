@@ -170,7 +170,7 @@
   .recs <- .recordEnv$.recs
   # process these records first to make sure abbreaviated code is
   # translated correctly
-  .first <- c("inp", "abb", "mod", "the", "ome", "sig")
+  .first <- c("inp", "abb", "mod", "the", "ome", "sig", "mix")
   for (.r in .first) {
     .w <- which(.recs == .r)
     if (length(.w) == 1L) {

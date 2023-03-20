@@ -27,6 +27,7 @@ statement
   | scale singleLineComment?
   | derivative singleLineComment?
   | derivativeI singleLineComment?
+  | prob singleLineComment?
   | da singleLineComment?
   | dp singleLineComment?
   | callsimeta singleLineComment?
@@ -39,12 +40,14 @@ statement
   | comresn1 singleLineComment?
   | ifexit singleLineComment?
   | callfl singleLineComment?
+  | nspop singleLineComment?
   | verbatimCode singleLineComment?
   | singleLineComment;
 
 
 ini         :  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
 iniI        :  'A_0(' identifier ')' '=' logical_or_expression;
+nspop       :  'NSPOP' '=' decimalintNo0;
 fbio        : "[Ff]([0-9]+|O)" '='  logical_or_expression;
 alag        : "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
 rate        : "[Rr][1-9][0-9]*" '=' logical_or_expression;
@@ -54,6 +57,7 @@ derivative  : ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
 derivativeI : ('DADT(' | 'dadt(' ) identifier ')' '=' logical_or_expression;
 da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
+prob        : ('P(' | 'p(') decimalintNo0 ')' '=' logical_or_expression;
 
 exit_line: 'EXIT' decimalint decimalint;
 ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
@@ -77,7 +81,7 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
-if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp);
+if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob);
 
 
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
@@ -151,6 +155,7 @@ mtime : ('MTIME(' | 'mtime(') decimalintNo0 ')';
 mnext : ('MNEXT(' | 'mext(') decimalintNo0 ')';
 mpast : ('MPAST(' | 'mpast(') decimalintNo0 ')';
 mixp  : ('MIXP(' | 'mixp(') decimalintNo0 ')';
+mixpc : ('MIXP(' | 'mixp(') ('MIXNUM' | 'MIXEST')  ')';
 com   : ('COM(' | 'com(') decimalintNo0 ')';
 pcmt  : ('PCMT(' | 'pcmt(') decimalintNo0 ')';
 sigma  : ('SIGMA(' | 'sigma(') decimalintNo0 ',' decimalintNo0 ')';
