@@ -108,9 +108,9 @@ test_that("test abbrev", {
     expect_error(.a("CALL SUPP(0 , 1)"), "'CALL SUPP")
     .a("CALL RANDOM(1, R)", "R <- rxunif()")
     expect_error(.a("C=DT(3)"), "DT\\(#\\)")
-    expect_error(.a("C=MTIME(3)"), "MTIME\\(#\\)")
+    .a("C=MTIME(3)", "C <- rx.mtime.3.")
     expect_error(.a("C=MNEXT(3)"), "MNEXT\\(#\\)")
-    expect_error(.a("C=MPAST(3)"), "MPAST\\(#\\)")
+    .a("C=MPAST(3)", "C <- rx.mpast.3.")
     expect_error(.a("C=COM(3)"), "COM\\(#\\)")
     expect_error(.a("C=PCMT(3)"), "PCMT\\(#\\)")
 
