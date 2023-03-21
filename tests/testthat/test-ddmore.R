@@ -115,8 +115,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "ddmore/215/Executable_Pimasertib_AeDropout.mod",
              "ddmore/239/Output_simulated_P241.res",
              "ddmore/239/Output_real_P241.res"
-             # mtime
-             ## "ddmore/239/Executable_P241.ctl"
+             "ddmore/239/Executable_P241.ctl"
              )
 
 
