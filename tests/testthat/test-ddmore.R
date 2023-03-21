@@ -112,15 +112,14 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "ddmore/212/Output_simulated_tamoxifen.lst",
              "ddmore/215/Output_simulated_Pimasertib_AeDropout.lst",
              "ddmore/215/Output_real_Pimasertib_AeDropout.lst",
-             "ddmore/215/Executable_Pimasertib_AeDropout.mod"
+             "ddmore/215/Executable_Pimasertib_AeDropout.mod",
+             "ddmore/239/Output_simulated_P241.res",
+             "ddmore/239/Output_real_P241.res"
              # mtime
              ## "ddmore/239/Executable_P241.ctl"
              )
 
 
-  # mixture models
-  ## "ddmore/239/Output_simulated_P241.res",
-  ## "ddmore/239/Output_real_P241.res",
   # multiple $data records
   ## "ddmore/239/Simulate_P241.ctl"
 

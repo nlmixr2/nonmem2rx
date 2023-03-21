@@ -39,8 +39,8 @@ test_that("test abbrev", {
     expect_error(.a(" CL      = INT(C)"), "'INT'")
     expect_error(.a("CL = A12345"), "'A#'")
     expect_error(.a("CL = C12345"), "'C#'")
-    expect_error(.a("A = MIXNUM"), "'MIXNUM'")
-    expect_error(.a("A = MIXEST"), "'MIXEST'")
+    .a("A = MIXNUM", "A <- MIXNUM")
+    .a("A = MIXEST", "A <- MIXNUM")
     expect_warning(.a("A = ICALL", "A <- icall"), "icall")
     expect_error(.a("A = COMACT"), "'COMACT'")
     expect_error(.a("A = COMSAV"), "'COMSAV'")
@@ -74,9 +74,13 @@ test_that("test abbrev", {
     expect_error(.a("C=MTIME(3)"), "MTIME\\(#\\)")
     expect_error(.a("C=MNEXT(3)"), "MNEXT\\(#\\)")
     expect_error(.a("C=MPAST(3)"), "MPAST\\(#\\)")
-    expect_error(.a("C=MIXP(3)"), "MIXP\\(#\\)")
     expect_error(.a("C=COM(3)"), "COM\\(#\\)")
     expect_error(.a("C=PCMT(3)"), "PCMT\\(#\\)")
+
+    .a("C=MIXP(3)", "C <- rxp.3.")
+    .a("C=MIXP(MIXNUM)", "C <- cur.mixp")
+    .a("C=MIXP(MIXEST)", "C <- cur.mixp")
+    .a("C=MIXP", "C <- cur.mixp")
 
     #d/dt() related lines
 

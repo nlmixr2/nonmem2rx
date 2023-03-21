@@ -6,6 +6,7 @@
 \alias{nonmem2rxRec.pk}
 \alias{nonmem2rxRec.pre}
 \alias{nonmem2rxRec.des}
+\alias{nonmem2rxRec.mix}
 \alias{nonmem2rxRec.err}
 \alias{nonmem2rxRec.dat}
 \alias{nonmem2rxRec.inp}
@@ -28,6 +29,8 @@
 \method{nonmem2rxRec}{pre}(x)
 
 \method{nonmem2rxRec}{des}(x)
+
+\method{nonmem2rxRec}{mix}(x)
 
 \method{nonmem2rxRec}{err}(x)
 

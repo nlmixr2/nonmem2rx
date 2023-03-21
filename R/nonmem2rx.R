@@ -66,6 +66,8 @@
   .nonmem2rx$finalInput <- NULL
   .nonmem2rx$esnDups <- NULL
   .nonmem2rx$needExtCalc <- TRUE
+  .nonmem2rx$mixp <- integer(0)
+  .nonmem2rx$nspop <- 0L
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -651,6 +653,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx <- .tmp$rx
       if (!is.null(.tmp$sigma)) .sigma <- .tmp$sigma
       .update <- .tmp$update
+    }
+  }
+  if (validate) {
+    if (length(.nonmem2rx$mixp) > 0) {
+      .minfo("mixture model, not currently validated")
+      .msg <- "mixture model; not validated"
+      validate <- FALSE
     }
   }
   if (!.update) {

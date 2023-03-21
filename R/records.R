@@ -4,7 +4,7 @@
 
 
 .transRecords <-
-  c("aaa"="aaa", # Triple A is before any record 
+  c("aaa"="aaa", # Triple A is before any record
     pro="pro", # $problem
     inp="inp", # $input
     ind="ind", # $index
@@ -20,6 +20,7 @@
     msf="msf", # $msfi
     sim="sim", # $simulation
     est="est", # $estimation
+    mix="mix", # $mixture
     estm="est",
     cov="cov", # $covariance
     tab="tab", # $table
@@ -47,6 +48,7 @@
     ome="$OMEGA", # $omega
     sig="$SIGMA", # $sigma
     msf="$MSFI", # $msfi
+    mix="$MIX",
     sim="$SIMULATION", # $simulation
     est="$ESTIMATION", # $estimation
     estm="$ESTIMATION",
@@ -142,7 +144,7 @@
 }
 #' Parse the record and put in the record environment
 #'
-#'  
+#'
 #' @param ctl control stream
 #' @return nothing called for side effects
 #' @noRd
@@ -154,6 +156,7 @@
   .clearRecordEnv()
   .minfo("splitting control stream by records")
   .recs <- strsplit(ctl, "(^|\\n) *[$]")[[1]]
+
   .addRec("aaa", .recs[1])
   lapply(.recs[-1], function(r) {
     .m <- regexpr("^ *[A-Za-z]+", r)
@@ -170,7 +173,7 @@
   .recs <- .recordEnv$.recs
   # process these records first to make sure abbreaviated code is
   # translated correctly
-  .first <- c("inp", "abb", "mod", "the", "ome", "sig")
+  .first <- c("inp", "abb", "mod", "the", "ome", "sig", "mix")
   for (.r in .first) {
     .w <- which(.recs == .r)
     if (length(.w) == 1L) {
@@ -190,8 +193,8 @@
     nonmem2rxRec(.ret)
   }
 }
-#' Record handling for nonmem records 
-#'  
+#' Record handling for nonmem records
+#'
 #' @param x Nonmem record data item, should be of class c(stdRec,
 #'   "nonmem2rx") where the stdRec is the standardized record (pro for
 #'   `$PROBLEM`, etc)
@@ -199,7 +202,7 @@
 #' @details
 #'
 #' Can add record parsing and handling by creating a S3 method for each type of standardized method
-#' 
+#'
 #' @export
 #' @author Matthew L. Fidler
 #' @keywords internal

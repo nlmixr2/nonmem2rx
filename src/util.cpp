@@ -514,3 +514,18 @@ extern "C" SEXP nonmem2rxAddLhsVar(const char* v) {
   return addLhsVar(v);
   END_RCPP
 }
+extern "C" SEXP nonmem2rxMixP(int p) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function addMixP(".addMixP", nonmem2rxNs);
+  return addMixP(p);
+  END_RCPP
+}
+extern "C" SEXP nonmem2rxNspop(int nspop) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function setNspop(".setNspop", nonmem2rxNs);
+  return setNspop(nspop);
+  END_RCPP
+}
+

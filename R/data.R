@@ -3,10 +3,7 @@
 nonmem2rxRec.dat <- function(x) {
   .x <- x
   class(.x) <- NULL
-  if (length(.x) != 1) {
-    stop("only one $DATA record is read in the 'rxode2' conversion",
-         call.=FALSE)
-  }
+  .x <- paste(.x, collapse="\n")
   .nonmem2rx$dataCondType <- .Call(`_nonmem2rx_trans_data`, .x)
 }
 
