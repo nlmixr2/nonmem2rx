@@ -7,6 +7,23 @@ test_that("test abbrev", {
     expect_equal(.nonmem2rx$model, eq)
   }
 
+  .a("MTIME(1) = THETA(3)+ETA(1)\nMTIME(2) = THETA(4)+ETA(5)",
+     c("mtime(rx.mtime.1.) <- theta3 + eta1",
+       "if (time >= rx.mtime.1.) {",
+       "rx.mpast.1. <- 1",
+       "} else {",
+       "rx.mpast.1. <- 0",
+       "}",
+       "mtime(rx.mtime.2.) <- theta4 + eta5",
+       "if (time >= rx.mtime.2.) {",
+       "rx.mpast.2. <- 1",
+       "} else {",
+       "rx.mpast.2. <- 0",
+       "}"
+       ))
+  
+  .a("IF (TIME > MTIME(1)) KA=THETA(2)", "if (t > rx.mtime.1.) KA <- theta2")
+
   .a("TVCL  = A_0(1) + 3", "TVCL <- rxini.rxddta1. + 3")
 
   .a("TVCL    = matt", "TVCL <- MATT")
@@ -284,5 +301,6 @@ test_that("test abbrev", {
     }
 
     .ae("E0=pope0*EXP(etae0)", "E0 <- POPE0 * exp(ETAE0)", "E0")
+    
 
 })

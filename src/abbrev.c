@@ -113,6 +113,7 @@ int icallWarning = 0;
 int irepWarning = 0;
 int simWarning=0;
 int ipredSimWarning = 0;
+int curMtime = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
@@ -230,6 +231,18 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       }
        sAppendN(&curLine, "irep", 4);
       return 1;
+    } else if (!nmrxstrcmpi("MNOW", v)) {
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'MNOW' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
+    } else if (!nmrxstrcmpi("MTDIFF", v)) {
+      sClear(&sbTransErr);
+      sAppend(&sbTransErr, "'MTDIFF' NONMEM reserved variable is not translated");
+      updateSyntaxCol();
+      trans_syntax_error_report_fn0(sbTransErr.s);
+      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("COMACT", v)) {
       sClear(&sbTransErr);
       sAppend(&sbTransErr, "'COMACT' NONMEM reserved variable is not translated");
@@ -745,11 +758,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     trans_syntax_error_report_fn0(sbTransErr.s);
     finalizeSyntaxError();
   } else if (!strcmp("mtime", name)) {
-    sClear(&sbTransErr);
-    sAppend(&sbTransErr, "MTIME(#) not supported in translation");
-    updateSyntaxCol();
-    trans_syntax_error_report_fn0(sbTransErr.s);
-    finalizeSyntaxError();
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int p = atoi(v1);
+    sAppend(&curLine, "rx.mtime.%d.", p);
+    return 0;
   } else if (!strcmp("mnext", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "MNEXT(#) not supported in translation");
@@ -757,11 +771,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     trans_syntax_error_report_fn0(sbTransErr.s);
     finalizeSyntaxError();
   } else if (!strcmp("mpast", name)) {
-    sClear(&sbTransErr);
-    sAppend(&sbTransErr, "MPAST(#) not supported in translation");
-    updateSyntaxCol();
-    trans_syntax_error_report_fn0(sbTransErr.s);
-    finalizeSyntaxError();
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int p = atoi(v1);
+    sAppend(&curLine, "rx.mpast.%d.", p);
+    return 0;
   } else if (!strcmp("com", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "COM(#) not supported in translation");
@@ -819,6 +834,22 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
                  x);
     sAppend(&curLine, "omega.%d.", x);
     nonmem2rxPushOmegaEst(x, -1);
+  }
+  return 0;
+}
+
+int abbrev_mtime_related(char *name, int i, D_ParseNode *pn) {
+  if (!strcmp("mtimeL", name)) {
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      int p = atoi(v);
+      curMtime = p;
+      sAppend(&curLine, "mtime(rx.mtime.%d.) <- ", p);
+      return 1;
+    } else if (i == 1 || i == 2 || i == 3) {
+      return 1;
+    }
   }
   return 0;
 }
@@ -1146,7 +1177,8 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
           abbrev_cmt_properties(name, i, pn) ||
           abbrev_function(name, i, pn) ||
           abbrev_unsupported_lines(name, i ,pn) ||
-          abbrev_mix_related(name, i, pn)) {
+          abbrev_mix_related(name, i, pn) ||
+          abbrev_mtime_related(name, i, pn)) {
         continue;
       }
       D_ParseNode *xpn = d_get_child(pn, i);
@@ -1213,6 +1245,18 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     sAppendN(&curLine, ".", 1);
     pushModel();
     cmtInfoStr = NULL;
+  } else if (!strcmp("mtimeL", name)) {
+    pushModel();
+    sAppend(&curLine,"if (time >= rx.mtime.%d.) {", curMtime);
+    pushModel();
+    sAppend(&curLine,"rx.mpast.%d. <- 1", curMtime);
+    pushModel();
+    sAppendN(&curLine, "} else {", 8);
+    pushModel();
+    sAppend(&curLine,"rx.mpast.%d. <- 0", curMtime);
+    pushModel();
+    sAppendN(&curLine, "}", 1);
+    pushModel();
   }
 }
 
@@ -1255,6 +1299,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP exte
   ipredSimWarning=0;
   icallWarning=0;
   irepWarning=0;
+  curMtime = 0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   nonmem2rxSetMaxA(maxA);
   parseFree(0);
