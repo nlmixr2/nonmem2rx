@@ -7,6 +7,26 @@ test_that("test abbrev", {
     expect_equal(.nonmem2rx$model, eq)
   }
 
+  .a("MTIME(1)=1.5\nMTIME(2)=2.5\nR1=   400*EXP(ETA(1))*(1-MPAST(1))\nR1=R1+300*EXP(ETA(2))*(MPAST(1)-MPAST(2))\nR1=R1+200*EXP(ETA(3))*MPAST(2)",
+     c("mtime(rx.mtime.1.) <- 1.5",
+       "if (time >= rx.mtime.1.) {",
+       "rx.mpast.1. <- 1",
+       "} else {",
+       "rx.mpast.1. <- 0",
+       "}",
+       "mtime(rx.mtime.2.) <- 2.5",
+       "if (time >= rx.mtime.2.) {",
+       "rx.mpast.2. <- 1",
+       "} else {",
+       "rx.mpast.2. <- 0",
+       "}",
+       "rxrate.rxddta1. <- 400 * exp(eta1) * (1 - rx.mpast.1.)",
+       "rate(rxddta1) <- rxrate.rxddta1.",
+       "rxrate.rxddta1. <- rxrate.rxddta1. + 300 * exp(eta2) * (rx.mpast.1. - rx.mpast.2.)",
+       "rate(rxddta1) <- rxrate.rxddta1.",
+       "rxrate.rxddta1. <- rxrate.rxddta1. + 200 * exp(eta3) * rx.mpast.2.",
+       "rate(rxddta1) <- rxrate.rxddta1."))
+
   .a("MTIME(1) = THETA(3)+ETA(1)\nMTIME(2) = THETA(4)+ETA(5)",
      c("mtime(rx.mtime.1.) <- theta3 + eta1",
        "if (time >= rx.mtime.1.) {",
