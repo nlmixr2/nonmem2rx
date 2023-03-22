@@ -32,6 +32,7 @@
     bin="bin", # $bind
     aes="aes", # $aes
     aesinitial="aesi", # $aesinitial
+    design="design", # $design
     tol="tol")
 
 .transRecordsDisplay <-
@@ -61,6 +62,7 @@
     err="$ERROR", # $error
     bin="$BIND", # $bind
     aes="$AES", # $aes
+    design="$DESIGN",
     aesinitial="$AESINITIAL", # $aesinitial
     tol="$TOL")
 
@@ -81,8 +83,14 @@
   .rec <- tolower(rec)
   .ret <- .transRecords[.rec]
   if (is.na(.ret)) {
-    .rec <- substr(.rec, 1, 3)
-    .ret <- .transRecords[.rec]
+    .rec0 <- substr(.rec, 1, 3)
+    .nchar <- nchar(.rec)
+    if (.rec0 != "des" || (.rec0 == "des" && .nchar == 3)) {
+      .ret <- .transRecords[.rec0]
+    } else if (.rec0 == "des" && .nchar >= 4 && substr(.rec, 1, 4) == "desi") {
+      .rec0 <- "design"
+      .ret <- .transRecords[.rec0]
+    }
   }
   if (is.na(.ret)) return("")
   setNames(.ret, NULL)
