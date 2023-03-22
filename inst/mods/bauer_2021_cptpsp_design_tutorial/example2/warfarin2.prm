@@ -1,0 +1,38 @@
+Parameter Extraction for Multiple Estimation Methods PDx-Pop 5.3 15JAN2020
+FINAL PARAMETER ESTIMATE 1
+THETA
+tf             1.50E-01  8.00E+00  1.00E+00
+*
+
+OMEGA
+
+of             7.00E-02 
+of             0.00E+00  2.00E-02 
+of             0.00E+00  0.00E+00  6.00E-01 
+*
+
+SIGMA
+
+sf             1.00E-02 
+sf             0.00E+00  1.00E-03 
+*
+
+STANDARD ERROR OF ESTIMATE 1
+THETA
+te             7.50E-03  2.71E-01  1.57E-01
+*
+
+OMEGA
+
+oe             1.90E-02 
+oe            .........  9.91E-03 
+oe            ......... .........  1.86E-01 
+*
+
+SIGMA
+
+se             5.66E-03 
+se            ......... ......... 
+*
+
+

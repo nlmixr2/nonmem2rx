@@ -1,0 +1,3 @@
+TABLE NO.     1: First Order: DS-OPTIMALITY: Problem=1 Subproblem=0 Superproblem1=0 Iteration1=0 Superproblem2=0 Iteration2=0
+ SUBJECT_NO   ID           ETA(1)       ETA(2)       ETA(3)       ETA(4)       ETC(1,1)     ETC(2,1)     ETC(2,2)     ETC(3,1)     ETC(3,2)     ETC(3,3)     ETC(4,1)     ETC(4,2)     ETC(4,3)     ETC(4,4)     OBJ
+            1            1  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  4.02940E-03  3.13506E-03  9.54588E-03  9.11438E-04  2.11115E-03  1.30769E-02 -4.00569E-04  1.04765E-03  3.40571E-03  1.49214E-02   -4.26492634911589
