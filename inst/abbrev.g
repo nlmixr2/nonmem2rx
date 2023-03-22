@@ -20,6 +20,7 @@ statement
   | enddo singleLineComment?
   | ini singleLineComment?
   | iniI singleLineComment?
+  | mtimeL singleLineComment?
   | fbio singleLineComment?
   | alag singleLineComment?     
   | rate singleLineComment?
@@ -58,6 +59,7 @@ derivativeI : ('DADT(' | 'dadt(' ) identifier ')' '=' logical_or_expression;
 da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 dp          : ('DP(' | 'dp(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
 prob        : ('P(' | 'p(') decimalintNo0 ')' '=' logical_or_expression;
+mtimeL      : ('mtime(' | 'MTIME(') decimalintNo0 ')' '=' logical_or_expression;
 
 exit_line: 'EXIT' decimalint decimalint;
 ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
@@ -81,7 +83,7 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
-if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob);
+if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL);
 
 
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';

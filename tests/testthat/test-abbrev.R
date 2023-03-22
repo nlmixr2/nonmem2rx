@@ -7,6 +7,43 @@ test_that("test abbrev", {
     expect_equal(.nonmem2rx$model, eq)
   }
 
+  .a("MTIME(1)=1.5\nMTIME(2)=2.5\nR1=   400*EXP(ETA(1))*(1-MPAST(1))\nR1=R1+300*EXP(ETA(2))*(MPAST(1)-MPAST(2))\nR1=R1+200*EXP(ETA(3))*MPAST(2)",
+     c("mtime(rx.mtime.1.) <- 1.5",
+       "if (time >= rx.mtime.1.) {",
+       "rx.mpast.1. <- 1",
+       "} else {",
+       "rx.mpast.1. <- 0",
+       "}",
+       "mtime(rx.mtime.2.) <- 2.5",
+       "if (time >= rx.mtime.2.) {",
+       "rx.mpast.2. <- 1",
+       "} else {",
+       "rx.mpast.2. <- 0",
+       "}",
+       "rxrate.rxddta1. <- 400 * exp(eta1) * (1 - rx.mpast.1.)",
+       "rate(rxddta1) <- rxrate.rxddta1.",
+       "rxrate.rxddta1. <- rxrate.rxddta1. + 300 * exp(eta2) * (rx.mpast.1. - rx.mpast.2.)",
+       "rate(rxddta1) <- rxrate.rxddta1.",
+       "rxrate.rxddta1. <- rxrate.rxddta1. + 200 * exp(eta3) * rx.mpast.2.",
+       "rate(rxddta1) <- rxrate.rxddta1."))
+
+  .a("MTIME(1) = THETA(3)+ETA(1)\nMTIME(2) = THETA(4)+ETA(5)",
+     c("mtime(rx.mtime.1.) <- theta3 + eta1",
+       "if (time >= rx.mtime.1.) {",
+       "rx.mpast.1. <- 1",
+       "} else {",
+       "rx.mpast.1. <- 0",
+       "}",
+       "mtime(rx.mtime.2.) <- theta4 + eta5",
+       "if (time >= rx.mtime.2.) {",
+       "rx.mpast.2. <- 1",
+       "} else {",
+       "rx.mpast.2. <- 0",
+       "}"
+       ))
+  
+  .a("IF (TIME > MTIME(1)) KA=THETA(2)", "if (t > rx.mtime.1.) KA <- theta2")
+
   .a("TVCL  = A_0(1) + 3", "TVCL <- rxini.rxddta1. + 3")
 
   .a("TVCL    = matt", "TVCL <- MATT")
@@ -44,6 +81,8 @@ test_that("test abbrev", {
     expect_warning(.a("A = ICALL", "A <- icall"), "icall")
     expect_error(.a("A = COMACT"), "'COMACT'")
     expect_error(.a("A = COMSAV"), "'COMSAV'")
+    expect_error(.a("B = MNOW"), "'MNOW'")
+    expect_error(.a("MTDIFF=1"), "'MTDIFF'")
 
     .a(" Y      = 1 + ERR(1)*W",
        "Y <- 1 + eps1 * W")
@@ -71,9 +110,9 @@ test_that("test abbrev", {
     expect_error(.a("CALL SUPP(0 , 1)"), "'CALL SUPP")
     .a("CALL RANDOM(1, R)", "R <- rxunif()")
     expect_error(.a("C=DT(3)"), "DT\\(#\\)")
-    expect_error(.a("C=MTIME(3)"), "MTIME\\(#\\)")
+    .a("C=MTIME(3)", "C <- rx.mtime.3.")
     expect_error(.a("C=MNEXT(3)"), "MNEXT\\(#\\)")
-    expect_error(.a("C=MPAST(3)"), "MPAST\\(#\\)")
+    .a("C=MPAST(3)", "C <- rx.mpast.3.")
     expect_error(.a("C=COM(3)"), "COM\\(#\\)")
     expect_error(.a("C=PCMT(3)"), "PCMT\\(#\\)")
 
@@ -284,5 +323,6 @@ test_that("test abbrev", {
     }
 
     .ae("E0=pope0*EXP(etae0)", "E0 <- POPE0 * exp(ETAE0)", "E0")
+    
 
 })
