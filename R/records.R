@@ -15,6 +15,8 @@
     abb="abb", # $abbrevited
     pre="pre", # $pred
     the="the", # $theta
+    thetap="thetap", #thetap
+    thetapv="thetapv", # thetapv
     ome="ome", # $omega
     sig="sig", # $sigma
     msf="msf", # $msfi
@@ -46,6 +48,8 @@
     abb="$ABBREVITED", # $abbrevited
     pre="$PRED", # $pred
     the="$THETA", # $theta
+    thetap="$THETAP", # $thetap
+    thetapv="$THETAPV", # $thetapv
     ome="$OMEGA", # $omega
     sig="$SIGMA", # $sigma
     msf="$MSFI", # $msfi
@@ -83,13 +87,19 @@
   .rec <- tolower(rec)
   .ret <- .transRecords[.rec]
   if (is.na(.ret)) {
-    .rec0 <- substr(.rec, 1, 3)
-    .nchar <- nchar(.rec)
-    if (.rec0 != "des" || (.rec0 == "des" && .nchar == 3)) {
-      .ret <- .transRecords[.rec0]
-    } else if (.rec0 == "des" && .nchar >= 4 && substr(.rec, 1, 4) == "desi") {
-      .rec0 <- "design"
-      .ret <- .transRecords[.rec0]
+    if (.rec == "thetap") {
+      .ret <- .transRecords[.rec]
+    } else if (.rec == "thetapv") {
+      .ret <- .transRecords[.rec]
+    } else {
+      .rec0 <- substr(.rec, 1, 3)
+      .nchar <- nchar(.rec)
+      if (.rec0 != "des" || (.rec0 == "des" && .nchar == 3)) {
+        .ret <- .transRecords[.rec0]
+      } else if (.rec0 == "des" && .nchar >= 4 && substr(.rec, 1, 4) == "desi") {
+        .rec0 <- "design"
+        .ret <- .transRecords[.rec0]
+      }
     }
   }
   if (is.na(.ret)) return("")
