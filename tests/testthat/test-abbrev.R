@@ -81,6 +81,8 @@ test_that("test abbrev", {
     expect_warning(.a("A = ICALL", "A <- icall"), "icall")
     expect_error(.a("A = COMACT"), "'COMACT'")
     expect_error(.a("A = COMSAV"), "'COMSAV'")
+    expect_error(.a("B = MNOW"), "'MNOW'")
+    expect_error(.a("MTDIFF=1"), "'MTDIFF'")
 
     .a(" Y      = 1 + ERR(1)*W",
        "Y <- 1 + eps1 * W")
