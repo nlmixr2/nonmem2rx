@@ -258,10 +258,15 @@ mod$thetaMat
 
 # External contributors (and notes on validation)
 
-This was validated against the `PsN` library test suite of NONMEM
-listings (https://github.com/UUPharmacometrics/PsN/tree/master/test)
-and the ddmore model scrapings
-(https://github.com/dpastoor/ddmore_scraping).
+This was validated against:
+
+- The `PsN` library test suite of NONMEM listings
+(https://github.com/UUPharmacometrics/PsN/tree/master/test) 
+
+- The ddmore model scrapings
+  (https://github.com/dpastoor/ddmore_scraping).
+
+- Models from Bauer 2021 https://doi.org/10.1002/psp4.12713
 
 Due to the sheer size of the zipped models for these two nonmem
 control stream sources these are excluded to keep the binary below 3
