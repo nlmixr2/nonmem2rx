@@ -1,0 +1,70 @@
+$PROB  AD3TR4_loqb
+$INPUT  C SET ID JID TIME CONC AMT RATE EVID MDV CMT DV
+
+$DATA  ad3tr4.csv IGNORE = C
+$SUBROUTINES ADVAN3 TRANS4
+
+$PK
+MU_1 = THETA(1)
+MU_2 = THETA(2)
+MU_3 = THETA(3)
+MU_4 = THETA(4)
+CL = EXP(MU_1 + ETA(1))
+V1 = EXP(MU_2 + ETA(2))
+Q = EXP(MU_3 + ETA(3))
+V2 = EXP(MU_4 + ETA(4))
+S1=V1
+
+$ERROR
+IEPRED=A(1)/S1
+LLOQ=-3.5
+SD = THETA(5)
+
+DEL=1.0E-30
+; The following coding for LOG() prevents numerical errors from occuring when F<=0
+; DEL can be 10E-10 or smaller
+IPRED = LOG(ABS(IEPRED)+DEL)
+IF(COMACT==1) PREDV=IPRED
+DUM = (LLOQ - IPRED) / SD
+; Adding DEL to CUMD prevents it from becoming 0, which is not good when NONMEM evaluates -2*LOG(CUMD)
+CUMD = PHI(DUM)+DEL
+TYPE=1
+IF(DV<LLOQ) TYPE=2
+IF(MDV==1) TYPE=0
+IF(TYPE.EQ.2) DV_LOQ=LLOQ
+IF (TYPE .NE. 2.OR.NPDE_MODE==1) THEN
+      F_FLAG = 0
+      Y = IPRED + SD * ERR(1)
+ENDIF
+IF (TYPE .EQ. 2.AND.NPDE_MODE==0) THEN
+      F_FLAG = 1
+      Y = CUMD
+      MDVRES=1
+ENDIF
+
+$THETA 
+( 2.0) ;[LN(CL)]
+(2.0) ;[LN(V1)]
+( 2.0) ;[LN(Q)]
+( 2.0) ;[LN(V2)]
+ 0.2
+;INITIAL values of OMEGA
+$OMEGA BLOCK(4)
+0.15   ;[P]
+0.01  ;[F]
+0.15   ;[P]
+0.01  ;[F]
+0.01  ;[F]
+0.15   ;[P]
+0.01  ;[F]
+0.01  ;[F]
+0.01  ;[F]
+0.15   ;[P]
+;Initial value of SIGMA
+$SIGMA 
+1.0 FIXED   ;[P]
+
+$EST METHOD=COND INTERACTION LAPLACE MAXEVAL=9999 NSIG=3 PRINT=5 NOABORT SIGL=10 MCETA=10
+$COV MATRIX=S PRINT=E UNCONDITIONAL
+$TABLE ID TIME DV IPRED TYPE PRED PREDV CWRES NPDE CIWRES NOAPPEND ONEHEADER ESAMPLE=1000
+ FILE=ad3tr4_loqb_lap.tab NOPRINT
