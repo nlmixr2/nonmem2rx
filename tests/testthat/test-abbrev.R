@@ -99,7 +99,7 @@ test_that("test abbrev", {
     .a("IF (CL .GE. 4) CL = 4", "if (CL >= 4) CL <- 4")
 
     # Unsupported lines
-    expect_warning(.a("\"FIRST", NULL), "Verbatim")
+    expect_warning(.a("\"FIRST", NULL), "verbatim")
 
     .a("EXIT 1 2", "ierprdu <- 1*100000+2")
 
