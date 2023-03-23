@@ -114,6 +114,8 @@ int irepWarning = 0;
 int simWarning=0;
 int ipredSimWarning = 0;
 int curMtime = 0;
+int mtdiffWarning = 0;
+int hasMnow = 0;
 
 SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
 SEXP nonmem2rxNeedNmevid(void);
@@ -231,18 +233,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       }
        sAppendN(&curLine, "irep", 4);
       return 1;
-    } else if (!nmrxstrcmpi("MNOW", v)) {
-      sClear(&sbTransErr);
-      sAppend(&sbTransErr, "'MNOW' NONMEM reserved variable is not translated");
-      updateSyntaxCol();
-      trans_syntax_error_report_fn0(sbTransErr.s);
-      finalizeSyntaxError();
     } else if (!nmrxstrcmpi("MTDIFF", v)) {
-      sClear(&sbTransErr);
-      sAppend(&sbTransErr, "'MTDIFF' NONMEM reserved variable is not translated");
-      updateSyntaxCol();
-      trans_syntax_error_report_fn0(sbTransErr.s);
-      finalizeSyntaxError();
+      //sClear(&sbTransErr);
+      if (mtdiffWarning == 0) {
+        Rf_warning("'MTDIFF' does not reset the system in rxode2; rxode2 calculates model times at first pass");
+        mtdiffWarning = 1;
+      }
+      sAppendN(&curLine, "MTDIFF", 6);
+      return 1;
     } else if (!nmrxstrcmpi("COMACT", v)) {
       sClear(&sbTransErr);
       sAppend(&sbTransErr, "'COMACT' NONMEM reserved variable is not translated");
@@ -1254,15 +1252,14 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     cmtInfoStr = NULL;
   } else if (!strcmp("mtimeL", name)) {
     pushModel();
-    sAppend(&curLine,"if (time >= rx.mtime.%d.) {", curMtime);
+    sAppend(&curLine,"rx.mpast.%d. <- ifelse(time >= rx.mtime.%d., 1, 0)", curMtime);
     pushModel();
-    sAppend(&curLine,"rx.mpast.%d. <- 1", curMtime);
-    pushModel();
-    sAppendN(&curLine, "} else {", 8);
-    pushModel();
-    sAppend(&curLine,"rx.mpast.%d. <- 0", curMtime);
-    pushModel();
-    sAppendN(&curLine, "}", 1);
+    if (hasMnow == 0) {
+      sAppend(&curLine,"MNOW <- ifelse(time == rx.mtime.%d., %d, 0)", curMtime, curMtime);
+      hasMnow = 1;
+    } else {
+      sAppend(&curLine,"MNOW <- ifelse(MNOW == 0 && time == rx.mtime.%d., %d, MNOW)", curMtime, curMtime);
+    }
     pushModel();
   }
 }
@@ -1308,6 +1305,8 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP exte
   icallWarning=0;
   irepWarning=0;
   curMtime = 0;
+  mtdiffWarning=0;
+  hasMnow=0;
   trans_abbrev(R_CHAR(STRING_ELT(in, 0)));
   nonmem2rxSetMaxA(maxA);
   parseFree(0);
