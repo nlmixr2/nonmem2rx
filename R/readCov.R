@@ -10,7 +10,22 @@ nmcov <- function (file, ...) {
   TABLE <- NULL
   NMREP <- NULL
   NAME <- NULL
-  dt1 <- data.table::fread(file, fill = TRUE, header = TRUE, skip = 1, ...)
+  colnames <- readLines(file, n=2)[2]
+  if (grepl(", *OMEGA\\( *1 *, *1\\)", colnames)) {
+    # in this case the NAME also has commas
+    lines <- readLines(file)
+    lines <- gsub("(OMEGA|SIGMA)[(]([0-9]+),([0-9]+)[)]", "\\1\\2AAAAAAAAA\\3", lines)
+    file2 <- tempfile()
+    writeLines(lines, file2)
+    dt1 <- fread(file2, fill = TRUE, header = TRUE, skip = 1, sep=",", 
+                 ...)
+    unlink(file2)
+    dt1$NAME <- gsub("[A]([0-9]+)AAAAAAAAA([0-9]+)", "A(\\1,\\2)", dt1$NAME)
+    setnames(dt1, gsub("[A]([0-9]+)AAAAAAAAA([0-9]+)", "A(\\1,\\2)", names(dt1)))
+  } else {
+    dt1 <- fread(file, fill = TRUE, header = TRUE, skip = 1, 
+                 ...)
+  }
   cnames <- colnames(dt1)
   dt1[grep("^TABLE", as.character(get(cnames[1])), invert = FALSE, 
            perl = TRUE), `:=`(TABLE, get(cnames[1]))]
