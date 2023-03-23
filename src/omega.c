@@ -113,7 +113,7 @@ SEXP nonmem2rxPushOmega(const char *ini, int sd, int cor, int chol);
 SEXP nonmem2rxPushOmegaComment(const char *comment, const char *prefix);
 SEXP nonmem2rxPushOmegaLabel(const char *comment, const char *prefix);
 SEXP nonmem2xPushOmegaBlockNvalue(int n, const char *v1, const char *v2,
-                                  const char *prefix, int num);
+                                  const char *prefix, int num, int fixed);
 
 void pushOmega(void) {
   //nonmem2rx_omegaDiagonal = NA_INTEGER; // diagonal but not specified

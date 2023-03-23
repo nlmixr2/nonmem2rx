@@ -26,7 +26,6 @@ Description: 'NONMEM' has been a tool for running nonlinear mixed
     'babelmixr2' package that translates 'nlmixr2' models to 'NONMEM'.
 License: GPL (>= 3) 
 Encoding: UTF-8
-LazyData: true
 LinkingTo: 
     dparser,
     Rcpp,

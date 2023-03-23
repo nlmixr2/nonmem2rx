@@ -13,8 +13,17 @@ nmtab <- function (file, ...)
   checkmate::assertFileExists(file)
   TABLE <- NULL
   NMREP <- NULL
-  dt1 <- fread(file, fill = TRUE, header = TRUE, skip = 1, 
-               ...)
+  colnames <- readLines(file, n=2)[2]
+  if (grepl(", *OMEGA\\( *1 *, *1\\)", colnames)) {
+    col.names <- gsub(" ", "",strsplit(colnames, " +,")[[1]])
+    dt1 <- fread(file, fill = TRUE, header = TRUE, skip = 1,
+                 ...)
+    dt1 <- dt1[,seq_along(col.names), with=FALSE]
+    setnames(dt1, col.names)
+  } else {
+    dt1 <- fread(file, fill = TRUE, header = TRUE, skip = 1, 
+                 ...)
+  }
   cnames <- colnames(dt1)
   if (length(cnames) == 0L) return(NULL)
   dt1[grep("^TABLE", as.character(get(cnames[1])), invert = FALSE, 

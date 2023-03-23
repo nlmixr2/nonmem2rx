@@ -6,6 +6,10 @@
 ^inst/ddmore.zip$
 ^tests/testthat/test-psn.R$
 ^tests/testthat/test-bauer-2021.R$
+^tests/testthat/test-bauer-2019.R$
 ^tests/testthat/test-ddmore.R$
 ^inst/mods/bauer_2021_cptpsp_design_tutorial$
 ^inst/mods/cptpsp$
+^inst/mods/bauer_2019_cptpsp_tutorial_1$
+^inst/mods/bauer_2019_cptpsp_tutorial_2$
+

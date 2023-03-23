@@ -43,6 +43,7 @@ statement
   | callfl singleLineComment?
   | nspop singleLineComment?
   | verbatimCode singleLineComment?
+  | includeCode singleLineComment?
   | singleLineComment;
 
 
@@ -254,4 +255,5 @@ identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
 singleLineComment: "[;:]" "[^\n]*";
 verbatimCode: '"' "[^\n]*";
+includeCode: 'include' "[^\n]*";
 

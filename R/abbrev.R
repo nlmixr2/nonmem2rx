@@ -42,7 +42,6 @@ nonmem2rxRec.mix <- function(x) {
   class(.x) <- NULL
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $MIX record is empty", call.=FALSE)
-    message(.cur)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$MIX", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
   }
   .nonmem2rx$mixp <- sort(unique(.nonmem2rx$mixp))

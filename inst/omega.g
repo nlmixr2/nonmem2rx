@@ -22,7 +22,7 @@ value: 'VALUES' | 'VALUE' | 'VAL' |
         'values' | 'value' | 'val' |
         'Values' | 'Value' | 'Val' ;
 
-blocknvalue: block '(' decimalint ')' value '(' ini_constant ',' ini_constant ')';
+blocknvalue: block '(' decimalint ')' fixed? value '(' ini_constant ',' ini_constant ')' fixed?;
 
 name_id: 'NAMES' | 'NAME' |
         'names' | 'name' |
@@ -30,7 +30,7 @@ name_id: 'NAMES' | 'NAME' |
 
 name_option:  name_id '(' identifier (',' identifier)* ')';
 
-blockn_name_value: block '(' decimalint ')' name_option value '(' ini_constant ',' ini_constant ')';
+blockn_name_value: block '(' decimalint ')' fixed? name_option fixed? value '(' ini_constant ',' ini_constant ')' fixed?;
 
 first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blocknsamen | blocknvalue | blockn_name_value;
 

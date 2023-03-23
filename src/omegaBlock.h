@@ -27,15 +27,35 @@ int omegaParseBlocknNameValue(_arg_) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rx_omegaBlockn = atoi(v);
-    // parse name_option
+    int fixed = 0;
     xpn = d_get_child(pn, 4);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    if (v[0] != 0) {
+      fixed = 1;
+    }
+    if (!fixed) {
+      xpn = d_get_child(pn, 6);
+      v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (v[0] != 0) {
+        fixed = 1;
+      }
+    }
+    if (!fixed) {
+      xpn = d_get_child(pn, 13);
+      v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (v[0] != 0) {
+        fixed = 1;
+      }
+    }
+    // parse name_option
+    xpn = d_get_child(pn, 5);
     wprint_parsetree_omega(pt, xpn, depth, fn, client_data);
     // Get diag and off diagonal pieces
-    xpn = d_get_child(pn, 7);
-    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     xpn = d_get_child(pn, 9);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 11);
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    nonmem2xPushOmegaBlockNvalue(nonmem2rx_omegaBlockn, v, v2, omegaEstPrefix, nonmem2rx_omeganum);
+    nonmem2xPushOmegaBlockNvalue(nonmem2rx_omegaBlockn, v, v2, omegaEstPrefix, nonmem2rx_omeganum, fixed);
     nonmem2rx_omeganum+=nonmem2rx_omegaBlockn;
     nonmem2rx_omegaBlockn=0;
     omegaParseEarlyExit = 1;
@@ -61,11 +81,24 @@ int omegaParseBlocknvalue (_arg_) {
     D_ParseNode *xpn = d_get_child(pn, 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     int n = atoi(v);
-    xpn = d_get_child(pn, 6);
+    int fixed = 0;
+    xpn = d_get_child(pn, 4);
     v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 8);
+    if (v[0] != 0) {
+      fixed = 1;
+    }
+    if (!fixed) {
+      xpn = d_get_child(pn, 11);
+      v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      if (v[0] != 0) {
+        fixed=1;
+      }
+    }
+    xpn = d_get_child(pn, 7);
+    v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    xpn = d_get_child(pn, 9);
     char *v2 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    nonmem2xPushOmegaBlockNvalue(n, v, v2, omegaEstPrefix, nonmem2rx_omeganum);
+    nonmem2xPushOmegaBlockNvalue(n, v, v2, omegaEstPrefix, nonmem2rx_omeganum, fixed);
     for (int cur = 0; cur < n; cur++) {
       pushOmegaLabel();      
     }
