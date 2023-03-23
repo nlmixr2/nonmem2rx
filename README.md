@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -177,9 +177,7 @@ The process steps are below:
     `rxode2`.
 
   - If available, `nonmem2rx` will read the final parameter estimates
-    and update the model. (It tries the `.ext` file followed by the
-    `.lst` file; without these files, will simply keep the initial
-    estimates in the model).
+    and update the model. (See below for source)
 
   - This will read in the nonmem input dataset, and search for the
     output files with `IPRED`, `PRED` and the `ETA` values. The
@@ -296,7 +294,7 @@ In order of preference, the model run parameters are gathered from:
 
   - XML parameter estimates (which are the most accurate). On some
     systems, the `xml` may be broken (or not present). This also gets
-    the covariance, `omega`, `sigma` values.
+    the covariance, `omega`, and `sigma` values.
 
   - `.ext` is the next source of the `theta`, `sigma` and `omega`
     matrices, and is slightly less accurate than the `xml` file. If the
@@ -350,9 +348,6 @@ get in a situation where it is important.
 
 See [discussion on
 nmusers](mail-archive.com/nmusers@globomaxnm.com/msg05466.html).
-
-That being said, a verification on the population level and a
-verification from a vpc is likely sufficient.
 
 ### What do the values mean
 
@@ -497,7 +492,8 @@ This was validated against:
   - The ddmore model scrapings
     (<https://github.com/dpastoor/ddmore_scraping>).
 
-  - Models from Bauer 2021 <https://doi.org/10.1002/psp4.12713>
+  - Models from NONMEM design tutorial Bauer 2021
+    <https://doi.org/10.1002/psp4.12713>
 
   - Models from NONMEM tutorial 1 (Bauer 2019)
     <https://doi.org/10.1002/psp4.12404>
@@ -505,19 +501,16 @@ This was validated against:
   - Models from NONMEM tutorial 2 (Bauer 2019)
     <https://doi.org/10.1002/psp4.12422>
 
-Due to the sheer size of the zipped models for these two nonmem control
-stream sources these are excluded to keep the binary below 3 mgs as
-required by CRAN.
+Due to the sheer size of the zipped models for these nonmem control
+stream sources, these are excluded to keep the binary below 3 mgs (CRAN
+requirement).
 
 However, I would like to acknowledge all who helped in these projects.
 With these projects the NONMEM conversion to rxode2 has been made much
 more robust.
 
-However, even though they are not/will not be in the CRAN binaries, you
-can test them yourself by:
+Still, while the tests are not/will not be in the CRAN binaries, you can
+test them yourself by:
 
 1.  Downloading this repository
 2.  Running the tests `devtools::test()`
-
-Note these are only excluded when building the library and are still
-available for you to test if you wish.
