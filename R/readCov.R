@@ -16,9 +16,11 @@ nmcov <- function (file, ...) {
            perl = TRUE), `:=`(TABLE, get(cnames[1]))]
   dt1[, `:=`(NMREP, cumsum(!is.na(TABLE)) + 1)]
   dt1[, `:=`(TABLE, NULL)]
-  dt1[,`:=`(NAME, NULL)]
   dt1 <- dt1[NMREP==1,]
+  name <- dt1$NAME
+  dt1[,`:=`(NAME, NULL)]
   dt1[, `:=`(NMREP, NULL),]
+  dt1 <- dt1[,..name]
   cnames <- colnames(dt1)
   dt1[, `:=`((cnames), lapply(.SD, as.numeric))]
   dt1 <- as.matrix(dt1)

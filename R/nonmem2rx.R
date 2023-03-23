@@ -545,7 +545,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         .minfo(paste0("different options for import, ignoring save file '", save, "'"))
       }
     }
-    checkmate::assertPathForOutput(save, overwrite=overwrite)
   }
   checkmate::assertCharacter(lst, len=1, any.missing= FALSE)
   checkmate::assertIntegerish(nLinesPro, len=1, lower=1)

@@ -1,0 +1,82 @@
+Multiple Estimation Method Run Summary File Run No: warfarin2
+[PDx-Pop 5.3 [15JAN2020] Revision]
+
+12:05 PM ;Model Desc: NO MODEL DESCRIPTION ;Project Name: example2_3 
+Stop Time:  Fri 04/02/2021  12:05 PM 
+Output Extracted from file: c:\users\bauerr\nonmem\design_tutorial\example2_3\warfarin2.res
+DataFile:  warfarin.csv
+
+
+MODEL DEFINITION:
+ ADVAN2 TRANS2
+
+
+MU_ECL=LOG(THETA(CL))
+MU_EV=LOG(THETA(V))
+MU_EKA=LOG(THETA(KA))
+CL=EXP(MU_ECL+ETA(ECL))
+V=EXP(MU_EV+ETA(EV))
+KA=EXP(MU_EKA+ETA(EKA))
+S2=V
+F1=1.0
+
+
+$DESIGN GROUPSIZE=32 FIMDIAG=1 MAXEVAL=9999 PRINT=20
+DESEL=TIME DESELSTRAT=TSTRAT DESELMIN=TMIN DESELMAX=TMAX
+
+
+
+IPRED=A(2)/V
+Y=IPRED + IPRED*EPS(RCV) + EPS(RSTD)
+
+
+
+TABLES CREATED:
+ warfarin2.tab
+
+
+Estimation Methods:
+
+1. Results for  First Order: D-OPTIMALITY
+
+TERMINATION STATUS:
+ NO. OF FUNCTION EVALUATIONS USED:      112
+ MINIMIZATION SUCCESSFUL
+
+ ETABAR IS THE ARITHMETIC MEAN OF THE ETA-ESTIMATES,
+ AND THE P-VALUE IS GIVEN FOR THE NULL HYPOTHESIS THAT THE TRUE MEAN IS 0.
+ 
+ ETABAR:         0.0000E+00  0.0000E+00  0.0000E+00
+ SE:             0.0000E+00  0.0000E+00  0.0000E+00
+ N:                       1           1           1
+ 
+ P VAL.:         1.0000E+00  1.0000E+00  1.0000E+00
+ 
+ ETASHRINKSD(%)  1.0000E+02  1.0000E+02  1.0000E+02
+ ETASHRINKVR(%)  1.0000E+02  1.0000E+02  1.0000E+02
+ EBVSHRINKSD(%)  3.9366E+00  2.1746E+01  8.7273E+00
+ EBVSHRINKVR(%)  7.7182E+00  3.8763E+01  1.6693E+01
+ RELATIVEINF(%)  8.7713E+01  5.4828E+01  7.6835E+01
+ EPSSHRINKSD(%)  1.0000E+02  1.0000E+02
+ EPSSHRINKVR(%)  1.0000E+02  1.0000E+02
+ 
+ MINIMUM VALUE OF OBJECTIVE FUNCTION: D-OPTIMALITY: -47.533
+ COVARIANCE STEP SUCCESSFUL
+
+                                    95% CONFIDENCE INTERVAL    DESCRIPTOR/
+     FINAL ESTIMATE          %RSE       LBOUND       UBOUND    VARIABILITY
+__________________________________________________________________________________
+
+ THETA
+     1        0.150         5.00%        0.135        0.165             CL
+     2         8.00         3.39%         7.47         8.53              V
+     3         1.00         15.7%        0.692         1.31             KA
+__________________________________________________________________________________
+                                                               INTERINDIVIDUAL
+ OMEGA                                                           VARIABILITY
+__________________________________________________________________________________
+*Indicates 95% confidence interval that includes zero
+%RSE is percent relative standard error (100% x SE/EST)
+
+        Akaike Information Criterion: -41.533
+        Schwarz Bayesian Criterion:   -44.2372
