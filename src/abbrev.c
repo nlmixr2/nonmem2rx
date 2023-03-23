@@ -720,11 +720,18 @@ int abbrev_if_while_clause(char *name, int i, D_ParseNode *pn) {
 SEXP nonmem2rxPushSigmaEst(int x, int y);
 SEXP nonmem2rxPushOmegaEst(int x, int y);
 
-int verbWarning = 0;
+int verbWarning = 0,
+  includeWarning = 0;
 int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("verbatimCode", name)) {
     if (verbWarning == 0) {
-      Rf_warning("Verbatim code is not supported in translation\nignored verbatim in %s", abbrevPrefix);
+      Rf_warning("verbatim code is not supported in translation\nignored verbatim in %s", abbrevPrefix);
+      verbWarning = 1;
+    }
+    return 1;
+  } else if (!strcmp("includeCode", name)) {
+    if (verbWarning == 0) {
+      Rf_warning("include is not supported in translation\nignored include in %s", abbrevPrefix);
       verbWarning = 1;
     }
     return 1;
@@ -1292,6 +1299,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP exte
   abbrevLin = INTEGER(abbrevLinSEXP)[0];
   extendedCtrlInt = INTEGER(extendedCtrlSEXP)[0];
   verbWarning = 0;
+  includeWarning = 0;
   maxA = 0;
   evidWarning=0;
   idWarning=0;
