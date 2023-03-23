@@ -93,7 +93,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -129,14 +129,14 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -223,7 +223,7 @@
 <ul>
 <li><p>Read in the nonmem control stream and convert the model to a <code>rxode2</code> ui function.</p></li>
 <li><p>Try to determine an endpoint in the model (if possible), and convert to a fully qualified ui model that can be used in <code>nlmixr2</code> and <code>rxode2</code>.</p></li>
-<li><p>If available, <code>nonmem2rx</code> will read the final parameter estimates and update the model. (It tries the <code>.ext</code> file followed by the <code>.lst</code> file; without these files, will simply keep the initial estimates in the model).</p></li>
+<li><p>If available, <code>nonmem2rx</code> will read the final parameter estimates and update the model. (See below for source)</p></li>
 <li><p>This will read in the nonmem input dataset, and search for the output files with <code>IPRED</code>, <code>PRED</code> and the <code>ETA</code> values. The translated <code>rxode2</code> model is run for the population parameters and the individual parameters. This will then compare the results between <code>NONMEM</code> and <code>rxode2</code> to make sure the translation makes sense. This only works when <code>nonmem2rx</code> has access to the input data and the output with the <code>IPRED</code>, <code>PRED</code> and the <code>ETA</code> values.</p></li>
 <li><p>Converts the upper case NONMEM variables to lower case.</p></li>
 <li><p>Replaces the NONMEM theta / eta names with the label-based names like an extended control stream</p></li>
@@ -305,7 +305,7 @@
 <p>This section discusses the source of the <code>theta</code> parameters. Often it is the same source of the <code>omega</code> and <code>sigma</code> matrices as well. In many cases it is the source of the overall covariance too. So the sources of all these data will be mentioned.</p>
 <p>In order of preference, the model run parameters are gathered from:</p>
 <ul>
-<li><p>XML parameter estimates (which are the most accurate). On some systems, the <code>xml</code> may be broken (or not present). This also gets the covariance, <code>omega</code>, <code>sigma</code> values.</p></li>
+<li><p>XML parameter estimates (which are the most accurate). On some systems, the <code>xml</code> may be broken (or not present). This also gets the covariance, <code>omega</code>, and <code>sigma</code> values.</p></li>
 <li><p><code>.ext</code> is the next source of the <code>theta</code>, <code>sigma</code> and <code>omega</code> matrices, and is slightly less accurate than the <code>xml</code> file. If the covariance file <code>.cov</code> exists the overall covariance is read from this file when the <code>xml</code> file is not present.</p></li>
 <li><p>The NONMEM output file is the next source of information for the <code>theta</code> values. This is the least accurate, but may be useful for models in libraries like the ddmore repository since often the <code>xml</code>, <code>ext</code> and <code>cov</code> files are not present.</p></li>
 <li><p>The model control stream is the last source of parameter estimates, and may not even reflect the minimum value of the model. In common practice many people adjust parameters close to the final parameter estimates so this may be close enough, or a starting place to start your own estimation with <code>nlmxir2</code>.</p></li>
@@ -333,7 +333,6 @@
 <p>If you wish to be more precise for the <code>IPRED</code> and <code>ETA</code> values output in your tables you can change the FORTRAN format to a something a bit higher.</p>
 <p>The default for tables is <code>FORMAT=s1PE11.4</code>, if you really want to increase the precision for the output you could use <code>FORMAT=s1PE17.9</code> or something similar, this can help with validation of individuals if you get in a situation where it is important.</p>
 <p>See <a href="mail-archive.com/nmusers@globomaxnm.com/msg05466.html">discussion on nmusers</a>.</p>
-<p>That being said, a verification on the population level and a verification from a vpc is likely sufficient.</p>
 </div>
 <div class="section level3">
 <h3 id="what-do-the-values-mean">What do the values mean<a class="anchor" aria-label="anchor" href="#what-do-the-values-mean"></a>
@@ -456,19 +455,18 @@
 <ul>
 <li><p>The <code>PsN</code> library test suite of NONMEM listings (<a href="https://github.com/UUPharmacometrics/PsN/tree/master/test" class="external-link uri">https://github.com/UUPharmacometrics/PsN/tree/master/test</a>)</p></li>
 <li><p>The ddmore model scrapings (<a href="https://github.com/dpastoor/ddmore_scraping" class="external-link uri">https://github.com/dpastoor/ddmore_scraping</a>).</p></li>
-<li><p>Models from Bauer 2021 <a href="https://doi.org/10.1002/psp4.12713" class="external-link uri">https://doi.org/10.1002/psp4.12713</a></p></li>
+<li><p>Models from NONMEM design tutorial Bauer 2021 <a href="https://doi.org/10.1002/psp4.12713" class="external-link uri">https://doi.org/10.1002/psp4.12713</a></p></li>
 <li><p>Models from NONMEM tutorial 1 (Bauer 2019) <a href="https://doi.org/10.1002/psp4.12404" class="external-link uri">https://doi.org/10.1002/psp4.12404</a></p></li>
 <li><p>Models from NONMEM tutorial 2 (Bauer 2019) <a href="https://doi.org/10.1002/psp4.12422" class="external-link uri">https://doi.org/10.1002/psp4.12422</a></p></li>
 </ul>
-<p>Due to the sheer size of the zipped models for these two nonmem control stream sources these are excluded to keep the binary below 3 mgs as required by CRAN.</p>
+<p>Due to the sheer size of the zipped models for these nonmem control stream sources, these are excluded to keep the binary below 3 mgs (CRAN requirement).</p>
 <p>However, I would like to acknowledge all who helped in these projects. With these projects the NONMEM conversion to rxode2 has been made much more robust.</p>
-<p>However, even though they are not/will not be in the CRAN binaries, you can test them yourself by:</p>
+<p>Still, while the tests are not/will not be in the CRAN binaries, you can test them yourself by:</p>
 <ol style="list-style-type: decimal">
 <li>Downloading this repository</li>
 <li>Running the tests <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code>
 </li>
 </ol>
-<p>Note these are only excluded when building the library and are still available for you to test if you wish.</p>
 </div>
 
   </div>
