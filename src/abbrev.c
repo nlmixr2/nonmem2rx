@@ -1252,7 +1252,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
     cmtInfoStr = NULL;
   } else if (!strcmp("mtimeL", name)) {
     pushModel();
-    sAppend(&curLine,"rx.mpast.%d. <- ifelse(time >= rx.mtime.%d., 1, 0)", curMtime);
+    sAppend(&curLine,"rx.mpast.%d. <- ifelse(time >= rx.mtime.%d., 1, 0)", curMtime, curMtime);
     pushModel();
     if (hasMnow == 0) {
       sAppend(&curLine,"MNOW <- ifelse(time == rx.mtime.%d., %d, 0)", curMtime, curMtime);
