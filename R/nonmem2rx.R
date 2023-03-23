@@ -539,7 +539,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     if (load && file.exists(save)) {
       .minfo(paste0("loading save file '", save, "'"))
       .ret <- qs::qread(save)
-      if (.ret$digest == .digest) {
+      if (!exists("digest", envir=.ret)) {
+        .minfo(paste0("older version of nonmem2rx without digest, ignoring save file '", save, "'"))
+      } else if (.ret$digest == .digest) {
         return(.ret)
       } else {
         .minfo(paste0("different options for import, ignoring save file '", save, "'"))
