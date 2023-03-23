@@ -4,7 +4,7 @@ statement_list : (statement)+ ;
 // ,1PE11.4 = csv format
 // firstonly = nodups
 
-statement: identifier_nm
+statement: identifier_nm 
     | paren_simple
     | etas_statement1
     | etas_statement2
@@ -19,6 +19,7 @@ statement: identifier_nm
     | file_statement
     | idformat_statement
     | npdtype_statement
+    | identifier_nm '=' identifier_nm
     ;
 
 etas_paren_name: ('ETAS' | 'Etas' | 'etas' | 'ETA' | 'Eta' | 'eta') ;
