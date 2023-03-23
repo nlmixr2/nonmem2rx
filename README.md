@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/Rtmpi7hPtr/temp_libpath45aa2aec8367/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,7 +75,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmpi7hPtr/temp_libpath45aa2aec8367/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
@@ -164,9 +164,9 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:279:16: note: previous declaration of ‘t_IndF’ with type ‘t_IndF’ {aka ‘void (*)(int,  double,  double,  double *)’}
 #>   279 | typedef void (*t_IndF)(int _cSub, double _t, double t, double *_mat);
 #>       |                ^~~~~~
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpi7hPtr/temp_libpath45aa2aec8367/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmpi7hPtr/temp_libpath45aa2aec8367/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -266,7 +266,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ done
 #> ℹ solving pred problem
 #> ℹ done
-mod 
+mod
 #>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
 #>  ── Initalization: ──  
 #> Fixed Effects ($theta): 
@@ -666,6 +666,12 @@ This was validated against:
     (<https://github.com/dpastoor/ddmore_scraping>).
 
   - Models from Bauer 2021 <https://doi.org/10.1002/psp4.12713>
+
+  - Models from NONMEM tutorial 1 (Bauer 2019)
+    <https://doi.org/10.1002/psp4.12404>
+
+  - Models from NONMEM tutorial 2 (Bauer 2019)
+    <https://doi.org/10.1002/psp4.12422>
 
 Due to the sheer size of the zipped models for these two nonmem control
 stream sources these are excluded to keep the binary below 3 mgs as

@@ -1,5 +1,5 @@
 if (identical(Sys.getenv("NOT_CRAN"), "true")) {
-  
+
   files <- c("mods/bauer_2019_cptpsp_tutorial_2/supp4/wexample10_lap.ctl",
              "mods/bauer_2019_cptpsp_tutorial_2/supp4/wexample10_bayes.ctl",
              "mods/bauer_2019_cptpsp_tutorial_2/supp4/wexample10_saem.ctl",

@@ -45,14 +45,14 @@ nonmem control stream for the parser to start.  For example:
 ```{r example}
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-mod 
+mod
 ```
 
 The process steps are below:
 
 - Read in the nonmem control stream and convert the model to a
   `rxode2` ui function.
-  
+
 - Try to determine an endpoint in the model (if possible), and convert
   to a fully qualified ui model that can be used in `nlmixr2` and
   `rxode2`.
@@ -61,7 +61,7 @@ The process steps are below:
   and update the model. (It tries the `.ext` file followed by the `.lst`
   file; without these files, will simply keep the initial estimates in
   the model).
-  
+
 - This will read in the nonmem input dataset, and search for the
   output files with `IPRED`, `PRED` and the `ETA` values. The
   translated `rxode2` model is run for the population parameters and
@@ -69,15 +69,15 @@ The process steps are below:
   between `NONMEM` and `rxode2` to make sure the translation makes
   sense.  This only works when `nonmem2rx` has access to the input
   data and the output with the `IPRED`, `PRED` and the `ETA` values.
-  
+
 - Converts the upper case NONMEM variables to lower case.
 
 - Replaces the NONMEM theta / eta names with the label-based names like an
   extended control stream
-  
+
 - Replaces the compartment names with the defined compartment names in
   the control stream (ie `COMP=(compartmenName)`)
-  
+
 ### Comparing differences between `NONMEM` and `rxode2`
 
 You may wish to see where the differences in predictions are between
@@ -141,17 +141,17 @@ In order of preference, the model run parameters are gathered from:
 - XML parameter estimates (which are the most accurate). On some
   systems, the `xml` may be broken (or not present).  This also gets
   the covariance, `omega`, `sigma` values.
-  
+
 - `.ext` is the next source of the `theta`, `sigma` and `omega`
   matrices, and is slightly less accurate than the `xml` file.  If the
   covariance file `.cov` exists the overall covariance is read from
   this file when the `xml` file is not present.
-  
+
 - The NONMEM output file is the next source of information for the
   `theta` values.  This is the least accurate, but may be useful for
   models in libraries like the ddmore repository since often the
   `xml`, `ext` and `cov` files are not present.
-  
+
 - The model control stream is the last source of parameter estimates,
   and may not even reflect the minimum value of the model.  In common
   practice many people adjust parameters close to the final parameter
@@ -171,7 +171,7 @@ The `eta` parameters come from 2 different sources.
   default are not very accurate compared to the `xml` or `ext` files
   above.  The accuracy can be increased by changing the `FORMAT`
   option in the NONMEM tables.
-  
+
 Since these values are not as accurate as the population parameters,
 these are much more likely to have a mismatch between `rxode2` and
 `NONMEM`.  You can compare the predictions if you wish.
@@ -261,12 +261,16 @@ mod$thetaMat
 This was validated against:
 
 - The `PsN` library test suite of NONMEM listings
-(https://github.com/UUPharmacometrics/PsN/tree/master/test) 
+(https://github.com/UUPharmacometrics/PsN/tree/master/test)
 
 - The ddmore model scrapings
   (https://github.com/dpastoor/ddmore_scraping).
 
 - Models from Bauer 2021 https://doi.org/10.1002/psp4.12713
+
+- Models from NONMEM tutorial 1 (Bauer 2019) https://doi.org/10.1002/psp4.12404
+
+- Models from NONMEM tutorial 2 (Bauer 2019)  https://doi.org/10.1002/psp4.12422
 
 Due to the sheer size of the zipped models for these two nonmem
 control stream sources these are excluded to keep the binary below 3
@@ -280,8 +284,7 @@ However, even though they are not/will not be in the CRAN binaries,
 you can test them yourself by:
 
 1. Downloading this repository
-2. Running the tests `devtools::test()` 
+2. Running the tests `devtools::test()`
 
 Note these are only excluded when building the library and are still
 available for you to test if you wish.
-
