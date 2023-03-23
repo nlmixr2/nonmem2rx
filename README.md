@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,98 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:78:18: warning: redefinition of typedef ‘t_F’ [-Wpedantic]
-#>    78 | typedef double (*t_F)(int _cSub,  int _cmt, double _amt, double t, double *y);
-#>       |                  ^~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:271:18: note: previous declaration of ‘t_F’ with type ‘t_F’ {aka ‘double (*)(int,  int,  double,  double,  double *)’}
-#>   271 | typedef double (*t_F)(int _cSub,  int _cmt, double _amt, double t, double *y);
-#>       |                  ^~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:79:18: warning: redefinition of typedef ‘t_LAG’ [-Wpedantic]
-#>    79 | typedef double (*t_LAG)(int _cSub,  int _cmt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:272:18: note: previous declaration of ‘t_LAG’ with type ‘t_LAG’ {aka ‘double (*)(int,  int,  double)’}
-#>   272 | typedef double (*t_LAG)(int _cSub,  int _cmt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:80:18: warning: redefinition of typedef ‘t_RATE’ [-Wpedantic]
-#>    80 | typedef double (*t_RATE)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:273:18: note: previous declaration of ‘t_RATE’ with type ‘t_RATE’ {aka ‘double (*)(int,  int,  double,  double)’}
-#>   273 | typedef double (*t_RATE)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:81:18: warning: redefinition of typedef ‘t_DUR’ [-Wpedantic]
-#>    81 | typedef double (*t_DUR)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:274:18: note: previous declaration of ‘t_DUR’ with type ‘t_DUR’ {aka ‘double (*)(int,  int,  double,  double)’}
-#>   274 | typedef double (*t_DUR)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:83:16: warning: redefinition of typedef ‘t_calc_mtime’ [-Wpedantic]
-#>    83 | typedef void (*t_calc_mtime)(int cSub, double *mtime);
-#>       |                ^~~~~~~~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:276:16: note: previous declaration of ‘t_calc_mtime’ with type ‘t_calc_mtime’ {aka ‘void (*)(int,  double *)’}
-#>   276 | typedef void (*t_calc_mtime)(int cSub, double *mtime);
-#>       |                ^~~~~~~~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:85:16: warning: redefinition of typedef ‘t_ME’ [-Wpedantic]
-#>    85 | typedef void (*t_ME)(int _cSub, double _t, double t, double *_mat, const double *__zzStateVar__);
-#>       |                ^~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:278:16: note: previous declaration of ‘t_ME’ with type ‘t_ME’ {aka ‘void (*)(int,  double,  double,  double *, const double *)’}
-#>   278 | typedef void (*t_ME)(int _cSub, double _t, double t, double *_mat, const double *__zzStateVar__);
-#>       |                ^~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:86:16: warning: redefinition of typedef ‘t_IndF’ [-Wpedantic]
-#>    86 | typedef void (*t_IndF)(int _cSub, double _t, double t, double *_mat);
-#>       |                ^~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_3d87dd49fc3e3655908a74fb05fda22a_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:279:16: note: previous declaration of ‘t_IndF’ with type ‘t_IndF’ {aka ‘void (*)(int,  double,  double,  double *)’}
-#>   279 | typedef void (*t_IndF)(int _cSub, double _t, double t, double *_mat);
-#>       |                ^~~~~~
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpXww9TK/temp_libpath46bf789b2a57/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpA1NgO1/temp_libpath5cee615bdd2e/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -178,90 +94,6 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:78:18: warning: redefinition of typedef ‘t_F’ [-Wpedantic]
-#>    78 | typedef double (*t_F)(int _cSub,  int _cmt, double _amt, double t, double *y);
-#>       |                  ^~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:271:18: note: previous declaration of ‘t_F’ with type ‘t_F’ {aka ‘double (*)(int,  int,  double,  double,  double *)’}
-#>   271 | typedef double (*t_F)(int _cSub,  int _cmt, double _amt, double t, double *y);
-#>       |                  ^~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:79:18: warning: redefinition of typedef ‘t_LAG’ [-Wpedantic]
-#>    79 | typedef double (*t_LAG)(int _cSub,  int _cmt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:272:18: note: previous declaration of ‘t_LAG’ with type ‘t_LAG’ {aka ‘double (*)(int,  int,  double)’}
-#>   272 | typedef double (*t_LAG)(int _cSub,  int _cmt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:80:18: warning: redefinition of typedef ‘t_RATE’ [-Wpedantic]
-#>    80 | typedef double (*t_RATE)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:273:18: note: previous declaration of ‘t_RATE’ with type ‘t_RATE’ {aka ‘double (*)(int,  int,  double,  double)’}
-#>   273 | typedef double (*t_RATE)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:81:18: warning: redefinition of typedef ‘t_DUR’ [-Wpedantic]
-#>    81 | typedef double (*t_DUR)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:274:18: note: previous declaration of ‘t_DUR’ with type ‘t_DUR’ {aka ‘double (*)(int,  int,  double,  double)’}
-#>   274 | typedef double (*t_DUR)(int _cSub,  int _cmt, double _amt, double t);
-#>       |                  ^~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:83:16: warning: redefinition of typedef ‘t_calc_mtime’ [-Wpedantic]
-#>    83 | typedef void (*t_calc_mtime)(int cSub, double *mtime);
-#>       |                ^~~~~~~~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:276:16: note: previous declaration of ‘t_calc_mtime’ with type ‘t_calc_mtime’ {aka ‘void (*)(int,  double *)’}
-#>   276 | typedef void (*t_calc_mtime)(int cSub, double *mtime);
-#>       |                ^~~~~~~~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:85:16: warning: redefinition of typedef ‘t_ME’ [-Wpedantic]
-#>    85 | typedef void (*t_ME)(int _cSub, double _t, double t, double *_mat, const double *__zzStateVar__);
-#>       |                ^~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:278:16: note: previous declaration of ‘t_ME’ with type ‘t_ME’ {aka ‘void (*)(int,  double,  double,  double *, const double *)’}
-#>   278 | typedef void (*t_ME)(int _cSub, double _t, double t, double *_mat, const double *__zzStateVar__);
-#>       |                ^~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:86:16: warning: redefinition of typedef ‘t_IndF’ [-Wpedantic]
-#>    86 | typedef void (*t_IndF)(int _cSub, double _t, double t, double *_mat);
-#>       |                ^~~~~~
-#> In file included from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parse.h:52,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2/include/rxode2.h:13,
-#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2_model_shared.h:3,
-#>                  from rx_1c9e430f1a41e85287d5346d3c5fa613_.c:115:
-#> /home/matt/R/x86_64-pc-linux-gnu-library/4.2/rxode2parse/include/rxode2parseStruct.h:279:16: note: previous declaration of ‘t_IndF’ with type ‘t_IndF’ {aka ‘void (*)(int,  double,  double,  double *)’}
-#>   279 | typedef void (*t_IndF)(int _cSub, double _t, double t, double *_mat);
-#>       |                ^~~~~~
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
