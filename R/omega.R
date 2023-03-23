@@ -168,19 +168,26 @@ nonmem2rxRec.sig <- function(x) {
 #' @param n The dimension of the block matrix
 #' @param diagVal The diagonal value
 #' @param odiag The off diagonal value
+#' @param prefix type of prefix for the omega/sigma estimates
+#' @param num number to start the omega estimates
+#' @param fixed integer representing if the block is fixed
 #' @return Nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
 .pushOmegaBlockNvalue <- function(n, diagVal, odiag,
-                                  prefix, num) {
+                                  prefix, num, fixed) {
   .dim <- paste0(prefix, seq_len(n)+num-1)
   .dim <- list(.dim, .dim)
   .ret <- matrix(rep(as.numeric(odiag), n*n), n,n)
   diag(.ret) <- rep(as.numeric(diagVal), n)
   dimnames(.ret) <- .dim
+  .retL <- matrix(rep(ifelse(fixed==1L, TRUE, FALSE), n*n), n, n, dimnames=.dim)
+  attr(.ret, "lotriFix") <- .retL
   class(.ret) <- c("lotriFix", class(.ret))
   .exp <-as.expression(.ret)
-  .addIni(deparse1(.exp[[2]][[2]]))
+  lapply(seq_along(.exp[[2]])[-1], function(i) {
+    .addIni(deparse1(.exp[[2]][[i]]))
+  })
   lapply(seq_len(n), function(...){
     .addOmegaComment("", prefix)
   })

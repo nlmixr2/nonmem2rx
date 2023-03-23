@@ -1,5 +1,5 @@
 test_that("test omega", {
-  
+
   .o <- function(omega, eq="no", len=0, reset=TRUE, unintFixed=TRUE) {
     .Call(`_nonmem2rx_setRecord`, "$OMEGA")
     if (reset) {
@@ -18,7 +18,7 @@ test_that("test omega", {
   .o("1", "eta1 ~ 1", 1)
   .o("(1 fix)", "eta1 ~ fix(1)", 1)
   .o("(fix 1)", "eta1 ~ fix(1)", 1)
-  
+
   .o(c("BLOCK(3) 6. .005 .3 .0002 .006 .4 fix",
        "BLOCK(3) 6. .005 .3 .0002 .006 .4",
        "BLOCK SAME",
@@ -48,13 +48,13 @@ test_that("test omega", {
        "eta14 + eta15 ~ fix(6., .005, .3)",
        ""),
      15), "BLOCK")
-  
+
   expect_error(.o("BLOCK SAME"))
   expect_error(.o("BLOCK(3) 6. .005 .3 .0002 .006 (.4)"))
   expect_error(.o("BLOCK(3) 6. .005 .3 .0002 .006"))
   expect_error(.o("BLOCK(3) 6. .005 .3 .0002 .006 .4 .4"))
   expect_error(.o("BLOCK(3) 6. .005 .3 .0002 .006 (fix .4)"))
-  
+
   expect_warning(.o("DIAGONAL(1) 1", "eta1 ~ 1", 1))
 
   .o(" BLOCK(6)\n 0.1\n0.01 0.1\n(0.01)x2 0.1\n(0.01)x3 0.1\n(0.01)x4 0.1\n(0.01)x5 0.1",
@@ -85,6 +85,24 @@ test_that("test omega", {
        "eta7 + eta8 ~ fix(6., .005, .3)",
        "eta9 + eta10 ~ fix(6., .005, .3)",
        "eta11 + eta12 ~ fix(6., .005, .3)"), 12)
+
+  .o("BLOCK(3) FIXED VALUES(0.09,0.0)",
+     c("eta1 ~ fix(0.09)",
+       "eta2 ~ fix(0.09)",
+       "eta3 ~ fix(0.09)"), 3)
+
+  .o("BLOCK(3) FIXED VALUES(0.09,0.0001)",
+     "eta1 + eta2 + eta3 ~ fix(0.09, 1e-04, 0.09, 1e-04, 1e-04, 0.09)",
+     3)
+
+  .o("BLOCK(3) VALUES(0.09,0.0) FIXED",
+     c("eta1 ~ fix(0.09)",
+       "eta2 ~ fix(0.09)",
+       "eta3 ~ fix(0.09)"), 3)
+
+  .o("BLOCK(3) VALUES(0.09,0.0001) FIXED",
+     "eta1 + eta2 + eta3 ~ fix(0.09, 1e-04, 0.09, 1e-04, 1e-04, 0.09)",
+     3)
 
   .o("BLOCK(6) VALUES(0.1,0.01)",
      "eta1 + eta2 + eta3 + eta4 + eta5 + eta6 ~ c(0.1, 0.01, 0.1, 0.01, 0.01, 0.1, 0.01, 0.01, 0.01, 0.1, 0.01, 0.01, 0.01, 0.01, 0.1, 0.01, 0.01, 0.01, 0.01, 0.01, 0.1)", 6)
@@ -152,26 +170,41 @@ test_that("test omega", {
   .o("BLOCK(4) NAMES(ECL2,EV12,EQ2,EV22) VALUES(0.03,0.01)",
      "eta1 + eta2 + eta3 + eta4 ~ c(0.03, 0.01, 0.03, 0.01, 0.01, 0.03, 0.01, 0.01, 0.01, 0.03)", 4)
 
+  .o("BLOCK(4) FIXED NAMES(ECL2,EV12,EQ2,EV22) VALUES(0.03,0.01)",
+     "eta1 + eta2 + eta3 + eta4 ~ fix(0.03, 0.01, 0.03, 0.01, 0.01, 0.03, 0.01, 0.01, 0.01, 0.03)", 4)
+
+  .o("BLOCK(4) NAMES(ECL2,EV12,EQ2,EV22) FIXED VALUES(0.03,0.01)",
+     "eta1 + eta2 + eta3 + eta4 ~ fix(0.03, 0.01, 0.03, 0.01, 0.01, 0.03, 0.01, 0.01, 0.01, 0.03)", 4)
+
+  .o("BLOCK(4) NAMES(ECL2,EV12,EQ2,EV22) VALUES(0.03,0.01) FIXED",
+     "eta1 + eta2 + eta3 + eta4 ~ fix(0.03, 0.01, 0.03, 0.01, 0.01, 0.03, 0.01, 0.01, 0.01, 0.03)", 4)
+
+  .o("BLOCK(4) NAMES(ECL2,EV12,EQ2,EV22) VALUES(0.03,0) FIXED",
+     c("eta1 ~ fix(0.03)",
+       "eta2 ~ fix(0.03)",
+       "eta3 ~ fix(0.03)",
+       "eta4 ~ fix(0.03)"), 4)
+
   expect_equal(.nonmem2rx$etaNonmemLabel,
                c("ECL2", "EV12", "EQ2", "EV22"))
 
   .o("(1 UNINT)", "eta1 ~ fix(1)", 1)
   .o("(1 UNINT)", "eta1 ~ fix(1)", 1)
-  
+
   .o("BLOCK(2) UNINT 0.1\n0.01 0.1",
      "eta1 + eta2 ~ fix(0.1, 0.01, 0.1)", 2)
-  
+
   .o("(UNINT 1)", "eta1 ~ 1", 1, unintFixed=FALSE)
   .o("(1 UNINT)", "eta1 ~ 1", 1, unintFixed=FALSE)
   .o("(1 UNINT)", "eta1 ~ 1", 1, unintFixed=FALSE)
-  
+
   .o("BLOCK(2) UNINT 0.1\n0.01 0.1",
      "eta1 + eta2 ~ c(0.1, 0.01, 0.1)", 2, unintFixed=FALSE)
-  
+
   .o("(UNINT 1)", "eta1 ~ 1", 1, , unintFixed=FALSE)
-  
+
   expect_error(.o("garbage"))
 
-  
+
 
 })

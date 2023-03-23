@@ -9,3 +9,6 @@
 ^tests/testthat/test-ddmore.R$
 ^inst/mods/bauer_2021_cptpsp_design_tutorial$
 ^inst/mods/cptpsp$
+^inst/mods/bauer_2019_cptpsp_tutorial_1$
+^inst/mods/bauer_2019_cptpsp_tutorial_2$
+
