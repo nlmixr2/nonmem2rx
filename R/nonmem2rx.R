@@ -255,7 +255,6 @@
           .cur <- as.character(.x[[2]][[1]])
           .w <- which(.cur == .c)
           if (length(.w) == 1) {
-            print(.x)
             .x[[2]] <- as.call(c(str2lang(.n[.w]), lapply(.x[[2]][-1], function(i) i)))
           }
         }
