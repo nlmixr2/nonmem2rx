@@ -243,6 +243,28 @@
     .ret <- .tmp
     .minfo("done")
   }
+  if (packageVersion("rxode2") <= "2.0.12") {
+    .expr <- .ret$lstExpr
+    .expr <- lapply(seq_along(.expr), function(i) {
+      .x <- .expr[[i]]
+      if (is.call(.x) && (identical(.x[[1]], quote(`<-`)) ||
+                            identical(.x[[1]], quote(`=`)))) {
+        if (is.call(.x[[2]]) && length(.x[[2]]) == 2L &&
+              is.numeric(.x[[2]][[2]]) &&
+              grepl("^rxddta",as.character(.x[[2]][[1]]))) {
+          .cur <- as.character(.x[[2]][[1]])
+          .w <- which(.cur == .c)
+          if (length(.w) == 1) {
+            print(.x)
+            .x[[2]] <- as.call(c(str2lang(.n[.w]), lapply(.x[[2]][-1], function(i) i)))
+          }
+        }
+      }
+      .x
+    })
+    .expr <- bquote(model(.(as.call(c(quote(`{`), .expr)))))
+    model(.ret) <- .expr
+  }
   .ret
 }
 
