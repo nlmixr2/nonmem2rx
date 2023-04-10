@@ -34,6 +34,9 @@ rxode2::rxSolve
 #' @export
 rxode2::rxUiGet
 
+#' @importFrom rxode2 `model<-`
+#' @export
+rxode2::`model<-`
 
 #' @importFrom lotri lotri
 #' @export
