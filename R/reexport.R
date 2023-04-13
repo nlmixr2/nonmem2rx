@@ -41,3 +41,8 @@ rxode2::`model<-`
 #' @importFrom lotri lotri
 #' @export
 lotri::lotri
+
+#' @importFrom ggplot2 autoplot
+#' @export
+ggplot2::autoplot
+

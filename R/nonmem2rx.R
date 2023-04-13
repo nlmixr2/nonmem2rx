@@ -243,7 +243,7 @@
     .ret <- .tmp
     .minfo("done")
   }
-  if (packageVersion("rxode2") <= "2.0.12") {
+  if (utils::packageVersion("rxode2") <= "2.0.12") {
     .expr <- .ret$lstExpr
     .expr <- lapply(seq_along(.expr), function(i) {
       .x <- .expr[[i]]
@@ -490,6 +490,7 @@
 #' @importFrom dparser mkdparse
 #' @importFrom utils read.csv
 #' @import data.table
+#' @import ggplot2
 #' @examples
 #'
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"), save=FALSE)

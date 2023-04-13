@@ -43,7 +43,9 @@ Imports:
     utils,
     data.table,
     qs,
-    xml2
+    xml2,
+    ggplot2,
+    ggforce
 Suggests: 
     devtools,
     testthat (>= 3.0.0),
@@ -52,7 +54,8 @@ Suggests:
     nonmem2R,
     withr,
     nlme,
-    dplyr
+    dplyr,
+    xgxr
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
