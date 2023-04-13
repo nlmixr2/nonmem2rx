@@ -81,7 +81,15 @@ The process steps are below:
 You may wish to see where the differences in predictions are between
 NONMEM and rxode2.
 
-From the modified returned `ui` object you can look at the rtol, atol as follows:
+The easiest way to visually compare the differences is by the plot method:
+
+```{r plot}
+plot(mod, log="y", ncol=4, nrow=4,
+     xlab="Time (hr)", ylab="Concentrations")
+```
+
+If you want numerical differences, you can also get these from the
+modified returned `ui` object.  For the rtol, atol as follows you have:
 
 ```{r tol}
 mod$ipredAtol

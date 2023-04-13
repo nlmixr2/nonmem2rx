@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,17 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
+#> calling scope. Please remove the '..name' variable in calling scope for
+#> clarity.
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpjcYa6t/temp_libpath63904ab0251c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -200,8 +203,18 @@ The process steps are below:
 You may wish to see where the differences in predictions are between
 NONMEM and rxode2.
 
-From the modified returned `ui` object you can look at the rtol, atol as
-follows:
+The easiest way to visually compare the differences is by the plot
+method:
+
+``` r
+plot(mod, log="y", ncol=4, nrow=4,
+     xlab="Time (hr)", ylab="Concentrations")
+```
+
+<img src="man/figures/README-plot-1.png" width="100%" /><img src="man/figures/README-plot-2.png" width="100%" /><img src="man/figures/README-plot-3.png" width="100%" /><img src="man/figures/README-plot-4.png" width="100%" /><img src="man/figures/README-plot-5.png" width="100%" /><img src="man/figures/README-plot-6.png" width="100%" /><img src="man/figures/README-plot-7.png" width="100%" /><img src="man/figures/README-plot-8.png" width="100%" /><img src="man/figures/README-plot-9.png" width="100%" />
+
+If you want numerical differences, you can also get these from the
+modified returned `ui` object. For the rtol, atol as follows you have:
 
 ``` r
 mod$ipredAtol
@@ -357,6 +370,9 @@ different. For example:
 ``` r
 # full parameter precision
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res"))
+#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
+#> calling scope. Please remove the '..name' variable in calling scope for
+#> clarity.
 #> Warning: there are duplicate theta names, not renaming duplicate parameters
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 
@@ -377,8 +393,13 @@ print(mod$predRtol)
 # now reduce precision by using table/lst output only
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                                   useXml=FALSE, useExt=FALSE,usePhi=FALSE))
+#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
+#> calling scope. Please remove the '..name' variable in calling scope for
+#> clarity.
+#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
+#> calling scope. Please remove the '..name' variable in calling scope for
+#> clarity.
 #> Warning: there are duplicate theta names, not renaming duplicate parameters
-
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 
 print(mod$predAtol)

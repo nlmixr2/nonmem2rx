@@ -6,7 +6,7 @@
 #' @inheritParams ggforce::facet_wrap_paginate
 #' @export
 autoplot.nonmem2rx <- function(object, ...,
-                               ncol=3, nrow=3, log="") {
+                               ncol=3, nrow=3, log="", xlab = "Time", ylab = "Predictions") {
   stopifnot(length(log) == 1)
   stopifnot(is.character(log))
   stopifnot(log %in% c("", "x", "y", "xy", "yx"))
@@ -38,7 +38,6 @@ autoplot.nonmem2rx <- function(object, ...,
   .logx <- NULL
   .logy <- NULL
   if (.useLogX) {
-    stopifnot(".dat requires 'time' column"="time" %in% names(.dat))
     .dat <- .data[.data$time > 0, ]
     if (.useXgxr) {
       .logx <- xgxr::xgx_scale_x_log10()
@@ -53,8 +52,6 @@ autoplot.nonmem2rx <- function(object, ...,
       .logy <- ggplot2::scale_y_log10()
     }
   }
-
-
   .ret <- c(.ret,
             lapply(seq_len(.npage),
                    function(p) {
@@ -63,20 +60,21 @@ autoplot.nonmem2rx <- function(object, ...,
                        ggforce::facet_wrap_paginate(~.data$id,
                                                     ncol=ncol, nrow=nrow, page=p) +
                        geom_line(aes(.data$time, .data$nonmem)) +
-                       ylab("Predictions") +
-                       xlab("Time") +
+                       ylab(ylab) +
+                       xlab(xlab) +
                        rxode2::rxTheme() +
                        theme(legend.position="top") + .logy +
-                       .logx
+                       .logx +
+                       ggtitle(paste0("Lines: NONMEM; Points: rxode2; Page ", p, " of ", .npage))
                    }))
   .ret
 }
 
 #' @export
-plot.nonmem2rx <- function(x, ..., ncol=3, nrow=3, log="") {
-  .ret <- autoplot.nonmem2rx(object=x, ..., ncol=ncol, nrow=nrow, log=log)
-  lapply(seq_along(.ret), function(x) {
-    print(x)
+plot.nonmem2rx <- function(x, ..., ncol=3, nrow=3, log="",  xlab = "Time", ylab = "Predictions") {
+  .ret <- autoplot.nonmem2rx(object=x, ..., ncol=ncol, nrow=nrow, log=log, xlab=xlab, ylab=ylab)
+  lapply(seq_along(.ret), function(i) {
+    print(.ret[[i]])
   })
   invisible()
 }

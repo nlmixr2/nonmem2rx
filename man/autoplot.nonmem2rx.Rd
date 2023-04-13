@@ -4,7 +4,15 @@
 \alias{autoplot.nonmem2rx}
 \title{Autoplot nonmem2rx object}
 \usage{
-\method{autoplot}{nonmem2rx}(object, ..., ncol = 3, nrow = 3, log = "")
+\method{autoplot}{nonmem2rx}(
+  object,
+  ...,
+  ncol = 3,
+  nrow = 3,
+  log = "",
+  xlab = "Time",
+  ylab = "Predictions"
+)
 }
 \arguments{
 \item{object}{an object, whose class will determine the behaviour of autoplot}
@@ -15,6 +23,8 @@
 
 \item{log}{Should "" (neither x nor y), "x", "y", or "xy" (or "yx") be
 log-scale?}
+
+\item{xlab, ylab}{The x and y axis labels}
 }
 \description{
 Autoplot nonmem2rx object
