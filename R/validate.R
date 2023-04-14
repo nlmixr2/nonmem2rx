@@ -93,7 +93,7 @@
     .msg <- "could not read in input data; validation skipped"
   }
   if (!is.null(.rx$nonmemData) && validate) {
-    .model <- .rx$simulationModel
+    .model <- .rx$simulationModelIwres
     .theta <- .rx$theta
     .ci0 <- .ci <- ci
     .sigdig <- sigdig
@@ -152,8 +152,13 @@
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.ipredSolve)) == "y")
           .y <- names(.ipredSolve)[.w]
+          .w <- which(tolower(names(.ipredSolve)) == "iwres")
+          if (length(.w) == 1L) {
+            .iwres <- names(.ipredSolve)[.w]
+          }
         } else {
           .y <- "sim"
+          .iwres <- "iwres"
         }
         if (length(.ipredData$IPRED) == length(.ipredSolve[[.y]])) {
           .wid  <- which(tolower(names(.ipredData)) == "id")
@@ -179,6 +184,34 @@
           .msg <- sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
                           length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
                           length(.rx$nonmemData[,1]))
+          .minfo(.msg)
+        }
+      }
+      if (any(names(.ipredData) == "IWRES"))  {
+        if (length(.ipredData$IWRES) == length(.ipredSolve[[.iwres]])) {
+          .wid  <- which(tolower(names(.ipredData)) == "id")
+          .wtime  <- which(tolower(names(.ipredData)) == "time")
+          .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
+                             nonmemIWRES=.ipredData$IWRES,
+                             IWRES=.ipredSolve[[.iwres]])
+          .qi <- stats::quantile(with(.cmp, 100*abs((IWRES-nonmemIWRES)/nonmemIWRES)), .q, na.rm=TRUE)
+          #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+          .qai <- stats::quantile(with(.cmp, abs(IWRES-nonmemIWRES)), .q, na.rm=TRUE)
+          #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
+          .msg <- c(.msg, paste0("IWRES relative difference compared to Nonmem IWRES: ", round(.qi[3], 2),
+                           "%; ", .ci0 * 100,"% percentile: (",
+                           round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
+                           signif(.qi[3] / 100, digits=.sigdig)),
+                    paste0("IWRES absolute difference compared to Nonmem IWRES: ", .ci0 * 100,"% percentile: (",
+                           signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), "); atol=",
+                           signif(.qai[3], .sigdig)))
+          .rx$iwresAtol <- .qai[3]
+          .rx$iwresRtol <- .qi[3]/100
+          .rx$iwresCompare <- .cmp
+        } else {
+          .msg < c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
+                          length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
+                          length(.rx$nonmemData[,1])))
           .minfo(.msg)
         }
       }
@@ -245,6 +278,9 @@
           .minfo(.msg[length(.msg)])
         }
       }
+    }
+    if (!is.null(.rx$predDf)) {
+      # try a iwres validation
     }
     if (is.null(.ipredData) && is.null(.predData)) {
       .msg <- "NONMEM input data found but could not find output PRED/IPRED data to validate against"

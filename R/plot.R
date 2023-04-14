@@ -40,9 +40,17 @@ autoplot.nonmem2rx <- function(object, ...,
     .data$type <- factor(.data$type, c("PRED", "IPRED"))
   }
   if (is.logical(page) && !page) {
+    .data2 <- object$iwresCompare
+    if (!is.null(.data2)) {
+      names(.data2) <- c("id", "time", "nonmem", "rxode2")
+      .data2$type <- "IWRES"
+      .lvl <- levels(.data$type)
+      .data <- rbind(.data, .data2)
+      .data$type <- factor(.data$type, c(.lvl, "IWRES"))
+    }
     return(ggplot(data=.data, aes(.data$rxode2, .data$nonmem)) +
              geom_point() +
-             facet_wrap(~type) +
+             facet_wrap(~type, scales="free") +
              rxode2::rxTheme() +
              ylab("NONMEM") +
              xlab("rxode2"))
