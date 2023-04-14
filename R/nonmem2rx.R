@@ -683,6 +683,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .update <- .tmp$update
     }
   }
+  .msg <- NULL
   if (validate) {
     if (length(.nonmem2rx$mixp) > 0) {
       .minfo("mixture model, not currently validated")
