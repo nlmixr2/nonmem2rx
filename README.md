@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -78,14 +78,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
 #> calling scope. Please remove the '..name' variable in calling scope for
 #> clarity.
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -207,11 +207,12 @@ The easiest way to visually compare the differences is by the plot
 method:
 
 ``` r
-plot(mod, log="y", ncol=4, nrow=4,
-     xlab="Time (hr)", ylab="Concentrations")
+plot(mod, log="y", ncol=2, nrow=2,
+     xlab="Time (hr)", ylab="Concentrations",
+     page=1)
 ```
 
-<img src="man/figures/README-plot-1.png" width="100%" /><img src="man/figures/README-plot-2.png" width="100%" /><img src="man/figures/README-plot-3.png" width="100%" /><img src="man/figures/README-plot-4.png" width="100%" /><img src="man/figures/README-plot-5.png" width="100%" /><img src="man/figures/README-plot-6.png" width="100%" /><img src="man/figures/README-plot-7.png" width="100%" /><img src="man/figures/README-plot-8.png" width="100%" /><img src="man/figures/README-plot-9.png" width="100%" />
+<img src="man/figures/README-plot-1.png" width="100%" /><img src="man/figures/README-plot-2.png" width="100%" />
 
 If you want numerical differences, you can also get these from the
 modified returned `ui` object. For the rtol, atol as follows you have:

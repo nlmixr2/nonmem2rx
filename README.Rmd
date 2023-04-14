@@ -84,8 +84,9 @@ NONMEM and rxode2.
 The easiest way to visually compare the differences is by the plot method:
 
 ```{r plot}
-plot(mod, log="y", ncol=4, nrow=4,
-     xlab="Time (hr)", ylab="Concentrations")
+plot(mod, log="y", ncol=2, nrow=2,
+     xlab="Time (hr)", ylab="Concentrations",
+     page=1)
 ```
 
 If you want numerical differences, you can also get these from the
