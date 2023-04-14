@@ -243,7 +243,7 @@
     .ret <- .tmp
     .minfo("done")
   }
-  if (packageVersion("rxode2") <= "2.0.12") {
+  if (utils::packageVersion("rxode2") <= "2.0.12") {
     .expr <- .ret$lstExpr
     .expr <- lapply(seq_along(.expr), function(i) {
       .x <- .expr[[i]]
@@ -490,6 +490,7 @@
 #' @importFrom dparser mkdparse
 #' @importFrom utils read.csv
 #' @import data.table
+#' @import ggplot2
 #' @examples
 #'
 #' nonmem2rx(system.file("run001.mod", package="nonmem2rx"), save=FALSE)
@@ -560,7 +561,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     if (load && file.exists(save)) {
       .minfo(paste0("loading save file '", save, "'"))
       .ret <- qs::qread(save)
-      if (!exists("digest", envir=.ret)) {
+      if (is.null(.ret$digest)) {
         .minfo(paste0("older version of nonmem2rx without digest, ignoring save file '", save, "'"))
       } else if (.ret$digest == .digest) {
         return(.ret)

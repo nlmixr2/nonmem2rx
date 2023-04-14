@@ -10,6 +10,7 @@ nmcov <- function (file, ...) {
   TABLE <- NULL
   NMREP <- NULL
   NAME <- NULL
+  ..name <- NULL
   colnames <- readLines(file, n=2)[2]
   if (grepl(", *OMEGA\\( *1 *, *1\\)", colnames)) {
     # in this case the NAME also has commas
