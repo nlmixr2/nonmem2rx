@@ -1,5 +1,5 @@
 #' Autoplot nonmem2rx object
-#' 
+#'
 #' @param ... ignored parameters for `nonmem2rx` objects
 #' @param page number of page(s) for the individual plots, by default
 #'   (NULL) all pages, otherwise you can list which pages you want to
@@ -7,7 +7,6 @@
 #' @inheritParams rxode2::plot.rxSolve
 #' @inheritParams ggplot2::autoplot
 #' @inheritParams ggforce::facet_wrap_paginate
-#' @export
 autoplot.nonmem2rx <- function(object, ...,
                                ncol=3, nrow=3, log="", xlab = "Time", ylab = "Predictions",
                                page=NULL) {
@@ -18,14 +17,24 @@ autoplot.nonmem2rx <- function(object, ...,
   .useLogX <- nchar(log) == 2 | log == "x"
   .useLogY <- nchar(log) == 2 | log == "y"
 
-  .data <- object$ipredCompare
-  names(.data) <- c("id", "time", "nonmem", "rxode2")
-  .data$type <- "IPRED"
   .data2 <- object$predCompare
+  if (is.null(object$predCompare)) {
+    warning("nothing to plot", call. = FALSE)
+    return(invisible())
+  }
   names(.data2) <- c("id", "time", "nonmem", "rxode2")
   .data2$type <- "PRED"
-  .data <- rbind(.data, .data2)
-  .data$type <- factor(.data$type, c("PRED", "IPRED"))
+  .data <- object$ipredCompare
+  if (is.null(.data)) {
+    .data <- .data2
+    .data$type <- factor(.data$type, c("PRED"))
+  } else {
+    names(.data) <- c("id", "time", "nonmem", "rxode2")
+    .data$type <- "IPRED"
+    .data <- rbind(.data, .data2)
+    .data$type <- factor(.data$type, c("PRED", "IPRED"))
+  }
+
   .ret <- list(
     ggplot(data=.data, aes(.data$rxode2, .data$nonmem)) +
       geom_point() +
@@ -82,7 +91,6 @@ autoplot.nonmem2rx <- function(object, ...,
   .ret
 }
 
-#' @export
 plot.nonmem2rx <- function(x, ..., ncol=3, nrow=3, log="",  xlab = "Time", ylab = "Predictions", page=NULL) {
   .ret <- autoplot.nonmem2rx(object=x, ..., ncol=ncol, nrow=nrow, log=log, xlab=xlab, ylab=ylab, page=page)
   lapply(seq_along(.ret), function(i) {
