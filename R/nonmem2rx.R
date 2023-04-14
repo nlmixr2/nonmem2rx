@@ -834,20 +834,20 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .rx$ssAtol <- .nonmem2rx$ssAtol
   .rx$ssRtol <- .nonmem2rx$ssRtol
   .rx$sticky <- c(.rx$sticky, "atol", "rtol", "ssAtol", "ssRtol")
-  if (is.null(.nonmemData) && validate) {
+  if (is.null(.rx$nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
   }
-  if (!is.null(.nonmemData) && validate) {
+  if (!is.null(.rx$nonmemData) && validate) {
     .model <- .rx$simulationModel
     .theta <- .rx$theta
     .ci0 <- .ci <- 0.95
     .sigdig <- 3
     .ci <- (1 - .ci) / 2
     .q <- c(0, .ci, 0.5, 1 - .ci, 1)
-    .obsIdx <- .nonmemObsIndex(.nonmemData)
+    .obsIdx <- .nonmemObsIndex(.rx$nonmemData)
     .msg <- NULL
     if (!is.null(.etaData) && !is.null(.ipredData)) {
-      if (length(.ipredData[,1]) == length(.nonmemData[,1])) {
+      if (length(.ipredData[,1]) == length(.rx$nonmemData[,1])) {
         .ipredData <- .ipredData[.obsIdx,]
       }
       .params <- .etaData
@@ -865,9 +865,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .wid <- which(tolower(names(.params)) == "id")
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
-        .widNm <- which(tolower(names(.nonmemData)) == "id")
+        .widNm <- which(tolower(names(.rx$nonmemData)) == "id")
         if (.widNm == 1L) {
-          .idNm <- unique(.nonmemData[,.widNm])
+          .idNm <- unique(.rx$nonmemData[,.widNm])
           .params <- do.call("rbind",
                   lapply(.idNm, function(id) {
                     return(.params[.params[,.wid] == id,])
@@ -879,7 +879,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
           }
         }
         .params <- .params[,-.wid]
-        .nonmemData2 <- .nonmemData
+        .nonmemData2 <- .rx$nonmemData
         # dummy id to match the .params
         .nonmemData2[,.wid] <- as.integer(factor(paste(.nonmemData2[,.wid])))
       }
@@ -922,13 +922,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         } else {
           .msg <- sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
                           length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
-                          length(.nonmemData[,1]))
+                          length(.rx$nonmemData[,1]))
           .minfo(.msg)
         }
       }
     }
     if (!is.null(.predData)) {
-      if (length(.predData[,1]) == length(.nonmemData[,1])) {
+      if (length(.predData[,1]) == length(.rx$nonmemData[,1])) {
         .predData <- .predData[.obsIdx,]
       }
       .params <- c(.theta,
@@ -944,7 +944,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         .params <- c(.params, setNames(0, paste0("err.", .rx$predDf$var)))
       }
       .minfo("solving pred problem")
-      .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+      .predSolve <- try(rxSolve(.model, .params, .rx$nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
                                 atol=.rx$atol, rtol=.rx$rtol,
                                 ssAtol=.rx$ssAtol, ssRtol=.rx$ssRtol,
@@ -983,7 +983,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                     sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
                             length(.predSolve[[.y]]),
                             length(.predData$PRED),
-                            length(.nonmemData[,1])))
+                            length(.rx$nonmemData[,1])))
           .minfo(.msg[length(.msg)])
         }
       }
