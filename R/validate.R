@@ -87,6 +87,7 @@
 #' @author Matthew L. Fidler
 .nonmem2rxValidate <- function(ui, msg=character(0), validate=TRUE, ci=0.95, sigdig=3) {
   .rx <- ui
+  .msg <- msg
   if (is.null(.rx$nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
   }
