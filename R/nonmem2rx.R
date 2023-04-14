@@ -829,6 +829,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .rx$nonmemData <- .nonmemData
     .rx$sticky <- "nonmemData"
   }
+  .rx$atol <- .nonmem2rx$atol
+  .rx$rtol <- .nonmem2rx$rtol
+  .rx$ssAtol <- .nonmem2rx$ssAtol
+  .rx$ssRtol <- .nonmem2rx$ssRtol
+  .rx$sticky <- c(.rx$sticky, "atol", "rtol", "ssAtol", "ssRtol")
   if (is.null(.nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
   }
@@ -882,8 +887,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         .minfo("solving ipred problem")
         .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
                                    covsInterpolation="nocb",
-                                   atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
-                                   ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
+                                   atol=.rx$atol, rtol=.rx$rtol,
+                                   ssAtol=.rx$ssAtol, ssRtol=.rx$ssRtol,
                                    addDosing = FALSE))
         .minfo("done")
       }
@@ -941,8 +946,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
-                                atol=.nonmem2rx$atol, rtol=.nonmem2rx$rtol,
-                                ssAtol=.nonmem2rx$ssAtol, ssRtol=.nonmem2rx$ssRtol,
+                                atol=.rx$atol, rtol=.rx$rtol,
+                                ssAtol=.rx$ssAtol, ssRtol=.rx$ssRtol,
                                 addDosing = FALSE))
       .minfo("done")
       if (!inherits(.predSolve, "try-error")) {
@@ -1009,11 +1014,6 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   if (inherits(.lstInfo$nobs, "numeric")) {
     .rx$dfObs <- .lstInfo$nobs
   }
-  .rx$atol <- .nonmem2rx$atol
-  .rx$rtol <- .nonmem2rx$rtol
-  .rx$ssAtol <- .nonmem2rx$ssAtol
-  .rx$ssRtol <- .nonmem2rx$ssRtol
-  .rx$sticky <- c(.rx$sticky, "atol", "rtol", "ssAtol", "ssRtol")
   .rx$digest <- .digest
   if (compress) {
     .ret <- rxode2::rxUiCompress(.rx)
