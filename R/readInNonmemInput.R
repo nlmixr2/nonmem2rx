@@ -7,12 +7,14 @@
 #'   `file`.  This is the user-specified input data.
 #' @param rename rename parameters
 #' @param delta Delta offset for ties
+#' @param scanLines number of lines to scan before meeting the first data row (default 50)
 #' @return dataset (as nonmem sees it), where all ignore, accept, and
 #'   records adjustment are done. If the model calls evid in it, it
 #'   also adds a nmevid column
 #' @noRd
 #' @author Matthew L. Fidler
-.readInDataFromNonmem <- function(file, inputData, rename=NULL, delta=1e-4) {
+.readInDataFromNonmem <- function(file, inputData, rename=NULL, delta=1e-4,
+                                  scanLines=50L) {
   .data <- NULL
   if (is.null(inputData)) {
     .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
@@ -22,18 +24,29 @@
   .ext <- tools::file_ext(.file)
   if (.ext == "csv" && file.exists(.file)) {
     .minfo(paste0("read in nonmem input data (for model validation): ", .file))
-    .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."))
     if (!is.null(.nonmem2rx$dataIgnore1)) {
+      .lines <- readLines(.file,n=scanLines)
       if (.nonmem2rx$dataIgnore1 == "@") {
         .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
+        .skip <- 0L
+        while (.skip != scanLines - 1L && grepl("^[A-Za-z]", .lines[.skip+1L])) {
+          .skip <- .skip+1L
+        }
+        .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
+                          skip=.skip)
         .w <- which(regexpr("^[A-Za-z]", .data[,1]) != -1)
         if (length(.w) > 0) .data <- .data[-.w, ]
       } else {
         .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
+        .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
+                          comment.char=.nonmem2rx$dataIgnore1)
         .w <- which(.data[,1] == .nonmem2rx$dataIgnore1)
         if (length(.w) > 0) .data <- .data[-.w, ]
       }
+    } else {
+      .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE)
     }
+    
     .minfo("applying names specified by $INPUT")
     # need to apply input names
     # 1. Only work with columns specified in $input

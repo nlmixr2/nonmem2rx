@@ -427,6 +427,9 @@
 #' @param useLst if present, use the NONMEM lst file to extract NONMEM
 #'   information
 #'
+#' @param scanLines number of lines to scan for comment chars when
+#'   `IGNORE=@`, default is 50
+#'
 #' @param save This can be:
 #'
 #' - a `NULL` (meaning don't save),
@@ -521,6 +524,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       lst=getOption("nonmem2rx.lst", ".lst"),
                       xml=".xml",
                       ext=".ext",
+                      scanLines=getOption("nonmem2rx.scanLines", 50L),
                       save=getOption("nonmem2rx.save", TRUE),
                       overwrite=getOption("nonmem2rx.overwrite", TRUE),
                       load=getOption("nonmem2rx.load", TRUE),
@@ -548,7 +552,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                  rename, tolowerLhs, thetaNames, etaNames, cmtNames, updateFinal,
                                  determineError, validate, nonmemData, strictLst, unintFixed,
                                  extended, nLinesPro, delta, usePhi, useExt, useCov, useXml,
-                                 useLst, mod, cov, phi, lst, xml, ext))
+                                 useLst, mod, cov, phi, lst, xml, ext, scanLines))
   if (!is.null(save)) {
     if (load && overwrite) {
       if (utils::file_test("-nt", file, save)) {
@@ -731,7 +735,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .ipredData <- .predData <- .etaData  <- .nonmemData <- NULL
   if (validate || nonmemData) {
     .nonmemData <- .readInDataFromNonmem(file, inputData=inputData,
-                                         rename=rename, delta=delta)
+                                         rename=rename, delta=delta, scanLines=scanLines)
   }
   if (validate)  {
     .model <- .rx$simulationModel
