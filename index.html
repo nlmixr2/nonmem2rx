@@ -93,7 +93,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -132,14 +132,14 @@
 <span><span class="co">#&gt; Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in</span></span>
 <span><span class="co">#&gt; calling scope. Please remove the '..name' variable in calling scope for</span></span>
 <span><span class="co">#&gt; clarity.</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ec503c5cc/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -239,9 +239,10 @@
 <p>You may wish to see where the differences in predictions are between NONMEM and rxode2.</p>
 <p>The easiest way to visually compare the differences is by the plot method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, log<span class="op">=</span><span class="st">"y"</span>, ncol<span class="op">=</span><span class="fl">4</span>, nrow<span class="op">=</span><span class="fl">4</span>,</span>
-<span>     xlab<span class="op">=</span><span class="st">"Time (hr)"</span>, ylab<span class="op">=</span><span class="st">"Concentrations"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-plot-1.png" width="100%"><img src="reference/figures/README-plot-2.png" width="100%"><img src="reference/figures/README-plot-3.png" width="100%"><img src="reference/figures/README-plot-4.png" width="100%"><img src="reference/figures/README-plot-5.png" width="100%"><img src="reference/figures/README-plot-6.png" width="100%"><img src="reference/figures/README-plot-7.png" width="100%"><img src="reference/figures/README-plot-8.png" width="100%"><img src="reference/figures/README-plot-9.png" width="100%"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, log<span class="op">=</span><span class="st">"y"</span>, ncol<span class="op">=</span><span class="fl">2</span>, nrow<span class="op">=</span><span class="fl">2</span>,</span>
+<span>     xlab<span class="op">=</span><span class="st">"Time (hr)"</span>, ylab<span class="op">=</span><span class="st">"Concentrations"</span>,</span>
+<span>     page<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-plot-1.png" width="100%"><img src="reference/figures/README-plot-2.png" width="100%"></p>
 <p>If you want numerical differences, you can also get these from the modified returned <code>ui</code> object. For the rtol, atol as follows you have:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">ipredAtol</span></span>
