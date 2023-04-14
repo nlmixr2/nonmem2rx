@@ -988,6 +988,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       warning("NONMEM input data found but could not find output PRED/IPRED data to validate against", call.=FALSE)
     }
   }
+  .rx$ipredData <- .ipredData
+  .rx$predData <- .predData
   if (!is.null(.msg)) {
     .rx$meta$validation <- .msg
   }
