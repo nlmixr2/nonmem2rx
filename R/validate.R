@@ -66,5 +66,10 @@
     .mdv <- inputData[,.wmdv]
     return(which(.mdv == 0))
   }
+  .wdv <- which(tolower(names(inputData)) == "dv")
+  if (length(.wdv) == 1L) {
+    .dv <- inputData[,.wdv]
+    return(which(!is.na(.dv)))
+  }
   seq_along(inputData[,1])
 }
