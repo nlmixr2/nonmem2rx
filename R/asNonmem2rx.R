@@ -60,7 +60,8 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   .rx <- rxode2::rxUiDecompress(.ui)
   .nm2rx <- rxode2::rxUiDecompress(.nm2rx)
   .cp <- c("sticky", "nonmemData", "atol", "rtol", "ssAtol", "ssRtol", "etaData",
-           "ipredData", "predData", "sigmaNames", "dfSub", "thetaMat", "dfObs")
+           "ipredData", "predData", "sigmaNames", "dfSub", "thetaMat", "dfObs",
+           "file")
   lapply(.cp, function(x) {
     if (exists(x, envir=.nm2rx)) {
       assign(x, get(x, envir=.nm2rx), envir=.rx)
