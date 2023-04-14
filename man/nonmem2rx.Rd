@@ -33,6 +33,7 @@ nonmem2rx(
   lst = getOption("nonmem2rx.lst", ".lst"),
   xml = ".xml",
   ext = ".ext",
+  scanLines = getOption("nonmem2rx.scanLines", 50L),
   save = getOption("nonmem2rx.save", TRUE),
   overwrite = getOption("nonmem2rx.overwrite", TRUE),
   load = getOption("nonmem2rx.load", TRUE),
@@ -140,6 +141,9 @@ information}
 \item{xml}{the NONMEM xml file extension , defaults to \code{.xml}}
 
 \item{ext}{the NONMEM ext file extension, defaults to \code{.ext}}
+
+\item{scanLines}{number of lines to scan for comment chars when
+\verb{IGNORE=@}, default is 50}
 
 \item{save}{This can be:
 \itemize{

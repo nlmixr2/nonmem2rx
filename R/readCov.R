@@ -10,7 +10,6 @@ nmcov <- function (file, ...) {
   TABLE <- NULL
   NMREP <- NULL
   NAME <- NULL
-  ..name <- NULL
   colnames <- readLines(file, n=2)[2]
   if (grepl(", *OMEGA\\( *1 *, *1\\)", colnames)) {
     # in this case the NAME also has commas
@@ -36,7 +35,7 @@ nmcov <- function (file, ...) {
   name <- dt1$NAME
   dt1[,`:=`(NAME, NULL)]
   dt1[, `:=`(NMREP, NULL),]
-  dt1 <- dt1[,..name]
+  dt1 <- dt1[,name, with=FALSE]
   cnames <- colnames(dt1)
   dt1[, `:=`((cnames), lapply(.SD, as.numeric))]
   dt1 <- as.matrix(dt1)
