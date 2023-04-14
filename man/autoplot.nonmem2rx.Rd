@@ -12,7 +12,7 @@
   log = "",
   xlab = "Time",
   ylab = "Predictions",
-  page = NULL
+  page = FALSE
 )
 }
 \arguments{
@@ -28,8 +28,8 @@ log-scale?}
 \item{xlab, ylab}{The x and y axis labels}
 
 \item{page}{number of page(s) for the individual plots, by default
-(NULL) all pages, otherwise you can list which pages you want to
-print}
+(\code{FALSE}) no pages are print; You can use \code{TRUE} for all pages to
+print, or list which pages you want to print}
 }
 \description{
 Autoplot nonmem2rx object

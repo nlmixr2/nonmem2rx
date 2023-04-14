@@ -201,6 +201,28 @@ uncompressed (default: \code{TRUE})
 
 nonmem2rx(system.file("run001.mod", package="nonmem2rx"), save=FALSE)
 
-nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+
+mod
+
+# you can plot to compare the pred/ipred differences
+
+plot(mod)
+
+# if you want to see the individual differences
+# you can by plotting by page of plots
+
+
+plot(mod, nrow=2, ncol=2, page=1, log="y")
+
+.# or select which pages you want to print
+
+plot(mod, nrow=2, ncol=2, page=c(1,3), log="y")
+
+
+#' or even  all the individuals with
+# plot(page=TRUE)
+
+plot(mod, nrow=5, ncol=5, page=TRUE, log="y")
 
 }
