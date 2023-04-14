@@ -27,7 +27,7 @@ autoplot.nonmem2rx <- function(object, ...,
   .data <- object$ipredCompare
   if (is.null(.data)) {
     .data <- .data2
-    .data$type <- factor(.data$type, c("PRED"))
+    .data$type <- factor(.data$type, "PRED")
   } else {
     names(.data) <- c("id", "time", "nonmem", "rxode2")
     .data$type <- "IPRED"
