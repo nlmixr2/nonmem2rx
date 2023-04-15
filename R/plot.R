@@ -2,21 +2,26 @@
 #'
 #' @param ... ignored parameters for `nonmem2rx` objects
 #' @param page number of page(s) for the individual plots, by default
-#'   (NULL) all pages, otherwise you can list which pages you want to
-#'   print
+#'   (`FALSE`) no pages are print; You can use `TRUE` for all pages to
+#'   print, or list which pages you want to print
 #' @inheritParams rxode2::plot.rxSolve
 #' @inheritParams ggplot2::autoplot
 #' @inheritParams ggforce::facet_wrap_paginate
 autoplot.nonmem2rx <- function(object, ...,
                                ncol=3, nrow=3, log="", xlab = "Time", ylab = "Predictions",
-                               page=NULL) {
+                               page=FALSE) {
   stopifnot(length(log) == 1)
   stopifnot(is.character(log))
-  checkmate::assertIntegerish(page, lower=1, any.missing = FALSE, null.ok=TRUE)
+  if (is.logical(page)) {
+    if (page) {
+      page <- NULL
+    }
+  } else {
+    checkmate::assertIntegerish(page, lower=1, any.missing = FALSE, null.ok=TRUE)
+  }
   stopifnot(log %in% c("", "x", "y", "xy", "yx"))
   .useLogX <- nchar(log) == 2 | log == "x"
   .useLogY <- nchar(log) == 2 | log == "y"
-
   .data2 <- object$predCompare
   if (is.null(object$predCompare)) {
     warning("nothing to plot", call. = FALSE)
@@ -34,15 +39,23 @@ autoplot.nonmem2rx <- function(object, ...,
     .data <- rbind(.data, .data2)
     .data$type <- factor(.data$type, c("PRED", "IPRED"))
   }
+  if (is.logical(page) && !page) {
+    .data2 <- object$iwresCompare
+    if (!is.null(.data2)) {
+      names(.data2) <- c("id", "time", "nonmem", "rxode2")
+      .data2$type <- "IWRES"
+      .lvl <- levels(.data$type)
+      .data <- rbind(.data, .data2)
+      .data$type <- factor(.data$type, c(.lvl, "IWRES"))
+    }
+    return(ggplot(data=.data, aes(.data$rxode2, .data$nonmem)) +
+             geom_point() +
+             facet_wrap(~type, scales="free") +
+             rxode2::rxTheme() +
+             ylab("NONMEM") +
+             xlab("rxode2"))
+  }
 
-  .ret <- list(
-    ggplot(data=.data, aes(.data$rxode2, .data$nonmem)) +
-      geom_point() +
-      facet_wrap(~type) +
-      rxode2::rxTheme() +
-      ylab("NONMEM") +
-      xlab("rxode2")
-  )
   .ids <- unique(.data$id)
   .npage <- ceiling(length(.ids)/(ncol*nrow))
 
@@ -73,8 +86,7 @@ autoplot.nonmem2rx <- function(object, ...,
     .pages <- .pages[.pages <= .npage]
   }
 
-  .ret <- c(.ret,
-            lapply(.pages,
+  .ret <- lapply(.pages,
                    function(p) {
                      .ret <- ggplot(data=.data, aes(.data$time, .data$rxode2, col=.data$type)) +
                        geom_point() +
@@ -87,14 +99,19 @@ autoplot.nonmem2rx <- function(object, ...,
                        theme(legend.position="top") + .logy +
                        .logx +
                        ggtitle(paste0("Lines: NONMEM; Points: rxode2; Page ", p, " of ", .npage))
-                   }))
+                   })
+  if (length(.ret) == 1L) return(.ret[[1]])
   .ret
 }
 
-plot.nonmem2rx <- function(x, ..., ncol=3, nrow=3, log="",  xlab = "Time", ylab = "Predictions", page=NULL) {
+plot.nonmem2rx <- function(x, ..., ncol=3, nrow=3, log="",  xlab = "Time", ylab = "Predictions", page=FALSE) {
   .ret <- autoplot.nonmem2rx(object=x, ..., ncol=ncol, nrow=nrow, log=log, xlab=xlab, ylab=ylab, page=page)
-  lapply(seq_along(.ret), function(i) {
-    print(.ret[[i]])
-  })
+  if (inherits(.ret, "ggplot")) {
+        print(.ret)
+  } else {
+    lapply(seq_along(.ret), function(i) {
+      print(.ret[[i]])
+    })
+  }
   invisible()
 }

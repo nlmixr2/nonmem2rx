@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,17 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
-#> calling scope. Please remove the '..name' variable in calling scope for
-#> clarity.
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpWqLShv/temp_libpathf3ecee0b77c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -131,6 +128,8 @@ mod
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
 #>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", 
 #>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
@@ -207,12 +206,19 @@ The easiest way to visually compare the differences is by the plot
 method:
 
 ``` r
+plot(mod) # for general plot
+```
+
+<img src="man/figures/README-plot-1.png" width="100%" />
+
+``` r
+# you can also see individual comparisons
 plot(mod, log="y", ncol=2, nrow=2,
      xlab="Time (hr)", ylab="Concentrations",
      page=1)
 ```
 
-<img src="man/figures/README-plot-1.png" width="100%" /><img src="man/figures/README-plot-2.png" width="100%" />
+<img src="man/figures/README-plot-2.png" width="100%" />
 
 If you want numerical differences, you can also get these from the
 modified returned `ui` object. For the rtol, atol as follows you have:
@@ -371,9 +377,6 @@ different. For example:
 ``` r
 # full parameter precision
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res"))
-#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
-#> calling scope. Please remove the '..name' variable in calling scope for
-#> clarity.
 #> Warning: there are duplicate theta names, not renaming duplicate parameters
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 
@@ -394,13 +397,8 @@ print(mod$predRtol)
 # now reduce precision by using table/lst output only
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                                   useXml=FALSE, useExt=FALSE,usePhi=FALSE))
-#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
-#> calling scope. Please remove the '..name' variable in calling scope for
-#> clarity.
-#> Warning in `[.data.table`(dt1, , ..name): Both 'name' and '..name' exist in
-#> calling scope. Please remove the '..name' variable in calling scope for
-#> clarity.
 #> Warning: there are duplicate theta names, not renaming duplicate parameters
+
 #> Warning: there are duplicate eta names, not renaming duplicate parameters
 
 print(mod$predAtol)

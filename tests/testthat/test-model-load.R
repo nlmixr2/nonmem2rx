@@ -16,23 +16,23 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     expect_error(.nonmem2rx(system.file("run001.mod", package="nonmem2rx")), NA)
 
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                     lst=".res", usePhi=FALSE)
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                     lst=".res", useCov=FALSE)
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                     lst=".res", useExt=FALSE)
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                     determineError=FALSE)
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     # try explicitly setting the input info
     f <- nmlst(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
@@ -43,13 +43,13 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
                                             package="nonmem2rx"),
                     nonmemOutputDir = system.file("mods/cpt", package="nonmem2rx"),
                     lst=".res")
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     # Now try to rename some of the data
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                     rename=c(SSX="SSY"),
                     lst=".res")
-    expect_equal(length(f$meta$validation), 4L)
+    expect_equal(length(f$meta$validation), 6L)
 
     # Test a rename of variables inside the model:
     f <- .nonmem2rx(system.file("mods/DDMODEL00000301/run3.mod", package="nonmem2rx"), rename=c(GFR2="GFR"))
