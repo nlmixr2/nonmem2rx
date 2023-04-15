@@ -212,10 +212,9 @@ plot(mod)
 # if you want to see the individual differences
 # you can by plotting by page of plots
 
-
 plot(mod, nrow=2, ncol=2, page=1, log="y")
 
-.# or select which pages you want to print
+# or select which pages you want to print
 
 plot(mod, nrow=2, ncol=2, page=c(1,3), log="y")
 
