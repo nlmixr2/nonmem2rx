@@ -406,7 +406,7 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">nonmem2rx</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">nonmem2rx</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> reading in xml file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
@@ -470,6 +470,8 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> solving pred problem</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mod</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 2-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">Initalization:</span> ──  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span>
@@ -499,6 +501,8 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ini({</span>
@@ -536,6 +540,34 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ipred ~ prop(RSV)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># you can plot to compare the pred/ipred differences</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="nonmem2rx-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># if you want to see the individual differences</span></span></span>
+<span class="r-in"><span><span class="co"># you can by plotting by page of plots</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, nrow<span class="op">=</span><span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">2</span>, page<span class="op">=</span><span class="fl">1</span>, log<span class="op">=</span><span class="st">"y"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="nonmem2rx-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># or select which pages you want to print</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, nrow<span class="op">=</span><span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">2</span>, page<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span>, log<span class="op">=</span><span class="st">"y"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="nonmem2rx-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="nonmem2rx-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' or even  all the individuals with</span></span></span>
+<span class="r-in"><span><span class="co"># plot(page=TRUE)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, nrow<span class="op">=</span><span class="fl">5</span>, ncol<span class="op">=</span><span class="fl">5</span>, page<span class="op">=</span><span class="cn">TRUE</span>, log<span class="op">=</span><span class="st">"y"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="nonmem2rx-5.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="nonmem2rx-6.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="nonmem2rx-7.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="nonmem2rx-8.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="nonmem2rx-9.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
