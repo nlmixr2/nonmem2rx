@@ -93,7 +93,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -129,14 +129,14 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -224,30 +224,288 @@
 <p>The process steps are below:</p>
 <ul>
 <li><p>Read in the nonmem control stream and convert the model to a <code>rxode2</code> ui function.</p></li>
-<li><p>Try to determine an endpoint in the model (if possible), and convert to a fully qualified ui model that can be used in <code>nlmixr2</code> and <code>rxode2</code>.</p></li>
+<li><p>Try to determine an endpoint in the model (if possible), and convert to a fully qualified ui model that can be used in <code>nlmixr2</code> and <code>rxode2</code> (see next section for a work-around)</p></li>
 <li><p>If available, <code>nonmem2rx</code> will read the final parameter estimates and update the model. (See below for source)</p></li>
-<li><p>This will read in the nonmem input dataset, and search for the output files with <code>IPRED</code>, <code>PRED</code> and the <code>ETA</code> values. The translated <code>rxode2</code> model is run for the population parameters and the individual parameters. This will then compare the results between <code>NONMEM</code> and <code>rxode2</code> to make sure the translation makes sense. This only works when <code>nonmem2rx</code> has access to the input data and the output with the <code>IPRED</code>, <code>PRED</code> and the <code>ETA</code> values.</p></li>
+<li><p>This will read in the nonmem input dataset, and search for the output files with <code>IPRED</code>, <code>PRED</code> and the <code>ETA</code> values. The translated <code>rxode2</code> model is run for the population parameters and the individual parameters. This will then compare the results between <code>NONMEM</code> and <code>rxode2</code> to make sure the translation makes sense. This only works when <code>nonmem2rx</code> has access to the input data and the output with the <code>IWRES</code>, <code>IPRED</code>, <code>PRED</code> and the <code>ETA</code> values.</p></li>
 <li><p>Converts the upper case NONMEM variables to lower case.</p></li>
-<li><p>Replaces the NONMEM theta / eta names with the label-based names like an extended control stream</p></li>
+<li><p>Replaces the NONMEM theta / eta names with the label-based names like an extended control stream.</p></li>
 <li><p>Replaces the compartment names with the defined compartment names in the control stream (ie <code>COMP=(compartmenName)</code>)</p></li>
 </ul>
+<div class="section level3">
+<h3 id="creating-a-nlmixr2-compatible-model">Creating a nlmixr2 compatible model<a class="anchor" aria-label="anchor" href="#creating-a-nlmixr2-compatible-model"></a>
+</h3>
+<p>Depending on the model, not all the residual specifications are translated to the <code>nlmixr2</code> style residuals. This means the model cannot be immediately used for nlmixr2 estimation.</p>
+<p>For example you could have something like:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">ipred</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">eps1</span><span class="op">)</span></span></code></pre></div>
+<p>For a model that can do <code>nlmixr2</code> estimation instead of simply simulation the residual needs to be changed to something like:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cp</span> <span class="op">~</span> <span class="fu">prop</span><span class="op">(</span><span class="va">prop.sd</span><span class="op">)</span></span></code></pre></div>
+<p>Since the model when import has most of the translation done already, you can easily tweak the model to have this form.</p>
+<p>Here is the same example where the residual errors are not automatically translated to the <code>nlmixr2</code> parameter style (in this case because of the option <code>determineError=FALSE</code>)</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>,</span>
+<span>                 determineError<span class="op">=</span><span class="cn">FALSE</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ reading in xml file</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ reading in phi file</span></span>
+<span><span class="co">#&gt; ℹ problems reading phi file</span></span>
+<span><span class="co">#&gt; ℹ reading in lst file</span></span>
+<span><span class="co">#&gt; ℹ abbreviated list parsing</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ splitting control stream by records</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ Processing record $INPUT</span></span>
+<span><span class="co">#&gt; ℹ Processing record $MODEL</span></span>
+<span><span class="co">#&gt; ℹ Processing record $THETA</span></span>
+<span><span class="co">#&gt; ℹ Processing record $OMEGA</span></span>
+<span><span class="co">#&gt; ℹ Processing record $SIGMA</span></span>
+<span><span class="co">#&gt; ℹ Processing record $PROBLEM</span></span>
+<span><span class="co">#&gt; ℹ Processing record $DATA</span></span>
+<span><span class="co">#&gt; ℹ Processing record $SUBROUTINES</span></span>
+<span><span class="co">#&gt; ℹ Processing record $PK</span></span>
+<span><span class="co">#&gt; ℹ Processing record $DES</span></span>
+<span><span class="co">#&gt; ℹ Processing record $ERROR</span></span>
+<span><span class="co">#&gt; ℹ Processing record $ESTIMATION</span></span>
+<span><span class="co">#&gt; ℹ Ignore record $ESTIMATION</span></span>
+<span><span class="co">#&gt; ℹ Processing record $COVARIANCE</span></span>
+<span><span class="co">#&gt; ℹ Ignore record $COVARIANCE</span></span>
+<span><span class="co">#&gt; ℹ Processing record $TABLE</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta1` to `1.37034036528946`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta2` to `4.19814911033061`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta3` to `1.38003493562413`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta4` to `3.87657341967489`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `theta5` to `0.196446108190896`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta1` to `0.101251418415006`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
+<span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
+<span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
+<span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ replace theta names</span></span>
+<span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ replace eta names</span></span>
+<span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
+<span><span class="co">#&gt; ℹ done (no labels)</span></span>
+<span><span class="co">#&gt; ℹ renaming compartments</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ solving ipred problem</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ solving pred problem</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── </span></span>
+<span><span class="co">#&gt;  ── Initalization: ──  </span></span>
+<span><span class="co">#&gt; Fixed Effects ($theta): </span></span>
+<span><span class="co">#&gt;    theta1    theta2    theta3    theta4       RSV </span></span>
+<span><span class="co">#&gt; 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Omega ($omega): </span></span>
+<span><span class="co">#&gt;           eta1       eta2      eta3       eta4</span></span>
+<span><span class="co">#&gt; eta1 0.1012514 0.00000000 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta2 0.0000000 0.09938724 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta3 0.0000000 0.00000000 0.1013027 0.00000000</span></span>
+<span><span class="co">#&gt; eta4 0.0000000 0.00000000 0.0000000 0.07304975</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; States ($state or $stateDf): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1          CENTRAL</span></span>
+<span><span class="co">#&gt; 2                  2             PERI</span></span>
+<span><span class="co">#&gt;  ── μ-referencing ($muRefTable): ──  </span></span>
+<span><span class="co">#&gt;    theta  eta level</span></span>
+<span><span class="co">#&gt; 1 theta1 eta1    id</span></span>
+<span><span class="co">#&gt; 2 theta2 eta2    id</span></span>
+<span><span class="co">#&gt; 3 theta3 eta3    id</span></span>
+<span><span class="co">#&gt; 4 theta4 eta4    id</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  ── Model (Normalized Syntax): ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
+<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", </span></span>
+<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", </span></span>
+<span><span class="co">#&gt;         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", </span></span>
+<span><span class="co">#&gt;         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", </span></span>
+<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", </span></span>
+<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         theta1 &lt;- 1.37034036528946</span></span>
+<span><span class="co">#&gt;         label("log Cl")</span></span>
+<span><span class="co">#&gt;         theta2 &lt;- 4.19814911033061</span></span>
+<span><span class="co">#&gt;         label("log Vc")</span></span>
+<span><span class="co">#&gt;         theta3 &lt;- 1.38003493562413</span></span>
+<span><span class="co">#&gt;         label("log Q")</span></span>
+<span><span class="co">#&gt;         theta4 &lt;- 3.87657341967489</span></span>
+<span><span class="co">#&gt;         label("log Vp")</span></span>
+<span><span class="co">#&gt;         RSV &lt;- c(0, 0.196446108190896, 1)</span></span>
+<span><span class="co">#&gt;         label("RSV")</span></span>
+<span><span class="co">#&gt;         eta1 ~ 0.101251418415006</span></span>
+<span><span class="co">#&gt;         eta2 ~ 0.0993872449483344</span></span>
+<span><span class="co">#&gt;         eta3 ~ 0.101302674763154</span></span>
+<span><span class="co">#&gt;         eta4 ~ 0.0730497519364148</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         cmt(CENTRAL)</span></span>
+<span><span class="co">#&gt;         cmt(PERI)</span></span>
+<span><span class="co">#&gt;         cl &lt;- exp(theta1 + eta1)</span></span>
+<span><span class="co">#&gt;         v &lt;- exp(theta2 + eta2)</span></span>
+<span><span class="co">#&gt;         q &lt;- exp(theta3 + eta3)</span></span>
+<span><span class="co">#&gt;         v2 &lt;- exp(theta4 + eta4)</span></span>
+<span><span class="co">#&gt;         v1 &lt;- v</span></span>
+<span><span class="co">#&gt;         scale1 &lt;- v</span></span>
+<span><span class="co">#&gt;         k21 &lt;- q/v2</span></span>
+<span><span class="co">#&gt;         k12 &lt;- q/v</span></span>
+<span><span class="co">#&gt;         d/dt(CENTRAL) &lt;- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1</span></span>
+<span><span class="co">#&gt;         d/dt(PERI) &lt;- -k21 * PERI + k12 * CENTRAL</span></span>
+<span><span class="co">#&gt;         f &lt;- CENTRAL/scale1</span></span>
+<span><span class="co">#&gt;         ipred &lt;- f</span></span>
+<span><span class="co">#&gt;         rescv &lt;- RSV</span></span>
+<span><span class="co">#&gt;         w &lt;- ipred * rescv</span></span>
+<span><span class="co">#&gt;         ires &lt;- DV - ipred</span></span>
+<span><span class="co">#&gt;         iwres &lt;- ires/w</span></span>
+<span><span class="co">#&gt;         y &lt;- ipred + w * eps1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span></span>
+<span><span class="co"># You can see that the residual error isn't specified in ~ syntax</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># I also like to name my parameters so they mean something a bit more</span></span>
+<span><span class="co"># descriptive (though I kept the estimates the same):</span></span>
+<span><span class="co"># </span></span>
+<span><span class="va">mod2</span> <span class="op">&lt;-</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/ini.html" class="external-link">ini</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">lcl</span> <span class="op">&lt;-</span> <span class="fl">1.37034036528946</span></span>
+<span>    <span class="va">lvc</span> <span class="op">&lt;-</span> <span class="fl">4.19814911033061</span></span>
+<span>    <span class="va">lq</span> <span class="op">&lt;-</span> <span class="fl">1.38003493562413</span></span>
+<span>    <span class="va">lvp</span> <span class="op">&lt;-</span> <span class="fl">3.87657341967489</span></span>
+<span>    <span class="va">RSV</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.196446108190896</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">eta.cl</span> <span class="op">~</span> <span class="fl">0.101251418415006</span></span>
+<span>    <span class="va">eta.v</span> <span class="op">~</span> <span class="fl">0.0993872449483344</span></span>
+<span>    <span class="va">eta.q</span> <span class="op">~</span> <span class="fl">0.101302674763154</span></span>
+<span>    <span class="va">eta.v2</span> <span class="op">~</span> <span class="fl">0.0730497519364148</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/model.html" class="external-link">model</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="fu">cmt</span><span class="op">(</span><span class="va">CENTRAL</span><span class="op">)</span></span>
+<span>    <span class="fu">cmt</span><span class="op">(</span><span class="va">PERI</span><span class="op">)</span></span>
+<span>    <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">lcl</span> <span class="op">+</span> <span class="va">eta.cl</span><span class="op">)</span></span>
+<span>    <span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">lvc</span> <span class="op">+</span> <span class="va">eta.v</span><span class="op">)</span></span>
+<span>    <span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">lq</span> <span class="op">+</span> <span class="va">eta.q</span><span class="op">)</span></span>
+<span>    <span class="va">v2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">lvp</span> <span class="op">+</span> <span class="va">eta.v2</span><span class="op">)</span></span>
+<span>    <span class="va">v1</span> <span class="op">&lt;-</span> <span class="va">v</span></span>
+<span>    <span class="va">scale1</span> <span class="op">&lt;-</span> <span class="va">v</span></span>
+<span>    <span class="va">k21</span> <span class="op">&lt;-</span> <span class="va">q</span><span class="op">/</span><span class="va">v2</span></span>
+<span>    <span class="va">k12</span> <span class="op">&lt;-</span> <span class="va">q</span><span class="op">/</span><span class="va">v</span></span>
+<span>    <span class="va">d</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">dt</a></span><span class="op">(</span><span class="va">CENTRAL</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">k21</span> <span class="op">*</span> <span class="va">PERI</span> <span class="op">-</span> <span class="va">k12</span> <span class="op">*</span> <span class="va">CENTRAL</span> <span class="op">-</span> <span class="va">cl</span> <span class="op">*</span> <span class="va">CENTRAL</span><span class="op">/</span><span class="va">v1</span></span>
+<span>    <span class="va">d</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">dt</a></span><span class="op">(</span><span class="va">PERI</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">k21</span> <span class="op">*</span> <span class="va">PERI</span> <span class="op">+</span> <span class="va">k12</span> <span class="op">*</span> <span class="va">CENTRAL</span></span>
+<span>    <span class="va">f</span> <span class="op">&lt;-</span> <span class="va">CENTRAL</span><span class="op">/</span><span class="va">scale1</span></span>
+<span>    <span class="va">f</span> <span class="op">~</span> <span class="fu">prop</span><span class="op">(</span><span class="va">RSV</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># The `as.nonmem2rx` function will compare the already imported</span></span>
+<span><span class="co"># function to the one you made some manual tweaks to</span></span>
+<span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as.nonmem2rx.html">as.nonmem2rx</a></span><span class="op">(</span><span class="va">mod2</span>, <span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ solving ipred problem</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; ℹ solving pred problem</span></span>
+<span><span class="co">#&gt; ℹ done</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── </span></span>
+<span><span class="co">#&gt;  ── Initalization: ──  </span></span>
+<span><span class="co">#&gt; Fixed Effects ($theta): </span></span>
+<span><span class="co">#&gt;       lcl       lvc        lq       lvp       RSV </span></span>
+<span><span class="co">#&gt; 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Omega ($omega): </span></span>
+<span><span class="co">#&gt;           eta.cl      eta.v     eta.q     eta.v2</span></span>
+<span><span class="co">#&gt; eta.cl 0.1012514 0.00000000 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta.v  0.0000000 0.09938724 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta.q  0.0000000 0.00000000 0.1013027 0.00000000</span></span>
+<span><span class="co">#&gt; eta.v2 0.0000000 0.00000000 0.0000000 0.07304975</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; States ($state or $stateDf): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1          CENTRAL</span></span>
+<span><span class="co">#&gt; 2                  2             PERI</span></span>
+<span><span class="co">#&gt;  ── μ-referencing ($muRefTable): ──  </span></span>
+<span><span class="co">#&gt;   theta    eta level</span></span>
+<span><span class="co">#&gt; 1   lcl eta.cl    id</span></span>
+<span><span class="co">#&gt; 2   lvc  eta.v    id</span></span>
+<span><span class="co">#&gt; 3    lq  eta.q    id</span></span>
+<span><span class="co">#&gt; 4   lvp eta.v2    id</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  ── Model (Normalized Syntax): ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
+<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", </span></span>
+<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", </span></span>
+<span><span class="co">#&gt;         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", </span></span>
+<span><span class="co">#&gt;         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", </span></span>
+<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", </span></span>
+<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         lcl &lt;- 1.37034036528946</span></span>
+<span><span class="co">#&gt;         lvc &lt;- 4.19814911033061</span></span>
+<span><span class="co">#&gt;         lq &lt;- 1.38003493562413</span></span>
+<span><span class="co">#&gt;         lvp &lt;- 3.87657341967489</span></span>
+<span><span class="co">#&gt;         RSV &lt;- c(0, 0.196446108190896, 1)</span></span>
+<span><span class="co">#&gt;         eta.cl ~ 0.101251418415006</span></span>
+<span><span class="co">#&gt;         eta.v ~ 0.0993872449483344</span></span>
+<span><span class="co">#&gt;         eta.q ~ 0.101302674763154</span></span>
+<span><span class="co">#&gt;         eta.v2 ~ 0.0730497519364148</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         cmt(CENTRAL)</span></span>
+<span><span class="co">#&gt;         cmt(PERI)</span></span>
+<span><span class="co">#&gt;         cl &lt;- exp(lcl + eta.cl)</span></span>
+<span><span class="co">#&gt;         v &lt;- exp(lvc + eta.v)</span></span>
+<span><span class="co">#&gt;         q &lt;- exp(lq + eta.q)</span></span>
+<span><span class="co">#&gt;         v2 &lt;- exp(lvp + eta.v2)</span></span>
+<span><span class="co">#&gt;         v1 &lt;- v</span></span>
+<span><span class="co">#&gt;         scale1 &lt;- v</span></span>
+<span><span class="co">#&gt;         k21 &lt;- q/v2</span></span>
+<span><span class="co">#&gt;         k12 &lt;- q/v</span></span>
+<span><span class="co">#&gt;         d/dt(CENTRAL) &lt;- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1</span></span>
+<span><span class="co">#&gt;         d/dt(PERI) &lt;- -k21 * PERI + k12 * CENTRAL</span></span>
+<span><span class="co">#&gt;         f &lt;- CENTRAL/scale1</span></span>
+<span><span class="co">#&gt;         f ~ prop(RSV)</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
+<p>In this case the <code>new</code> model qualifies and now has all the information from the imported nonmem2rx model.</p>
+<p>This means you can estimate from the new model knowing it was the same model specified in NONMEM.</p>
+<p>Since <code>iwres</code> is affected by how your specify your residuals, pay special attention to that validation. If it does not validate, you may have forgot to translate the NONMEM variance estimate to the standard deviation estimate required by many estimation methods.</p>
+</div>
 <div class="section level3">
 <h3 id="comparing-differences-between-nonmem-and-rxode2">Comparing differences between <code>NONMEM</code> and <code>rxode2</code>
 <a class="anchor" aria-label="anchor" href="#comparing-differences-between-nonmem-and-rxode2"></a>
 </h3>
 <p>You may wish to see where the differences in predictions are between NONMEM and rxode2.</p>
 <p>The easiest way to visually compare the differences is by the plot method:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span> <span class="co"># for general plot</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.png" width="100%"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># you can also see individual comparisons</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, log<span class="op">=</span><span class="st">"y"</span>, ncol<span class="op">=</span><span class="fl">2</span>, nrow<span class="op">=</span><span class="fl">2</span>,</span>
 <span>     xlab<span class="op">=</span><span class="st">"Time (hr)"</span>, ylab<span class="op">=</span><span class="st">"Concentrations"</span>,</span>
 <span>     page<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot-2.png" width="100%"></p>
 <p>If you want numerical differences, you can also get these from the modified returned <code>ui</code> object. For the rtol, atol as follows you have:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">iwresAtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
 <span><span class="co">#&gt; 1.137824e-05</span></span>
@@ -267,7 +525,7 @@
 <span><span class="co">#&gt;          50% </span></span>
 <span><span class="co">#&gt; 6.406839e-06</span></span></code></pre></div>
 <p>You can see they do not exactly match but are very close (I would say they validate). However you can explore these difference further if you wish by looking at the <code>ipredCompare</code> and <code>predCompare</code> datasets:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">iwresCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemIWRES      IWRES</span></span>
 <span><span class="co">#&gt; 1  1 0.25    -0.73154 -0.7315635</span></span>
@@ -297,7 +555,7 @@
 <p>In these cases you can see that NONMEM seems to round the values for the output (the rounding rules are based on the <code>FORMAT</code> option), but rxode2 seems to keep the entire number.</p>
 <p>Note this is the <strong>observation data only</strong> that is compared. Dosing predictions are excluded from these comparisons.</p>
 <p>You can also explore the NONMEM input dataset that was used to make the validation predictions (dosing and observations) by the <code>$nonmemData</code> item:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">nonmemData</span><span class="op">)</span> <span class="co"># with nlme loaded you can also use getData(mod)</span></span>
 <span><span class="co">#&gt;   ID TIME     DV   LNDV MDV    AMT EVID   DOSE   V1I  CLI   QI   V2I SSX IIX SD</span></span>
 <span><span class="co">#&gt; 1  1 0.00    0.0 0.0000   1 120000    1 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
@@ -365,7 +623,7 @@
 <h3 id="what-do-the-values-mean">What do the values mean<a class="anchor" aria-label="anchor" href="#what-do-the-values-mean"></a>
 </h3>
 <p>Depending on the precision the validation numbers can be quite different. For example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># full parameter precision</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
@@ -428,7 +686,7 @@
 <h3 id="simulating-from-the-model">Simulating from the model<a class="anchor" aria-label="anchor" href="#simulating-from-the-model"></a>
 </h3>
 <p>Unlike the traditional <code>rxode2</code> <code>ui</code> objects, this contains information about the model that can be used for simulation with uncertainty: theta covariance, number of subjects and number of observations. You can see them below if you wish:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">dfSub</span> <span class="co"># Number of subjects</span></span>
 <span><span class="co">#&gt; [1] 120</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">dfObs</span> <span class="co"># Number of observations</span></span>
