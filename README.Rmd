@@ -95,17 +95,21 @@ If you want numerical differences, you can also get these from the
 modified returned `ui` object.  For the rtol, atol as follows you have:
 
 ```{r tol}
+mod$iwresAtol
+mod$iwresRtol
 mod$ipredAtol
 mod$ipredRtol
 mod$predAtol
 mod$predAtol
 ```
 
-You can see they do not exactly match. You can explore these
-difference further if you wish by looking at the `ipredCompare` and
-`predCompare` datasets:
+You can see they do not exactly match but are very close (I would say
+they validate). However you can explore these difference further if you wish
+by looking at the `ipredCompare` and `predCompare` datasets:
 
 ```{r compare}
+head(mod$iwresCompare)
+
 head(mod$ipredCompare)
 
 head(mod$predCompare)
@@ -134,7 +138,9 @@ estimates.  This is:
 - `theta` or population parameters
 - `eta` or individual parameters
 
-The `omega` and `sigma` matrices are captured but do not contribute to
+The `omega` and `sigma` matrices are captured. When the nlmixr2 model
+is fully qualified, the `IWRES` validation ensures the residual errors
+are specified correctly. Otherwise `omega` and `sigma` values do not contribute to
 the validation.  Also the overall covariance is captured, but not used
 in the validation.
 
@@ -218,6 +224,9 @@ print(mod$ipredRtol)
 print(mod$predAtol)
 print(mod$predRtol)
 
+print(mod$iwresAtol)
+print(mod$iwresRtol)
+
 # now reduce precision by using table/lst output only
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                                   useXml=FALSE, useExt=FALSE,usePhi=FALSE))
@@ -227,6 +236,9 @@ print(mod$predRtol)
 
 print(mod$ipredAtol)
 print(mod$ipredRtol)
+
+print(mod$iwresAtol)
+print(mod$iwresRtol)
 ```
 
 You can see that using less precise values will lead to larger

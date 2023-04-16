@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmpprz41V/temp_libpath17de2532b4735/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -224,6 +224,12 @@ If you want numerical differences, you can also get these from the
 modified returned `ui` object. For the rtol, atol as follows you have:
 
 ``` r
+mod$iwresAtol
+#>          50% 
+#> 1.137824e-05
+mod$iwresRtol
+#>          50% 
+#> 2.041157e-05
 mod$ipredAtol
 #>         50% 
 #> 0.001770218
@@ -238,11 +244,20 @@ mod$predAtol
 #> 6.406839e-06
 ```
 
-You can see they do not exactly match. You can explore these difference
-further if you wish by looking at the `ipredCompare` and `predCompare`
-datasets:
+You can see they do not exactly match but are very close (I would say
+they validate). However you can explore these difference further if you
+wish by looking at the `ipredCompare` and `predCompare` datasets:
 
 ``` r
+head(mod$iwresCompare)
+#>   ID TIME nonmemIWRES      IWRES
+#> 1  1 0.25    -0.73154 -0.7315635
+#> 2  1 0.50     1.86670  1.8666295
+#> 3  1 0.75    -1.26860 -1.2685934
+#> 4  1 1.00     0.44442  0.4443967
+#> 5  1 1.50     0.55470  0.5546777
+#> 6  1 2.00     0.35351  0.3534849
+
 head(mod$ipredCompare)
 #>   ID TIME nonmemIPRED    IPRED
 #> 1  1 0.25      1215.4 1215.363
@@ -299,9 +314,11 @@ estimates. This is:
   - `theta` or population parameters
   - `eta` or individual parameters
 
-The `omega` and `sigma` matrices are captured but do not contribute to
-the validation. Also the overall covariance is captured, but not used in
-the validation.
+The `omega` and `sigma` matrices are captured. When the nlmixr2 model is
+fully qualified, the `IWRES` validation ensures the residual errors are
+specified correctly. Otherwise `omega` and `sigma` values do not
+contribute to the validation. Also the overall covariance is captured,
+but not used in the validation.
 
 #### `theta` parameters:
 
@@ -394,6 +411,13 @@ print(mod$predRtol)
 #>          50% 
 #> 6.406839e-06
 
+print(mod$iwresAtol)
+#>          50% 
+#> 1.137824e-05
+print(mod$iwresRtol)
+#>          50% 
+#> 2.041157e-05
+
 # now reduce precision by using table/lst output only
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                                   useXml=FALSE, useExt=FALSE,usePhi=FALSE))
@@ -414,6 +438,13 @@ print(mod$ipredAtol)
 print(mod$ipredRtol)
 #>         50% 
 #> 0.001273287
+
+print(mod$iwresAtol)
+#>         50% 
+#> 0.005937187
+print(mod$iwresRtol)
+#>        50% 
+#> 0.00974823
 ```
 
 You can see that using less precise values will lead to larger
