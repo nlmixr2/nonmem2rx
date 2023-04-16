@@ -80,7 +80,8 @@ The process steps are below:
 
 Depending on the model, not all the residual specifications are
 translated to the `nlmixr2` style residuals.  This means the model
-cannot be immediately used for nlmixr2 estimation.
+cannot be immediately used for nlmixr2 estimation (though you can
+simulate with and without certainty without any modifications)
 
 For example you could have something like:
 
