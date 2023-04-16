@@ -847,6 +847,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .rx <- .replaceCmtNames(.rx, cmtNames)
   .rx <- rxode2::rxUiDecompress(.rx)
   .rx$file <- file
+  .rx$outputExtension <- lst
   .rx$sticky <- NULL
   # now try to validate
   if (!is.null(.nonmemData)) {
