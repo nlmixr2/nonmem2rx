@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d3f9b72c9/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -176,7 +176,7 @@ The process steps are below:
 
   - Try to determine an endpoint in the model (if possible), and convert
     to a fully qualified ui model that can be used in `nlmixr2` and
-    `rxode2`.
+    `rxode2` (see next section for a work-around)
 
   - If available, `nonmem2rx` will read the final parameter estimates
     and update the model. (See below for source)
@@ -187,15 +187,297 @@ The process steps are below:
     the individual parameters. This will then compare the results
     between `NONMEM` and `rxode2` to make sure the translation makes
     sense. This only works when `nonmem2rx` has access to the input data
-    and the output with the `IPRED`, `PRED` and the `ETA` values.
+    and the output with the `IWRES`, `IPRED`, `PRED` and the `ETA`
+    values.
 
   - Converts the upper case NONMEM variables to lower case.
 
   - Replaces the NONMEM theta / eta names with the label-based names
-    like an extended control stream
+    like an extended control stream.
 
   - Replaces the compartment names with the defined compartment names in
     the control stream (ie `COMP=(compartmenName)`)
+
+### Creating a nlmixr2 compatible model
+
+Depending on the model, not all the residual specifications are
+translated to the `nlmixr2` style residuals. This means the model cannot
+be immediately used for nlmixr2 estimation.
+
+For example you could have something like:
+
+``` r
+y <- ipred*(1+eps1)
+```
+
+For a model that can do `nlmixr2` estimation instead of simply
+simulation the residual needs to be changed to something like:
+
+``` r
+cp ~ prop(prop.sd)
+```
+
+Since the model when import has most of the translation done already,
+you can easily tweak the model to have this form.
+
+Here is the same example where the residual errors are not automatically
+translated to the `nlmixr2` parameter style (in this case because of the
+option `determineError=FALSE`)
+
+``` r
+
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 determineError=FALSE, lst=".res", save=FALSE)
+#> ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ reading in xml file
+#> ℹ done
+#> ℹ reading in phi file
+#> ℹ problems reading phi file
+#> ℹ reading in lst file
+#> ℹ abbreviated list parsing
+#> ℹ done
+#> ℹ done
+#> ℹ splitting control stream by records
+#> ℹ done
+#> ℹ Processing record $INPUT
+#> ℹ Processing record $MODEL
+#> ℹ Processing record $THETA
+#> ℹ Processing record $OMEGA
+#> ℹ Processing record $SIGMA
+#> ℹ Processing record $PROBLEM
+#> ℹ Processing record $DATA
+#> ℹ Processing record $SUBROUTINES
+#> ℹ Processing record $PK
+#> ℹ Processing record $DES
+#> ℹ Processing record $ERROR
+#> ℹ Processing record $ESTIMATION
+#> ℹ Ignore record $ESTIMATION
+#> ℹ Processing record $COVARIANCE
+#> ℹ Ignore record $COVARIANCE
+#> ℹ Processing record $TABLE
+#> ℹ change initial estimate of `theta1` to `1.37034036528946`
+#> ℹ change initial estimate of `theta2` to `4.19814911033061`
+#> ℹ change initial estimate of `theta3` to `1.38003493562413`
+#> ℹ change initial estimate of `theta4` to `3.87657341967489`
+#> ℹ change initial estimate of `theta5` to `0.196446108190896`
+#> ℹ change initial estimate of `eta1` to `0.101251418415006`
+#> ℹ change initial estimate of `eta2` to `0.0993872449483344`
+#> ℹ change initial estimate of `eta3` to `0.101302674763154`
+#> ℹ change initial estimate of `eta4` to `0.0730497519364148`
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ applying names specified by $INPUT
+#> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
+#> ℹ done
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ done
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d7a746f7c/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ done
+#> ℹ changing most variables to lower case
+#> ℹ done
+#> ℹ replace theta names
+#> Warning: there are duplicate theta names, not renaming duplicate parameters
+#> ℹ done
+#> ℹ replace eta names
+#> Warning: there are duplicate eta names, not renaming duplicate parameters
+#> ℹ done (no labels)
+#> ℹ renaming compartments
+#> ℹ done
+#> ℹ solving ipred problem
+#> ℹ done
+#> ℹ solving pred problem
+#> ℹ done
+
+print(mod)
+#>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
+#>  ── Initalization: ──  
+#> Fixed Effects ($theta): 
+#>    theta1    theta2    theta3    theta4       RSV 
+#> 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 
+#> 
+#> Omega ($omega): 
+#>           eta1       eta2      eta3       eta4
+#> eta1 0.1012514 0.00000000 0.0000000 0.00000000
+#> eta2 0.0000000 0.09938724 0.0000000 0.00000000
+#> eta3 0.0000000 0.00000000 0.1013027 0.00000000
+#> eta4 0.0000000 0.00000000 0.0000000 0.07304975
+#> 
+#> States ($state or $stateDf): 
+#>   Compartment Number Compartment Name
+#> 1                  1          CENTRAL
+#> 2                  2             PERI
+#>  ── μ-referencing ($muRefTable): ──  
+#>    theta  eta level
+#> 1 theta1 eta1    id
+#> 2 theta2 eta2    id
+#> 3 theta3 eta3    id
+#> 4 theta4 eta4    id
+#> 
+#>  ── Model (Normalized Syntax): ── 
+#> function() {
+#>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", 
+#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
+#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
+#>     ini({
+#>         theta1 <- 1.37034036528946
+#>         label("log Cl")
+#>         theta2 <- 4.19814911033061
+#>         label("log Vc")
+#>         theta3 <- 1.38003493562413
+#>         label("log Q")
+#>         theta4 <- 3.87657341967489
+#>         label("log Vp")
+#>         RSV <- c(0, 0.196446108190896, 1)
+#>         label("RSV")
+#>         eta1 ~ 0.101251418415006
+#>         eta2 ~ 0.0993872449483344
+#>         eta3 ~ 0.101302674763154
+#>         eta4 ~ 0.0730497519364148
+#>     })
+#>     model({
+#>         cmt(CENTRAL)
+#>         cmt(PERI)
+#>         cl <- exp(theta1 + eta1)
+#>         v <- exp(theta2 + eta2)
+#>         q <- exp(theta3 + eta3)
+#>         v2 <- exp(theta4 + eta4)
+#>         v1 <- v
+#>         scale1 <- v
+#>         k21 <- q/v2
+#>         k12 <- q/v
+#>         d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+#>         d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+#>         f <- CENTRAL/scale1
+#>         ipred <- f
+#>         rescv <- RSV
+#>         w <- ipred * rescv
+#>         ires <- DV - ipred
+#>         iwres <- ires/w
+#>         y <- ipred + w * eps1
+#>     })
+#> }
+
+# You can see that the residual error isn't specified in ~ syntax
+#
+# I also like to name my parameters so they mean something a bit more
+# descriptive (though I kept the estimates the same):
+# 
+mod2 <-function() {
+  ini({
+    lcl <- 1.37034036528946
+    lvc <- 4.19814911033061
+    lq <- 1.38003493562413
+    lvp <- 3.87657341967489
+    RSV <- c(0, 0.196446108190896, 1)
+    eta.cl ~ 0.101251418415006
+    eta.v ~ 0.0993872449483344
+    eta.q ~ 0.101302674763154
+    eta.v2 ~ 0.0730497519364148
+  })
+  model({
+    cmt(CENTRAL)
+    cmt(PERI)
+    cl <- exp(lcl + eta.cl)
+    v <- exp(lvc + eta.v)
+    q <- exp(lq + eta.q)
+    v2 <- exp(lvp + eta.v2)
+    v1 <- v
+    scale1 <- v
+    k21 <- q/v2
+    k12 <- q/v
+    d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+    d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+    f <- CENTRAL/scale1
+    f ~ prop(RSV)
+  })
+}
+
+# The `as.nonmem2rx` function will compare the already imported
+# function to the one you made some manual tweaks to
+new <- as.nonmem2rx(mod2, mod)
+#> ℹ solving ipred problem
+#> ℹ done
+#> ℹ solving pred problem
+#> ℹ done
+
+print(new)
+#>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
+#>  ── Initalization: ──  
+#> Fixed Effects ($theta): 
+#>       lcl       lvc        lq       lvp       RSV 
+#> 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 
+#> 
+#> Omega ($omega): 
+#>           eta.cl      eta.v     eta.q     eta.v2
+#> eta.cl 0.1012514 0.00000000 0.0000000 0.00000000
+#> eta.v  0.0000000 0.09938724 0.0000000 0.00000000
+#> eta.q  0.0000000 0.00000000 0.1013027 0.00000000
+#> eta.v2 0.0000000 0.00000000 0.0000000 0.07304975
+#> 
+#> States ($state or $stateDf): 
+#>   Compartment Number Compartment Name
+#> 1                  1          CENTRAL
+#> 2                  2             PERI
+#>  ── μ-referencing ($muRefTable): ──  
+#>   theta    eta level
+#> 1   lcl eta.cl    id
+#> 2   lvc  eta.v    id
+#> 3    lq  eta.q    id
+#> 4   lvp eta.v2    id
+#> 
+#>  ── Model (Normalized Syntax): ── 
+#> function() {
+#>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", 
+#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
+#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
+#>     ini({
+#>         lcl <- 1.37034036528946
+#>         lvc <- 4.19814911033061
+#>         lq <- 1.38003493562413
+#>         lvp <- 3.87657341967489
+#>         RSV <- c(0, 0.196446108190896, 1)
+#>         eta.cl ~ 0.101251418415006
+#>         eta.v ~ 0.0993872449483344
+#>         eta.q ~ 0.101302674763154
+#>         eta.v2 ~ 0.0730497519364148
+#>     })
+#>     model({
+#>         cmt(CENTRAL)
+#>         cmt(PERI)
+#>         cl <- exp(lcl + eta.cl)
+#>         v <- exp(lvc + eta.v)
+#>         q <- exp(lq + eta.q)
+#>         v2 <- exp(lvp + eta.v2)
+#>         v1 <- v
+#>         scale1 <- v
+#>         k21 <- q/v2
+#>         k12 <- q/v
+#>         d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+#>         d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+#>         f <- CENTRAL/scale1
+#>         f ~ prop(RSV)
+#>     })
+#> }
+```
+
+In this case the `new` model qualifies and now has all the information
+from the imported nonmem2rx model.
+
+This means you can estimate from the new model knowing it was the same
+model specified in NONMEM.
+
+Since `iwres` is affected by how your specify your residuals, pay
+special attention to that validation. If it does not validate, you may
+have forgot to translate the NONMEM variance estimate to the standard
+deviation estimate required by many estimation methods.
 
 ### Comparing differences between `NONMEM` and `rxode2`
 
