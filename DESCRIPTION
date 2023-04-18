@@ -45,7 +45,8 @@ Imports:
     qs,
     xml2,
     ggplot2,
-    ggforce
+    ggforce,
+    crayon
 Suggests: 
     devtools,
     testthat (>= 3.0.0),
