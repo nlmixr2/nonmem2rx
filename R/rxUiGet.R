@@ -7,7 +7,7 @@ rxUiGet.simulationModelIwres <- function(x, ...) {
     .env <- new.env(parent=.ns)
     .env$.ui <- .ui
     .ui <- with(.env,eval(rxode2::rxCombineErrorLines(.ui, modelVars=TRUE)))
-    iwres <- rxdv <- rx_pred_ <- rx_r_ <- NULL
+    DV <- sim <- iwres <- rxdv <- rx_pred_ <- rx_r_ <- NULL
     .ret <- suppressMessages(rxode2::model(.ui, iwres <- (DV-rx_pred_)/sqrt(rx_r_),
                                            append=sim, auto=FALSE))
     .ret <- rxode2::rxModelVars(.ret)
