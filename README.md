@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -167,6 +167,11 @@ mod
 #>         ipred ~ prop(RSV)
 #>     })
 #> }
+#>  ── nonmem2rx extra properties: ──  
+#> other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs
+#> captured NONMEM table outputs: $predData, $ipredData
+#> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
+#> NONMEM/rxode2 composite comparison: $predAtol, $predRtol, $ipredAtol, $ipredRtol, $iwresAtol, $iwresRtol
 ```
 
 The process steps are below:
@@ -229,7 +234,7 @@ option `determineError=FALSE`)
 
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                  determineError=FALSE, lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -265,14 +270,14 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpDtx8m8/temp_libpath1d03d175fa626/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -361,6 +366,16 @@ print(mod)
 #>         y <- ipred + w * eps1
 #>     })
 #> }
+#>  ── nonmem2rx extra properties: ──  
+#> 
+#> Sigma ($sigma): 
+#>      eps1
+#> eps1    1
+#> 
+#> other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs
+#> captured NONMEM table outputs: $predData, $ipredData
+#> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
+#> NONMEM/rxode2 composite comparison: $predAtol, $predRtol, $ipredAtol, $ipredRtol, $iwresAtol, $iwresRtol
 
 # You can see that the residual error isn't specified in ~ syntax
 #
@@ -467,6 +482,11 @@ print(new)
 #>         f ~ prop(RSV)
 #>     })
 #> }
+#>  ── nonmem2rx extra properties: ──  
+#> other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs
+#> captured NONMEM table outputs: $predData, $ipredData
+#> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
+#> NONMEM/rxode2 composite comparison: $predAtol, $predRtol, $ipredAtol, $ipredRtol, $iwresAtol, $iwresRtol
 ```
 
 In this case the `new` model qualifies and now has all the information
