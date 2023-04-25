@@ -93,7 +93,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -129,14 +129,15 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -148,6 +149,7 @@
 <span><span class="co">#&gt; ℹ done (no labels)</span></span>
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
@@ -252,7 +254,7 @@
 <code class="sourceCode R"><span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>,</span>
 <span>                 determineError<span class="op">=</span><span class="cn">FALSE</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -288,14 +290,15 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -307,6 +310,7 @@
 <span><span class="co">#&gt; ℹ done (no labels)</span></span>
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
@@ -433,6 +437,7 @@
 <span><span class="co"># The `as.nonmem2rx` function will compare the already imported</span></span>
 <span><span class="co"># function to the one you made some manual tweaks to</span></span>
 <span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as.nonmem2rx.html">as.nonmem2rx</a></span><span class="op">(</span><span class="va">mod2</span>, <span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
@@ -524,8 +529,15 @@
 <span>     xlab<span class="op">=</span><span class="st">"Time (hr)"</span>, ylab<span class="op">=</span><span class="st">"Concentrations"</span>,</span>
 <span>     page<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot-2.png" width="100%"></p>
-<p>If you want numerical differences, you can also get these from the modified returned <code>ui</code> object. For the rtol, atol as follows you have:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># If you want all pages you could use:</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># plot(mod, log="y", ncol=2, nrow=2,</span></span>
+<span><span class="co">#      xlab="Time (hr)", ylab="Concentrations",</span></span>
+<span><span class="co">#      page=TRUE)</span></span></code></pre></div>
+<p>If you want numerical differences, you can also get these from the modified returned <code>ui</code> object. For the rtol, atol as follows you have:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">iwresAtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
 <span><span class="co">#&gt; 1.137824e-05</span></span>
@@ -545,7 +557,7 @@
 <span><span class="co">#&gt;          50% </span></span>
 <span><span class="co">#&gt; 6.406839e-06</span></span></code></pre></div>
 <p>You can see they do not exactly match but are very close (I would say they validate). However you can explore these difference further if you wish by looking at the <code>ipredCompare</code> and <code>predCompare</code> datasets:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">iwresCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemIWRES      IWRES</span></span>
 <span><span class="co">#&gt; 1  1 0.25    -0.73154 -0.7315635</span></span>
@@ -575,7 +587,7 @@
 <p>In these cases you can see that NONMEM seems to round the values for the output (the rounding rules are based on the <code>FORMAT</code> option), but rxode2 seems to keep the entire number.</p>
 <p>Note this is the <strong>observation data only</strong> that is compared. Dosing predictions are excluded from these comparisons.</p>
 <p>You can also explore the NONMEM input dataset that was used to make the validation predictions (dosing and observations) by the <code>$nonmemData</code> item:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">nonmemData</span><span class="op">)</span> <span class="co"># with nlme loaded you can also use getData(mod)</span></span>
 <span><span class="co">#&gt;   ID TIME     DV   LNDV MDV    AMT EVID   DOSE   V1I  CLI   QI   V2I SSX IIX SD</span></span>
 <span><span class="co">#&gt; 1  1 0.00    0.0 0.0000   1 120000    1 120000 101.5 3.57 6.99 59.19  99   0  1</span></span>
@@ -643,7 +655,7 @@
 <h3 id="what-do-the-values-mean">What do the values mean<a class="anchor" aria-label="anchor" href="#what-do-the-values-mean"></a>
 </h3>
 <p>Depending on the precision the validation numbers can be quite different. For example:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># full parameter precision</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
@@ -706,7 +718,7 @@
 <h3 id="simulating-from-the-model">Simulating from the model<a class="anchor" aria-label="anchor" href="#simulating-from-the-model"></a>
 </h3>
 <p>Unlike the traditional <code>rxode2</code> <code>ui</code> objects, this contains information about the model that can be used for simulation with uncertainty: theta covariance, number of subjects and number of observations. You can see them below if you wish:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">dfSub</span> <span class="co"># Number of subjects</span></span>
 <span><span class="co">#&gt; [1] 120</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">dfObs</span> <span class="co"># Number of observations</span></span>

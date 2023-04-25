@@ -74,7 +74,8 @@
 <span>  xml <span class="op">=</span> <span class="st">".xml"</span>,</span>
 <span>  ext <span class="op">=</span> <span class="st">".ext"</span>,</span>
 <span>  scanLines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.scanLines"</span>, <span class="fl">50L</span><span class="op">)</span>,</span>
-<span>  save <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.save"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  save <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.save"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  saveTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.saveTime"</span>, <span class="fl">15</span><span class="op">)</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.overwrite"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.load"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  compress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"nonmem2rx.compress"</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -253,7 +254,15 @@ using <code><a href="https://rdrr.io/pkg/qs/man/qsave.html" class="external-link
 <li><p>A path to a file to write</p>
 <p>Note that this file will be saved with qs::qsave() and can be
 loaded with qs::qread()</p></li>
+<li><p>A <code>NA</code> value which means save if the whole process (including
+validation) takes too much time</p></li>
 </ul></dd>
+
+
+<dt>saveTime</dt>
+<dd><p>The time that the translation/validation needs (in
+secs) before it will save to avoid having to rerun the model
+(default 15 for 15 seconds)</p></dd>
 
 
 <dt>overwrite</dt>
@@ -343,6 +352,7 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> replace theta names</span>
@@ -455,6 +465,7 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span>
@@ -471,6 +482,7 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> solving ipred problem</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> solving pred problem</span>
