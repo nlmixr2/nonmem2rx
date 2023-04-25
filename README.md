@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,14 +75,15 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -94,6 +95,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
@@ -234,7 +236,7 @@ option `determineError=FALSE`)
 
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                  determineError=FALSE, lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -270,14 +272,15 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpGAw3EO/temp_libpath3e847a5a657d/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -289,6 +292,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
@@ -415,6 +419,7 @@ mod2 <-function() {
 # The `as.nonmem2rx` function will compare the already imported
 # function to the one you made some manual tweaks to
 new <- as.nonmem2rx(mod2, mod)
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
@@ -522,6 +527,15 @@ plot(mod, log="y", ncol=2, nrow=2,
 ```
 
 <img src="man/figures/README-plot-2.png" width="100%" />
+
+``` r
+
+# If you want all pages you could use:
+#
+# plot(mod, log="y", ncol=2, nrow=2,
+#      xlab="Time (hr)", ylab="Concentrations",
+#      page=TRUE)
+```
 
 If you want numerical differences, you can also get these from the
 modified returned `ui` object. For the rtol, atol as follows you have:

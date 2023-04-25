@@ -443,6 +443,13 @@
 #'   Note that this file will be saved with qs::qsave() and can be
 #'   loaded with qs::qread()
 #'
+#' - A `NA` value which means save if the whole process (including
+#'   validation) takes too much time
+#'
+#' @param saveTime The time that the translation/validation needs (in
+#'   secs) before it will save to avoid having to rerun the model
+#'   (default 15 for 15 seconds)
+#'
 #' @param overwrite is a boolean to allow overwriting the save file
 #'   (see `load` for more information).
 #'
@@ -546,10 +553,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       xml=".xml",
                       ext=".ext",
                       scanLines=getOption("nonmem2rx.scanLines", 50L),
-                      save=getOption("nonmem2rx.save", TRUE),
+                      save=getOption("nonmem2rx.save", NA),
+                      saveTime=getOption("nonmem2rx.saveTime", 15),
                       overwrite=getOption("nonmem2rx.overwrite", TRUE),
                       load=getOption("nonmem2rx.load", TRUE),
                       compress=getOption("nonmem2rx.compress", TRUE)) {
+  .pt <- proc.time()
   checkmate::assertFileExists(file)
   if (!is.null(inputData)) checkmate::assertFileExists(inputData)
   if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
@@ -562,8 +571,14 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   checkmate::assertLogical(overwrite, len=1, any.missing = FALSE)
   checkmate::assertLogical(load, len=1, any.missing = FALSE)
   checkmate::assertLogical(compress, len=1, any.missing = FALSE)
+  checkmate::assertNumeric(saveTime, len=1, lower=1.0)
+  .saveWithTime <- FALSE
   if (is.logical(save)) {
-    checkmate::assertLogical(save, len=1, any.missing=FALSE)
+    checkmate::assertLogical(save, len=1, any.missing=TRUE)
+    if (is.na(save)) {
+      .saveWithTime <- TRUE
+      save <- TRUE
+    }
     if (save) {
       save <- paste0(tools::file_path_sans_ext(file),".qs")
     } else {
@@ -890,6 +905,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .ret <- .rx
   }
   class(.ret) <- c("nonmem2rx", class(.ret))
+  if (.saveWithTime) {
+    if ((proc.time() - .pt)["elapsed"] < saveTime) {
+      save <- NULL
+    }
+  }
   if (!is.null(save)) {
     qs::qsave(.ret, save)
   }

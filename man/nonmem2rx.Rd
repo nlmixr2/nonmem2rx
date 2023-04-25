@@ -34,7 +34,8 @@ nonmem2rx(
   xml = ".xml",
   ext = ".ext",
   scanLines = getOption("nonmem2rx.scanLines", 50L),
-  save = getOption("nonmem2rx.save", TRUE),
+  save = getOption("nonmem2rx.save", NA),
+  saveTime = getOption("nonmem2rx.saveTime", 15),
   overwrite = getOption("nonmem2rx.overwrite", TRUE),
   load = getOption("nonmem2rx.load", TRUE),
   compress = getOption("nonmem2rx.compress", TRUE)
@@ -155,7 +156,13 @@ using \code{qs::qsave()}
 
 Note that this file will be saved with qs::qsave() and can be
 loaded with qs::qread()
+\item A \code{NA} value which means save if the whole process (including
+validation) takes too much time
 }}
+
+\item{saveTime}{The time that the translation/validation needs (in
+secs) before it will save to avoid having to rerun the model
+(default 15 for 15 seconds)}
 
 \item{overwrite}{is a boolean to allow overwriting the save file
 (see \code{load} for more information).}
