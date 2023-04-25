@@ -911,7 +911,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
   }
   if (!is.null(save)) {
+    .minfo("save model and validation")
     qs::qsave(.ret, save)
+    .minfo("done")
   }
   .ret
 }
