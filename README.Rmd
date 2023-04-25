@@ -177,6 +177,12 @@ plot(mod) # for general plot
 plot(mod, log="y", ncol=2, nrow=2,
      xlab="Time (hr)", ylab="Concentrations",
      page=1)
+
+# If you want all pages you could use:
+#
+# plot(mod, log="y", ncol=2, nrow=2,
+#      xlab="Time (hr)", ylab="Concentrations",
+#      page=TRUE)
 ```
 
 If you want numerical differences, you can also get these from the
