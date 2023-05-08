@@ -322,7 +322,6 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> not list file, control stream</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> splitting control stream by records</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>multiple $PROBLEM statements; only use first $PROBLEM for translation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Processing record $INPUT</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Processing record $ABBREVITED</span>
@@ -415,6 +414,8 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ipred ~ add(Add.) + prop(Prop.) + combined1()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">nonmem2rx translation notes (</span><span style="color: #0000BB; font-weight: bold;">$notes</span><span style="font-weight: bold;">):</span> ──  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    • multiple $PROBLEM statements; only use first $PROBLEM for translation </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> other properties include: <span style="color: #0000BB; font-weight: bold;">$etaData</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span>
@@ -473,10 +474,8 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> replace theta names</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>there are duplicate theta names, not renaming duplicate parameters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> replace eta names</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>there are duplicate eta names, not renaming duplicate parameters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done (no labels)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> renaming compartments</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> done</span>
@@ -557,6 +556,9 @@ uncompressed (default: <code>TRUE</code>)</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ipred ~ prop(RSV)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">nonmem2rx translation notes (</span><span style="color: #0000BB; font-weight: bold;">$notes</span><span style="font-weight: bold;">):</span> ──  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    • there are duplicate eta names, not renaming duplicate parameters </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    • there are duplicate theta names, not renaming duplicate parameters </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span>, <span style="color: #0000BB; font-weight: bold;">$thetaMat</span>, <span style="color: #0000BB; font-weight: bold;">$dfSub</span>, <span style="color: #0000BB; font-weight: bold;">$dfObs</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span>
