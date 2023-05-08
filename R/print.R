@@ -6,6 +6,16 @@ print.nonmem2rx <- function(x, ...) {
   class(.tmp) <- .cls
   print(.tmp)
   .tmp <- rxode2::rxUiDecompress(.tmp)
+  if (length(.tmp$notes) > 0) {
+    cat(cli::cli_format_method({
+      cli::cli_h2(paste0("nonmem2rx translation notes (", crayon::bold$blue("$notes"),"):"))
+    }), "\n")
+    lapply(.tmp$notes, function(msg) {
+      cat("  ", cli::cli_format_method({
+        cli::cli_li(msg)
+      }), "\n")
+    })
+  }
   cat(cli::cli_format_method({
     cli::cli_h2("nonmem2rx extra properties:")
   }), "\n")
