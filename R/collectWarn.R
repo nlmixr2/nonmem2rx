@@ -19,6 +19,6 @@
       ))
     list(ret, ws)
   } else {
-    expr
+    list(expr, NULL)
   }
 }
