@@ -39,7 +39,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -75,23 +75,21 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
 #> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
 #> ℹ replace theta names
-#> Warning: there are duplicate theta names, not renaming duplicate parameters
 #> ℹ done
 #> ℹ replace eta names
-#> Warning: there are duplicate eta names, not renaming duplicate parameters
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
@@ -169,6 +167,9 @@ mod
 #>         ipred ~ prop(RSV)
 #>     })
 #> }
+#>  ── nonmem2rx translation notes ($notes): ──  
+#>    • there are duplicate eta names, not renaming duplicate parameters 
+#>    • there are duplicate theta names, not renaming duplicate parameters 
 #>  ── nonmem2rx extra properties: ──  
 #> other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs
 #> captured NONMEM table outputs: $predData, $ipredData
@@ -236,7 +237,7 @@ option `determineError=FALSE`)
 
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                  determineError=FALSE, lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -272,23 +273,21 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
 #> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
 #> ℹ replace theta names
-#> Warning: there are duplicate theta names, not renaming duplicate parameters
 #> ℹ done
 #> ℹ replace eta names
-#> Warning: there are duplicate eta names, not renaming duplicate parameters
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
@@ -370,6 +369,9 @@ print(mod)
 #>         y <- ipred + w * eps1
 #>     })
 #> }
+#>  ── nonmem2rx translation notes ($notes): ──  
+#>    • there are duplicate eta names, not renaming duplicate parameters 
+#>    • there are duplicate theta names, not renaming duplicate parameters 
 #>  ── nonmem2rx extra properties: ──  
 #> 
 #> Sigma ($sigma): 
@@ -711,8 +713,6 @@ different. For example:
 ``` r
 # full parameter precision
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res"))
-#> Warning: there are duplicate theta names, not renaming duplicate parameters
-#> Warning: there are duplicate eta names, not renaming duplicate parameters
 
 print(mod$ipredAtol)
 #>         50% 
@@ -738,9 +738,6 @@ print(mod$iwresRtol)
 # now reduce precision by using table/lst output only
 mod <- suppressMessages(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
                                   useXml=FALSE, useExt=FALSE,usePhi=FALSE))
-#> Warning: there are duplicate theta names, not renaming duplicate parameters
-
-#> Warning: there are duplicate eta names, not renaming duplicate parameters
 
 print(mod$predAtol)
 #>         50% 
