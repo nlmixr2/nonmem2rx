@@ -93,7 +93,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">nonmem2rx</span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -129,23 +129,21 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ replace theta names</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ replace eta names</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
 <span><span class="co">#&gt; ℹ done (no labels)</span></span>
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -223,6 +221,9 @@
 <span><span class="co">#&gt;         ipred ~ prop(RSV)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt;  ── nonmem2rx translation notes ($notes): ──  </span></span>
+<span><span class="co">#&gt;    • there are duplicate eta names, not renaming duplicate parameters </span></span>
+<span><span class="co">#&gt;    • there are duplicate theta names, not renaming duplicate parameters </span></span>
 <span><span class="co">#&gt;  ── nonmem2rx extra properties: ──  </span></span>
 <span><span class="co">#&gt; other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs</span></span>
 <span><span class="co">#&gt; captured NONMEM table outputs: $predData, $ipredData</span></span>
@@ -254,7 +255,7 @@
 <code class="sourceCode R"><span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>,</span>
 <span>                 determineError<span class="op">=</span><span class="cn">FALSE</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -290,23 +291,21 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp9ChM8z/temp_libpath2c78560f1ff7/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem ETA data (for model validation): /tmp/RtmpbHUN4M/temp_libpath21c2e5a8d3c96/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ replace theta names</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ replace eta names</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
 <span><span class="co">#&gt; ℹ done (no labels)</span></span>
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -388,6 +387,9 @@
 <span><span class="co">#&gt;         y &lt;- ipred + w * eps1</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt;  ── nonmem2rx translation notes ($notes): ──  </span></span>
+<span><span class="co">#&gt;    • there are duplicate eta names, not renaming duplicate parameters </span></span>
+<span><span class="co">#&gt;    • there are duplicate theta names, not renaming duplicate parameters </span></span>
 <span><span class="co">#&gt;  ── nonmem2rx extra properties: ──  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Sigma ($sigma): </span></span>
@@ -658,8 +660,6 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># full parameter precision</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ipredAtol</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         50% </span></span>
@@ -685,9 +685,6 @@
 <span><span class="co"># now reduce precision by using table/lst output only</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>,</span>
 <span>                                  useXml<span class="op">=</span><span class="cn">FALSE</span>, useExt<span class="op">=</span><span class="cn">FALSE</span>,usePhi<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: there are duplicate theta names, not renaming duplicate parameters</span></span>
-<span></span>
-<span><span class="co">#&gt; Warning: there are duplicate eta names, not renaming duplicate parameters</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         50% </span></span>
