@@ -8,7 +8,7 @@
 #' @noRd
 .collectWarn <- function(expr, lst = FALSE) {
   if (getOption("nlmixr2.collectWarnings", TRUE)) {
-    ws <- c()
+    ws <- character(0)
     this.env <- environment()
     ret <-
       suppressWarnings(withCallingHandlers(
