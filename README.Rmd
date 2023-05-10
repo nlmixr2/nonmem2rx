@@ -47,8 +47,11 @@ install.packages('nonmem2rx')
 ## What you can do with `nonmem2rx`
 
 - [Convert a `NONMEM` model to a `rxode2`
-  model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html). With
-  this conversion you can:
+  model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html). 
+  
+- Make sure the model is translated correctly
+
+- Then with this model, you can:
 
   - Perform simulations of new dosing from the NONMEM model (with and
     without uncertainty in population parameters and between subject
@@ -57,11 +60,8 @@ install.packages('nonmem2rx')
   - Modify the model for scenarios like adaptive dosing with model
     piping
 
-- Before you do all that, you can make sure the conversion matches
-  `NONMEM`
-
-- With `nonmem2rx` and `babelmixr2`, converted the imported `rxode2`
-  model to a `nlmixr2` with residuals specified. This allows:
+- With `nonmem2rx` and `babelmixr2`, convert the imported `rxode2`
+  model to a `nlmixr2` object, allowing:
   
   - Generation of Word and PowerPoint plots with `nlmixr2rpt` because
     the goodness of fit plots can be created from this object
@@ -71,11 +71,16 @@ install.packages('nonmem2rx')
   - Easy Individual plots with extra solved points to show the
     curvature of individual and population fits for sparse data-sets
     (with `augPred()`)
+    
+- You can even use this conversion to help debug your NONMEM model (or
+  even try it in `nlmixr2` instead)
   
   - Understand how to simplify the NONMEM model to avoid rounding errors
   
   - Run `nlmixr2`'s covariance step when `NONMEM`s covariance step has
     failed
+    
+- This model could be a seed for other types of models
     
   - Use model piping within `nlmixr2` to modify/fix parts of the model
     (and subsequent estimation in `nlmixr2` or even `NONMEM` with

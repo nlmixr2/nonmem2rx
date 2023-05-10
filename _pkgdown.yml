@@ -6,7 +6,7 @@ template:
 navbar:
   left:
   - text: Converting
-    icon: fas fa-book
+    icon: fa-arrow-right
     menu:
         - text: "Converting NONMEM to rxode2 model"
           href: articles/import-nonmem.html
