@@ -25,8 +25,9 @@ knitr::opts_chunk$set(
 ![r-universe](https://nlmixr2.r-universe.dev/badges/nonmem2rx)
 <!-- badges: end -->
 
-The goal of nonmem2rx is to convert a NONMEM control stream to
-`rxode2` for easy clinical trial simulation in R.
+The goal of nonmem2rx is to convert a NONMEM control stream to a
+`rxode2` (or even a `nlmixr2` fit) for easy clinical trial simulation
+in R.
 
 ## Installation
 
@@ -45,7 +46,9 @@ install.packages('nonmem2rx')
 
 ## What you can do with `nonmem2rx`
 
-- Convert a `NONMEM` model to a `rxode2` model. With this conversion you can:
+- [Convert a `NONMEM` model to a `rxode2`
+  model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html). With
+  this conversion you can:
 
   - Perform simulations of new dosing from the NONMEM model (with and
     without uncertainty in population parameters and between subject

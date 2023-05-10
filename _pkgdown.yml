@@ -1,4 +1,17 @@
 url: ~
 template:
   bootstrap: 5
-
+  params:
+    bootswatch: flatly
+navbar:
+  left:
+  - text: Converting
+    icon: fas fa-book
+    menu:
+        - text: "Converting NONMEM to rxode2 model"
+          href: articles/import-nonmem.html
+        - text: "Converting NONMEM to nlmixr2 object"
+          href: articles/convert-nlmixr2.html
+  - text: "Functions"
+    icon: fa-file-code-o
+    href: reference/index.html
