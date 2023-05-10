@@ -25,14 +25,17 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     f2 <- f %>% ini(eta1=fixed)
     expect_false(is.null(f2$nonmemData))
     expect_true(!is.null(f2$dfSub))
+    expect_true(inherits(f2, "nonmem2rx"))
 
     f2 <- f %>% rxRename(eta.v=eta2)
     expect_false(is.null(f2$nonmemData))
     expect_true(!is.null(f2$dfSub))
+    expect_true(inherits(f2, "nonmem2rx"))
 
     f2 <- f %>% dplyr::rename(eta.v=eta2)
     expect_false(is.null(f2$nonmemData))
     expect_true(!is.null(f2$dfSub))
+    expect_true(inherits(f2, "nonmem2rx"))
 
 
 
