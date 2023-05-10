@@ -57,7 +57,10 @@ Suggests:
     nlme,
     dplyr,
     xgxr,
-    vdiffr
+    vdiffr,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

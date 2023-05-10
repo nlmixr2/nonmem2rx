@@ -5,3 +5,5 @@
 *.o
 *.dll
 *.so
+inst/doc
+docs

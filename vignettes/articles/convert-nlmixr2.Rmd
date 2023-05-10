@@ -1,0 +1,74 @@
+---
+title: "Converting a NONMEM fit to a nlmixr2 object"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r asNonmem2Rx}
+library(nonmem2rx)
+library(babelmixr2)
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 determineError=FALSE, lst=".res", save=FALSE)
+
+print(mod)
+
+# You can see that the residual error isn't specified in ~ syntax
+#
+# I also like to name my parameters so they mean something a bit more
+# descriptive (though I kept the estimates the same):
+# 
+mod2 <-function() {
+  ini({
+    lcl <- 1.37034036528946
+    lvc <- 4.19814911033061
+    lq <- 1.38003493562413
+    lvp <- 3.87657341967489
+    RSV <- c(0, 0.196446108190896, 1)
+    eta.cl ~ 0.101251418415006
+    eta.v ~ 0.0993872449483344
+    eta.q ~ 0.101302674763154
+    eta.v2 ~ 0.0730497519364148
+  })
+  model({
+    cmt(CENTRAL)
+    cmt(PERI)
+    cl <- exp(lcl + eta.cl)
+    v <- exp(lvc + eta.v)
+    q <- exp(lq + eta.q)
+    v2 <- exp(lvp + eta.v2)
+    v1 <- v
+    scale1 <- v
+    k21 <- q/v2
+    k12 <- q/v
+    d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+    d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+    f <- CENTRAL/scale1
+    f ~ prop(RSV)
+  })
+}
+
+# The `as.nonmem2rx` function will compare the already imported
+# function to the one you made some manual tweaks to
+new <- as.nonmem2rx(mod2, mod)
+
+print(new)
+
+```
+
+In this case the `new` model qualifies and now has all the information
+from the imported nonmem2rx model.
+
+This means you can estimate from the new model knowing it was the same
+model specified in NONMEM.
+
+Since `iwres` is affected by how your specify your residuals, pay
+special attention to that validation.  If it does not validate, you
+may have forgot to translate the NONMEM variance estimate to the
+standard deviation estimate required by many estimation methods.
+
