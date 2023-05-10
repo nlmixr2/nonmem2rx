@@ -31,7 +31,11 @@ rxRename.nonmem2rx <- function(.data, ...) {
   lapply(seq_along(.lst), function(i) {
     .rxnmRename1(.rxui, .lst[[i]])
   })
-  rxode2::rxUiCompress(.rxui)
+  .ret <- rxode2::rxUiCompress(.rxui)
+  if (!inherits(.ret, "nonmem2x")) {
+    class(.ret) <- c("nonmem2rx", class(.ret))
+  }
+  .ret
 }
 
 rename.nonmem2rx <- rxRename.nonmem2rx
