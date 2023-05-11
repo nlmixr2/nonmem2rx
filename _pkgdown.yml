@@ -7,7 +7,7 @@ reference:
   - title: Importing NONMEM to rxode2
     contents:
       - nonmem2rx
-  - title: Cross-checking manual models with imported models
+  - title: Cross-checking manual models
     contents:
       - as.nonmem2rx
   - title: Reading in information from `NONMEM`
