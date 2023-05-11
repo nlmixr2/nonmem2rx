@@ -23,6 +23,7 @@ dosing paradigm than what was modeled.
 ```{r setup}
 library(nonmem2rx)
 library(rxode2)
+
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 ```
 

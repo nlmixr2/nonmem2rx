@@ -110,7 +110,7 @@ plot(mod, log="y", ncol=2, nrow=2,
 ```
 
 
-### Notes on validation
+## Notes on validation
 
 The validation of the model uses the best data available for NONMEM
 estimates.  This is:

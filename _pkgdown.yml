@@ -21,9 +21,7 @@ navbar:
       - text: "New Dosing Scenarios"
         href: articles/simulate-new-dosing.html
       - text: "Simulating with Uncertainty"
-        href: articles/rxode2-validate.html
-      - text: "Adaptive dosing & piping"
-        href: articles/rxode2-validate.html
+        href: articles/simulate-uncertainty.html
     href: articles/rxode2-validate.html
   - text: "Reporting"
     icon: fa-file
