@@ -53,14 +53,16 @@ install.packages('nonmem2rx')
 
 - Then with this model, you can:
 
-  - Perform simulations of new dosing from the NONMEM model or even
-    using the uncertainty in your model to simulate new scenarios
+  - Perform [simulations of new
+    dosing](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html)
+    from the NONMEM model or even [simulate using the uncertainty in your model](https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html)
+    to simulate new scenarios
   
   - Modify the model for scenarios like adaptive dosing with model
     piping
 
-- With `nonmem2rx` and `babelmixr2`, convert the imported `rxode2`
-  model to a `nlmixr2` object, allowing:
+- With `nonmem2rx` and `babelmixr2`, [convert the imported `rxode2`
+  model to a `nlmixr2` object](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html), allowing:
   
   - Generation of Word and PowerPoint plots with `nlmixr2rpt` because
     the goodness of fit plots can be created from this object

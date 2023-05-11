@@ -19,7 +19,7 @@ navbar:
     icon: fa-dice
     menu:
       - text: "New Dosing Scenarios"
-        href: articles/rxode2-validate.html
+        href: articles/simulate-new-dosing.html
       - text: "Simulating with Uncertainty"
         href: articles/rxode2-validate.html
       - text: "Adaptive dosing & piping"

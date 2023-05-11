@@ -47,15 +47,20 @@ install.packages('nonmem2rx')
 
   - Then with this model, you can:
     
-      - Perform simulations of new dosing from the NONMEM model (with
-        and without uncertainty in population parameters and between
-        subject covariances)
+      - Perform [simulations of new
+        dosing](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html)
+        from the NONMEM model or even [simulate using the uncertainty in
+        your
+        model](https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html)
+        to simulate new scenarios
     
       - Modify the model for scenarios like adaptive dosing with model
         piping
 
-  - With `nonmem2rx` and `babelmixr2`, convert the imported `rxode2`
-    model to a `nlmixr2` object, allowing:
+  - With `nonmem2rx` and `babelmixr2`, [convert the imported `rxode2`
+    model to a `nlmixr2`
+    object](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html),
+    allowing:
     
       - Generation of Word and PowerPoint plots with `nlmixr2rpt`
         because the goodness of fit plots can be created from this
@@ -76,13 +81,13 @@ install.packages('nonmem2rx')
       - Run `nlmixr2`’s covariance step when `NONMEM`s covariance step
         has failed
 
-  - This model could be a seed for other types of models
+  - This model could be a starting point for other types of models
     
       - Use model piping within `nlmixr2` to modify/fix parts of the
         model (and subsequent estimation in `nlmixr2` or even `NONMEM`
         with `babelmixr2`)
 
-## Example
+## Simple example
 
 Once `nonmem2rx` has been loaded, you simply type the location of the
 nonmem control stream for the parser to start. For example:
@@ -90,7 +95,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpA7lw0B/temp_libpath683b152e6425/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpW6iHYJ/temp_libpath3e574b288918/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -126,15 +131,15 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpA7lw0B/temp_libpath683b152e6425/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpW6iHYJ/temp_libpath3e574b288918/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
 #> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpA7lw0B/temp_libpath683b152e6425/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpW6iHYJ/temp_libpath3e574b288918/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpA7lw0B/temp_libpath683b152e6425/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem ETA data (for model validation): /tmp/RtmpW6iHYJ/temp_libpath3e574b288918/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done

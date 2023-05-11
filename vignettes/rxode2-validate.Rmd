@@ -50,21 +50,7 @@ generated outputs for the following items:
 is the between subject covariance matrix, `omega`. We assume this is
 correct as long as it is read in correctly.
 
-The easiest way to visually compare the differences is by the plot method:
-
-```{r plot}
-plot(mod) # for general plot
-# you can also see individual comparisons
-plot(mod, log="y", ncol=2, nrow=2,
-     xlab="Time (hr)", ylab="Concentrations",
-     page=1)
-
-# If you want all pages you could use:
-#
-plot(mod, log="y", ncol=2, nrow=2,
-     xlab="Time (hr)", ylab="Concentrations",
-     page=TRUE)
-```
+## Comparing numerically
 
 If you want numerical differences, you can also get these from the
 modified returned `ui` object.  For the rtol, atol as follows you have:
@@ -104,6 +90,25 @@ the validation predictions (dosing and observations) by the
 ```{r nonmemData}
 head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 ```
+
+## Comparing visually
+
+The easiest way to visually compare the differences is by the plot method:
+
+```{r plot}
+plot(mod) # for general plot
+# you can also see individual comparisons
+plot(mod, log="y", ncol=2, nrow=2,
+     xlab="Time (hr)", ylab="Concentrations",
+     page=1)
+
+# If you want all pages you could use:
+#
+plot(mod, log="y", ncol=2, nrow=2,
+     xlab="Time (hr)", ylab="Concentrations",
+     page=TRUE)
+```
+
 
 ### Notes on validation
 
