@@ -1,0 +1,66 @@
+---
+title: "Easily Create a VPC using nonmem2rx"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+This shows an easy work-flow to create a VPC using a NONMEM model:
+
+# Step 1: Convert the `NONMEM` model to `rxode2`:
+
+```{r setup}
+library(babelmixr2)
+library(nonmem2rx)
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+```
+
+
+# Step 2: convert the `rxode2` model to `nlmixr2`
+
+In this step, you convert the model to `nlmixr2` by `as.nlmixr2(mod)`;
+You may need to do a [little manual work to get the residual
+specification to match between nlmixr2 and NONMEM](convert-nlmixr2.html). 
+
+Once the residual specification is compatible with a nlmixr2 object, you can convert the model, `mod`, to
+a nlmixr2 fit object:
+
+```{r toNlmixr2}
+fit <- as.nlmixr2(mod)
+
+fit
+```
+
+# Step 3: Perform the VPC
+
+From here we simply use `vpcPlot()` in conjunction with the `vpc`
+package to get the regular and prediction-corrected VPCs and arrange
+them on a single plot:
+
+```{r vpc}
+
+library(ggplot2)
+p1 <- vpcPlot(fit, show=list(obs_dv=TRUE));
+p1 <- p1 + ylab("Concentrations") +
+  rxode2::rxTheme() +
+  xlab("Time (hr)") +
+  xgxr::xgx_scale_x_time_units("h", "h")
+
+p1a <- p1 + xgxr::xgx_scale_y_log10()
+
+## A prediction-corrected VPC
+p2 <- vpcPlot(fit, pred_corr = TRUE, show=list(obs_dv=TRUE))
+p2 <- p2 + ylab("Prediction-Corrected Concentrations") +
+  rxode2::rxTheme() +
+  xlab("Time (hr)") +
+  xgxr::xgx_scale_x_time_units("h", "h")
+
+p2a <- p2 + xgxr::xgx_scale_y_log10()
+
+
+library(patchwork)
+(p1 * p1a) / (p2 * p2a)
+```

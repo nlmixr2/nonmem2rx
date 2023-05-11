@@ -206,7 +206,7 @@ uncompressed (default: \code{TRUE})
 }
 \examples{
 
-nonmem2rx(system.file("run001.mod", package="nonmem2rx"), save=FALSE)
+
 
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 

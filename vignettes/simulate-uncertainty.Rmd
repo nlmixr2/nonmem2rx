@@ -29,7 +29,6 @@ library(rxode2)
 set.seed(42)
 rxSetSeed(42)
 
-
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 ```
 

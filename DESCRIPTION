@@ -25,6 +25,7 @@ Description: 'NONMEM' has been a tool for running nonlinear mixed
     matrix) with a 'rxode2' model.  This is complementary to the
     'babelmixr2' package that translates 'nlmixr2' models to 'NONMEM'.
 License: GPL (>= 3) 
+URL: https://nlmixr2.github.io/nonmem2rx/, https://github.com/nlmixr2/nonmem2rx/
 Encoding: UTF-8
 LinkingTo: 
     dparser,

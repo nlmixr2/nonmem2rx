@@ -34,3 +34,4 @@ print, or list which pages you want to print}
 \description{
 Autoplot nonmem2rx object
 }
+\keyword{internal}

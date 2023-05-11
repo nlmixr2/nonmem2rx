@@ -7,6 +7,7 @@
 #' @inheritParams rxode2::plot.rxSolve
 #' @inheritParams ggplot2::autoplot
 #' @inheritParams ggforce::facet_wrap_paginate
+#' @keywords internal
 autoplot.nonmem2rx <- function(object, ...,
                                ncol=3, nrow=3, log="", xlab = "Time", ylab = "Predictions",
                                page=FALSE) {

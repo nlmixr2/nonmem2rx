@@ -64,14 +64,14 @@ install.packages('nonmem2rx')
 - With `nonmem2rx` and `babelmixr2`, [convert the imported `rxode2`
   model to a `nlmixr2` object](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html), allowing:
   
-  - Generation of Word and PowerPoint plots with `nlmixr2rpt` because
-    the goodness of fit plots can be created from this object
+  - [Generation of Word and PowerPoint plots with `nlmixr2rpt`](https://nlmixr2.github.io/nonmem2rx/articles/create-office.html)
   
-  - Easy VPC creation (with `vpcPlot()`)
+  - [Easy VPC creation (with `vpcPlot()`)](https://nlmixr2.github.io/nonmem2rx/articles/create-vpc.html)
   
-  - Easy Individual plots with extra solved points to show the
-    curvature of individual and population fits for sparse data-sets
-    (with `augPred()`)
+  - [Easy Individual plots with extra solved
+    points](https://nlmixr2.github.io/nonmem2rx/articles/create-augPred.html).
+    This will show the curvature of individual and population fits for sparse
+    data-sets (with `augPred()`)
     
 - You can even use this conversion to help debug your NONMEM model (or
   even try it in `nlmixr2` instead)

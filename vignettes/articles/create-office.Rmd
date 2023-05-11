@@ -10,7 +10,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-setwd("..")
 ```
 
 # Step 1: import the model into `nonmem2rx`
@@ -26,7 +25,12 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 
 # Step 2: convert the `rxode2` model to `nlmixr2`
 
-In this step, you convert the model to `nlmixr2` by `as.nlmixr2(mod)`:
+In this step, you convert the model to `nlmixr2` by `as.nlmixr2(mod)`;
+You may need to do a [little manual work to get the residual
+specification to match between nlmixr2 and NONMEM](convert-nlmixr2.html).
+
+Once the residual specification is compatible with a nlmixr2 object, you can convert the model, `mod`, to
+a nlmixr2 fit object:
 
 ```{r toNlmixr2}
 fit <- as.nlmixr2(mod)
