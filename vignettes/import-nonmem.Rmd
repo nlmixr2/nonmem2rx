@@ -27,22 +27,20 @@ mod
 
 ## Setting up `nonmem2rx` for your model
 
-There are a few other things you may want to do when reading in a
-NONMEM control stream, which can be controlled, I believe the common ones are:
+Some common options that you may want to change when importing NONMEM
+control stream are:
 
-- Control the default NONMEM output extension; By default it is `.lst`
-  but if you prefer something else you can set it to something
-  else. For example if you use `.res` simply put
-  `options(nonmem2rx.lst=".res")` at the top.
+- The default NONMEM output extension; By default it is `.lst`.  You
+  can set it to something else, like `.res`, using the following
+  option: `options(nonmem2rx.lst=".res")`.
   
-- Turn on or off extended control stream support. Since not everyone
-  uses wings for nonmem, extended control stream support is off by
-  default.  But if you wish to turn it on by default you can use
-  `options(nonmem2rx.extended=TRUE)`
+- Turn on [extended control
+  stream](https://wfn.sourceforge.net/wfncs.htm#control_streams)
+  support. You can turn it on by `options(nonmem2rx.extended=TRUE)`
   
-The last common task you want to probably perform is changing the names of compartments and parameters.
-
-The easiest way to name the parameters whatever you want is to pre-specify the names.  For example:
+You probably also want to change the name of parameters and
+compartments. The easiest way to name the parameters whatever you want
+is to pre-specify the names.  For example:
 
 ```{r prespecify}
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE,
@@ -53,8 +51,8 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 mod
 ```
 
-This does check the parameter names to make sure they are the same
-length as what is input, if are not, the model will skip parameter
+This checks the parameter names to make sure they are the same
+length as the input names, if they are not, the model will skip parameter
 renaming and keep the default translation names `theta#` and `eta#`.
 
 As a note, `sigma` parameters are not currently renamed; So for the
@@ -74,11 +72,14 @@ mod <- mod %>% rxRename(add.var=eps1)
 mod
 ```
 
+This model does not specify the residuals in a way that makes sense to
+`nlmixr2`.  If you want, you can still [convert the `rxode2` model to
+a nlmixr2 fit](convert-nlmixr2.html).
+
 ## Technical details about reading NONMEM to rxode2
 
 The key files to import are the NONMEM control stream (or related
 file) and the NONMEM output (often with a `.lst` or `.res` extension).
-
 
 The import process steps are below:
 
@@ -87,54 +88,30 @@ The import process steps are below:
 
 - Try to determine an endpoint/residual specification in the model (if
   possible), and convert to a fully qualified ui model that can be
-  used in `nlmixr2` and `rxode2` [though you can manually fix
-  this](convert-nlmixr2.html)
+  used in `nlmixr2` and `rxode2`. If it cannot be determined
+  automatically, [you can manually fix this](convert-nlmixr2.html) and
+  still convert to a `nlmixr2` object (if the data/estimates are
+  available of course).
 
 - If available, `nonmem2rx` will read the final parameter estimates
   and update the model.
 
-- This will read in the nonmem input dataset, and search for the
-  output files with `IPRED`, `PRED` and the `ETA` values. The
+- The converter will read in the nonmem input dataset, and search for
+  the output files with `IPRED`, `PRED` and the `ETA` values. The
   translated `rxode2` model is run for the population parameters and
   the individual parameters.  This will then compare the results
   between `NONMEM` and `rxode2` to make sure the translation makes
   sense.  This only works when `nonmem2rx` has access to the input
-  data and the output with the `IWRES`, `IPRED`, `PRED` and the `ETA` values.
+  data and the output with the `IWRES`, `IPRED`, `PRED` and the `ETA`
+  values.
 
-- Converts the upper case NONMEM variables to lower case.
+- Converts the upper case NONMEM variables to lower case (can be
+  turned off with `nonmem2rx(..., toLowerLhs=FALSE))`)
 
-- Replaces the NONMEM theta / eta names with the label-based names like an
-  extended control stream.
+- Replaces the NONMEM theta / eta names with the label-based names
+  like an extended control stream (can be turned off with
+  `nonmem2rx(thetaNames=FALSE, etaNames=FALSE)`)
 
 - Replaces the compartment names with the defined compartment names in
   the control stream (ie `COMP=(compartmenName)`)
   
-### Creating a nlmixr2 compatible model 
-
-Depending on the model, not all the residual specifications are
-translated to the `nlmixr2` style residuals.  This means the model
-cannot be immediately used for nlmixr2 estimation (though you can
-simulate with and without certainty without any modifications)
-
-For example you could have something like:
-
-```r
-y <- ipred*(1+eps1)
-```
-
-For a model that can do `nlmixr2` estimation instead of simply
-simulation the residual needs to be changed to something like:
-
-```r
-cp ~ prop(prop.sd)
-```
-
-Since the model when import has most of the translation done already,
-you can easily tweak the model to have this form. 
-
-Here is the same example where the residual errors are not
-automatically translated to the `nlmixr2` parameter style (in this
-case because of the option `determineError=FALSE`)
-
-
-

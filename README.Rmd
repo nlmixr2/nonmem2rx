@@ -49,13 +49,12 @@ install.packages('nonmem2rx')
 - [Convert a `NONMEM` model to a `rxode2`
   model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html). 
   
-- Make sure the model is translated correctly
+- [Make sure the model is translated correctly](https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html)
 
 - Then with this model, you can:
 
-  - Perform simulations of new dosing from the NONMEM model (with and
-    without uncertainty in population parameters and between subject
-    covariances)
+  - Perform simulations of new dosing from the NONMEM model or even
+    using the uncertainty in your model to simulate new scenarios
   
   - Modify the model for scenarios like adaptive dosing with model
     piping
@@ -80,13 +79,13 @@ install.packages('nonmem2rx')
   - Run `nlmixr2`'s covariance step when `NONMEM`s covariance step has
     failed
     
-- This model could be a seed for other types of models
+- This model could be a starting point for other types of models
     
   - Use model piping within `nlmixr2` to modify/fix parts of the model
     (and subsequent estimation in `nlmixr2` or even `NONMEM` with
     `babelmixr2`)
     
-## Example
+## Simple example
 
 Once `nonmem2rx` has been loaded, you simply type the location of the
 nonmem control stream for the parser to start.  For example:

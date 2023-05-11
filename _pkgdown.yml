@@ -12,6 +12,29 @@ navbar:
           href: articles/import-nonmem.html
         - text: "Converting NONMEM to nlmixr2 object"
           href: articles/convert-nlmixr2.html
+  - text: "Validate"
+    icon: fa-check
+    href: articles/rxode2-validate.html
+  - text: "Simulation"
+    icon: fa-dice
+    menu:
+      - text: "New Dosing Scenarios"
+        href: articles/rxode2-validate.html
+      - text: "Simulating with Uncertainty"
+        href: articles/rxode2-validate.html
+      - text: "Adaptive dosing & piping"
+        href: articles/rxode2-validate.html
+    href: articles/rxode2-validate.html
+  - text: "Reporting"
+    icon: fa-file
+    href: articles/rxode2-validate.html
+  - text: "Debugging"
+    icon: fa-bug
+    menu:
+      - text: "Recovering from Rounding Errors"
+        href: articles/rxode2-validate.html
+      - text: "Adding a covariance step"
+        href: articles/rxode2-validate.html
   - text: "Functions"
     icon: fa-file-code-o
     href: reference/index.html

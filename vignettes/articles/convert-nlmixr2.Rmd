@@ -8,7 +8,35 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+### Creating a nlmixr2 compatible model 
 
+Depending on the model, not all the residual specifications are
+translated to the `nlmixr2` style residuals.  This means the model
+cannot be immediately used for either `nlmixr2()` estimation or
+creating a `nlmixr2` fit object (though you can simulate with and
+without certainty without any modifications)
+
+For example you could have something like:
+
+```r
+y <- ipred*(1+eps1)
+```
+
+For a model that can do `nlmixr2` estimation instead of simply
+simulation the residual needs to be changed to something like:
+
+```r
+cp ~ prop(prop.sd)
+```
+
+Since the model when import has most of the translation done already,
+you can easily tweak the model to have this form. 
+
+Here is the same example where the residual errors are not
+automatically translated to the `nlmixr2` parameter style (in this
+case because of the option `determineError=FALSE`)
+
+## Example -- no error determined
 
 ```{r asNonmem2Rx}
 library(nonmem2rx)
@@ -17,12 +45,15 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                  determineError=FALSE, lst=".res", save=FALSE)
 
 print(mod)
+```
 
-# You can see that the residual error isn't specified in ~ syntax
-#
-# I also like to name my parameters so they mean something a bit more
-# descriptive (though I kept the estimates the same):
-# 
+One approach to get a nlmixr2 compatible model is to copy the printed
+model above and then modify it as needed.
+
+In this case, I will name the parameters to something a bit more
+meaningful while keeping the estimates the same:
+
+```{r manuallySpecifyModel}
 mod2 <-function() {
   ini({
     lcl <- 1.37034036528946
@@ -52,13 +83,15 @@ mod2 <-function() {
     f ~ prop(RSV)
   })
 }
+```
 
-# The `as.nonmem2rx` function will compare the already imported
-# function to the one you made some manual tweaks to
+The `as.nonmem2rx()` function will compare the already imported rxode2
+model function with the model you made some manual tweaks to:
+
+```{r}
 new <- as.nonmem2rx(mod2, mod)
 
 print(new)
-
 ```
 
 In this case the `new` model qualifies and now has all the information
@@ -72,3 +105,20 @@ special attention to that validation.  If it does not validate, you
 may have forgot to translate the NONMEM variance estimate to the
 standard deviation estimate required by many estimation methods.
 
+
+### Converting the model to a nlmixr2 fit
+
+Once you have a `rxode2()` model that:
+
+- Qualifies against the NONMEM model, 
+
+- Has `nlmixr2` compatible residuals
+
+You can then convert it to a `nlmixr2` fit object with `babelmixr2`:
+
+```{r convertNlmixr2object}
+library(babelmixr2)
+fit <- as.nlmixr2(new)
+
+fit
+```
