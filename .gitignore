@@ -7,3 +7,6 @@
 *.so
 inst/doc
 docs
+/vignettes/articles/RUNN/
+/vignettes/articles/mod-PowerPoint.pptx
+/vignettes/articles/mod-Word.docx

@@ -24,8 +24,13 @@ navbar:
         href: articles/simulate-uncertainty.html
     href: articles/rxode2-validate.html
   - text: "Reporting"
-    icon: fa-file
-    href: articles/rxode2-validate.html
+    menu:
+      - text: "Creating word and powerpoint documents"
+        href: articles/create-office.html
+      - text: "Easily create VPC plots"
+        href: articles/create-vpc.html
+      - text: "Create enriched Individual plots"
+        href: articles/create-augPred.html
   - text: "Debugging"
     icon: fa-bug
     menu:
