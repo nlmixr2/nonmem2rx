@@ -4,10 +4,46 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/add-cov.html</loc>
+  </url>
+  <url>
+    <loc>/articles/convert-nlmixr2.html</loc>
+  </url>
+  <url>
+    <loc>/articles/create-augPred.html</loc>
+  </url>
+  <url>
+    <loc>/articles/create-office.html</loc>
+  </url>
+  <url>
+    <loc>/articles/create-vpc.html</loc>
+  </url>
+  <url>
+    <loc>/articles/import-nonmem.html</loc>
+  </url>
+  <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/read-rounding.html</loc>
+  </url>
+  <url>
+    <loc>/articles/rxode2-validate.html</loc>
+  </url>
+  <url>
+    <loc>/articles/simulate-new-dosing.html</loc>
+  </url>
+  <url>
+    <loc>/articles/simulate-uncertainty.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
     <loc>/index.html</loc>
+  </url>
+  <url>
+    <loc>/news/index.html</loc>
   </url>
   <url>
     <loc>/reference/as.nonmem2rx.html</loc>

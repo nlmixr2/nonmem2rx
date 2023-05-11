@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="41.875702mm"
+   height="48.520699mm"
+   viewBox="0 0 41.875702 48.520699"
+   version="1.1"
+   id="svg6736"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview6738"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.0885159"
+     inkscape:cx="90.03084"
+     inkscape:cy="237.47931"
+     inkscape:window-width="1904"
+     inkscape:window-height="1027"
+     inkscape:window-x="8"
+     inkscape:window-y="8"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs6733">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient7639">
+      <stop
+         style="stop-color:#3272c2;stop-opacity:0.12000013;"
+         offset="0"
+         id="stop7643" />
+      <stop
+         style="stop-color:#3272c2;stop-opacity:1;"
+         offset="1"
+         id="stop7635" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7639"
+       id="radialGradient7641"
+       cx="122.83262"
+       cy="99.999229"
+       fx="122.83262"
+       fy="99.999229"
+       r="91.894394"
+       gradientTransform="matrix(1,0,0,1.1544869,0,-19.554339)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-80.81215,-87.802146)">
+    <path
+       sodipodi:type="star"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient7641);fill-opacity:1;fill-rule:nonzero;stroke:#1b3d64;stroke-width:4.38096;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       id="path17178"
+       sodipodi:sides="6"
+       sodipodi:cx="121.90476"
+       sodipodi:cy="126.57602"
+       sodipodi:r1="103.56153"
+       sodipodi:r2="103.56153"
+       sodipodi:arg1="-0.52327829"
+       sodipodi:arg2="0.0003204856"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 211.60827,74.824 -0.0332,103.56153 -89.70351,51.75202 -89.670315,-51.80951 0.03319,-103.561527 89.703505,-51.752019 z"
+       inkscape:transform-center-x="0.32645456"
+       inkscape:transform-center-y="-1.460707"
+       transform="matrix(0.22784689,0,0,0.22867518,73.97438,83.117701)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.72547px;font-family:Arial;-inkscape-font-specification:Arial;display:inline;fill:#ffffff;fill-opacity:1;stroke:#1b3d64;stroke-width:1.16;stroke-opacity:1;stroke-dasharray:none"
+       x="78.367157"
+       y="130.76389"
+       id="text1297"
+       transform="scale(1.0750625,0.93017848)"><tspan
+         sodipodi:role="line"
+         id="tspan1295"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';fill:#ffffff;fill-opacity:1;stroke-width:1.16;stroke:#1b3d64;stroke-opacity:1;stroke-dasharray:none"
+         x="78.367157"
+         y="130.76389">nonmem2rx</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.72547px;font-family:Arial;-inkscape-font-specification:Arial;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.560457"
+       x="78.367157"
+       y="130.76389"
+       id="text1297-3"
+       transform="scale(1.0750625,0.93017848)"><tspan
+         sodipodi:role="line"
+         id="tspan1295-6"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Nimbus Roman';-inkscape-font-specification:'Nimbus Roman, ';fill:#ffffff;fill-opacity:1;stroke-width:0.560457"
+         x="78.367157"
+         y="130.76389">nonmem2rx</tspan></text>
+    <g
+       aria-label="n"
+       id="text2179"
+       style="font-size:64.6445px;font-family:'Noto Serif';-inkscape-font-specification:'Noto Serif';display:inline;fill:#1b3d64;fill-opacity:1;stroke-width:5.38704"
+       transform="matrix(0.31776032,0,0,0.52519023,37.396229,224.95154)">
+      <path
+         d="m 197.76208,-245.83778 h -4.39583 v 33.80907 h 4.6544 v -18.42368 c 0,-7.04625 1.82425,-12.19653 6.5433,-12.19653 3.94331,0 6.77347,3.59881 6.77347,9.80468 v 20.81553 h 4.65441 l -0.18483,-20.9972 c -0.0977,-11.10049 -7.74157,-12.40253 -10.63432,-12.55617 -3.95154,-0.20987 -6.59837,1.85994 -7.4106,3.7386 z"
+         style="font-family:'Nimbus Sans Narrow';-inkscape-font-specification:'Nimbus Sans Narrow';fill:#1b3d64;fill-opacity:1"
+         id="path3633"
+         sodipodi:nodetypes="ccccsssccsscc" />
+    </g>
+  </g>
+</svg>
