@@ -1,0 +1,16 @@
+---
+title: "Reading rounding from NONMEM"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Coming soon...
+
+```{r setup}
+library(nonmem2rx)
+```

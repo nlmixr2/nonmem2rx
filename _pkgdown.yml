@@ -50,9 +50,9 @@ navbar:
     icon: fa-bug
     menu:
       - text: "Recovering from Rounding Errors"
-        href: articles/rxode2-validate.html
+        href: articles/read-rounding.html
       - text: "Adding a covariance step"
-        href: articles/rxode2-validate.html
+        href: articles/add-cov.html
   - text: "Functions"
     icon: fa-file-code-o
     href: reference/index.html
