@@ -13,3 +13,7 @@
 ^inst/mods/bauer_2019_cptpsp_tutorial_1$
 ^inst/mods/bauer_2019_cptpsp_tutorial_2$
 
+^vignettes/articles$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

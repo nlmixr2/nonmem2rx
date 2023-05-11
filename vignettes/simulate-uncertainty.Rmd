@@ -1,0 +1,77 @@
+---
+title: "Simulate using Parameter Uncertainty"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulate using Parameter Uncertainty}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This page shows a simple work-flow for directly simulating a different
+dosing paradigm than what was modeled taking into account the modeled
+uncertainty. This workflow is very similar to simply [simulating
+without uncertainty](simuate-new-dosing.html) in the parameters
+themselves.
+
+## Step 1: Import the model
+
+```{r setup}
+library(nonmem2rx)
+library(rxode2)
+# its best practice to sed the seed for the simulations
+set.seed(42)
+rxSetSeed(42)
+
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+```
+
+## Step 2: Look at a different dosing paradigm
+
+Lets say that in this case instead of a single dose, we want to see
+what the concentration profile is with a single day of BID dosing.  In
+this case is done by creating a [quick event
+table](https://nlmixr2.github.io/rxode2/articles/rxode2-event-table.html).
+
+```{r eventTable}
+ev <- et(amt=120000, ii=12, until=24) %>%
+  et(c(1:6, seq(8, 24, by=2))) %>%
+  et(id=1:100)
+```
+
+
+## Step 3: Solve using the uncertainty in the NONMEM model
+
+To use the uncertainty in the model, it is a simple matter of telling
+how many times `rxode2()` should sample with `nStud=X`.  In this case
+we will use `100`.
+
+```{r rxSolve}
+s <- rxSolve(mod, ev, nStud=100)
+
+s
+```
+
+## Step 4: Summarize and plot
+
+Since there is a bunch of data, a confidence band of the simulation with uncertainty would be helpful. 
+
+One way to do that is to select the interesting components, create a confidence interval and then plot the confidence bands:
+
+
+
+```{r confint}
+sci <- confint(s, parm=c("CENTRAL", "PERI", "sim"))
+
+sci
+
+plot(sci)
+
+plot(sci, log="y")
+```

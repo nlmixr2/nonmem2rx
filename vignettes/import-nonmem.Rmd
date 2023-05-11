@@ -1,0 +1,117 @@
+---
+title: "Importing NONMEM into rxode2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Importing NONMEM into rxode2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The goal of `nonmem2rx` is to convert a NONMEM control stream to
+`rxode2` for easy clinical trial simulation in R.
+
+Here is a quick example of a conversion:
+
+```{r model}
+library(nonmem2rx)
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+mod
+```
+
+## Setting up `nonmem2rx` for your model
+
+Some common options that you may want to change when importing NONMEM
+control stream are:
+
+- The default NONMEM output extension; By default it is `.lst`.  You
+  can set it to something else, like `.res`, using the following
+  option: `options(nonmem2rx.lst=".res")`.
+  
+- Turn on [extended control
+  stream](https://wfn.sourceforge.net/wfncs.htm#control_streams)
+  support. You can turn it on by `options(nonmem2rx.extended=TRUE)`
+  
+You probably also want to change the name of parameters and
+compartments. The easiest way to name the parameters whatever you want
+is to pre-specify the names.  For example:
+
+```{r prespecify}
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE,
+                 thetaNames=c("lcl", "lvc", "lq", "lvp", "prop.sd"),
+                 etaNames=c("eta.cl", "eta.vc", "eta.q","eta.vp"),
+                 cmtNames = c("central", "perip"))
+
+mod
+```
+
+This checks the parameter names to make sure they are the same
+length as the input names, if they are not, the model will skip parameter
+renaming and keep the default translation names `theta#` and `eta#`.
+
+As a note, `sigma` parameters are not currently renamed; So for the
+following model (which grabs the parameter automatically labels to
+generate variables), `sigma` is simply `eps#`.
+
+```{r prespecifySigma}
+mod <- nonmem2rx(system.file("Theopd.ctl", package="nonmem2rx"), save=FALSE)
+mod
+```
+
+You can still rename however you wish, though, using model piping
+(`rxRename()` or `dplyr::rename()` would both work):
+
+```{r renameMod}
+mod <- mod %>% rxRename(add.var=eps1)
+mod
+```
+
+This model does not specify the residuals in a way that makes sense to
+`nlmixr2`.  If you want, you can still [convert the `rxode2` model to
+a nlmixr2 fit](convert-nlmixr2.html).
+
+## Technical details about reading NONMEM to rxode2
+
+The key files to import are the NONMEM control stream (or related
+file) and the NONMEM output (often with a `.lst` or `.res` extension).
+
+The import process steps are below:
+
+- Read in the nonmem control stream and convert the model to a
+  `rxode2` ui function.
+
+- Try to determine an endpoint/residual specification in the model (if
+  possible), and convert to a fully qualified ui model that can be
+  used in `nlmixr2` and `rxode2`. If it cannot be determined
+  automatically, [you can manually fix this](convert-nlmixr2.html) and
+  still convert to a `nlmixr2` object (if the data/estimates are
+  available of course).
+
+- If available, `nonmem2rx` will read the final parameter estimates
+  and update the model.
+
+- The converter will read in the nonmem input dataset, and search for
+  the output files with `IPRED`, `PRED` and the `ETA` values. The
+  translated `rxode2` model is run for the population parameters and
+  the individual parameters.  This will then compare the results
+  between `NONMEM` and `rxode2` to make sure the translation makes
+  sense.  This only works when `nonmem2rx` has access to the input
+  data and the output with the `IWRES`, `IPRED`, `PRED` and the `ETA`
+  values.
+
+- Converts the upper case NONMEM variables to lower case (can be
+  turned off with `nonmem2rx(..., toLowerLhs=FALSE))`)
+
+- Replaces the NONMEM theta / eta names with the label-based names
+  like an extended control stream (can be turned off with
+  `nonmem2rx(thetaNames=FALSE, etaNames=FALSE)`)
+
+- Replaces the compartment names with the defined compartment names in
+  the control stream (ie `COMP=(compartmenName)`)
+  

@@ -1,0 +1,124 @@
+---
+title: "Converting a NONMEM fit to a nlmixr2 object"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+### Creating a nlmixr2 compatible model 
+
+Depending on the model, not all the residual specifications are
+translated to the `nlmixr2` style residuals.  This means the model
+cannot be immediately used for either `nlmixr2()` estimation or
+creating a `nlmixr2` fit object (though you can simulate with and
+without certainty without any modifications)
+
+For example you could have something like:
+
+```r
+y <- ipred*(1+eps1)
+```
+
+For a model that can do `nlmixr2` estimation instead of simply
+simulation the residual needs to be changed to something like:
+
+```r
+cp ~ prop(prop.sd)
+```
+
+Since the model when import has most of the translation done already,
+you can easily tweak the model to have this form. 
+
+Here is the same example where the residual errors are not
+automatically translated to the `nlmixr2` parameter style (in this
+case because of the option `determineError=FALSE`)
+
+## Example -- no error determined
+
+```{r asNonmem2Rx}
+library(nonmem2rx)
+library(babelmixr2)
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 determineError=FALSE, lst=".res", save=FALSE)
+
+print(mod)
+```
+
+One approach to get a nlmixr2 compatible model is to copy the printed
+model above and then modify it as needed.
+
+In this case, I will name the parameters to something a bit more
+meaningful while keeping the estimates the same:
+
+```{r manuallySpecifyModel}
+mod2 <-function() {
+  ini({
+    lcl <- 1.37034036528946
+    lvc <- 4.19814911033061
+    lq <- 1.38003493562413
+    lvp <- 3.87657341967489
+    RSV <- c(0, 0.196446108190896, 1)
+    eta.cl ~ 0.101251418415006
+    eta.v ~ 0.0993872449483344
+    eta.q ~ 0.101302674763154
+    eta.v2 ~ 0.0730497519364148
+  })
+  model({
+    cmt(CENTRAL)
+    cmt(PERI)
+    cl <- exp(lcl + eta.cl)
+    v <- exp(lvc + eta.v)
+    q <- exp(lq + eta.q)
+    v2 <- exp(lvp + eta.v2)
+    v1 <- v
+    scale1 <- v
+    k21 <- q/v2
+    k12 <- q/v
+    d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+    d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+    f <- CENTRAL/scale1
+    f ~ prop(RSV)
+  })
+}
+```
+
+The `as.nonmem2rx()` function will compare the already imported rxode2
+model function with the model you made some manual tweaks to:
+
+```{r}
+new <- as.nonmem2rx(mod2, mod)
+
+print(new)
+```
+
+In this case the `new` model qualifies and now has all the information
+from the imported nonmem2rx model.
+
+This means you can estimate from the new model knowing it was the same
+model specified in NONMEM.
+
+Since `iwres` is affected by how your specify your residuals, pay
+special attention to that validation.  If it does not validate, you
+may have forgot to translate the NONMEM variance estimate to the
+standard deviation estimate required by many estimation methods.
+
+
+### Converting the model to a nlmixr2 fit
+
+Once you have a `rxode2()` model that:
+
+- Qualifies against the NONMEM model, 
+
+- Has `nlmixr2` compatible residuals
+
+You can then convert it to a `nlmixr2` fit object with `babelmixr2`:
+
+```{r convertNlmixr2object}
+library(babelmixr2)
+fit <- as.nlmixr2(new)
+
+fit
+```

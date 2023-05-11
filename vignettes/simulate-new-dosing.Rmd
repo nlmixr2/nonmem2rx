@@ -1,0 +1,71 @@
+---
+title: "Simulate New dosing from NONMEM model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulate New dosing from NONMEM model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This page shows a simple work-flow for directly simulating a different
+dosing paradigm than what was modeled.
+
+
+## Step 1: Import the model
+
+```{r setup}
+library(nonmem2rx)
+library(rxode2)
+
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+```
+
+## Step 2: Look at a different dosing paradigm
+
+Lets say that in this case instead of a single dose, we want to see
+what the concentration profile is with a single day of BID dosing.
+In this case is done by creating a [quick event table](https://nlmixr2.github.io/rxode2/articles/rxode2-event-table.html):
+
+```{r eventTable}
+ev <- et(amt=120000, ii=12, until=24) %>%
+  et(list(c(0, 2), # add observations in windows
+          c(4, 6),
+          c(8, 12),
+          c(14, 18),
+          c(20, 26),
+          c(28, 32),
+          c(32, 36),
+          c(36, 44))) %>%
+  et(id=1:10)
+```
+
+## Step 3: solve using `rxode2`
+
+In this step, we solve the model with the new event table for the 10
+subjects:
+
+```{r solve}
+s <- rxSolve(mod, ev)
+```
+
+Note that since this is a `nonmem2rx` model, the default solving will
+match the tolerances and methods specified in your `NONMEM` model.
+
+## Step 4: exploring the simulation (by plotting)
+
+This solved object acts the same as any other `rxode2` solved object,
+so you can use the `plot()` function to see the individual profiles
+you simulated:
+
+```{r plot}
+library(ggplot2)
+plot(s, ipred) +
+  ylab("Concentrations")
+```

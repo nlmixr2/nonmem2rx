@@ -1,0 +1,125 @@
+---
+title: "Validate rxode2 model against NONMEM"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validate rxode2 model against NONMEM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+library(nonmem2rx)
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+```
+
+### Comparing differences between `NONMEM` and `rxode2`
+
+You may wish to see where the differences in predictions are between
+NONMEM and rxode2.
+
+The `rxode2` generated outputs are compared with the `NONMEM`
+generated outputs for the following items:
+
+- **Population Predictions:** this shows if the model translation is
+  adequate to simulate general trends; This will validate structural
+  model's population parameters coupled with the model structure.
+  
+- **Individual Predictions:** this shows if the model translation is
+  able to replicate the same values over all the subjects within the
+  modeling data-set.  This validates the model can reproduce the
+  between subject variability observed in the study. 
+  
+- **Individual Weighted Residuals:** this is one step further than the
+  individual parameter validation, it couples the individual
+  predictions, the observations and the residual specification to
+  generate the individual weighted residuals. Since you can [modify
+  the residual specification to create a nlmixr2-compatible
+  model](convert-nlmixr2.html), this step is important to make sure
+  the residual specification is the same.
+  
+  
+**Note:** the only part that is not validated with these three metrics
+is the between subject covariance matrix, `omega`. We assume this is
+correct as long as it is read in correctly.
+
+## Comparing numerically
+
+If you want numerical differences, you can also get these from the
+modified returned `ui` object.  For the rtol, atol as follows you have:
+
+```{r tol}
+mod$iwresAtol
+mod$iwresRtol
+mod$ipredAtol
+mod$ipredRtol
+mod$predAtol
+mod$predAtol
+```
+
+You can see they do not exactly match but are very close (I would say
+they validate). However you can explore these difference further if you wish
+by looking at the `ipredCompare` and `predCompare` datasets:
+
+```{r compare}
+head(mod$iwresCompare)
+
+head(mod$ipredCompare)
+
+head(mod$predCompare)
+```
+
+In these cases you can see that NONMEM seems to round the values for
+the output (the rounding rules are based on the `FORMAT` option), but
+rxode2 seems to keep the entire number.
+
+Note this is the **observation data only** that is compared.  Dosing
+predictions are excluded from these comparisons.
+
+You can also explore the NONMEM input dataset that was used to make
+the validation predictions (dosing and observations) by the
+`$nonmemData` item:
+
+```{r nonmemData}
+head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
+```
+
+## Comparing visually
+
+The easiest way to visually compare the differences is by the plot method:
+
+```{r plot}
+plot(mod) # for general plot
+# you can also see individual comparisons
+plot(mod, log="y", ncol=2, nrow=2,
+     xlab="Time (hr)", ylab="Concentrations",
+     page=1)
+
+# If you want all pages you could use:
+#
+plot(mod, log="y", ncol=2, nrow=2,
+     xlab="Time (hr)", ylab="Concentrations",
+     page=TRUE)
+```
+
+
+## Notes on validation
+
+The validation of the model uses the best data available for NONMEM
+estimates.  This is:
+
+- `theta` or population parameters
+- `eta` or individual parameters
+
+The `omega` and `sigma` matrices are captured. When the nlmixr2 model
+is fully qualified, the `IWRES` validation ensures the residual errors
+are specified correctly. Otherwise `omega` and `sigma` values do not contribute to
+the validation.  Also the overall covariance is captured, but not used
+in the validation.

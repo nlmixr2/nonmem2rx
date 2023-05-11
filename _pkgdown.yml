@@ -1,0 +1,61 @@
+url: ~
+template:
+  bootstrap: 5
+  params:
+    bootswatch: flatly
+reference:
+  - title: Importing NONMEM to rxode2
+    contents:
+      - nonmem2rx
+  - title: Cross-checking manual models
+    contents:
+      - as.nonmem2rx
+  - title: Reading in information from `NONMEM`
+    contents:
+      - nminfo
+      - nmcov
+      - nmext
+      - nmlst
+      - nmtab
+      - nmxml
+navbar:
+  left:
+  - text: Converting
+    icon: fa-arrow-right
+    menu:
+        - text: "Converting NONMEM to rxode2 model"
+          href: articles/import-nonmem.html
+        - text: "Converting NONMEM to nlmixr2 object"
+          href: articles/convert-nlmixr2.html
+  - text: "Validate"
+    icon: fa-check
+    href: articles/rxode2-validate.html
+  - text: "Simulation"
+    icon: fa-dice
+    menu:
+      - text: "New Dosing Scenarios"
+        href: articles/simulate-new-dosing.html
+      - text: "Simulating with Uncertainty"
+        href: articles/simulate-uncertainty.html
+    href: articles/rxode2-validate.html
+  - text: "Reporting"
+    menu:
+      - text: "Creating word and powerpoint documents"
+        href: articles/create-office.html
+      - text: "Easily create VPC plots"
+        href: articles/create-vpc.html
+      - text: "Create enriched Individual plots"
+        href: articles/create-augPred.html
+  - text: "Debug"
+    icon: fa-bug
+    menu:
+      - text: "Recovering from Rounding Errors"
+        href: articles/read-rounding.html
+      - text: "Adding a covariance step"
+        href: articles/add-cov.html
+  - text: "Functions"
+    icon: fa-file-code-o
+    href: reference/index.html
+  - text: "News"
+    icon: fas fa-rss
+    href: news/index.html
