@@ -1,5 +1,5 @@
 ---
-title: "Validate rxode2 model against NONMEM"
+title: "Qualify rxode2 model against NONMEM"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Validate rxode2 model against NONMEM}

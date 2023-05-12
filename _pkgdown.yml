@@ -27,7 +27,7 @@ navbar:
           href: articles/import-nonmem.html
         - text: "Converting NONMEM to nlmixr2 object"
           href: articles/convert-nlmixr2.html
-  - text: "Validate"
+  - text: "Qualify"
     icon: fa-check
     href: articles/rxode2-validate.html
   - text: "Simulation"
