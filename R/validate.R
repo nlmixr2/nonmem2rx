@@ -93,16 +93,17 @@
     .msg <- "could not read in input data; validation skipped"
   }
   if (!is.null(.rx$nonmemData) && validate) {
+    .nonmemData <- .rx$nonmemData
     .model <- .rx$simulationModelIwres
     .theta <- .rx$theta
     .ci0 <- .ci <- ci
     .sigdig <- sigdig
     .ci <- (1 - .ci) / 2
     .q <- c(0, .ci, 0.5, 1 - .ci, 1)
-    .obsIdx <- .nonmemObsIndex(.rx$nonmemData)
+    .obsIdx <- .nonmemObsIndex(.nonmemData)
     .msg <- NULL
     if (!is.null(.rx$etaData) && !is.null(.rx$ipredData)) {
-      if (length(.rx$ipredData[,1]) == length(.rx$nonmemData[,1])) {
+      if (length(.rx$ipredData[,1]) == length(.nonmemData[,1])) {
         .ipredData <- .rx$ipredData[.obsIdx,]
       } else {
         .ipredData <- .rx$ipredData
@@ -116,14 +117,16 @@
         .params[[.i]] <- 0
       }
       if (!is.null(.rx$predDf)) {
-        .params[[paste0("err.", .rx$predDf$var)]] <- 0
+        for (.v in .rx$predDf$var) {
+          .params[[paste0("err.", .v)]] <- 0
+        }
       }
       .wid <- which(tolower(names(.params)) == "id")
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
-        .widNm <- which(tolower(names(.rx$nonmemData)) == "id")
+        .widNm <- which(tolower(names(.nonmemData)) == "id")
         if (.widNm == 1L) {
-          .idNm <- unique(.rx$nonmemData[,.widNm])
+          .idNm <- unique(.nonmemData[,.widNm])
           .params <- do.call("rbind",
                              lapply(.idNm, function(id) {
                                return(.params[.params[,.wid] == id,])
@@ -135,7 +138,7 @@
           }
         }
         .params <- .params[,-.wid]
-        .nonmemData2 <- .rx$nonmemData
+        .nonmemData2 <- .nonmemData
         # dummy id to match the .params
         .nonmemData2[,.wid] <- as.integer(factor(paste(.nonmemData2[,.wid])))
       }
@@ -183,7 +186,7 @@
         } else {
           .msg <- sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
                           length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
-                          length(.rx$nonmemData[,1]))
+                          length(.nonmemData[,1]))
           .minfo(.msg)
         }
       }
@@ -211,13 +214,13 @@
         } else {
           .msg < c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
                           length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
-                          length(.rx$nonmemData[,1])))
+                          length(.nonmemData[,1])))
           .minfo(.msg)
         }
       }
     }
     if (!is.null(.rx$predData)) {
-      if (length(.rx$predData[,1]) == length(.rx$nonmemData[,1])) {
+      if (length(.rx$predData[,1]) == length(.nonmemData[,1])) {
         .predData <- .rx$predData[.obsIdx,]
       } else {
         .predData <- .rx$predData
@@ -232,10 +235,11 @@
                             return(0.0)
                           }, double(1), USE.NAMES = TRUE))
       if (!is.null(.rx$predDf)) {
-        .params <- c(.params, setNames(0, paste0("err.", .rx$predDf$var)))
+        .params <- c(.params, setNames(rep(0, length(.rx$predDf$cond)),
+                                           paste0("err.", .rx$predDf$var)))
       }
       .minfo("solving pred problem")
-      .predSolve <- try(rxSolve(.model, .params, .rx$nonmemData, returnType = "tibble",
+      .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
                                 atol=.rx$atol, rtol=.rx$rtol,
                                 ssAtol=.rx$ssAtol, ssRtol=.rx$ssRtol,
@@ -274,7 +278,7 @@
                     sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
                             length(.predSolve[[.y]]),
                             length(.predData$PRED),
-                            length(.rx$nonmemData[,1])))
+                            length(.nonmemData[,1])))
           .minfo(.msg[length(.msg)])
         }
       }

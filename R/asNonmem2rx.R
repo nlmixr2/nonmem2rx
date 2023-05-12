@@ -67,6 +67,13 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
       assign(x, get(x, envir=.nm2rx), envir=.rx)
     }
   })
+  .nonmemData <- .rx$nonmemData
+  .w <- which(names(.nonmemData) == "nmdvid")
+  if (length(.w) == 1L) {
+    .minfo("assuming 'dvid' is close enough to nlmixr2 definition")
+    names(.nonmemData)[.w] <- "dvid"
+    .rx$nonmemData <- .nonmemData
+  }
   # now rename thetaMat
   .iniDfIn <- .nm2rx$iniDf
   .iniDfOut <- .rx$iniDf
