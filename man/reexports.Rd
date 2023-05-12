@@ -12,6 +12,8 @@
 \alias{rxRename}
 \alias{rxSolve}
 \alias{rxUiGet}
+\alias{logit}
+\alias{expit}
 \alias{model<-}
 \alias{lotri}
 \alias{autoplot}
@@ -28,6 +30,6 @@ below to see their documentation.
 
   \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
-  \item{rxode2}{\code{\link[rxode2]{ini}}, \code{\link[rxode2]{model}}, \code{\link[rxode2:model-set]{model<-}}, \code{\link[rxode2:rxode2]{rxode}}, \code{\link[rxode2:rxode2]{RxODE}}, \code{\link[rxode2]{rxode2}}, \code{\link[rxode2]{rxRename}}, \code{\link[rxode2]{rxSolve}}, \code{\link[rxode2]{rxUiGet}}}
+  \item{rxode2}{\code{\link[rxode2:logit]{expit}}, \code{\link[rxode2]{ini}}, \code{\link[rxode2]{logit}}, \code{\link[rxode2]{model}}, \code{\link[rxode2:model-set]{model<-}}, \code{\link[rxode2:rxode2]{rxode}}, \code{\link[rxode2:rxode2]{RxODE}}, \code{\link[rxode2]{rxode2}}, \code{\link[rxode2]{rxRename}}, \code{\link[rxode2]{rxSolve}}, \code{\link[rxode2]{rxUiGet}}}
 }}
 
