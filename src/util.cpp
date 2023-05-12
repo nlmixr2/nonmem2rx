@@ -470,6 +470,13 @@ extern "C" SEXP nonmem2rxNeedYtype(void) {
   END_RCPP
 }
 
+extern "C" SEXP nonmem2rxNeedDvid(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needDvid(".needDvid", nonmem2rxNs);
+  return needDvid();
+  END_RCPP
+}
 
 extern "C" SEXP nonmem2rxNeedExit(void) {
   BEGIN_RCPP

@@ -95,6 +95,11 @@
       .wyt <- which(tolower(names(.data)) == "ytype")
       names(.data)[.wyt] <- "nmytype"
     }
+    if (.nonmem2rx$needDvid) {
+      .minfo("renaming 'dvid' to 'nmdvid'")
+      .wyt <- which(tolower(names(.data)) == "dvid")
+      names(.data)[.wyt] <- "nmdvid"
+    }
     # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
     if (!is.na(.nonmem2rx$dataRecords)) {
       .minfo(sprintf("subsetting to %d records after filters", .nonmem2rx$dataRecords))

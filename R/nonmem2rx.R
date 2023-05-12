@@ -53,6 +53,7 @@
   .nonmem2rx$replaceDataParItem <- NULL
   .nonmem2rx$hasVol <- FALSE
   .nonmem2rx$needYtype <- FALSE
+  .nonmem2rx$needDvid <- FALSE
   .nonmem2rx$needExit <- FALSE
   .nonmem2rx$atol <- 1e-12
   .nonmem2rx$rtol <- 1e-12
@@ -634,6 +635,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .parseRec(.lines)
     if (.nonmem2rx$needYtype) {
       warning("'ytype' variable has special meaning in rxode2, renamed to 'nmytype', rename/copy in your data too",
+              call.=FALSE)
+    }
+    if (.nonmem2rx$needDvid) {
+      warning("'dvid' variable has special meaning in rxode2, renamed to 'nmdvid', rename/copy in your data too",
               call.=FALSE)
     }
     if (length(.nonmem2rx$esnDups) > 0) {
