@@ -88,15 +88,18 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
     stop("cannot determine eta translation, need parameter estimates to match",
          call.=FALSE)
   }
-  .dn <- vapply(dimnames(.rx$thetaMat)[[1]], .getNewName, character(1), USE.NAMES=FALSE)
   .thetaMat <- .rx$thetaMat
-  dimnames(.thetaMat) <- list(.dn, .dn)
-  .w <- which(.dn == "..drop..")
-  .thetaMat <- .thetaMat[-.w, -.w]
-  .ndim <- dim(.rx$omega)[1] + length(.rx$theta)
-  if (dim(.thetaMat)[1] != .ndim) {
-    warning("not all the initial estimates matched in the model, check model",
-            call.=FALSE)
+  if (!is.null(.thetaMat)) {
+    .dn <- vapply(dimnames(.thetaMat)[[1]], .getNewName, character(1), USE.NAMES=FALSE)
+    .thetaMat <- .rx$thetaMat
+    dimnames(.thetaMat) <- list(.dn, .dn)
+    .w <- which(.dn == "..drop..")
+    .thetaMat <- .thetaMat[-.w, -.w]
+    .ndim <- dim(.rx$omega)[1] + length(.rx$theta)
+    if (dim(.thetaMat)[1] != .ndim) {
+      warning("not all the initial estimates matched in the model, check model",
+              call.=FALSE)
+    }
   }
   .msg <- .nonmem2rxValidate(.rx, msg=NULL, validate=TRUE, ci=0.95, sigdig=3)
   if (is.null(.rx$predAtol)) {
