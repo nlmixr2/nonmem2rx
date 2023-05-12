@@ -329,24 +329,32 @@
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ add(", .nonmem2rx$addPar, ")}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+      .ret <- try(eval(parse(text=.removeWrelated(rxui, .mod))), silent=TRUE)
+      if (inherits(.ret, "try-error")) return(rxui)
+      return(.ret)
     } else if (.isPropW(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ prop(", .nonmem2rx$propPar, ")}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+      .ret <- try(eval(parse(text=.removeWrelated(rxui, .mod))), silent=TRUE)
+      if (inherits(.ret, "try-error")) return(rxui)
+      return(.ret)
     } else if (.isAddPropW1(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
                      ") + combined1()}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+      .ret <- try(eval(parse(text=.removeWrelated(rxui, .mod))), silent=TRUE)
+      if (inherits(.ret, "try-error")) return(rxui)
+      return(.ret)
     } else if (.isAddPropW2(.wp, rxui=rxui)) {
       .y0 <- as.character(.y[[2]])
       .mod <- paste0("rxode2::model(rxode2::model(rxui, {", .nonmem2rx$curF,
                      "~ add(", .nonmem2rx$addPar, ") + prop(", .nonmem2rx$propPar,
                      ") + combined2()}, append = TRUE), -", .y0, ")")
-      return(eval(parse(text=.removeWrelated(rxui, .mod))))
+      .ret <- try((eval(parse(text=.removeWrelated(rxui, .mod)))), silent=TRUE)
+      if (inherits(.ret, "try-error")) return(rxui)
+      return(.ret)
     }
   }
   rxui
