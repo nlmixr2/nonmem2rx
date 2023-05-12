@@ -288,7 +288,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       return 1;
     } else if (!nmrxstrcmpi("dvid", v)) {
       nonmem2rxNeedDvid();
-      sAppendN(&curLine, "nmdvid", 7);
+      sAppendN(&curLine, "nmdvid", 6);
       return 1;
     } else if (!nmrxstrcmpi("ytype", v)) {
       nonmem2rxNeedYtype();
