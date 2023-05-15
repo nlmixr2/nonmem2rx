@@ -70,9 +70,18 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   .nonmemData <- .rx$nonmemData
   .w <- which(names(.nonmemData) == "nmdvid")
   if (length(.w) == 1L) {
-    .minfo("assuming 'dvid' is close enough to nlmixr2 definition")
-    names(.nonmemData)[.w] <- "dvid"
-    .rx$nonmemData <- .nonmemData
+    .wcmt <- which(tolower(names(.nonmemData)) == "cmt")
+    .wevid <- which(tolower(names(.nonmemData)) == "evid")
+    if (length(.wcmt) == 1L && length(.wevid) == 1L) {
+      .minfo("merging 'dvid' with nlmixr2 'cmt' definition")
+      .nonmemData[,.wcmt] <- ifelse(.nonmemData[, .wevid] != 0, .nonmemData[,.wcmt],
+                                    length(.ui$mv0$state) + .nonmemData[, .w])
+      .rx$nonmemData <- .nonmemData
+    } else {
+      .minfo("assuming 'dvid' is close enough to nlmixr2 definition")
+      names(.nonmemData)[.w] <- "dvid"
+    }
+
   }
   # now rename thetaMat
   .iniDfIn <- .nm2rx$iniDf
