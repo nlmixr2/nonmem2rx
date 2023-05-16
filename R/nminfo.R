@@ -97,7 +97,7 @@ nminfo <- function(file,
     if (file.exists(.phiFile)) {
       if (verbose) .minfo("reading in phi file")
       .phi <- nmtab(.phiFile)
-      if (is.null(.phi)) {
+      if (!is.null(.phi)) {
         .phi <- .phi[,which(regexpr("(ID|ETA[(])", names(.phi)) != -1), drop=FALSE]
         if (length(.phi) > 1) {
           names(.phi) <- vapply(names(.phi),
@@ -107,6 +107,7 @@ nminfo <- function(file,
                                 }, character(1), USE.NAMES=FALSE)
           .ret$eta <- .phi
           .uses <- c(.uses, "phi")
+        } else {
           .minfo("phi file does not contain etas")
         }
         if (verbose) .minfo("done")
