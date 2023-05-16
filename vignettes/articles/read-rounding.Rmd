@@ -9,8 +9,151 @@ knitr::opts_chunk$set(
 )
 ```
 
-Coming soon...
+One of the things that can be helpful is reading NONMEM with rounding
+errors.
+
+For this example we will take some of the test examples from
+`babelmixr2` to translate to show examples of rounding errors that can
+be read in to help diagnose what could be happening with the model.
 
 ```{r setup}
 library(nonmem2rx)
+library(babelmixr2)
+```
+
+# Step 1: Have a NONMEM model with rounding errors (and `.phi` or other information about the `etas`)
+
+The first step is to load a model with rounding errors using `nonmem2rx()`:
+
+```{r loadNonmemModel}
+# Unzip example with rounding error
+unzip(system.file("tests/testthat/pk.turnover.emax3-nonmem.zip", package="babelmixr2"))
+# Load the model with `nonmem2rx`:
+mod <- nonmem2rx("pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl")
+```
+
+# Step 2: Convert `rxode2` model to model with endpoints/residuals specified like `nlmixr2`
+
+This example has rounding errors and isn't a fully qualified `nlmixr2`
+model (even though it was generated from `nlmixr2`).
+
+We can use the model and create an equivalent model with
+`as.nonmem2rx()`
+
+```{r createNlmixr2Model}
+mod2 <- function() {
+  ini({
+    tktr <- 6.24053043162953e-07
+    label("1 - tktr")
+    tka <- -3.00642760553675e-06
+    label("2 - tka")
+    tcl <- -2.00405074386117
+    label("3 - tcl")
+    tv <- 2.05188410700476
+    label("4 - tv")
+    prop.err <- c(0, 0.0985804613565218)
+    label("5 - prop.err")
+    pkadd.err <- c(0, 0.511625249037084)
+    label("6 - pkadd.err")
+    temax <- 6.4184983102259
+    label("7 - temax")
+    tec50 <- 0.140763261319656
+    label("8 - tec50")
+    tkout <- -2.9534704318737
+    label("9 - tkout")
+    te0 <- 4.57045413136592
+    label("10 - te0")
+    pdadd.err <- c(0, 3.71714384851537)
+    label("11 - pdadd.err")
+    eta.ktr ~ 0.558129815059436
+    eta.ka ~ 0.558402321309217
+    eta.cl ~ 0.0785849119252598
+    eta.v ~ 0.0508226905750953
+    eta.emax ~ 5e-05
+    eta.ec50 ~ 0.18426809257979
+    eta.kout ~ 0.0083631531443303
+    eta.e0 ~ 0.00274561514766752
+  })
+  model({
+    cmt(DEPOT)
+    cmt(GUT)
+    cmt(CENTER)
+    cmt(EFFECT)
+    ktr <- exp(tktr + eta.ktr)
+    ka <- exp(tka   + eta.ka)
+    cl <- exp(tcl   + eta.cl)
+    v <- exp(tv     + eta.v)
+    emax <- expit(temax + eta.emax) 
+    ec50 <- exp(tec50 + eta.ec50)
+    kout <- exp(tkout + eta.kout)
+    e0 <- exp(te0 + eta.e0)
+    EFFECT(0) <- e0
+    dcp <- CENTER/v
+    pd <- 1 - emax * dcp/(ec50 + dcp)
+    kin <- e0 * kout
+    d/dt(DEPOT) <- -ktr * DEPOT
+    d/dt(GUT) <- ktr * DEPOT - ka * GUT
+    d/dt(CENTER) <- ka * GUT - cl/v * CENTER
+    d/dt(EFFECT) <- kin * pd - kout * EFFECT
+    eff <- EFFECT
+    dcp ~ add(pkadd.err)+prop(prop.err)
+    eff ~ add(pdadd.err)
+  })
+}
+```
+
+In the model above, the following modifications were made:
+
+- The code for protecting for rounding errors was removed
+
+- Endpoints/residual specifications were added
+
+- Duplicate code in NONMEM's `$ERROR` block was removed from imported
+  model
+  
+- All the `rx` and `nlmixr` prefixed items were removed from the
+  model.  It is possible that not removing these variables can
+  cause`nlmixr2` conversion to fail.  It is best practice to remove
+  them completely.
+
+Also, it is good practice to make sure the model parses correctly before
+trying to validate/convert the model.  If you find that your model doesn't
+parse correctly it definitely won't validate (and the error may not be
+as easy to track-down).
+
+The first step is to validate if the translation is correct.  This is
+done below:
+
+```{r convertAsNonmem2rx}
+mod2 <- mod2()
+
+mod2
+
+new <- as.nonmem2rx(mod, mod2)
+print(new)
+```
+
+# Step 3: Convert new model to nlmixr2 fit with `as.nlmixr2()`
+
+Once the translation is complete, and it is validated, you can convert
+the fit to a full nlmixr2 fit object.
+
+```{r convertAsNlmixr2}
+fit <- as.nlmixr2(new)
+
+# Once it is loaded remove the directory (we don't need the files any
+# more for this example)
+unlink("pk.turnover.emax3-nonmem", recursive = TRUE)
+```
+
+Note this object **does not** rerun an estimation, but rather imports
+everything it knows about
+
+# Step 4: Explore the data/fit as if it came from `nlmixr2`
+
+
+```{r diagnoseProblems}
+print(fit)
+
+getVarCov(fit)
 ```
