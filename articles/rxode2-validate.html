@@ -144,7 +144,7 @@
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in phi file</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> problems reading phi file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in lst file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> abbreviated list parsing</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -182,8 +182,6 @@
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -234,17 +232,17 @@ modified returned <code>ui</code> object. For the rtol, atol as follows
 you have:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span><span class="op">$</span><span class="va">iwresAtol</span></span>
-<span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 1.137824e-05</span></span>
+<span><span class="co">#&gt;         50% </span></span>
+<span><span class="co">#&gt; 3.64871e-06</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">iwresRtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 2.041157e-05</span></span>
+<span><span class="co">#&gt; 8.987887e-06</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">ipredAtol</span></span>
-<span><span class="co">#&gt;         50% </span></span>
-<span><span class="co">#&gt; 0.001770218</span></span>
+<span><span class="co">#&gt;        50% </span></span>
+<span><span class="co">#&gt; 0.00166826</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">ipredRtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
-<span><span class="co">#&gt; 6.886608e-06</span></span>
+<span><span class="co">#&gt; 6.430677e-06</span></span>
 <span><span class="va">mod</span><span class="op">$</span><span class="va">predAtol</span></span>
 <span><span class="co">#&gt;          50% </span></span>
 <span><span class="co">#&gt; 6.406839e-06</span></span>
@@ -258,21 +256,21 @@ wish by looking at the <code>ipredCompare</code> and
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">iwresCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemIWRES      IWRES</span></span>
-<span><span class="co">#&gt; 1  1 0.25    -0.73154 -0.7315635</span></span>
-<span><span class="co">#&gt; 2  1 0.50     1.86670  1.8666295</span></span>
-<span><span class="co">#&gt; 3  1 0.75    -1.26860 -1.2685934</span></span>
-<span><span class="co">#&gt; 4  1 1.00     0.44442  0.4443967</span></span>
-<span><span class="co">#&gt; 5  1 1.50     0.55470  0.5546777</span></span>
-<span><span class="co">#&gt; 6  1 2.00     0.35351  0.3534849</span></span>
+<span><span class="co">#&gt; 1  1 0.25    -0.73154 -0.7315464</span></span>
+<span><span class="co">#&gt; 2  1 0.50     1.86670  1.8666563</span></span>
+<span><span class="co">#&gt; 3  1 0.75    -1.26860 -1.2685789</span></span>
+<span><span class="co">#&gt; 4  1 1.00     0.44442  0.4444172</span></span>
+<span><span class="co">#&gt; 5  1 1.50     0.55470  0.5546978</span></span>
+<span><span class="co">#&gt; 6  1 2.00     0.35351  0.3535035</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ipredCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemIPRED    IPRED</span></span>
-<span><span class="co">#&gt; 1  1 0.25      1215.4 1215.363</span></span>
-<span><span class="co">#&gt; 2  1 0.50      1191.9 1191.929</span></span>
-<span><span class="co">#&gt; 3  1 0.75      1169.2 1169.169</span></span>
-<span><span class="co">#&gt; 4  1 1.00      1147.1 1147.062</span></span>
-<span><span class="co">#&gt; 5  1 1.50      1104.7 1104.724</span></span>
-<span><span class="co">#&gt; 6  1 2.00      1064.8 1064.762</span></span>
+<span><span class="co">#&gt; 1  1 0.25      1215.4 1215.358</span></span>
+<span><span class="co">#&gt; 2  1 0.50      1191.9 1191.924</span></span>
+<span><span class="co">#&gt; 3  1 0.75      1169.2 1169.164</span></span>
+<span><span class="co">#&gt; 4  1 1.00      1147.1 1147.057</span></span>
+<span><span class="co">#&gt; 5  1 1.50      1104.7 1104.721</span></span>
+<span><span class="co">#&gt; 6  1 2.00      1064.8 1064.759</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">predCompare</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID TIME nonmemPRED     PRED</span></span>

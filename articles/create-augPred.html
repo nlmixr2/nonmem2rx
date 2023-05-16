@@ -155,7 +155,7 @@ and population.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in phi file</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> problems reading phi file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in lst file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> abbreviated list parsing</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -194,8 +194,6 @@ and population.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem ETA data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -250,7 +248,7 @@ object:</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.027708 0.068    0.019 100.95      2.899</span></span>
+<span><span class="co">#&gt; elapsed 0.029503 0.078    0.019 100.95      3.084</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -284,9 +282,9 @@ object:</p>
 <span><span class="co">#&gt;  NO. OF FUNCTION EVALUATIONS USED:      320</span></span>
 <span><span class="co">#&gt;  NO. OF SIG. DIGITS IN FINAL EST.:  2.5</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06</span></span>
+<span><span class="co">#&gt;     IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06</span></span>
 <span><span class="co">#&gt;     PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06</span></span>
-<span><span class="co">#&gt;     IPRED absolute difference compared to Nonmem IPRED: atol=0.00177; 95% percentile: (2.23e-05, 0.0421)</span></span>
+<span><span class="co">#&gt;     IPRED absolute difference compared to Nonmem IPRED: atol=0.00167; 95% percentile: (2.25e-05, 0.0418)</span></span>
 <span><span class="co">#&gt;     PRED absolute difference compared to Nonmem PRED: atol=6.41e-06; 95% percentile: (1.41e-07,0.00382)</span></span>
 <span><span class="co">#&gt;     nonmem2rx model file: '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl' </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -311,12 +309,12 @@ object:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     values        ind id   time Endpoint</span></span>
-<span><span class="co">#&gt; 1 1239.493 Individual  1 0.0000  CENTRAL</span></span>
-<span><span class="co">#&gt; 2 1215.363 Individual  1 0.2500  CENTRAL</span></span>
-<span><span class="co">#&gt; 3 1191.929 Individual  1 0.5000  CENTRAL</span></span>
-<span><span class="co">#&gt; 4 1169.169 Individual  1 0.7500  CENTRAL</span></span>
-<span><span class="co">#&gt; 5 1147.062 Individual  1 1.0000  CENTRAL</span></span>
-<span><span class="co">#&gt; 6 1109.693 Individual  1 1.4398  CENTRAL</span></span>
+<span><span class="co">#&gt; 1 1239.488 Individual  1 0.0000  CENTRAL</span></span>
+<span><span class="co">#&gt; 2 1215.358 Individual  1 0.2500  CENTRAL</span></span>
+<span><span class="co">#&gt; 3 1191.924 Individual  1 0.5000  CENTRAL</span></span>
+<span><span class="co">#&gt; 4 1169.164 Individual  1 0.7500  CENTRAL</span></span>
+<span><span class="co">#&gt; 5 1147.057 Individual  1 1.0000  CENTRAL</span></span>
+<span><span class="co">#&gt; 6 1109.689 Individual  1 1.4398  CENTRAL</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span></code></pre></div>
 <p><img src="create-augPred_files/figure-html/augPred-1.png" width="700"><img src="create-augPred_files/figure-html/augPred-2.png" width="700"><img src="create-augPred_files/figure-html/augPred-3.png" width="700"><img src="create-augPred_files/figure-html/augPred-4.png" width="700"><img src="create-augPred_files/figure-html/augPred-5.png" width="700"><img src="create-augPred_files/figure-html/augPred-6.png" width="700"><img src="create-augPred_files/figure-html/augPred-7.png" width="700"><img src="create-augPred_files/figure-html/augPred-8.png" width="700"></p>
