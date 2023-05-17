@@ -264,6 +264,8 @@
   .minfo(paste0("read in nonmem ETA data (for model validation): ", .file))
   .ret <- nmtab(.file)
   if (is.null(.ret)) return(NULL)
+  .wid <- which((tolower(names(.ret))) == "id")
+  if (length(.wid) == 1L) names(.ret)[.wid] <- "ID"
   if (.table$fullData) {
     .ret <- .ret[!duplicated(.ret$ID),]
   }
