@@ -102,6 +102,20 @@
     .q <- c(0, .ci, 0.5, 1 - .ci, 1)
     .obsIdx <- .nonmemObsIndex(.nonmemData)
     .msg <- NULL
+    .etaData <- .rx$etaData
+    if (!is.null(.etaData)) {
+      if (dim(.etaData)[1] == 0) {
+        .etaData <- NULL
+        .rx$etaData <- NULL
+      }
+    }
+    .ipredData <- .rx$ipredData
+    if (!is.null(.ipredData)) {
+      if (dim(.ipredData)[1] == 0) {
+        .ipredData <- NULL
+        .rx$ipredData <- NULL
+      }
+    }
     if (!is.null(.rx$etaData) && !is.null(.rx$ipredData)) {
       if (length(.rx$ipredData[,1]) == length(.nonmemData[,1])) {
         .ipredData <- .rx$ipredData[.obsIdx,]
@@ -109,8 +123,11 @@
         .ipredData <- .rx$ipredData
       }
       .params <- .rx$etaData
+      .nt <- names(.theta)
       for (.i in seq_along(.theta)) {
-        .params[[names(.theta)[.i]]] <- .theta[.i]
+        if (.nt[.i] %in% names(.params)) {
+          .params[[.nt[.i]]] <- .theta[.i]
+        }
       }
       .dn <- .rx$sigmaNames
       for (.i in .dn) {
