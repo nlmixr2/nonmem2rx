@@ -58,6 +58,7 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .getLinCmtModel <- function(model, advan=1, trans=1) {
+  if (trans==0) trans <- 1
   .rep <- .getLinCmt(advan=advan, trans=trans)
   if (is.null(.rep)) return(model)
   .w <- which(names(.rep) == "#")
