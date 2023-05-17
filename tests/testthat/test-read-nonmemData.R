@@ -13,4 +13,11 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
       expect_true(inherits(f$nonmemData, "data.frame"))
     })
   })
+
+  test_that("read in data without phi, lower case id", {
+    expect_error(nonmem2rx(system.file("mods/err/run002.res", package="nonmem2rx"), lst=".res", usePhi = FALSE), NA)
+    tmp <- nonmem2rx(system.file("mods/err/run002.res", package="nonmem2rx"), lst=".res", usePhi = FALSE)
+    expect_true(inherits(tmp$iwresAtol, "numeric"))
+    expect_true(length(tmp$iwresAtol) == 1L)
+  })
 })
