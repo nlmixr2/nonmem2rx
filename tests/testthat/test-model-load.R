@@ -15,10 +15,10 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     expect_error(.nonmem2rx(system.file("mods/DDMODEL00000302/run1.mod", package="nonmem2rx")), NA)
     expect_error(.nonmem2rx(system.file("run001.mod", package="nonmem2rx")), NA)
 
-    expect_error(.nonmem2rx(system.file("mods/err/run000.res", package="nonmem2rx")), NA)
+    expect_error(.nonmem2rx(system.file("mods/err/run000.lst", package="nonmem2rx")), NA)
     expect_error(.nonmem2rx(system.file("mods/err/run002.res", package="nonmem2rx")), NA)
-    expect_error(.nonmem2rx(system.file("mods/err/run006.res", package="nonmem2rx")), NA)
-    expect_error(.nonmem2rx(system.file("mods/err/run007.res", package="nonmem2rx")), NA)
+    expect_error(.nonmem2rx(system.file("mods/err/run006.lst", package="nonmem2rx")), NA)
+    expect_error(.nonmem2rx(system.file("mods/err/run007.lst", package="nonmem2rx")), NA)
 
     f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
     expect_equal(length(f$meta$validation), 6L)
