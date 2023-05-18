@@ -7,12 +7,12 @@
 .linCmtAdvan <- new.env(parent=emptyenv())
 
 .linCmtAdvan$`1` <- new.env(parent=emptyenv())
-.linCmtAdvan$`1`$`1` <- c("K"="k", "V"="v")
-.linCmtAdvan$`1`$`2` <- c("CL"="cl", "V"="v")
+.linCmtAdvan$`1`$`1` <- c("K"="k", "#"="v")
+.linCmtAdvan$`1`$`2` <- c("CL"="cl", "#"="v")
 
 .linCmtAdvan$`2` <- new.env(parent=emptyenv())
-.linCmtAdvan$`2`$`1` <- c("KA"="ka", "K"="k", "V"="v")
-.linCmtAdvan$`2`$`2` <- c("KA"="ka", "CL"="cl", "V"="v")
+.linCmtAdvan$`2`$`1` <- c("KA"="ka", "K"="k", "#"="v")
+.linCmtAdvan$`2`$`2` <- c("KA"="ka", "CL"="cl", "#"="v")
 
 .linCmtAdvan$`3` <- new.env(parent=emptyenv())
 # #1 = volume associated with cmt1
@@ -63,7 +63,9 @@
   if (is.null(.rep)) return(model)
   .w <- which(names(.rep) == "#")
   if (length(.w) == 1L) {
-    if (.nonmem2rx$vcOne) {
+    if (length(.nonmem2rx$allVol) == 1L) {
+      names(.rep)[.w] <- .nonmem2rx$allVol[1]
+    } else if (.nonmem2rx$vcOne) {
       names(.rep)[.w] <- "VC"
     } else {
       .w2 <- which(tolower(.nonmem2rx$allVol) == "v")
@@ -91,6 +93,8 @@
       }
     }
   }
+  # in the case of the one compartment model, Vs are not always
+  # specified and could be different
   .mv <- rxode2::rxModelVars(model)
   .lhs <- toupper(.mv$lhs)
   .rest <- setdiff(.lhs, names(.rep))
