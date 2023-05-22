@@ -40,7 +40,7 @@ install.packages('nonmem2rx')
 ## What you can do with `nonmem2rx`
 
   - [Convert a `NONMEM` model to a `rxode2`
-    model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html).
+    model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html)
 
   - [Make sure the model is translated
     correctly](https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html)
@@ -76,8 +76,8 @@ install.packages('nonmem2rx')
   - You can even use this conversion to help debug your NONMEM model (or
     even try it in `nlmixr2` instead)
     
-      - Understand how to simplify the NONMEM model to avoid rounding
-        errors
+      - Understand [how to simplify the NONMEM model to avoid rounding
+        errors](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html)
     
       - Run `nlmixr2`’s covariance step when `NONMEM`s covariance step
         has failed
@@ -96,11 +96,11 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/Rtmp7mOva5/temp_libpatha4e41cced109/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/Rtmpbc8kZv/temp_libpath71356f53d40/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
-#> ℹ problems reading phi file
+#> ℹ done
 #> ℹ reading in lst file
 #> ℹ abbreviated list parsing
 #> ℹ done
@@ -132,15 +132,13 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp7mOva5/temp_libpatha4e41cced109/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmpbc8kZv/temp_libpath71356f53d40/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp7mOva5/temp_libpatha4e41cced109/nonmem2rx/mods/cpt/runODE032.csv
-#> ℹ done
-#> ℹ read in nonmem ETA data (for model validation): /tmp/Rtmp7mOva5/temp_libpatha4e41cced109/nonmem2rx/mods/cpt/runODE032.csv
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpbc8kZv/temp_libpath71356f53d40/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -150,7 +148,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
-#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
@@ -183,10 +181,10 @@ mod
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
-#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.89e-06", 
-#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.23e-05, 0.0421); atol=0.00177", 
-#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.05%); rtol=2.04e-05", 
-#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (5.38e-07, 5.27e-05); atol=1.14e-05", 
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.82e-07, 4.63e-05); atol=3.65e-06", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
