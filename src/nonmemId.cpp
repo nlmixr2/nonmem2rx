@@ -20,7 +20,7 @@ IntegerVector fromNonmemToRxId(IntegerVector nonmemId) {
   unsigned int j;
   int fctInt = 1;
   for (unsigned int i = 0; i < nonmemId.size(); ++i) {
-    cur = cur0 = "NM:" + std::to_string(nonmemId[i]) + "'";
+    cur = cur0 = "NM:'" + std::to_string(nonmemId[i]) + "'";
     j = 1;
     while (true) {
       if (std::find(lvl.begin(), lvl.end(), cur) == lvl.end()) {
