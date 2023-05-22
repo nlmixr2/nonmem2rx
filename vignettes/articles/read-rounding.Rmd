@@ -27,7 +27,9 @@ The first step is to load a model with rounding errors using `nonmem2rx()`:
 
 ```{r loadNonmemModel}
 # Unzip example with rounding error
-unzip(system.file("tests/testthat/pk.turnover.emax3-nonmem.zip", package="babelmixr2"))
+# included, but can be accessed with nlmixr2
+#
+# unzip(system.file("tests/testthat/pk.turnover.emax3-nonmem.zip", package="babelmixr2"))
 # Load the model with `nonmem2rx`:
 mod <- nonmem2rx("pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl")
 ```
@@ -143,7 +145,10 @@ fit <- as.nlmixr2(new)
 
 # Once it is loaded remove the directory (we don't need the files any
 # more for this example)
-unlink("pk.turnover.emax3-nonmem", recursive = TRUE)
+#
+# In this example, we don't remove, but not where it can be removed
+#
+# unlink("pk.turnover.emax3-nonmem", recursive = TRUE)
 ```
 
 Note this object **does not** rerun an estimation, but rather imports
@@ -151,9 +156,16 @@ everything it knows about
 
 # Step 4: Explore the data/fit as if it came from `nlmixr2`
 
+You can get the covariance with `getVarCov()` see:
 
 ```{r diagnoseProblems}
 print(fit)
 
 getVarCov(fit)
+```
+
+Then you can see the standard error here:
+
+``{r standardError}
+fit
 ```
