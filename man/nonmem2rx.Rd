@@ -231,4 +231,7 @@ plot(mod, nrow=2, ncol=2, page=c(1,3), log="y")
 
 plot(mod, nrow=5, ncol=5, page=TRUE, log="y")
 
+# you can also convert to a nlmixr2 object, but need babelmixr2 for
+# that conversion
+
 }

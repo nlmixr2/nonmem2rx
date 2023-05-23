@@ -2,7 +2,7 @@
 title: "Qualify rxode2 model against NONMEM"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Validate rxode2 model against NONMEM}
+  %\VignetteIndexEntry{Qualify rxode2 model against NONMEM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

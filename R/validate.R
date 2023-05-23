@@ -140,7 +140,7 @@
         .params <- .params[,-.wid]
         .nonmemData2 <- .nonmemData
         # dummy id to match the .params
-        .nonmemData2[,.wid] <- as.integer(factor(paste(.nonmemData2[,.wid])))
+        .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]))
       }
       if (.doIpred) {
         .minfo("solving ipred problem")

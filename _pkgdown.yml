@@ -48,11 +48,7 @@ navbar:
         href: articles/create-augPred.html
   - text: "Debug"
     icon: fa-bug
-    menu:
-      - text: "Recovering from Rounding Errors"
-        href: articles/read-rounding.html
-      - text: "Adding a covariance step"
-        href: articles/add-cov.html
+    href: articles/read-rounding.html
   - text: "Functions"
     icon: fa-file-code-o
     href: reference/index.html

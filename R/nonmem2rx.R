@@ -529,6 +529,9 @@
 #'
 #' plot(mod, nrow=5, ncol=5, page=TRUE, log="y")
 #'
+#' # you can also convert to a nlmixr2 object, but need babelmixr2 for
+#' # that conversion
+#'
 nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       rename=NULL, tolowerLhs=TRUE, thetaNames=TRUE,
                       etaNames=TRUE,
