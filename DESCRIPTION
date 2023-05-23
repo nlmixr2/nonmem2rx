@@ -60,8 +60,10 @@ Suggests:
     xgxr,
     vdiffr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    spelling
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+Language: en-US
