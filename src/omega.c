@@ -6,7 +6,7 @@
 //#include "ode.h"
 #include <rxode2parseSbuf.h>
 #include <errno.h>
-#include <dparser2.h>
+#include "dparser3.h"
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>

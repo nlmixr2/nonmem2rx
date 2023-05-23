@@ -6,7 +6,7 @@
 //#include "ode.h"
 #include <rxode2parseSbuf.h>
 #include <errno.h>
-#include <dparser2.h>
+#include "dparser3.h"
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
@@ -85,7 +85,7 @@ void nonmem2rx_full_parseFree(int last) {
 
 
 int nonmem2rx_full_ini_done = 0;
-void nonmem2rx_full_ini() {
+void nonmem2rx_full_ini(void) {
   if (nonmem2rx_full_ini_done == 0) {
     sIni(&firstErr);
     sIni(&sbTransErr);
@@ -103,12 +103,12 @@ void nonmem2rx_full_ini() {
   }
 }
 
-SEXP _nonmem2rx_r_parseFree() {
+SEXP _nonmem2rx_r_parseFree(void) {
   nonmem2rx_full_parseFree(0);
   return R_NilValue;
 }
 
-SEXP _nonmem2rx_r_parseIni() {
+SEXP _nonmem2rx_r_parseIni(void) {
   nonmem2rx_full_ini();
   return R_NilValue;
 }

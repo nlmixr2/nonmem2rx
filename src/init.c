@@ -22,10 +22,10 @@ SEXP _nonmem2rx_trans_lst(SEXP in, SEXP cov);
 SEXP _nonmem2rx_trans_data(SEXP in);
 SEXP _nonmem2rx_trans_tab(SEXP in);
 SEXP _nonmem2rx_trans_abbrec(SEXP in);
-void nonmem2rx_full_ini();
+void nonmem2rx_full_ini(void);
 void nonmem2rx_full_parseFree(int last);
-SEXP _nonmem2rx_r_parseFree();
-SEXP _nonmem2rx_r_parseIni();
+SEXP _nonmem2rx_r_parseFree(void);
+SEXP _nonmem2rx_r_parseIni(void);
 SEXP _nonmem2rx_fixNonmemTies(SEXP idS, SEXP timeS, SEXP deltaS);
 SEXP _nonmem2rx_setRecord(SEXP rec);
 void R_init_nonmem2rx(DllInfo *info) {
