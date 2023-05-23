@@ -87,12 +87,6 @@ install.packages('nonmem2rx')
         (in the linked example, there was no covariance step because
         rounding errors)
 
-  - This model could be a starting point for other types of models
-    
-      - Use model piping within `nlmixr2` to modify/fix parts of the
-        model (and subsequent estimation in `nlmixr2` or even `NONMEM`
-        with `babelmixr2`)
-
 ## Simple example
 
 Once `nonmem2rx` has been loaded, you simply type the location of the
@@ -101,7 +95,7 @@ nonmem control stream for the parser to start. For example:
 ``` r
 library(nonmem2rx)
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpucHNMH/temp_libpath39c97f4f81af/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -137,12 +131,13 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpucHNMH/temp_libpath39c97f4f81af/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/runODE032.csv
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpucHNMH/temp_libpath39c97f4f81af/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -152,6 +147,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem

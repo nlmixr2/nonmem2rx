@@ -86,12 +86,6 @@ install.packages('nonmem2rx')
     (in the linked example, there was no covariance step because
     rounding errors)
     
-- This model could be a starting point for other types of models
-    
-  - Use model piping within `nlmixr2` to modify/fix parts of the model
-    (and subsequent estimation in `nlmixr2` or even `NONMEM` with
-    `babelmixr2`)
-    
 ## Simple example
 
 Once `nonmem2rx` has been loaded, you simply type the location of the
