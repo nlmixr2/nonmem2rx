@@ -33,11 +33,12 @@ The concentration in this case is the `f` from the model, a trick to
 get the `AUC` is to have an additional ODE `d/dt(AUC) <- f` and use
 some reset to get it per dosing period.
 
-However, this additional parameter is not part of the original model
-and isn't exactly trivial to calculate from the model output.
+However, this additional parameter is not part of the original model.
+The calculation of AUC would depend on the number of observations in
+your model, and for sparse data wouldn't be terribly accurate.
 
-One thing you can do is to use model piping to modify the original
-model to add this to the imported model:
+One thing you can do is to use model piping append `d/dt(AUC) <- f` to
+the imported model:
 
 ```{r modAuc}
 modAuc <- mod %>%
@@ -46,7 +47,7 @@ modAuc <- mod %>%
 modAuc
 ```
 
-You can also use `append=NA` to prepend or `append=f` to put the ODE
+You can also use `append=NA` to pre-pend or `append=f` to put the ODE
 right after the `f` line in the model.
 
 ## Step 3: Setup event table to calculate the AUC for a different dosing paradigm:
@@ -56,9 +57,9 @@ what the concentration profile is with a single day of BID dosing.  In
 this case is done by creating a [quick event
 table](https://nlmixr2.github.io/rxode2/articles/rxode2-event-table.html).
 
-In this case since we are also wanting `AUC`, we wish to add a reset
-dose to the AUC compartment every time a dose is given (so it will
-only track the AUC of the current dose):
+In this case since we are also wanting `AUC` per dosing period, you
+can add a reset dose to the `AUC` compartment every time a dose is given
+(so it will only track the AUC of the current dose):
 
 ```{r eventTable}
 ev <- et(amt=120000, ii=12, until=24) %>%
@@ -76,8 +77,9 @@ subjects:
 s <- rxSolve(modAuc, ev)
 ```
 
-Note that since this is a `nonmem2rx` model, the default solving will
-match the tolerances and methods specified in your `NONMEM` model.
+Note that since this derived from a `nonmem2rx` model, the default
+solving will match the tolerances and methods specified in your
+`NONMEM` model.
 
 ## Step 5: Exploring the simulation (by plotting), and summarizing (dplyr)
 
