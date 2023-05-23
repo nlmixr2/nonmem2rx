@@ -37,7 +37,8 @@ navbar:
         href: articles/simulate-new-dosing.html
       - text: "Simulating with Uncertainty"
         href: articles/simulate-uncertainty.html
-    href: articles/rxode2-validate.html
+      - text: "Simulating with Derived Variables"
+        href: articles/simulate-extra-items.html
   - text: "Reporting"
     menu:
       - text: "Creating word and powerpoint documents"
