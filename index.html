@@ -199,12 +199,6 @@
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model" class="external-link">Run <code>nlmixr2</code>’s covariance step when <code>NONMEM</code>s covariance step has failed</a> (in the linked example, there was no covariance step because rounding errors)</p></li>
 </ul>
 </li>
-<li>
-<p>This model could be a starting point for other types of models</p>
-<ul>
-<li>Use model piping within <code>nlmixr2</code> to modify/fix parts of the model (and subsequent estimation in <code>nlmixr2</code> or even <code>NONMEM</code> with <code>babelmixr2</code>)</li>
-</ul>
-</li>
 </ul>
 </div>
 <div class="section level2">
@@ -214,7 +208,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/nonmem2rx/" class="external-link">nonmem2rx</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpucHNMH/temp_libpath39c97f4f81af/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -250,12 +244,13 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpucHNMH/temp_libpath39c97f4f81af/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpucHNMH/temp_libpath39c97f4f81af/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -265,6 +260,7 @@
 <span><span class="co">#&gt; ℹ done (no labels)</span></span>
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
