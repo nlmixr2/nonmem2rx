@@ -58,8 +58,10 @@ install.packages('nonmem2rx')
     from the NONMEM model or even [simulate using the uncertainty in your model](https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html)
     to simulate new scenarios
   
-  - Modify the model for scenarios like adaptive dosing with model
-    piping
+  - [Modify the model to calculate derived
+    parameters](https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html)
+    (like AUC). These parameters slow down NONMEM's optimization, but
+    can help in your simulation scenario.
 
 - With `nonmem2rx` and `babelmixr2`, [convert the imported `rxode2`
   model to a `nlmixr2` object](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html), allowing:

@@ -1,0 +1,104 @@
+---
+title: "Simulate Derived Variables from imported NONMEM model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulate Derived Variables from imported NONMEM model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This page shows a simple work-flow for directly simulating a different
+dosing paradigm with new derived items, in this case `AUC`.
+
+
+## Step 1: Import the model
+
+```{r setup}
+library(nonmem2rx)
+library(rxode2)
+
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+```
+
+## Step 2: Add AUC calculation
+
+The concentration in this case is the `f` from the model, a trick to
+get the `AUC` is to have an additional ODE `d/dt(AUC) <- f` and use
+some reset to get it per dosing period.
+
+However, this additional parameter is not part of the original model.
+The calculation of AUC would depend on the number of observations in
+your model, and for sparse data wouldn't be terribly accurate.
+
+One thing you can do is to use model piping append `d/dt(AUC) <- f` to
+the imported model:
+
+```{r modAuc}
+modAuc <- mod %>%
+  model(d/dt(AUC) <- f, append=TRUE)
+
+modAuc
+```
+
+You can also use `append=NA` to pre-pend or `append=f` to put the ODE
+right after the `f` line in the model.
+
+## Step 3: Setup event table to calculate the AUC for a different dosing paradigm:
+
+Lets say that in this case instead of a single dose, we want to see
+what the concentration profile is with a single day of BID dosing.  In
+this case is done by creating a [quick event
+table](https://nlmixr2.github.io/rxode2/articles/rxode2-event-table.html).
+
+In this case since we are also wanting `AUC` per dosing period, you
+can add a reset dose to the `AUC` compartment every time a dose is given
+(so it will only track the AUC of the current dose):
+
+```{r eventTable}
+ev <- et(amt=120000, ii=12, until=24) %>%
+  et(amt=0, ii=12, until=24, cmt="AUC", evid=5) %>% # replace AUC with zero at dosing
+  et(c(0, 4, 8, 11.999, 12, 12.01, 14, 20, 23.999, 24, 24.001, 28, 32, 36)) %>%
+  et(id=1:10)
+```
+
+## Step 4: Solve using `rxode2`
+
+In this step, we solve the model with the new event table for the 10
+subjects:
+
+```{r solve}
+s <- rxSolve(modAuc, ev)
+```
+
+Note that since this derived from a `nonmem2rx` model, the default
+solving will match the tolerances and methods specified in your
+`NONMEM` model.
+
+## Step 5: Exploring the simulation (by plotting), and summarizing (dplyr)
+
+This solved object acts the same as any other `rxode2` solved object,
+so you can use the `plot()` function to see the individual running AUC profiles
+you simulated:
+
+```{r plot}
+library(ggplot2)
+plot(s, AUC) +
+  ylab("Running AUC")
+```
+
+You can also select the points near the dosing to get the AUC for the
+interval:
+
+```{r gatherAuc}
+library(dplyr)
+s %>% filter(time %in% c(11.999,  23.999)) %>%
+  mutate(time=round(time)) %>%
+  select(id, time, AUC)
+```
