@@ -78,8 +78,11 @@ install.packages('nonmem2rx')
   
   - Understand [how to simplify the NONMEM model to avoid rounding errors](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html)
   
-  - Run `nlmixr2`'s covariance step when `NONMEM`s covariance step has
-    failed
+  - [Run `nlmixr2`'s covariance step when `NONMEM`s covariance step
+    has
+    failed](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model)
+    (in the linked example, there was no covariance step because
+    rounding errors)
     
 - This model could be a starting point for other types of models
     

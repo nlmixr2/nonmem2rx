@@ -21,7 +21,7 @@ library(nonmem2rx)
 library(babelmixr2)
 ```
 
-# Step 1: Have a NONMEM model with rounding errors (and `.phi` or other information about the `etas`)
+## Step 1: Have a NONMEM model with rounding errors (and `.phi` or other information about the `etas`)
 
 The first step is to load a model with rounding errors using `nonmem2rx()`:
 
@@ -35,7 +35,7 @@ mod <- nonmem2rx("pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl")
 mod
 ```
 
-# Step 2: Convert `rxode2` model to model with endpoints/residuals specified like `nlmixr2`
+## Step 2: Convert `rxode2` model to model with endpoints/residuals specified like `nlmixr2`
 
 This example has rounding errors and isn't a fully qualified `nlmixr2`
 model (even though it was generated from `nlmixr2`).
@@ -132,7 +132,7 @@ new <- as.nonmem2rx(mod, mod2)
 print(new)
 ```
 
-# Step 3: Convert new model to nlmixr2 fit with `as.nlmixr2()`
+## Step 3: Convert new model to nlmixr2 fit with `as.nlmixr2()`
 
 Once the translation is complete, and it is validated, you can convert
 the fit to a full nlmixr2 fit object.
@@ -152,7 +152,7 @@ Note this object **does not** rerun an estimation, but rather imports
 everything it knows about the fit to rerun the `nlmixr2` table steps
 to calculate the things you need.
 
-# Step 4: Explore the data/fit as if it came from `nlmixr2`
+## Step 4: Explore the data/fit as if it came from `nlmixr2`
 
 With this information you can see about the properties of the model:
 
@@ -169,7 +169,7 @@ NONMEM run.
 
 If you want, you can use model piping to remove these parameters as follows:
 
-```{r runNlmixr2}
+```{r modModelForNlmixr2}
 mod3 <-  fit %>%
   model(ktr <- exp(tktr)) %>%
   model(ka <- exp(tka)) %>%
@@ -193,7 +193,7 @@ fit2
 
 With these modifications the shrinkage is also reduced (just like in the NONMEM case)
 
-# Step 5: Get the covariance of the model 
+## Step 5: Get the covariance of the model
 
 Another thing that can be helpful when the fit has been imported into
 a `nlmixr2` fit is to get the variance/covariance matrix.  This can be
