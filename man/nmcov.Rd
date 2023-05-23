@@ -11,10 +11,14 @@ nmcov(file, ...)
 
 \item{...}{other parameters passed to \code{data.table::fread}}
 }
+\value{
+A matrix with covariance step from NONMEM
+}
 \description{
 Read in data file
 }
 \examples{
+
 nmcov(system.file("mods/cpt/runODE032.cov", package="nonmem2rx"))
 }
 \author{

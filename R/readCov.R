@@ -1,9 +1,15 @@
 #' Read in data file
 #'  
 #' @inheritParams nmtab
-#' @export 
+#' 
+#' @return A matrix with covariance step from NONMEM
+#' 
+#' @export
+#' 
 #' @author Philip Delff and Matthew L. Fidler
+#' 
 #' @examples
+#' 
 #' nmcov(system.file("mods/cpt/runODE032.cov", package="nonmem2rx"))
 nmcov <- function (file, ...) {
   checkmate::assertFileExists(file)
