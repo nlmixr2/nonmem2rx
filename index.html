@@ -101,6 +101,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown--simulation">
     <a class="dropdown-item" href="articles/simulate-new-dosing.html">New Dosing Scenarios</a>
     <a class="dropdown-item" href="articles/simulate-uncertainty.html">Simulating with Uncertainty</a>
+    <a class="dropdown-item" href="articles/simulate-extra-items.html">Simulating with Derived Variables</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -180,7 +181,7 @@
 <p>Then with this model, you can:</p>
 <ul>
 <li><p>Perform <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html" class="external-link">simulations of new dosing</a> from the NONMEM model or even <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html" class="external-link">simulate using the uncertainty in your model</a> to simulate new scenarios</p></li>
-<li><p>Modify the model for scenarios like adaptive dosing with model piping</p></li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html" class="external-link">Modify the model to calculate derived parameters</a> (like AUC). These parameters slow down NONMEM’s optimization, but can help in your simulation scenario.</p></li>
 </ul>
 </li>
 <li>
@@ -213,7 +214,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/nonmem2rx/" class="external-link">nonmem2rx</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp2ERVRR/temp_libpath8a01422a228/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -249,12 +250,12 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp2ERVRR/temp_libpath8a01422a228/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp2ERVRR/temp_libpath8a01422a228/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmp4LtVc3/temp_libpath1cc4620c923e/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
