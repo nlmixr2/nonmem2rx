@@ -26,14 +26,14 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.0885159"
-     inkscape:cx="90.030839"
+     inkscape:cx="89.112157"
      inkscape:cy="239.31667"
-     inkscape:window-width="1904"
-     inkscape:window-height="1027"
-     inkscape:window-x="8"
-     inkscape:window-y="8"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="text1297-3" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
   <defs
      id="defs6733">
     <linearGradient
@@ -65,6 +65,24 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-80.81215,-87.802146)">
+    <path
+       sodipodi:type="star"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#1b3d64;stroke-width:4.38096;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       id="path17178-5"
+       sodipodi:sides="6"
+       sodipodi:cx="121.90476"
+       sodipodi:cy="126.57602"
+       sodipodi:r1="103.56153"
+       sodipodi:r2="103.56153"
+       sodipodi:arg1="-0.52327829"
+       sodipodi:arg2="0.0003204856"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 211.60827,74.824 -0.0332,103.56153 -89.70351,51.75202 -89.670315,-51.80951 0.03319,-103.561527 89.703505,-51.752019 z"
+       inkscape:transform-center-x="0.32645456"
+       inkscape:transform-center-y="-1.460707"
+       transform="matrix(0.22784689,0,0,0.22867518,73.97438,83.117701)" />
     <path
        sodipodi:type="star"
        style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient7641);fill-opacity:1;fill-rule:nonzero;stroke:#1b3d64;stroke-width:4.38096;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
