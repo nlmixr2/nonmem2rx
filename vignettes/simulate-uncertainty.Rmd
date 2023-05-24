@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 This page shows a simple work-flow for directly simulating a different
 dosing paradigm than what was modeled taking into account the modeled
 uncertainty. This workflow is very similar to simply [simulating
-without uncertainty](simuate-new-dosing.html) in the parameters
+without uncertainty](simulate-new-dosing.html) in the parameters
 themselves.
 
 ## Step 1: Import the model

@@ -42,7 +42,7 @@ generated outputs for the following items:
   predictions, the observations and the residual specification to
   generate the individual weighted residuals. Since you can [modify
   the residual specification to create a nlmixr2-compatible
-  model](convert-nlmixr2.html), this step is important to make sure
+  model](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html), this step is important to make sure
   the residual specification is the same.
   
   

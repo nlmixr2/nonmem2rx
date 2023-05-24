@@ -74,7 +74,7 @@ mod
 
 This model does not specify the residuals in a way that makes sense to
 `nlmixr2`.  If you want, you can still [convert the `rxode2` model to
-a nlmixr2 fit](convert-nlmixr2.html).
+a nlmixr2 fit](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html).
 
 ## Technical details about reading NONMEM to rxode2
 
