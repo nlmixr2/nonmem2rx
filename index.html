@@ -14,14 +14,15 @@
     syntax requires the residual specification to be included and it
     is not always translated. If available, the rxode2 model will
     read in the NONMEM data and compare the simulation for the
-    population model (PRED) and the individual model (IPRED) to
-    immediately show how well the translation is performing. This
-    saves the model development time for people who are creating a
-    rxode2 model manually.  Additionally, this package reads in all
-    the information to allow simulation with uncertainty (that is the
+    population model (PRED) individual model (IPRED) and residual
+    model (IWRES) to immediately show how well the translation is
+    performing. This saves the model development time for people who are
+    creating an rxode2 model manually.  Additionally, this package reads
+    in all the information to allow simulation with uncertainty (that is the
     number of observations, the number of subjects, and the covariance
     matrix) with a rxode2 model.  This is complementary to the
-    babelmixr2 package that translates nlmixr2 models to NONMEM.">
+    babelmixr2 package that translates nlmixr2 models to NONMEM and can
+    convert the objects converted from nonmem2rx to a full nlmixr2 fit.">
 <title>nonmem2rx Converts NONMEM Models to rxode2 • nonmem2rx</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -43,14 +44,15 @@
     syntax requires the residual specification to be included and it
     is not always translated. If available, the rxode2 model will
     read in the NONMEM data and compare the simulation for the
-    population model (PRED) and the individual model (IPRED) to
-    immediately show how well the translation is performing. This
-    saves the model development time for people who are creating a
-    rxode2 model manually.  Additionally, this package reads in all
-    the information to allow simulation with uncertainty (that is the
+    population model (PRED) individual model (IPRED) and residual
+    model (IWRES) to immediately show how well the translation is
+    performing. This saves the model development time for people who are
+    creating an rxode2 model manually.  Additionally, this package reads
+    in all the information to allow simulation with uncertainty (that is the
     number of observations, the number of subjects, and the covariance
     matrix) with a rxode2 model.  This is complementary to the
-    babelmixr2 package that translates nlmixr2 models to NONMEM.">
+    babelmixr2 package that translates nlmixr2 models to NONMEM and can
+    convert the objects converted from nonmem2rx to a full nlmixr2 fit.">
 <meta property="og:image" content="/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
