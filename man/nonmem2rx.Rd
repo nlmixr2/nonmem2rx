@@ -206,7 +206,16 @@ uncompressed (default: \code{TRUE})
 }
 \examples{
 
+# You can run a translation without validating the input.  This is
+# a faster way to import a dataset (and allows the CRAN machines to
+# run a quick example)
 
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE,
+     validate=FALSE, compress=FALSE)
+
+\donttest{
+
+# Though by default you likely wish to validate the input
 
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
 
@@ -233,5 +242,7 @@ plot(mod, nrow=5, ncol=5, page=TRUE, log="y")
 
 # you can also convert to a nlmixr2 object, but need babelmixr2 for
 # that conversion
+
+}
 
 }

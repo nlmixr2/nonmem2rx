@@ -12,7 +12,7 @@
 ^inst/mods/cptpsp$
 ^inst/mods/bauer_2019_cptpsp_tutorial_1$
 ^inst/mods/bauer_2019_cptpsp_tutorial_2$
-
+^logo.svg$
 ^vignettes/articles$
 ^_pkgdown\.yml$
 ^docs$
