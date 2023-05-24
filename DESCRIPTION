@@ -3,7 +3,7 @@ Type: Package
 Title: 'nonmem2rx' Converts 'NONMEM' Models to 'rxode2'
 Version: 0.1.0
 Author: Matthew Fidler
-Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
+Maintainer: Matthew Fidler <matt.fidler@novartis.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matt.fidler@novartis.com", comment=c(ORCID="0000-0001-8538-6691")),
     person("Philip", "Delff", email = "philip@delff.dk",role = c("ctb")),
     person("Gabriel", "Staples", role="ctb", comment="string insensitive compare"))
@@ -16,14 +16,15 @@ Description: 'NONMEM' has been a tool for running nonlinear mixed
     syntax requires the residual specification to be included and it
     is not always translated. If available, the 'rxode2' model will
     read in the 'NONMEM' data and compare the simulation for the
-    population model ('PRED') and the individual model ('IPRED') to
-    immediately show how well the translation is performing. This
-    saves the model development time for people who are creating a
-    'rxode2' model manually.  Additionally, this package reads in all
-    the information to allow simulation with uncertainty (that is the
+    population model ('PRED') individual model ('IPRED') and residual
+    model ('IWRES') to immediately show how well the translation is
+    performing. This saves the model development time for people who are
+    creating an 'rxode2' model manually.  Additionally, this package reads
+    in all the information to allow simulation with uncertainty (that is the
     number of observations, the number of subjects, and the covariance
     matrix) with a 'rxode2' model.  This is complementary to the
-    'babelmixr2' package that translates 'nlmixr2' models to 'NONMEM'.
+    'babelmixr2' package that translates 'nlmixr2' models to 'NONMEM' and can
+    convert the objects converted from 'nonmem2rx' to a full 'nlmixr2' fit.
 License: GPL (>= 3) 
 URL: https://nlmixr2.github.io/nonmem2rx/, https://github.com/nlmixr2/nonmem2rx/
 Encoding: UTF-8
