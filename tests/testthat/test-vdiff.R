@@ -1,5 +1,5 @@
 test_that("plot tests", {
-  
+  skip_on_cran()
   mod <- suppressMessages(suppressWarnings(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)))
 
   expect_error(autoplot(mod), NA)
@@ -45,5 +45,4 @@ test_that("plot tests", {
 
   expect_warning(plot(mod))
 
-  
 })

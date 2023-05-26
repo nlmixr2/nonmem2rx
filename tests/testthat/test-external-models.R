@@ -3,6 +3,7 @@
 }
 
 withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE),{
+    skip_on_cran()
   test_that("test nonmemica models", {
     skip_if_not(requireNamespace("nonmemica", quietly = TRUE))
     

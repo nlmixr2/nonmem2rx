@@ -1,4 +1,5 @@
 test_that("test $simulationModelIwres with multiple endpoints", {
+  skip_on_cran()
   pk.turnover.emax3 <- function() {
     ini({
       tktr <- log(1)
@@ -58,6 +59,7 @@ test_that("test $simulationModelIwres with multiple endpoints", {
 })
 
 test_that("test $simulationModelIwres with single endpoints", {
+  skip_on_cran()
   one.cmt <- function() {
     ini({
       ## You may label each parameter with a comment

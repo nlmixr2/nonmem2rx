@@ -1,5 +1,5 @@
 test_that("as.nonmem2rx", {
-
+  skip_on_cran()
   mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                    determineError=FALSE, lst=".res", save=FALSE)
 

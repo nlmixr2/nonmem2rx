@@ -4,7 +4,8 @@
 
 withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE),{
   test_that("model loading", {
-
+    skip_on_cran()
+    
     expect_error(.nonmem2rx(system.file("mods/DDMODEL00000301/run3.mod", package="nonmem2rx")), NA)
     ## expect_error(.nonmem2rx(system.file("mods/DDMODEL00000311/zebrafish.mod", package="nonmem2rx"))
     ##                        "SIGMA(#, #)")
