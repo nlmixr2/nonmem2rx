@@ -210,7 +210,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/nonmem2rx/" class="external-link">nonmem2rx</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmprTgmjl/temp_libpathe73d3d151514/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmpqt001c/temp_libpath50e2f43563895/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -246,20 +246,13 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmprTgmjl/temp_libpathe73d3d151514/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmpqt001c/temp_libpath50e2f43563895/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span><span class="co">#&gt; In file included from /usr/share/R/include/R.h:71,</span></span>
-<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2/include/rxode2.h:9,</span></span>
-<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2parse/include/rxode2_model_shared.h:3,</span></span>
-<span><span class="co">#&gt;                  from rx_3fc4ae7cf132c0f9271202d3f47a5a89_.c:115:</span></span>
-<span><span class="co">#&gt; /usr/share/R/include/R_ext/Complex.h:80:6: warning: ISO C99 doesn’t support unnamed structs/unions [-Wpedantic]</span></span>
-<span><span class="co">#&gt;    80 |     };</span></span>
-<span><span class="co">#&gt;       |      ^</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmprTgmjl/temp_libpathe73d3d151514/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpqt001c/temp_libpath50e2f43563895/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -270,13 +263,6 @@
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span><span class="co">#&gt; In file included from /usr/share/R/include/R.h:71,</span></span>
-<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2/include/rxode2.h:9,</span></span>
-<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2parse/include/rxode2_model_shared.h:3,</span></span>
-<span><span class="co">#&gt;                  from rx_2222306f3e9dc582ea63c0e02f33e98c_.c:115:</span></span>
-<span><span class="co">#&gt; /usr/share/R/include/R_ext/Complex.h:80:6: warning: ISO C99 doesn’t support unnamed structs/unions [-Wpedantic]</span></span>
-<span><span class="co">#&gt;    80 |     };</span></span>
-<span><span class="co">#&gt;       |      ^</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
@@ -417,6 +403,9 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/nlmixr2/nonmem2rx/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/nlmixr2/nonmem2rx/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/nlmixr2/nonmem2rx?branch=main" class="external-link"><img src="https://codecov.io/gh/nlmixr2/nonmem2rx/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://cran.r-project.org/package=nonmem2rx" class="external-link"><img src="http://www.r-pkg.org/badges/version/nonmem2rx" alt="CRAN version"></a></li>
+<li><a href="https://cran.r-project.org/package=nonmem2rx" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/nonmem2rx" alt="CRAN total downloads"></a></li>
+<li><a href="https://cran.r-project.org/package=nonmem2rx" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/nonmem2rx" alt="CRAN total downloads"></a></li>
 <li><a href="https://www.codefactor.io/repository/github/nlmixr2/nonmem2rx" class="external-link"><img src="https://www.codefactor.io/repository/github/nlmixr2/nonmem2rx/badge" alt="CodeFactor"></a></li>
 </ul>
 </div>
