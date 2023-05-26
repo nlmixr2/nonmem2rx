@@ -32,7 +32,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
                            nonmem2rx.extended=FALSE),{
                              lapply(files,function(x) {
                                test_that(paste(x, ", regular"), {
-                                 expect_error(nonmem2rx(system.file(x, package="nonmem2rx")), NA)
+                                 expect_error(nonmem2rx(system.file(x, package="nonmem2rx"), save=FALSE), NA)
                                })
                              })
                            })

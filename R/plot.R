@@ -4,6 +4,7 @@
 #' @param page number of page(s) for the individual plots, by default
 #'   (`FALSE`) no pages are print; You can use `TRUE` for all pages to
 #'   print, or list which pages you want to print
+#' @return a ggplot2 object
 #' @inheritParams rxode2::plot.rxSolve
 #' @inheritParams ggplot2::autoplot
 #' @inheritParams ggforce::facet_wrap_paginate

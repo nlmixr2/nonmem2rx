@@ -185,7 +185,7 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
                                unzip(system.file("ddmore.zip", package="nonmem2rx"))
                                lapply(files,function(x) {
                                  test_that(paste(x, ", extended"), {
-                                   expect_error(suppressMessages(suppressWarnings(nonmem2rx(x))), NA)
+                                   expect_error(suppressMessages(suppressWarnings(nonmem2rx(x, save=FALSE))), NA)
                                  })
                                })
                              })

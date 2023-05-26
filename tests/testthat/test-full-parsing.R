@@ -1,5 +1,5 @@
-.nonmem2rx <- function(...) {
-  suppressMessages(nonmem2rx(...))
+.nonmem2rx <- function(..., save=FALSE) {
+  suppressMessages(nonmem2rx(..., save=FALSE))
 }
 
 withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,

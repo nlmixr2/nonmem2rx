@@ -508,14 +508,15 @@
 #' # a faster way to import a dataset (and allows the CRAN machines to
 #' # run a quick example)
 #' 
-#' mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE,
-#'      validate=FALSE, compress=FALSE)
+#' mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
+#'                 save=FALSE, validate=FALSE, compress=FALSE)
 #'
 #' \donttest{
 #'
 #' # Though by default you likely wish to validate the input
 #'
-#' mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+#' mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+#'                  lst=".res", save=FALSE)
 #'
 #' mod
 #'

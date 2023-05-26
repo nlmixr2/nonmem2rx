@@ -220,14 +220,14 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
       lapply(.files,
              function(file) {
                test_that(file, {
-                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))), NA)
+                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE, save=FALSE))), NA)
                })
              })
 
       lapply(.fileError,
              function(file) {
                test_that(paste0("error for ", file), {
-                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE))))
+                 expect_error(suppressMessages(suppressWarnings(nonmem2rx(file, strictLst=TRUE, save=FALSE))))
                })
              })
 

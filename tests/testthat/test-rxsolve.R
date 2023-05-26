@@ -1,5 +1,5 @@
-.nonmem2rx <- function(...) {
-  suppressWarnings(suppressMessages(nonmem2rx(...)))
+.nonmem2rx <- function(..., save=FALSE) {
+  suppressWarnings(suppressMessages(nonmem2rx(..., save=FALSE)))
 }
 
 .rxSolve <-  function(...) {

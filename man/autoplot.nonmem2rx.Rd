@@ -31,6 +31,9 @@ log-scale?}
 (\code{FALSE}) no pages are print; You can use \code{TRUE} for all pages to
 print, or list which pages you want to print}
 }
+\value{
+a ggplot2 object
+}
 \description{
 Autoplot nonmem2rx object
 }
