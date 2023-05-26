@@ -89,7 +89,7 @@ The import process steps are below:
 - Try to determine an endpoint/residual specification in the model (if
   possible), and convert to a fully qualified ui model that can be
   used in `nlmixr2` and `rxode2`. If it cannot be determined
-  automatically, [you can manually fix this](convert-nlmixr2.html) and
+  automatically, [you can manually fix this](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html) and
   still convert to a `nlmixr2` object (if the data/estimates are
   available of course).
 
