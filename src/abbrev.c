@@ -117,7 +117,7 @@ int curMtime = 0;
 int mtdiffWarning = 0;
 int hasMnow = 0;
 
-SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label);
+SEXP nonmem2rxPushTheta(const char *ini, const char *comment, const char *label, int nargs);
 SEXP nonmem2rxNeedNmevid(void);
 SEXP nonmem2rxNeedNmid(void);
 SEXP nonmem2rxNeedNmid(void);
@@ -219,7 +219,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     } else if (!nmrxstrcmpi("ICALL", v)) {
       if (icallWarning == 0) {
         nonmem2rxPushTheta("icall <- fix(1)", "icall set to 1 for non-simulation",
-                           NULL);
+                           NULL, 0);
         Rf_warning("icall found and added as rxode2 parameter to model; set to 4 to activate simulation code");
         icallWarning=1;
       }
@@ -228,7 +228,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     } else if (!nmrxstrcmpi("IREP", v)) {
        if (irepWarning == 0) {
          nonmem2rxPushTheta("irep <- fix(0)", "irep set to 0 (not supported)",
-                            NULL);
+                            NULL, 0);
         Rf_warning("irep found and added as rxode2 parameter to model (=0); 'sim.id' is added to all multi-study simulations and currently cannot be accessed in the simulation code");
         irepWarning=1;
       }
