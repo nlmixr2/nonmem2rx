@@ -361,7 +361,6 @@ SEXP nonmem2rxPushObservedMaxTheta(int a);
 SEXP _nonmem2rx_trans_theta(SEXP in, SEXP unintFix) {
   nonmem2rx_unintFix =  INTEGER(unintFix)[0];
   trans_theta(R_CHAR(STRING_ELT(in, 0)));
-  parseFree(0);
   nonmem2rxPushObservedMaxTheta(nonmem2rx_thetanum);
   if (nonmem2rx_names_nargs) {
     nonmem2rx_names_nargs = 0;
