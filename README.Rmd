@@ -46,45 +46,44 @@ install.packages('nonmem2rx')
 
 ## What you can do with `nonmem2rx`
 
-- [Convert a `NONMEM` model to a `rxode2`
-  model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html)
-  
-- [Make sure the model is translated correctly](https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html)
+## What you can do with `nonmem2rx`/`babelmixr2`
 
-- Then with this model, you can:
+You can do many useful tasks directly converting between nlmixr2 and NONMEM models; you can:
 
-  - Perform [simulations of new
-    dosing](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html)
-    from the NONMEM model or even [simulate using the uncertainty in your model](https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html)
-    to simulate new scenarios
-  
-  - [Modify the model to calculate derived
-    parameters](https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html)
-    (like AUC). These parameters slow down NONMEM's optimization, but
-    can help in your simulation scenario.
+-	[Convert a NONMEM model to a rxode2 model](https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html)
 
-- With `nonmem2rx` and `babelmixr2`, [convert the imported `rxode2`
-  model to a `nlmixr2` object](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html), allowing:
-  
-  - [Generation of Word and PowerPoint plots with `nlmixr2rpt`](https://nlmixr2.github.io/nonmem2rx/articles/create-office.html)
-  
-  - [Easy VPC creation (with `vpcPlot()`)](https://nlmixr2.github.io/nonmem2rx/articles/create-vpc.html)
-  
-  - [Easy Individual plots with extra solved
-    points](https://nlmixr2.github.io/nonmem2rx/articles/create-augPred.html).
-    This will show the curvature of individual and population fits for sparse
-    data-sets (with `augPred()`)
-    
-- You can even use this conversion to help debug your NONMEM model (or
-  even try it in `nlmixr2` instead)
-  
-  - Understand [how to simplify the NONMEM model to avoid rounding errors](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html)
-  
-  - [Run `nlmixr2`'s covariance step when `NONMEM`s covariance step
-    has
-    failed](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model)
-    (in the linked example, there was no covariance step because
-    rounding errors)
+-	[Do development in nlmixr2 and then run NONMEM from a nlmixr2 model](https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html) for reviewers who want to know about NONMEM results.
+
+-	In both conversions, [automatically make sure the model is translated correctly ](https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html) (for [babelmixr2](https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html#optional-step-2-recover-a-failed-nonmem-run))
+
+Then with nlmixr2 fit models coming from both conversions, you can:
+
+-	[Perform simulations of new
+    dosing](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html) from the NONMEM model or even [simulate using the uncertainty in your model to simulate new scenarios](https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html)
+
+-	[Modify the model to calculate derived parameters](https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html) (like AUC). These parameters slow down NONMEM’s optimization, but can help in your simulation scenario.
+
+With nonmem2rx and babelmixr2, convert the imported rxode2 model to a nlmixr2 object, allowing:
+
+-	[Generation of Word and PowerPoint plots with
+      nlmixr2rpt](https://nlmixr2.github.io/nonmem2rx/articles/create-office.html)
+
+-	[Easy VPC
+      creation](https://nlmixr2.github.io/nonmem2rx/articles/create-vpc.html)
+      (with `vpcPlot()`)
+
+-	[Easy Individual plots with extra solved
+      points](https://nlmixr2.github.io/nonmem2rx/articles/create-augPred.html). This
+      will show the curvature of individual and population fits for
+      sparse data-sets (with `augPred()`)
+
+You can even use this conversion to help debug your NONMEM model (or
+even try it in nlmixr2 instead)
+
+-	[Understand how to simplify the NONMEM model to avoid rounding errors](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html)
+
+-	[Run nlmixr2’s covariance step when NONMEMs covariance step has failed](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model) (in the linked example, there was no covariance step because rounding errors)
+
     
 ## Simple example
 
