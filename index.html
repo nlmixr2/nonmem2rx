@@ -176,31 +176,32 @@
 <h2 id="what-you-can-do-with-nonmem2rx">What you can do with <code>nonmem2rx</code>
 <a class="anchor" aria-label="anchor" href="#what-you-can-do-with-nonmem2rx"></a>
 </h2>
+</div>
+<div class="section level2">
+<h2 id="what-you-can-do-with-nonmem2rxbabelmixr2">What you can do with <code>nonmem2rx</code>/<code>babelmixr2</code>
+<a class="anchor" aria-label="anchor" href="#what-you-can-do-with-nonmem2rxbabelmixr2"></a>
+</h2>
+<p>You can do many useful tasks directly converting between nlmixr2 and NONMEM models; you can:</p>
 <ul>
-<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html" class="external-link">Convert a <code>NONMEM</code> model to a <code>rxode2</code> model</a></p></li>
-<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html" class="external-link">Make sure the model is translated correctly</a></p></li>
-<li>
-<p>Then with this model, you can:</p>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/import-nonmem.html" class="external-link">Convert a NONMEM model to a rxode2 model</a></p></li>
+<li><p><a href="https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html" class="external-link">Do development in nlmixr2 and then run NONMEM from a nlmixr2 model</a> for reviewers who want to know about NONMEM results.</p></li>
+<li><p>In both conversions, <a href="https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html" class="external-link">automatically make sure the model is translated correctly</a> (for <a href="https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html#optional-step-2-recover-a-failed-nonmem-run" class="external-link">babelmixr2</a>)</p></li>
+</ul>
+<p>Then with nlmixr2 fit models coming from both conversions, you can:</p>
 <ul>
-<li><p>Perform <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html" class="external-link">simulations of new dosing</a> from the NONMEM model or even <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html" class="external-link">simulate using the uncertainty in your model</a> to simulate new scenarios</p></li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html" class="external-link">Perform simulations of new dosing</a> from the NONMEM model or even <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html" class="external-link">simulate using the uncertainty in your model to simulate new scenarios</a></p></li>
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html" class="external-link">Modify the model to calculate derived parameters</a> (like AUC). These parameters slow down NONMEM’s optimization, but can help in your simulation scenario.</p></li>
 </ul>
-</li>
-<li>
-<p>With <code>nonmem2rx</code> and <code>babelmixr2</code>, <a href="https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html" class="external-link">convert the imported <code>rxode2</code> model to a <code>nlmixr2</code> object</a>, allowing:</p>
+<p>With nonmem2rx and babelmixr2, convert the imported rxode2 model to a nlmixr2 object, allowing:</p>
 <ul>
-<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/create-office.html" class="external-link">Generation of Word and PowerPoint plots with <code>nlmixr2rpt</code></a></p></li>
-<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/create-vpc.html" class="external-link">Easy VPC creation (with <code>vpcPlot()</code>)</a></p></li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/create-office.html" class="external-link">Generation of Word and PowerPoint plots with nlmixr2rpt</a></p></li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/create-vpc.html" class="external-link">Easy VPC creation</a> (with <code>vpcPlot()</code>)</p></li>
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/create-augPred.html" class="external-link">Easy Individual plots with extra solved points</a>. This will show the curvature of individual and population fits for sparse data-sets (with <code>augPred()</code>)</p></li>
 </ul>
-</li>
-<li>
-<p>You can even use this conversion to help debug your NONMEM model (or even try it in <code>nlmixr2</code> instead)</p>
+<p>You can even use this conversion to help debug your NONMEM model (or even try it in nlmixr2 instead)</p>
 <ul>
-<li><p>Understand <a href="https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html" class="external-link">how to simplify the NONMEM model to avoid rounding errors</a></p></li>
-<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model" class="external-link">Run <code>nlmixr2</code>’s covariance step when <code>NONMEM</code>s covariance step has failed</a> (in the linked example, there was no covariance step because rounding errors)</p></li>
-</ul>
-</li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html" class="external-link">Understand how to simplify the NONMEM model to avoid rounding errors</a></p></li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model" class="external-link">Run nlmixr2’s covariance step when NONMEMs covariance step has failed</a> (in the linked example, there was no covariance step because rounding errors)</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -210,7 +211,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/nonmem2rx/" class="external-link">nonmem2rx</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmpqt001c/temp_libpath50e2f43563895/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -246,13 +247,13 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmpqt001c/temp_libpath50e2f43563895/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpqt001c/temp_libpath50e2f43563895/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
