@@ -39,6 +39,8 @@ navbar:
         href: articles/simulate-uncertainty.html
       - text: "Simulating with Derived Variables"
         href: articles/simulate-extra-items.html
+      - text: "Simulating with Covariates/Input PK parameters"
+        href: articles/simulate-new-dosing-with-covs.html
   - text: "Reporting"
     menu:
       - text: "Creating word and powerpoint documents"
