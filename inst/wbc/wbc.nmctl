@@ -1,0 +1,79 @@
+$PROBLEM wbc
+
+$DATA wbc.csv IGNORE=@
+
+$INPUT ID TIME EVID AMT DV CMT CLI V1I V2I RXROW
+
+$SUBROUTINES ADVAN13 TOL=6 ATOL=12 SSTOL=6 SSATOL=12
+
+$MODEL NCOMPARTMENTS=7
+     COMP(CENTR, DEFDOSE) ; centr
+     COMP(PERIPH) ; periph
+     COMP(PROL) ; prol
+     COMP(TR1) ; tr1
+     COMP(TR2) ; tr2
+     COMP(TR3) ; tr3
+     COMP(CIRC) ; circ
+
+$PK
+  MU_1=THETA(1)
+  MU_2=THETA(2)
+  MU_3=THETA(3)
+  CIRC0=DEXP(MU_1+ETA(1)) ; CIRC0 <- exp(log_CIRC0)
+  MTT=DEXP(MU_2+ETA(2)) ; MTT <- exp(log_MTT)
+  SLOPU=DEXP(MU_3+ETA(3)) ; SLOPU <- exp(log_SLOPU)
+  GAMMA=DEXP(THETA(4)) ; GAMMA <- exp(log_GAMMA)
+  A_0(3)=CIRC0 ; prol(0) = CIRC0
+  A_0(4)=CIRC0 ; tr1(0) = CIRC0
+  A_0(5)=CIRC0 ; tr2(0) = CIRC0
+  A_0(6)=CIRC0 ; tr3(0) = CIRC0
+  A_0(7)=CIRC0 ; circ(0) = CIRC0
+
+$DES
+  CL=CLI ; CL = CLI
+  V1=V1I ; V1 = V1I
+  V2=V2I ; V2 = V2I
+  RXR1=204 ; Q = 204
+  CONC=A(1)/V1 ; CONC = centr/V1
+  NN=3 ; NN = 3
+  KTR=(NN+1)/MTT ; KTR = (NN + 1)/MTT
+  EDRUG=1-SLOPU*CONC ; EDRUG = 1 - SLOPU * CONC
+  
+  FDBK=(CIRC0/A(7))**GAMMA ; FDBK = (CIRC0/circ)^GAMMA
+  CIRC=A(7) ; CIRC = circ
+  DADT(1) = A(2)*RXR1/V2-A(1)*(CL/V1+RXR1/V1) ; d/dt(centr) = periph * Q/V2 - centr * (CL/V1 + Q/V1)
+  DADT(2) = A(1)*RXR1/V1-A(2)*RXR1/V2 ; d/dt(periph) = centr * Q/V1 - periph * Q/V2
+  DADT(3) = KTR*A(3)*EDRUG*FDBK-KTR*A(3) ; d/dt(prol) = KTR * prol * EDRUG * FDBK - KTR * prol
+  DADT(4) = KTR*A(3)-KTR*A(4) ; d/dt(tr1) = KTR * prol - KTR * tr1
+  DADT(5) = KTR*A(4)-KTR*A(5) ; d/dt(tr2) = KTR * tr1 - KTR * tr2
+  DADT(6) = KTR*A(5)-KTR*A(6) ; d/dt(tr3) = KTR * tr2 - KTR * tr3
+  DADT(7) = KTR*A(6)-KTR*A(7) ; d/dt(circ) = KTR * tr3 - KTR * circ
+
+$ERROR
+  IPRED = A(7)
+  W=DSQRT((IPRED*THETA(5))**2) ; W1 ~ sqrt((rx_pred_f_ * prop.err)^2)
+  IF (W .EQ. 0.0) W = 1
+  Y     = IPRED + W*EPS(1)
+
+$THETA (1.8317        ) ; 1 - log_CIRC0
+       (8.3733        ) ; 2 - log_MTT  
+       (6.3774        ) ; 3 - log_SLOPU
+       (-11.558       ) ; 4 - log_GAMMA
+       (0,     0.46465) ; 5 - prop.err 
+
+$OMEGA 0.097905 ; eta.CIRC0
+$OMEGA 3e-06 ; eta.MTT
+$OMEGA 2e-05 ; eta.SLOPU
+
+$SIGMA 1 FIX
+
+$ESTIMATION METHOD=1 INTER MAXEVALS=100000 SIGDIG=3 SIGL=12 PRINT=1 NOABORT
+
+$COVARIANCE
+
+$TABLE ID ETAS(1:LAST) OBJI FIRSTONLY ONEHEADER NOPRINT
+     FORMAT=s1PE17.9 NOAPPEND FILE=wbc.eta
+
+$TABLE ID TIME IPRED PRED RXROW ONEHEADER NOPRINT
+    FORMAT=s1PE17.9 NOAPPEND FILE=wbc.pred
+

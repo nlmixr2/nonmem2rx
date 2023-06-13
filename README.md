@@ -103,8 +103,15 @@ nonmem control stream for the parser to start. For example:
 
 ``` r
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/runODE032.ctl'
+
+# First we need the location of the nonmem control stream Since we are
+# running an example, we will use one of the built-in examples in
+# `nonmem2rx`
+ctlFile <- system.file("mods/cpt/runODE032.ctl", package="nonmem2rx")
+# You can use a control stream or other file. With the development
+# version of `babelmixr2`, you can simply point to the listing file
+mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
+#> ℹ getting information from  '/tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -140,13 +147,12 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -156,11 +162,11 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
-#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
 #> ℹ done
+
 mod
 #>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
 #>  ── Initalization: ──  
@@ -227,13 +233,21 @@ mod
 #>         f <- CENTRAL/scale1
 #>         ipred <- f
 #>         rescv <- RSV
-#>         ipred ~ prop(RSV)
+#>         w <- ipred * rescv
+#>         ires <- DV - ipred
+#>         iwres <- ires/w
+#>         y <- ipred + w * eps1
 #>     })
 #> }
 #>  ── nonmem2rx translation notes ($notes): ──  
 #>    • there are duplicate eta names, not renaming duplicate parameters 
 #>    • there are duplicate theta names, not renaming duplicate parameters 
 #>  ── nonmem2rx extra properties: ──  
+#> 
+#> Sigma ($sigma): 
+#>      eps1
+#> eps1    1
+#> 
 #> other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs
 #> captured NONMEM table outputs: $predData, $ipredData
 #> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare

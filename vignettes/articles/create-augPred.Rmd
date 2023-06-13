@@ -19,7 +19,13 @@ individual and population.
 ```{r setup}
 library(babelmixr2)
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+
+# First we need the location of the nonmem control stream Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
+ctlFile <- system.file("mods/cpt/runODE032.ctl", package="nonmem2rx")
+# You can use a control stream or other file. With the development
+# version of `babelmixr2`, you can simply point to the listing file
+
+mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
 ```
 
 
@@ -29,8 +35,7 @@ In this step, you convert the model to `nlmixr2` by `as.nlmixr2(mod)`;
 You may need to do a [little manual work to get the residual
 specification to match between nlmixr2 and NONMEM](convert-nlmixr2.html). 
 
-Once the residual specification is compatible with a nlmixr2 object, you can convert the model, `mod`, to
-a nlmixr2 fit object:
+Once the residual specification is compatible with a nlmixr2 object, you can convert the model, `mod`, to a nlmixr2 fit object:
 
 ```{r toNlmixr2}
 fit <- as.nlmixr2(mod)

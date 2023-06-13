@@ -1,0 +1,170 @@
+xxxxx---
+title: "Simulate New dosing with covariates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulate New dosing with covariates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Simulation with covariates or input parameters
+
+Sometimes your NONMEM model can have covariates that you may wish to
+simulate from; this simulation exercise shows a few methods to
+simulate with the covariates from NONMEM.
+
+```{r setup}
+library(nonmem2rx)
+library(rxode2)
+```
+
+## Step 0: input the model
+
+In this case, we will use the Friberg myelosuppresion model originally
+contributed as an example by Yuan Xiong.
+
+With the simulated data in nlmixr2, babelmixr2, and some manual edits
+to simplify the model we run NONMEM 7.4.3.  
+
+Note in this case there are some PK parameters that are in the model
+that require some special handling to simulate with uncertainty or
+even with different dosing scenarios.
+
+For any simulation scenario, we need to import the NONMEM model:
+
+```{r wbcImport}
+# Since this is an included example, we import the model from the
+# `nonmem2rx` package.  This is done by the `system.file()` command:
+wbcModel <- system.file("wbc/wbc.lst", package="nonmem2rx")
+
+wbc <- nonmem2rx(wbcModel)
+
+print(wbc)
+
+# note the NONMEM vs rxode2 models validate well. You can see this in
+# the validation code:
+message(paste(wbc$meta$validation, collapse="\n"))
+```
+
+## Option #1: simulate with the same conditions as the input model
+
+The easiest way to simulate with uncertainty is to use the original
+NONMEM input dataset.  If we want to simulate covariates from here, we
+simply add `resample=TRUE`:
+
+```{r simCovUncertainty}
+sim <- rxSolve(wbc, resample=TRUE, nStud=500)
+```
+
+In this case every individual re-samples from the original dataset's
+covariates.  In this particular case, the dosing changes per
+individual and it may not be what you wish to share with the team but
+may be a way to see how the model is performing relative to the data.
+Binning may be necessary, as with a typical `VPC`
+
+## Option 2: simulate with a different condition (with resampled PK parameters/covariates)
+
+In this case, you may wish to simulate a study that has similar
+covariates as the NONMEM model in general (and also with resampling)
+
+First lets simulate `410` every 20 days.  We can easily add this by
+creating a event table with the same input PK parameters as the NONMEM
+dataset.
+
+
+```{r simCovUncertainty2}
+# first create the base event table with the nubmer of individuals
+# matching the NONMEM dataset:
+ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
+  et(seq(0, 365*24, by=7*24)) %>% # Assume weekly observations
+  et(id=seq_along(unique(wbc$nonmemData$ID))) %>% # Match the number of subjects modeled
+  as.data.frame # convert to data.frame
+
+# Now create the PK covariates
+library(dplyr)
+pkCov <- wbc$nonmemData %>%
+  filter(!duplicated(ID)) %>% # only get one observation per id
+  select(CLI, V1I, V2I) # select the covariates
+
+pkCov$id <- seq_along(pkCov$CLI) # add the covariates per id
+
+# Then merge the PK covariates to the original event table
+ev <- merge(pkCov, ev)
+
+# Last simulate with replacement with the new data frame
+
+sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
+
+ci <- confint(sim, "y")
+
+plot(ci)
+```
+
+This may be closer a constant theoretical dosing regimen you may wish
+to explore. 
+
+## Option 3: simulate a larger study with a different condition (resampled PK parameters/covariates)
+
+Another option is to create a larger dataset (that is a multiple of
+the original dataset). In this case, I will assume that the new study
+will have `225` patients, which is a `5` fold increase in subjects
+compared to the NONMEM input.
+
+```{r simUncertanty3}
+# first create the base event table with the nubmer of individuals
+# matching the NONMEM dataset:
+ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
+  et(seq(0, 365*24, by=7*24)) %>% # Assume weekly observations
+  et(id=seq(1, max(wbc$nonmemData$ID)*5)) %>% # Match the number of subjects modeled
+  as.data.frame # convert to data.frame
+
+# Now create the PK covariates
+library(dplyr)
+
+pkCov <- wbc$nonmemData %>%
+  filter(!duplicated(ID)) %>% # only get one observation per id
+  select(CLI, V1I, V2I) # select the covariates
+
+# expand the covariates by 5
+
+pkCov <- do.call("rbind",
+                 lapply(1:5, function(i) {
+                   pkCov
+                 }))
+
+
+pkCov$id <- seq_along(pkCov$CLI) # add the covariates per id
+
+# Then merge the PK covariates to the original event table
+ev <- merge(pkCov, ev)
+
+# Last simulate with replacement with the new data frame
+
+sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
+
+ci <- confint(sim, "y")
+
+plot(ci)
+```
+
+## Other options
+
+You can also simulation without uncertainty and use covariates by
+resampling by hand (or even simulating new covariates manually).
+
+I believe that reampling keeps any hidden correlations between
+covariates, and should be used whenever possible.  At the time of this
+writing, resampling can only occur when the new event table is a
+multiple of the input dataest.  Eventually a feature may be added to
+resample from an input dataset directly.
+
+Note that resampling will also work with time-varying covariates.  The
+time-varying covariates would be imputed based on the input times per
+subject.
