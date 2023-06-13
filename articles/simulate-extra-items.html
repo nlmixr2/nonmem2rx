@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@
     <a class="dropdown-item" href="../articles/simulate-new-dosing.html">New Dosing Scenarios</a>
     <a class="dropdown-item" href="../articles/simulate-uncertainty.html">Simulating with Uncertainty</a>
     <a class="dropdown-item" href="../articles/simulate-extra-items.html">Simulating with Derived Variables</a>
+    <a class="dropdown-item" href="../articles/simulate-new-dosing-with-covs.html">Simulating with Covariates/Input PK parameters</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -146,7 +147,13 @@ different dosing paradigm with new derived items, in this case
 <span><span class="co">#&gt; rxode2 2.0.13.9000 using 1 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># First we need the location of the nonmem control stream Since we are running an example, we will use one of the built-in examples in `nonmem2rx`</span></span>
+<span><span class="va">ctlFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span></span>
+<span><span class="co"># You can use a control stream or other file. With the development</span></span>
+<span><span class="co"># version of `babelmixr2`, you can simply point to the listing file</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span>, determineError<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -291,11 +298,19 @@ your model, and for sparse data wouldn’t be terribly accurate.</p>
 <span><span class="co">#&gt;         f &lt;- CENTRAL/scale1</span></span>
 <span><span class="co">#&gt;         ipred &lt;- f</span></span>
 <span><span class="co">#&gt;         rescv &lt;- RSV</span></span>
-<span><span class="co">#&gt;         ipred ~ prop(RSV)</span></span>
+<span><span class="co">#&gt;         w &lt;- ipred * rescv</span></span>
+<span><span class="co">#&gt;         ires &lt;- DV - ipred</span></span>
+<span><span class="co">#&gt;         iwres &lt;- ires/w</span></span>
+<span><span class="co">#&gt;         y &lt;- ipred + w * eps1</span></span>
 <span><span class="co">#&gt;         d/dt(AUC) &lt;- f</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt; }</span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Sigma</span> (<span style="color: #0000BB; font-weight: bold;">$sigma</span>): </span></span>
+<span><span class="co">#&gt;      eps1</span></span>
+<span><span class="co">#&gt; eps1    1</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span></span></span>
 <span><span class="co">#&gt; captured NONMEM table outputs: </span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
@@ -330,6 +345,7 @@ subjects:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/rxSolve.html" class="external-link">rxSolve</a></span><span class="op">(</span><span class="va">modAuc</span>, <span class="va">ev</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using nocb interpolation like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using sigma from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified atol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssRtol=1e-06</span></span>
@@ -366,27 +382,27 @@ interval:</p>
 <span><span class="va">s</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11.999</span>,  <span class="fl">23.999</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">AUC</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id time       AUC</span></span>
-<span><span class="co">#&gt; 1   1   12  9182.146</span></span>
-<span><span class="co">#&gt; 2   1   24 13172.477</span></span>
-<span><span class="co">#&gt; 3   2   12 12318.558</span></span>
-<span><span class="co">#&gt; 4   2   24 18240.985</span></span>
-<span><span class="co">#&gt; 5   3   12  9349.523</span></span>
-<span><span class="co">#&gt; 6   3   24 14430.193</span></span>
-<span><span class="co">#&gt; 7   4   12 14260.875</span></span>
-<span><span class="co">#&gt; 8   4   24 22405.512</span></span>
-<span><span class="co">#&gt; 9   5   12 12781.330</span></span>
-<span><span class="co">#&gt; 10  5   24 17832.116</span></span>
-<span><span class="co">#&gt; 11  6   12  8728.591</span></span>
-<span><span class="co">#&gt; 12  6   24 14029.399</span></span>
-<span><span class="co">#&gt; 13  7   12 13184.779</span></span>
-<span><span class="co">#&gt; 14  7   24 19418.053</span></span>
-<span><span class="co">#&gt; 15  8   12 11394.811</span></span>
-<span><span class="co">#&gt; 16  8   24 17650.850</span></span>
-<span><span class="co">#&gt; 17  9   12 12439.117</span></span>
-<span><span class="co">#&gt; 18  9   24 18440.134</span></span>
-<span><span class="co">#&gt; 19 10   12 14127.806</span></span>
-<span><span class="co">#&gt; 20 10   24 23568.948</span></span></code></pre></div>
+<span><span class="co">#&gt;    id time      AUC</span></span>
+<span><span class="co">#&gt; 1   1   12 10360.89</span></span>
+<span><span class="co">#&gt; 2   1   24 15182.22</span></span>
+<span><span class="co">#&gt; 3   2   12 14166.79</span></span>
+<span><span class="co">#&gt; 4   2   24 20767.46</span></span>
+<span><span class="co">#&gt; 5   3   12 11252.91</span></span>
+<span><span class="co">#&gt; 6   3   24 17767.27</span></span>
+<span><span class="co">#&gt; 7   4   12 11631.64</span></span>
+<span><span class="co">#&gt; 8   4   24 17782.03</span></span>
+<span><span class="co">#&gt; 9   5   12 11086.50</span></span>
+<span><span class="co">#&gt; 10  5   24 14999.88</span></span>
+<span><span class="co">#&gt; 11  6   12 10392.82</span></span>
+<span><span class="co">#&gt; 12  6   24 13877.33</span></span>
+<span><span class="co">#&gt; 13  7   12 12435.64</span></span>
+<span><span class="co">#&gt; 14  7   24 20508.80</span></span>
+<span><span class="co">#&gt; 15  8   12 16004.55</span></span>
+<span><span class="co">#&gt; 16  8   24 21847.63</span></span>
+<span><span class="co">#&gt; 17  9   12 14236.45</span></span>
+<span><span class="co">#&gt; 18  9   24 21180.87</span></span>
+<span><span class="co">#&gt; 19 10   12 13918.48</span></span>
+<span><span class="co">#&gt; 20 10   24 19376.31</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

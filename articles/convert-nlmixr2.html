@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@
     <a class="dropdown-item" href="../articles/simulate-new-dosing.html">New Dosing Scenarios</a>
     <a class="dropdown-item" href="../articles/simulate-uncertainty.html">Simulating with Uncertainty</a>
     <a class="dropdown-item" href="../articles/simulate-extra-items.html">Simulating with Derived Variables</a>
+    <a class="dropdown-item" href="../articles/simulate-new-dosing-with-covs.html">Simulating with Covariates/Input PK parameters</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -164,8 +165,13 @@ this case because of the option <code>determineError=FALSE</code>)</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/babelmixr2/" class="external-link">babelmixr2</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: nlmixr2</span></span>
 <span><span class="co">#&gt; Loading required package: nlmixr2data</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>,</span>
-<span>                 determineError<span class="op">=</span><span class="cn">FALSE</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># First we need the location of the nonmem control stream Since we are running an example, we will use one of the built-in examples in `nonmem2rx`</span></span>
+<span><span class="va">ctlFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span></span>
+<span><span class="co"># You can use a control stream or other file. With the development</span></span>
+<span><span class="co"># version of `babelmixr2`, you can simply point to the listing file</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span>, determineError<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -468,7 +474,7 @@ methods.</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.029409 0.062    0.026 100.95      3.048</span></span>
+<span><span class="co">#&gt; elapsed 0.033705 0.072    0.023 100.95      3.492</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>

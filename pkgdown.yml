@@ -10,7 +10,8 @@ articles:
   import-nonmem: import-nonmem.html
   rxode2-validate: rxode2-validate.html
   simulate-extra-items: simulate-extra-items.html
+  simulate-new-dosing-with-covs: simulate-new-dosing-with-covs.html
   simulate-new-dosing: simulate-new-dosing.html
   simulate-uncertainty: simulate-uncertainty.html
-last_built: 2023-06-02T16:55Z
+last_built: 2023-06-13T19:43Z
 

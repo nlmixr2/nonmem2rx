@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@
     <a class="dropdown-item" href="../articles/simulate-new-dosing.html">New Dosing Scenarios</a>
     <a class="dropdown-item" href="../articles/simulate-uncertainty.html">Simulating with Uncertainty</a>
     <a class="dropdown-item" href="../articles/simulate-extra-items.html">Simulating with Derived Variables</a>
+    <a class="dropdown-item" href="../articles/simulate-new-dosing-with-covs.html">Simulating with Covariates/Input PK parameters</a>
   </div>
 </li>
 <li class="nav-item dropdown">
@@ -145,7 +146,14 @@ different dosing paradigm than what was modeled.</p>
 <span><span class="co">#&gt; rxode2 2.0.13.9000 using 1 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/nonmem2rx/" class="external-link">nonmem2rx</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># First we need the location of the nonmem control stream Since we are running an example, we will use one of the built-in examples in `nonmem2rx`</span></span>
+<span><span class="va">ctlFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span></span>
+<span><span class="co"># You can use a control stream or other file. With the development</span></span>
+<span><span class="co"># version of `babelmixr2`, you can simply point to the listing file</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span>, determineError<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -229,11 +237,11 @@ subjects:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/rxSolve.html" class="external-link">rxSolve</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">ev</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using nocb interpolation like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using sigma from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified atol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssRtol=1e-06</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0’</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span></code></pre></div>
 <p>Note that since this is a <code>nonmem2rx</code> model, the default
 solving will match the tolerances and methods specified in your
 <code>NONMEM</code> model.</p>
