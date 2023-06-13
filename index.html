@@ -192,6 +192,7 @@
 <ul>
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html" class="external-link">Perform simulations of new dosing</a> from the NONMEM model or even <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html" class="external-link">simulate using the uncertainty in your model to simulate new scenarios</a></p></li>
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html" class="external-link">Modify the model to calculate derived parameters</a> (like AUC). These parameters slow down NONMEM’s optimization, but can help in your simulation scenario.</p></li>
+<li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing-with-covs.html" class="external-link">Simulating with Covariates/Input PK parameters</a>. This example shows approaches to resample from the input dataset for covariate selection.</p></li>
 </ul>
 <p>With nonmem2rx and babelmixr2, convert the imported rxode2 model to a nlmixr2 object, allowing:</p>
 <ul>
@@ -218,8 +219,8 @@
 <span><span class="va">ctlFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span></span>
 <span><span class="co"># You can use a control stream or other file. With the development</span></span>
 <span><span class="co"># version of `babelmixr2`, you can simply point to the listing file</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span>, determineError<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -255,12 +256,13 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -270,6 +272,7 @@
 <span><span class="co">#&gt; ℹ done (no labels)</span></span>
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
@@ -341,21 +344,13 @@
 <span><span class="co">#&gt;         f &lt;- CENTRAL/scale1</span></span>
 <span><span class="co">#&gt;         ipred &lt;- f</span></span>
 <span><span class="co">#&gt;         rescv &lt;- RSV</span></span>
-<span><span class="co">#&gt;         w &lt;- ipred * rescv</span></span>
-<span><span class="co">#&gt;         ires &lt;- DV - ipred</span></span>
-<span><span class="co">#&gt;         iwres &lt;- ires/w</span></span>
-<span><span class="co">#&gt;         y &lt;- ipred + w * eps1</span></span>
+<span><span class="co">#&gt;         ipred ~ prop(RSV)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt; }</span></span>
 <span><span class="co">#&gt;  ── nonmem2rx translation notes ($notes): ──  </span></span>
 <span><span class="co">#&gt;    • there are duplicate eta names, not renaming duplicate parameters </span></span>
 <span><span class="co">#&gt;    • there are duplicate theta names, not renaming duplicate parameters </span></span>
 <span><span class="co">#&gt;  ── nonmem2rx extra properties: ──  </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Sigma ($sigma): </span></span>
-<span><span class="co">#&gt;      eps1</span></span>
-<span><span class="co">#&gt; eps1    1</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs</span></span>
 <span><span class="co">#&gt; captured NONMEM table outputs: $predData, $ipredData</span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare</span></span>
