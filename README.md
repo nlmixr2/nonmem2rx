@@ -70,6 +70,11 @@ Then with nlmixr2 fit models coming from both conversions, you can:
     (like AUC). These parameters slow down NONMEM’s optimization, but
     can help in your simulation scenario.
 
+  - [Simulating with Covariates/Input PK
+    parameters](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing-with-covs.html).
+    This example shows approaches to resample from the input dataset for
+    covariate selection.
+
 With nonmem2rx and babelmixr2, convert the imported rxode2 model to a
 nlmixr2 object, allowing:
 
@@ -110,8 +115,8 @@ library(nonmem2rx)
 ctlFile <- system.file("mods/cpt/runODE032.ctl", package="nonmem2rx")
 # You can use a control stream or other file. With the development
 # version of `babelmixr2`, you can simply point to the listing file
-mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
-#> ℹ getting information from  '/tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/runODE032.ctl'
+mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
+#> ℹ getting information from  '/tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -147,12 +152,13 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/Rtmpr8Ndcw/temp_libpath36fa2021ef69/nonmem2rx/mods/cpt/runODE032.csv
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -162,6 +168,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ done (no labels)
 #> ℹ renaming compartments
 #> ℹ done
+#> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
@@ -233,21 +240,13 @@ mod
 #>         f <- CENTRAL/scale1
 #>         ipred <- f
 #>         rescv <- RSV
-#>         w <- ipred * rescv
-#>         ires <- DV - ipred
-#>         iwres <- ires/w
-#>         y <- ipred + w * eps1
+#>         ipred ~ prop(RSV)
 #>     })
 #> }
 #>  ── nonmem2rx translation notes ($notes): ──  
 #>    • there are duplicate eta names, not renaming duplicate parameters 
 #>    • there are duplicate theta names, not renaming duplicate parameters 
 #>  ── nonmem2rx extra properties: ──  
-#> 
-#> Sigma ($sigma): 
-#>      eps1
-#> eps1    1
-#> 
 #> other properties include: $nonmemData, $etaData, $thetaMat, $dfSub, $dfObs
 #> captured NONMEM table outputs: $predData, $ipredData
 #> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare

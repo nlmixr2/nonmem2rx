@@ -63,6 +63,9 @@ Then with nlmixr2 fit models coming from both conversions, you can:
 
 -	[Modify the model to calculate derived parameters](https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html) (like AUC). These parameters slow down NONMEM’s optimization, but can help in your simulation scenario.
 
+-  [Simulating with Covariates/Input PK
+   parameters](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing-with-covs.html). This example shows approaches to resample from the input dataset for covariate selection.
+
 With nonmem2rx and babelmixr2, convert the imported rxode2 model to a nlmixr2 object, allowing:
 
 -	[Generation of Word and PowerPoint plots with
