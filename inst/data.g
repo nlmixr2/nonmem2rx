@@ -20,8 +20,13 @@ records_statement: ('RECORDS' | 'Records' | 'records') '='? decimalint;
 lrecl_statement: ('LRECL' | 'lrecl' | 'Lrecl') '='? decimalint;
 rewind_statement: ('NOREWIND' | 'REWIND' | 'norewind' | 'rewind' | 'Norewind' | 'Rewind');
 
-logic_bracket: '(' (simple_logic)*  (',' simple_logic)* ')';
+logic_bracket: '(' (simple_logic | quote_logic)*  (',' (simple_logic | quote_logic))* ')';
 simple_logic: identifier_nm logic_compare (identifier_nm | logic_constant);
+
+char_t1: "\'([^\'\\]|\\[^])*\'";
+char_t2: "\"([^\"\\]|\\[^])*\"";
+
+quote_logic: identifier_nm (neq_expression_nm | eq_expression_nm) (char_t1 | char_t2);
 
 logic_compare: eq_expression_nm
     | neq_expression_nm

@@ -8,7 +8,7 @@ test_that("test data", {
   }
 
   expect_error(.f("matt.csv matt=.csv"))
-  
+
   .f(" matt.csv\n", "matt.csv")
   .f(" 'matt \"s file with spaces.csv'", "matt \"s file with spaces.csv")
   .f(' "matt \'s file with spaces.csv"', "matt 's file with spaces.csv")
@@ -39,6 +39,11 @@ test_that("test data", {
 
   .i("PK.csv IGNORE=@ ACCEPT=(PKFL.EQ.0,TRTPN.EQ.1, TRTPN.EQ.3, TRTPN.EQ.4)\n",
      list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "accept"))
+
+
+  .i("PK.csv IGNORE=@ IGNORE=(C.EQ.'C',D=\"C\", E .NE. 'E')\n",
+     list(data = "PK.csv", cond = c(".data$C == 'C'", ".data$D == \"C\"", ".data$E != 'E'"),
+          ignore1="@", condType = "ignore"))
 
   .i(" matt.csv\n",
      list(data = "matt.csv", cond = character(0), ignore1=NULL, condType = "none"))
