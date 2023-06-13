@@ -21,7 +21,14 @@ Here is a quick example of a conversion:
 
 ```{r model}
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+# First we need the location of the nonmem listing file
+# Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
+lstFile <- system.file("mods/cpt/runODE032.res", package="nonmem2rx")
+# You can use a control stream or other file, and change the `lst`
+# import too, but this seems like the easiest to me.
+
+# Of course you woud use your own listing file
+mod <- nonmem2rx(lstFile, save=FALSE)
 mod
 ```
 

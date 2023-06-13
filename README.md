@@ -103,13 +103,21 @@ nonmem control stream for the parser to start. For example:
 
 ``` r
 library(nonmem2rx)
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/runODE032.ctl'
+# First we need the location of the nonmem listing file
+# Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
+lstFile <- system.file("mods/cpt/runODE032.res", package="nonmem2rx")
+# You can use a control stream or other file, and change the `lst`
+# import too, but this seems like the easiest to me.
+
+mod <- nonmem2rx(lstFile, save=FALSE)
+#> ℹ getting information from  '/tmp/RtmpkJKN0a/temp_libpath50ff379595cf/nonmem2rx/mods/cpt/runODE032.res'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
 #> ℹ done
 #> ℹ reading in lst file
+#> ℹ seeing if file argument is actually lst file
+#> ℹ file is nonmem output
 #> ℹ abbreviated list parsing
 #> ℹ done
 #> ℹ done
@@ -140,13 +148,13 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpkJKN0a/temp_libpath50ff379595cf/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
 #> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmppJp4fU/temp_libpath3dec72697cf4e/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpkJKN0a/temp_libpath50ff379595cf/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done

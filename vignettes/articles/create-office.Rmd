@@ -19,7 +19,16 @@ library(nonmem2rx)
 library(babelmixr2)
 library(nlmixr2rpt)
 library(onbrand)
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+
+library(nonmem2rx)
+
+# First we need the location of the nonmem listing file
+# Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
+lstFile <- system.file("mods/cpt/runODE032.res", package="nonmem2rx")
+# You can use a control stream or other file, and change the `lst`
+# import too, but this seems like the easiest to me.
+
+mod <- nonmem2rx(lstFile, save=FALSE)
 ```
 
 

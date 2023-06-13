@@ -25,11 +25,18 @@ themselves.
 ```{r setup}
 library(nonmem2rx)
 library(rxode2)
-# its best practice to sed the seed for the simulations
+# its best practice to set the seed for the simulations
 set.seed(42)
 rxSetSeed(42)
 
-mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)
+# First we need the location of the nonmem listing file
+# Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
+lstFile <- system.file("mods/cpt/runODE032.res", package="nonmem2rx")
+# You can use a control stream or other file, and change the `lst`
+# import too, but this seems like the easiest to me.
+
+# Of course you woud use your own listing file
+mod <- nonmem2rx(lstFile, save=FALSE)
 ```
 
 ## Step 2: Look at a different dosing paradigm
