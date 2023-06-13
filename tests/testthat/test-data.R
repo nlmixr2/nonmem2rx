@@ -40,9 +40,12 @@ test_that("test data", {
   .i("PK.csv IGNORE=@ ACCEPT=(PKFL.EQ.0,TRTPN.EQ.1, TRTPN.EQ.3, TRTPN.EQ.4)\n",
      list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "accept"))
 
-
   .i("PK.csv IGNORE=@ IGNORE=(C.EQ.'C',D=\"C\", E .NE. 'E')\n",
      list(data = "PK.csv", cond = c(".data$C == 'C'", ".data$D == \"C\"", ".data$E != 'E'"),
+          ignore1="@", condType = "ignore"))
+
+  .i("PK.csv IGNORE=@ IGNORE=(A .LE. 1, B .LT. 2, C .GT. 3, D .GE. 4)\n",
+     list(data = "PK.csv", cond = c(".data$A <= 1", ".data$B < 2", ".data$C > 3", ".data$D >= 4"),
           ignore1="@", condType = "ignore"))
 
   .i(" matt.csv\n",
