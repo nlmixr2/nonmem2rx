@@ -1,4 +1,4 @@
-jwithr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE),{
+withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE),{
   test_that("reading nonmem data without estimates", {
     skip_on_cran()
     withr::with_tempdir({
