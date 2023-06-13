@@ -1,4 +1,4 @@
-xxxxx---
+---
 title: "Simulate New dosing with covariates"
 output: rmarkdown::html_vignette
 vignette: >
