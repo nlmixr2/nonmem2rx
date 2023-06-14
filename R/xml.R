@@ -88,3 +88,38 @@ nmxml <- function(xml) {
        time=.time,
        control=.ctl)
 }
+
+#' Get the xml for debugging (without including data etc)
+#'  
+#' @param xml Original xml file
+#' @param xmlout xml output (only includes xml)
+#' @return nothing, called for side effects
+#' @export 
+#' @author Matthew L. Fidler
+#' @keywords internal
+nmxmlCov <- function(xml, xmlout, tag="//nm:covariance") {
+  .xml <- try(xml2::read_xml(xml), silent=TRUE)
+  if (inherits(.xml, "try-error")) return(NULL)
+  .covXml <- xml2::xml_find_first(.xml,"//nm:covariance")
+  xml2::write_xml(.covXml, xmlout)
+  message("written to xml output '", xmlout, "'")
+  invisible()
+}
+#' @rdname nmxmlCov
+#' @export
+nmxmlOmega <- function(xml, xmlout, tag="//nm:omega") {
+  nmxmlCov(xml, xmlout, tag=tag)
+}
+
+#' @rdname nmxmlCov
+#' @export
+nmxmlSigma <- function(xml, xmlout, tag="//nm:sigma") {
+  nmxmlCov(xml, xmlout, tag=tag)
+}
+#' @rdname nmxmlCov
+#' @export
+nmxmlTheta <- function(xml, xmlout, tag="//nm:theta") {
+  nmxmlCov(xml, xmlout, tag=tag)
+}
+
+
