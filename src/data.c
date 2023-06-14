@@ -90,6 +90,11 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
     v[len-1] = 0;
     nonmem2rxPushDataFile(v);
     return;
+  } else if (!strcmp("char_t1", name) ||
+             !strcmp("char_t2", name)) {
+    char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
+    sAppend(&curLine, "%s", v);
+    return;
   } else if (!strcmp("le_expression_nm", name)) {
     sAppendN(&curLine, " <= ", 4);
     return;
@@ -140,7 +145,8 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
       wprint_parsetree_data(pt, xpn, depth, fn, client_data);
     }
   }
-  if (!strcmp("simple_logic", name)) {
+  if (!strcmp("simple_logic", name) ||
+      !strcmp("quote_logic", name)) {
     nonmem2rxPushDataCond(curLine.s);
     sClear(&curLine);
   }
