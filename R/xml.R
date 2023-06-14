@@ -45,9 +45,12 @@ nmxml <- function(xml) {
   .omega <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:omega"),"nm:row/nm:col"))
   if (length(.omega) > 0) {
     .maxElt <- sqrt(1 + length(.omega) * 8)/2 - 1/2
-    .omega <- eval(parse(text=paste0("lotri::lotri({",
+    .omega <- try(eval(parse(text=paste0("lotri::lotri({",
                                      paste(paste0("eta", seq_len(.maxElt)), collapse="+"),
-                                     "~", deparse1(.omega), "})")))
+                                     "~", deparse1(.omega), "})"))), silent=TRUE)
+    if (inherits(.omega, "try-error")) {
+      .omega <- NULL
+    }
   } else {
     .omgea <- NULL
   }
@@ -56,9 +59,13 @@ nmxml <- function(xml) {
   .sigma <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:sigma"),"nm:row/nm:col"))
   if (length(.sigma) > 0) {
     .maxElt <- sqrt(1 + length(.sigma) * 8)/2 - 1/2
-    .sigma <- eval(parse(text=paste0("lotri::lotri({",
-                                     paste(paste0("eps", seq_len(.maxElt)), collapse="+"),
-                                     "~", deparse1(.sigma), "})")))
+    .sigma <- try(eval(parse(text=paste0("lotri::lotri({",
+                                         paste(paste0("eps", seq_len(.maxElt)), collapse="+"),
+                                         "~", deparse1(.sigma), "})"))),
+                  silent=TRUE)
+    if (inherits(.sigma, "try-error")) {
+      .sigma <- NULL
+    }
   } else {
     .sigma <- NULL
   }
@@ -68,9 +75,12 @@ nmxml <- function(xml) {
   .cov <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"),"nm:row/nm:col"))
   if (length(.cov) > 0) {
     .names <-  .replaceNmDimNames(setNames(unlist(xml2::xml_attrs(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"), "nm:row"))), NULL))
-    .cov <- eval(parse(text=paste0("lotri({", paste(.names, collapse = " + "),
+    .cov <-  try(eval(parse(text=paste0("lotri({", paste(.names, collapse = " + "),
                                    "~", deparse1(.cov),
-                                   "})")))    
+                                   "})"))), silent=TRUE)
+    if (inherits(.cov, "try-error")) {
+      .cov <- NULL
+    }
   } else {
     .cov <- NULL
   }
