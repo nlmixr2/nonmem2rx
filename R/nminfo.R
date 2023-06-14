@@ -43,10 +43,15 @@ nminfo <- function(file,
     if (inherits(.xml, "list")) {
       .hasXml <- TRUE
       .ret$theta <- .xml$theta
+      if (!is.null(.ret$theta)) .ret$thetaSource <- "xml"
       .ret$omega <- .xml$omega
+      if (!is.null(.ret$omega)) .ret$omegaSource <- "xml"
       .ret$sigma <- .xml$sigma
+      if (!is.null(.ret$sigma)) .ret$sigmaSource <- "xml"
       .ret$cov <- .xml$cov
+      if (!is.null(.ret$cov)) .ret$covSource <- "xml"
       .ret$objf <- .xml$objf
+      if (!is.null(.ret$objf)) .ret$objfSource <- "xml"
       .ret$nobs <- .xml$nobs
       .ret$nsub <- .xml$nsub
       .ret$nmtran <- .xml$nmtran
@@ -62,22 +67,37 @@ nminfo <- function(file,
   }
   # for theta, omega, and sigma the ext file is more accurate than the lst file
   .hasExt <- FALSE
-  if (useExt && !.hasXml) {
+  if (useExt && (is.null(.ret$theta) ||
+                   is.null(.ret$omega) ||
+                   is.null(.ret$sigma) ||
+                   is.null(.ret$objf))) {
     .extFile <- paste0(.base, ext)
     if (file.exists(.extFile)) {
       if (verbose) .minfo("reading in ext file")
       .ext <- nmext(.extFile)
-      .ret$theta <- .ext$theta
-      .ret$omega <- .ext$omega
-      .ret$sigma <- .ext$sigma
-      .ret$objf <- .ext$objf
+      if (is.null(.ret$theta)) {
+        .ret$theta <- .ext$theta
+        if (!is.null(.ret$theta)) .ret$thetaSource <- "ext"
+      }
+      if (is.null(.ret$omega)) {
+        .ret$omega <- .ext$omega
+        if (!is.null(.ret$omega)) .ret$omegaSource <- "ext"
+      }
+      if (is.null(.ret$sigma)) {
+        .ret$sigma <- .ext$sigma
+        if (!is.null(.ret$sigma)) .ret$sigmaSource <- "ext"
+      }
+      if (is.null(.ret$objf)) {
+        .ret$objf <- .ext$objf
+        if (!is.null(.ret$objf)) .ret$objfSource <- "ext"
+      }
       .hasExt <- TRUE
       .uses <- c(.uses, "ext")
       if (verbose) .minfo("done")
     }
   }
   .hasCov <- FALSE
-  if (useCov && !.hasXml) {
+  if (useCov && is.null(.ret$cov)) {
     .covFile <- paste0(.base, cov)
     if (file.exists(.covFile)) {
       if (verbose) .minfo("reading in cov file")
@@ -85,11 +105,14 @@ nminfo <- function(file,
       .dm <- dimnames(.cov)[[1]]
       .dm <- .replaceNmDimNames(.dm)
       dimnames(.cov) <- list(.dm, .dm)
+      if (is.null(.ret$cov)) {
+        .ret$cov <- .cov
+        if (!is.null(.ret$cov)) .ret$covSource <- "ext"
+      }
       .ret$cov <- .cov
       .uses <- c(.uses, "cov")
       .hasCov <- TRUE
       if (verbose) .minfo("done")
-
     }
   }
   if (usePhi) {
@@ -119,7 +142,7 @@ nminfo <- function(file,
   .fileLines <- NULL
   if (useLst) {
     .lstFile <- paste0(.base, lst)
-          if (verbose) .minfo("reading in lst file")
+    if (verbose) .minfo("reading in lst file")
     if (!file.exists(.lstFile)) {
       if (file.exists(file)) {
         if (verbose) .minfo("seeing if file argument is actually lst file")
@@ -140,7 +163,10 @@ nminfo <- function(file,
       }
     }
     if (!is.null(.lstFile)) {
-      if (.hasXml) {
+      if ((!is.null(.ret$theta) &&
+             !is.null(.ret$omega) &&
+             !is.null(.ret$sigma) &&
+             !is.null(.ret$objf))) {
         # use abbreviated parsing
         if (verbose) .minfo("abbreviated list parsing")
         .resetLst(strictLst=strictLst)
@@ -154,26 +180,28 @@ nminfo <- function(file,
         lapply(.l, .nmlst.fun)
         .ret$tere <- .nmlst$tere
         if (verbose) .minfo("done")
-
       } else {
         if (verbose) .minfo("getting information from lst file")
         .lst <- nmlst(.lstFile, strictLst=strictLst)
-        if (!.hasExt) {
-          .ret$theta <- .lst$theta
-          .ret$omega <- .lst$omega
-          .ret$sigma <- .lst$sigma
-          .ret$objf <- .lst$objf
-        } else {
-          if (is.null(.ret$theta)) .ret$theta <- .lst$theta
-          if (is.null(.ret$omega)) .ret$omega <- .lst$omega
-          if (is.null(.ret$sigma)) .ret$sigma <- .lst$sigma
-          if (is.null(.ret$objf)) .ret$objf <- .lst$objf
-
+        if (is.null(.ret$theta)) {
+          .ret$theta <- .lst$thet
+          if (!is.null(.ret$theta)) .ret$thetaSource <- "lst"
         }
-        if (!.hasCov) {
+        if (is.null(.ret$omega)) {
+          .ret$omega <- .lst$omega
+          if (!is.null(.ret$omega)) .ret$omegaSource <- "lst"
+        }
+        if (is.null(.ret$sigma)) {
+          .ret$sigma <- .lst$sigma
+          if (!is.null(.ret$sigma)) .ret$sigmaSource <- "lst"
+        }
+        if (is.null(.ret$objf)) {
+          .ret$objf <- .lst$objf
+          if (!is.null(.ret$objf)) .ret$objfSource <- "lst"
+        }
+        if (is.null(.ret$cov)) {
           .ret$cov <- .lst$cov
-        } else {
-          if (is.null(.ret$cov)) .ret$cov <- .lst$cov
+          if (!is.null(.ret$cov)) .ret$covSource <- "lst"
         }
         .ret$nobs <- .lst$nobs
         .ret$nsub <- .lst$nsub
