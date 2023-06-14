@@ -223,7 +223,7 @@ nminfo <- function(file,
       .fileLines <- suppressWarnings(readLines(file))
       .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
       if (length(.wpro) != 0L) {
-        .control <- .fileLines[seq(.wpro, length(.fileLines))]
+        .control <- .fileLines[seq(.wpro[1], length(.fileLines))]
         .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
         .wend <- which(regexpr(.end, .control)!= -1)
         if (length(.wend) != 0L) {
@@ -242,7 +242,7 @@ nminfo <- function(file,
       .fileLines <- suppressWarnings(readLines(file))
       .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
       if (length(.wpro) != 0L) {
-        .control <- .fileLines[seq(.wpro, length(.fileLines))]
+        .control <- .fileLines[seq(.wpro[1], length(.fileLines))]
         .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
         .wend <- which(regexpr(.end, .control)!= -1)
         if (length(.wend) != 0L) {
