@@ -107,7 +107,7 @@ nminfo <- function(file,
       dimnames(.cov) <- list(.dm, .dm)
       if (is.null(.ret$cov)) {
         .ret$cov <- .cov
-        if (!is.null(.ret$cov)) .ret$covSource <- "ext"
+        if (!is.null(.ret$cov)) .ret$covSource <- "cov"
       }
       .ret$cov <- .cov
       .uses <- c(.uses, "cov")
@@ -223,7 +223,13 @@ nminfo <- function(file,
       .fileLines <- suppressWarnings(readLines(file))
       .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
       if (length(.wpro) != 0L) {
-        .ret$control <- .fileLines
+        .control <- .fileLines[seq(.wpro, length(.fileLines))]
+        .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
+        .wend <- which(regexpr(.end, .control)!= -1)
+        if (length(.wend) != 0L) {
+          .control <- .control[seq(1, .wend[1]-1L)]
+        }
+        .ret$control <- .control
         .uses <- c(.uses, "mod")
         if (verbose) .minfo("yes, read in")
       }
@@ -236,9 +242,14 @@ nminfo <- function(file,
       .fileLines <- suppressWarnings(readLines(file))
       .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
       if (length(.wpro) != 0L) {
-        .ret$control <- .fileLines
-        .uses <- c(.uses, "mod")
-        if (verbose) .minfo("found")
+        .control <- .fileLines[seq(.wpro, length(.fileLines))]
+        .end <- "^( *NM-TRAN +MESSAGES *$| *1NONLINEAR *MIXED|License +Registered +to: +| *[*][*][*][*][*]*)"
+        .wend <- which(regexpr(.end, .control)!= -1)
+        if (length(.wend) != 0L) {
+          .control <- .control[seq(1, .wend[1]-1L)]
+        }
+        .ret$control <- .control
+        .uses <- c(.uses, "ctl")
       }
     }
   }
