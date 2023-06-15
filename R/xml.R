@@ -6,11 +6,49 @@
   .dn <- gsub("SIGMA[(]([1-9][0-9]*),([1-9][0-9]*)[)]", "sigma.\\1.\\2", .dn)
   .dn
 }
+
+.nmxmlGetCov <- function(xml) {
+  .cov <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(xml,"//nm:covariance"),"nm:row/nm:col"))
+  if (length(.cov) > 0) {
+    .names <- xml2::xml_attrs(xml2::xml_find_all(xml, "nm:row"))
+    .inputNames <- setNames(unlist(.names), NULL)
+    .finalNames <-  .replaceNmDimNames(.inputNames)
+
+    .cov <- try(eval(parse(text=paste0("lotri({", paste(.finalNames, collapse = " + "),
+                                   "~", deparse1(.cov),
+                                   "}"))), silent=TRUE)
+    if (inherits(.cov, "try-error")) {
+      .minfo("try to get covariance a different method (slower)")
+      .env <- new.env(parent=emptyenv())
+      .env$matrix <- matrix(rep(NA_real_, length(.finalNames)^2), length(.finalNames), length(.finalNames),
+                            dimnames=list(.finalNames, .finalNames))
+      .tmp <- try(lapply(seq_along(.finalNames),
+             function(i) {
+               lapply(seq(i, length(.finalNames)),
+                      function(j) {
+                        .val <- xml2::xml_double(xml2::xml_find_first(xml2::xml_find_first(xml, paste0("//nm:row[@nm:rname='", .inputNames[i], "']")), paste0("//nm:col[@nm:cname='", .inputNames[j], "']")))
+                        .env$matrix[.finalNames[i], .finalNames[j]] <-
+                          .env$matrix[.finalNames[j], .finalNames[i]] <- .val
+
+                      })
+             }), silent=TRUE)
+      if (inherits(.tmp, "try-error")) {
+        .cov <- NULL
+      } else {
+        .cov <- .env$matrix
+      }
+    }
+  } else {
+    .cov <- NULL
+  }
+  .cov
+}
+
 #' Read a nonmem xml and create output similar to the `nmlst()`
 #'
 #' @param xml xml file
 #' @return list of nonmem information
-#' @export 
+#' @export
 #' @author Matthew L. Fidler
 #' @examples
 #' nmxml(system.file("mods/cpt/runODE032.xml", package="nonmem2rx"))
@@ -31,7 +69,7 @@ nmxml <- function(xml) {
   # use list parsing for this
   .resetLst(strictLst=FALSE)
   .lst <- strsplit(xml2::xml_text(xml2::xml_find_first(.xml,"//nm:problem_information")),"\n")[[1]]
-  
+
   .nmlst$section <- .nmlst.nobs
   lapply(.lst, .nmlst.fun)
 
@@ -52,7 +90,6 @@ nmxml <- function(xml) {
     .omgea <- NULL
   }
 
-
   .sigma <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:sigma"),"nm:row/nm:col"))
   if (length(.sigma) > 0) {
     .maxElt <- sqrt(1 + length(.sigma) * 8)/2 - 1/2
@@ -63,18 +100,8 @@ nmxml <- function(xml) {
     .sigma <- NULL
   }
 
+  .cov <- .nmxmlGetCov(xml2::xml_find_first(.xml,"//nm:covariance"))
 
-
-  .cov <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"),"nm:row/nm:col"))
-  if (length(.cov) > 0) {
-    .names <-  .replaceNmDimNames(setNames(unlist(xml2::xml_attrs(xml2::xml_find_all(xml2::xml_find_first(.xml,"//nm:covariance"), "nm:row"))), NULL))
-    .cov <- eval(parse(text=paste0("lotri({", paste(.names, collapse = " + "),
-                                   "~", deparse1(.cov),
-                                   "})")))    
-  } else {
-    .cov <- NULL
-  }
-  
   list(theta=.theta,
        omega=.omega,
        sigma=.sigma,
@@ -87,4 +114,47 @@ nmxml <- function(xml) {
        termInfo=.termInfo,
        time=.time,
        control=.ctl)
+}
+
+#' Get the xml for debugging (without including data etc)
+#'
+#' @param xml Original xml file
+#' @param xmlout xml output (only includes xml)
+#' @return nothing, called for side effects
+#' @export
+#' @author Matthew L. Fidler
+#' @keywords internal
+nmxmlCov <- function(xml, xmlout, tag="//nm:covariance") {
+  .xml <- try(xml2::read_xml(xml), silent=TRUE)
+  if (inherits(.xml, "try-error")) return(NULL)
+  .covXml <- xml2::xml_find_first(.xml,"//nm:covariance")
+  xml2::write_xml(.covXml, xmlout)
+  .lines <- c('<?xml version="1.0" encoding="ASCII"?>',
+              '<!DOCTYPE nm:output SYSTEM "output.dtd">',
+              "<nm:output",
+              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
+              'xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address output.xsd"',
+              'xmlns:nm="http://namespaces.oreilly.com/xmlnut/address"',
+              '>',
+              readLines(xmlout),
+              "</nm:output>")
+  writeLines(.lines, xmlout)
+  message("written to xml output '", xmlout, "'")
+  invisible()
+}
+#' @rdname nmxmlCov
+#' @export
+nmxmlOmega <- function(xml, xmlout, tag="//nm:omega") {
+  nmxmlCov(xml, xmlout, tag=tag)
+}
+
+#' @rdname nmxmlCov
+#' @export
+nmxmlSigma <- function(xml, xmlout, tag="//nm:sigma") {
+  nmxmlCov(xml, xmlout, tag=tag)
+}
+#' @rdname nmxmlCov
+#' @export
+nmxmlTheta <- function(xml, xmlout, tag="//nm:theta") {
+  nmxmlCov(xml, xmlout, tag=tag)
 }
