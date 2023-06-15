@@ -156,6 +156,7 @@ different dosing paradigm with new derived items, in this case
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span>, determineError<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> try to get covariance a different method (slower)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in phi file</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
@@ -383,26 +384,26 @@ interval:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">AUC</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    id time       AUC</span></span>
-<span><span class="co">#&gt; 1   1   12 16556.104</span></span>
-<span><span class="co">#&gt; 2   1   24 22352.981</span></span>
-<span><span class="co">#&gt; 3   2   12  9136.186</span></span>
-<span><span class="co">#&gt; 4   2   24 13338.007</span></span>
-<span><span class="co">#&gt; 5   3   12  8575.233</span></span>
-<span><span class="co">#&gt; 6   3   24 13261.676</span></span>
-<span><span class="co">#&gt; 7   4   12 14991.681</span></span>
-<span><span class="co">#&gt; 8   4   24 19653.990</span></span>
-<span><span class="co">#&gt; 9   5   12 14280.615</span></span>
-<span><span class="co">#&gt; 10  5   24 19526.434</span></span>
-<span><span class="co">#&gt; 11  6   12 12539.684</span></span>
-<span><span class="co">#&gt; 12  6   24 18018.746</span></span>
-<span><span class="co">#&gt; 13  7   12 14512.419</span></span>
-<span><span class="co">#&gt; 14  7   24 21289.551</span></span>
-<span><span class="co">#&gt; 15  8   12 15088.773</span></span>
-<span><span class="co">#&gt; 16  8   24 20981.715</span></span>
-<span><span class="co">#&gt; 17  9   12 14988.599</span></span>
-<span><span class="co">#&gt; 18  9   24 23376.148</span></span>
-<span><span class="co">#&gt; 19 10   12 11623.947</span></span>
-<span><span class="co">#&gt; 20 10   24 17650.348</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   1   12  9363.758</span></span>
+<span><span class="co">#&gt; 2   1   24 14145.936</span></span>
+<span><span class="co">#&gt; 3   2   12 14420.714</span></span>
+<span><span class="co">#&gt; 4   2   24 22161.719</span></span>
+<span><span class="co">#&gt; 5   3   12 12972.987</span></span>
+<span><span class="co">#&gt; 6   3   24 20208.403</span></span>
+<span><span class="co">#&gt; 7   4   12 13772.318</span></span>
+<span><span class="co">#&gt; 8   4   24 18439.705</span></span>
+<span><span class="co">#&gt; 9   5   12  9470.850</span></span>
+<span><span class="co">#&gt; 10  5   24 14904.301</span></span>
+<span><span class="co">#&gt; 11  6   12 10141.700</span></span>
+<span><span class="co">#&gt; 12  6   24 14065.847</span></span>
+<span><span class="co">#&gt; 13  7   12  9305.761</span></span>
+<span><span class="co">#&gt; 14  7   24 15510.424</span></span>
+<span><span class="co">#&gt; 15  8   12 10138.558</span></span>
+<span><span class="co">#&gt; 16  8   24 17016.370</span></span>
+<span><span class="co">#&gt; 17  9   12  5668.984</span></span>
+<span><span class="co">#&gt; 18  9   24  9152.423</span></span>
+<span><span class="co">#&gt; 19 10   12 13399.219</span></span>
+<span><span class="co">#&gt; 20 10   24 18134.569</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

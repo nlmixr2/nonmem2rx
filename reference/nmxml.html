@@ -128,6 +128,7 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">nmxml</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.xml"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> try to get covariance a different method (slower)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $theta</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    theta1    theta2    theta3    theta4    theta5 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 </span>
@@ -144,57 +145,57 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> eps1    1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $cov</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  theta1        theta2        theta3        theta4        theta5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1     8.876810e-04 -1.055098e-04  1.844162e-04 -1.202337e-04  5.278300e-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2    -1.055098e-04  8.714095e-04 -1.061946e-04 -5.066632e-05 -1.565618e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3     1.844162e-04 -1.061946e-04  2.993363e-03  1.652516e-04  5.993313e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4    -1.202337e-04 -5.066632e-05  1.652516e-04  1.213465e-03 -2.539912e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5     5.278300e-08 -1.565618e-05  5.993313e-06 -2.539912e-05  9.942182e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1      -4.712728e-05  4.696667e-05 -3.642709e-05  2.547962e-05 -8.168847e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2      -7.371560e-05  2.566338e-05 -8.083493e-05  1.369999e-05 -4.365635e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3       6.633832e-05 -8.190016e-05  5.489848e-04  1.683555e-04  1.591222e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      -9.496613e-06  1.101079e-04 -3.065372e-04 -9.128974e-05  3.187703e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1       0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    eta1 omega.1.2 omega.1.3 omega.1.4          eta2 omega.2.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1    -4.712728e-05         0         0         0 -7.371560e-05         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2     4.696667e-05         0         0         0  2.566338e-05         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3    -3.642709e-05         0         0         0 -8.083493e-05         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4     2.547962e-05         0         0         0  1.369999e-05         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    -8.168847e-06         0         0         0 -4.365635e-06         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1       1.692964e-04         0         0         0  8.751806e-06         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2  0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3  0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4  0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2       8.751806e-06         0         0         0  1.512503e-04         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3  0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4  0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3       3.487139e-05         0         0         0  4.315929e-07         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4  0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4       1.366281e-05         0         0         0 -1.950959e-05         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1       0.000000e+00         0         0         0  0.000000e+00         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           omega.2.4          eta3 omega.3.4          eta4 eps1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta1            0  6.633832e-05         0 -9.496613e-06    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta2            0 -8.190016e-05         0  1.101079e-04    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta3            0  5.489848e-04         0 -3.065372e-04    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta4            0  1.683555e-04         0 -9.128974e-05    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> theta5            0  1.591222e-06         0  3.187703e-06    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta1              0  3.487139e-05         0  1.366281e-05    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2         0  0.000000e+00         0  0.000000e+00    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3         0  0.000000e+00         0  0.000000e+00    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4         0  0.000000e+00         0  0.000000e+00    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta2              0  4.315929e-07         0 -1.950959e-05    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3         0  0.000000e+00         0  0.000000e+00    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4         0  0.000000e+00         0  0.000000e+00    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta3              0  9.590290e-04         0 -1.297699e-04    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4         0  0.000000e+00         0  0.000000e+00    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eta4              0 -1.297699e-04         0  5.101895e-04    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eps1              0  0.000000e+00         0  0.000000e+00    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 theta1       theta2       theta3       theta4       theta5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta1    8.876810e-04 8.714095e-04 2.993363e-03 1.213465e-03 9.942182e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta2    8.714095e-04 8.714095e-04 2.993363e-03 1.213465e-03 9.942182e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta3    2.993363e-03 2.993363e-03 2.993363e-03 1.213465e-03 9.942182e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta4    1.213465e-03 1.213465e-03 1.213465e-03 1.213465e-03 9.942182e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    9.942182e-06 9.942182e-06 9.942182e-06 9.942182e-06 9.942182e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta1      1.692964e-04 1.692964e-04 1.692964e-04 1.692964e-04 1.692964e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta2      1.512503e-04 1.512503e-04 1.512503e-04 1.512503e-04 1.512503e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta3      9.590290e-04 9.590290e-04 9.590290e-04 9.590290e-04 9.590290e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      5.101895e-04 5.101895e-04 5.101895e-04 5.101895e-04 5.101895e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eps1      0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   eta1    omega.1.2    omega.1.3    omega.1.4         eta2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta1    0.0001692964 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta2    0.0001692964 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta3    0.0001692964 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta4    0.0001692964 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    0.0001692964 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta1      0.0001692964 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta2      0.0001512503 0.0001512503 0.0001512503 0.0001512503 0.0001512503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta3      0.0009590290 0.0009590290 0.0009590290 0.0009590290 0.0009590290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      0.0005101895 0.0005101895 0.0005101895 0.0005101895 0.0005101895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eps1      0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              omega.2.3    omega.2.4         eta3    omega.3.4         eta4 eps1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta1    0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta2    0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta3    0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta4    0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta5    0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta1      0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.2 0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.3 0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.1.4 0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta2      0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.3 0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.2.4 0.0000000000 0.0000000000 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta3      0.0009590290 0.0009590290 0.0009590290 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> omega.3.4 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eta4      0.0005101895 0.0005101895 0.0005101895 0.0005101895 0.0005101895    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eps1      0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000    0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $objf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20167.64</span>
