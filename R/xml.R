@@ -13,10 +13,10 @@
     .names <- xml2::xml_attrs(xml2::xml_find_all(xml, "nm:row"))
     .inputNames <- setNames(unlist(.names), NULL)
     .finalNames <-  .replaceNmDimNames(.inputNames)
-
-    .cov <- try(eval(parse(text=paste0("lotri({", paste(.finalNames, collapse = " + "),
+    .cov <- parse(text=paste0("lotri({", paste(.finalNames, collapse = " + "),
                                    "~", deparse1(.cov),
-                                   "}"))), silent=TRUE)
+                                   "})"))
+    .cov <- try(eval(.cov), silent=TRUE)
     if (inherits(.cov, "try-error")) {
       .minfo("try to get covariance a different method (slower)")
       .env <- new.env(parent=emptyenv())
