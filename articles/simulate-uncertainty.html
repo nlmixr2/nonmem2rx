@@ -235,6 +235,7 @@ how many times <code><a href="https://nlmixr2.github.io/rxode2/reference/rxode2.
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/rxSolve.html" class="external-link">rxSolve</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">ev</span>, nStud<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using nocb interpolation like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfSub=120 from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfObs=2280 from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using thetaMat from NONMEM</span></span>
@@ -244,7 +245,7 @@ how many times <code><a href="https://nlmixr2.github.io/rxode2/reference/rxode2.
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssRtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2', 'omega.4.1', 'omega.4.2', 'omega.4.3'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:01</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">s</span></span>

@@ -345,6 +345,7 @@ subjects:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/rxSolve.html" class="external-link">rxSolve</a></span><span class="op">(</span><span class="va">modAuc</span>, <span class="va">ev</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using nocb interpolation like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using sigma from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified atol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
@@ -382,27 +383,27 @@ interval:</p>
 <span><span class="va">s</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11.999</span>,  <span class="fl">23.999</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">AUC</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id time      AUC</span></span>
-<span><span class="co">#&gt; 1   1   12 12206.84</span></span>
-<span><span class="co">#&gt; 2   1   24 18157.60</span></span>
-<span><span class="co">#&gt; 3   2   12 12106.41</span></span>
-<span><span class="co">#&gt; 4   2   24 17144.58</span></span>
-<span><span class="co">#&gt; 5   3   12 15200.28</span></span>
-<span><span class="co">#&gt; 6   3   24 22020.15</span></span>
-<span><span class="co">#&gt; 7   4   12 14596.36</span></span>
-<span><span class="co">#&gt; 8   4   24 20235.51</span></span>
-<span><span class="co">#&gt; 9   5   12 10589.33</span></span>
-<span><span class="co">#&gt; 10  5   24 16118.96</span></span>
-<span><span class="co">#&gt; 11  6   12 10180.92</span></span>
-<span><span class="co">#&gt; 12  6   24 15145.93</span></span>
-<span><span class="co">#&gt; 13  7   12 12975.25</span></span>
-<span><span class="co">#&gt; 14  7   24 20483.80</span></span>
-<span><span class="co">#&gt; 15  8   12 11480.28</span></span>
-<span><span class="co">#&gt; 16  8   24 17924.57</span></span>
-<span><span class="co">#&gt; 17  9   12 11661.55</span></span>
-<span><span class="co">#&gt; 18  9   24 17385.35</span></span>
-<span><span class="co">#&gt; 19 10   12 16652.57</span></span>
-<span><span class="co">#&gt; 20 10   24 23662.05</span></span></code></pre></div>
+<span><span class="co">#&gt;    id time       AUC</span></span>
+<span><span class="co">#&gt; 1   1   12 10139.139</span></span>
+<span><span class="co">#&gt; 2   1   24 14555.932</span></span>
+<span><span class="co">#&gt; 3   2   12 10836.919</span></span>
+<span><span class="co">#&gt; 4   2   24 17074.689</span></span>
+<span><span class="co">#&gt; 5   3   12 10366.450</span></span>
+<span><span class="co">#&gt; 6   3   24 13882.020</span></span>
+<span><span class="co">#&gt; 7   4   12  8465.722</span></span>
+<span><span class="co">#&gt; 8   4   24 12415.066</span></span>
+<span><span class="co">#&gt; 9   5   12 10073.819</span></span>
+<span><span class="co">#&gt; 10  5   24 15815.262</span></span>
+<span><span class="co">#&gt; 11  6   12 13899.444</span></span>
+<span><span class="co">#&gt; 12  6   24 17612.556</span></span>
+<span><span class="co">#&gt; 13  7   12 16065.654</span></span>
+<span><span class="co">#&gt; 14  7   24 24276.399</span></span>
+<span><span class="co">#&gt; 15  8   12 16350.797</span></span>
+<span><span class="co">#&gt; 16  8   24 26038.847</span></span>
+<span><span class="co">#&gt; 17  9   12  9555.791</span></span>
+<span><span class="co">#&gt; 18  9   24 15209.079</span></span>
+<span><span class="co">#&gt; 19 10   12 12243.020</span></span>
+<span><span class="co">#&gt; 20 10   24 15815.189</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
