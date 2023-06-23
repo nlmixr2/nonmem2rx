@@ -103,6 +103,10 @@
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")
     }
+    if (missing(safeZero)) {
+      .minfo("using safeZero=FALSE since NONMEM does not use protection by default")
+      safeZero=TRUE
+    }
     if (!missing(nStud)) {
       if (missing(dfSub)) {
         if (!is.null(object$dfSub)){
