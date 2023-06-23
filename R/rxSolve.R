@@ -36,10 +36,14 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
         rate2 = TRUE, dur2 = TRUE), resample = NULL, resampleID = TRUE, 
     maxwhile = 1e+05, atolSens = 1e-08, rtolSens = 1e-06, ssAtolSens = 1e-08, 
     ssRtolSens = 1e-06, simVariability = NA, nLlikAlloc = NULL, 
-    useStdPow = FALSE) {
+    useStdPow = FALSE, naTimeHandle = c("ignore", "warn", "error")) {
     if (missing(covsInterpolation)) {
         covsInterpolation <- "nocb"
         .minfo("using nocb interpolation like NONMEM, specify directly to change")
+    }
+    if (missing(safeZero)) {
+        .minfo("using safeZero=FALSE since NONMEM does not use protection by default")
+        safeZero = TRUE
     }
     if (!missing(nStud)) {
         if (missing(dfSub)) {
@@ -124,5 +128,5 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
         resampleID = resampleID, maxwhile = maxwhile, atolSens = atolSens, 
         rtolSens = rtolSens, ssAtolSens = ssAtolSens, ssRtolSens = ssRtolSens, 
         simVariability = simVariability, nLlikAlloc = nLlikAlloc, 
-        useStdPow = useStdPow)
+        useStdPow = useStdPow, naTimeHandle = naTimeHandle)
 }
