@@ -44,8 +44,6 @@ When on CRAN, you can also get the CRAN version by:
 install.packages('nonmem2rx')
 ```
 
-## What you can do with `nonmem2rx`
-
 ## What you can do with `nonmem2rx`/`babelmixr2`
 
 You can do many useful tasks directly converting between nlmixr2 and NONMEM models; you can:
@@ -56,7 +54,7 @@ You can do many useful tasks directly converting between nlmixr2 and NONMEM mode
 
 -	In both conversions, [automatically make sure the model is translated correctly ](https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html) (for [babelmixr2](https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html#optional-step-2-recover-a-failed-nonmem-run))
 
-Then with nlmixr2 fit models coming from both conversions, you can:
+Then with nlmixr2 fit models and nonmem2rx models coming from both conversions, you can:
 
 -	[Perform simulations of new
     dosing](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html) from the NONMEM model or even [simulate using the uncertainty in your model to simulate new scenarios](https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html)

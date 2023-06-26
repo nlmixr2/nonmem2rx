@@ -37,8 +37,6 @@ When on CRAN, you can also get the CRAN version by:
 install.packages('nonmem2rx')
 ```
 
-## What you can do with `nonmem2rx`
-
 ## What you can do with `nonmem2rx`/`babelmixr2`
 
 You can do many useful tasks directly converting between nlmixr2 and
@@ -57,7 +55,8 @@ NONMEM models; you can:
     (for
     [babelmixr2](https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html#optional-step-2-recover-a-failed-nonmem-run))
 
-Then with nlmixr2 fit models coming from both conversions, you can:
+Then with nlmixr2 fit models and nonmem2rx models coming from both
+conversions, you can:
 
   - [Perform simulations of new
     dosing](https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html)
@@ -116,7 +115,7 @@ ctlFile <- system.file("mods/cpt/runODE032.ctl", package="nonmem2rx")
 # You can use a control stream or other file. With the development
 # version of `babelmixr2`, you can simply point to the listing file
 mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
-#> ℹ getting information from  '/tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ getting information from  '/tmp/RtmpdH4Yp4/temp_libpath791e4eabc92c/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in phi file
@@ -152,13 +151,20 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
 #> ℹ change initial estimate of `eta2` to `0.0993872449483344`
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
-#> ℹ read in nonmem input data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/Bolus_2CPT.csv
+#> ℹ read in nonmem input data (for model validation): /tmp/RtmpdH4Yp4/temp_libpath791e4eabc92c/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)'
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ done
 #> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
-#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.csv
+#> In file included from /usr/share/R/include/R.h:71,
+#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2/include/rxode2.h:9,
+#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2parse/include/rxode2_model_shared.h:3,
+#>                  from rx_d16f021bc9a6b4f5e2be95cdc7bf3d57_.c:115:
+#> /usr/share/R/include/R_ext/Complex.h:80:6: warning: ISO C99 doesn’t support unnamed structs/unions [-Wpedantic]
+#>    80 |     };
+#>       |      ^
+#> ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpdH4Yp4/temp_libpath791e4eabc92c/nonmem2rx/mods/cpt/runODE032.csv
 #> ℹ done
 #> ℹ changing most variables to lower case
 #> ℹ done
@@ -169,6 +175,13 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
 #> ℹ renaming compartments
 #> ℹ done
 #> using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’
+#> In file included from /usr/share/R/include/R.h:71,
+#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2/include/rxode2.h:9,
+#>                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2parse/include/rxode2_model_shared.h:3,
+#>                  from rx_edd6c2bb8fc0df18bd2c37d123e584da_.c:115:
+#> /usr/share/R/include/R_ext/Complex.h:80:6: warning: ISO C99 doesn’t support unnamed structs/unions [-Wpedantic]
+#>    80 |     };
+#>       |      ^
 #> ℹ solving ipred problem
 #> ℹ done
 #> ℹ solving pred problem
