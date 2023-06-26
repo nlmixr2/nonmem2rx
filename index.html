@@ -174,11 +174,6 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'nonmem2rx'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="what-you-can-do-with-nonmem2rx">What you can do with <code>nonmem2rx</code>
-<a class="anchor" aria-label="anchor" href="#what-you-can-do-with-nonmem2rx"></a>
-</h2>
-</div>
-<div class="section level2">
 <h2 id="what-you-can-do-with-nonmem2rxbabelmixr2">What you can do with <code>nonmem2rx</code>/<code>babelmixr2</code>
 <a class="anchor" aria-label="anchor" href="#what-you-can-do-with-nonmem2rxbabelmixr2"></a>
 </h2>
@@ -188,7 +183,7 @@
 <li><p><a href="https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html" class="external-link">Do development in nlmixr2 and then run NONMEM from a nlmixr2 model</a> for reviewers who want to know about NONMEM results.</p></li>
 <li><p>In both conversions, <a href="https://nlmixr2.github.io/nonmem2rx/articles/rxode2-validate.html" class="external-link">automatically make sure the model is translated correctly</a> (for <a href="https://nlmixr2.github.io/babelmixr2/articles/running-nonmem.html#optional-step-2-recover-a-failed-nonmem-run" class="external-link">babelmixr2</a>)</p></li>
 </ul>
-<p>Then with nlmixr2 fit models coming from both conversions, you can:</p>
+<p>Then with nlmixr2 fit models and nonmem2rx models coming from both conversions, you can:</p>
 <ul>
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-new-dosing.html" class="external-link">Perform simulations of new dosing</a> from the NONMEM model or even <a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-uncertainty.html" class="external-link">simulate using the uncertainty in your model to simulate new scenarios</a></p></li>
 <li><p><a href="https://nlmixr2.github.io/nonmem2rx/articles/simulate-extra-items.html" class="external-link">Modify the model to calculate derived parameters</a> (like AUC). These parameters slow down NONMEM’s optimization, but can help in your simulation scenario.</p></li>
@@ -220,7 +215,7 @@
 <span><span class="co"># You can use a control stream or other file. With the development</span></span>
 <span><span class="co"># version of `babelmixr2`, you can simply point to the listing file</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">ctlFile</span>, lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; ℹ getting information from  '/tmp/RtmpdH4Yp4/temp_libpath791e4eabc92c/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
 <span><span class="co">#&gt; ℹ reading in xml file</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ reading in phi file</span></span>
@@ -256,13 +251,20 @@
 <span><span class="co">#&gt; ℹ change initial estimate of `eta2` to `0.0993872449483344`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; ℹ change initial estimate of `eta4` to `0.0730497519364148`</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem input data (for model validation): /tmp/RtmpdH4Yp4/temp_libpath791e4eabc92c/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
 <span><span class="co">#&gt; ℹ ignoring lines that begin with a letter (IGNORE=@)'</span></span>
 <span><span class="co">#&gt; ℹ applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpdtTLgx/temp_libpath1694025bdcdc1/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; In file included from /usr/share/R/include/R.h:71,</span></span>
+<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2/include/rxode2.h:9,</span></span>
+<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2parse/include/rxode2_model_shared.h:3,</span></span>
+<span><span class="co">#&gt;                  from rx_d16f021bc9a6b4f5e2be95cdc7bf3d57_.c:115:</span></span>
+<span><span class="co">#&gt; /usr/share/R/include/R_ext/Complex.h:80:6: warning: ISO C99 doesn’t support unnamed structs/unions [-Wpedantic]</span></span>
+<span><span class="co">#&gt;    80 |     };</span></span>
+<span><span class="co">#&gt;       |      ^</span></span>
+<span><span class="co">#&gt; ℹ read in nonmem IPRED data (for model validation): /tmp/RtmpdH4Yp4/temp_libpath791e4eabc92c/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ changing most variables to lower case</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
@@ -273,6 +275,13 @@
 <span><span class="co">#&gt; ℹ renaming compartments</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; In file included from /usr/share/R/include/R.h:71,</span></span>
+<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2/include/rxode2.h:9,</span></span>
+<span><span class="co">#&gt;                  from /home/matt/R/x86_64-pc-linux-gnu-library/4.3/rxode2parse/include/rxode2_model_shared.h:3,</span></span>
+<span><span class="co">#&gt;                  from rx_edd6c2bb8fc0df18bd2c37d123e584da_.c:115:</span></span>
+<span><span class="co">#&gt; /usr/share/R/include/R_ext/Complex.h:80:6: warning: ISO C99 doesn’t support unnamed structs/unions [-Wpedantic]</span></span>
+<span><span class="co">#&gt;    80 |     };</span></span>
+<span><span class="co">#&gt;       |      ^</span></span>
 <span><span class="co">#&gt; ℹ solving ipred problem</span></span>
 <span><span class="co">#&gt; ℹ done</span></span>
 <span><span class="co">#&gt; ℹ solving pred problem</span></span>
