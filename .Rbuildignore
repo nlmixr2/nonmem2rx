@@ -13,6 +13,7 @@
 ^inst/mods/bauer_2019_cptpsp_tutorial_1$
 ^inst/mods/bauer_2019_cptpsp_tutorial_2$
 ^logo.svg$
+^nonmem2rx-flowchart.png$
 ^vignettes/articles$
 ^_pkgdown\.yml$
 ^docs$
