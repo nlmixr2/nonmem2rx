@@ -7,13 +7,13 @@
   if (!(.nonmem2rx$advan %in% c(5L, 7L))) return(NULL)
   if (k %in% .nonmem2rx$advan5k) return(NULL)
   .reg1 <- "^[Kk]([1-9])[Tt]?([0-9])$"
-  .reg2 <- "^[Kk]([1-9]+)[Tt]([0-9]+)$"
+  .reg2 <- "^[Kk]([1-9][0-9]*)[Tt]([0-9]+)$"
   if (grepl(.reg1, k)) {
     .n1 <- as.numeric(gsub(.reg1, "\\1", k))
     .n2 <- as.numeric(gsub(.reg1, "\\2", k))
   } else if (grepl(.reg2, k)) {
-    .n1 <- as.numeric(gsub(.reg1, "\\1", k))
-    .n2 <- as.numeric(gsub(.reg1, "\\2", k))
+    .n1 <- as.numeric(gsub(.reg2, "\\1", k))
+    .n2 <- as.numeric(gsub(.reg2, "\\2", k))
   } else {
     return(NULL)
   }
@@ -35,8 +35,8 @@
 .advan5odes <- function() {
   if (!(.nonmem2rx$advan %in% c(5L, 7L))) return("")
   .w <- which(.nonmem2rx$advan5 == "")
-  .ret <- paste0("d/dt(rxddta", seq_along(.nonmem2rx$advan5), ") <-", .nonmem2rx$advan5)
+  .ret <- paste0("d/dt(rxddta", seq_along(.nonmem2rx$advan5), ") <- ",
+                 gsub("^[+]", "", .nonmem2rx$advan5))
   if (length(.w) > 0) .ret <- .ret[-.w]
-  .ret <- gsub("^[+]", "", .ret)
   paste0("\n",paste(.ret, collapse="\n"))
 }
