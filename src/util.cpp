@@ -536,3 +536,11 @@ extern "C" SEXP nonmem2rxNspop(int nspop) {
   END_RCPP
 }
 
+
+extern "C" SEXP nonmem2rxAdvan5handleK(const char* v) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function advan5handleK(".advan5handleK", nonmem2rxNs);
+  return advan5handleK(v);
+  END_RCPP
+}
