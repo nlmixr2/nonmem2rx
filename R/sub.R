@@ -26,10 +26,10 @@ nonmem2rxRec.sub <- function(x) {
   for (.cur in .x) {
     .Call(`_nonmem2rx_trans_sub`, .cur)
   }
-  if (.nonmem2rx$advan %in% c(5L, 7L)) {
-    stop("General Linear model translation not supported (ADVAN5 or ADVAN7)",
-         call.=FALSE)
-  }
+  ## if (.nonmem2rx$advan %in% c(5L, 7L)) {
+  ##   stop("General Linear model translation not supported (ADVAN5 or ADVAN7)",
+  ##        call.=FALSE)
+  ## }
   if (.nonmem2rx$advan %in% c(9L, 15L)) {
     stop("Differential Algebra Equations are not supported in translation (ADVAN9 or ADVAN15)",
          call.=FALSE)

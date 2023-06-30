@@ -1,5 +1,7 @@
 # nonmem2rx (development version)
 
+* Added support for `ADVAN5` and `ADVAN7` models
+
 * Add parsing of accept/ignore characters for example `IGNORE=(C='C')`
   (See Issue #140)
 

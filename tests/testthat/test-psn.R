@@ -194,14 +194,14 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
              "PsN/test_files/postfrem/frem_covstep_removed/final_models/model_4.lst",
              "PsN/test_files/run45.lst",
              "PsN/test_files/output/onePROB/oneEST/noSIM/warfarin_ddmore.lst",
-             "PsN/test_files/output/special_mod/rounding_errors.lst")
+             "PsN/test_files/output/special_mod/rounding_errors.lst",
+             "PsN/test_files/output/special_mod/two_digit_cov_index.lst",
+             "PsN/test_files/output/nm6/nm61_1.lst")
 
   .fileError <- c("PsN/test_files/output/special_mod/missingmodel.lst",
                   "PsN/test_files/output/special_mod/empty.lst",
                   "PsN/test_files/output/special_mod/empty_lines.lst",
                   #bad advan
-                  "PsN/test_files/output/special_mod/two_digit_cov_index.lst",
-                  "PsN/test_files/output/nm6/nm61_1.lst",
                   # bad lincmt
                   "PsN/test_files/output/special_mod/objv_infinity.lst",
                   "PsN/test_files/output/special_mod/interrupted_at_eigen.lst",

@@ -88,6 +88,7 @@ SEXP nonmem2rxAddLhsVar(const char* v);
 SEXP nonmem2rxGetExtendedVar(const char *v);
 SEXP nonmem2rxMixP(int p);
 SEXP nonmem2rxNspop(int nspop);
+SEXP nonmem2rxAdvan5handleK(const char* v);
 
 int maxA = 0,
   definingScale = 0;
@@ -309,6 +310,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       sAppendN(&curLine, "nmipredsim", 10);
       return 1;
     }
+    if (v[0] == 'K') nonmem2rxAdvan5handleK(v);
     // use only upper case in output since NONMEM is case insensitive and rxode2 is sensitive.
     if (extendedCtrlInt && strstr(curLine.s, "<-") != NULL) {
       char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
