@@ -662,7 +662,7 @@ model:</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.024159 0.043    0.014 320.27      3.735</span></span>
+<span><span class="co">#&gt; elapsed 0.023143 0.041    0.013 320.27       3.59</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -842,251 +842,120 @@ it setup to run NONMEM), or even run the model from <code>nlmixr2</code>
 itself. In this example we will choose to use <code>nlmixr2</code>
 (since the <code>babelmixr2</code> example runs NONMEM and shows a
 reduction in shrinkage)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">nlmixr</span>(mod3, new<span class="sc">$</span>nonmemData, <span class="st">"focei"</span>, <span class="fu">foceiControl</span>(<span class="at">print=</span><span class="dv">0</span>))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → loading into  [34m [34msymengine [34m [39m environment...</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → pruning branches (`if`/`else`) of full model...</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m done</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → calculate jacobian</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → calculate sensitivities</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → calculate ∂(f)/∂(η)</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → calculate ∂(R²)/∂(η)</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → finding duplicate expressions in inner model...</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → optimizing duplicate expressions in inner model...</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → finding duplicate expressions in EBE model...</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → compiling inner model...</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m done</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → finding duplicate expressions in FD model...</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → optimizing duplicate expressions in FD model...</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → compiling EBE model...</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m done</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → compiling events FD model...</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m done</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Theta reset (zero/bad gradient values); Switch to bobyqa</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in .foceiFitInternal(.env) : Starting values violate bounds</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Restart 1</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; calculating covariance matrix</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 3.98853e-16, the</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.8669e-18, the</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.88228e-18, the</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.0677e-18, the</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 8.1123e-18, the</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.30718e-18, the</span></span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.22652e-19, the</span></span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 3.6184e-18, the</span></span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 6.50329e-18, the</span></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.63532e-18, the</span></span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 3.96474e-18, the</span></span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.30655e-18, the</span></span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.31114e-18, the</span></span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 6.48765e-18, the</span></span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.73529e-18, the</span></span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.5935e-18, the</span></span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.16009e-18, the</span></span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.34583e-18, the</span></span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.09633e-18, the</span></span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.49952e-18, the</span></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.23263e-18, the</span></span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.59301e-18, the</span></span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.42483e-18, the</span></span>
-<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.23277e-18, the</span></span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.34578e-18, the</span></span>
-<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.05491e-18, the</span></span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.05471e-18, the</span></span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.05632e-18, the</span></span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 3.18081e-18, the</span></span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 4.63525e-18, the</span></span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 3.89326e-18, the</span></span>
-<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; unhandled error message: EE:lsoda -- at t = 0 and step size _rxC(h) = 5.23252e-18, the</span></span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  corrector convergence failed repeatedly or</span></span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  with fabs(_rxC(h)) = hmin</span></span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  @(lsoda.c:889</span></span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|=</span></span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>S matrix calculation failed; Switch to R<span class="sc">-</span>matrix covariance.</span>
-<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ===] 0:00:12 </span></span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; done</span></span>
-<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → Calculating residuals/tables</span></span>
-<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m done</span></span>
-<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → compress origData in nlmixr2 object, save 21592</span></span>
-<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; → compress parHist in nlmixr2 object, save 461280</span></span>
-<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>fit2</span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m──  [34mnlmix [39m [31mr² [39m  [33mFOCE [39m [31mi [39m [22m (outer: bobyqa) ──</span></span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)</span></span>
-<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FOCEi 3255.418 4173.112 4235.813      -2071.556        72388294               1</span></span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m── Time (sec  [33mfit2 [39m [34m$time [39m): ── [22m</span></span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            setup optimize covariance table compress    other</span></span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed 0.008946 12.01924   12.01924 0.075    0.015 1101.232</span></span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m── Population Parameters ( [33mfit2 [39m [34m$parFixed [39m or  [33mfit2 [39m [34m$parFixedDf [39m): ── [22m</span></span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                 [1m [1mParameter [0m [0m      [1mEst. [0m        [1m [1mSE [0m [0m    [1m%RSE [0m        [1mBack-transformed(95%CI) [0m</span></span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtktr [0m [0m            1 -  [1m [1mtktr [0m [0m     11.7  0.00282 0.0241   1.2e+05 (1.2e+05, 1.21e+05)</span></span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtka [0m [0m              2 -  [1m [1mtka [0m [0m    -11.4  0.00275 0.0241 1.12e-05 (1.11e-05, 1.12e-05)</span></span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtcl [0m [0m              3 -  [1m [1mtcl [0m [0m    -1.37 0.000527 0.0384          0.253 (0.253, 0.254)</span></span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtv [0m [0m                4 -  [1m [1mtv [0m [0m     10.6  0.00257 0.0243 3.86e+04 (3.84e+04, 3.88e+04)</span></span>
-<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mprop.err [0m [0m    5 -  [1m [1mprop.err [0m [0m    0.206                                         0.206</span></span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mpkadd.err [0m [0m  6 -  [1m [1mpkadd.err [0m [0m     7.46                                          7.46</span></span>
-<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtemax [0m [0m          7 -  [1m [1mtemax [0m [0m 2.02e+04     4.48 0.0222                      1 (1, 1)</span></span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtec50 [0m [0m          8 -  [1m [1mtec50 [0m [0m    -2.19 0.000707 0.0324          0.112 (0.112, 0.112)</span></span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtkout [0m [0m          9 -  [1m [1mtkout [0m [0m       20  0.00212 0.0106 5.07e+08 (5.05e+08, 5.09e+08)</span></span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mte0 [0m [0m             10 -  [1m [1mte0 [0m [0m      3.5  0.00142 0.0407               33 (32.9, 33.1)</span></span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mpdadd.err [0m [0m 11 -  [1m [1mpdadd.err [0m [0m     44.8                                          44.8</span></span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            [1mBSV(CV%) [0m  [1mShrink(SD)% [0m</span></span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtktr [0m [0m                          </span></span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtka [0m [0m                           </span></span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtcl [0m [0m           69.4       [1;31m99.9% [0m </span></span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtv [0m [0m            2.25       [1;31m97.9% [0m </span></span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mprop.err [0m [0m                      </span></span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mpkadd.err [0m [0m                     </span></span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtemax [0m [0m                         </span></span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtec50 [0m [0m         123.       [1;31m99.9% [0m </span></span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mtkout [0m [0m                         </span></span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mte0 [0m [0m          0.524       [1;31m99.7% [0m </span></span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m [1mpdadd.err [0m [0m                     </span></span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Covariance Type ( [33mfit2 [39m [1m [34m$covMethod [39m [22m):  [1m|r| [22m</span></span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Full BSV covariance ( [33mfit2 [39m [1m [34m$omega [39m [22m) or correlation ( [33mfit2 [39m [1m [34m$omegaR [39m [22m; diagonals=SDs) </span></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Distribution stats (mean/skewness/kurtosis/p-value) available in  [33mfit2 [39m [1m [34m$shrink [39m [22m </span></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Information about run found ( [33mfit2 [39m [1m [34m$runInfo [39m [22m):</span></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • zero gradient replaced with small number (0.000000) </span></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • tolerances (atol/rtol) were increased (after 4 bad solves) for some difficult ODE solving during the optimization. can control with foceiControl(stickyRecalcN=) consider increasing sigdig/atol/rtol changing initial estimates or changing the structural model </span></span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • gradient problems with covariance; see $scaleInfo </span></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • using R matrix to calculate covariance, can check sandwich or S matrix with $covRS and $covS </span></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • R matrix non-positive definite but corrected by R = sqrtm(R%*%R) </span></span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • S matrix had problems solving for some subject and parameters </span></span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • bad solve during optimization </span></span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.)) </span></span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • initial ETAs were nudged; (can control by foceiControl(etaNudge=., etaNudge2=)) </span></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • Hessian reset during optimization; (can control by foceiControl(resetHessianAndEta=.)) </span></span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    • thetas were reset during optimization because of a zero gradient </span></span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Censoring ( [33mfit2 [39m [1m [34m$censInformation [39m [22m): No censoring</span></span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Minimization message ( [33mfit2 [39m [1m [34m$message [39m [22m):  </span></span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Normal exit from bobyqa </span></span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1m── Fit Data (object  [33mfit2 [39m is a modified  [34mtibble [39m): ── [22m</span></span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m# A tibble: 483 × 33 [39m</span></span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ID     TIME CMT      DV       PRED      RES     WRES   IPRED     IRES    IWRES</span></span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    [3m [38;5;246m&lt;fct&gt; [39m [23m  [3m [38;5;246m&lt;dbl&gt; [39m [23m  [3m [38;5;246m&lt;fct&gt; [39m [23m  [3m [38;5;246m&lt;dbl&gt; [39m [23m       [3m [38;5;246m&lt;dbl&gt; [39m [23m     [3m [38;5;246m&lt;dbl&gt; [39m [23m     [3m [38;5;246m&lt;dbl&gt; [39m [23m    [3m [38;5;246m&lt;dbl&gt; [39m [23m     [3m [38;5;246m&lt;dbl&gt; [39m [23m     [3m [38;5;246m&lt;dbl&gt; [39m [23m</span></span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;250m1 [39m 1       0.5 dcp     0      1.45 [38;5;246me [39m [31m-8 [39m - [31m1 [39m [31m. [39m [31m45 [39m [38;5;246me [39m [31m-8 [39m - [31m1 [39m [31m. [39m [31m94 [39m [38;5;246me [39m [31m-9 [39m 1.45 [38;5;246me [39m [31m-8 [39m - [31m1 [39m [31m. [39m [31m45 [39m [38;5;246me [39m [31m-8 [39m - [31m1 [39m [31m. [39m [31m94 [39m [38;5;246me [39m [31m-9 [39m</span></span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;250m2 [39m 1       1   dcp     1.9    2.90 [38;5;246me [39m [31m-8 [39m  1.90 [38;5;246me [39m+0  2.55 [38;5;246me [39m [31m-1 [39m 2.90 [38;5;246me [39m [31m-8 [39m  1.90 [38;5;246me [39m+0  2.55 [38;5;246me [39m [31m-1 [39m</span></span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;250m3 [39m 1       2   dcp     3.3    5.80 [38;5;246me [39m [31m-8 [39m  3.30 [38;5;246me [39m+0  4.43 [38;5;246me [39m [31m-1 [39m 5.79 [38;5;246me [39m [31m-8 [39m  3.30 [38;5;246me [39m+0  4.43 [38;5;246me [39m [31m-1 [39m</span></span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m# ℹ 480 more rows [39m</span></span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m# ℹ 23 more variables: CPRED &lt;dbl&gt;, CRES &lt;dbl&gt;, CWRES &lt;dbl&gt;, eta.cl &lt;dbl&gt;, [39m</span></span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m#   eta.v &lt;dbl&gt;, eta.ec50 &lt;dbl&gt;, eta.e0 &lt;dbl&gt;, DEPOT &lt;dbl&gt;, GUT &lt;dbl&gt;, [39m</span></span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m#   CENTER &lt;dbl&gt;, EFFECT &lt;dbl&gt;, ktr &lt;dbl&gt;, ka &lt;dbl&gt;, cl &lt;dbl&gt;, v &lt;dbl&gt;, [39m</span></span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m#   emax &lt;dbl&gt;, ec50 &lt;dbl&gt;, kout &lt;dbl&gt;, e0 &lt;dbl&gt;, pd &lt;dbl&gt;, kin &lt;dbl&gt;, [39m</span></span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [38;5;246m#   tad &lt;dbl&gt;, dosenum &lt;dbl&gt; [39m</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/nlmixr2est/reference/nlmixr2.html" class="external-link">nlmixr</a></span><span class="op">(</span><span class="va">mod3</span>, <span class="va">new</span><span class="op">$</span><span class="va">nonmemData</span>, <span class="st">"focei"</span>, <span class="fu"><a href="https://nlmixr2.github.io/nlmixr2/reference/foceiControl.html" class="external-link">foceiControl</a></span><span class="op">(</span>print<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → loading into <span style="color: #0000BB;">symengine</span> environment...</span></span>
+<span><span class="co">#&gt; → pruning branches (`if`/`else`) of full model...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
+<span><span class="co">#&gt; → calculate jacobian</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → calculate sensitivities</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → calculate ∂(f)/∂(η)</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → calculate ∂(R²)/∂(η)</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → finding duplicate expressions in inner model...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in inner model...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → finding duplicate expressions in EBE model...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → compiling inner model...</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
+<span><span class="co">#&gt; → finding duplicate expressions in FD model...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in FD model...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
+<span><span class="co">#&gt; → compiling EBE model...</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
+<span><span class="co">#&gt; → compiling events FD model...</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
+<span><span class="co">#&gt; Theta reset (zero/bad gradient values); Switch to bobyqa</span></span>
+<span><span class="co">#&gt; Error in .foceiFitInternal(.env) : Starting values violate bounds</span></span>
+<span><span class="co">#&gt; Restart 1</span></span>
+<span><span class="co">#&gt; calculating covariance matrix</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:32 </span></span>
+<span><span class="co">#&gt; done</span></span>
+<span><span class="co">#&gt; → Calculating residuals/tables</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
+<span><span class="co">#&gt; → compress origData in nlmixr2 object, save 21592</span></span>
+<span><span class="co">#&gt; → compress parHist in nlmixr2 object, save 69544</span></span>
+<span></span>
+<span><span class="va">fit2</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── </span><span style="color: #0000BB; font-weight: bold;">nlmix</span><span style="color: #BB0000; font-weight: bold;">r²</span><span style="font-weight: bold;"> </span><span style="color: #BBBB00; font-weight: bold;">FOCE</span><span style="color: #BB0000; font-weight: bold;">i</span> (outer: bobyqa) ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)</span></span>
+<span><span class="co">#&gt; FOCEi 3179.669 4097.363 4160.063      -2033.682        165862.9        4.662411</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            setup optimize covariance table compress    other</span></span>
+<span><span class="co">#&gt; elapsed 0.007723  92.8869    92.8869 0.136    0.013 282.5575</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                <span style="font-weight: bold;">Parameter</span>     <span style="font-weight: bold;">Est.</span>    <span style="font-weight: bold;">SE</span> <span style="font-weight: bold;">%RSE</span>       <span style="font-weight: bold;">Back-transformed(95%CI)</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>            1 - <span style="font-weight: bold;">tktr</span>     23.5  7.39 31.4 1.63e+10 (8.36e+03, 3.18e+16)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>              2 - <span style="font-weight: bold;">tka</span>     19.2  4.82 25.1 2.17e+08 (1.73e+04, 2.73e+12)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>              3 - <span style="font-weight: bold;">tcl</span>   -0.543 0.369   68            0.581 (0.282, 1.2)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                4 - <span style="font-weight: bold;">tv</span>     2.53 0.131 5.17              12.5 (9.7, 16.2)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>    5 - <span style="font-weight: bold;">prop.err</span>  0.00157                                  0.00157</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>  6 - <span style="font-weight: bold;">pkadd.err</span>     6.41                                     6.41</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>          7 - <span style="font-weight: bold;">temax</span> 3.29e+04  52.6 0.16                      1 (1, 1)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>          8 - <span style="font-weight: bold;">tec50</span>    0.892 0.661 74.1            2.44 (0.668, 8.92)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>          9 - <span style="font-weight: bold;">tkout</span>     3.76  3.13 83.3       42.9 (0.0927, 1.98e+04)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>             10 - <span style="font-weight: bold;">te0</span>     4.78 0.466 9.76               119 (47.6, 296)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span> 11 - <span style="font-weight: bold;">pdadd.err</span>     44.7                                     44.7</span></span>
+<span><span class="co">#&gt;           <span style="font-weight: bold;">BSV(CV%)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>                          </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>                           </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>           2.80      <span style="color: #BB0000; font-weight: bold;">97.6%</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>            2.25      <span style="color: #BB0000; font-weight: bold;">97.9%</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>                      </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>                     </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>                         </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>         4.29      <span style="color: #BB0000; font-weight: bold;">98.0%</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>                         </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>           2.26      <span style="color: #BB0000; font-weight: bold;">98.6%</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span>                     </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt;   Covariance Type (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$covMethod</span>): <span style="font-weight: bold;">r+</span></span></span>
+<span><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
+<span><span class="co">#&gt;   Full BSV covariance (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$omega</span>) or correlation (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$omegaR</span>; diagonals=SDs) </span></span>
+<span><span class="co">#&gt;   Distribution stats (mean/skewness/kurtosis/p-value) available in <span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$shrink</span> </span></span>
+<span><span class="co">#&gt;   Information about run found (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$runInfo</span>):</span></span>
+<span><span class="co">#&gt;    • zero gradient replaced with small number (0.000000) </span></span>
+<span><span class="co">#&gt;    • gradient problems with covariance; see $scaleInfo </span></span>
+<span><span class="co">#&gt;    • using R matrix to calculate covariance, can check sandwich or S matrix with $covRS and $covS </span></span>
+<span><span class="co">#&gt;    • R matrix non-positive definite but corrected (because of cholAccept) </span></span>
+<span><span class="co">#&gt;    • S matrix non-positive definite </span></span>
+<span><span class="co">#&gt;    • last objective function was not at minimum, possible problems in optimization </span></span>
+<span><span class="co">#&gt;    • ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.)) </span></span>
+<span><span class="co">#&gt;    • initial ETAs were nudged; (can control by foceiControl(etaNudge=., etaNudge2=)) </span></span>
+<span><span class="co">#&gt;    • Hessian reset during optimization; (can control by foceiControl(resetHessianAndEta=.)) </span></span>
+<span><span class="co">#&gt;    • thetas were reset during optimization because of a zero gradient </span></span>
+<span><span class="co">#&gt;   Censoring (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$censInformation</span>): No censoring</span></span>
+<span><span class="co">#&gt;   Minimization message (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$message</span>):  </span></span>
+<span><span class="co">#&gt;     Normal exit from bobyqa </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Fit Data (object </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="font-weight: bold;"> is a modified </span><span style="color: #0000BB; font-weight: bold;">tibble</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 483 × 33</span></span></span>
+<span><span class="co">#&gt;   ID     TIME CMT      DV  PRED   RES   WRES IPRED  IRES  IWRES CPRED  CRES</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1       0.5 dcp     0    7.79 -<span style="color: #BB0000;">7.79</span> -<span style="color: #BB0000;">1.21</span>   7.79 -<span style="color: #BB0000;">7.79</span> -<span style="color: #BB0000;">1.21</span>   7.79 -<span style="color: #BB0000;">7.79</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1       1   dcp     1.9  7.61 -<span style="color: #BB0000;">5.71</span> -<span style="color: #BB0000;">0.891</span>  7.61 -<span style="color: #BB0000;">5.71</span> -<span style="color: #BB0000;">0.890</span>  7.61 -<span style="color: #BB0000;">5.71</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1       2   dcp     3.3  7.27 -<span style="color: #BB0000;">3.97</span> -<span style="color: #BB0000;">0.619</span>  7.27 -<span style="color: #BB0000;">3.97</span> -<span style="color: #BB0000;">0.618</span>  7.27 -<span style="color: #BB0000;">3.97</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 480 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 21 more variables: CWRES &lt;dbl&gt;, eta.cl &lt;dbl&gt;, eta.v &lt;dbl&gt;, eta.ec50 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   eta.e0 &lt;dbl&gt;, DEPOT &lt;dbl&gt;, GUT &lt;dbl&gt;, CENTER &lt;dbl&gt;, EFFECT &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ktr &lt;dbl&gt;, ka &lt;dbl&gt;, cl &lt;dbl&gt;, v &lt;dbl&gt;, emax &lt;dbl&gt;, ec50 &lt;dbl&gt;, kout &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   e0 &lt;dbl&gt;, pd &lt;dbl&gt;, kin &lt;dbl&gt;, tad &lt;dbl&gt;, dosenum &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>With these modifications the shrinkage is also reduced (just like in
 the NONMEM case)</p>
 </div>
@@ -1168,7 +1037,7 @@ model</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2 covariance</span></span>
-<span><span class="co">#&gt; elapsed 0.024159 0.043    0.014 320.27      3.735     18.411</span></span>
+<span><span class="co">#&gt; elapsed 0.023143 0.041    0.013 320.27       3.59     18.715</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
