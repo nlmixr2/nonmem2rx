@@ -23,7 +23,13 @@
     .nonmem2rx$advan5max <- .newMax
   }
   .nonmem2rx$advan5[.n1] <- paste0(.nonmem2rx$advan5[.n1], "-", k, "*rxddta", .n1)
-  if (.n2 != 0) .nonmem2rx$advan5[.n2] <- paste0(.nonmem2rx$advan5[.n2], "+", k, "*rxddta", .n1)
+  .pushObservedDadt(.n1)
+  .setMaxA(.n1)
+  if (.n2 != 0) {
+    .nonmem2rx$advan5[.n2] <- paste0(.nonmem2rx$advan5[.n2], "+", k, "*rxddta", .n1)
+    .pushObservedDadt(.n2)
+    .setMaxA(.n2)
+  }
   .nonmem2rx$advan5k <- c(.nonmem2rx$advan5k, k)
   NULL
 }
