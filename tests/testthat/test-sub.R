@@ -19,7 +19,6 @@ test_that("test sub", {
   .s("ADVAN=ADVAN2 TRANS=TRANS2", c(advan=2L, trans=2L, abbrevLin=2L))
   expect_error(.s("ADVAN1 TRANS3"), "ADVAN1 does not support TRANS3")
   expect_error(.s("ADVAN20"), "Unsupported ADVAN20")
-  expect_error(.s("ADVAN7"), "General Linear model translation not supported")
   expect_error(.s("ADVAN9"), "Differential Algebra Equations")
   expect_error(.s("ADVAN15"), "Differential Algebra Equations")
 
