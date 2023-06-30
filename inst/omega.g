@@ -42,11 +42,14 @@ omega_name: identifier '=';
 
 omega_statement: omega_name? omega repeat? ','* singleLineComment?;
 
-omega: omega0 | omega1 | omega2 ;
+omega: omega0 | omega1 | omega2 | omega3 | omega4;
 
 omega0: ini_constant block_type? fixed? block_type?;
+omega0ignore: ini_constant block_type? fixed? block_type?;
 omega1: '(' omega0 ')';
 omega2: '(' block_type? fixed block_type? ini_constant ')';
+omega3: '(' omega0ignore ','? omega0 ')';
+omega4: '(' omega0ignore ','? omega0 ','? omega0ignore ')';
 
 repeat: "[Xx]" decimalint;
 

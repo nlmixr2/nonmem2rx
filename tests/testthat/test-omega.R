@@ -203,6 +203,8 @@ test_that("test omega", {
 
   .o("(UNINT 1)", "eta1 ~ 1", 1, , unintFixed=FALSE)
 
+  expect_warning(expect_warning(.o("(0, 1) (0, 2, 3)", c("eta1 ~ 1", "eta2 ~ 2"), 2), "ignored"), "ignored")
+
   expect_error(.o("garbage"))
 
 
