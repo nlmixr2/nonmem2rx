@@ -356,6 +356,10 @@ void wprint_parsetree_omega(D_ParserTables pt, D_ParseNode *pn, int depth, print
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
 #define _arg_ name, pn, pt, depth, fn, client_data
+  if (!strcmp("omega3", name) ||
+      !strcmp("omega4", name)) {
+    Rf_warning("Nonmem parameter boundaries for $OMEGA and $SIGMA are ignored");
+  }
   omegaParseOmeg0(_arg_)
     || omegaParseOmega1(_arg_)
     || omegaParseOmega2(_arg_)
