@@ -1,4 +1,4 @@
-# nonmem2rx (development version)
+# nonmem2rx 0.1.2
 
 * Added support for `ADVAN5` and `ADVAN7` models
 
