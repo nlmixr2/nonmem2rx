@@ -12,6 +12,10 @@
   default for `solveZero` is changed to `solveZero = TRUE` for
   `nonmem2rx` objects.
 
+* Fixed bug for renaming `eta` and `theta` when they are renamed so
+  that the `ui$iniDf` does not match the `theta#` or `eta#` (Issue
+  #153)
+
 # nonmem2rx 0.1.1
 
 - Fix internal memory issue (`LTO`, `valgrind` etc)

@@ -176,8 +176,12 @@
     if (length(.w) > 0) {
       .t <- .t[-.w]
     }
+    .i <- as.numeric(gsub("^theta", "", .t))
+    .t <- .t[order(.i)]
   } else {
     .t <- rxui$iniDf$name[which(is.na(rxui$iniDf$ntheta) & rxui$iniDf$neta1 == rxui$iniDf$neta2)]
+    .i <- as.numeric(gsub("^eta", "", .t))
+    .t <- .t[order(.i)]
   }
   .t <- .t[!(.t %in% c("icall", "irep"))]
   .w <- which(.n == "")
