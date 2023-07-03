@@ -16,6 +16,9 @@
   that the `ui$iniDf` does not match the `theta#` or `eta#` (Issue
   #153)
 
+* Turned off testing of the `as.nonmem2rx` example since it took too
+  much time (according to CRAN)
+
 # nonmem2rx 0.1.1
 
 - Fix internal memory issue (`LTO`, `valgrind` etc)
