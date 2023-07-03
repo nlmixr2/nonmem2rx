@@ -8,6 +8,8 @@
 #' @author Matthew L. Fidler
 #' @examples
 #'
+#' \donttest{
+#' 
 #'  mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #'                   determineError=FALSE, lst=".res", save=FALSE)
 #'
@@ -43,6 +45,8 @@
 #'
 #' new <- try(as.nonmem2rx(mod2, mod))
 #' if (!inherits(new, "try-error")) print(new, page=1)
+#'
+#' }
 #'
 as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   if (inherits(model1, "nonmem2rx")) {

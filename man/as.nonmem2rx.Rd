@@ -21,6 +21,8 @@ Convert a model to a nonmem2rx model
 }
 \examples{
 
+\donttest{
+
  mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
                   determineError=FALSE, lst=".res", save=FALSE)
 
@@ -56,6 +58,8 @@ Convert a model to a nonmem2rx model
 
 new <- try(as.nonmem2rx(mod2, mod))
 if (!inherits(new, "try-error")) print(new, page=1)
+
+}
 
 }
 \author{
