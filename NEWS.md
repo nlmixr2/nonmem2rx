@@ -1,5 +1,7 @@
 # nonmem2rx (development version)
 
+* Added explicit requirement for rxode2 2.0.12
+
 # nonmem2rx 0.1.2
 
 * Added support for `ADVAN5` and `ADVAN7` models
