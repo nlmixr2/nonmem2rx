@@ -103,6 +103,18 @@
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")
     }
+    if (missing(addlKeepsCov)) {
+      .minfo("using addlKeepsCov=TRUE like NONMEM, specify directly to change")
+      addlKeepsCov <- TRUE
+    }
+    if (missing(addlDropSs)) {
+      .minfo("using addlDropSs=TRUE like NONMEM, specify directly to change")
+      addlDropSs <- TRUE
+    }
+    if (missing(ssAtDoseTime)) {
+      .minfo("using ssAtDoseTime=TRUE like NONMEM, specify directly to change")
+      safeZero=TRUE
+    }
     if (missing(safeZero)) {
       .minfo("using safeZero=FALSE since NONMEM does not use protection by default")
       safeZero=TRUE
