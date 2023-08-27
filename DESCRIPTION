@@ -37,7 +37,7 @@ Imports:
     dparser,
     lotri,
     Rcpp,
-    rxode2 (>= 2.0.12),
+    rxode2 (> 2.0.13),
     magrittr,
     cli,
     tools,

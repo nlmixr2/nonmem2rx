@@ -118,7 +118,7 @@
       }
       if (!is.null(.rx$predDf)) {
         for (.v in .rx$predDf$var) {
-          .params[[paste0("err.", .v)]] <- 0
+          .params[[paste0("rxerr.", .v)]] <- 0
         }
       }
       .wid <- which(tolower(names(.params)) == "id")
@@ -236,7 +236,7 @@
                           }, double(1), USE.NAMES = TRUE))
       if (!is.null(.rx$predDf)) {
         .params <- c(.params, setNames(rep(0, length(.rx$predDf$cond)),
-                                           paste0("err.", .rx$predDf$var)))
+                                           paste0("rxerr.", .rx$predDf$var)))
       }
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
