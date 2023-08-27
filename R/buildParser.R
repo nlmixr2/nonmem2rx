@@ -113,11 +113,15 @@
     }
     if (missing(ssAtDoseTime)) {
       .minfo("using ssAtDoseTime=TRUE like NONMEM, specify directly to change")
-      safeZero=TRUE
+      ssAtDoseTime <- TRUE
     }
     if (missing(safeZero)) {
       .minfo("using safeZero=FALSE since NONMEM does not use protection by default")
-      safeZero=TRUE
+      safeZero <- TRUE
+    }
+    if (missing(ss2cancelAllPending)) {
+      .minfo("using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2")
+      ss2cancelAllPending <- FALSE
     }
     if (!missing(nStud)) {
       if (missing(dfSub)) {

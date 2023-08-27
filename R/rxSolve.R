@@ -37,7 +37,8 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     maxwhile = 1e+05, atolSens = 1e-08, rtolSens = 1e-06, ssAtolSens = 1e-08, 
     ssRtolSens = 1e-06, simVariability = NA, nLlikAlloc = NULL, 
     useStdPow = FALSE, naTimeHandle = c("ignore", "warn", "error"), 
-    addlKeepsCov = FALSE, addlDropSs = TRUE, ssAtDoseTime = TRUE) {
+    addlKeepsCov = FALSE, addlDropSs = TRUE, ssAtDoseTime = TRUE, 
+    ss2cancelAllPending = FALSE) {
     if (missing(covsInterpolation)) {
         covsInterpolation <- "nocb"
         .minfo("using nocb interpolation like NONMEM, specify directly to change")
@@ -52,11 +53,15 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     }
     if (missing(ssAtDoseTime)) {
         .minfo("using ssAtDoseTime=TRUE like NONMEM, specify directly to change")
-        safeZero = TRUE
+        ssAtDoseTime <- TRUE
     }
     if (missing(safeZero)) {
         .minfo("using safeZero=FALSE since NONMEM does not use protection by default")
-        safeZero = TRUE
+        safeZero <- TRUE
+    }
+    if (missing(ss2cancelAllPending)) {
+        .minfo("using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2")
+        ss2cancelAllPending <- FALSE
     }
     if (!missing(nStud)) {
         if (missing(dfSub)) {
@@ -142,5 +147,6 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
         rtolSens = rtolSens, ssAtolSens = ssAtolSens, ssRtolSens = ssRtolSens, 
         simVariability = simVariability, nLlikAlloc = nLlikAlloc, 
         useStdPow = useStdPow, naTimeHandle = naTimeHandle, addlKeepsCov = addlKeepsCov, 
-        addlDropSs = addlDropSs, ssAtDoseTime = ssAtDoseTime)
+        addlDropSs = addlDropSs, ssAtDoseTime = ssAtDoseTime, 
+        ss2cancelAllPending = ss2cancelAllPending)
 }
