@@ -13,6 +13,7 @@ test_that("test sub", {
 
   expect_error(.s("tranvan1"))
 
+  .s("ADVAN1,TRANS2", c(advan=1L, trans=2L, abbrevLin=1L))
   .s("ADVAN1 TRANS1", c(advan=1L, trans=1L, abbrevLin=1L))
   .s("ADVAN1 TRANS2", c(advan=1L, trans=2L, abbrevLin=1L))
   .s("ADVAN=ADVAN1 TRANS=TRANS2", c(advan=1L, trans=2L, abbrevLin=1L))

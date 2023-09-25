@@ -1,7 +1,7 @@
 //loop
 statement_list : (statement)+ ;
 
-statement: advan_statement 
+statement: advan_statement
     | trans_statement
     | tol_statement
     | atol_statement
@@ -47,7 +47,7 @@ sstol_statement2: sstol_keyword '=' nonSpace;
 sstol_statement: sstol_statement1 | sstol_statement2 | sstol_statement3;
 
 unsupported_subnames: 'SS' | 'PK' | 'ERROR' | 'DES' | 'AES' | 'INFN' | 'MODEL'
-    'ss' | 'pk' | 'error' | 'des' | 'aes' | 'infn' | 'model' |
+        'ss' | 'pk' | 'error' | 'des' | 'aes' | 'infn' | 'model' |
     'Ss' | 'Pk' | 'Error' | 'Des' | 'Aes' | 'Infn' | 'Model';
 
 unsupported_statement: unsupported_subnames '=' nonSpace;
@@ -56,7 +56,7 @@ decimalint: "0|([1-9][0-9]*)" $term -1;
 string: "\"([^\"\\]|\\[^])*\"";
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
-whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
+whitespace: ( "[ \t\r\n, ]+" | singleLineComment )*;
 singleLineComment: ';' "[^\n]*";
 nonSpace: "[^0-9 \n][^ \n]*";
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
