@@ -2,6 +2,13 @@
 
 * Added explicit requirement for rxode2 2.0.12
 
+* Added support of `DADT(#)` statements on the right side of the
+  equation, i.e. `DADT(3) = DADT(1) + DADT(2)` (#164)
+
+* Added support of `ADVAN#, TRANS#` (#161)
+
+* Added more NONMEM-specific solving options
+
 # nonmem2rx 0.1.2
 
 * Added support for `ADVAN5` and `ADVAN7` models
