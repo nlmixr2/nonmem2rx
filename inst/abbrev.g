@@ -1,50 +1,50 @@
 //loop
-statement_list : 
- (statement)+ ;
+statement_list :
+        (statement)+ ;
 
 // return and exit statements not supported
 
-statement 
-  : call_protocol_phrase singleLineComment?
-  | assignment singleLineComment?
-  | if1 singleLineComment?
-  | if1other singleLineComment?
-  | ifthen singleLineComment?
-  | ifcallrandom singleLineComment?
-  | ifcallsimeps singleLineComment?
-  | ifcallsimeta singleLineComment?
-  | elseif singleLineComment?
-  | else singleLineComment?
-  | endif singleLineComment?
-  | dowhile singleLineComment?
-  | enddo singleLineComment?
-  | ini singleLineComment?
-  | iniI singleLineComment?
-  | mtimeL singleLineComment?
-  | fbio singleLineComment?
-  | alag singleLineComment?     
-  | rate singleLineComment?
-  | dur singleLineComment?
-  | scale singleLineComment?
-  | derivative singleLineComment?
-  | derivativeI singleLineComment?
-  | prob singleLineComment?
-  | da singleLineComment?
-  | dp singleLineComment?
-  | callsimeta singleLineComment?
-  | callgeteta singleLineComment?
-  | callsimeps singleLineComment?
-  | callpassmode singleLineComment?
-  | callsupp singleLineComment?
-  | callrandom singleLineComment?
-  | exit_line singleLineComment?
-  | comresn1 singleLineComment?
-  | ifexit singleLineComment?
-  | callfl singleLineComment?
-  | nspop singleLineComment?
-  | verbatimCode singleLineComment?
-  | includeCode singleLineComment?
-  | singleLineComment;
+statement
+    : call_protocol_phrase singleLineComment?
+    | assignment singleLineComment?
+    | if1 singleLineComment?
+    | if1other singleLineComment?
+    | ifthen singleLineComment?
+    | ifcallrandom singleLineComment?
+    | ifcallsimeps singleLineComment?
+    | ifcallsimeta singleLineComment?
+    | elseif singleLineComment?
+    | else singleLineComment?
+    | endif singleLineComment?
+    | dowhile singleLineComment?
+    | enddo singleLineComment?
+    | ini singleLineComment?
+    | iniI singleLineComment?
+    | mtimeL singleLineComment?
+    | fbio singleLineComment?
+    | alag singleLineComment?
+    | rate singleLineComment?
+    | dur singleLineComment?
+    | scale singleLineComment?
+    | derivative singleLineComment?
+    | derivativeI singleLineComment?
+    | prob singleLineComment?
+    | da singleLineComment?
+    | dp singleLineComment?
+    | callsimeta singleLineComment?
+    | callgeteta singleLineComment?
+    | callsimeps singleLineComment?
+    | callpassmode singleLineComment?
+    | callsupp singleLineComment?
+    | callrandom singleLineComment?
+    | exit_line singleLineComment?
+    | comresn1 singleLineComment?
+    | ifexit singleLineComment?
+    | callfl singleLineComment?
+    | nspop singleLineComment?
+    | verbatimCode singleLineComment?
+    | includeCode singleLineComment?
+    | singleLineComment;
 
 
 ini         :  'A_0(' decimalintNo0 ')' '=' logical_or_expression;
@@ -70,8 +70,8 @@ callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
 call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         | 'OBS'
         | 'OBSERVATION' 'ONLY'
-        | 'ONLY' 'OBSERVATION' 
-        | 'ONLY' 'OBSERVATIONS' 
+        | 'ONLY' 'OBSERVATION'
+        | 'ONLY' 'OBSERVATIONS'
         | 'OBS' 'ONLY'
         | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
         | 'ONCE'
@@ -106,27 +106,27 @@ ifcallrandom: 'IF' '(' logical_or_expression ')' 'CALL' 'RANDOM' '(' "(10|[1-9])
 
 assignment : identifier  '='  logical_or_expression;
 
-logical_or_expression : logical_and_expression 
-    (or_expression_nm  logical_and_expression)* ;
+logical_or_expression : logical_and_expression
+        (or_expression_nm  logical_and_expression)* ;
 
 or_expression_nm: '.or.' | '.OR.';
 
-logical_and_expression : equality_expression0 
-    (and_expression_nm equality_expression0)* ;
+logical_and_expression : equality_expression0
+        (and_expression_nm equality_expression0)* ;
 
 and_expression_nm: '.and.' | '.AND.';
 
 equality_expression0 : equality_expression |
-    '(' equality_expression ')';
+        '(' equality_expression ')';
 
-equality_expression : relational_expression 
-    ((neq_expression_nm | eq_expression_nm ) relational_expression)* ;
+equality_expression : relational_expression
+        ((neq_expression_nm | eq_expression_nm ) relational_expression)* ;
 
 eq_expression_nm: '.eq.' | '.EQ.' | '==';
 neq_expression_nm: '.ne.' | '.NE.';
 
 relational_expression : additive_expression
-    ((lt_expression_nm | gt_expression_nm | le_expression_nm | ge_expression_nm) additive_expression)* ;
+        ((lt_expression_nm | gt_expression_nm | le_expression_nm | ge_expression_nm) additive_expression)* ;
 
 lt_expression_nm: '<' | '.lt.' | '.LT.';
 gt_expression_nm: '>' | '.gt.' | '.GT.';
@@ -134,10 +134,10 @@ ge_expression_nm: '>='| '.ge.' | '.GE.';
 le_expression_nm: '<='| '.le.' | '.LE.';
 
 additive_expression : multiplicative_expression
-    (('+' | '-') multiplicative_expression)* ;
+        (('+' | '-') multiplicative_expression)* ;
 
-multiplicative_expression : unary_expression 
-    (mult_part)* ;
+multiplicative_expression : unary_expression
+        (mult_part)* ;
 
 mult_part : ('*' | '/') unary_expression ;
 
@@ -165,6 +165,9 @@ sigma  : ('SIGMA(' | 'sigma(') decimalintNo0 ',' decimalintNo0 ')';
 omega  : ('OMEGA(' | 'omega(') decimalintNo0 ',' decimalintNo0 ')';
 sigma1  : ('SIGMA(' | 'sigma(') decimalintNo0 ')';
 omega1  : ('OMEGA(' | 'omega(') decimalintNo0 ')';
+der  : ('DADT(' | 'dadt(' ) decimalintNo0 ')';
+derI : ('DADT(' | 'dadt(' ) identifier ')';
+
 
 avar:  "[Aa][0-9][0-9][0-9][0-9][0-9]";
 cvar:  "[Cc][0-9][0-9][0-9][0-9][0-9]";
@@ -185,43 +188,45 @@ duri         : "[Dd][1-9][0-9]*";
 scalei       : "[Ss]([0-9]+|C|O)";
 
 
-primary_expression 
-  : constant
-  | a0
-  | a0i
-  | fbioi
-  | alagi
-  | ratei
-  | duri
-  | scalei
-  | identifier
-  | theta
-  | thetaI
-  | eta
-  | etaI
-  | eps
-  | epsI
-  | err
-  | errI
-  | dt
-  | amt
-  | amtI
-  | mpast
-  | mnext
-  | mtime
-  | mixp
-  | mixpc
-  | avar
-  | cvar
-  | com
-  | pcmt
-  | sigma
-  | omega
-  | sigma1
-  | omega1
-  | function
-  | '(' logical_or_expression ')'
-  ;
+primary_expression
+    : constant
+    | derI
+    | der
+    | a0
+    | a0i
+    | fbioi
+    | alagi
+    | ratei
+    | duri
+    | scalei
+    | identifier
+    | theta
+    | thetaI
+    | eta
+    | etaI
+    | eps
+    | epsI
+    | err
+    | errI
+    | dt
+    | amt
+    | amtI
+    | mpast
+    | mnext
+    | mtime
+    | mixp
+    | mixpc
+    | avar
+    | cvar
+    | com
+    | pcmt
+    | sigma
+    | omega
+    | sigma1
+    | omega1
+    | function
+    | '(' logical_or_expression ')'
+    ;
 
 function : function_name (logical_or_expression)*  (',' logical_or_expression)* ')' ;
 
@@ -256,4 +261,3 @@ whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
 singleLineComment: "[;:]" "[^\n]*";
 verbatimCode: '"' "[^\n]*";
 includeCode: 'include' "[^\n]*";
-
