@@ -388,6 +388,6 @@ static inline void finalizeSyntaxError(void) {
     }
     char *v= rc_dup_str(firstErr.s, 0);
     sClear(&firstErr);
-    Rf_errorcall(R_NilValue, v);
+    Rf_errorcall(R_NilValue, "%s", v);
   }
 }
