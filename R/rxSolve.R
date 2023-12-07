@@ -38,7 +38,7 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     ssRtolSens = 1e-06, simVariability = NA, nLlikAlloc = NULL, 
     useStdPow = FALSE, naTimeHandle = c("ignore", "warn", "error"), 
     addlKeepsCov = FALSE, addlDropSs = TRUE, ssAtDoseTime = TRUE, 
-    ss2cancelAllPending = FALSE) {
+    ss2cancelAllPending = FALSE, envir = parent.frame()) {
     if (missing(covsInterpolation)) {
         covsInterpolation <- "nocb"
         .minfo("using nocb interpolation like NONMEM, specify directly to change")
@@ -65,28 +65,28 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     }
     if (!missing(nStud)) {
         if (missing(dfSub)) {
-            if (!is.null(object$dfSub)) {
-                dfSub <- object$dfSub
+            if (!is.null(object$meta$dfSub)) {
+                dfSub <- object$meta$dfSub
                 .minfo(paste0("using dfSub=", dfSub, " from NONMEM"))
             }
         }
         if (missing(dfObs)) {
-            if (!is.null(object$dfObs)) {
-                dfObs <- object$dfObs
+            if (!is.null(object$meta$dfObs)) {
+                dfObs <- object$meta$dfObs
                 .minfo(paste0("using dfObs=", dfObs, " from NONMEM"))
             }
         }
         if (missing(thetaMat)) {
-            if (!is.null(object$thetaMat)) {
-                thetaMat <- object$thetaMat
+            if (!is.null(object$meta$thetaMat)) {
+                thetaMat <- object$meta$thetaMat
                 .minfo(paste0("using thetaMat from NONMEM"))
             }
         }
     }
     if (missing(sigma)) {
         if (is.null(object$predDf)) {
-            if (!is.null(object$sigma)) {
-                sigma <- object$sigma
+            if (!is.null(object$meta$sigma)) {
+                sigma <- object$meta$sigma
                 .minfo(paste0("using sigma from NONMEM"))
             }
         }
@@ -98,19 +98,19 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
         }
     }
     if (missing(atol)) {
-        atol <- object$atol
+        atol <- object$meta$atol
         .minfo(paste0("using NONMEM specified atol=", atol))
     }
     if (missing(rtol)) {
-        rtol <- object$rtol
+        rtol <- object$meta$rtol
         .minfo(paste0("using NONMEM specified rtol=", rtol))
     }
     if (missing(ssRtol)) {
-        ssRtol <- object$ssRtol
+        ssRtol <- object$meta$ssRtol
         .minfo(paste0("using NONMEM specified ssRtol=", ssRtol))
     }
     if (missing(ssAtol)) {
-        ssAtol <- object$ssAtol
+        ssAtol <- object$meta$ssAtol
         .minfo(paste0("using NONMEM specified ssAtol=", ssAtol))
     }
     .cls <- class(object)
@@ -148,5 +148,5 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
         simVariability = simVariability, nLlikAlloc = nLlikAlloc, 
         useStdPow = useStdPow, naTimeHandle = naTimeHandle, addlKeepsCov = addlKeepsCov, 
         addlDropSs = addlDropSs, ssAtDoseTime = ssAtDoseTime, 
-        ss2cancelAllPending = ss2cancelAllPending)
+        ss2cancelAllPending = ss2cancelAllPending, envir = envir)
 }

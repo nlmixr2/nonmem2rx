@@ -1,19 +1,39 @@
 .rxnmRename1 <- function(rxui, lst) {
-  .thetaMat <- rxui$thetaMat
+  .doThetaMatMeta <- FALSE
+  if (exists("thetaMat", envir=rxui$meta)) {
+    .thetaMat <- rxui$meta$thetaMat
+    .doThetaMatMeta <- TRUE
+  } else {
+    .thetaMat <- rxui$thetaMat
+  }
   .dnt <- dimnames(.thetaMat)[[1]]
-  .sigma <- rxui$sigma
+  .doSigmaMeta <- FALSE
+  if (exists("sigma", envir=rxui$meta)) {
+    .sigma <- rxui$meta$sigma
+    .doSigmaMeta <- TRUE
+  } else {
+    .sigma <- rxui$sigma
+  }
   .dns <- dimnames(.sigma)[[1]]
   .w <- which(.dnt == lst[[4]])
   if (length(.w) == 1) {
     .dnt[.w] <- lst[[3]]
     dimnames(.thetaMat) <- list(.dnt, .dnt)
-    rxui$thetaMat <- .thetaMat
+    if (.doThetaMatMeta) {
+      rxui$meta$thetaMat <- .thetaMat
+    } else {
+      rxui$thetaMat <- .thetaMat
+    }
   }
   .w <- which(.dns == lst[[4]])
   if (length(.w) == 1) {
     .dns[.w] <- lst[[3]]
     dimnames(.sigma) <- list(.dns, .dns)
-    rxui$sigma <- .sigma
+    if (.doSigmaMeta) {
+      rxui$meta$sigma <- .sigma
+    } else {
+      rxui$sigma <- .sigma
+    }
   }
 }
 

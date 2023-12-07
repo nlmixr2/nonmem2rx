@@ -142,12 +142,34 @@
         # dummy id to match the .params
         .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]))
       }
+      if (exists("atol", envir=.rx$meta)) {
+        .atol <- .rx$meta$atol
+      } else {
+        .atol <- .rx$atol
+      }
+      if (exists("rtol", envir=.rx$meta)) {
+        .rtol <- .rx$meta$rtol
+      } else {
+        .rtol <- .rx$rtol
+      }
+      if (exists("ssAtol", envir=.rx$meta)) {
+        .ssAtol <- .rx$meta$ssAtol
+      } else {
+        .ssAtol <- .rx$ssAtol
+      }
+      if (exists("ssRtol", envir=.rx$meta)) {
+        .ssRtol <- .rx$meta$ssRtol
+      } else {
+        .ssRtol <- .rx$ssRtol
+      }
       if (.doIpred) {
         .minfo("solving ipred problem")
         .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
                                    covsInterpolation="nocb",
-                                   atol=.rx$atol, rtol=.rx$rtol,
-                                   ssAtol=.rx$ssAtol, ssRtol=.rx$ssRtol,
+                                   addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
+                                   safeZero=TRUE, ss2cancelAllPending=TRUE,
+                                   atol=.atol, rtol=.rtol,
+                                   ssAtol=.ssAtol, ssRtol=.ssRtol, omega=NULL,
                                    addDosing = FALSE))
         .minfo("done")
       }
@@ -241,8 +263,10 @@
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
-                                atol=.rx$atol, rtol=.rx$rtol,
-                                ssAtol=.rx$ssAtol, ssRtol=.rx$ssRtol,
+                                addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
+                                safeZero=TRUE, ss2cancelAllPending=TRUE,
+                                atol=.atol, rtol=.rtol,
+                                ssAtol=.ssAtol, ssRtol=.ssRtol,
                                 addDosing = FALSE))
       .minfo("done")
       if (!inherits(.predSolve, "try-error")) {
