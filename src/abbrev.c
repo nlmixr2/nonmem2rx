@@ -1068,11 +1068,11 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     }
     if (abbrevLin == 1) {
       if (scaleCmt > 1) {
-        if (i == 0) Rf_warning("scale%d could be meaningless with this linCmt() model translation");
+        if (i == 0) Rf_warning("scale0 could be meaningless with this linCmt() model translation");
       }
     } else if (abbrevLin == 2) {
       if (scaleCmt > 2) {
-        if (i == 0) Rf_warning("scale%d could be meaningless with this linCmt() model translation");
+        if (i == 0) Rf_warning("scale0 could be meaningless with this linCmt() model translation");
       }
     }
     if (i == 0) {
