@@ -586,7 +586,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       overwrite=getOption("nonmem2rx.overwrite", TRUE),
                       load=getOption("nonmem2rx.load", TRUE),
                       compress=getOption("nonmem2rx.compress", TRUE),
-                      keep=getOption("nonmem2rx.keep", "sigma")) {
+                      keep=getOption("nonmem2rx.keep", c("dfSub", "dfObs", "thetaMat", "sigma"))) {
   .pt <- proc.time()
   .ret <- .collectWarn({
     checkmate::assertFileExists(file)
@@ -622,7 +622,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                    rename, tolowerLhs, thetaNames, etaNames, cmtNames, updateFinal,
                                    determineError, validate, nonmemData, strictLst, unintFixed,
                                    extended, nLinesPro, delta, usePhi, useExt, useCov, useXml,
-                                   useLst, mod, cov, phi, lst, xml, ext, scanLines))
+                                   useLst, mod, cov, phi, lst, xml, ext, scanLines, keep))
     if (!is.null(save)) {
       if (load && overwrite) {
         if (utils::file_test("-nt", file, save)) {
