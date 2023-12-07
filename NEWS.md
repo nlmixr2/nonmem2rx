@@ -1,4 +1,4 @@
-# nonmem2rx (development version)
+# nonmem2rx 0.1.3
 
 * Added explicit requirement for rxode2 2.0.12
 
@@ -8,6 +8,8 @@
 * Added support of `ADVAN#, TRANS#` (#161)
 
 * Added more NONMEM-specific solving options
+
+* Fixed security related format issues as requested by CRAN #167
 
 # nonmem2rx 0.1.2
 
