@@ -1,6 +1,6 @@
 # nonmem2rx 0.1.3
 
-* Added explicit requirement for rxode2 2.0.12
+* Added explicit requirement for rxode2 2.0.13
 
 * Added support of `DADT(#)` statements on the right side of the
   equation, i.e. `DADT(3) = DADT(1) + DADT(2)` (#164)
@@ -10,6 +10,14 @@
 * Added more NONMEM-specific solving options
 
 * Fixed security related format issues as requested by CRAN #167
+
+* Now `omega`, `thetaMat`, `dfObs` and `dfSub` are incorporated into
+  model function (by default).  You can change this with the
+  `nonmem2rx` `keep` argument
+
+* Using the `rxode2` 2.0.13 makes sure that the solves for models
+  where the endpoint is not determined in the typical `nlmixr2` style
+  will validate more often (due to a bug in solving in `rxode2`).
 
 # nonmem2rx 0.1.2
 
