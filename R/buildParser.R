@@ -265,6 +265,10 @@
                     .desc <- setNames(.meth[i], NULL)
                     .ret <- c("",
                               sprintf("rxUiGet.%s <- function(x, ...) {", .name),
+                              "  .meta <- new.env(parent=emptyenv())",
+                              "  if (exists(\"meta\", envir=x[[1]])) .meta <- get(\"meta\", envir=x[[1]])",
+                              sprintf("  if (exists(\"%s\", envir=.meta)) return(get(\"%s\", envir=.meta))", .name, .name),
+                              sprintf("  if (!exists(\"%s\", envir=x[[1]])) return(NULL)", .name),
                               sprintf("  if (!exists(\"%s\", envir=x[[1]])) return(NULL)", .name),
                               sprintf("  get(\"%s\", envir=x[[1]])", .name),
                               "}",
