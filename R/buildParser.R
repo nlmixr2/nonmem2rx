@@ -99,6 +99,9 @@
   .args[1] <- paste0("rxSolve.nonmem2rx <-", .args[1])
   .args <- .args[-length(.args)]
   .extra <- quote({
+    if (missing(cores)) {
+      cores <- 0L
+    }
     if (missing(covsInterpolation)) {
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")

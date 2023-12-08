@@ -39,6 +39,9 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     useStdPow = FALSE, naTimeHandle = c("ignore", "warn", "error"), 
     addlKeepsCov = FALSE, addlDropSs = TRUE, ssAtDoseTime = TRUE, 
     ss2cancelAllPending = FALSE, envir = parent.frame()) {
+    if (missing(cores)) {
+        cores <- 0L
+    }
     if (missing(covsInterpolation)) {
         covsInterpolation <- "nocb"
         .minfo("using nocb interpolation like NONMEM, specify directly to change")
