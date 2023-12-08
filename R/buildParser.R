@@ -271,7 +271,7 @@
                               sprintf("  if (!exists(\"%s\", envir=x[[1]])) return(NULL)", .name),
                               sprintf("  get(\"%s\", envir=x[[1]])", .name),
                               "}",
-                              sprintf("attr(rxUiGet.%s, \"desc=\") <- %s", .name, deparse1(.desc)))
+                              sprintf("attr(rxUiGet.%s, \"desc\") <- %s", .name, deparse1(.desc)))
                     .ret <- paste(.ret, collapse="\n")
                   }, character(1), USE.NAMES=TRUE),
                   ".rxUiGetRegister <- function() {",
