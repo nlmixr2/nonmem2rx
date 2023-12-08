@@ -125,7 +125,7 @@
     .lhs <- .lhs[-.w]
     .rhs <- .rhs[-.w]
   }
-  .ret <- eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))
+  .ret <- eval(str2lang(paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))
   .minfo("done")
   .ret
 }
