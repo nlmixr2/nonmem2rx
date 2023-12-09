@@ -39,6 +39,10 @@ jobs:
             nlmixr2/rxode2random
             nlmixr2/rxode2et
             nlmixr2/rxode2
+            nlmixr2/nlmixr2est
+            nlmixr2/nlmixr2extra
+            nlmixr2/nlmixr2plot
+            nlmixr2/nlmixr2
             nlmixr2/babelmixr2
             nlmixr2/nlmixr2rpt
             lixoftConnectors=?ignore
