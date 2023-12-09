@@ -144,7 +144,11 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   if (length(.nonmem2rx$modelDesc) > 0) {
     .rx$meta$description <- .nm2rx$meta$description
   }
-  .rx$thetaMat <- .thetaMat
+  if (exists("thetaMat", .rx$meta)) {
+    assign("thetaMat", .thetaMat, envir=.rx$meta)
+  } else {
+    assign("thetaMat", .thetaMat, envir=.rx)
+  }
   if (compress) {
     .ret <- rxode2::rxUiCompress(.rx)
   } else {
