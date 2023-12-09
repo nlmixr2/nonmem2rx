@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulate Derived Variables from imported NONMEM model">
 <meta property="og:description" content="nonmem2rx">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,7 +144,7 @@ different dosing paradigm with new derived items, in this case
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/nonmem2rx/" class="external-link">nonmem2rx</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/rxode2/" class="external-link">rxode2</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; rxode2 2.0.13.9000 using 1 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 2.0.14.9000 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span></span>
 <span></span>
@@ -195,7 +195,7 @@ different dosing paradigm with new derived items, in this case
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
@@ -206,7 +206,7 @@ different dosing paradigm with new derived items, in this case
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done (no labels)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming compartments</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving ipred problem</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving pred problem</span></span>
@@ -228,8 +228,8 @@ your model, and for sparse data wouldn’t be terribly accurate.</p>
 <code class="sourceCode R"><span><span class="va">modAuc</span> <span class="op">&lt;-</span> <span class="va">mod</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/model.html" class="external-link">model</a></span><span class="op">(</span><span class="va">d</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">dt</a></span><span class="op">(</span><span class="va">AUC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">f</span>, append<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → significant model change detected</span></span>
-<span><span class="co">#&gt; → kept in model: '$atol', '$nonmemData', '$rtol', '$sigma', '$ssAtol', '$ssRtol'</span></span>
-<span><span class="co">#&gt; → removed from model: '$dfObs', '$dfSub', '$digest', '$etaData', '$file', '$ipredAtol', '$ipredCompare', '$ipredData', '$ipredRtol', '$iwresAtol', '$iwresCompare', '$iwresRtol', '$notes', '$outputExtension', '$predAtol', '$predCompare', '$predData', '$predRtol', '$sigmaNames', '$thetaMat'</span></span>
+<span><span class="co">#&gt; → kept in model: '$atol', '$nonmemData', '$rtol', '$ssAtol', '$ssRtol'</span></span>
+<span><span class="co">#&gt; → removed from model: '$digest', '$etaData', '$file', '$ipredAtol', '$ipredCompare', '$ipredData', '$ipredRtol', '$iwresAtol', '$iwresCompare', '$iwresRtol', '$notes', '$outputExtension', '$predAtol', '$predCompare', '$predData', '$predRtol', '$sigmaNames'</span></span>
 <span></span>
 <span><span class="va">modAuc</span></span>
 <span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 3-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
@@ -260,6 +260,32 @@ your model, and for sparse data wouldn’t be terribly accurate.</p>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
+<span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
+<span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
+<span><span class="co">#&gt;     sigma &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         eps1 ~ 1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         theta1 + theta2 + theta3 + theta4 + RSV + eps1 + eta1 + </span></span>
+<span><span class="co">#&gt;             omega.2.1 + eta2 + omega.3.1 + omega.3.2 + eta3 + </span></span>
+<span><span class="co">#&gt;             omega.4.1 + omega.4.2 + omega.4.3 + eta4 ~ c(0.000887681, </span></span>
+<span><span class="co">#&gt;             -0.00010551, 0.000871409, 0.000184416, -0.000106195, </span></span>
+<span><span class="co">#&gt;             0.00299336, -0.000120234, -5.06663e-05, 0.000165252, </span></span>
+<span><span class="co">#&gt;             0.00121347, 5.2783e-08, -1.56562e-05, 5.99331e-06, </span></span>
+<span><span class="co">#&gt;             -2.53991e-05, 9.94218e-06, 0, 0, 0, 0, 0, 0, -4.71273e-05, </span></span>
+<span><span class="co">#&gt;             4.69667e-05, -3.64271e-05, 2.54796e-05, -8.16885e-06, </span></span>
+<span><span class="co">#&gt;             0, 0.000169296, 0, 0, 0, 0, 0, 0, 0, 0, -7.37156e-05, </span></span>
+<span><span class="co">#&gt;             2.56634e-05, -8.08349e-05, 1.37e-05, -4.36564e-06, </span></span>
+<span><span class="co">#&gt;             0, 8.75181e-06, 0, 0.00015125, 0, 0, 0, 0, 0, 0, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.63383e-05, </span></span>
+<span><span class="co">#&gt;             -8.19002e-05, 0.000548985, 0.000168356, 1.59122e-06, </span></span>
+<span><span class="co">#&gt;             0, 3.48714e-05, 0, 4.31593e-07, 0, 0, 0.000959029, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, -9.49661e-06, 0.000110108, </span></span>
+<span><span class="co">#&gt;             -0.000306537, -9.12897e-05, 3.1877e-06, 0, 1.36628e-05, </span></span>
+<span><span class="co">#&gt;             0, -1.95096e-05, 0, 0, -0.00012977, 0, 0, 0, 0.00051019)</span></span>
+<span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
 <span><span class="co">#&gt;         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", </span></span>
@@ -345,13 +371,16 @@ subjects:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/rxSolve.html" class="external-link">rxSolve</a></span><span class="op">(</span><span class="va">modAuc</span>, <span class="va">ev</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using nocb interpolation like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using addlKeepsCov=TRUE like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using addlDropSs=TRUE like NONMEM, specify directly to change</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ssAtDoseTime=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using sigma from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified atol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssRtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span></code></pre></div>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span></code></pre></div>
 <p>Note that since this derived from a <code>nonmem2rx</code> model, the
 default solving will match the tolerances and methods specified in your
 <code>NONMEM</code> model.</p>
@@ -383,27 +412,27 @@ interval:</p>
 <span><span class="va">s</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11.999</span>,  <span class="fl">23.999</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">AUC</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id time      AUC</span></span>
-<span><span class="co">#&gt; 1   1   12 12319.90</span></span>
-<span><span class="co">#&gt; 2   1   24 15561.37</span></span>
-<span><span class="co">#&gt; 3   2   12 13467.68</span></span>
-<span><span class="co">#&gt; 4   2   24 19484.58</span></span>
-<span><span class="co">#&gt; 5   3   12 10066.80</span></span>
-<span><span class="co">#&gt; 6   3   24 15314.17</span></span>
-<span><span class="co">#&gt; 7   4   12 11843.82</span></span>
-<span><span class="co">#&gt; 8   4   24 17114.40</span></span>
-<span><span class="co">#&gt; 9   5   12 15154.88</span></span>
-<span><span class="co">#&gt; 10  5   24 23450.37</span></span>
-<span><span class="co">#&gt; 11  6   12 12094.76</span></span>
-<span><span class="co">#&gt; 12  6   24 18926.65</span></span>
-<span><span class="co">#&gt; 13  7   12 10807.01</span></span>
-<span><span class="co">#&gt; 14  7   24 17210.25</span></span>
-<span><span class="co">#&gt; 15  8   12 11423.57</span></span>
-<span><span class="co">#&gt; 16  8   24 17012.68</span></span>
-<span><span class="co">#&gt; 17  9   12 10681.23</span></span>
-<span><span class="co">#&gt; 18  9   24 16773.14</span></span>
-<span><span class="co">#&gt; 19 10   12 13096.23</span></span>
-<span><span class="co">#&gt; 20 10   24 18200.62</span></span></code></pre></div>
+<span><span class="co">#&gt;    id time       AUC</span></span>
+<span><span class="co">#&gt; 1   1   12  7932.545</span></span>
+<span><span class="co">#&gt; 2   1   24 12586.530</span></span>
+<span><span class="co">#&gt; 3   2   12 13612.148</span></span>
+<span><span class="co">#&gt; 4   2   24 18970.850</span></span>
+<span><span class="co">#&gt; 5   3   12 14376.687</span></span>
+<span><span class="co">#&gt; 6   3   24 19625.286</span></span>
+<span><span class="co">#&gt; 7   4   12 12609.856</span></span>
+<span><span class="co">#&gt; 8   4   24 18928.415</span></span>
+<span><span class="co">#&gt; 9   5   12 15723.115</span></span>
+<span><span class="co">#&gt; 10  5   24 21373.867</span></span>
+<span><span class="co">#&gt; 11  6   12 10549.211</span></span>
+<span><span class="co">#&gt; 12  6   24 15067.468</span></span>
+<span><span class="co">#&gt; 13  7   12 13547.855</span></span>
+<span><span class="co">#&gt; 14  7   24 19953.162</span></span>
+<span><span class="co">#&gt; 15  8   12 12118.761</span></span>
+<span><span class="co">#&gt; 16  8   24 17840.502</span></span>
+<span><span class="co">#&gt; 17  9   12 12999.231</span></span>
+<span><span class="co">#&gt; 18  9   24 18357.698</span></span>
+<span><span class="co">#&gt; 19 10   12 13156.012</span></span>
+<span><span class="co">#&gt; 20 10   24 19341.440</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

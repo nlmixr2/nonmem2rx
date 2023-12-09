@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Converting a NONMEM fit to a nlmixr2 object">
 <meta property="og:description" content="nonmem2rx">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -256,6 +256,32 @@ this case because of the option <code>determineError=FALSE</code>)</p>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
+<span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
+<span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
+<span><span class="co">#&gt;     sigma &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         eps1 ~ 1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         theta1 + theta2 + theta3 + theta4 + RSV + eps1 + eta1 + </span></span>
+<span><span class="co">#&gt;             omega.2.1 + eta2 + omega.3.1 + omega.3.2 + eta3 + </span></span>
+<span><span class="co">#&gt;             omega.4.1 + omega.4.2 + omega.4.3 + eta4 ~ c(0.000887681, </span></span>
+<span><span class="co">#&gt;             -0.00010551, 0.000871409, 0.000184416, -0.000106195, </span></span>
+<span><span class="co">#&gt;             0.00299336, -0.000120234, -5.06663e-05, 0.000165252, </span></span>
+<span><span class="co">#&gt;             0.00121347, 5.2783e-08, -1.56562e-05, 5.99331e-06, </span></span>
+<span><span class="co">#&gt;             -2.53991e-05, 9.94218e-06, 0, 0, 0, 0, 0, 0, -4.71273e-05, </span></span>
+<span><span class="co">#&gt;             4.69667e-05, -3.64271e-05, 2.54796e-05, -8.16885e-06, </span></span>
+<span><span class="co">#&gt;             0, 0.000169296, 0, 0, 0, 0, 0, 0, 0, 0, -7.37156e-05, </span></span>
+<span><span class="co">#&gt;             2.56634e-05, -8.08349e-05, 1.37e-05, -4.36564e-06, </span></span>
+<span><span class="co">#&gt;             0, 8.75181e-06, 0, 0.00015125, 0, 0, 0, 0, 0, 0, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.63383e-05, </span></span>
+<span><span class="co">#&gt;             -8.19002e-05, 0.000548985, 0.000168356, 1.59122e-06, </span></span>
+<span><span class="co">#&gt;             0, 3.48714e-05, 0, 4.31593e-07, 0, 0, 0.000959029, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
+<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, -9.49661e-06, 0.000110108, </span></span>
+<span><span class="co">#&gt;             -0.000306537, -9.12897e-05, 3.1877e-06, 0, 1.36628e-05, </span></span>
+<span><span class="co">#&gt;             0, -1.95096e-05, 0, 0, -0.00012977, 0, 0, 0, 0.00051019)</span></span>
+<span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
 <span><span class="co">#&gt;         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", </span></span>
@@ -309,7 +335,7 @@ this case because of the option <code>determineError=FALSE</code>)</p>
 <span><span class="co">#&gt;      eps1</span></span>
 <span><span class="co">#&gt; eps1    1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span>, <span style="color: #0000BB; font-weight: bold;">$thetaMat</span>, <span style="color: #0000BB; font-weight: bold;">$dfSub</span>, <span style="color: #0000BB; font-weight: bold;">$dfObs</span></span></span>
+<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
 <span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 composite comparison: <span style="color: #0000BB; font-weight: bold;">$predAtol</span>, <span style="color: #0000BB; font-weight: bold;">$predRtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredAtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredRtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresAtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresRtol</span></span></span></code></pre></div>
@@ -352,6 +378,9 @@ imported rxode2 model function with the model you made some manual
 tweaks to:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.nonmem2rx.html">as.nonmem2rx</a></span><span class="op">(</span><span class="va">mod2</span>, <span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> copy 'dfSub' to nonmem2rx model</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> copy 'thetaMat' to nonmem2rx model</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> copy 'dfObs' to nonmem2rx model</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving ipred problem</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving pred problem</span></span>
@@ -385,6 +414,23 @@ tweaks to:</p>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
+<span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
+<span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
+<span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         lcl + lvc + lq + lvp + RSV + eta.cl + eta.v + eta.q + </span></span>
+<span><span class="co">#&gt;             eta.v2 ~ c(0.000887681, -0.00010551, 0.000871409, </span></span>
+<span><span class="co">#&gt;             0.000184416, -0.000106195, 0.00299336, -0.000120234, </span></span>
+<span><span class="co">#&gt;             -5.06663e-05, 0.000165252, 0.00121347, 5.2783e-08, </span></span>
+<span><span class="co">#&gt;             -1.56562e-05, 5.99331e-06, -2.53991e-05, 9.94218e-06, </span></span>
+<span><span class="co">#&gt;             -4.71273e-05, 4.69667e-05, -3.64271e-05, 2.54796e-05, </span></span>
+<span><span class="co">#&gt;             -8.16885e-06, 0.000169296, -7.37156e-05, 2.56634e-05, </span></span>
+<span><span class="co">#&gt;             -8.08349e-05, 1.37e-05, -4.36564e-06, 8.75181e-06, </span></span>
+<span><span class="co">#&gt;             0.00015125, 6.63383e-05, -8.19002e-05, 0.000548985, </span></span>
+<span><span class="co">#&gt;             0.000168356, 1.59122e-06, 3.48714e-05, 4.31593e-07, </span></span>
+<span><span class="co">#&gt;             0.000959029, -9.49661e-06, 0.000110108, -0.000306537, </span></span>
+<span><span class="co">#&gt;             -9.12897e-05, 3.1877e-06, 1.36628e-05, -1.95096e-05, </span></span>
+<span><span class="co">#&gt;             -0.00012977, 0.00051019)</span></span>
+<span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
 <span><span class="co">#&gt;         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", </span></span>
@@ -420,7 +466,7 @@ tweaks to:</p>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt; }</span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
-<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span>, <span style="color: #0000BB; font-weight: bold;">$thetaMat</span>, <span style="color: #0000BB; font-weight: bold;">$dfSub</span>, <span style="color: #0000BB; font-weight: bold;">$dfObs</span></span></span>
+<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
 <span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 composite comparison: <span style="color: #0000BB; font-weight: bold;">$predAtol</span>, <span style="color: #0000BB; font-weight: bold;">$predRtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredAtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredRtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresAtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresRtol</span></span></span></code></pre></div>
@@ -445,6 +491,7 @@ methods.</p>
 <code>babelmixr2</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nlmixr2.github.io/babelmixr2/" class="external-link">babelmixr2</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/babelmixr2/reference/as.nlmixr2.html" class="external-link">as.nlmixr2</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → loading into <span style="color: #0000BB;">symengine</span> environment...</span></span>
 <span><span class="co">#&gt; → pruning branches (`if`/`else`) of full model...</span></span>
@@ -454,14 +501,14 @@ methods.</p>
 <span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 2.0.13.9000 using 1 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 2.0.14.9000 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → compress origData in nlmixr2 object, save 204016</span></span>
-<span><span class="co">#&gt; → compress parHist in nlmixr2 object, save 1976</span></span>
+<span><span class="co">#&gt; → compress parHistData in nlmixr2 object, save 2176</span></span>
 <span></span>
 <span><span class="va">fit</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── </span><span style="color: #0000BB; font-weight: bold;">nlmix</span><span style="color: #BB0000; font-weight: bold;">r²</span><span style="font-weight: bold;"> </span><span style="color: #BBBB00; font-weight: bold;">nonmem2rx</span><span style="font-weight: bold;"> reading NONMEM ver 7.4.3 ──</span></span></span>
@@ -474,7 +521,7 @@ methods.</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.029491 0.062    0.019 100.95       2.96</span></span>
+<span><span class="co">#&gt; elapsed 0.035162 0.068    0.014 100.95      2.577</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>

@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create PowerPoint and Word documents using nonmem2rx">
 <meta property="og:description" content="nonmem2rx">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -231,75 +231,34 @@ object:</p>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 2.0.13.9000 using 1 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 2.0.14.9000 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → compress origData in nlmixr2 object, save 204016</span></span>
-<span><span class="co">#&gt; → compress parHist in nlmixr2 object, save 1984</span></span>
+<span><span class="co">#&gt; → compress parHistData in nlmixr2 object, save 2184</span></span>
 <span></span>
-<span><span class="va">fit</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">── </span><span style="color: #0000BB; font-weight: bold;">nlmix</span><span style="color: #BB0000; font-weight: bold;">r²</span><span style="font-weight: bold;"> </span><span style="color: #BBBB00; font-weight: bold;">nonmem2rx</span><span style="font-weight: bold;"> reading NONMEM ver 7.4.3 ──</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;               OBJF      AIC      BIC Log-likelihood Condition#(Cov)</span></span>
-<span><span class="co">#&gt; nonmem2rx 15977.28 20185.64 20237.23      -10083.82        335.4129</span></span>
-<span><span class="co">#&gt;           Condition#(Cor)</span></span>
-<span><span class="co">#&gt; nonmem2rx        2.096559</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.032254 0.077    0.023 100.95      2.872</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        <span style="font-weight: bold;">Parameter</span>  <span style="font-weight: bold;">Est.</span>     <span style="font-weight: bold;">SE</span>  <span style="font-weight: bold;">%RSE</span> <span style="font-weight: bold;">Back-transformed(95%CI)</span> <span style="font-weight: bold;">BSV(CV%)</span></span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta1</span>    log Cl  1.37 0.0298  2.17       3.94 (3.71, 4.17)     32.6</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta2</span>    log Vc   4.2 0.0295 0.703       66.6 (62.8, 70.5)     32.3</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta3</span>     log Q  1.38 0.0547  3.96       3.98 (3.57, 4.42)     32.7</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta4</span>    log Vp  3.88 0.0348 0.899       48.3 (45.1, 51.7)     27.5</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">RSV</span>          <span style="font-weight: bold;">RSV</span> 0.196                                0.196         </span></span>
-<span><span class="co">#&gt;        <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta1</span>      1.94% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta2</span>      2.46% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta3</span>      <span style="color: #BB0000; font-weight: bold;">40.5%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">theta4</span>      <span style="color: #00BB00; font-weight: bold;">28.4%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">RSV</span>               </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt;   Covariance Type (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$covMethod</span>): <span style="font-weight: bold;">nonmem2rx</span></span></span>
-<span><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
-<span><span class="co">#&gt;   Full BSV covariance (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$omega</span>) or correlation (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$omegaR</span>; diagonals=SDs) </span></span>
-<span><span class="co">#&gt;   Distribution stats (mean/skewness/kurtosis/p-value) available in <span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$shrink</span> </span></span>
-<span><span class="co">#&gt;   Censoring (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$censInformation</span>): No censoring</span></span>
-<span><span class="co">#&gt;   Minimization message (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$message</span>):  </span></span>
-<span><span class="co">#&gt;     </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  WARNINGS AND ERRORS (IF ANY) FOR PROBLEM    1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  (WARNING  2) NM-TRAN INFERS THAT THE DATA ARE POPULATION.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     </span></span>
-<span><span class="co">#&gt; 0MINIMIZATION SUCCESSFUL</span></span>
-<span><span class="co">#&gt;  NO. OF FUNCTION EVALUATIONS USED:      320</span></span>
-<span><span class="co">#&gt;  NO. OF SIG. DIGITS IN FINAL EST.:  2.5</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06</span></span>
-<span><span class="co">#&gt;     PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06</span></span>
-<span><span class="co">#&gt;     IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.25e-05, 0.0418); atol=0.00167</span></span>
-<span><span class="co">#&gt;     PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382); atol=6.41e-06</span></span>
-<span><span class="co">#&gt;     nonmem2rx model file: '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl' </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">── Fit Data (object </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="font-weight: bold;"> is a modified </span><span style="color: #0000BB; font-weight: bold;">tibble</span><span style="font-weight: bold;">): ──</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,280 × 27</span></span></span>
-<span><span class="co">#&gt;   ID     TIME    DV  PRED    RES IPRED  IRES  IWRES   eta1  eta2   eta3  eta4</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1      0.25 <span style="text-decoration: underline;">1</span>041. <span style="text-decoration: underline;">1</span>750. -<span style="color: #BB0000;">710.</span>  <span style="text-decoration: underline;">1</span>215. -<span style="color: #BB0000;">175.</span> -<span style="color: #BB0000;">0.732</span> -<span style="color: #BB0000;">0.144</span> 0.375 0.065<span style="text-decoration: underline;">0</span> 0.241</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1      0.5  <span style="text-decoration: underline;">1</span>629  <span style="text-decoration: underline;">1</span>700.  -<span style="color: #BB0000;">70.8</span> <span style="text-decoration: underline;">1</span>192.  437.  1.87  -<span style="color: #BB0000;">0.144</span> 0.375 0.065<span style="text-decoration: underline;">0</span> 0.241</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1      0.75  878. <span style="text-decoration: underline;">1</span>651. -<span style="color: #BB0000;">774.</span>  <span style="text-decoration: underline;">1</span>169. -<span style="color: #BB0000;">291.</span> -<span style="color: #BB0000;">1.27</span>  -<span style="color: #BB0000;">0.144</span> 0.375 0.065<span style="text-decoration: underline;">0</span> 0.241</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,277 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 15 more variables: ipred &lt;dbl&gt;, CENTRAL &lt;dbl&gt;, PERI &lt;dbl&gt;, cl &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   v &lt;dbl&gt;, q &lt;dbl&gt;, v2 &lt;dbl&gt;, v1 &lt;dbl&gt;, scale1 &lt;dbl&gt;, k21 &lt;dbl&gt;, k12 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   f &lt;dbl&gt;, rescv &lt;dbl&gt;, tad &lt;dbl&gt;, dosenum &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="va">fit</span></span></code></pre></div>
+<p><span class="math display">\[\begin{align*}
+cmt({CENTRAL}) \\
+cmt({PERI}) \\
+{cl} &amp; = \exp\left({theta1}+{eta1}\right) \\
+{v} &amp; = \exp\left({theta2}+{eta2}\right) \\
+{q} &amp; = \exp\left({theta3}+{eta3}\right) \\
+{v2} &amp; = \exp\left({theta4}+{eta4}\right) \\
+{v1} &amp; = {v} \\
+{scale1} &amp; = {v} \\
+{k21} &amp; = \frac{{q}}{{v2}} \\
+{k12} &amp; = \frac{{q}}{{v}} \\
+\frac{d \: CENTRAL}{dt} &amp; = {k21} {\times} {PERI}-{k12} {\times}
+{CENTRAL}-\frac{{cl} {\times} {CENTRAL}}{{v1}} \\
+\frac{d \: PERI}{dt} &amp; = -{k21} {\times} {PERI}+{k12} {\times}
+{CENTRAL} \\
+{f} &amp; = \frac{{CENTRAL}}{{scale1}} \\
+{ipred} &amp; = {f} \\
+{rescv} &amp; = {RSV} \\
+{ipred} &amp; \sim prop({RSV})
+\end{align*}\]</span></p>
 </div>
 <div class="section level2">
 <h2 id="step-3-create-a-powerpoint-file">Step 3: Create a PowerPoint file<a class="anchor" aria-label="anchor" href="#step-3-create-a-powerpoint-file"></a>
@@ -348,17 +307,17 @@ come from <code>nlmixr2rpt</code> directly:</p>
 <span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling inner model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → finding duplicate expressions in FD model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → optimizing duplicate expressions in FD model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
