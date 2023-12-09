@@ -6,7 +6,8 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
   test_that("piping works", {
     skip_on_cran()
 
-    f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res")
+    f <- .nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
+                    keep=NULL)
 
     expect_true(inherits(f, "nonmem2rx"))
     expect_false(is.null(f$nonmemData))

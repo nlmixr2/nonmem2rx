@@ -9,7 +9,7 @@
 #' @examples
 #'
 #' \donttest{
-#' 
+#'
 #'  mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #'                   determineError=FALSE, lst=".res", save=FALSE)
 #'
@@ -66,9 +66,21 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   .cp <- c("sticky", "nonmemData", "atol", "rtol", "ssAtol", "ssRtol", "etaData",
            "ipredData", "predData", "sigmaNames", "dfSub", "thetaMat", "dfObs",
            "file", "outputExtension")
+  .meta <- new.env(parent=emptyenv())
+  if (exists("meta", envir=.nm2rx)) {
+    .meta <- get("meta", envir=.nm2rx)
+  }
+  .metaRx <- new.env(parent=emptyenv())
+  if (exists("meta", envir=.rx)) {
+    .metaRx <- get("meta", envir=.rx)
+  }
   lapply(.cp, function(x) {
     if (exists(x, envir=.nm2rx)) {
       assign(x, get(x, envir=.nm2rx), envir=.rx)
+    }
+    if (exists(x, envir=.meta) && !exists(x, envir=.metaRx)) {
+      .minfo(paste0("copy '", x, "' to nonmem2rx model"))
+      assign(x, get(x, envir=.meta), envir=.metaRx)
     }
   })
   .nonmemData <- .rx$nonmemData
@@ -132,7 +144,11 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   if (length(.nonmem2rx$modelDesc) > 0) {
     .rx$meta$description <- .nm2rx$meta$description
   }
-  .rx$thetaMat <- .thetaMat
+  if (exists("thetaMat", .rx$meta)) {
+    assign("thetaMat", .thetaMat, envir=.rx$meta)
+  } else {
+    assign("thetaMat", .thetaMat, envir=.rx)
+  }
   if (compress) {
     .ret <- rxode2::rxUiCompress(.rx)
   } else {

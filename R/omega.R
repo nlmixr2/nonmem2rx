@@ -58,7 +58,7 @@ nonmem2rxRec.sig <- function(x) {
   comment
 }
 #'  Add omega parameter comment to `.nonmem2rx` environment
-#'  
+#'
 #' @param comment comment for the Omega parameter
 #' @param prefix Prefix of parameter names (currently eta or eps)
 #' @return Nothing, called for side effects

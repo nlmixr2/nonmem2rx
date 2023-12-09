@@ -99,6 +99,9 @@
   .args[1] <- paste0("rxSolve.nonmem2rx <-", .args[1])
   .args <- .args[-length(.args)]
   .extra <- quote({
+    if (missing(cores)) {
+      cores <- 0L
+    }
     if (missing(covsInterpolation)) {
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")
@@ -125,20 +128,30 @@
     }
     if (!missing(nStud)) {
       if (missing(dfSub)) {
-        if (!is.null(object$dfSub)){
+        if (!is.null(object$meta$dfSub)){
+          dfSub <- object$meta$dfSub
+          .minfo(paste0("using dfSub=", dfSub, " from NONMEM"))
+        } else if (!is.null(object$dfSub)) {
           dfSub <- object$dfSub
           .minfo(paste0("using dfSub=", dfSub, " from NONMEM"))
         }
       }
       if (missing(dfObs)) {
-        if (!is.null(object$dfObs)){
+        if (!is.null(object$meta$dfObs)) {
+          dfObs <- object$meta$dfObs
+          .minfo(paste0("using dfObs=", dfObs, " from NONMEM"))
+        } else if (!is.null(object$dfObs)) {
           dfObs <- object$dfObs
+          dfObs <- object$meta$dfObs
           .minfo(paste0("using dfObs=", dfObs, " from NONMEM"))
         }
       }
       if (missing(thetaMat)) {
-        if (!is.null(object$thetaMat)){
-          thetaMat <- object$thetaMat
+        if (!is.null(object$meta$thetaMat)) {
+          thetaMat <- object$meta$thetaMat
+          .minfo(paste0("using thetaMat from NONMEM"))
+        } else if (!is.null(object$thetaMat)) {
+          thetaMat <- object$meta$thetaMat
           .minfo(paste0("using thetaMat from NONMEM"))
         }
       }
@@ -147,8 +160,11 @@
     if (missing(sigma)) {
       if (is.null(object$predDf)) {
         # if a true nlmixr2 model, this is not needed
-        if (!is.null(object$sigma)){
-          sigma <- object$sigma
+        if (!is.null(object$meta$sigma)){
+          sigma <- object$meta$sigma
+          .minfo(paste0("using sigma from NONMEM"))
+        } else if (!is.null(object$sigma)) {
+          sigma <- object$meta$sigma
           .minfo(paste0("using sigma from NONMEM"))
         }
       }
@@ -160,20 +176,40 @@
       }
     }
     if (missing(atol)) {
-      atol <- object$atol
-      .minfo(paste0("using NONMEM specified atol=", atol))
+      if (!is.null(object$meta$atol)) {
+        atol <- object$meta$atol
+        .minfo(paste0("using NONMEM specified atol=", atol))
+      } else if (!is.null(object$atol)) {
+        atol <- object$atol
+        .minfo(paste0("using NONMEM specified atol=", atol))
+      }
     }
     if (missing(rtol)) {
-      rtol <- object$rtol
-      .minfo(paste0("using NONMEM specified rtol=", rtol))
+      if (!is.null(object$meta$atol)) {
+        rtol <- object$meta$rtol
+        .minfo(paste0("using NONMEM specified rtol=", rtol))
+      } else if (!is.null(object$atol)) {
+        rtol <- object$rtol
+        .minfo(paste0("using NONMEM specified rtol=", rtol))
+      }
     }
     if (missing(ssRtol)) {
-      ssRtol <- object$ssRtol
-      .minfo(paste0("using NONMEM specified ssRtol=", ssRtol))
+      if (!is.null(object$meta$ssRtol)) {
+        ssRtol <- object$meta$ssRtol
+        .minfo(paste0("using NONMEM specified ssRtol=", ssRtol))
+      } else if (!is.null(object$meta$ssRtol)) {
+        ssRtol <- object$meta$ssRtol
+        .minfo(paste0("using NONMEM specified ssRtol=", ssRtol))
+      }
     }
     if (missing(ssAtol)) {
-      ssAtol <- object$ssAtol
-      .minfo(paste0("using NONMEM specified ssAtol=", ssAtol))
+      if (!is.null(object$meta$ssAtol)) {
+        ssAtol <- object$meta$ssAtol
+        .minfo(paste0("using NONMEM specified ssAtol=", ssAtol))
+      } else if (!is.null(object$ssAtol)) {
+        ssAtol <- object$ssAtol
+        .minfo(paste0("using NONMEM specified ssAtol=", ssAtol))
+      }
     }
     .cls <- class(object)
     class(object) <- .cls[-which(.cls == "nonmem2rx")]
@@ -229,10 +265,13 @@
                     .desc <- setNames(.meth[i], NULL)
                     .ret <- c("",
                               sprintf("rxUiGet.%s <- function(x, ...) {", .name),
+                              "  .meta <- new.env(parent=emptyenv())",
+                              "  if (exists(\"meta\", envir=x[[1]])) .meta <- get(\"meta\", envir=x[[1]])",
+                              sprintf("  if (exists(\"%s\", envir=.meta)) return(get(\"%s\", envir=.meta))", .name, .name),
                               sprintf("  if (!exists(\"%s\", envir=x[[1]])) return(NULL)", .name),
                               sprintf("  get(\"%s\", envir=x[[1]])", .name),
                               "}",
-                              sprintf("attr(rxUiGet.%s, \"desc=\") <- %s", .name, deparse1(.desc)))
+                              sprintf("attr(rxUiGet.%s, \"desc\") <- %s", .name, deparse1(.desc)))
                     .ret <- paste(.ret, collapse="\n")
                   }, character(1), USE.NAMES=TRUE),
                   ".rxUiGetRegister <- function() {",

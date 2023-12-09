@@ -125,7 +125,7 @@
     .lhs <- .lhs[-.w]
     .rhs <- .rhs[-.w]
   }
-  .ret <- eval(parse(text=paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))
+  .ret <- eval(str2lang(paste0("rxode2::rxRename(rxui, ", paste(paste(.lhs,"=",.rhs, sep=""), collapse=", "), ")")))
   .minfo("done")
   .ret
 }
@@ -475,6 +475,11 @@
 #'   should be `FALSE`. Otherwise use `TRUE` if you are using a newer
 #'   rxode2.
 #'
+#' @param keep is a character vector of imported model items that are
+#'   kept in the model itself; The defaults is "sigma" which keeps the
+#'   sigma matrix in the model itself.  You can add rxode2 solving
+#'   options that are imported from NONMEM to keep in the model.
+#'
 #' @details
 #'
 #' Since some of these options you may want to set per project, the
@@ -514,7 +519,7 @@
 #' # You can run a translation without validating the input.  This is
 #' # a faster way to import a dataset (and allows the CRAN machines to
 #' # run a quick example)
-#' 
+#'
 #' mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res",
 #'                 save=FALSE, validate=FALSE, compress=FALSE)
 #'
@@ -580,7 +585,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       saveTime=getOption("nonmem2rx.saveTime", 15),
                       overwrite=getOption("nonmem2rx.overwrite", TRUE),
                       load=getOption("nonmem2rx.load", TRUE),
-                      compress=getOption("nonmem2rx.compress", TRUE)) {
+                      compress=getOption("nonmem2rx.compress", TRUE),
+                      keep=getOption("nonmem2rx.keep", c("dfSub", "dfObs", "thetaMat", "sigma"))) {
   .pt <- proc.time()
   .ret <- .collectWarn({
     checkmate::assertFileExists(file)
@@ -596,6 +602,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     checkmate::assertLogical(load, len=1, any.missing = FALSE)
     checkmate::assertLogical(compress, len=1, any.missing = FALSE)
     checkmate::assertNumeric(saveTime, len=1, lower=1.0)
+    checkmate::assertSubset(keep,
+                            c("dfSub", "dfObs", "thetaMat", "sigma", "atol",
+                              "rtol", "ssRtol", "ssAtol"))
     .saveWithTime <- FALSE
     if (is.logical(save)) {
       checkmate::assertLogical(save, len=1, any.missing=TRUE)
@@ -613,7 +622,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                    rename, tolowerLhs, thetaNames, etaNames, cmtNames, updateFinal,
                                    determineError, validate, nonmemData, strictLst, unintFixed,
                                    extended, nLinesPro, delta, usePhi, useExt, useCov, useXml,
-                                   useLst, mod, cov, phi, lst, xml, ext, scanLines))
+                                   useLst, mod, cov, phi, lst, xml, ext, scanLines, keep))
     if (!is.null(save)) {
       if (load && overwrite) {
         if (utils::file_test("-nt", file, save)) {
@@ -897,12 +906,31 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx$nonmemData <- .nonmemData
       .rx$sticky <- "nonmemData"
     }
-    .rx$atol <- .nonmem2rx$atol
-    .rx$rtol <- .nonmem2rx$rtol
-    .rx$ssAtol <- .nonmem2rx$ssAtol
-    .rx$ssRtol <- .nonmem2rx$ssRtol
+    if ("atol" %in% keep) {
+      .rx$meta$atol <- .nonmem2rx$atol
+    } else {
+      .rx$atol <- .nonmem2rx$atol
+      .rx$sticky <- c(.rx$sticky, "atol")
+    }
+    if ("rtol" %in% keep) {
+      .rx$meta$rtol <- .nonmem2rx$rtol
+    } else {
+      .rx$rtol <- .nonmem2rx$rtol
+      .rx$sticky <- c(.rx$sticky, "rtol")
+    }
+    if ("ssAtol" %in% keep) {
+      .rx$meta$ssAtol <- .nonmem2rx$ssAtol
+    } else {
+      .rx$ssAtol <- .nonmem2rx$ssAtol
+      .rx$sticky <- c(.rx$sticky, "ssAtol")
+    }
+    if ("ssRtol" %in% keep) {
+      .rx$meta$ssRtol <- .nonmem2rx$ssRtol
+    } else {
+      .rx$ssRtol <- .nonmem2rx$ssRtol
+      .rx$sticky <- c(.rx$sticky, "ssRtol")
+    }
     .rx$etaData <- .etaData
-    .rx$sticky <- c(.rx$sticky, "atol", "rtol", "ssAtol", "ssRtol")
     .rx$ipredData <- .ipredData
     .rx$predData <- .predData
     .rx$sigmaNames <- dimnames(.sigma)[[1]]
@@ -914,17 +942,33 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .rx$meta$description <- .nonmem2rx$modelDesc
     }
     if (!is.null(.sigma)) {
-      .rx$sigma <- .sigma
-      .rx$sticky <- c(.rx$sticky, "sigma")
+      if ("sigma" %in% keep) {
+        .rx$meta$sigma <- .sigma
+      } else {
+        .rx$sigma <- .sigma
+        .rx$sticky <- c(.rx$sticky, "sigma")
+      }
     }
     if (!is.null(.cov)) {
-      .rx$thetaMat <- .cov
+      if ("thetaMat" %in% keep) {
+        .rx$meta$thetaMat <- .cov
+      } else {
+        .rx$thetaMat <- .cov
+      }
     }
     if (inherits(.lstInfo$nsub, "numeric")) {
-      .rx$dfSub <- .lstInfo$nsub
+      if ("dfSub" %in% keep) {
+        .rx$meta$dfSub <- .lstInfo$nsub
+      } else {
+        .rx$dfSub <- .lstInfo$nsub
+      }
     }
     if (inherits(.lstInfo$nobs, "numeric")) {
-      .rx$dfObs <- .lstInfo$nobs
+      if ("dfObs" %in% keep) {
+        .rx$meta$dfObs <- .lstInfo$nobs
+      } else {
+        .rx$dfObs <- .lstInfo$nobs
+      }
     }
     .rx$digest <- .digest
     .rx

@@ -38,7 +38,8 @@ nonmem2rx(
   saveTime = getOption("nonmem2rx.saveTime", 15),
   overwrite = getOption("nonmem2rx.overwrite", TRUE),
   load = getOption("nonmem2rx.load", TRUE),
-  compress = getOption("nonmem2rx.compress", TRUE)
+  compress = getOption("nonmem2rx.compress", TRUE),
+  keep = getOption("nonmem2rx.keep", c("dfSub", "dfObs", "thetaMat", "sigma"))
 )
 }
 \arguments{
@@ -180,6 +181,11 @@ compressed UI.  If you are using this for simulation with old
 versions of rxode2, the compressed ui is not supported, so this
 should be \code{FALSE}. Otherwise use \code{TRUE} if you are using a newer
 rxode2.}
+
+\item{keep}{is a character vector of imported model items that are
+kept in the model itself; The defaults is "sigma" which keeps the
+sigma matrix in the model itself.  You can add rxode2 solving
+options that are imported from NONMEM to keep in the model.}
 }
 \value{
 rxode2 function

@@ -3,9 +3,6 @@
   if (requireNamespace("nlme", quietly=TRUE)) {
     rxode2::.s3register("nlme::getData", "nonmem2rx")
   }
-  if (requireNamespace("dplyr", quietly=TRUE)) {
-    rxode2::.s3register("dplyr::rename", "nonmem2rx")
-  }
   rxode2::.s3register("ggplot2::autoplot", "nonmem2rx")
   rxode2::.s3register("base::plot", "nonmem2rx")
   .rxUiGetRegister()

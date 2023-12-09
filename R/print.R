@@ -20,7 +20,7 @@ print.nonmem2rx <- function(x, ...) {
     cli::cli_h2("nonmem2rx extra properties:")
   }), "\n")
   if (is.null(x$predDf)) {
-    cat(paste0("\n", crayon::bold("Sigma"), " (", crayon::bold$blue("$sigma"), 
+    cat(paste0("\n", crayon::bold("Sigma"), " (", crayon::bold$blue("$sigma"),
                "):"), "\n")
     print(x$sigma)
     cat("\n")

@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-### Creating a nlmixr2 compatible model 
+### Creating a nlmixr2 compatible model
 
 Depending on the model, not all the residual specifications are
 translated to the `nlmixr2` style residuals.  This means the model
@@ -30,7 +30,7 @@ cp ~ prop(prop.sd)
 ```
 
 Since the model when import has most of the translation done already,
-you can easily tweak the model to have this form. 
+you can easily tweak the model to have this form.
 
 Here is the same example where the residual errors are not
 automatically translated to the `nlmixr2` parameter style (in this
@@ -115,7 +115,7 @@ standard deviation estimate required by many estimation methods.
 
 Once you have a `rxode2()` model that:
 
-- Qualifies against the NONMEM model, 
+- Qualifies against the NONMEM model,
 
 - Has `nlmixr2` compatible residuals
 
@@ -123,6 +123,7 @@ You can then convert it to a `nlmixr2` fit object with `babelmixr2`:
 
 ```{r convertNlmixr2object}
 library(babelmixr2)
+
 fit <- as.nlmixr2(new)
 
 fit

@@ -31,7 +31,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
 
 In this step, you convert the model to `nlmixr2` by `as.nlmixr2(mod)`;
 You may need to do a [little manual work to get the residual
-specification to match between nlmixr2 and NONMEM](convert-nlmixr2.html). 
+specification to match between nlmixr2 and NONMEM](convert-nlmixr2.html).
 
 Once the residual specification is compatible with a nlmixr2 object, you can convert the model, `mod`, to
 a nlmixr2 fit object:
@@ -51,11 +51,12 @@ them on a single plot:
 ```{r vpc}
 
 library(ggplot2)
-p1 <- vpcPlot(fit, show=list(obs_dv=TRUE));
+p1 <- vpcPlot(fit, show=list(obs_dv=TRUE))
+
 p1 <- p1 + ylab("Concentrations") +
   rxode2::rxTheme() +
   xlab("Time (hr)") +
-  xgxr::xgx_scale_x_time_units("h", "h")
+  xgxr::xgx_scale_x_time_units("hour", "hour")
 
 p1a <- p1 + xgxr::xgx_scale_y_log10()
 
@@ -64,7 +65,7 @@ p2 <- vpcPlot(fit, pred_corr = TRUE, show=list(obs_dv=TRUE))
 p2 <- p2 + ylab("Prediction-Corrected Concentrations") +
   rxode2::rxTheme() +
   xlab("Time (hr)") +
-  xgxr::xgx_scale_x_time_units("h", "h")
+  xgxr::xgx_scale_x_time_units("hour", "hour")
 
 p2a <- p2 + xgxr::xgx_scale_y_log10()
 
