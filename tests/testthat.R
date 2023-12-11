@@ -8,5 +8,10 @@
 
 library(testthat)
 library(nonmem2rx)
+library(rxode2)
+setRxThreads(1L)
+library(data.table)
+setDTthreads(1L)
+
 
 test_check("nonmem2rx")
