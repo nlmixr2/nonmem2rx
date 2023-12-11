@@ -53,7 +53,6 @@ SEXP _nonmem2rx_setRecord(SEXP rec) {
   return R_NilValue;
 }
 
-
 extern D_ParserTables nonmem2rxAbbrevRec;
 
 char* gBuf;
@@ -212,7 +211,7 @@ int abbrecProcessDataParItem(const char* name, D_ParseNode *pn) {
   if (!strcmp("replace_data", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     abbrecVarType = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-    xpn = d_get_child(pn, 5); 
+    xpn = d_get_child(pn, 5);
     char *tmp = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     if (strcmp(abbrecVarType, tmp)) {
       sClear(&sbTransErr);
