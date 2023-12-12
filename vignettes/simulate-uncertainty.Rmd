@@ -12,6 +12,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(rxode2)
+setRxThreads(1L)
+library(data.table)
+setDTthreads(1L)
 ```
 
 This page shows a simple work-flow for directly simulating a different
@@ -66,7 +70,7 @@ s
 
 ## Step 4: Summarize and plot
 
-Since there is a bunch of data, a confidence band of the simulation with uncertainty would be helpful. 
+Since there is a bunch of data, a confidence band of the simulation with uncertainty would be helpful.
 
 One way to do that is to select the interesting components, create a confidence interval and then plot the confidence bands:
 

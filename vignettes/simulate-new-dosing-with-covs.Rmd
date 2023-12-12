@@ -12,6 +12,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(rxode2)
+setRxThreads(1L)
+library(data.table)
+setDTthreads(1L)
 ```
 
 ## Simulation with covariates or input parameters
@@ -31,7 +35,7 @@ In this case, we will use the Friberg myelosuppresion model originally
 contributed as an example by Yuan Xiong.
 
 With the simulated data in nlmixr2, babelmixr2, and some manual edits
-to simplify the model we run NONMEM 7.4.3.  
+to simplify the model we run NONMEM 7.4.3.
 
 Note in this case there are some PK parameters that are in the model
 that require some special handling to simulate with uncertainty or
@@ -108,7 +112,7 @@ plot(ci)
 ```
 
 This may be closer a constant theoretical dosing regimen you may wish
-to explore. 
+to explore.
 
 ## Option 3: simulate a larger study with a different condition (resampled PK parameters/covariates)
 

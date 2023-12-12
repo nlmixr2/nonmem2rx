@@ -12,6 +12,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(rxode2)
+setRxThreads(1L)
+library(data.table)
+setDTthreads(1L)
+
 ```
 
 The goal of `nonmem2rx` is to convert a NONMEM control stream to
@@ -39,11 +44,11 @@ control stream are:
 - The default NONMEM output extension; By default it is `.lst`.  You
   can set it to something else, like `.res`, using the following
   option: `options(nonmem2rx.lst=".res")`.
-  
+
 - Turn on [extended control
   stream](https://wfn.sourceforge.net/wfncs.htm#control_streams)
   support. You can turn it on by `options(nonmem2rx.extended=TRUE)`
-  
+
 You probably also want to change the name of parameters and
 compartments. The easiest way to name the parameters whatever you want
 is to pre-specify the names.  For example:
@@ -120,4 +125,3 @@ The import process steps are below:
 
 - Replaces the compartment names with the defined compartment names in
   the control stream (ie `COMP=(compartmenName)`)
-  

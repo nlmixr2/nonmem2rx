@@ -12,6 +12,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(rxode2)
+setRxThreads(1L)
+library(data.table)
+setDTthreads(1L)
 ```
 
 
@@ -37,12 +41,12 @@ generated outputs for the following items:
 - **Population Predictions:** this shows if the model translation is
   adequate to simulate general trends; This will validate structural
   model's population parameters coupled with the model structure.
-  
+
 - **Individual Predictions:** this shows if the model translation is
   able to replicate the same values over all the subjects within the
   modeling data-set.  This validates the model can reproduce the
-  between subject variability observed in the study. 
-  
+  between subject variability observed in the study.
+
 - **Individual Weighted Residuals:** this is one step further than the
   individual parameter validation, it couples the individual
   predictions, the observations and the residual specification to
@@ -50,8 +54,8 @@ generated outputs for the following items:
   the residual specification to create a nlmixr2-compatible
   model](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html), this step is important to make sure
   the residual specification is the same.
-  
-  
+
+
 **Note:** the only part that is not validated with these three metrics
 is the between subject covariance matrix, `omega`. We assume this is
 correct as long as it is read in correctly.

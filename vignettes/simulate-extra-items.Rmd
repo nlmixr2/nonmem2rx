@@ -12,6 +12,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(rxode2)
+setRxThreads(1L)
+library(data.table)
+setDTthreads(1L)
 ```
 
 This page shows a simple work-flow for directly simulating a different
