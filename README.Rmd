@@ -38,7 +38,7 @@ You can install the development version of nonmem2rx from
 install.packages('nonmem2rx', repos = c('https://nlmixr2.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
-When on CRAN, you can also get the CRAN version by:
+You can also get the CRAN version by:
 
 ``` r
 install.packages('nonmem2rx')
@@ -88,7 +88,7 @@ even try it in nlmixr2 instead)
 
 -	[Run nlmixr2’s covariance step when NONMEMs covariance step has failed](https://nlmixr2.github.io/nonmem2rx/articles/read-rounding.html#step-5-get-the-covariance-of-the-model) (in the linked example, there was no covariance step because rounding errors)
 
-    
+
 ## Simple example
 
 Once `nonmem2rx` has been loaded, you simply type the location of the
@@ -140,4 +140,3 @@ can test them yourself by:
 
 1. Downloading this repository
 2. Running the tests `devtools::test()`
-
