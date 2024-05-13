@@ -782,7 +782,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .in <-c(.mv$params, .mv$state, .mv$lhs)
       .w <- which(vapply(.r,
                          function(v) {
-                           return(v %in% .in)
+                           v %in% .in
                          }, logical(1), USE.NAMES=FALSE))
       if (length(.w) > 0) {
         .r <- .r[.w]
