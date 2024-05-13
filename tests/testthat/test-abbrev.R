@@ -315,4 +315,40 @@ test_that("test abbrev", {
   .ae("E0=pope0*EXP(etae0)", "E0 <- POPE0 * exp(ETAE0)", "E0")
 
 
+  .ifelse <- paste(c(" IF (PMAW.LT.40) THEN",
+                     "   K=0.33",
+                     " ELSE",
+                     "   IF (AGE.LT.1) THEN",
+                     "     K=0.45",
+                     "   ELSE",
+                     "     IF (M1F0.EQ.1.AND.AGE.GE.13) THEN",
+                     "       K=0.7",
+                     "     ELSE",
+                     "       K=0.55",
+                     "      ENDIF",
+                     "   ENDIF",
+                     " ENDIF"), collapse="\n")
+
+  .a <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
+    .clearNonmem2rx()
+    .Call(`_nonmem2rx_setRecord`, "$PRED")
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', abbrevLin, extended)
+    expect_equal(.nonmem2rx$model, eq)
+  }
+
+  .a(.ifelse,
+     c("if (PMAW < 40) {",
+       "K <- 0.33",
+       "} else {",
+       "if (AGE < 1) {",
+       "K <- 0.45",
+       "} else {",
+       "if (M1F0 == 1 && AGE >= 13) {",
+       "K <- 0.7",
+       "} else {",
+       "K <- 0.55",
+       "}",
+       "}",
+       "}"))
+
 })

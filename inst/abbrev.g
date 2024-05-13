@@ -88,11 +88,11 @@ if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate |
 
 
 ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
-elseif: ('ELSEIF' | 'ELSE' 'IF') '(' logical_or_expression ')' 'THEN';
+elseif: ('ELSEIF' | "ELSE +IF") '(' logical_or_expression ')' 'THEN';
 else: 'ELSE';
-endif: ('ENDIF' | 'END' 'IF');
+endif: ('ENDIF' | "END +IF");
 dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
-enddo: ('ENDDO' | 'END' 'DO');
+enddo: ('ENDDO' | "END +DO");
 
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
 ifcallsimeta: 'IF' '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';
