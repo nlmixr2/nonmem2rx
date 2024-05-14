@@ -1,5 +1,12 @@
 # nonmem2rx (development version)
 
+* When lines in the NONMEM input dataset start with `#` they are now
+  ignored.
+
+* When all IDs are zero (or na and zero), NONMEM assumes restarting
+  time gives different IDs; this is now reflected in NONMEM
+  translation of IDs.
+
 * With `linCmt()` parsing, expand the scope of conflicting parameters
   that will be renamed with an import.
 

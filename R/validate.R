@@ -142,6 +142,7 @@
         }
       }
       .wid <- which(tolower(names(.params)) == "id")
+      .wtime <- which(tolower(names(.params)) == "time")
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
         .widNm <- which(tolower(names(.nonmemData)) == "id")
@@ -160,7 +161,13 @@
         .params <- .params[,-.wid]
         .nonmemData2 <- .nonmemData
         # dummy id to match the .params
-        .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]))
+        if (length(.wtime) == 1 && is.numeric(.nonmemData2[, .wtime])) {
+          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
+                                                  .nonmemData2[, .wtime])
+        } else {
+          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]) &&
+                                                  as.double(seq_along(.nonmemData2[,.wid])))
+        }
       }
       if (.doIpred) {
         .minfo("solving ipred problem")

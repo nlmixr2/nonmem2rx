@@ -10,14 +10,15 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// fromNonmemToRxId
-IntegerVector fromNonmemToRxId(IntegerVector nonmemId);
-RcppExport SEXP _nonmem2rx_fromNonmemToRxId(SEXP nonmemIdSEXP) {
+// fromNonmemToRxId_
+IntegerVector fromNonmemToRxId_(IntegerVector nonmemId, NumericVector time);
+RcppExport SEXP _nonmem2rx_fromNonmemToRxId_(SEXP nonmemIdSEXP, SEXP timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< IntegerVector >::type nonmemId(nonmemIdSEXP);
-    rcpp_result_gen = Rcpp::wrap(fromNonmemToRxId(nonmemId));
+    Rcpp::traits::input_parameter< NumericVector >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(fromNonmemToRxId_(nonmemId, time));
     return rcpp_result_gen;
 END_RCPP
 }
