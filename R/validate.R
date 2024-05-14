@@ -92,6 +92,26 @@
   if (is.null(.rx$nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
   }
+  if (exists("atol", envir=.rx$meta)) {
+    .atol <- .rx$meta$atol
+  } else {
+    .atol <- .rx$atol
+  }
+  if (exists("rtol", envir=.rx$meta)) {
+    .rtol <- .rx$meta$rtol
+  } else {
+    .rtol <- .rx$rtol
+  }
+  if (exists("ssAtol", envir=.rx$meta)) {
+    .ssAtol <- .rx$meta$ssAtol
+  } else {
+    .ssAtol <- .rx$ssAtol
+  }
+  if (exists("ssRtol", envir=.rx$meta)) {
+    .ssRtol <- .rx$meta$ssRtol
+  } else {
+    .ssRtol <- .rx$ssRtol
+  }
   if (!is.null(.rx$nonmemData) && validate) {
     .nonmemData <- .rx$nonmemData
     .model <- .rx$simulationModelIwres
@@ -141,26 +161,6 @@
         .nonmemData2 <- .nonmemData
         # dummy id to match the .params
         .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]))
-      }
-      if (exists("atol", envir=.rx$meta)) {
-        .atol <- .rx$meta$atol
-      } else {
-        .atol <- .rx$atol
-      }
-      if (exists("rtol", envir=.rx$meta)) {
-        .rtol <- .rx$meta$rtol
-      } else {
-        .rtol <- .rx$rtol
-      }
-      if (exists("ssAtol", envir=.rx$meta)) {
-        .ssAtol <- .rx$meta$ssAtol
-      } else {
-        .ssAtol <- .rx$ssAtol
-      }
-      if (exists("ssRtol", envir=.rx$meta)) {
-        .ssRtol <- .rx$meta$ssRtol
-      } else {
-        .ssRtol <- .rx$ssRtol
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
