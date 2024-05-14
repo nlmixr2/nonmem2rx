@@ -80,14 +80,14 @@
           if (length(.w2) == 1) {
             names(.rep)[.w] <- paste0("V", .nonmem2rx$abbrevLin)
           } else if (length(.nonmem2rx$allVol) > 0) {
-            .nchar <- vapply(.nonmem2rx$allVol, function(i){
+            .nchar <- vapply(.nonmem2rx$allVol, function(i) {
               nchar(.nonmem2rx$allVol[i])
             }, integer(1), USE.NAMES=FALSE)
             .min <- min(.nchar)
             .w2 <- which(.nchar == .min)[1]
             names(.rep)[.w] <- .nonmem2rx$allVol[.w2]
           } else {
-           stop("can't figure out volume for linCmt() model", call.=FALSE) #nocov
+            stop("can't figure out volume for linCmt() model", call.=FALSE) #nocov
           }
         }
       }
@@ -104,7 +104,7 @@
     .up <- toupper(x)
     if (.up %in% names(.rep)) return(.rep[.up])
     if (grepl(.linCmtParReg, x, perl=TRUE)) {
-      return(paste0("rxm.", x))
+      paste0("rxm.", x)
     }
     x
   }, character(1), USE.NAMES=TRUE)
@@ -113,6 +113,12 @@
   .lhsOut <- .lhsOut[.w]
   .ret <- eval(parse(text=paste0("rxode2::rxRename(model,",paste(paste0(.lhsOut, "=", .lhsIn), collapse=", "),")")))
   .ret <- rxode2::rxUiDecompress(.ret)
+  .wvp <- which(grepl("^[Vv][Pp]", .nonmem2rx$allVol))
+  if (any(grepl("^[Vv][0-9]+$", .nonmem2rx$allVol)) && length(.wvp) > 0) {
+    .ret <- eval(str2lang(paste0("rxode2::rxRename(.ret,", paste(paste0("rxm.", .nonmem2rx$allVol[.wvp], "=", .nonmem2rx$allVol[.wvp]), collapse=", "), ")")))
+    .ret <- rxode2::rxUiDecompress(.ret)
+    .nonmem2rx$allVol <- paste0("rxm.", .nonmem2rx$allVol, "=", .nonmem2rx$allVol)
+  }
   .lstExpr <- .ret$lstExpr
   .w <- which(vapply(seq_along(.lstExpr), function(y) {
     x <- .lstExpr[[y]]
