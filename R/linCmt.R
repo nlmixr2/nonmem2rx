@@ -1,6 +1,6 @@
 
 # comes from rxDerived regexp
-.linCmtParReg <- "^(?:(?:(?:V|Q|VP|VT|CLD)[[:digit:]])|KA|VP|VT|CLD|V|VC|CL|VSS|K|KE|KEL|Q|VT|(?:K[[:digit:]][[:digit:]])|AOB|ALPHA|BETA|GAMMA|A|B|C)$"
+.linCmtParReg <- "^(?:(?:(?:V|Q|VP|VT|CLD)[[:digit:]])|KA|VP|VT|CLD|V|VC|CL|VSS|K|KE|KEL|Q|VT|(?:K[[:digit:]][[:digit:]])|AOB|ALPHA|BETA|GAMMA|A|B|C).*$"
 
 # translations to rxode2
 
@@ -97,28 +97,21 @@
   # specified and could be different
   .mv <- rxode2::rxModelVars(model)
   .lhs <- toupper(.mv$lhs)
-  .rest <- setdiff(.lhs, names(.rep))
-  .w <- which(.rest %in% toupper(.lhs))
-  .lhsIn <- .mv$lhs[.w]
+  .lhsIn <- .mv$lhs
   .lhsOut <- vapply(.lhsIn, function(x) {
     .up <- toupper(x)
     if (.up %in% names(.rep)) return(.rep[.up])
     if (grepl(.linCmtParReg, x, perl=TRUE)) {
-      paste0("rxm.", x)
+      return(paste0("rxm.", x))
     }
     x
   }, character(1), USE.NAMES=TRUE)
   .w <- which(.lhsIn != .lhsOut)
   .lhsIn <- .lhsIn[.w]
   .lhsOut <- .lhsOut[.w]
+
   .ret <- eval(parse(text=paste0("rxode2::rxRename(model,",paste(paste0(.lhsOut, "=", .lhsIn), collapse=", "),")")))
   .ret <- rxode2::rxUiDecompress(.ret)
-  .wvp <- which(grepl("^[Vv][Pp]", .nonmem2rx$allVol))
-  if (any(grepl("^[Vv][0-9]+$", .nonmem2rx$allVol)) && length(.wvp) > 0) {
-    .ret <- eval(str2lang(paste0("rxode2::rxRename(.ret,", paste(paste0("rxm.", .nonmem2rx$allVol[.wvp], "=", .nonmem2rx$allVol[.wvp]), collapse=", "), ")")))
-    .ret <- rxode2::rxUiDecompress(.ret)
-    .nonmem2rx$allVol <- paste0("rxm.", .nonmem2rx$allVol, "=", .nonmem2rx$allVol)
-  }
   .lstExpr <- .ret$lstExpr
   .w <- which(vapply(seq_along(.lstExpr), function(y) {
     x <- .lstExpr[[y]]
@@ -155,5 +148,13 @@
   .fun0 <- as.call(c(list(quote(`{`)), .ini, .model))
   .fun <- function() {}
   body(.fun) <- .fun0
-  .fun()
+  .ret <- try(.fun(), silent=TRUE)
+  if (inherits(.ret, "try-error")) {
+    message(paste(deparse(.fun), collapse="\n"))
+    stop("error parsing linCmt() translation:\n",
+         attr(.ret, "condition")$message,
+         "\ntranslation printed out so far",
+         call.=FALSE)
+  }
+  .ret
 }

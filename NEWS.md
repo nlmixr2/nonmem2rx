@@ -1,5 +1,14 @@
 # nonmem2rx (development version)
 
+* With `linCmt()` parsing, expand the scope of conflicting parameters
+  that will be renamed with an import.
+
+* Added better parsing for `ELSE` where there is another `IF` on the
+  next line.
+
+* Prefixed conflicting `VP` with `rxm.` when `linCmt()` models to be
+  more accommodating when importing linear compartment models.
+
 # nonmem2rx 0.1.3
 
 * Added explicit requirement for rxode2 2.0.13
