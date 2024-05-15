@@ -117,6 +117,11 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
+  for (.v in names(.data)) {
+    .data[[.v]] <- suppressWarnings(as.numeric(.data[[.v]]))
+    .w <- which(is.na(.data[[.v]]))
+    .data[[.v]][.w] <- 0
+  }
   .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it

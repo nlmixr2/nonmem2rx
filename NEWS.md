@@ -1,9 +1,11 @@
 # nonmem2rx (development version)
 
+* On data import, `NA` values are replaced with zero
+
 * When lines in the NONMEM input dataset start with `#` they are now
   ignored.
 
-* When all IDs are zero (or na and zero), NONMEM assumes restarting
+* When all IDs are zero, NONMEM assumes restarting
   time gives different IDs; this is now reflected in NONMEM
   translation of IDs.
 
