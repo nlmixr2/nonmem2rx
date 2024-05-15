@@ -165,7 +165,7 @@
           .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
                                                   .nonmemData2[, .wtime])
         } else {
-          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]) &&
+          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
                                                   as.double(seq_along(.nonmemData2[,.wid])))
         }
       }
