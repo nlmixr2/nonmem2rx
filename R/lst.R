@@ -60,7 +60,7 @@
       return(NULL)
     }
   }
-  return(.nmlst$section)
+  .nmlst$section
 }
 
 .nmlstVersion <- function(line) {
@@ -232,7 +232,7 @@
     }
     return(NULL)
   }
-  return(TRUE)
+  TRUE
 }
 
 
@@ -259,7 +259,7 @@
     }
     return(NULL)
   }
-  return(TRUE)
+  TRUE
 }
 
 .prepareEst <- function() {
@@ -371,9 +371,7 @@
   if (is.null(.nmlstObj(line))) return(NULL)
   if (is.null(.nmlstEst(line))) return(NULL)
   if (is.null(.nmlstCov(line))) return(NULL)
-
-  return(NULL)
-
+  NULL
 }
 
 .resetLst <- function(strictLst) {

@@ -48,5 +48,5 @@ nmcov <- function (file, ...) {
   dn <- dimnames(dt1)
   dn[[1]] <- dn[[2]]
   dimnames(dt1) <- dn
-  return(dt1)
+  dt1
 }

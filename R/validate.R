@@ -25,7 +25,7 @@
     .minfo(paste0("observation only ETAs are ignored: ", paste(.d, collapse=", ")))
     return(.ret[.ret$ID %in% .id,])
   }
-  return(etaData)
+  etaData
 }
 
 #' Fix NONMEM ties
@@ -150,7 +150,7 @@
           .idNm <- unique(.nonmemData[,.widNm])
           .params <- do.call("rbind",
                              lapply(.idNm, function(id) {
-                               return(.params[.params[,.wid] == id,])
+                               .params[.params[,.wid] == id,]
                              }))
           if (!all(.idNm == .params[,.wid])) {
             .minfo("id values between input and output do not match, skipping IPRED check")
@@ -257,11 +257,11 @@
       .params <- c(.theta,
                    vapply(dimnames(.rx$omega)[[1]],
                           function(x) {
-                            return(0.0)
+                            0.0
                           }, double(1), USE.NAMES = TRUE),
                    vapply(.rx$sigmaNames,
                           function(x) {
-                            return(0.0)
+                            0.0
                           }, double(1), USE.NAMES = TRUE))
       if (!is.null(.rx$predDf)) {
         .params <- c(.params, setNames(rep(0, length(.rx$predDf$cond)),
