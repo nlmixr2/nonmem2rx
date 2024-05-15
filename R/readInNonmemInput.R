@@ -25,7 +25,7 @@
   if (.ext == "csv" && file.exists(.file)) {
     .minfo(paste0("read in nonmem input data (for model validation): ", .file))
     if (!is.null(.nonmem2rx$dataIgnore1)) {
-      .lines <- readLines(.file,n=scanLines)
+      .lines <- readLines(.file,n=scanLines, encoding="latin1")
       if (.nonmem2rx$dataIgnore1 == "@") {
         .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
         .skip <- 0L

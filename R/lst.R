@@ -421,7 +421,7 @@ nmlst <- function(file, strictLst=FALSE) {
   # run time
   # nmtran message
   if (length(file) == 1L) {
-    .lst <- suppressWarnings(readLines(file))
+    .lst <- suppressWarnings(readLines(file, encoding="latin1"))
   } else {
     .lst <-file
   }

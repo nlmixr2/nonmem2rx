@@ -1,5 +1,8 @@
 # nonmem2rx (development version)
 
+* Read all NONMEM files using latin1 encoding to allow single byte
+  parser to work
+
 * On data import, `NA` values are replaced with zero
 
 * When lines in the NONMEM input dataset start with `#` they are now
