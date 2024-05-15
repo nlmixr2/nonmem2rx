@@ -122,7 +122,7 @@ equality_expression0 : equality_expression |
 equality_expression : relational_expression
         ((neq_expression_nm | eq_expression_nm ) relational_expression)* ;
 
-eq_expression_nm: '.eq.' | '.EQ.' | '==';
+eq_expression_nm: '.eq.' | '.EQ.' | '==' | '.EQN.' | '.eqn.';
 neq_expression_nm: '.ne.' | '.NE.';
 
 relational_expression : additive_expression

@@ -28,6 +28,9 @@ test_that("test data", {
   .i("PK.csv IGNORE=@ IGNORE=(PKFL.EQ.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
      list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
 
+  .i("PK.csv IGNORE=@ IGNORE=(PKFL.EQN.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
+     list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
+
   .i("PK.csv IGNORE='@' IGNORE=(PKFL.EQ.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
      list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
 
