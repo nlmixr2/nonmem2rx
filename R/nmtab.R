@@ -41,5 +41,5 @@ nmtab <- function (file, ...)
   cnames <- colnames(dt1)
   dt1[, `:=`((cnames), lapply(.SD, as.numeric))]
   dt1 <- as.data.frame(dt1)
-  return(dt1)
+  dt1
 }
