@@ -29,6 +29,7 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        cache-version: 2
         with:
           extra-packages: |
             any::pkgdown
