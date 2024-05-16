@@ -146,7 +146,7 @@ nminfo <- function(file,
     if (!file.exists(.lstFile)) {
       if (file.exists(file)) {
         if (verbose) .minfo("seeing if file argument is actually lst file")
-        .fileLines <- suppressWarnings(readLines(file))
+        .fileLines <- suppressWarnings(readLines(file, encoding="latin1"))
         .w <- which(regexpr("^( *NM-TRAN +MESSAGES *| *1NONLINEAR *MIXED|License +Registered +to: +)", .fileLines)!=-1)
         if (length(.w) == 0L) {
           .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
@@ -173,7 +173,7 @@ nminfo <- function(file,
         .nmlst$section <- .nmlst.tere
         .nmlst$tereOnly <- TRUE
         if (length(.lstFile) == 1L) {
-          .l <- suppressWarnings(readLines(.lstFile))
+          .l <- suppressWarnings(readLines(.lstFile, encoding="latin1"))
         } else {
           .l <- .lstFile
         }
@@ -220,7 +220,7 @@ nminfo <- function(file,
     # lonely control stream?
     if (file.exists(file)) {
       if (verbose) .minfo("is file actually control stream")
-      .fileLines <- suppressWarnings(readLines(file))
+      .fileLines <- suppressWarnings(readLines(file, encoding="latin1"))
       .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
       if (length(.wpro) != 0L) {
         .control <- .fileLines[seq(.wpro[1], length(.fileLines))]
@@ -239,7 +239,7 @@ nminfo <- function(file,
     .ctl <- paste0(.base, mod)
     if (verbose) .minfo("looking for control stream")
     if (file.exists(.ctl)) {
-      .fileLines <- suppressWarnings(readLines(file))
+      .fileLines <- suppressWarnings(readLines(file, encoding="latin1"))
       .wpro <- which(regexpr("^ *[$][Pp][Rr][Oo]", .fileLines) != -1)
       if (length(.wpro) != 0L) {
         .control <- .fileLines[seq(.wpro[1], length(.fileLines))]

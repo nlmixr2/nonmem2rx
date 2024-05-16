@@ -8,7 +8,7 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
-SEXP _nonmem2rx_fromNonmemToRxId(SEXP);
+SEXP _nonmem2rx_fromNonmemToRxId_(SEXP, SEXP);
 SEXP _nonmem2rx_trans_theta(SEXP in, SEXP unintFix);
 SEXP _nonmem2rx_thetanum_reset(void);
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix, SEXP unintFix);
@@ -30,7 +30,7 @@ SEXP _nonmem2rx_fixNonmemTies(SEXP idS, SEXP timeS, SEXP deltaS);
 SEXP _nonmem2rx_setRecord(SEXP rec);
 void R_init_nonmem2rx(DllInfo *info) {
   R_CallMethodDef callMethods[]  = {
-    {"_nonmem2rx_fromNonmemToRxId", (DL_FUNC) &_nonmem2rx_fromNonmemToRxId, 1},
+    {"_nonmem2rx_fromNonmemToRxId_", (DL_FUNC) &_nonmem2rx_fromNonmemToRxId_, 2},
     {"_nonmem2rx_setRecord", (DL_FUNC) &_nonmem2rx_setRecord, 1},
     {"_nonmem2rx_fixNonmemTies", (DL_FUNC) &_nonmem2rx_fixNonmemTies, 3},
     {"_nonmem2rx_r_parseFree", (DL_FUNC) &_nonmem2rx_r_parseFree, 0},
@@ -62,4 +62,3 @@ void R_init_nonmem2rx(DllInfo *info) {
 void R_unload_nonmem2rx(DllInfo *info) {
   nonmem2rx_full_parseFree(1);
 }
-

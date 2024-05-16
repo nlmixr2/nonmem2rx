@@ -35,7 +35,7 @@ logic_compare: eq_expression_nm
     | ge_expression_nm
     | le_expression_nm;
 
-eq_expression_nm: '.eq.' | '.EQ.' | '==' | '=';
+eq_expression_nm: '.eq.' | '.EQ.' | '==' | '=' | '.eqn.' | '.EQN.';
 neq_expression_nm: '.ne.' | '.NE.';
 lt_expression_nm: '<' | '.lt.' | '.LT.';
 gt_expression_nm: '>' | '.gt.' | '.GT.';

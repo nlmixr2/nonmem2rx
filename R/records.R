@@ -174,7 +174,10 @@
   .clearRecordEnv()
   .minfo("splitting control stream by records")
   .recs <- strsplit(ctl, "(^|\\n) *[$]")[[1]]
-
+  if (length(.recs) == 1L && is.na(.recs)) {
+    stop("problem splitting control stream by records",
+         call.=FALSE)
+  }
   .addRec("aaa", .recs[1])
   lapply(.recs[-1], function(r) {
     .m <- regexpr("^ *[A-Za-z]+", r)

@@ -25,7 +25,7 @@
     .minfo(paste0("observation only ETAs are ignored: ", paste(.d, collapse=", ")))
     return(.ret[.ret$ID %in% .id,])
   }
-  return(etaData)
+  etaData
 }
 
 #' Fix NONMEM ties
@@ -92,6 +92,26 @@
   if (is.null(.rx$nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
   }
+  if (exists("atol", envir=.rx$meta)) {
+    .atol <- .rx$meta$atol
+  } else {
+    .atol <- .rx$atol
+  }
+  if (exists("rtol", envir=.rx$meta)) {
+    .rtol <- .rx$meta$rtol
+  } else {
+    .rtol <- .rx$rtol
+  }
+  if (exists("ssAtol", envir=.rx$meta)) {
+    .ssAtol <- .rx$meta$ssAtol
+  } else {
+    .ssAtol <- .rx$ssAtol
+  }
+  if (exists("ssRtol", envir=.rx$meta)) {
+    .ssRtol <- .rx$meta$ssRtol
+  } else {
+    .ssRtol <- .rx$ssRtol
+  }
   if (!is.null(.rx$nonmemData) && validate) {
     .nonmemData <- .rx$nonmemData
     .model <- .rx$simulationModelIwres
@@ -122,6 +142,7 @@
         }
       }
       .wid <- which(tolower(names(.params)) == "id")
+      .wtime <- which(tolower(names(.params)) == "time")
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
         .widNm <- which(tolower(names(.nonmemData)) == "id")
@@ -129,7 +150,7 @@
           .idNm <- unique(.nonmemData[,.widNm])
           .params <- do.call("rbind",
                              lapply(.idNm, function(id) {
-                               return(.params[.params[,.wid] == id,])
+                               .params[.params[,.wid] == id,]
                              }))
           if (!all(.idNm == .params[,.wid])) {
             .minfo("id values between input and output do not match, skipping IPRED check")
@@ -140,27 +161,13 @@
         .params <- .params[,-.wid]
         .nonmemData2 <- .nonmemData
         # dummy id to match the .params
-        .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]))
-      }
-      if (exists("atol", envir=.rx$meta)) {
-        .atol <- .rx$meta$atol
-      } else {
-        .atol <- .rx$atol
-      }
-      if (exists("rtol", envir=.rx$meta)) {
-        .rtol <- .rx$meta$rtol
-      } else {
-        .rtol <- .rx$rtol
-      }
-      if (exists("ssAtol", envir=.rx$meta)) {
-        .ssAtol <- .rx$meta$ssAtol
-      } else {
-        .ssAtol <- .rx$ssAtol
-      }
-      if (exists("ssRtol", envir=.rx$meta)) {
-        .ssRtol <- .rx$meta$ssRtol
-      } else {
-        .ssRtol <- .rx$ssRtol
+        if (length(.wtime) == 1 && is.numeric(.nonmemData2[, .wtime])) {
+          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
+                                                  .nonmemData2[, .wtime])
+        } else {
+          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
+                                                  as.double(seq_along(.nonmemData2[,.wid])))
+        }
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
@@ -250,11 +257,11 @@
       .params <- c(.theta,
                    vapply(dimnames(.rx$omega)[[1]],
                           function(x) {
-                            return(0.0)
+                            0.0
                           }, double(1), USE.NAMES = TRUE),
                    vapply(.rx$sigmaNames,
                           function(x) {
-                            return(0.0)
+                            0.0
                           }, double(1), USE.NAMES = TRUE))
       if (!is.null(.rx$predDf)) {
         .params <- c(.params, setNames(rep(0, length(.rx$predDf$cond)),

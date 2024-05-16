@@ -136,7 +136,7 @@ nmxmlCov <- function(xml, xmlout, tag="//nm:covariance") {
               'xsi:schemaLocation="http://namespaces.oreilly.com/xmlnut/address output.xsd"',
               'xmlns:nm="http://namespaces.oreilly.com/xmlnut/address"',
               '>',
-              readLines(xmlout),
+              readLines(xmlout, encoding="latin1"),
               "</nm:output>")
   writeLines(.lines, xmlout)
   message("written to xml output '", xmlout, "'")

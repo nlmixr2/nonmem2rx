@@ -1,7 +1,7 @@
 #' Read in data frame nonmem input file
 #'
 #' This requires the parsing environment setup
-#'  
+#'
 #' @param file this is the file name of the control stream
 #' @param inputData is a flag to use a different input data than
 #'   `file`.  This is the user-specified input data.
@@ -25,7 +25,7 @@
   if (.ext == "csv" && file.exists(.file)) {
     .minfo(paste0("read in nonmem input data (for model validation): ", .file))
     if (!is.null(.nonmem2rx$dataIgnore1)) {
-      .lines <- readLines(.file,n=scanLines)
+      .lines <- readLines(.file,n=scanLines, encoding="latin1")
       if (.nonmem2rx$dataIgnore1 == "@") {
         .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
         .skip <- 0L
@@ -45,8 +45,10 @@
       }
     } else {
       .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE)
+      .w <- which(regexpr("^[#]", .data[,1]) != -1)
+      if (length(.w) > 0) .data <- .data[-.w, ]
     }
-    
+
     .minfo("applying names specified by $INPUT")
     # need to apply input names
     # 1. Only work with columns specified in $input
@@ -118,7 +120,7 @@
   .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it
-#'  
+#'
 #' @param file nonmem control stream file name
 #' @inheritParams nonmem2rx
 #' @return dataset that has nonmem ipred data for validation
@@ -126,7 +128,7 @@
 #' @author Matthew L. Fidler
 .readInIpredFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
-    .dir <- dirname(file)    
+    .dir <- dirname(file)
   } else {
     .dir <- nonmemOutputDir
   }
@@ -162,8 +164,8 @@
   .ret
 }
 #'  Get and normalize path (if exists or exists in a case insensitive way)
-#'  
-#' @param path path to normalize 
+#'
+#' @param path path to normalize
 #' @return normalized case sensitive path
 #' @noRd
 #' @author Matthew L. Fidler
@@ -178,14 +180,14 @@
 }
 
 #' Read in the ipred data from nonmem output
-#'  
+#'
 #' @param file nonmem control stream name
 #' @return pred data file or null if it doesn't exist or isn't available
 #' @noRd
 #' @author Matthew L. Fidler
 .readInPredFromTables <- function(file, nonmemOutputDir=NULL, rename=NULL) {
   if (is.null(nonmemOutputDir)) {
-    .dir <- dirname(file)    
+    .dir <- dirname(file)
   } else {
     .dir <- nonmemOutputDir
   }
@@ -219,7 +221,7 @@
 }
 
 #' Read in the etas from the nonmem dataest
-#'  
+#'
 #' @param file control stream name
 #' @param nonmemData represents the input nonmem data
 #' @param rxModel represents the classic `rxode2` simulation model
@@ -230,7 +232,7 @@
 .readInEtasFromTables <- function(file, nonmemData, rxModel, nonmemOutputDir=NULL, rename=NULL,
                                   digits=0L) {
   if (is.null(nonmemOutputDir)) {
-    .dir <- dirname(file)    
+    .dir <- dirname(file)
   } else {
     .dir <- nonmemOutputDir
   }

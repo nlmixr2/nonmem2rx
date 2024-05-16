@@ -744,7 +744,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                   .advan5odes(),
                    "\n})",
                    "}")
-    .fun <- eval(parse(text=.txt))
+    .fun <- try(eval(parse(text=.txt)), silent=TRUE)
+    if (inherits(.fun, "try-error")) {
+      message(.txt)
+      stop("error translating NONMEM, model translation so far echoed above", call.=FALSE)
+    }
     .rx <- .fun()
     .rx <- .getLinCmtModel(.rx, advan=.nonmem2rx$advan, trans=.nonmem2rx$trans)
     .update <- FALSE
@@ -778,7 +782,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .in <-c(.mv$params, .mv$state, .mv$lhs)
       .w <- which(vapply(.r,
                          function(v) {
-                           return(v %in% .in)
+                           v %in% .in
                          }, logical(1), USE.NAMES=FALSE))
       if (length(.w) > 0) {
         .r <- .r[.w]

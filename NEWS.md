@@ -1,3 +1,24 @@
+# nonmem2rx (development version)
+
+* Read all NONMEM files using latin1 encoding to allow single byte
+  parser to work
+
+* When lines in the NONMEM input dataset start with `#` they are now
+  ignored.
+
+* When all IDs are zero, NONMEM assumes restarting
+  time gives different IDs; this is now reflected in NONMEM
+  translation of IDs.
+
+* With `linCmt()` parsing, expand the scope of conflicting parameters
+  that will be renamed with an import.
+
+* Added better parsing for `ELSE` where there is another `IF` on the
+  next line.
+
+* Prefixed conflicting `VP` with `rxm.` when `linCmt()` models to be
+  more accommodating when importing linear compartment models.
+
 # nonmem2rx 0.1.3
 
 * Added explicit requirement for rxode2 2.0.13
