@@ -37,5 +37,13 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) {
                              })
                            })
 
+  withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,
+                           nonmem2rx.extended=FALSE), {
+                             rx <- nonmem2rx(system.file("mods/bauer_2019_cptpsp_tutorial_2/supp2/504_nuts.ctl",
+                                                         package="nonmem2rx"))
+
+                             expect_true(dim(rx$omega)[1] == 2)
+                           })
+
 
 }
