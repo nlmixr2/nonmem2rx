@@ -1,5 +1,7 @@
 # nonmem2rx (development version)
 
+* Omega and Sigma prior estimates are currently ignored
+
 * Read all NONMEM files using latin1 encoding to allow single byte
   parser to work
 
