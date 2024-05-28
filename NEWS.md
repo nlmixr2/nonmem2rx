@@ -1,4 +1,4 @@
-# nonmem2rx (development version)
+# nonmem2rx 0.1.4
 
 * Omega and Sigma prior estimates are currently ignored
 
