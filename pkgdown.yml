@@ -10,8 +10,8 @@ articles:
   read-rounding: read-rounding.html
   rxode2-validate: rxode2-validate.html
   simulate-extra-items: simulate-extra-items.html
-  simulate-new-dosing-with-covs: simulate-new-dosing-with-covs.html
   simulate-new-dosing: simulate-new-dosing.html
   simulate-uncertainty: simulate-uncertainty.html
-last_built: 2024-05-29T14:28Z
+  simulate-with-covs: simulate-with-covs.html
+last_built: 2024-05-29T22:07Z
 

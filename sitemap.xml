@@ -31,13 +31,13 @@
     <loc>/articles/simulate-extra-items.html</loc>
   </url>
   <url>
-    <loc>/articles/simulate-new-dosing-with-covs.html</loc>
-  </url>
-  <url>
     <loc>/articles/simulate-new-dosing.html</loc>
   </url>
   <url>
     <loc>/articles/simulate-uncertainty.html</loc>
+  </url>
+  <url>
+    <loc>/articles/simulate-with-covs.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>

@@ -100,7 +100,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="nonmem2rx-014">nonmem2rx 0.1.4<a class="anchor" aria-label="anchor" href="#nonmem2rx-014"></a></h2>
-<ul><li><p>Omega and Sigma prior estimates are currently ignored</p></li>
+<ul><li><p>When reading NONMEM results from xml will try <code>nm:</code> prefixed tags and non-<code>nm:</code> prefixed tags.</p></li>
+<li><p>Omega and Sigma prior estimates are currently ignored (theta priors were already ignored)</p></li>
+<li><p>Improve reading in <code>theta</code> values from the <code>xml</code></p></li>
 <li><p>Read all NONMEM files using latin1 encoding to allow single byte parser to work</p></li>
 <li><p>When lines in the NONMEM input dataset start with <code>#</code> they are now ignored.</p></li>
 <li><p>When all IDs are zero, NONMEM assumes restarting time gives different IDs; this is now reflected in NONMEM translation of IDs.</p></li>
