@@ -100,7 +100,12 @@ nmxml <- function(xml) {
 
   .theta <-  paste0("//", .prefix, "theta")
   .val <- paste0("//", .prefix, "val")
-  .theta <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,.theta), .val))
+  .node <- xml2::xml_find_first(.xml,.theta)
+  .children <- xml2::xml_children(.node)
+  .theta <- vapply(seq_along(.children),
+                   function(i) {
+                     xml2::xml_double(.children[i])
+                   }, numeric(1), USE.NAMES = FALSE)
   if (length(.theta) > 0) {
     names(.theta) <- paste0("theta", seq_along(.theta))
   } else {
@@ -134,7 +139,6 @@ nmxml <- function(xml) {
   .cov <- paste0("//", .prefix, "covariance")
   .cov <- .nmxmlGetCov(xml2::xml_find_first(.xml, .cov),
                        prefix=.prefix)
-
   list(theta=.theta,
        omega=.omega,
        sigma=.sigma,
