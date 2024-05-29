@@ -88,7 +88,7 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
   if (length(.w) == 1L) {
     .wcmt <- which(tolower(names(.nonmemData)) == "cmt")
     .wevid <- which(tolower(names(.nonmemData)) == "evid")
-    if (length(.wcmt) == 1L && length(.wevid) == 1L) {e
+    if (length(.wcmt) == 1L && length(.wevid) == 1L) {
       .minfo("merging 'dvid' with nlmixr2 'cmt' definition")
       .nonmemData[,.wcmt] <- ifelse(.nonmemData[, .wevid] != 0, .nonmemData[,.wcmt],
                                     length(.ui$mv0$state) + .nonmemData[, .w])
