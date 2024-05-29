@@ -3,7 +3,10 @@
 * When reading NONMEM results from xml will try `nm:` prefixed tags
   and non-`nm:` prefixed tags.
 
-* Omega and Sigma prior estimates are currently ignored
+* Omega and Sigma prior estimates are currently ignored (theta priors
+  were already ignored)
+
+* Improve reading in `theta` values from the `xml`
 
 * Read all NONMEM files using latin1 encoding to allow single byte
   parser to work
