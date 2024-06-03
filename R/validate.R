@@ -112,8 +112,6 @@
   } else {
     .ssRtol <- .rx$ssRtol
   }
-  .ipredSolve <- NULL
-  .predSolve <- NULL
   if (!is.null(.rx$nonmemData) && validate) {
     .nonmemData <- .rx$nonmemData
     .model <- .rx$simulationModelIwres
@@ -182,7 +180,6 @@
                                    addDosing = FALSE))
         .minfo("done")
       }
-      if (.doIpred && is.null(.ipredSolve)) .doIpred <- FALSE
       if (.doIpred && !inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.ipredSolve)) == "y")
@@ -279,7 +276,7 @@
                                 ssAtol=.ssAtol, ssRtol=.ssRtol,
                                 addDosing = FALSE))
       .minfo("done")
-      if (!is.null(.predSolve) && !inherits(.predSolve, "try-error")) {
+      if (!inherits(.predSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.predSolve)) == "y")
           .y <- names(.predSolve)[.w]
