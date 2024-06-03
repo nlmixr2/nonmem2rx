@@ -148,14 +148,23 @@
         .widNm <- which(tolower(names(.nonmemData)) == "id")
         if (.widNm == 1L) {
           .idNm <- unique(.nonmemData[,.widNm])
-          .params <- do.call("rbind",
-                             lapply(.idNm, function(id) {
-                               .params[.params[,.wid] == id,]
-                             }))
+          .la <- lapply(.idNm, function(id) {
+            .ret <- .params[.params[,.wid] == id,, drop=FALSE]
+            if (length(.ret[,1]) == 0L) return(NULL)
+            .ret
+          })
+          .w <- which(vapply(seq_along(.la), function(i){is.null(.la[[i]])}, logical(1)))
+          if (length(.w) > 0) {
+            .minfo(paste0("the following IDs were not included in the validation: ", paste(.idNm[.w], collapse=", ")))
+            .nonmemData <- .nonmemData[!(.nonmemData[, .widNm] %in% .idNm[.w]), ]
+          }
+          .params <- do.call("rbind",.la)
+
           if (!all(.idNm == .params[,.wid])) {
             .minfo("id values between input and output do not match, skipping IPRED check")
             .doIpred <- FALSE
             .msg <- "id values between input and output do not match, skipping IPRED validation"
+            .ipredSolve <- NULL
           }
         }
         .params <- .params[,-.wid]
@@ -164,7 +173,7 @@
         if (length(.wtime) == 1 && is.numeric(.nonmemData2[, .wtime])) {
           .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
                                                   .nonmemData2[, .wtime])
-        } else {
+        } else if (.doIpred) {
           .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
                                                   as.double(seq_along(.nonmemData2[,.wid])))
         }
@@ -219,7 +228,7 @@
           .minfo(.msg)
         }
       }
-      if (any(names(.ipredData) == "IWRES"))  {
+      if (.doIpred && any(names(.ipredData) == "IWRES"))  {
         if (length(.ipredData$IWRES) == length(.ipredSolve[[.iwres]])) {
           .wid  <- which(tolower(names(.ipredData)) == "id")
           .wtime  <- which(tolower(names(.ipredData)) == "time")
@@ -231,9 +240,9 @@
           .qai <- stats::quantile(with(.cmp, abs(IWRES-nonmemIWRES)), .q, na.rm=TRUE)
           #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .msg <- c(.msg, paste0("IWRES relative difference compared to Nonmem IWRES: ", round(.qi[3], 2),
-                           "%; ", .ci0 * 100,"% percentile: (",
-                           round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
-                           signif(.qi[3] / 100, digits=.sigdig)),
+                                 "%; ", .ci0 * 100,"% percentile: (",
+                                 round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
+                                 signif(.qi[3] / 100, digits=.sigdig)),
                     paste0("IWRES absolute difference compared to Nonmem IWRES: ", .ci0 * 100,"% percentile: (",
                            signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), "); atol=",
                            signif(.qai[3], .sigdig)))
@@ -242,8 +251,8 @@
           .rx$iwresCompare <- .cmp
         } else {
           .msg < c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
-                          length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
-                          length(.nonmemData[,1])))
+                                 length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
+                                 length(.nonmemData[,1])))
           .minfo(.msg)
         }
       }
@@ -265,7 +274,7 @@
                           }, double(1), USE.NAMES = TRUE))
       if (!is.null(.rx$predDf)) {
         .params <- c(.params, setNames(rep(0, length(.rx$predDf$cond)),
-                                           paste0("rxerr.", .rx$predDf$var)))
+                                       paste0("rxerr.", .rx$predDf$var)))
       }
       .minfo("solving pred problem")
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
