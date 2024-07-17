@@ -30,7 +30,7 @@ Encoding: UTF-8
 LinkingTo:
     dparser,
     Rcpp,
-    rxode2parse
+    rxode2
 Imports:
     checkmate,
     digest,
