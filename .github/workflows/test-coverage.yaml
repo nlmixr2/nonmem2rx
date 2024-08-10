@@ -30,9 +30,6 @@ jobs:
             nlmixr2/lotri
             nlmixr2/dparser-R
             nlmixr2/rxode2ll
-            nlmixr2/rxode2parse
-            nlmixr2/rxode2random
-            nlmixr2/rxode2et
             nlmixr2/rxode2
           needs: coverage
 
