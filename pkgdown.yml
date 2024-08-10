@@ -1,17 +1,16 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
-  convert-nlmixr2: convert-nlmixr2.html
-  create-augPred: create-augPred.html
-  create-office: create-office.html
-  create-vpc: create-vpc.html
+  articles/convert-nlmixr2: convert-nlmixr2.html
+  articles/create-augPred: create-augPred.html
+  articles/create-office: create-office.html
+  articles/create-vpc: create-vpc.html
   import-nonmem: import-nonmem.html
-  read-rounding: read-rounding.html
-  rxode2-validate: rxode2-validate.html
-  simulate-extra-items: simulate-extra-items.html
-  simulate-new-dosing: simulate-new-dosing.html
-  simulate-uncertainty: simulate-uncertainty.html
-  simulate-with-covs: simulate-with-covs.html
-last_built: 2024-06-08T13:51Z
-
+  articles/read-rounding: read-rounding.html
+  articles/rxode2-validate: rxode2-validate.html
+  articles/simulate-extra-items: simulate-extra-items.html
+  articles/simulate-new-dosing: simulate-new-dosing.html
+  articles/simulate-uncertainty: simulate-uncertainty.html
+  articles/simulate-with-covs: simulate-with-covs.html
+last_built: 2024-08-10T22:43Z

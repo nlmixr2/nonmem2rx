@@ -1,90 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/convert-nlmixr2.html</loc>
-  </url>
-  <url>
-    <loc>/articles/create-augPred.html</loc>
-  </url>
-  <url>
-    <loc>/articles/create-office.html</loc>
-  </url>
-  <url>
-    <loc>/articles/create-vpc.html</loc>
-  </url>
-  <url>
-    <loc>/articles/import-nonmem.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/read-rounding.html</loc>
-  </url>
-  <url>
-    <loc>/articles/rxode2-validate.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulate-extra-items.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulate-new-dosing.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulate-uncertainty.html</loc>
-  </url>
-  <url>
-    <loc>/articles/simulate-with-covs.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.nonmem2rx.html</loc>
-  </url>
-  <url>
-    <loc>/reference/autoplot.nonmem2rx.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nmcov.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nmext.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nminfo.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nmlst.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nmtab.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nmxml.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nmxmlCov.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nonmem2rx.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nonmem2rxRec.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reexports.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/convert-nlmixr2.html</loc></url>
+<url><loc>/articles/create-augPred.html</loc></url>
+<url><loc>/articles/create-office.html</loc></url>
+<url><loc>/articles/create-vpc.html</loc></url>
+<url><loc>/articles/import-nonmem.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/read-rounding.html</loc></url>
+<url><loc>/articles/rxode2-validate.html</loc></url>
+<url><loc>/articles/simulate-extra-items.html</loc></url>
+<url><loc>/articles/simulate-new-dosing.html</loc></url>
+<url><loc>/articles/simulate-uncertainty.html</loc></url>
+<url><loc>/articles/simulate-with-covs.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/as.nonmem2rx.html</loc></url>
+<url><loc>/reference/autoplot.nonmem2rx.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/nmcov.html</loc></url>
+<url><loc>/reference/nmext.html</loc></url>
+<url><loc>/reference/nminfo.html</loc></url>
+<url><loc>/reference/nmlst.html</loc></url>
+<url><loc>/reference/nmtab.html</loc></url>
+<url><loc>/reference/nmxml.html</loc></url>
+<url><loc>/reference/nmxmlCov.html</loc></url>
+<url><loc>/reference/nonmem2rx.html</loc></url>
+<url><loc>/reference/nonmem2rxRec.html</loc></url>
+<url><loc>/reference/reexports.html</loc></url>
 </urlset>
+
