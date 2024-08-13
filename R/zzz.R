@@ -14,7 +14,7 @@
   .rxUiGetRegister()
   rxode2::.s3register("rxode2::rxUiGet", "simulationModelIwres")
 }
-.onAttach <- function(libname,pkgname){
+.onAttach <- function(libname,pkgname) {
   .dparserLoad()
   .Call(`_nonmem2rx_r_parseIni`)
 }
