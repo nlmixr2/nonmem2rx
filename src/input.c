@@ -6,7 +6,7 @@
 //#include "ode.h"
 #include <rxode2parseSbuf.h>
 #include <errno.h>
-#include "dparser3.h"
+#include <dparserPtr.h>
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
@@ -68,7 +68,7 @@ void parseFree(int last) {
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
 
 void wprint_node_input(int depth, char *name, char *value, void *client_data)  {
-  
+
 }
 
 extern char * rc_dup_str(const char *s, const char *e);
@@ -123,7 +123,7 @@ void trans_input(const char* parse){
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
-  
+
   eBuf = gBuf;
   eBufLast = 0;
   errP = curP;
