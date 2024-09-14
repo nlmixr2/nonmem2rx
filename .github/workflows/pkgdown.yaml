@@ -44,6 +44,8 @@ jobs:
             nlmixr2/nlmixr2
             nlmixr2/babelmixr2
             nlmixr2/nlmixr2rpt
+            nlmixr2/lbfgsb3c
+            nlmixr2/n1qn1c
             lixoftConnectors=?ignore
             local::.
           needs: website
