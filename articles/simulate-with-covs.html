@@ -208,20 +208,37 @@ with different dosing scenarios.</p>
 <span><span class="co">#&gt;         eps1 ~ 1</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
-<span><span class="co">#&gt;         log_CIRC0 + log_MTT + log_SLOPU + log_GAMMA + prop.err + </span></span>
-<span><span class="co">#&gt;             eps1 + eta.CIRC0 + omega.2.1 + eta.MTT + omega.3.1 + </span></span>
-<span><span class="co">#&gt;             omega.3.2 + eta.SLOPU ~ c(0.00339803, -0.00171728, </span></span>
-<span><span class="co">#&gt;             0.00224653, -0.00142939, 0.00545118, 0.0311551, 0.0107932, </span></span>
-<span><span class="co">#&gt;             -0.0333153, -0.18915, 3.18077, 8.44599e-05, -0.000185993, </span></span>
-<span><span class="co">#&gt;             -0.00110008, 0.0241601, 0.000189655, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, -0.00103234, 0.00125366, 0.00108067, 0.000599458, </span></span>
-<span><span class="co">#&gt;             3.39316e-05, 0, 0.000977024, 0, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 5.9718e-08, -5.65051e-08, 6.21392e-09, 8.42426e-07, </span></span>
-<span><span class="co">#&gt;             6.68526e-09, 0, -5.00488e-08, 0, 7.54658e-12, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 3.70943e-07, -1.8945e-07, 1.25175e-06, -1.7346e-06, </span></span>
-<span><span class="co">#&gt;             1.59707e-09, 0, -3.13414e-07, 0, 5.308e-11, 0, 0, </span></span>
-<span><span class="co">#&gt;             4.20267e-10)</span></span>
+<span><span class="co">#&gt;         log_CIRC0 ~ c(log_CIRC0 = 0.00339803)</span></span>
+<span><span class="co">#&gt;         log_MTT ~ c(log_CIRC0 = -0.00171728, log_MTT = 0.00224653)</span></span>
+<span><span class="co">#&gt;         log_SLOPU ~ c(log_CIRC0 = -0.00142939, log_MTT = 0.00545118, </span></span>
+<span><span class="co">#&gt;             log_SLOPU = 0.0311551)</span></span>
+<span><span class="co">#&gt;         log_GAMMA ~ c(log_CIRC0 = 0.0107932, log_MTT = -0.0333153, </span></span>
+<span><span class="co">#&gt;             log_SLOPU = -0.18915, log_GAMMA = 3.18077)</span></span>
+<span><span class="co">#&gt;         prop.err ~ c(log_CIRC0 = 8.44599e-05, log_MTT = -0.000185993, </span></span>
+<span><span class="co">#&gt;             log_SLOPU = -0.00110008, log_GAMMA = 0.0241601, prop.err = 0.000189655)</span></span>
+<span><span class="co">#&gt;         eps1 ~ c(log_CIRC0 = 0, log_MTT = 0, log_SLOPU = 0, log_GAMMA = 0, </span></span>
+<span><span class="co">#&gt;             prop.err = 0, eps1 = 0)</span></span>
+<span><span class="co">#&gt;         eta.CIRC0 ~ c(log_CIRC0 = -0.00103234, log_MTT = 0.00125366, </span></span>
+<span><span class="co">#&gt;             log_SLOPU = 0.00108067, log_GAMMA = 0.000599458, </span></span>
+<span><span class="co">#&gt;             prop.err = 3.39316e-05, eps1 = 0, eta.CIRC0 = 0.000977024)</span></span>
+<span><span class="co">#&gt;         omega.2.1 ~ c(log_CIRC0 = 0, log_MTT = 0, log_SLOPU = 0, </span></span>
+<span><span class="co">#&gt;             log_GAMMA = 0, prop.err = 0, eps1 = 0, eta.CIRC0 = 0, </span></span>
+<span><span class="co">#&gt;             omega.2.1 = 0)</span></span>
+<span><span class="co">#&gt;         eta.MTT ~ c(log_CIRC0 = 5.9718e-08, log_MTT = -5.65051e-08, </span></span>
+<span><span class="co">#&gt;             log_SLOPU = 6.21392e-09, log_GAMMA = 8.42426e-07, </span></span>
+<span><span class="co">#&gt;             prop.err = 6.68526e-09, eps1 = 0, eta.CIRC0 = -5.00488e-08, </span></span>
+<span><span class="co">#&gt;             omega.2.1 = 0, eta.MTT = 7.54658e-12)</span></span>
+<span><span class="co">#&gt;         omega.3.1 ~ c(log_CIRC0 = 0, log_MTT = 0, log_SLOPU = 0, </span></span>
+<span><span class="co">#&gt;             log_GAMMA = 0, prop.err = 0, eps1 = 0, eta.CIRC0 = 0, </span></span>
+<span><span class="co">#&gt;             omega.2.1 = 0, eta.MTT = 0, omega.3.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.3.2 ~ c(log_CIRC0 = 0, log_MTT = 0, log_SLOPU = 0, </span></span>
+<span><span class="co">#&gt;             log_GAMMA = 0, prop.err = 0, eps1 = 0, eta.CIRC0 = 0, </span></span>
+<span><span class="co">#&gt;             omega.2.1 = 0, eta.MTT = 0, omega.3.1 = 0, omega.3.2 = 0)</span></span>
+<span><span class="co">#&gt;         eta.SLOPU ~ c(log_CIRC0 = 3.70943e-07, log_MTT = -1.8945e-07, </span></span>
+<span><span class="co">#&gt;             log_SLOPU = 1.25175e-06, log_GAMMA = -1.7346e-06, </span></span>
+<span><span class="co">#&gt;             prop.err = 1.59707e-09, eps1 = 0, eta.CIRC0 = -3.13414e-07, </span></span>
+<span><span class="co">#&gt;             omega.2.1 = 0, eta.MTT = 5.308e-11, omega.3.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.2 = 0, eta.SLOPU = 4.20267e-10)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7.82e-11", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (4.96e-11, 1.28e-06); atol=5.24e-10", </span></span>
@@ -327,6 +344,8 @@ simply add <code>resample=TRUE</code>:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using addlDropSs=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ssAtDoseTime=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safePow=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeLog=FALSE since NONMEM does not use protection by default</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfSub=45 from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfObs=176 from NONMEM</span></span>
@@ -337,6 +356,7 @@ simply add <code>resample=TRUE</code>:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:05</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span></code></pre></div>
 <p>In this case every individual re-samples from the original dataset’s
@@ -392,6 +412,8 @@ NONMEM dataset.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using addlDropSs=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ssAtDoseTime=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safePow=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeLog=FALSE since NONMEM does not use protection by default</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfSub=45 from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfObs=176 from NONMEM</span></span>
@@ -401,6 +423,7 @@ NONMEM dataset.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>
@@ -456,6 +479,8 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using addlDropSs=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ssAtDoseTime=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safePow=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeLog=FALSE since NONMEM does not use protection by default</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfSub=45 from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using dfObs=176 from NONMEM</span></span>
@@ -465,7 +490,8 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified rtol=1e-06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:37</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:39</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>

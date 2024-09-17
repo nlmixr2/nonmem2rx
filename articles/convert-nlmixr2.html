@@ -219,25 +219,50 @@ this case because of the option <code>determineError=FALSE</code>)</p>
 <span><span class="co">#&gt;         eps1 ~ 1</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
-<span><span class="co">#&gt;         theta1 + theta2 + theta3 + theta4 + RSV + eps1 + eta1 + </span></span>
-<span><span class="co">#&gt;             omega.2.1 + eta2 + omega.3.1 + omega.3.2 + eta3 + </span></span>
-<span><span class="co">#&gt;             omega.4.1 + omega.4.2 + omega.4.3 + eta4 ~ c(0.000887681, </span></span>
-<span><span class="co">#&gt;             -0.00010551, 0.000871409, 0.000184416, -0.000106195, </span></span>
-<span><span class="co">#&gt;             0.00299336, -0.000120234, -5.06663e-05, 0.000165252, </span></span>
-<span><span class="co">#&gt;             0.00121347, 5.2783e-08, -1.56562e-05, 5.99331e-06, </span></span>
-<span><span class="co">#&gt;             -2.53991e-05, 9.94218e-06, 0, 0, 0, 0, 0, 0, -4.71273e-05, </span></span>
-<span><span class="co">#&gt;             4.69667e-05, -3.64271e-05, 2.54796e-05, -8.16885e-06, </span></span>
-<span><span class="co">#&gt;             0, 0.000169296, 0, 0, 0, 0, 0, 0, 0, 0, -7.37156e-05, </span></span>
-<span><span class="co">#&gt;             2.56634e-05, -8.08349e-05, 1.37e-05, -4.36564e-06, </span></span>
-<span><span class="co">#&gt;             0, 8.75181e-06, 0, 0.00015125, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.63383e-05, </span></span>
-<span><span class="co">#&gt;             -8.19002e-05, 0.000548985, 0.000168356, 1.59122e-06, </span></span>
-<span><span class="co">#&gt;             0, 3.48714e-05, 0, 4.31593e-07, 0, 0, 0.000959029, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, -9.49661e-06, 0.000110108, </span></span>
-<span><span class="co">#&gt;             -0.000306537, -9.12897e-05, 3.1877e-06, 0, 1.36628e-05, </span></span>
-<span><span class="co">#&gt;             0, -1.95096e-05, 0, 0, -0.00012977, 0, 0, 0, 0.00051019)</span></span>
+<span><span class="co">#&gt;         theta1 ~ c(theta1 = 0.000887681)</span></span>
+<span><span class="co">#&gt;         theta2 ~ c(theta1 = -0.00010551, theta2 = 0.000871409)</span></span>
+<span><span class="co">#&gt;         theta3 ~ c(theta1 = 0.000184416, theta2 = -0.000106195, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.00299336)</span></span>
+<span><span class="co">#&gt;         theta4 ~ c(theta1 = -0.000120234, theta2 = -5.06663e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.000165252, theta4 = 0.00121347)</span></span>
+<span><span class="co">#&gt;         RSV ~ c(theta1 = 5.2783e-08, theta2 = -1.56562e-05, theta3 = 5.99331e-06, </span></span>
+<span><span class="co">#&gt;             theta4 = -2.53991e-05, RSV = 9.94218e-06)</span></span>
+<span><span class="co">#&gt;         eps1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0)</span></span>
+<span><span class="co">#&gt;         eta1 ~ c(theta1 = -4.71273e-05, theta2 = 4.69667e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = -3.64271e-05, theta4 = 2.54796e-05, RSV = -8.16885e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 0.000169296)</span></span>
+<span><span class="co">#&gt;         omega.2.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0)</span></span>
+<span><span class="co">#&gt;         eta2 ~ c(theta1 = -7.37156e-05, theta2 = 2.56634e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = -8.08349e-05, theta4 = 1.37e-05, RSV = -4.36564e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 8.75181e-06, omega.2.1 = 0, eta2 = 0.00015125)</span></span>
+<span><span class="co">#&gt;         omega.3.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.3.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0)</span></span>
+<span><span class="co">#&gt;         eta3 ~ c(theta1 = 6.63383e-05, theta2 = -8.19002e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.000548985, theta4 = 0.000168356, RSV = 1.59122e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 3.48714e-05, omega.2.1 = 0, eta2 = 4.31593e-07, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0.000959029)</span></span>
+<span><span class="co">#&gt;         omega.4.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.4.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.4.2 = 0)</span></span>
+<span><span class="co">#&gt;         omega.4.3 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.4.2 = 0, omega.4.3 = 0)</span></span>
+<span><span class="co">#&gt;         eta4 ~ c(theta1 = -9.49661e-06, theta2 = 0.000110108, </span></span>
+<span><span class="co">#&gt;             theta3 = -0.000306537, theta4 = -9.12897e-05, RSV = 3.1877e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 1.36628e-05, omega.2.1 = 0, eta2 = -1.95096e-05, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = -0.00012977, </span></span>
+<span><span class="co">#&gt;             omega.4.1 = 0, omega.4.2 = 0, omega.4.3 = 0, eta4 = 0.00051019)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
@@ -374,19 +399,24 @@ tweaks to:</p>
 <span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
 <span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
 <span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
-<span><span class="co">#&gt;         lcl + lvc + lq + lvp + RSV + eta.cl + eta.v + eta.q + </span></span>
-<span><span class="co">#&gt;             eta.v2 ~ c(0.000887681, -0.00010551, 0.000871409, </span></span>
-<span><span class="co">#&gt;             0.000184416, -0.000106195, 0.00299336, -0.000120234, </span></span>
-<span><span class="co">#&gt;             -5.06663e-05, 0.000165252, 0.00121347, 5.2783e-08, </span></span>
-<span><span class="co">#&gt;             -1.56562e-05, 5.99331e-06, -2.53991e-05, 9.94218e-06, </span></span>
-<span><span class="co">#&gt;             -4.71273e-05, 4.69667e-05, -3.64271e-05, 2.54796e-05, </span></span>
-<span><span class="co">#&gt;             -8.16885e-06, 0.000169296, -7.37156e-05, 2.56634e-05, </span></span>
-<span><span class="co">#&gt;             -8.08349e-05, 1.37e-05, -4.36564e-06, 8.75181e-06, </span></span>
-<span><span class="co">#&gt;             0.00015125, 6.63383e-05, -8.19002e-05, 0.000548985, </span></span>
-<span><span class="co">#&gt;             0.000168356, 1.59122e-06, 3.48714e-05, 4.31593e-07, </span></span>
-<span><span class="co">#&gt;             0.000959029, -9.49661e-06, 0.000110108, -0.000306537, </span></span>
-<span><span class="co">#&gt;             -9.12897e-05, 3.1877e-06, 1.36628e-05, -1.95096e-05, </span></span>
-<span><span class="co">#&gt;             -0.00012977, 0.00051019)</span></span>
+<span><span class="co">#&gt;         lcl ~ c(lcl = 0.000887681)</span></span>
+<span><span class="co">#&gt;         lvc ~ c(lcl = -0.00010551, lvc = 0.000871409)</span></span>
+<span><span class="co">#&gt;         lq ~ c(lcl = 0.000184416, lvc = -0.000106195, lq = 0.00299336)</span></span>
+<span><span class="co">#&gt;         lvp ~ c(lcl = -0.000120234, lvc = -5.06663e-05, lq = 0.000165252, </span></span>
+<span><span class="co">#&gt;             lvp = 0.00121347)</span></span>
+<span><span class="co">#&gt;         RSV ~ c(lcl = 5.2783e-08, lvc = -1.56562e-05, lq = 5.99331e-06, </span></span>
+<span><span class="co">#&gt;             lvp = -2.53991e-05, RSV = 9.94218e-06)</span></span>
+<span><span class="co">#&gt;         eta.cl ~ c(lcl = -4.71273e-05, lvc = 4.69667e-05, lq = -3.64271e-05, </span></span>
+<span><span class="co">#&gt;             lvp = 2.54796e-05, RSV = -8.16885e-06, eta.cl = 0.000169296)</span></span>
+<span><span class="co">#&gt;         eta.v ~ c(lcl = -7.37156e-05, lvc = 2.56634e-05, lq = -8.08349e-05, </span></span>
+<span><span class="co">#&gt;             lvp = 1.37e-05, RSV = -4.36564e-06, eta.cl = 8.75181e-06, </span></span>
+<span><span class="co">#&gt;             eta.v = 0.00015125)</span></span>
+<span><span class="co">#&gt;         eta.q ~ c(lcl = 6.63383e-05, lvc = -8.19002e-05, lq = 0.000548985, </span></span>
+<span><span class="co">#&gt;             lvp = 0.000168356, RSV = 1.59122e-06, eta.cl = 3.48714e-05, </span></span>
+<span><span class="co">#&gt;             eta.v = 4.31593e-07, eta.q = 0.000959029)</span></span>
+<span><span class="co">#&gt;         eta.v2 ~ c(lcl = -9.49661e-06, lvc = 0.000110108, lq = -0.000306537, </span></span>
+<span><span class="co">#&gt;             lvp = -9.12897e-05, RSV = 3.1877e-06, eta.cl = 1.36628e-05, </span></span>
+<span><span class="co">#&gt;             eta.v = -1.95096e-05, eta.q = -0.00012977, eta.v2 = 0.00051019)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
@@ -460,7 +490,7 @@ methods.</p>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 2.1.3.9000 using 2 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 3.0.0 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -478,7 +508,7 @@ methods.</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.030591 0.098    0.012 100.95      2.531</span></span>
+<span><span class="co">#&gt; elapsed 0.038368 0.094    0.012 100.95      2.819</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>

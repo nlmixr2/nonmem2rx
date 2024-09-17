@@ -219,25 +219,50 @@ your model, and for sparse data wouldn’t be terribly accurate.</p>
 <span><span class="co">#&gt;         eps1 ~ 1</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
-<span><span class="co">#&gt;         theta1 + theta2 + theta3 + theta4 + RSV + eps1 + eta1 + </span></span>
-<span><span class="co">#&gt;             omega.2.1 + eta2 + omega.3.1 + omega.3.2 + eta3 + </span></span>
-<span><span class="co">#&gt;             omega.4.1 + omega.4.2 + omega.4.3 + eta4 ~ c(0.000887681, </span></span>
-<span><span class="co">#&gt;             -0.00010551, 0.000871409, 0.000184416, -0.000106195, </span></span>
-<span><span class="co">#&gt;             0.00299336, -0.000120234, -5.06663e-05, 0.000165252, </span></span>
-<span><span class="co">#&gt;             0.00121347, 5.2783e-08, -1.56562e-05, 5.99331e-06, </span></span>
-<span><span class="co">#&gt;             -2.53991e-05, 9.94218e-06, 0, 0, 0, 0, 0, 0, -4.71273e-05, </span></span>
-<span><span class="co">#&gt;             4.69667e-05, -3.64271e-05, 2.54796e-05, -8.16885e-06, </span></span>
-<span><span class="co">#&gt;             0, 0.000169296, 0, 0, 0, 0, 0, 0, 0, 0, -7.37156e-05, </span></span>
-<span><span class="co">#&gt;             2.56634e-05, -8.08349e-05, 1.37e-05, -4.36564e-06, </span></span>
-<span><span class="co">#&gt;             0, 8.75181e-06, 0, 0.00015125, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.63383e-05, </span></span>
-<span><span class="co">#&gt;             -8.19002e-05, 0.000548985, 0.000168356, 1.59122e-06, </span></span>
-<span><span class="co">#&gt;             0, 3.48714e-05, 0, 4.31593e-07, 0, 0, 0.000959029, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, </span></span>
-<span><span class="co">#&gt;             0, 0, 0, 0, 0, 0, 0, 0, -9.49661e-06, 0.000110108, </span></span>
-<span><span class="co">#&gt;             -0.000306537, -9.12897e-05, 3.1877e-06, 0, 1.36628e-05, </span></span>
-<span><span class="co">#&gt;             0, -1.95096e-05, 0, 0, -0.00012977, 0, 0, 0, 0.00051019)</span></span>
+<span><span class="co">#&gt;         theta1 ~ c(theta1 = 0.000887681)</span></span>
+<span><span class="co">#&gt;         theta2 ~ c(theta1 = -0.00010551, theta2 = 0.000871409)</span></span>
+<span><span class="co">#&gt;         theta3 ~ c(theta1 = 0.000184416, theta2 = -0.000106195, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.00299336)</span></span>
+<span><span class="co">#&gt;         theta4 ~ c(theta1 = -0.000120234, theta2 = -5.06663e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.000165252, theta4 = 0.00121347)</span></span>
+<span><span class="co">#&gt;         RSV ~ c(theta1 = 5.2783e-08, theta2 = -1.56562e-05, theta3 = 5.99331e-06, </span></span>
+<span><span class="co">#&gt;             theta4 = -2.53991e-05, RSV = 9.94218e-06)</span></span>
+<span><span class="co">#&gt;         eps1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0)</span></span>
+<span><span class="co">#&gt;         eta1 ~ c(theta1 = -4.71273e-05, theta2 = 4.69667e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = -3.64271e-05, theta4 = 2.54796e-05, RSV = -8.16885e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 0.000169296)</span></span>
+<span><span class="co">#&gt;         omega.2.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0)</span></span>
+<span><span class="co">#&gt;         eta2 ~ c(theta1 = -7.37156e-05, theta2 = 2.56634e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = -8.08349e-05, theta4 = 1.37e-05, RSV = -4.36564e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 8.75181e-06, omega.2.1 = 0, eta2 = 0.00015125)</span></span>
+<span><span class="co">#&gt;         omega.3.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.3.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0)</span></span>
+<span><span class="co">#&gt;         eta3 ~ c(theta1 = 6.63383e-05, theta2 = -8.19002e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.000548985, theta4 = 0.000168356, RSV = 1.59122e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 3.48714e-05, omega.2.1 = 0, eta2 = 4.31593e-07, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0.000959029)</span></span>
+<span><span class="co">#&gt;         omega.4.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.4.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.4.2 = 0)</span></span>
+<span><span class="co">#&gt;         omega.4.3 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.4.2 = 0, omega.4.3 = 0)</span></span>
+<span><span class="co">#&gt;         eta4 ~ c(theta1 = -9.49661e-06, theta2 = 0.000110108, </span></span>
+<span><span class="co">#&gt;             theta3 = -0.000306537, theta4 = -9.12897e-05, RSV = 3.1877e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 1.36628e-05, omega.2.1 = 0, eta2 = -1.95096e-05, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = -0.00012977, </span></span>
+<span><span class="co">#&gt;             omega.4.1 = 0, omega.4.2 = 0, omega.4.3 = 0, eta4 = 0.00051019)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
 <span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
@@ -328,6 +353,8 @@ subjects:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using addlDropSs=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ssAtDoseTime=TRUE like NONMEM, specify directly to change</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeZero=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safePow=FALSE since NONMEM does not use protection by default</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using safeLog=FALSE since NONMEM does not use protection by default</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using sigma from NONMEM</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified atol=1e-12</span></span>
@@ -369,26 +396,26 @@ interval:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">AUC</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    id time       AUC</span></span>
-<span><span class="co">#&gt; 1   1   12 11399.102</span></span>
-<span><span class="co">#&gt; 2   1   24 16698.162</span></span>
-<span><span class="co">#&gt; 3   2   12 11760.193</span></span>
-<span><span class="co">#&gt; 4   2   24 15603.514</span></span>
-<span><span class="co">#&gt; 5   3   12  9928.931</span></span>
-<span><span class="co">#&gt; 6   3   24 13661.422</span></span>
-<span><span class="co">#&gt; 7   4   12 14472.699</span></span>
-<span><span class="co">#&gt; 8   4   24 21934.396</span></span>
-<span><span class="co">#&gt; 9   5   12 12076.014</span></span>
-<span><span class="co">#&gt; 10  5   24 18022.833</span></span>
-<span><span class="co">#&gt; 11  6   12 16519.046</span></span>
-<span><span class="co">#&gt; 12  6   24 24477.901</span></span>
-<span><span class="co">#&gt; 13  7   12 17188.504</span></span>
-<span><span class="co">#&gt; 14  7   24 25640.442</span></span>
-<span><span class="co">#&gt; 15  8   12 14752.541</span></span>
-<span><span class="co">#&gt; 16  8   24 22941.763</span></span>
-<span><span class="co">#&gt; 17  9   12  9738.933</span></span>
-<span><span class="co">#&gt; 18  9   24 15112.572</span></span>
-<span><span class="co">#&gt; 19 10   12 17356.075</span></span>
-<span><span class="co">#&gt; 20 10   24 25496.276</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   1   12 14933.285</span></span>
+<span><span class="co">#&gt; 2   1   24 20692.082</span></span>
+<span><span class="co">#&gt; 3   2   12 11099.596</span></span>
+<span><span class="co">#&gt; 4   2   24 16694.837</span></span>
+<span><span class="co">#&gt; 5   3   12 10303.763</span></span>
+<span><span class="co">#&gt; 6   3   24 14196.023</span></span>
+<span><span class="co">#&gt; 7   4   12 13015.708</span></span>
+<span><span class="co">#&gt; 8   4   24 21400.784</span></span>
+<span><span class="co">#&gt; 9   5   12 11612.369</span></span>
+<span><span class="co">#&gt; 10  5   24 17944.491</span></span>
+<span><span class="co">#&gt; 11  6   12 10137.247</span></span>
+<span><span class="co">#&gt; 12  6   24 15223.973</span></span>
+<span><span class="co">#&gt; 13  7   12 16532.019</span></span>
+<span><span class="co">#&gt; 14  7   24 22787.019</span></span>
+<span><span class="co">#&gt; 15  8   12 10612.266</span></span>
+<span><span class="co">#&gt; 16  8   24 16781.396</span></span>
+<span><span class="co">#&gt; 17  9   12 11593.421</span></span>
+<span><span class="co">#&gt; 18  9   24 17713.529</span></span>
+<span><span class="co">#&gt; 19 10   12  7972.637</span></span>
+<span><span class="co">#&gt; 20 10   24 13225.795</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

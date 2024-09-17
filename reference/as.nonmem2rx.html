@@ -231,19 +231,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     dfObs &lt;- 2280</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     dfSub &lt;- 120</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     thetaMat &lt;- lotri({</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         lcl + lvc + lq + lvp + RSV + eta.cl + eta.v + eta.q + </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             eta.v2 ~ c(0.000887681, -0.00010551, 0.000871409, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             0.000184416, -0.000106195, 0.00299336, -0.000120234, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -5.06663e-05, 0.000165252, 0.00121347, 5.2783e-08, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -1.56562e-05, 5.99331e-06, -2.53991e-05, 9.94218e-06, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -4.71273e-05, 4.69667e-05, -3.64271e-05, 2.54796e-05, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -8.16885e-06, 0.000169296, -7.37156e-05, 2.56634e-05, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -8.08349e-05, 1.37e-05, -4.36564e-06, 8.75181e-06, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             0.00015125, 6.63383e-05, -8.19002e-05, 0.000548985, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             0.000168356, 1.59122e-06, 3.48714e-05, 4.31593e-07, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             0.000959029, -9.49661e-06, 0.000110108, -0.000306537, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -9.12897e-05, 3.1877e-06, 1.36628e-05, -1.95096e-05, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             -0.00012977, 0.00051019)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         lcl ~ c(lcl = 0.000887681)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         lvc ~ c(lcl = -0.00010551, lvc = 0.000871409)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         lq ~ c(lcl = 0.000184416, lvc = -0.000106195, lq = 0.00299336)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         lvp ~ c(lcl = -0.000120234, lvc = -5.06663e-05, lq = 0.000165252, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             lvp = 0.00121347)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         RSV ~ c(lcl = 5.2783e-08, lvc = -1.56562e-05, lq = 5.99331e-06, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             lvp = -2.53991e-05, RSV = 9.94218e-06)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         eta.cl ~ c(lcl = -4.71273e-05, lvc = 4.69667e-05, lq = -3.64271e-05, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             lvp = 2.54796e-05, RSV = -8.16885e-06, eta.cl = 0.000169296)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         eta.v ~ c(lcl = -7.37156e-05, lvc = 2.56634e-05, lq = -8.08349e-05, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             lvp = 1.37e-05, RSV = -4.36564e-06, eta.cl = 8.75181e-06, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             eta.v = 0.00015125)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         eta.q ~ c(lcl = 6.63383e-05, lvc = -8.19002e-05, lq = 0.000548985, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             lvp = 0.000168356, RSV = 1.59122e-06, eta.cl = 3.48714e-05, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             eta.v = 4.31593e-07, eta.q = 0.000959029)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         eta.v2 ~ c(lcl = -9.49661e-06, lvc = 0.000110108, lq = -0.000306537, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             lvp = -9.12897e-05, RSV = 3.1877e-06, eta.cl = 1.36628e-05, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             eta.v = -1.95096e-05, eta.q = -0.00012977, eta.v2 = 0.00051019)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span>
