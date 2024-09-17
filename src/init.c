@@ -28,8 +28,10 @@ SEXP _nonmem2rx_r_parseFree(void);
 SEXP _nonmem2rx_r_parseIni(void);
 SEXP _nonmem2rx_fixNonmemTies(SEXP idS, SEXP timeS, SEXP deltaS);
 SEXP _nonmem2rx_setRecord(SEXP rec);
+SEXP _nonmem2rx_iniDparserPtr(SEXP ptr);
 void R_init_nonmem2rx(DllInfo *info) {
   R_CallMethodDef callMethods[]  = {
+    {"_nonmem2rx_iniDparserPtr", (DL_FUNC) &_nonmem2rx_iniDparserPtr, 1},
     {"_nonmem2rx_fromNonmemToRxId_", (DL_FUNC) &_nonmem2rx_fromNonmemToRxId_, 2},
     {"_nonmem2rx_setRecord", (DL_FUNC) &_nonmem2rx_setRecord, 1},
     {"_nonmem2rx_fixNonmemTies", (DL_FUNC) &_nonmem2rx_fixNonmemTies, 3},

@@ -6,7 +6,7 @@
 //#include "ode.h"
 #include <rxode2parseSbuf.h>
 #include <errno.h>
-#include "dparser3.h"
+#include <dparserPtr.h>
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
@@ -160,7 +160,7 @@ void trans_lst(const char* parse){
   // problems with R's garbage collection, so duplicate the string.
   gBuf = (char*)(parse);
   gBufFree=0;
-  
+
   eBuf = gBuf;
   eBufLast = 0;
   errP = curP;

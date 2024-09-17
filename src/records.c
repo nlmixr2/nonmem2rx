@@ -6,7 +6,11 @@
 //#include "ode.h"
 #include <rxode2parseSbuf.h>
 #include <errno.h>
-#include <dparser.h>
+
+#define iniDparserPtr _nonmem2rx_iniDparserPtr
+#include <dparserPtr.h>
+dparserPtrIni;
+
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>

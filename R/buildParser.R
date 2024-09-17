@@ -120,7 +120,15 @@
     }
     if (missing(safeZero)) {
       .minfo("using safeZero=FALSE since NONMEM does not use protection by default")
-      safeZero <- TRUE
+      safeZero <- FALSE
+    }
+    if (missing(safePow)) {
+      .minfo("using safePow=FALSE since NONMEM does not use protection by default")
+      safePow <- FALSE
+    }
+    if (missing(safeLog)) {
+      .minfo("using safeLog=FALSE since NONMEM does not use protection by default")
+      safeLog <- FALSE
     }
     if (missing(ss2cancelAllPending)) {
       .minfo("using ss2cancelAllPending=FALSE since NONMEM does not cancel pending doses with SS=2")

@@ -6,7 +6,7 @@
 //#include "ode.h"
 #include <rxode2parseSbuf.h>
 #include <errno.h>
-#include "dparser3.h"
+#include <dparserPtr.h>
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
@@ -68,7 +68,7 @@ void parseFree(int last) {
 extern char * rc_dup_str(const char *s, const char *e);
 typedef void (print_node_fn_t)(int depth, char *token_name, char *token_value, void *client_data);
 void wprint_node_omega(int depth, char *token_name, char *token_value, void *client_data) {
-  
+
 }
 
 int nonmem2rx_unintFix = 0;
@@ -337,10 +337,10 @@ int omegaParseOmeg0(_arg_) {
     } else {
       if (fix[0] != 0) {
         if ((fix[0] == 'u' || fix[0] == 'U')){
-          if (nonmem2rx_unintFix) 
-            nonmem2rx_omegaFixed = 1; 
+          if (nonmem2rx_unintFix)
+            nonmem2rx_omegaFixed = 1;
         } else {
-          nonmem2rx_omegaFixed = 1; 
+          nonmem2rx_omegaFixed = 1;
         }
       }
       addOmegaBlockItem(v);

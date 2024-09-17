@@ -183,7 +183,8 @@
         .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
                                    covsInterpolation="nocb",
                                    addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
-                                   safeZero=TRUE, ss2cancelAllPending=TRUE,
+                                   safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
+                                   ss2cancelAllPending=TRUE,
                                    atol=.atol, rtol=.rtol,
                                    ssAtol=.ssAtol, ssRtol=.ssRtol, omega=NULL,
                                    addDosing = FALSE))
@@ -280,7 +281,8 @@
       .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
                                 covsInterpolation="nocb",
                                 addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
-                                safeZero=TRUE, ss2cancelAllPending=TRUE,
+                                safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
+                                ss2cancelAllPending=TRUE,
                                 atol=.atol, rtol=.rtol,
                                 ssAtol=.ssAtol, ssRtol=.ssRtol,
                                 addDosing = FALSE))

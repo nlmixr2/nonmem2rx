@@ -54,10 +54,14 @@ jobs:
           pak-version: devel
           extra-packages: |
             any::rcmdcheck
-            nlmixr2/lotri
+            nlmixr2/rxode2
+            nlmixr2/lbfgsb3c
             nlmixr2/dparser-R
+            nlmixr2/n1qn1c
+            nlmixr2/lotri
             nlmixr2/rxode2ll
             nlmixr2/rxode2
+            nlmixr2/PreciseSums
           needs: check
       - uses: r-lib/actions/check-r-package@v2
         with:

@@ -1,18 +1,20 @@
 test_that("test omega", {
 
   .o <- function(omega, eq="no", len=0, reset=TRUE, unintFixed=TRUE) {
-    .Call(`_nonmem2rx_setRecord`, "$OMEGA")
-    if (reset) {
-      .clearNonmem2rx()
-      .Call(`_nonmem2rx_omeganum_reset`)
-    }
-    lapply(omega, function(o) {
-      .Call(`_nonmem2rx_trans_omega`, o, "eta", as.integer(unintFixed))
+    withr::with_options(list(lotri.plusNames=TRUE), {
+      .Call(`_nonmem2rx_setRecord`, "$OMEGA")
+      if (reset) {
+        .clearNonmem2rx()
+        .Call(`_nonmem2rx_omeganum_reset`)
+      }
+      lapply(omega, function(o) {
+        .Call(`_nonmem2rx_trans_omega`, o, "eta", as.integer(unintFixed))
+      })
+      expect_equal(.nonmem2rx$ini, eq)
+      expect_length(.nonmem2rx$etaLabel, len)
+      expect_length(.nonmem2rx$etaComment, len)
+      expect_length(.nonmem2rx$etaNonmemLabel, len)
     })
-    expect_equal(.nonmem2rx$ini, eq)
-    expect_length(.nonmem2rx$etaLabel, len)
-    expect_length(.nonmem2rx$etaComment, len)
-    expect_length(.nonmem2rx$etaNonmemLabel, len)
   }
 
   .o("1", "eta1 ~ 1", 1)

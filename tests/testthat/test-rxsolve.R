@@ -17,7 +17,8 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     s <- rxSolve(f, nStud=1)
     expect_equal(s$env$.args$dfObs, 2280)
     expect_equal(s$env$.args$dfSub, 120)
-    expect_equal(s$env$.args$thetaMat, f$thetaMat)
+    ## expect_equal(s$env$.args$thetaMat, f$thetaMat) # dropped items
+    expect_true(inherits(s$env$.args$thetaMat, "matrix"))
     expect_equal(s$env$.args$omega, f$omega)
     for (v in names(f$theta)) {
       expect_true(all(s$params[[v]] == f$theta[v]))
@@ -32,7 +33,8 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     s <- rxSolve(f, nStud=1)
     expect_equal(s$env$.args$dfObs, 2280)
     expect_equal(s$env$.args$dfSub, 120)
-    expect_equal(s$env$.args$thetaMat, f$thetaMat)
+    ## expect_equal(s$env$.args$thetaMat, f$thetaMat) # drops vars not in model and zero diag
+    expect_true(inherits(s$env$.args$thetaMat, "matrix"))
     expect_equal(s$env$.args$omega, f$omega)
     expect_equal(s$env$.args$sigma, f$sigma)
   })

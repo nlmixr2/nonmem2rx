@@ -33,6 +33,7 @@ jobs:
           cache-version: 2
           extra-packages: |
             any::pkgdown
+            nlmixr2/PreciseSums
             nlmixr2/lotri
             nlmixr2/dparser-R
             nlmixr2/rxode2ll
@@ -43,6 +44,9 @@ jobs:
             nlmixr2/nlmixr2
             nlmixr2/babelmixr2
             nlmixr2/nlmixr2rpt
+            nlmixr2/lbfgsb3c
+            nlmixr2/n1qn1c
+            nlmixr2/monolix2rx
             lixoftConnectors=?ignore
             local::.
           needs: website
