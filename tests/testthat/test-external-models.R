@@ -43,7 +43,7 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     for (f in c("examples/nonmem/xgxr001.mod", "examples/nonmem/xgxr002.mod", "examples/nonmem/xgxr003.mod", "examples/nonmem/xgxr014.mod", "examples/nonmem/xgxr018.mod")) {
       .mod <- system.file(f, package="NMdata")
       if (file.exists(.mod)) {
-        expect_error(.nonmem2rx(.ctl), NA)
+        expect_error(.nonmem2rx(.mod), NA)
       }
     }
   })
