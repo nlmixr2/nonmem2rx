@@ -9,7 +9,7 @@
 
 #define iniDparserPtr _nonmem2rx_iniDparserPtr
 #include <dparserPtr.h>
-dparserPtrIni;
+dparserPtrIni
 
 #include <R.h>
 #include <Rinternals.h>
