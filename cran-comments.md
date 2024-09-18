@@ -1,2 +1,1 @@
-# Fixes for new release
-- Made to work with rxode2parse and general bug fixes
+- This is made to work with the new dparser and rxode2
