@@ -1,6 +1,6 @@
 Package: nonmem2rx
 Type: Package
-Title: 'nonmem2rx' Converts 'NONMEM' Models to 'rxode2'
+Title: Converts 'NONMEM' Models to 'rxode2'
 Version: 0.1.5
 Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
