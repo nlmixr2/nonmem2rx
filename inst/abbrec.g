@@ -46,7 +46,7 @@ seq_nm: decimalint (':' | 'TO' | 'to' | 'To') decimalint
 seq_arg: '(' ','* (seq_nm | decimalint)  (',' (seq_nm | decimalint))* ')';
 
 replace_direct1: var_replace '(' identifier_nm ')' '=' var_replace '(' decimalintNo0 ')';
-replace_direct2: identifier_nm '=' (identifier_nm | constantneg);
+replace_direct2: identifier_nm '=' (identifier_nm | constantneg | var_replace '(' decimalintNo0 ')');
 replace_direct3: identifier_nm '=' string;
 
 replace_data: var_rep2 '(' identifier_nm ')' '=' var_rep2 (seq_arg | dec_arg);
@@ -70,4 +70,3 @@ decimalintNo0: "([1-9][0-9]*)" $term -1;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
-
