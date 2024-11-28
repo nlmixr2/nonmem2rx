@@ -587,6 +587,12 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       load=getOption("nonmem2rx.load", TRUE),
                       compress=getOption("nonmem2rx.compress", TRUE),
                       keep=getOption("nonmem2rx.keep", c("dfSub", "dfObs", "thetaMat", "sigma"))) {
+  if (any(grepl("[$][Pp][Rr][Oo][Bb][Ll][Ee][Mm]", file))) {
+    .file <- tempfile(fileext=".ctl")
+    writeLines(gsub("[ \t]+[$]", "$", file), .file)
+    file <- .file
+    on.exit(unlink(.file))
+  }
   .pt <- proc.time()
   .ret <- .collectWarn({
     checkmate::assertFileExists(file)

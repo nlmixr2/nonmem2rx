@@ -1,3 +1,9 @@
+# nonmem2rx (development version)
+
+* Add more flexible replacement of ETA and other values #188
+
+* Add ability to use `nonmem2rx` with a NONMEM control stream text input
+
 # nonmem2rx 0.1.5
 
 * Be more forgiving in the validation and remove IDs without
