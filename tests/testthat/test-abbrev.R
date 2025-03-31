@@ -402,12 +402,18 @@ test_that("abbrev #190", {
   VC = TVV*EXP(ETA_VC)
   V = VC
   S1 = VC
+  EXPP = DEXP(THETA(3))
+
+  F1=EXP(EXPP)/(1+EXP(EXPP))
+  IF (DSCOL.EQ.2) F1 = 1
+  IF (DSCOL.EQ.3) F1 = 1
 
   $ERROR (ONLY OBS)
   Y = F + F*EPS(1)
 
   $THETA  (0,0.00469307) ; POP_CL
   $THETA  (0,1.00916) ; POP_VC
+  $THETA  (0,1) ; POP_EXP
 
   $OMEGA  0.0309626 ; IIV_CL
   $OMEGA  0.031128 ; IIV_VC
