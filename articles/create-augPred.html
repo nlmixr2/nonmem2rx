@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Created Augmented pred/ipred plots with `augPred()`</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/v0.1.6/vignettes/articles/create-augPred.Rmd" class="external-link"><code>vignettes/articles/create-augPred.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/main/vignettes/articles/create-augPred.Rmd" class="external-link"><code>vignettes/articles/create-augPred.Rmd</code></a></small>
       <div class="d-none name"><code>create-augPred.Rmd</code></div>
     </div>
 
@@ -153,7 +153,7 @@ and population.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
@@ -189,9 +189,9 @@ object:</p>
 <span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 3.0.2.9000 using 2 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 3.0.4.9000 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -209,7 +209,7 @@ object:</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.040281 0.121    0.012 100.95       2.85</span></span>
+<span><span class="co">#&gt; elapsed 0.038916 0.089    0.012 100.95      2.748</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -266,7 +266,7 @@ object:</p>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/augPred.html" class="external-link">augPred</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     values        ind id   time Endpoint</span></span>

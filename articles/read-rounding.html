@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Reading rounding from NONMEM</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/v0.1.6/vignettes/articles/read-rounding.Rmd" class="external-link"><code>vignettes/articles/read-rounding.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/main/vignettes/articles/read-rounding.Rmd" class="external-link"><code>vignettes/articles/read-rounding.Rmd</code></a></small>
       <div class="d-none name"><code>read-rounding.Rmd</code></div>
     </div>
 
@@ -167,7 +167,7 @@ model.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'dvid' to 'nmdvid'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/nonmem2rx/nonmem2rx/vignettes/articles/pk.turnover.emax3-nonmem/pk.turnover.emax3.pred</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
@@ -178,7 +178,7 @@ model.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming compartments</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving ipred problem</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving pred problem</span></span>
@@ -447,7 +447,7 @@ done below:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> copy 'dfSub' to nonmem2rx model</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> copy 'dfObs' to nonmem2rx model</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> merging 'dvid' with nlmixr2 'cmt' definition</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving ipred problem</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving pred problem</span></span>
@@ -556,7 +556,7 @@ done below:</p>
 <span><span class="co">#&gt;         ka &lt;- exp(tka + eta.ka)</span></span>
 <span><span class="co">#&gt;         cl &lt;- exp(tcl + eta.cl)</span></span>
 <span><span class="co">#&gt;         v &lt;- exp(tv + eta.v)</span></span>
-<span><span class="co">#&gt;         emax &lt;- expit(temax + eta.emax)</span></span>
+<span><span class="co">#&gt;         emax &lt;- expit(temax + eta.emax, 0, 1)</span></span>
 <span><span class="co">#&gt;         ec50 &lt;- exp(tec50 + eta.ec50)</span></span>
 <span><span class="co">#&gt;         kout &lt;- exp(tkout + eta.kout)</span></span>
 <span><span class="co">#&gt;         e0 &lt;- exp(te0 + eta.e0)</span></span>
@@ -595,9 +595,9 @@ convert the fit to a full nlmixr2 fit object.</p>
 <span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 3.0.2.9000 using 2 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 3.0.4.9000 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -630,7 +630,7 @@ model:</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.040244 0.077     0.01 320.27      3.762</span></span>
+<span><span class="co">#&gt; elapsed 0.029866 0.069     0.01 320.27      3.517</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -789,7 +789,7 @@ follows:</p>
 <span><span class="co">#&gt;         ka &lt;- exp(tka)</span></span>
 <span><span class="co">#&gt;         cl &lt;- exp(tcl + eta.cl)</span></span>
 <span><span class="co">#&gt;         v &lt;- exp(tv + eta.v)</span></span>
-<span><span class="co">#&gt;         emax &lt;- expit(temax)</span></span>
+<span><span class="co">#&gt;         emax &lt;- expit(temax, 0, 1)</span></span>
 <span><span class="co">#&gt;         ec50 &lt;- exp(tec50 + eta.ec50)</span></span>
 <span><span class="co">#&gt;         kout &lt;- exp(tkout)</span></span>
 <span><span class="co">#&gt;         e0 &lt;- exp(te0 + eta.e0)</span></span>
@@ -834,20 +834,20 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling inner model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → finding duplicate expressions in FD model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → optimizing duplicate expressions in FD model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; calculating covariance matrix</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:33 </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:28 </span></span>
 <span><span class="co">#&gt; done</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -858,12 +858,12 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── </span><span style="color: #0000BB; font-weight: bold;">nlmix</span><span style="color: #BB0000; font-weight: bold;">r²</span><span style="font-weight: bold;"> </span><span style="color: #BBBB00; font-weight: bold;">FOCE</span><span style="color: #BB0000; font-weight: bold;">i</span> (outer: nlminb) ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)</span></span>
-<span><span class="co">#&gt; FOCEi 1425.005 2342.699 2405.399       -1156.35        896101.4        262.0511</span></span>
+<span><span class="co">#&gt; FOCEi 1425.005 2342.699 2405.399       -1156.35        910755.8        267.0385</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup optimize covariance table compress    other</span></span>
-<span><span class="co">#&gt; elapsed 0.010427 33.65147   33.65148  0.11    0.014 85.76462</span></span>
+<span><span class="co">#&gt; elapsed 0.003348  28.0335   28.03351 0.106    0.016 73.13464</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -955,17 +955,17 @@ model</p>
 <span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling inner model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → finding duplicate expressions in FD model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → optimizing duplicate expressions in FD model...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; calculating covariance matrix</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:05</span></span>
@@ -1002,7 +1002,7 @@ model</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2 covariance</span></span>
-<span><span class="co">#&gt; elapsed 0.040244 0.077     0.01 320.27      3.762     13.813</span></span>
+<span><span class="co">#&gt; elapsed 0.029866 0.069     0.01 320.27      3.517     13.631</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
