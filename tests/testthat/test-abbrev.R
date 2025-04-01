@@ -386,3 +386,43 @@ test_that("abbrev #188", {
   expect_error(nonmem2rx(m), NA)
 
 })
+
+test_that("abbrev #190", {
+
+  m <- "$PROBLEM 1cmptIVmodelCov
+  $DATA ..\\data.csv IGNORE=@
+  $INPUT ID TIME AMT DV
+  $SUBROUTINE ADVAN1 TRANS2
+  $ABBR REPLACE ETA_CL=ETA(1)
+  $ABBR REPLACE ETA_VC=ETA(2)
+  $PK
+  TVCL = THETA(1)
+  TVV = THETA(2)
+  CL = TVCL*EXP(ETA_CL)
+  VC = TVV*EXP(ETA_VC)
+  V = VC
+  S1 = VC
+  EXPP = DEXP(THETA(3))
+
+  F1=EXP(EXPP)/(1+EXP(EXPP))
+  IF (DSCOL.EQ.2) F1 = 1
+  IF (DSCOL.EQ.3) F1 = 1
+
+  $ERROR (ONLY OBS)
+  Y = F + F*EPS(1)
+
+  $THETA  (0,0.00469307) ; POP_CL
+  $THETA  (0,1.00916) ; POP_VC
+  $THETA  (0,1) ; POP_EXP
+
+  $OMEGA  0.0309626 ; IIV_CL
+  $OMEGA  0.031128 ; IIV_VC
+
+  $SIGMA  0.0130865  ; SIGMA
+
+  $ESTIMATION METHOD=1 INTERACTION MAXEVALS=99999
+  $TABLE ID TIME DV CIPREDI PRED RES CWRES NOAPPEND NOPRINT ONEHEADER FILE=res.tab"
+
+  expect_error(nonmem2rx(m), NA)
+
+})

@@ -1,3 +1,7 @@
+# nonmem2rx 0.1.7
+
+* Added `$ERROR (ONLY OBS)` support
+
 # nonmem2rx 0.1.6
 
 * Add more flexible replacement of ETA and other values #188

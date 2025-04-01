@@ -68,19 +68,20 @@ comresn1: 'COMRES' '=' '-' '1';
 callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
 
 call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
+        | 'EVERY'
+        | 'EVERY' 'EVENT'
+        | 'IND' 'REC'
+        | 'IND.' 'REC.'
+        | 'NEW' 'EVENT' 'TIME'
+        | 'NEW' 'TIME'
         | 'OBS'
+        | 'OBS' 'ONLY'
         | 'OBSERVATION' 'ONLY'
+        | 'ONCE'
+        | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
+        | 'ONLY' 'OBS'
         | 'ONLY' 'OBSERVATION'
         | 'ONLY' 'OBSERVATIONS'
-        | 'OBS' 'ONLY'
-        | 'ONCE' 'PER' 'INDIVIDUAL' 'RECORD'
-        | 'ONCE'
-        | 'IND.' 'REC.'
-        | 'IND' 'REC'
-        | 'EVERY' 'EVENT'
-        | 'EVERY'
-        | 'NEW' 'TIME'
-        | 'NEW' 'EVENT' 'TIME'
         ) ')';
 
 if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
