@@ -141,6 +141,16 @@
                      }
                      x
                    })
+  if (length(.w) > 0 && packageVersion("rxode2") >= "4.0.0") {
+    .w  <- which(vapply(seq_along(.model),
+                        function(i) {
+                          identical(.model[[i]], str2lang("central <- rxLinCmt1"))
+                        }, logical(1), USE.NAMES=FALSE))
+    .model <- lapply(seq_along(.model)[-.w],
+                     function(i) {
+                       .model[[i]]
+                     })
+  }
   .ini <- as.expression(lotri::as.lotri(.ret$iniDf))
   .ini[[1]] <- str2lang("ini")
   .model <- as.call(c(list(quote(`{`)), .model))
