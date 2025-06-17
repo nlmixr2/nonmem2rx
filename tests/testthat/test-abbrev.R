@@ -84,6 +84,12 @@ test_that("test abbrev", {
   .a("DO WHILE (CL .NE. 4)", "while (CL != 4) {")
   .a("ENDDO", "}")
   .a("IF (CL .GE. 4) CL = 4", "if (CL >= 4) CL <- 4")
+  # Case-insensitive if statements
+  .a("if (CL.GE.4) THEN", "if (CL >= 4) {")
+  .a("if (CL.GE.4) then", "if (CL >= 4) {")
+  .a("else", "} else {")
+  .a("elseif (CL .LE. 2) THEN", "} else if (CL <= 2) {")
+  .a("endif", "}")
 
   # Unsupported lines
   expect_warning(.a("\"FIRST", NULL), "verbatim")

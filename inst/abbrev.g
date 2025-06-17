@@ -63,7 +63,7 @@ prob        : ('P(' | 'p(') decimalintNo0 ')' '=' logical_or_expression;
 mtimeL      : ('mtime(' | 'MTIME(') decimalintNo0 ')' '=' logical_or_expression;
 
 exit_line: 'EXIT' decimalint decimalint;
-ifexit: 'IF' '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
+ifexit: ifStatement '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
 comresn1: 'COMRES' '=' '-' '1';
 callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
 
@@ -84,26 +84,32 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         | 'ONLY' 'OBSERVATIONS'
         ) ')';
 
-if1 : 'IF' '(' logical_or_expression ')' identifier  '='  logical_or_expression;
-if1other : 'IF' '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL);
+if1 : ifStatement '(' logical_or_expression ')' identifier  '='  logical_or_expression;
+if1other : ifStatement '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL);
 
 
-ifthen: 'IF' '(' logical_or_expression ')' 'THEN';
-elseif: ('ELSEIF' | "ELSE +IF") '(' logical_or_expression ')' 'THEN';
-else: 'ELSE';
-endif: ('ENDIF' | "END +IF");
+ifthen: ifStatement '(' logical_or_expression ')' thenStatement;
+elseif: elseifStatement '(' logical_or_expression ')' thenStatement;
+else: elseStatement;
+endif: endifStatement;
 dowhile: 'DO' 'WHILE' '(' logical_or_expression ')';
 enddo: ('ENDDO' | "END +DO");
 
+ifStatement: ('IF' | 'if');
+thenStatement: ('THEN' | 'then');
+elseifStatement: ('ELSEIF' | 'elseif' | 'ELSE +IF' | 'else +if');
+elseStatement: ('ELSE' | 'else');
+endifStatement: ('ENDIF' | 'endif' | 'END +IF' | 'end +if');
+
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
-ifcallsimeta: 'IF' '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';
+ifcallsimeta: ifStatement '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';
 callgeteta: 'CALL' 'GETETA' '(' 'ETA' ')';
 callsimeps: 'CALL' 'SIMEPS' '(' 'EPS' ')';
-ifcallsimeps:'IF' '(' logical_or_expression ')' 'CALL' 'SIMEPS' '(' 'EPS' ')';
+ifcallsimeps: ifStatement '(' logical_or_expression ')' 'CALL' 'SIMEPS' '(' 'EPS' ')';
 callpassmode: 'CALL' 'PASS' '(' 'MODE' ')';
 callsupp:   'CALL' 'SUPP' '(' "[01]" ',' "[01]" ')';
 callrandom: 'CALL' 'RANDOM' '(' "(10|[1-9])" ',' 'R' ')';
-ifcallrandom: 'IF' '(' logical_or_expression ')' 'CALL' 'RANDOM' '(' "(10|[1-9])" ',' 'R' ')';
+ifcallrandom: ifStatement '(' logical_or_expression ')' 'CALL' 'RANDOM' '(' "(10|[1-9])" ',' 'R' ')';
 
 assignment : identifier  '='  logical_or_expression;
 
