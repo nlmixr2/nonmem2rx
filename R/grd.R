@@ -17,5 +17,5 @@ nmgrd <- function(file) {
   }
   .lst <- .lst[.lst$NMREP == 1 & .lst$ITERATION == max(.lst$ITERATION),]
   .lst$NMREP <- NULL
-  return(rwaGrad=unlist(.lst))
+  unlist(.lst)
 }
