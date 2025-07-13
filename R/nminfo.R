@@ -259,7 +259,7 @@ nminfo <- function(file,
   .grdFile <- paste0(.base, grd)
   if (file.exists(.grdFile)) {
     if (verbose) .minfo("reading in grd file")
-    .ret$rawGrad <- nmgrd(.extFile)
+    .ret$rawGrad <- nmgrd(.grdFile)
     .uses <- c(.uses, "grd")
   } else {
     .ret$rawGrad <- NULL
