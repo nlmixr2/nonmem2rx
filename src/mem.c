@@ -12,9 +12,7 @@
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
 /* replace pkg as appropriate */
-#else
 #define _(String) (String)
-#endif
 
 void nonmem2rx_abbrec_parseFree(int last);
 void nonmem2rx_abbrev_parseFree(int last);
