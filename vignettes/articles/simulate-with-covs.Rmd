@@ -163,7 +163,7 @@ plot(ci)
 You can also simulation without uncertainty and use covariates by
 resampling by hand (or even simulating new covariates manually).
 
-I believe that reampling keeps any hidden correlations between
+I believe that resampling keeps any hidden correlations between
 covariates, and should be used whenever possible.  At the time of this
 writing, resampling can only occur when the new event table is a
 multiple of the input dataest.  Eventually a feature may be added to
