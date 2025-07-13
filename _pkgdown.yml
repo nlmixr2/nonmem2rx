@@ -12,9 +12,10 @@ reference:
       - as.nonmem2rx
   - title: Reading in information from `NONMEM`
     contents:
-      - nminfo
       - nmcov
       - nmext
+      - nmgrd
+      - nminfo
       - nmlst
       - nmtab
       - nmxml
