@@ -2,13 +2,7 @@
 #define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include <R.h>
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#define _(String) dgettext ("nonmem2rx", String)
-/* replace pkg as appropriate */
-#else
 #define _(String) (String)
-#endif
 
 using namespace Rcpp;
 

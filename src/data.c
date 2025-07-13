@@ -11,13 +11,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#define _(String) dgettext ("nonmem2rx", String)
-/* replace pkg as appropriate */
-#else
 #define _(String) (String)
-#endif
 #include "data.g.d_parser.h"
 #define max2( a , b )  ( (a) > (b) ? (a) : (b) )
 
