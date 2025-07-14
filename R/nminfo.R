@@ -14,6 +14,7 @@
 #' nminfo(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
 nminfo <- function(file,
                    mod=".mod", xml=".xml", ext=".ext", cov=".cov", phi=".phi", lst=".lst",
+                   grd=".grd",
                    useXml = TRUE, useExt = TRUE, useCov=TRUE, usePhi=TRUE, useLst=TRUE,
                    strictLst=FALSE, verbose=FALSE) {
   # xml output can be buggy and not well formed for some nonmem implementations, so skip if necessary
@@ -34,7 +35,8 @@ nminfo <- function(file,
                tere=NULL,
                control=NULL,
                eta=NULL,
-               uses=NULL)
+               uses=NULL,
+               thetaGrad=NULL)
   .xmlFile <- paste0(.base, xml)
   .hasXml <- FALSE
   if (useXml && file.exists(.xmlFile)) {
@@ -252,6 +254,15 @@ nminfo <- function(file,
         .uses <- c(.uses, "ctl")
       }
     }
+  }
+  # now check for grad
+  .grdFile <- paste0(.base, grd)
+  if (file.exists(.grdFile)) {
+    if (verbose) .minfo("reading in grd file")
+    .ret$rawGrad <- nmgrd(.grdFile)
+    .uses <- c(.uses, "grd")
+  } else {
+    .ret$rawGrad <- NULL
   }
   .ret$uses <- .uses
   .ret

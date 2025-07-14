@@ -412,6 +412,8 @@
 #'
 #' @param ext the NONMEM ext file extension, defaults to `.ext`
 #'
+#' @param grd the NONMEM gradient file extension, defaults to `.grd`
+#'
 #' @param cov the NONMEM covariance file extension, defaults to `.cov`
 #'
 #' @param phi the NONMEM eta/phi file extension, defaults to `.phi`
@@ -580,6 +582,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       lst=getOption("nonmem2rx.lst", ".lst"),
                       xml=".xml",
                       ext=".ext",
+                      grd=".grd",
                       scanLines=getOption("nonmem2rx.scanLines", 50L),
                       save=getOption("nonmem2rx.save", NA),
                       saveTime=getOption("nonmem2rx.saveTime", 15),
@@ -659,7 +662,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       .Call(`_nonmem2rx_r_parseFree`)
     })
     .minfo(sprintf("getting information from  '%s'", file))
-    .lstInfo <- nminfo(file, mod=mod, xml=xml, ext=ext, cov=cov, phi=phi, lst=lst,
+    .lstInfo <- nminfo(file, mod=mod, xml=xml, ext=ext, cov=cov, phi=phi, lst=lst, grd=grd,
                        useXml = useXml, useExt = useExt, useCov=useCov, usePhi=usePhi, useLst=useLst,
                        strictLst=strictLst, verbose=TRUE)
     .minfo("done")

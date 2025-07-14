@@ -12,6 +12,7 @@ nminfo(
   cov = ".cov",
   phi = ".phi",
   lst = ".lst",
+  grd = ".grd",
   useXml = TRUE,
   useExt = TRUE,
   useCov = TRUE,
@@ -38,6 +39,8 @@ file.}
 \item{phi}{the NONMEM eta/phi file extension, defaults to \code{.phi}}
 
 \item{lst}{the NONMEM output extension, defaults to \code{.lst}}
+
+\item{grd}{the NONMEM gradient file extension, defaults to \code{.grd}}
 
 \item{useXml}{if present, use the NONMEM xml file to import much of
 the NONMEM information}

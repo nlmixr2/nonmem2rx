@@ -33,6 +33,7 @@ nonmem2rx(
   lst = getOption("nonmem2rx.lst", ".lst"),
   xml = ".xml",
   ext = ".ext",
+  grd = ".grd",
   scanLines = getOption("nonmem2rx.scanLines", 50L),
   save = getOption("nonmem2rx.save", NA),
   saveTime = getOption("nonmem2rx.saveTime", 15),
@@ -143,6 +144,8 @@ information}
 \item{xml}{the NONMEM xml file extension , defaults to \code{.xml}}
 
 \item{ext}{the NONMEM ext file extension, defaults to \code{.ext}}
+
+\item{grd}{the NONMEM gradient file extension, defaults to \code{.grd}}
 
 \item{scanLines}{number of lines to scan for comment chars when
 \verb{IGNORE=@}, default is 50}

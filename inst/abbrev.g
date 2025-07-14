@@ -97,9 +97,9 @@ enddo: ('ENDDO' | "END +DO");
 
 ifStatement: ('IF' | 'if');
 thenStatement: ('THEN' | 'then');
-elseifStatement: ('ELSEIF' | 'elseif' | 'ELSE +IF' | 'else +if');
+elseifStatement: ('ELSEIF' | 'elseif' | "ELSE +IF" | "else +if");
 elseStatement: ('ELSE' | 'else');
-endifStatement: ('ENDIF' | 'endif' | 'END +IF' | 'end +if');
+endifStatement: ('ENDIF' | 'endif' | "END +IF" | "end +if");
 
 callsimeta: 'CALL' 'SIMETA' '(' 'ETA' ')';
 ifcallsimeta: ifStatement '(' logical_or_expression ')' 'CALL' 'SIMETA' '(' 'ETA' ')';

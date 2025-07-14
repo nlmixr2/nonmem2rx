@@ -10,13 +10,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#define _(String) dgettext ("nonmem2rx", String)
-/* replace pkg as appropriate */
-#else
 #define _(String) (String)
-#endif
 
 SEXP _nonmem2rx_fixNonmemTies(SEXP idS, SEXP timeS, SEXP deltaS) {
   int *id = INTEGER(idS);

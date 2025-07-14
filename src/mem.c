@@ -11,13 +11,8 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <Rmath.h>
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#define _(String) dgettext ("nonmem2rx", String)
 /* replace pkg as appropriate */
-#else
 #define _(String) (String)
-#endif
 
 void nonmem2rx_abbrec_parseFree(int last);
 void nonmem2rx_abbrev_parseFree(int last);
