@@ -95,7 +95,29 @@
 
 .nonmem2rxBuildRxSolve <- function() {
   message("build options for rxSolve to match NONMEM")
-  .args <- deparse(eval(str2lang(paste0("args(rxode2::rxSolve)"))))
+  .args <- deparse1(eval(str2lang(paste0("args(rxode2::rxSolve)"))))
+  .first <- c(strsplit(.args, "[.][.][.]"))[[1]][1]
+  .first <- paste(.first,
+                  "..., ",
+                  "cores,",
+                  'covsInterpolation = c("locf", "linear", "nocb", "midpoint"), ',
+                  'naInterpolation = c("locf", "nocb"), ',
+                  "addlKeepsCov = FALSE, ",
+                  "addlDropSs = TRUE, ",
+                  "ssAtDoseTime = TRUE, ",
+                  "safeZero = TRUE, ",
+                  "safePow = TRUE, ",
+                  "safeLog = TRUE, ",
+                  "ss2cancelAllPending = FALSE, ",
+                  "nStud = 1L, ",
+                  "dfSub = 0, ",
+                  "dfObs = 0, ",
+                  "thetaMat = NULL, ",
+                  "ssAtol = 1e-08, ",
+                  "ssRtol = 1e-06, ",
+                  "sigma = NULL, ",
+                  "envir = parent.frame()) NULL", collapse="")
+  .args <- deparse(eval(str2lang(.first)))
   .args[1] <- paste0("rxSolve.nonmem2rx <-", .args[1])
   .args <- .args[-length(.args)]
   .extra <- quote({
@@ -238,7 +260,30 @@
     .formalArgs[.w] <- "..."
     .has3 <- TRUE
   }
-  .formalArgs <- paste(.formalArgs, collapse=", ")
+  if (length(.w) > 0) {
+    .formalArgs[.w] <- "..."
+    .has3 <- TRUE
+  }
+  .formalArgs <- c(paste(.formalArgs[seq(1, .w-1)], ", "),
+                   "..., ",
+                   "cores=cores,",
+                   'covsInterpolation = covsInterpolation, ',
+                   "addlKeepsCov = addlKeepsCov, ",
+                   "addlDropSs = addlDropSs, ",
+                   "ssAtDoseTime = ssAtDoseTime, ",
+                   "safeZero = safeZero, ",
+                   "safePow = safePow, ",
+                   "safeLog = safeLog, ",
+                   "ss2cancelAllPending = ss2cancelAllPending, ",
+                   "nStud = nStud, ",
+                   "dfSub = dfSub, ",
+                   "dfObs = dfObs, ",
+                   "thetaMat = thetaMat, ",
+                   "ssAtol = ssAtol, ",
+                   "ssRtol = ssRtol, ",
+                   "sigma = sigma, ",
+                   "envir = envir")
+  .formalArgs <- paste(.formalArgs, collapse="")
   .formalArgs <- paste0("rxode2::rxSolve(", .formalArgs, ")")
   .args <- c(.args, .formalArgs, "}")
   .args <- paste(.args, collapse="\n")
