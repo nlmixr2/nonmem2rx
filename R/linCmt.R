@@ -141,7 +141,7 @@
                      }
                      x
                    })
-  if (length(.w) > 0 && packageVersion("rxode2") >= "4.0.0") {
+  if (length(.w) > 0 && utils::packageVersion("rxode2") >= "4.0.0") {
     .w  <- which(vapply(seq_along(.model),
                         function(i) {
                           identical(.model[[i]][[1]], quote(`<-`)) &&
