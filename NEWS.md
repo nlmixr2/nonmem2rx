@@ -1,3 +1,7 @@
+# nonmem2rx (development version)
+
+* Better handling of `ytype`
+
 # nonmem2rx 0.1.7
 
 * Added `$ERROR (ONLY OBS)` support
