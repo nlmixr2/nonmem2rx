@@ -96,6 +96,10 @@
       .minfo("renaming 'ytype' to 'nmytype'")
       .wyt <- which(tolower(names(.data)) == "ytype")
       names(.data)[.wyt] <- "nmytype"
+    } else {
+      .minfo("renaming 'ytype' to 'nmytype'")
+      .wyt <- which(tolower(names(.data)) == "ytype")
+      names(.data)[.wyt] <- "nmytype"
     }
     if (.nonmem2rx$needDvid) {
       .minfo("renaming 'dvid' to 'nmdvid'")

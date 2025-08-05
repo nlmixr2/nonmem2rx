@@ -103,6 +103,7 @@ int extendedCtrlInt = 0;
 SEXP nonmem2rxGetScale(int scale);
 
 int evidWarning = 0;
+int ytypeWarning = 0;
 int idWarning = 0;
 int icallWarning = 0;
 int irepWarning = 0;
@@ -277,6 +278,15 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       }
       sAppendN(&curLine, "nmevid", 6);
       return 1;
+    } else if (!nmrxstrcmpi("ytype", v)) {
+      if (evidWarning == 0) {
+        Rf_warning("'ytype' variable has a special meaning in rxode2, renamed to 'nmytype', rename/copy in your data too");
+        ytypeWarning = 1;
+        nonmem2rxNeedYtype();
+      }
+      sAppendN(&curLine, "nmytype", 7);
+      return 1;
+
     } else if (!nmrxstrcmpi("amt", v)) {
       // make sure amt is lower case; works around a parser bug in rxode2parse
       sAppendN(&curLine, "amt", 3);
@@ -1323,6 +1333,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP exte
   includeWarning = 0;
   maxA = 0;
   evidWarning=0;
+  ytypeWarning = 0;
   idWarning=0;
   simWarning=0;
   ipredSimWarning=0;
