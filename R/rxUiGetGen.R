@@ -27,6 +27,7 @@ rxUiGet.ipredAtol <- function(x, ...) {
   get("ipredAtol", envir=x[[1]])
 }
 attr(rxUiGet.ipredAtol, "desc") <- "50th percentile of the IPRED atol comparison between rxode2 and model import"
+attr(rxUiGet.ipredAtol, "rstudio") <- list(1)
 
 rxUiGet.ipredRtol <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -36,6 +37,7 @@ rxUiGet.ipredRtol <- function(x, ...) {
   get("ipredRtol", envir=x[[1]])
 }
 attr(rxUiGet.ipredRtol, "desc") <- "50th percentile of the IPRED rtol comparison between rxode2 and model import"
+attr(rxUiGet.ipredRtol, "rstudio") <- list(1)
 
 rxUiGet.ipredCompare <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -54,6 +56,7 @@ rxUiGet.predAtol <- function(x, ...) {
   get("predAtol", envir=x[[1]])
 }
 attr(rxUiGet.predAtol, "desc") <- "50th percentile of the PRED atol comparison between rxode2 and model import"
+attr(rxUiGet.predAtol, "rstudio") <- list(1)
 
 rxUiGet.predRtol <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -63,6 +66,7 @@ rxUiGet.predRtol <- function(x, ...) {
   get("predRtol", envir=x[[1]])
 }
 attr(rxUiGet.predRtol, "desc") <- "50th percentile of the PRED rtol comparison between rxode2 and model import"
+attr(rxUiGet.predRtol, "rstudio") <- list(1)
 
 rxUiGet.predCompare <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -81,6 +85,7 @@ rxUiGet.sigma <- function(x, ...) {
   get("sigma", envir=x[[1]])
 }
 attr(rxUiGet.sigma, "desc") <- "sigma matrix from model import"
+attr(rxUiGet.sigma, "rstudio") <- list(structure(0, dim = c(1L, 1L)))
 
 rxUiGet.thetaMat <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -90,6 +95,7 @@ rxUiGet.thetaMat <- function(x, ...) {
   get("thetaMat", envir=x[[1]])
 }
 attr(rxUiGet.thetaMat, "desc") <- "covariance matrix"
+attr(rxUiGet.thetaMat, "rstudio") <- list(structure(0, dim = c(1L, 1L)))
 
 rxUiGet.dfSub <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -99,6 +105,7 @@ rxUiGet.dfSub <- function(x, ...) {
   get("dfSub", envir=x[[1]])
 }
 attr(rxUiGet.dfSub, "desc") <- "Number of subjects"
+attr(rxUiGet.dfSub, "rstudio") <- list(10L)
 
 rxUiGet.dfObs <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -108,6 +115,7 @@ rxUiGet.dfObs <- function(x, ...) {
   get("dfObs", envir=x[[1]])
 }
 attr(rxUiGet.dfObs, "desc") <- "Number of observations"
+attr(rxUiGet.dfObs, "rstudio") <- list(10L)
 
 rxUiGet.atol <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -117,6 +125,7 @@ rxUiGet.atol <- function(x, ...) {
   get("atol", envir=x[[1]])
 }
 attr(rxUiGet.atol, "desc") <- "atol imported from translation"
+attr(rxUiGet.atol, "rstudio") <- list(1)
 
 rxUiGet.rtol <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -126,6 +135,7 @@ rxUiGet.rtol <- function(x, ...) {
   get("rtol", envir=x[[1]])
 }
 attr(rxUiGet.rtol, "desc") <- "rtol imported from translation"
+attr(rxUiGet.rtol, "rstudio") <- list(1)
 
 rxUiGet.ssRtol <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -135,6 +145,7 @@ rxUiGet.ssRtol <- function(x, ...) {
   get("ssRtol", envir=x[[1]])
 }
 attr(rxUiGet.ssRtol, "desc") <- "ssRtol imported from translation"
+attr(rxUiGet.ssRtol, "rstudio") <- list(1)
 
 rxUiGet.ssAtol <- function(x, ...) {
   .meta <- new.env(parent=emptyenv())
@@ -144,6 +155,7 @@ rxUiGet.ssAtol <- function(x, ...) {
   get("ssAtol", envir=x[[1]])
 }
 attr(rxUiGet.ssAtol, "desc") <- "ssRtol imported from translation"
+attr(rxUiGet.ssAtol, "rstudio") <- list(1)
 .rxUiGetRegister <- function() {
   rxode2::.s3register("rxode2::rxUiGet", "nonmemData")
   rxode2::.s3register("rxode2::rxUiGet", "etaData")

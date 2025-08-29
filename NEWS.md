@@ -1,6 +1,8 @@
-# nonmem2rx (development version)
+# nonmem2rx 0.1.8
 
 * Better handling of `ytype`
+
+* Added work-around for new Rstudio completion
 
 # nonmem2rx 0.1.7
 

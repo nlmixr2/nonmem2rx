@@ -295,6 +295,20 @@
 
 .nonmem2rxRxUiGetMethods <- function() {
   message("build rxUiGet options to allow str() and dollar completion")
+  .rstudio <- list(
+    "ipredAtol"=1,
+    "ipredRtol"=1,
+    "predAtol"=1,
+    "predRtol"=1,
+    "sigma"=matrix(0, 1, 1),
+    "thetaMat"=matrix(0, 1, 1),
+    "dfSub"=10L,
+    "dfObs"=10L,
+    "atol"=1,
+    "rtol"=1,
+    "ssRtol"=1,
+    "ssAtol"=1
+  )
   .meth <- c("nonmemData"="NONMEM input data from nonmem2rx",
              "etaData"="NONMEM etas input from nonmem2rx",
              "ipredAtol"="50th percentile of the IPRED atol comparison between rxode2 and model import",
@@ -325,6 +339,10 @@
                               sprintf("  get(\"%s\", envir=x[[1]])", .name),
                               "}",
                               sprintf("attr(rxUiGet.%s, \"desc\") <- %s", .name, deparse1(.desc)))
+                    if (.name %in% names(.rstudio)) {
+                      .ret <- c(.ret,
+                                sprintf("attr(rxUiGet.%s, \"rstudio\") <- list(%s)", .name, deparse1(.rstudio[[.name]])))
+                    }
                     .ret <- paste(.ret, collapse="\n")
                   }, character(1), USE.NAMES=TRUE),
                   ".rxUiGetRegister <- function() {",
