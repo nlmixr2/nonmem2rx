@@ -126,5 +126,5 @@ library(babelmixr2)
 
 fit <- as.nlmixr2(new)
 
-fit
+print(fit)
 ```
