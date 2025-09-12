@@ -83,7 +83,7 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Simulate using Parameter Uncertainty</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/v0.1.8/vignettes/articles/simulate-uncertainty.Rmd" class="external-link"><code>vignettes/articles/simulate-uncertainty.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/main/vignettes/articles/simulate-uncertainty.Rmd" class="external-link"><code>vignettes/articles/simulate-uncertainty.Rmd</code></a></small>
       <div class="d-none name"><code>simulate-uncertainty.Rmd</code></div>
     </div>
 
@@ -277,7 +277,15 @@ confidence interval and then plot the confidence bands:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.025<span style="text-decoration: underline;">0</span>     4 CENTRAL  <span style="text-decoration: underline;">41</span>353.  <span style="text-decoration: underline;">48</span>409.  <span style="text-decoration: underline;">57</span>328. 2.5%      </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 80 more rows</span></span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sci</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sci</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `aes_string()` was deprecated in ggplot2 3.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use tidy evaluation idioms with `aes()`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See also `vignette("ggplot2-in-packages")` for more information.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">rxode2</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/nlmixr2/rxode2/issues/&gt;</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
 <p><img src="simulate-uncertainty_files/figure-html/confint-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
