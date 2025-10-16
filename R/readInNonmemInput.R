@@ -121,6 +121,31 @@
                            }, character(1), USE.NAMES=FALSE)
   }
   .minfo("done")
+  # try to convert numeric whenever possible
+  # In cases like #208, the data is read in as a character and
+  # the final values are no longer numeric.
+  for (n in names(.data)) {
+    .cur <- .data[[n]]
+    if (is.numeric(.cur)) next
+    .x <- suppressWarnings(as.numeric(.cur))
+
+    # Vectorized check for valid conversion or valid missing value
+    # representations
+    isNaX <- is.na(.x)
+    isNaCur <- is.na(.cur)
+    if (is.character(.cur)) {
+      isEmpty <- .cur == ""
+      isNaStr <- tolower(.cur) == "na"
+      isNanStr <- tolower(.cur) == "nan"
+      isDot <- .cur == "."
+      validNa <- isNaCur | isEmpty | isNaStr | isNanStr | isDot
+    } else {
+      validNa <- isNaCur
+    }
+    if (all(!isNaX | validNa)) {
+      .data[[n]] <- .x
+    }
+  }
   .fixNonmemTies(.data, delta)
 }
 #' This reads in the nonmem output file that has the ipred data in it

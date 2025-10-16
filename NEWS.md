@@ -1,3 +1,7 @@
+# nonmem2rx (development version)
+
+* Try to make sure all the values that can be numeric are numeric #208
+
 # nonmem2rx 0.1.8
 
 * Better handling of `ytype`
