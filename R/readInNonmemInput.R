@@ -128,17 +128,21 @@
     .cur <- .data[[n]]
     if (is.numeric(.cur)) next
     .x <- suppressWarnings(as.numeric(.cur))
-    if (all(vapply(seq_along(.cur), function(i) {
-      if (is.na(.x[i])) {
-        is.na(.cur[i]) ||
-          .cur[i] == "" ||
-          tolower(.cur[i]) == "na" ||
-          tolower(.cur[i]) == "nan" ||
-          .cur[i] == "."
-      } else {
-        TRUE
-      }
-    }, logical(1), USE.NAMES=FALSE))) {
+
+    # Vectorized check for valid conversion or valid missing value
+    # representations
+    isNaX <- is.na(.x)
+    isNaCur <- is.na(.cur)
+    if (is.character(.cur)) {
+      isEmpty <- .cur == ""
+      isNaStr <- tolower(.cur) == "na"
+      isNanStr <- tolower(.cur) == "nan"
+      isDot <- .cur == "."
+      validNa <- isNaCur | isEmpty | isNaStr | isNanStr | isDot
+    } else {
+      validNa <- isNaCur
+    }
+    if (all(!isNaX | validNa)) {
       .data[[n]] <- .x
     }
   }
