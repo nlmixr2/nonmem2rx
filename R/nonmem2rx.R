@@ -446,12 +446,12 @@
 #'
 #' - a logical (default `FALSE`, don't save) that when `TRUE` will use
 #'   the base name of the control stream, append `.qs` and save the file
-#'   using `qs::qsave()`
+#'   using `qs2::qs_save()`
 #'
 #' - A path to a file to write
 #'
-#'   Note that this file will be saved with qs::qsave() and can be
-#'   loaded with qs::qread()
+#'   Note that this file will be saved with qs2::qs_save() and can be
+#'   loaded with qs2::qs_read()
 #'
 #' - A `NA` value which means save if the whole process (including
 #'   validation) takes too much time
@@ -643,7 +643,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
       if (load && file.exists(save)) {
         .minfo(paste0("loading save file '", save, "'"))
-        .ret <- qs::qread(save)
+        .ret <- qs2::qs_read(save)
         if (is.null(.ret$digest)) {
           .minfo(paste0("older version of nonmem2rx without digest, ignoring save file '", save, "'"))
         } else if (.ret$digest == .digest) {
@@ -1002,7 +1002,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   if (!is.null(save)) {
     .minfo("save model and validation")
-    qs::qsave(.ret, save)
+    qs2::qs_save(.ret, save)
     .minfo("done")
   }
   .ret

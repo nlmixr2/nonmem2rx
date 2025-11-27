@@ -1,7 +1,7 @@
 Package: nonmem2rx
 Type: Package
 Title: Converts 'NONMEM' Models to 'rxode2'
-Version: 0.1.8.9000
+Version: 0.1.9
 Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
     person("Philip", "Delff", email = "philip@delff.dk",role = c("ctb")),
@@ -43,7 +43,7 @@ Imports:
     tools,
     utils,
     data.table,
-    qs,
+    qs2,
     xml2,
     ggplot2,
     ggforce,
@@ -63,7 +63,7 @@ Suggests:
     rmarkdown,
     spelling
 Config/testthat/edition: 3
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Language: en-US
