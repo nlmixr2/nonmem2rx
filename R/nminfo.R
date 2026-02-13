@@ -179,7 +179,7 @@ nminfo <- function(file,
         } else {
           .l <- .lstFile
         }
-        lapply(.l, .nmlst.fun)
+        lapply(seq_along(.l), .nmlst.fun, lines=.l)
         .ret$tere <- .nmlst$tere
         if (verbose) .minfo("done")
       } else {

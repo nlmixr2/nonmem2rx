@@ -96,7 +96,7 @@ nmxml <- function(xml) {
   .lst <- strsplit(xml2::xml_text(xml2::xml_find_first(.xml,.lst)),"\n")[[1]]
 
   .nmlst$section <- .nmlst.nobs
-  lapply(.lst, .nmlst.fun)
+  lapply(seq_along(.lst), .nmlst.fun, lines=.lst)
 
   .theta <-  paste0("//", .prefix, "theta")
   .val <- paste0("//", .prefix, "val")
