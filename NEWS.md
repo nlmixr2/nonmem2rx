@@ -2,6 +2,10 @@
 
 * Bug fix for covariance matrices that span multiple FORTRAN output pages
 
+* Change NONMEM import for mixture models to prepend NM to MIXNUM and
+  related import items so they will not interact with rxode2/nlmixr2's
+  handling of mixture models.
+
 # nonmem2rx 0.1.9
 
 * Try to make sure all the values that can be numeric are numeric #208
