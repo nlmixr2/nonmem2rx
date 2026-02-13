@@ -48,6 +48,7 @@ jobs:
             nlmixr2/n1qn1c
             nlmixr2/monolix2rx
             lixoftConnectors=?ignore
+            qs=?ignore
             local::.
           needs: website
 
