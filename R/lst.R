@@ -354,14 +354,10 @@
                  grepl("^ *1 *$", line)) {
       j <- i + 1L
       .len <- length(lines)
-      while (grepl("^ *$", lines[j])) {
+      while (j <= .len && grepl("^ *$", lines[j])) {
         j <- j + 1L
-        if (j > .len) {
-          .nmlst$section <- .nmlst.end
-          return(NULL)
-        }
       }
-      if (!grepl("(TH|OM|SG)", lines[j])) {
+      if (j == .len || !grepl("(TH|OM|SG)", lines[j])) {
         .nmlst$section <- .nmlst.end
       }
       return(NULL)
