@@ -56,13 +56,13 @@ nonmem2rxRec.mix <- function(x) {
          call.=FALSE)
   }
   # define the simulated mixnum
-  .addModel(paste0("MIXNUM <- rxord(",
+  .addModel(paste0("NMMIXNUM <- rxord(",
                    paste(paste0("rxp.", .nonmem2rx$mixp[-length(.nonmem2rx$mixp)],"."),
                          collapse=", "),
                    ")"))
   .addModel("cur.mixp <- -1")
   # define cur.mixp which nonmem translates from MIXP and MIXP(MIXNUM)
-  .addModel(paste(paste0("if (MIXNUM == ", .nonmem2rx$mixp, ") cur.mixp <- rxp.", .nonmem2rx$mixp, "."),
+  .addModel(paste(paste0("if (NMMIXNUM == ", .nonmem2rx$mixp, ") cur.mixp <- rxp.", .nonmem2rx$mixp, "."),
                   collapse="\n"))
   # MIXP(#) is translated in the grammar
 }

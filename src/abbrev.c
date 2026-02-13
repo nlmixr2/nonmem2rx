@@ -204,10 +204,10 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       sAppendN(&curLine, "newind", 6);
       return 1;
     } else if (!nmrxstrcmpi("MIXNUM", v)) {
-      sAppendN(&curLine, "MIXNUM", 6);
+      sAppendN(&curLine, "NMMIXNUM", 8);
       return 1;
     } else if (!nmrxstrcmpi("MIXEST", v)) {
-      sAppendN(&curLine, "MIXNUM", 6);
+      sAppendN(&curLine, "NMMIXNUM", 8);
       return 1;
     } else if (!nmrxstrcmpi("MIXP", v)) {
       sAppendN(&curLine, "cur.mixp", 8);
