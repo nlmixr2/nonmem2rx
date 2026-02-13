@@ -352,9 +352,14 @@
       return(NULL)
     } else if (.nmlst$isCov &&
                  grepl("^ *1 *$", line)) {
-      j <- i+1L
+      j <- i + 1L
+      .len <- length(lines)
       while (grepl("^ *$", lines[j])) {
         j <- j + 1L
+        if (j > .len) {
+          .nmlst$section <- .nmlst.end
+          return(NULL)
+        }
       }
       if (!grepl("(TH|OM|SG)", lines[j])) {
         .nmlst$section <- .nmlst.end
@@ -393,7 +398,6 @@
 
 .resetLst <- function(strictLst) {
   .nmlst$strictLst <- strictLst
-  ## message(".nmlst.control")
   .nmlst$section <- .nmlst.control
 
   .nmlst$control <- NULL
