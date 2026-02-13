@@ -9,7 +9,7 @@ test_that("lst import that didn't import cov", {
   # Save file in temporary directory
   f <- withr::with_tempdir({
     writeLines(lst, "run0112.lst")
-    nonmem2rx("run0112.lst")
+    suppressMessages(nonmem2rx("run0112.lst"))
   })
 
   expect_false(is.null(f$thetaMat))

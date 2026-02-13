@@ -1,3 +1,7 @@
+# nonmem2rx 0.1.10
+
+* Bug fix for covariance matrices that span multiple FORTRAN output pages
+
 # nonmem2rx 0.1.9
 
 * Try to make sure all the values that can be numeric are numeric #208
