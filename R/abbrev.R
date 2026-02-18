@@ -235,8 +235,8 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .pushSigmaEst <- function(x, y) {
-  .w <- which(.nonmem2rx$sigmaEst$x == x && .nonmem2rx$sigmaEst$y == y)
-  if (length(.w) != 0L) return(invisible())
+  .w <- which(.nonmem2rx$sigmaEst$x == x & .nonmem2rx$sigmaEst$y == y)
+  if (length(.w) != 1L) return(invisible())
   .nonmem2rx$sigmaEst <- rbind(.nonmem2rx$sigmaEst, data.frame(x=x, y=y))
 }
 
