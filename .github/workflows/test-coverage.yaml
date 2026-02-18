@@ -29,6 +29,7 @@ jobs:
           cache-version: 8
           extra-packages: |
             any::covr
+            qs?=ignore
           needs: coverage
 
       - name: Test coverage

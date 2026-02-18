@@ -142,11 +142,15 @@
           .nmlst$time <- NULL
         }
         .nmlst$section <- .nmlst.obj
-        if (.nmlst$tereOnly) .nmlst$section <- .nmlst.end
+        if (.nmlst$tereOnly) {
+          .nmlst$section <- .nmlst.end
+        }
         return(NULL)
       } else if (.nmlst$tere && grepl("#OBJV:", line, fixed=TRUE)) {
         .nmlst$section <- .nmlst.obj
-        if (.nmlst$tereOnly) .nmlst$section <- .nmlst.end
+        if (.nmlst$tereOnly) {
+          .nmlst$section <- .nmlst.end
+        }
       } else if (.nmlst$tere) {
         .nmlst$time <- c(.nmlst$time, line)
         return(NULL)
@@ -341,16 +345,29 @@
   .nmlst$section
 }
 
-.nmlstCov <- function(line) {
+.nmlstCov <- function(line, i, lines) {
   if (.nmlst$section == .nmlst.cov) {
     if (!.nmlst$isCov && grepl("COVARIANCE MATRIX OF ESTIMATE", line, fixed=TRUE)) {
       .nmlst$isCov <- TRUE
       return(NULL)
     } else if (.nmlst$isCov &&
-                 grepl("^ *(1 *$|CORRELATION MATRIX OF ESTIMATE|Elapsed|[#]|PROBLEM +NO|R MATRIX)", line)) {
+                 grepl("^ *1 *$", line)) {
+      j <- i + 1L
+      .len <- length(lines)
+      while (j <= .len && grepl("^ *$", lines[j])) {
+        j <- j + 1L
+      }
+      if (j == .len || !grepl("(TH|OM|SG)", lines[j])) {
+        .nmlst$section <- .nmlst.end
+      }
+      return(NULL)
+    } else if (.nmlst$isCov &&
+                 grepl("^ *(CORRELATION MATRIX OF ESTIMATE|Elapsed|[#]|PROBLEM +NO|R MATRIX)", line)) {
+
       .nmlst$section <- .nmlst.end
       return(NULL)
     } else if (.nmlst$isCov && grepl("********", line, fixed=TRUE)) {
+    } else if (.nmlst$isCov && grepl("(TH|OM|SG)", line, fixed=TRUE)) {
     } else if (.nmlst$isCov) {
       .nmlst$covEst <- c(.nmlst$covEst, line)
     } else {
@@ -360,7 +377,8 @@
   .nmlst$secton
 }
 
-.nmlst.fun <- function(line) {
+.nmlst.fun <- function(i, lines) {
+  line <- lines[i]
   if (is.null(.nmlstControl(line))) return(NULL)
   if (is.null(.nmlstNmtran(line))) return(NULL)
   if (is.null(.nmlstVersion(line))) return(NULL)
@@ -370,7 +388,7 @@
   if (is.null(.nmlstTere(line))) return(NULL)
   if (is.null(.nmlstObj(line))) return(NULL)
   if (is.null(.nmlstEst(line))) return(NULL)
-  if (is.null(.nmlstCov(line))) return(NULL)
+  if (is.null(.nmlstCov(line=line, i=i, lines=lines))) return(NULL)
   NULL
 }
 
@@ -441,7 +459,7 @@ nmlst <- function(file, strictLst=FALSE) {
   }
   .resetLst(strictLst)
 
-  lapply(.lst, .nmlst.fun)
+  lapply(seq_along(.lst), .nmlst.fun, lines=.lst)
 
   if (!is.null(.nmlst$covEst)) {
     .cov <- paste(.nmlst$covEst, collapse="\n")
@@ -481,8 +499,8 @@ nmlst <- function(file, strictLst=FALSE) {
   .matC <- mat
   .matR <- mat
   for (.i in seq_len(dim(.matC)[1])) {
-    .matC[,.i] <- .i
-    .matR[.i,] <- .i
+    .matC[ ,.i] <- .i
+    .matR[.i, ] <- .i
   }
   .matB <- paste0(type, .matC, ".", .matR)
   dim(.matB) <- dim(.matC)

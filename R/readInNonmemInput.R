@@ -124,7 +124,9 @@
   # try to convert numeric whenever possible
   # In cases like #208, the data is read in as a character and
   # the final values are no longer numeric.
-  for (n in names(.data)) {
+  .n <- names(.data)
+  .n <- .n[!is.na(.n)]
+  for (n in .n) {
     .cur <- .data[[n]]
     if (is.numeric(.cur)) next
     .x <- suppressWarnings(as.numeric(.cur))
