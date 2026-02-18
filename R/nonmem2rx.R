@@ -837,7 +837,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         }
         # get ETA data if it has better digits than the phi file (or isn't present yet)
         .etaData <- try(.readInEtasFromTables(file, nonmemData=.nonmemData, rxModel=.model,
-                                              nonmemOutputDir=nonmemOutputDir,rename=rename,
+                                              nonmemOutputDir=nonmemOutputDir,
+                                              rename=rename,
                                               digits=.digs))
         if (inherits(.etaData, "try-error")) .etaData <- NULL
         if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
