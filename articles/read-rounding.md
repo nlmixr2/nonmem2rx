@@ -411,12 +411,10 @@ fit <- as.nlmixr2(new)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.0.0 using 2 threads (see ?getRxThreads)
+#> rxode2 5.0.2 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
-#> → compress origData in nlmixr2 object, save 21592
-#> → compress parHistData in nlmixr2 object, save 5536
 
 # Once it is loaded remove the directory (we don't need the files any
 # more for this example)
@@ -443,8 +441,8 @@ print(fit)
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>            setup table compress NONMEM as.nlmixr2
-#> elapsed 0.038404  0.09    0.017 320.27      4.106
+#>           setup table compress NONMEM as.nlmixr2
+#> elapsed 0.01976 0.081    0.001 320.27      3.167
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -594,12 +592,22 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:27 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:29 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
-#> → compress origData in nlmixr2 object, save 21592
-#> → compress parHistData in nlmixr2 object, save 18856
+#> Warning in FUN(X[[i]], ...): gradient problems with initial estimate and
+#> covariance; see $scaleInfo
+#> Warning in FUN(X[[i]], ...): since sandwich matrix is corrected, you may
+#> compare to $covR or $covS if you wish
+#> Warning in FUN(X[[i]], ...): S matrix non-positive definite but corrected by S
+#> = sqrtm(S%*%S)
+#> Warning in FUN(X[[i]], ...): R matrix non-positive definite but corrected by R
+#> = sqrtm(R%*%R)
+#> Warning in FUN(X[[i]], ...): ETAs were reset to zero during optimization; (Can
+#> control by foceiControl(resetEtaP=.))
+#> Warning in FUN(X[[i]], ...): initial ETAs were nudged; (can control by
+#> foceiControl(etaNudge=., etaNudge2=))
 
 fit2
 ```
@@ -678,7 +686,6 @@ getVarCov(fit)
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
 #> $scaleInfo
-#> → compress origData in nlmixr2 object, save 21592
 #> Updated original fit object fit
 #>                tktr           tka           tcl           tv         temax
 #> tktr   1.833921e-02 -1.528029e-02 -2.352104e-05 3.170757e-04  0.0014879140

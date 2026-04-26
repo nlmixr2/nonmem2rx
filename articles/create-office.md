@@ -97,12 +97,10 @@ fit <- as.nlmixr2(mod)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.0.0 using 2 threads (see ?getRxThreads)
+#> rxode2 5.0.2 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
-#> → compress origData in nlmixr2 object, save 203816
-#> → compress parHistData in nlmixr2 object, save 2184
 
 fit
 ```
@@ -194,7 +192,7 @@ obnd_pptx = report_fit(
 #> 'object'
 #> Warning in is.na(p_res): is.na() applied to non-(list or vector) of type
 #> 'object'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
 #> Warning in melt.data.table(dx.cats, measure.vars = cats): id.vars and
 #> measure.vars are internally guessed when both are 'NULL'. All
 #> non-numeric/integer/logical type columns are considered id.vars, which in this
@@ -243,7 +241,7 @@ obnd_docx = report_fit(
 #> 'object'
 #> Warning in is.na(p_res): is.na() applied to non-(list or vector) of type
 #> 'object'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
 #> Warning in melt.data.table(dx.cats, measure.vars = cats): id.vars and
 #> measure.vars are internally guessed when both are 'NULL'. All
 #> non-numeric/integer/logical type columns are considered id.vars, which in this

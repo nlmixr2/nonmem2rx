@@ -420,12 +420,10 @@ fit <- as.nlmixr2(new)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.0.0 using 2 threads (see ?getRxThreads)
+#> rxode2 5.0.2 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
-#> → compress origData in nlmixr2 object, save 203816
-#> → compress parHistData in nlmixr2 object, save 2176
 
 print(fit)
 #> ── nlmixr² nonmem2rx reading NONMEM ver 7.4.3 ──
@@ -438,7 +436,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>            setup table compress NONMEM as.nlmixr2
-#> elapsed 0.048873 0.109    0.018 100.95      3.235
+#> elapsed 0.030846 0.103    0.002 100.95      2.269
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 

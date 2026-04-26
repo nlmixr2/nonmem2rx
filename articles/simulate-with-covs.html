@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -435,10 +435,10 @@ NONMEM dataset.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> See also `vignette("ggplot2-in-packages")` for more information.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">rxode2</span> package.</span></span>
 <span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/nlmixr2/rxode2/issues/&gt;</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once per session.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
-<p><img src="simulate-with-covs_files/figure-html/simCovUncertainty2-1.png" class="r-plt" width="700"></p>
+<p><img src="simulate-with-covs_files/figure-html/simCovUncertainty2-1.png" class="r-plt" alt="" width="700"></p>
 <p>This may be closer a constant theoretical dosing regimen you may wish
 to explore.</p>
 </div>
@@ -498,7 +498,7 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:34</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:47</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>
@@ -506,7 +506,7 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; done</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ci</span><span class="op">)</span></span></code></pre></div>
-<p><img src="simulate-with-covs_files/figure-html/simUncertanty3-1.png" class="r-plt" width="700"></p>
+<p><img src="simulate-with-covs_files/figure-html/simUncertanty3-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="other-options">Other options<a class="anchor" aria-label="anchor" href="#other-options"></a>

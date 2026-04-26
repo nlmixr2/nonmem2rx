@@ -97,12 +97,10 @@ fit <- as.nlmixr2(mod)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.0.0 using 2 threads (see ?getRxThreads)
+#> rxode2 5.0.2 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
-#> → compress origData in nlmixr2 object, save 203816
-#> → compress parHistData in nlmixr2 object, save 2184
 
 fit
 ```
@@ -137,31 +135,44 @@ prediction-corrected VPCs and arrange them on a single plot:
 
 library(ggplot2)
 p1 <- vpcPlot(fit, show=list(obs_dv=TRUE))
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> ℹ The deprecated feature was likely used in the vpc package.
-#>   Please report the issue to the authors.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
+#> Warning in filter_dv(obs, verbose): No software packages matched for filtering values, not filtering.
+#>  Object class: other, data.frame
+#>  Available filters: phoenix, nonmem
+#> Warning in filter_dv(sim, verbose): No software packages matched for filtering values, not filtering.
+#>  Object class: other, nlmixr2vpcSim, data.frame
+#>  Available filters: phoenix, nonmem
 
 p1 <- p1 + ylab("Concentrations") +
   rxode2::rxTheme() +
   xlab("Time (hr)") +
   xgxr::xgx_scale_x_time_units("hour", "hour")
+#> Scale for x is already present.
+#> Adding another scale for x, which will replace the existing scale.
 
 p1a <- p1 + xgxr::xgx_scale_y_log10()
+#> Scale for y is already present.
+#> Adding another scale for y, which will replace the existing scale.
 
 ## A prediction-corrected VPC
 p2 <- vpcPlot(fit, pred_corr = TRUE, show=list(obs_dv=TRUE))
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
+#> Warning in filter_dv(obs, verbose): No software packages matched for filtering values, not filtering.
+#>  Object class: other, data.frame
+#>  Available filters: phoenix, nonmem
+#> Warning in filter_dv(obs, verbose): No software packages matched for filtering values, not filtering.
+#>  Object class: other, nlmixr2vpcSim, data.frame
+#>  Available filters: phoenix, nonmem
 p2 <- p2 + ylab("Prediction-Corrected Concentrations") +
   rxode2::rxTheme() +
   xlab("Time (hr)") +
   xgxr::xgx_scale_x_time_units("hour", "hour")
+#> Scale for x is already present.
+#> Adding another scale for x, which will replace the existing scale.
 
 p2a <- p2 + xgxr::xgx_scale_y_log10()
+#> Scale for y is already present.
+#> Adding another scale for y, which will replace the existing scale.
 
 
 library(patchwork)

@@ -1,6 +1,20 @@
 # Changelog
 
+## nonmem2rx 0.1.10
+
+- Bug fix for covariance matrices that span multiple FORTRAN output
+  pages
+
+- Bug fix for multiple errors are imported using
+  [`nonmem2rx()`](../reference/nonmem2rx.md)
+
+- Change NONMEM import for mixture models to prepend NM to MIXNUM and
+  related import items so they will not interact with rxode2/nlmixr2’s
+  handling of mixture models.
+
 ## nonmem2rx 0.1.9
+
+CRAN release: 2025-11-27
 
 - Try to make sure all the values that can be numeric are numeric
   [\#208](https://github.com/nlmixr2/nonmem2rx/issues/208)

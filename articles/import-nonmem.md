@@ -8,13 +8,13 @@ Here is a quick example of a conversion:
 ``` r
 library(nonmem2rx)
 
-# First we need the location of the nonmem control stream Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
-ctlFile <- system.file("mods/cpt/runODE032.ctl", package="nonmem2rx")
-# You can use a control stream or other file. With the development
-# version of `babelmixr2`, you can simply point to the listing file
+# First we need the location of the nonmem control stream Since we are running
+# an example, we will use one of the built-in examples in `nonmem2rx`
+resFile <- system.file("mods/cpt/runODE032.res", package="nonmem2rx")
+# You can use a control stream or the listing (.lst or .res) file
 
-mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
-#> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'
+mod <- nonmem2rx(resFile, save=FALSE, determineError=FALSE)
+#> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.res'
 #> ℹ reading in xml file
 #> ℹ done
 #> ℹ reading in ext file
@@ -22,6 +22,8 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ reading in phi file
 #> ℹ done
 #> ℹ reading in lst file
+#> ℹ seeing if file argument is actually lst file
+#> ℹ file is nonmem output
 #> ℹ abbreviated list parsing
 #> ℹ done
 #> ℹ reading in grd file
@@ -222,7 +224,8 @@ control stream are:
 
 - Turn on [extended control
   stream](https://wfn.sourceforge.net/wfncs.htm#control_streams)
-  support. You can turn it on by `options(nonmem2rx.extended=TRUE)`
+  support, as used by Wings for NONMEM. You can turn it on by
+  `options(nonmem2rx.extended=TRUE)`
 
 You probably also want to change the name of parameters and
 compartments. The easiest way to name the parameters whatever you want
