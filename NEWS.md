@@ -1,3 +1,13 @@
+# nonmem2rx 0.1.11
+
+* Range-check the `(int)strlen(gBuf)` cast in all 10 NONMEM-record parser
+  entry-points (`src/abbrec.c`, `src/abbrev.c`, `src/data.c`,
+  `src/input.c`, `src/lst.c`, `src/model.c`, `src/omega.c`, `src/sub.c`,
+  `src/tab.c`, `src/theta.c`).  When the parsed input exceeds `INT_MAX`
+  bytes, `(int)strlen(gBuf)` silently truncated to a wrong (often
+  negative) length, which dparser then read out-of-bounds.  The new
+  guard raises a clean R error.
+
 # nonmem2rx 0.1.10
 
 * Bug fix for covariance matrices that span multiple FORTRAN output pages

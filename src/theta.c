@@ -343,7 +343,13 @@ void trans_theta(const char* parse){
   eBufLast = 0;
   errP = curP;
 
-  _pn= dparse(curP, gBuf, (int)strlen(gBuf));
+  {
+    size_t gBufLen = strlen(gBuf);
+    if (gBufLen > (size_t)INT_MAX) {
+      Rf_error(_("input too large to parse (exceeds INT_MAX bytes)"));
+    }
+    _pn = dparse(curP, gBuf, (int)gBufLen);
+  }
   if (!_pn || curP->syntax_errors) {
   } else {
     wprint_parsetree_theta(parser_tables_nonmem2rxTheta, _pn, 0, wprint_node_theta, NULL);

@@ -304,7 +304,13 @@ void trans_abbrec(const char* parse){
   errP = curP;
   eBufLast = 0;
   gBufFree=0;
-  _pn= dparse(curP, gBuf, (int)strlen(gBuf));
+  {
+    size_t gBufLen = strlen(gBuf);
+    if (gBufLen > (size_t)INT_MAX) {
+      Rf_error(_("input too large to parse (exceeds INT_MAX bytes)"));
+    }
+    _pn = dparse(curP, gBuf, (int)gBufLen);
+  }
   if (!_pn || curP->syntax_errors) {
   } else {
     wprint_parsetree_abbrec(parser_tables_nonmem2rxAbbrevRec , _pn, 0, wprint_node_abbrec, NULL);
