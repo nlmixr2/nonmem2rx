@@ -1,12 +1,12 @@
 # nonmem2rx 0.1.11
 
-* Range-check the `(int)strlen(gBuf)` cast in all 10 NONMEM-record parser
+* Document known `(int)strlen(gBuf)` cast in all 10 NONMEM-record parser
   entry-points (`src/abbrec.c`, `src/abbrev.c`, `src/data.c`,
   `src/input.c`, `src/lst.c`, `src/model.c`, `src/omega.c`, `src/sub.c`,
-  `src/tab.c`, `src/theta.c`).  When the parsed input exceeds `INT_MAX`
-  bytes, `(int)strlen(gBuf)` silently truncated to a wrong (often
-  negative) length, which dparser then read out-of-bounds.  The new
-  guard raises a clean R error.
+  `src/tab.c`, `src/theta.c`).  Inputs at or above `INT_MAX` bytes cause
+  silent length truncation passed to `dparse()`.  A long-term fix will
+  switch each call site to `udparse()` once dparser-R ships that symbol
+  to CRAN.
 
 # nonmem2rx 0.1.10
 
