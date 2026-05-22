@@ -446,13 +446,13 @@
 #' - a `NULL` (meaning don't save),
 #'
 #' - a logical (default `FALSE`, don't save) that when `TRUE` will use
-#'   the base name of the control stream, append `.qs` and save the file
-#'   using `qs2::qs_save()`
+#'   the base name of the control stream, append `.rds` and save the file
+#'   using `saveRDS()`
 #'
 #' - A path to a file to write
 #'
-#'   Note that this file will be saved with qs2::qs_save() and can be
-#'   loaded with qs2::qs_read()
+#'   Note that this file will be saved with saveRDS() and can be
+#'   loaded with readRDS()
 #'
 #' - A `NA` value which means save if the whole process (including
 #'   validation) takes too much time
@@ -623,7 +623,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
         save <- TRUE
       }
       if (save) {
-        save <- paste0(tools::file_path_sans_ext(file),".qs")
+        save <- paste0(tools::file_path_sans_ext(file),".rds")
       } else {
         save <- NULL
       }
@@ -644,7 +644,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       }
       if (load && file.exists(save)) {
         .minfo(paste0("loading save file '", save, "'"))
-        .ret <- qs2::qs_read(save)
+        .ret <- readRDS(save)
         if (is.null(.ret$digest)) {
           .minfo(paste0("older version of nonmem2rx without digest, ignoring save file '", save, "'"))
         } else if (.ret$digest == .digest) {
@@ -1008,7 +1008,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   }
   if (!is.null(save)) {
     .minfo("save model and validation")
-    qs2::qs_save(.ret, save)
+    saveRDS(.ret, save)
     .minfo("done")
   }
   .ret
