@@ -472,6 +472,14 @@ extern "C" SEXP nonmem2rxNeedDvid(void) {
   END_RCPP
 }
 
+extern "C" SEXP nonmem2rxNeedDur(void) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function needDur(".needDur", nonmem2rxNs);
+  return needDur();
+  END_RCPP
+}
+
 extern "C" SEXP nonmem2rxNeedExit(void) {
   BEGIN_RCPP
   Environment nonmem2rxNs = loadNamespace("nonmem2rx");

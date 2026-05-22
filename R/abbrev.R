@@ -199,6 +199,14 @@ nonmem2rxRec.err <- function(x) {
 .needDvid <- function() {
   .nonmem2rx$needDvid <- TRUE
 }
+#' Sets the flag that we need dur renamed to rxDur
+#'
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.needDur <- function() {
+  .nonmem2rx$needDur <- TRUE
+}
 
 #' Tells the parser that a volume is in the model
 #'
