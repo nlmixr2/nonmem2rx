@@ -150,6 +150,36 @@
   }
   .fixNonmemTies(.data, delta)
 }
+#' Apply NONMEM $INPUT alias mappings to an sdtab data frame
+#'
+#' NONMEM writes sdtab columns using the original data column names,
+#' not the internal aliases declared in $INPUT. This function adds
+#' alias columns as copies of the original columns, mirroring what
+#' `.readInDataFromNonmem()` does for the input dataset — so both TAFD
+#' and TIME are present in the result.
+#'
+#' @param ret data frame returned by `nmtab()`
+#' @return data frame with alias columns added
+#' @noRd
+#' @author Matthew L. Fidler
+.applyNmInputAliasesToTable <- function(ret) {
+  .inp <- .nonmem2rx$input
+  .w <- which(names(.inp) != .inp)
+  if (length(.w) == 0L) return(ret)
+  .inpr <- .inp[.w]
+  for (.col in names(.inpr)) {
+    .alias <- .inpr[[.col]]
+    if (.alias == "DROP") next
+    .wc <- which(toupper(names(ret)) == toupper(.col))
+    .wa <- which(toupper(names(ret)) == toupper(.alias))
+    # Add alias column as copy of original; keep both (mirrors readInDataFromNonmem)
+    if (length(.wc) > 0L && length(.wa) == 0L) {
+      ret[, .alias] <- ret[, .wc[1L]]
+    }
+  }
+  ret
+}
+
 #' This reads in the nonmem output file that has the ipred data in it
 #'
 #' @param file nonmem control stream file name
@@ -181,6 +211,15 @@
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
   if (is.null(.ret)) return(NULL)
+  .ret <- .applyNmInputAliasesToTable(.ret)
+  .reqCols <- c("ID", "TIME")
+  .missing <- .reqCols[!toupper(.reqCols) %in% toupper(names(.ret))]
+  if (length(.missing) > 0L) {
+    stop(paste0("required column(s) ", paste(.missing, collapse=", "),
+                " not found in NONMEM table '", basename(.file),
+                "'; available columns: ", paste(names(.ret), collapse=", "),
+                "; check $INPUT aliases (e.g., TAFD=TIME) or $TABLE column list"))
+  }
   .w <- which(names(.ret) == "IPRE")
   if (length(.w) > 0) names(.ret)[.w] <- "IPRED"
   if (!is.null(rename) && !is.null(names(.ret))) {
@@ -239,6 +278,15 @@
   #.ret <- pmxTools::read_nm_multi_table(.file)
   .ret <- nmtab(.file)
   if (is.null(.ret)) return(NULL)
+  .ret <- .applyNmInputAliasesToTable(.ret)
+  .reqCols <- c("ID", "TIME")
+  .missing <- .reqCols[!toupper(.reqCols) %in% toupper(names(.ret))]
+  if (length(.missing) > 0L) {
+    stop(paste0("required column(s) ", paste(.missing, collapse=", "),
+                " not found in NONMEM table '", basename(.file),
+                "'; available columns: ", paste(names(.ret), collapse=", "),
+                "; check $INPUT aliases (e.g., TAFD=TIME) or $TABLE column list"))
+  }
   if (!is.null(rename) && !is.null(names(.ret))) {
     names(.ret) <- vapply(names(.ret),
                           function(x) {
