@@ -49,6 +49,7 @@ Imports:
     ggforce,
     crayon
 Suggests:
+    ellmer,
     devtools,
     testthat (>= 3.0.0),
     nonmemica,

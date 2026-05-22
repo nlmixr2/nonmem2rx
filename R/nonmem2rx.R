@@ -953,6 +953,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .rx$ipredData <- .ipredData
     .rx$predData <- .predData
     .rx$sigmaNames <- dimnames(.sigma)[[1]]
+    .rx$nonmemErrorBlock <- .nonmem2rx$nonmemErrorBlock
+    .rx$nonmemPkBlock    <- .nonmem2rx$nonmemPkBlock
+    .rx$nonmemPredBlock  <- .nonmem2rx$nonmemPredBlock
     .msg <- .nonmem2rxValidate(.rx, msg=.msg, validate=validate, ci=0.95, sigdig=3)
     if (!is.null(.msg)) {
       .rx$meta$validation <- .msg
