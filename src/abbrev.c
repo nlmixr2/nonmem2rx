@@ -817,11 +817,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     sAppend(&curLine, "rx.mpast.%d.", p);
     return 0;
   } else if (!strcmp("com", name)) {
-    sClear(&sbTransErr);
-    sAppend(&sbTransErr, "COM(#) not supported in translation");
-    updateSyntaxCol();
-    trans_syntax_error_report_fn0(sbTransErr.s);
-    finalizeSyntaxError();
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int p = atoi(v1);
+    sAppend(&curLine, "rxCOM_%d_", p);
+    return 0;
   } else if (!strcmp("pcmt", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "PCMT(#) not supported in translation");

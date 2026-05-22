@@ -24,12 +24,12 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{ggplot2}{\code{\link[ggplot2]{autoplot}}}
+  \item{ggplot2}{\code{\link[ggplot2:autoplot]{autoplot()}}}
 
-  \item{lotri}{\code{\link[lotri]{lotri}}}
+  \item{lotri}{\code{\link[lotri:lotri]{lotri()}}}
 
-  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
+  \item{magrittr}{\code{\link[magrittr:\%>\%]{\%>\%}}}
 
-  \item{rxode2}{\code{\link[rxode2:logit]{expit}}, \code{\link[rxode2]{ini}}, \code{\link[rxode2]{logit}}, \code{\link[rxode2]{model}}, \code{\link[rxode2:model-set]{model<-}}, \code{\link[rxode2:rxode2]{rxode}}, \code{\link[rxode2:rxode2]{RxODE}}, \code{\link[rxode2]{rxode2}}, \code{\link[rxode2]{rxRename}}, \code{\link[rxode2]{rxSolve}}, \code{\link[rxode2]{rxUiGet}}}
+  \item{rxode2}{\code{\link[rxode2:expit]{expit()}}, \code{\link[rxode2:ini]{ini()}}, \code{\link[rxode2:logit]{logit()}}, \code{\link[rxode2:model]{model()}}, \code{\link[rxode2:model<-]{model<-()}}, \code{\link[rxode2:rxode]{rxode()}}, \code{\link[rxode2:RxODE]{RxODE()}}, \code{\link[rxode2:rxode2]{rxode2()}}, \code{\link[rxode2:rxRename]{rxRename()}}, \code{\link[rxode2:rxSolve]{rxSolve()}}, \code{\link[rxode2:rxUiGet]{rxUiGet()}}}
 }}
 

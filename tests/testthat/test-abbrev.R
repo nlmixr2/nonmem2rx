@@ -106,7 +106,9 @@ test_that("test abbrev", {
   .a("C=MTIME(3)", "C <- rx.mtime.3.")
   expect_error(.a("C=MNEXT(3)"), "MNEXT\\(#\\)")
   .a("C=MPAST(3)", "C <- rx.mpast.3.")
-  expect_error(.a("C=COM(3)"), "COM\\(#\\)")
+  .a("C=COM(3)", "C <- rxCOM_3_")
+  .a("C=COM(1)", "C <- rxCOM_1_")
+  .a("C=com(3)", "C <- rxCOM_3_")
   expect_error(.a("C=PCMT(3)"), "PCMT\\(#\\)")
 
   .a("C=MIXP(3)", "C <- rxp.3.")
