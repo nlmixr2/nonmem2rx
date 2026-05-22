@@ -26,6 +26,11 @@ nmtab <- function (file, ...)
   }
   cnames <- colnames(dt1)
   if (length(cnames) == 0L) return(NULL)
+  .w <- grep("^(ETA|THETA|ERR|EPS)[(][0-9]+[)]$", cnames)
+  if (length(.w) > 0L) {
+    cnames[.w] <- gsub("[(]([0-9]+)[)]$", "\\1", cnames[.w])
+    setnames(dt1, cnames)
+  }
   dt1[grep("^TABLE", as.character(get(cnames[1])), invert = FALSE,
            perl = TRUE), `:=`(TABLE, get(cnames[1]))]
   dt1[, `:=`(NMREP, cumsum(!is.na(TABLE)) + 1)]
