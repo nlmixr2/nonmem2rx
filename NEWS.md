@@ -1,5 +1,14 @@
 # nonmem2rx 0.1.11
 
+
+* Add integer overflow guards in the C-level string buffer
+  (`src/sbuf.c`).  `sAppendN`, `sAppend`, and `addLine` previously
+  computed the new allocation size as `sbb->o + 2 + n + SBUF_MXBUF`
+  (or analogous expression).  When the user-controlled `n` was large
+  enough this expression overflowed `int` to a negative value, which
+  `R_Realloc` then converted to a huge unsigned size and crashed.  The
+  guard converts this into a clean R error.
+
 * Document known `(int)strlen(gBuf)` cast in all 10 NONMEM-record parser
   entry-points (`src/abbrec.c`, `src/abbrev.c`, `src/data.c`,
   `src/input.c`, `src/lst.c`, `src/model.c`, `src/omega.c`, `src/sub.c`,
@@ -14,6 +23,7 @@
   the pointer difference / `strlen` result was silently cast to `int`,
   truncating the length to a wrong (often negative) value.  The new
   guard rejects such inputs with an informative R error.
+
 
 
 # nonmem2rx 0.1.10
