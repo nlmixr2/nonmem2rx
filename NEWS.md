@@ -1,3 +1,12 @@
+# nonmem2rx 0.1.11
+
+* Fix implicit `ptrdiff_t` to `int` truncation in `rc_dup_str`
+  (`src/records.c`).  When the parser passes a string segment longer
+  than `INT_MAX` bytes (or a NUL-terminated string of that length),
+  the pointer difference / `strlen` result was silently cast to `int`,
+  truncating the length to a wrong (often negative) value.  The new
+  guard rejects such inputs with an informative R error.
+
 # nonmem2rx 0.1.10
 
 * Bug fix for covariance matrices that span multiple FORTRAN output pages
