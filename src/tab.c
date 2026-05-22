@@ -150,6 +150,10 @@ void trans_tab(const char* parse){
   eBufLast = 0;
   errP = curP;
 
+  /* TODO(long-term): switch to udparse() once dparser-R ships that symbol
+   * to CRAN.  udparse() accepts an unsigned int for buf_len, eliminating
+   * the silent (int)strlen truncation on inputs >= INT_MAX bytes.
+   * Track at https://github.com/nlmixr2/dparser-R */
   _pn= dparse(curP, gBuf, (int)strlen(gBuf));
   if (!_pn || curP->syntax_errors) {
     //rx_syntax_error = 1;

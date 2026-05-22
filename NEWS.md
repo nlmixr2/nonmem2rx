@@ -1,11 +1,20 @@
 # nonmem2rx 0.1.11
 
+* Document known `(int)strlen(gBuf)` cast in all 10 NONMEM-record parser
+  entry-points (`src/abbrec.c`, `src/abbrev.c`, `src/data.c`,
+  `src/input.c`, `src/lst.c`, `src/model.c`, `src/omega.c`, `src/sub.c`,
+  `src/tab.c`, `src/theta.c`).  Inputs at or above `INT_MAX` bytes cause
+  silent length truncation passed to `dparse()`.  A long-term fix will
+  switch each call site to `udparse()` once dparser-R ships that symbol
+  to CRAN.
+
 * Fix implicit `ptrdiff_t` to `int` truncation in `rc_dup_str`
   (`src/records.c`).  When the parser passes a string segment longer
   than `INT_MAX` bytes (or a NUL-terminated string of that length),
   the pointer difference / `strlen` result was silently cast to `int`,
   truncating the length to a wrong (often negative) value.  The new
   guard rejects such inputs with an informative R error.
+
 
 # nonmem2rx 0.1.10
 
