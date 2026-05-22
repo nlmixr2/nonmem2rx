@@ -236,7 +236,7 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .pushSigmaEst <- function(x, y) {
   .w <- which(.nonmem2rx$sigmaEst$x == x & .nonmem2rx$sigmaEst$y == y)
-  if (length(.w) != 1L) return(invisible())
+  if (length(.w) != 0L) return(invisible())
   .nonmem2rx$sigmaEst <- rbind(.nonmem2rx$sigmaEst, data.frame(x=x, y=y))
 }
 
@@ -248,7 +248,7 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .pushOmegaEst <- function(x, y) {
-  .w <- which(.nonmem2rx$omegaEst$x == x && .nonmem2rx$omegaEst$y == y)
+  .w <- which(.nonmem2rx$omegaEst$x == x & .nonmem2rx$omegaEst$y == y)
   if (length(.w) != 0L) return(invisible())
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
 }
