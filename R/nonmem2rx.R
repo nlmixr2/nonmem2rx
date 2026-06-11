@@ -54,6 +54,7 @@
   .nonmem2rx$hasVol <- FALSE
   .nonmem2rx$needYtype <- FALSE
   .nonmem2rx$needDvid <- FALSE
+  .nonmem2rx$needDur <- FALSE
   .nonmem2rx$needExit <- FALSE
   .nonmem2rx$atol <- 1e-12
   .nonmem2rx$rtol <- 1e-12
@@ -679,6 +680,10 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     }
     if (.nonmem2rx$needDvid) {
       warning("'dvid' variable has special meaning in rxode2, renamed to 'nmdvid', rename/copy in your data too",
+              call.=FALSE)
+    }
+    if (.nonmem2rx$needDur) {
+      warning("'dur' variable has special meaning in rxode2, renamed to 'rxDur', rename/copy in your data too",
               call.=FALSE)
     }
     if (length(.nonmem2rx$esnDups) > 0) {

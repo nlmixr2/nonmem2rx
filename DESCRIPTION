@@ -62,7 +62,7 @@ Suggests:
     rmarkdown,
     spelling
 Config/testthat/edition: 3
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Language: en-US
+Config/roxygen2/version: 8.0.0

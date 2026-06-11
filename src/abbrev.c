@@ -109,6 +109,7 @@ int icallWarning = 0;
 int irepWarning = 0;
 int simWarning=0;
 int ipredSimWarning = 0;
+int durWarning = 0;
 int curMtime = 0;
 int mtdiffWarning = 0;
 int hasMnow = 0;
@@ -119,6 +120,7 @@ SEXP nonmem2rxNeedNmid(void);
 SEXP nonmem2rxNeedNmid(void);
 SEXP nonmem2rxNeedYtype(void);
 SEXP nonmem2rxNeedDvid(void);
+SEXP nonmem2rxNeedDur(void);
 SEXP nonmem2rxPushScaleVolume(int scale, const char *v);
 SEXP nonmem2rxHasVolume(const char *v);
 SEXP nonmem2rxNeedExit(void);
@@ -298,6 +300,14 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     } else if (!nmrxstrcmpi("ytype", v)) {
       nonmem2rxNeedYtype();
       sAppendN(&curLine, "nmytype", 7);
+      return 1;
+    } else if (!nmrxstrcmpi("dur", v)) {
+      if (durWarning == 0) {
+        Rf_warning("'dur' variable has special meaning in rxode2, renamed to 'rxDur', rename/copy in your data too");
+        durWarning = 1;
+        nonmem2rxNeedDur();
+      }
+      sAppendN(&curLine, "rxDur", 5);
       return 1;
     } else if (!nmrxstrcmpi("sim", v)) {
       if (simWarning == 0) {
@@ -817,11 +827,12 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
     sAppend(&curLine, "rx.mpast.%d.", p);
     return 0;
   } else if (!strcmp("com", name)) {
-    sClear(&sbTransErr);
-    sAppend(&sbTransErr, "COM(#) not supported in translation");
-    updateSyntaxCol();
-    trans_syntax_error_report_fn0(sbTransErr.s);
-    finalizeSyntaxError();
+    if (i != 0) return 1;
+    D_ParseNode *xpn = d_get_child(pn, 1);
+    char *v1 = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    int p = atoi(v1);
+    sAppend(&curLine, "rxCOM_%d_", p);
+    return 0;
   } else if (!strcmp("pcmt", name)) {
     sClear(&sbTransErr);
     sAppend(&sbTransErr, "PCMT(#) not supported in translation");
@@ -1343,6 +1354,7 @@ SEXP _nonmem2rx_trans_abbrev(SEXP in, SEXP prefix, SEXP abbrevLinSEXP, SEXP exte
   ipredSimWarning=0;
   icallWarning=0;
   irepWarning=0;
+  durWarning=0;
   curMtime = 0;
   mtdiffWarning=0;
   hasMnow=0;

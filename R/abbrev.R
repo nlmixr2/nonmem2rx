@@ -199,6 +199,14 @@ nonmem2rxRec.err <- function(x) {
 .needDvid <- function() {
   .nonmem2rx$needDvid <- TRUE
 }
+#' Sets the flag that we need dur renamed to rxDur
+#'
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.needDur <- function() {
+  .nonmem2rx$needDur <- TRUE
+}
 
 #' Tells the parser that a volume is in the model
 #'
@@ -236,7 +244,7 @@ nonmem2rxRec.err <- function(x) {
 #' @author Matthew L. Fidler
 .pushSigmaEst <- function(x, y) {
   .w <- which(.nonmem2rx$sigmaEst$x == x & .nonmem2rx$sigmaEst$y == y)
-  if (length(.w) != 1L) return(invisible())
+  if (length(.w) != 0L) return(invisible())
   .nonmem2rx$sigmaEst <- rbind(.nonmem2rx$sigmaEst, data.frame(x=x, y=y))
 }
 
@@ -248,7 +256,7 @@ nonmem2rxRec.err <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .pushOmegaEst <- function(x, y) {
-  .w <- which(.nonmem2rx$omegaEst$x == x && .nonmem2rx$omegaEst$y == y)
+  .w <- which(.nonmem2rx$omegaEst$x == x & .nonmem2rx$omegaEst$y == y)
   if (length(.w) != 0L) return(invisible())
   .nonmem2rx$omegaEst <- rbind(.nonmem2rx$omegaEst, data.frame(x=x, y=y))
 }
