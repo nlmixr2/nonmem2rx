@@ -126,7 +126,7 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
     .thetaMat <- .rx$thetaMat
     dimnames(.thetaMat) <- list(.dn, .dn)
     .w <- which(.dn == "..drop..")
-    .thetaMat <- .thetaMat[-.w, -.w]
+    .thetaMat <- .thetaMat[-.w, -.w, drop = FALSE]
     .ndim <- dim(.rx$omega)[1] + length(.rx$theta)
     if (dim(.thetaMat)[1] != .ndim) {
       warning("not all the initial estimates matched in the model, check model",

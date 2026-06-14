@@ -1,6 +1,8 @@
 # nonmem2rx 0.1.11
 
 
+- Defensive `drop = FALSE` on the imported `thetaMat` covariance subset so a single surviving parameter is not collapsed to a scalar.
+
 * Add integer overflow guards in the C-level string buffer
   (`src/sbuf.c`).  `sAppendN`, `sAppend`, and `addLine` previously
   computed the new allocation size as `sbb->o + 2 + n + SBUF_MXBUF`
