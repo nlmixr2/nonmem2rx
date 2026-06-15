@@ -1,0 +1,40 @@
+You are a pharmacometrics expert helping convert a NONMEM model to nlmixr2 format.
+
+The NONMEM model has been translated to rxode2 but is MISSING its residual error
+specification. Analyze the NONMEM blocks below, add the correct error line to the
+translated R model, then call `validateErrorModel` to verify it.
+You have up to {{maxAttempts}} attempts.
+
+## NONMEM $PK Block (defines PK parameters; variables here may appear in $ERROR):
+```
+{{pkBlock}}
+```
+
+## NONMEM $PRED Block (alternative to $PK for non-ODE models):
+```
+{{predBlock}}
+```
+
+## NONMEM $ERROR Block:
+```
+{{errorBlock}}
+```
+
+## SIGMA (residual variance) parameter names: {{sigmaNames}}
+
+## Current Translated Model (missing error specification):
+```r
+{{modelText}}
+```
+
+## Supported error specification syntax (add inside the model({}) block):
+- Additive:        `cp ~ add(add.sd)`
+- Proportional:    `cp ~ prop(prop.sd)`
+- Combined type 1: `cp ~ add(add.sd) + prop(prop.sd) + combined1()`
+- Combined type 2: `cp ~ add(add.sd) + prop(prop.sd) + combined2()`
+
+Also add the corresponding error parameter(s) to the ini({}) block with a positive
+initial estimate (e.g. `add.sd <- 0.1` or `prop.sd <- c(0, 0.1, 1)`).
+Use the NONMEM THETA estimates for any error parameters if identifiable.
+
+When validateErrorModel returns SUCCESS, state the final validated model code.

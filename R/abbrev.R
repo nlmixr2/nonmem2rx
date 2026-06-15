@@ -8,6 +8,7 @@
 nonmem2rxRec.pk <- function(x) {
   .x <- x
   class(.x) <- NULL
+  .nonmem2rx$nonmemPkBlock <- paste(.x, collapse = "\n")
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $PK record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PK", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
@@ -18,6 +19,7 @@ nonmem2rxRec.pk <- function(x) {
 nonmem2rxRec.pre <- function(x) {
   .x <- x
   class(.x) <- NULL
+  .nonmem2rx$nonmemPredBlock <- paste(.x, collapse = "\n")
   for (.cur in .x) {
     if (.isEmptyExpr(.cur)) stop("the $PRED record is empty", call.=FALSE)
     .Call(`_nonmem2rx_trans_abbrev`, .cur, "$PRED", .nonmem2rx$abbrevLin, as.integer(.nonmem2rx$extendedCtl))
@@ -72,6 +74,7 @@ nonmem2rxRec.mix <- function(x) {
 nonmem2rxRec.err <- function(x) {
   .x <- x
   class(.x) <- NULL
+  .nonmem2rx$nonmemErrorBlock <- paste(.x, collapse = "\n")
   # Add F for linear models
   if (.nonmem2rx$abbrevLin != 0L) {
     .vcOne <- FALSE

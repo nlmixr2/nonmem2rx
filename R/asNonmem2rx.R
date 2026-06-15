@@ -48,7 +48,27 @@
 #'
 #' }
 #'
-as.nonmem2rx <- function(model1, model2, compress=TRUE) {
+as.nonmem2rx <- function(model1, model2, compress=TRUE,
+                          chat=NULL, maxAttempts=3,
+                          useLLM=getOption("nonmem2rx.useLLM", TRUE)) {
+  if (missing(model2)) {
+    .nm2rx <- rxode2::rxUiDecompress(rxode2::as.rxUi(model1))
+    if (!is.null(.nm2rx$predDf)) {
+      if (compress) .nm2rx <- rxode2::rxUiCompress(.nm2rx)
+      class(.nm2rx) <- c("nonmem2rx", class(.nm2rx))
+      return(.nm2rx)
+    }
+    if (!useLLM) {
+      stop("model lacks residual specification ($predDf); ",
+           "provide a second model argument or set useLLM=TRUE", call.=FALSE)
+    }
+    .minfo("no endpoint found; invoking LLM to determine error structure")
+    .rx <- .llmDetermineError(model1, chat=chat, maxAttempts=maxAttempts)
+    if (is.null(.rx)) stop("LLM could not determine a valid error structure", call.=FALSE)
+    if (compress) .rx <- rxode2::rxUiCompress(.rx)
+    class(.rx) <- c("nonmem2rx", class(.rx))
+    return(.rx)
+  }
   if (inherits(model1, "nonmem2rx")) {
     .nm2rx <- model1
     if (inherits(model2, "nonmem2rx")) stop("it makes no sense to have 2 nonmem2rx models", call.=FALSE)
@@ -58,14 +78,23 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
     .ui <- rxode2::as.rxUi(model1)
   }
   if (is.null(.ui$predDf)) {
-    stop("This only tries to convert to a rxode2 model with residual specification\nthis model is missing residual specification",
-         call.=FALSE)
+    if (!useLLM) {
+      stop("This only tries to convert to a rxode2 model with residual specification\nthis model is missing residual specification",
+           call.=FALSE)
+    }
+    .minfo("provided model lacks residual specification; invoking LLM")
+    .rx <- .llmDetermineError(.nm2rx, chat=chat, maxAttempts=maxAttempts)
+    if (is.null(.rx)) stop("LLM could not determine error structure", call.=FALSE)
+    if (compress) .rx <- rxode2::rxUiCompress(.rx)
+    class(.rx) <- c("nonmem2rx", class(.rx))
+    return(.rx)
   }
   .rx <- rxode2::rxUiDecompress(.ui)
   .nm2rx <- rxode2::rxUiDecompress(.nm2rx)
   .cp <- c("sticky", "nonmemData", "atol", "rtol", "ssAtol", "ssRtol", "etaData",
            "ipredData", "predData", "sigmaNames", "dfSub", "thetaMat", "dfObs",
-           "file", "outputExtension")
+           "file", "outputExtension",
+           "nonmemErrorBlock", "nonmemPkBlock", "nonmemPredBlock")
   .meta <- new.env(parent=emptyenv())
   if (exists("meta", envir=.nm2rx)) {
     .meta <- get("meta", envir=.nm2rx)
