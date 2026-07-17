@@ -1,8 +1,7 @@
 # This is built from buildParser.R, edit there
 #'@export
 rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL, 
-    inits = NULL, scale = NULL, method = c("liblsoda", "lsoda", 
-        "dop853", "indLin"), sigdig = NULL, atol = 1e-08, rtol = 1e-06, 
+    inits = NULL, scale = NULL, method = "liblsoda", sigdig = NULL, atol = 1e-08, rtol = 1e-06,
     maxsteps = 70000L, hmin = 0, hmax = NA_real_, hmaxSd = 0, 
     hini = 0, maxordn = 12L, maxords = 5L, ..., cores, covsInterpolation = c("locf", 
         "linear", "nocb", "midpoint"), naInterpolation = c("locf", 

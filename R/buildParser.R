@@ -96,6 +96,12 @@
 .nonmem2rxBuildRxSolve <- function() {
   message("build options for rxSolve to match NONMEM")
   .args <- deparse1(eval(str2lang(paste0("args(rxode2::rxSolve)"))))
+  # Keep only the first (preferred) ODE method as the default. rxode2's full
+  # multi-element `method` default is frozen here at build time and goes stale;
+  # a stale multi-element default that no longer matches rxode2's own default
+  # trips odeMethodToInt()'s match.arg() ("'arg' must be of length 1") when the
+  # solve is dispatched. The first element is the default rxode2 would pick.
+  .args <- sub('method = c\\(("[^"]*")[^)]*\\)', "method = \\1", .args)
   .first <- c(strsplit(.args, "[.][.][.]"))[[1]][1]
   .first <- paste(.first,
                   "..., ",
