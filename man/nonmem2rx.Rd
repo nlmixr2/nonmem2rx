@@ -154,12 +154,12 @@ information}
 \itemize{
 \item a \code{NULL} (meaning don't save),
 \item a logical (default \code{FALSE}, don't save) that when \code{TRUE} will use
-the base name of the control stream, append \code{.qs} and save the file
-using \code{qs2::qs_save()}
+the base name of the control stream, append \code{.rds} and save the file
+using \code{saveRDS()}
 \item A path to a file to write
 
-Note that this file will be saved with qs2::qs_save() and can be
-loaded with qs2::qs_read()
+Note that this file will be saved with saveRDS() and can be
+loaded with readRDS()
 \item A \code{NA} value which means save if the whole process (including
 validation) takes too much time
 }}
