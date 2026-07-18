@@ -7,6 +7,13 @@
   translate to `as.numeric(.data$COL) == value` / `!= value`.  `.NEN.`
   was previously unparseable (silently dropping the filter), and `.EQN.`
   was treated as a plain `==` without the numeric coercion.
+* Support assignment to the NONMEM `COM(#)` communication array (declared
+  with `$ABBREVIATED COMRES=#`).  Previously only reading `COM(#)` was
+  translated, so control streams that assigned `COM(#)` (e.g.
+  `IF(NEWIND.LE.1) COM(1)=-1`) failed to parse (#228).  A `COM(#)`
+  assignment now translates to the rxode2 sticky variable `rxCOM_#_`,
+  which retains its value from record to record like the NONMEM COM
+  array (see the rxode2 sticky variable vignette).
 
 * Add optional LLM-assisted residual error detection to `as.nonmem2rx()`
   (via the `ellmer` package) for models imported without a residual
