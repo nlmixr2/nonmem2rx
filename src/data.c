@@ -68,6 +68,10 @@ SEXP nonmem2rxPushDataFile(const char* file);
 SEXP nonmem2rxPushDataCond(const char* cond);
 SEXP nonmem2rxPushDataRecords(int nrec);
 int ignoreAcceptFlag=0;
+// Set while walking a `simple_logic` whose operator is `.EQN.`/`.NEN.`, which
+// request that the data item be converted to numeric before comparison.  When
+// set, identifiers are emitted wrapped in as.numeric().
+int curNumeric=0;
 void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_node_fn_t fn, void *client_data) {
   char *name = (char*)pt.symbols[pn->symbol].name;
   int nch = d_get_number_of_children(pn);
@@ -107,9 +111,35 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
   } else if (!strcmp("eq_expression_nm", name)) {
     sAppendN(&curLine, " == ", 4);
     return ;
+  } else if (!strcmp("nen_expression_nm", name)) {
+    sAppendN(&curLine, " != ", 4);
+    return;
+  } else if (!strcmp("eqn_expression_nm", name)) {
+    sAppendN(&curLine, " == ", 4);
+    return ;
+  } else if (!strcmp("simple_logic", name)) {
+    // Pre-scan the operator (logic_compare -> child 0) before recursing into
+    // children, since the LHS identifier is visited first.  `.EQN.`/`.NEN.`
+    // require numeric coercion of the data item(s).
+    curNumeric = 0;
+    if (nch > 1) {
+      D_ParseNode *cmp = d_get_child(pn, 1);
+      if (cmp != NULL && d_get_number_of_children(cmp) > 0) {
+        D_ParseNode *op = d_get_child(cmp, 0);
+        char *opn = (char*)pt.symbols[op->symbol].name;
+        if (!strcmp("eqn_expression_nm", opn) ||
+            !strcmp("nen_expression_nm", opn)) {
+          curNumeric = 1;
+        }
+      }
+    }
   } else if (!strcmp("identifier_nm", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
-    sAppend(&curLine, ".data$%s", v);
+    if (curNumeric) {
+      sAppend(&curLine, "as.numeric(.data$%s)", v);
+    } else {
+      sAppend(&curLine, ".data$%s", v);
+    }
   } else if (!strcmp("logic_constant", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     sAppend(&curLine, "%s", v);
@@ -143,6 +173,7 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
       !strcmp("quote_logic", name)) {
     nonmem2rxPushDataCond(curLine.s);
     sClear(&curLine);
+    curNumeric = 0;
   }
 }
 
@@ -178,6 +209,7 @@ void trans_data(const char* parse){
 SEXP _nonmem2rx_trans_data(SEXP in) {
   sClear(&curLine);
   ignoreAcceptFlag=0;
+  curNumeric=0;
   trans_data(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   SEXP ret = PROTECT(Rf_allocVector(STRSXP, 1));
