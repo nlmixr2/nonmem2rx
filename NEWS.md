@@ -1,6 +1,17 @@
 # nonmem2rx 0.1.11
 
 
+* Add optional LLM-assisted residual error detection to `as.nonmem2rx()`
+  (via the `ellmer` package) for models imported without a residual
+  error specification (`$predDf`).  When no `chat` engine is supplied,
+  the default engine is now chosen dynamically: `getOption(
+  "nonmem2rx.llmProvider")` is honored first (accepting any exported
+  `ellmer::chat_*` engine by name), otherwise the first provider with a
+  configured API key is auto-detected (e.g. `ANTHROPIC_API_KEY`,
+  `OPENAI_API_KEY`, `GEMINI_API_KEY`), instead of always requiring
+  Claude.  Any `ellmer` chat object may also be passed directly through
+  the new `chat` argument.
+
 * Add integer overflow guards in the C-level string buffer
   (`src/sbuf.c`).  `sAppendN`, `sAppend`, and `addLine` previously
   computed the new allocation size as `sbb->o + 2 + n + SBUF_MXBUF`
