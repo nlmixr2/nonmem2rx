@@ -3,6 +3,19 @@
 #' @param model1 Input model 1
 #' @param model2 Input model 2
 #' @param compress boolean to compress the ui at the end
+#' @param chat optional `ellmer` chat object used when the model lacks a
+#'   residual error specification (`$predDf`) and `useLLM=TRUE`.  When `NULL`
+#'   a default engine is selected: `getOption("nonmem2rx.llmProvider")` is
+#'   honored first (it may be an `ellmer` chat function, a provider name such
+#'   as `"openai"`, or a full function name such as `"chat_openai"`, exposing
+#'   every engine exported by `ellmer`), otherwise the first provider with a
+#'   detected API key is used (e.g. `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`,
+#'   `GEMINI_API_KEY`).
+#' @param maxAttempts maximum number of LLM validation attempts when inferring
+#'   the residual error structure
+#' @param useLLM logical; when `TRUE` (default, controllable with
+#'   `getOption("nonmem2rx.useLLM")`) an LLM is used to infer the residual
+#'   error structure for models that lack one
 #' @return nonmem2rx model
 #' @export
 #' @author Matthew L. Fidler
@@ -48,7 +61,27 @@
 #'
 #' }
 #'
-as.nonmem2rx <- function(model1, model2, compress=TRUE) {
+as.nonmem2rx <- function(model1, model2, compress=TRUE,
+                          chat=NULL, maxAttempts=3,
+                          useLLM=getOption("nonmem2rx.useLLM", TRUE)) {
+  if (missing(model2)) {
+    .nm2rx <- rxode2::rxUiDecompress(rxode2::as.rxUi(model1))
+    if (!is.null(.nm2rx$predDf)) {
+      if (compress) .nm2rx <- rxode2::rxUiCompress(.nm2rx)
+      class(.nm2rx) <- c("nonmem2rx", class(.nm2rx))
+      return(.nm2rx)
+    }
+    if (!useLLM) {
+      stop("model lacks residual specification ($predDf); ",
+           "provide a second model argument or set useLLM=TRUE", call.=FALSE)
+    }
+    .minfo("no endpoint found; invoking LLM to determine error structure")
+    .rx <- .llmDetermineError(model1, chat=chat, maxAttempts=maxAttempts)
+    if (is.null(.rx)) stop("LLM could not determine a valid error structure", call.=FALSE)
+    if (compress) .rx <- rxode2::rxUiCompress(.rx)
+    class(.rx) <- c("nonmem2rx", class(.rx))
+    return(.rx)
+  }
   if (inherits(model1, "nonmem2rx")) {
     .nm2rx <- model1
     if (inherits(model2, "nonmem2rx")) stop("it makes no sense to have 2 nonmem2rx models", call.=FALSE)
@@ -58,14 +91,23 @@ as.nonmem2rx <- function(model1, model2, compress=TRUE) {
     .ui <- rxode2::as.rxUi(model1)
   }
   if (is.null(.ui$predDf)) {
-    stop("This only tries to convert to a rxode2 model with residual specification\nthis model is missing residual specification",
-         call.=FALSE)
+    if (!useLLM) {
+      stop("This only tries to convert to a rxode2 model with residual specification\nthis model is missing residual specification",
+           call.=FALSE)
+    }
+    .minfo("provided model lacks residual specification; invoking LLM")
+    .rx <- .llmDetermineError(.nm2rx, chat=chat, maxAttempts=maxAttempts)
+    if (is.null(.rx)) stop("LLM could not determine error structure", call.=FALSE)
+    if (compress) .rx <- rxode2::rxUiCompress(.rx)
+    class(.rx) <- c("nonmem2rx", class(.rx))
+    return(.rx)
   }
   .rx <- rxode2::rxUiDecompress(.ui)
   .nm2rx <- rxode2::rxUiDecompress(.nm2rx)
   .cp <- c("sticky", "nonmemData", "atol", "rtol", "ssAtol", "ssRtol", "etaData",
            "ipredData", "predData", "sigmaNames", "dfSub", "thetaMat", "dfObs",
-           "file", "outputExtension")
+           "file", "outputExtension",
+           "nonmemErrorBlock", "nonmemPkBlock", "nonmemPredBlock")
   .meta <- new.env(parent=emptyenv())
   if (exists("meta", envir=.nm2rx)) {
     .meta <- get("meta", envir=.nm2rx)
