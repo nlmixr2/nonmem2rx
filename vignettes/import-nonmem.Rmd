@@ -88,6 +88,54 @@ This model does not specify the residuals in a way that makes sense to
 `nlmixr2`.  If you want, you can still [convert the `rxode2` model to
 a nlmixr2 fit](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html).
 
+## Pointing `nonmem2rx` at the input data
+
+To validate the translation, `nonmem2rx` reads the NONMEM input
+dataset and re-runs the model to compare against the NONMEM output.
+By default it finds the data from the `$DATA` record of the control
+stream.  When you import a model from another system, though, that
+path often does not match your machine, so you can override it with
+the `inputData` argument.
+
+`inputData` accepts either a **path** or an **in-memory
+`data.frame`**.
+
+The path form is the simplest fix when the data is a plain CSV that
+just lives somewhere else -- for example a folder or two higher up
+than the control stream:
+
+```{r inputDataPath, eval=FALSE}
+mod <- nonmem2rx("runs/run1/run1.ctl",
+                 inputData = "../../data.csv")
+```
+
+When the data is not a plain on-disk CSV -- it is already in memory,
+came from a database, or needs a custom reader (fixed-width,
+tab-delimited, decompressed on the fly) -- read it in yourself and
+pass the resulting `data.frame`:
+
+```{r inputDataFrame}
+# read the data from wherever it really is
+d <- read.csv(system.file("mods/cpt/Bolus_2CPT.csv", package="nonmem2rx"))
+
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 lst=".res", save=FALSE, inputData = d)
+mod
+```
+
+Either way the control stream itself is left untouched.
+
+One thing to get right: the supplied `data.frame` is interpreted
+**positionally against `$INPUT`** -- the column *names* are discarded
+and re-applied from the `$INPUT` record, and the usual `$INPUT` names,
+`DROP`, `IGNORE`/`ACCEPT` filters and record subsetting are then
+applied.  So read the data in the same column order NONMEM would see
+it and do not reorder, insert, or drop columns beforehand.  If the CSV
+has no header, use `read.csv(..., header = FALSE)`; a header row that
+NONMEM skips via `IGNORE=@` is fine with a plain `read.csv()`, since
+the header becomes the (discarded) names and the data rows still line
+up with `$INPUT`.
+
 ## Technical details about reading NONMEM to rxode2
 
 The key files to import are the NONMEM control stream (or related
