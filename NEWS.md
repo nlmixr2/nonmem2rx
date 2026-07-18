@@ -1,6 +1,13 @@
 # nonmem2rx 0.1.11
 
 
+* Support the NONMEM `$DATA` numeric-comparison operators `.EQN.` and
+  `.NEN.` in `IGNORE=`/`ACCEPT=` filters (#195).  These request that the
+  data item be converted to numeric before being compared, so they now
+  translate to `as.numeric(.data$COL) == value` / `!= value`.  `.NEN.`
+  was previously unparseable (silently dropping the filter), and `.EQN.`
+  was treated as a plain `==` without the numeric coercion.
+
 * Add optional LLM-assisted residual error detection to `as.nonmem2rx()`
   (via the `ellmer` package) for models imported without a residual
   error specification (`$predDf`).  When no `chat` engine is supplied,

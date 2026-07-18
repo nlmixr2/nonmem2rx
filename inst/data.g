@@ -30,13 +30,17 @@ quote_logic: identifier_nm (neq_expression_nm | eq_expression_nm) (char_t1 | cha
 
 logic_compare: eq_expression_nm
     | neq_expression_nm
+    | eqn_expression_nm
+    | nen_expression_nm
     | lt_expression_nm
     | gt_expression_nm
     | ge_expression_nm
     | le_expression_nm;
 
-eq_expression_nm: '.eq.' | '.EQ.' | '==' | '=' | '.eqn.' | '.EQN.';
+eq_expression_nm: '.eq.' | '.EQ.' | '==' | '=';
 neq_expression_nm: '.ne.' | '.NE.';
+eqn_expression_nm: '.eqn.' | '.EQN.';
+nen_expression_nm: '.nen.' | '.NEN.';
 lt_expression_nm: '<' | '.lt.' | '.LT.';
 gt_expression_nm: '>' | '.gt.' | '.GT.';
 ge_expression_nm: '>='| '.ge.' | '.GE.';

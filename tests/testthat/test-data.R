@@ -28,8 +28,17 @@ test_that("test data", {
   .i("PK.csv IGNORE=@ IGNORE=(PKFL.EQ.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
      list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
 
+  # .EQN. coerces the data item to numeric before comparing (nm73)
   .i("PK.csv IGNORE=@ IGNORE=(PKFL.EQN.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
-     list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
+     list(data = "PK.csv", cond = c("as.numeric(.data$PKFL) == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
+
+  # .NEN. is the numeric-coercion counterpart of .NE. (#195)
+  .i("PK.csv IGNORE=@ IGNORE=(PKFL.NEN.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
+     list(data = "PK.csv", cond = c("as.numeric(.data$PKFL) != 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
+
+  # lowercase .eqn./.nen. behave the same
+  .i("PK.csv IGNORE=@ IGNORE=(PKFL.eqn.0, TRTPN.nen.1)\n",
+     list(data = "PK.csv", cond = c("as.numeric(.data$PKFL) == 0", "as.numeric(.data$TRTPN) != 1"), ignore1="@", condType = "ignore"))
 
   .i("PK.csv IGNORE='@' IGNORE=(PKFL.EQ.0)\nIGNORE=(TRTPN.EQ.1) IGNORE=(TRTPN.EQ.3)\nIGNORE=(TRTPN.EQ.4)\n",
      list(data = "PK.csv", cond = c(".data$PKFL == 0", ".data$TRTPN == 1", ".data$TRTPN == 3", ".data$TRTPN == 4"), ignore1="@", condType = "ignore"))
