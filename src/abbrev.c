@@ -888,6 +888,31 @@ int abbrev_unsupported_lines(char *name, int i, D_ParseNode *pn) {
   return 0;
 }
 
+int abbrev_com_assign(char *name, int i, D_ParseNode *pn) {
+  // Translate a NONMEM COM(#) array assignment (declared with
+  // '$ABBREVIATED COMRES=#') to the rxode2 sticky variable rxCOM_#_.  The
+  // COM array retains its value from record to record in NONMEM, matching
+  // rxode2 sticky variables (variables initialize to NA per individual and
+  // carry their value forward unless explicitly updated).
+  if (!strcmp("comAssign", name)) {
+    if (i == 0) {
+      // child 0 is the 'com' node: ('COM(' | 'com(') decimalintNo0 ')'
+      D_ParseNode *comNode = d_get_child(pn, 0);
+      D_ParseNode *xpn = d_get_child(comNode, 1);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      int p = atoi(v);
+      sAppend(&curLine, "rxCOM_%d_ <- ", p);
+      return 1;
+    } else if (i == 1) {
+      // '='
+      return 1;
+    }
+    // logical_or_expression is processed normally
+    return 0;
+  }
+  return 0;
+}
+
 int abbrev_mtime_related(char *name, int i, D_ParseNode *pn) {
   if (!strcmp("mtimeL", name)) {
     if (i == 0) {
@@ -1228,6 +1253,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
           abbrev_function(name, i, pn) ||
           abbrev_unsupported_lines(name, i ,pn) ||
           abbrev_mix_related(name, i, pn) ||
+          abbrev_com_assign(name, i, pn) ||
           abbrev_mtime_related(name, i, pn)) {
         continue;
       }
@@ -1238,6 +1264,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
   if (!strcmp("assignment", name) ||
       !strcmp("ifexit", name) ||
       !strcmp("if1", name) ||
+      !strcmp("comAssign", name) ||
       !strcmp("derivative", name) ||
       !strcmp("derivativeI", name) ||
       !strcmp("scale", name) ||

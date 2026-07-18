@@ -109,6 +109,16 @@ test_that("test abbrev", {
   .a("C=COM(3)", "C <- rxCOM_3_")
   .a("C=COM(1)", "C <- rxCOM_1_")
   .a("C=com(3)", "C <- rxCOM_3_")
+  # COM(#) assignment; COM array is a NONMEM communication variable that
+  # retains its value from record to record, translated to a rxode2 sticky
+  # variable (issue #228)
+  .a("COM(1)=-1", "rxCOM_1_ <-  - 1")
+  .a("com(2)=CL*V", "rxCOM_2_ <- CL * V")
+  .a("COM(2)=COM(2)+1", "rxCOM_2_ <- rxCOM_2_ + 1")
+  .a("IF(NEWIND.LE.1) THEN\nCOM(1)=-1\nCOM(2)=-1\nENDIF",
+     c("if (newind <= 1) {", "rxCOM_1_ <-  - 1", "rxCOM_2_ <-  - 1", "}"))
+  .a("IF(NEWIND.LE.1) COM(1)=-1",
+     c("if (newind <= 1) {", "rxCOM_1_ <-  - 1", "}"))
   expect_error(.a("C=PCMT(3)"), "PCMT\\(#\\)")
 
   .a("C=MIXP(3)", "C <- rxp.3.")
