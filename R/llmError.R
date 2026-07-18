@@ -1,3 +1,95 @@
+#' Registry of ellmer chat engines usable for LLM-assisted error detection
+#'
+#' Each entry maps a short provider name to the exported `ellmer::chat_*`
+#' function that creates it and the API-key environment variable(s) that
+#' indicate the provider is configured.  The order of the list defines the
+#' auto-detection priority when no engine is explicitly requested.
+#'
+#' Providers that do not rely on an API key (e.g. `ollama`, `lmstudio`,
+#' `vllm`) are intentionally omitted from auto-detection but remain reachable
+#' by name through `getOption("nonmem2rx.llmProvider")` -- any exported
+#' `ellmer::chat_*` engine can be selected that way.
+#'
+#' @return named list; each element has `fun` (ellmer chat function name) and
+#'   `env` (character vector of API-key environment variables)
+#' @noRd
+#' @author Matthew L. Fidler
+.llmChatEngines <- function() {
+  list(
+    anthropic     = list(fun="chat_anthropic",    env="ANTHROPIC_API_KEY"),
+    openai        = list(fun="chat_openai",        env="OPENAI_API_KEY"),
+    google_gemini = list(fun="chat_google_gemini", env=c("GEMINI_API_KEY", "GOOGLE_API_KEY")),
+    mistral       = list(fun="chat_mistral",       env="MISTRAL_API_KEY"),
+    groq          = list(fun="chat_groq",          env="GROQ_API_KEY"),
+    deepseek      = list(fun="chat_deepseek",      env="DEEPSEEK_API_KEY"),
+    openrouter    = list(fun="chat_openrouter",    env="OPENROUTER_API_KEY"),
+    perplexity    = list(fun="chat_perplexity",    env="PERPLEXITY_API_KEY"),
+    huggingface   = list(fun="chat_huggingface",   env="HUGGINGFACE_API_KEY"),
+    cloudflare    = list(fun="chat_cloudflare",    env="CLOUDFLARE_API_KEY"),
+    azure_openai  = list(fun="chat_azure_openai",  env="AZURE_OPENAI_API_KEY"),
+    databricks    = list(fun="chat_databricks",    env="DATABRICKS_TOKEN"),
+    snowflake     = list(fun="chat_snowflake",     env=c("SNOWFLAKE_TOKEN", "SNOWFLAKE_PRIVATE_KEY"))
+  )
+}
+
+#' Resolve an ellmer chat engine by name
+#'
+#' Accepts any exported `ellmer::chat_*` engine, given either as the bare
+#' provider name (`"openai"`) or the full function name (`"chat_openai"`).
+#'
+#' @param provider length-one character naming an ellmer chat engine
+#' @return the exported `ellmer::chat_*` function
+#' @noRd
+#' @author Matthew L. Fidler
+.llmResolveChatFun <- function(provider) {
+  .fnName <- if (startsWith(provider, "chat_")) provider else paste0("chat_", provider)
+  .exported <- grep("^chat_", getNamespaceExports("ellmer"), value=TRUE)
+  if (!.fnName %in% .exported) {
+    stop("unknown ellmer chat engine: '", provider, "'\n",
+         "available engines: ",
+         paste(sort(sub("^chat_", "", .exported)), collapse=", "),
+         call.=FALSE)
+  }
+  getExportedValue("ellmer", .fnName)
+}
+
+#' Create the default ellmer chat engine for LLM-assisted error detection
+#'
+#' Resolution order:
+#'
+#' 1. `getOption("nonmem2rx.llmProvider")` -- may be an ellmer chat function,
+#'    a provider name (`"openai"`), or a full function name (`"chat_openai"`);
+#'    this exposes every engine exported by ellmer.
+#' 2. auto-detection: the first engine in [.llmChatEngines()] whose API-key
+#'    environment variable is set.
+#'
+#' @return an ellmer chat object
+#' @noRd
+#' @author Matthew L. Fidler
+.llmDefaultChat <- function() {
+  .provider <- getOption("nonmem2rx.llmProvider", NULL)
+  if (!is.null(.provider)) {
+    if (is.function(.provider)) return(.provider())
+    .minfo(paste0("using LLM engine from getOption('nonmem2rx.llmProvider'): ", .provider))
+    return(.llmResolveChatFun(.provider)())
+  }
+  .engines <- .llmChatEngines()
+  for (.nm in names(.engines)) {
+    .e <- .engines[[.nm]]
+    if (any(nzchar(Sys.getenv(.e$env)))) {
+      .minfo(paste0("auto-detected LLM engine ellmer::", .e$fun,
+                    "() from environment variable ",
+                    paste(.e$env[nzchar(Sys.getenv(.e$env))], collapse="/")))
+      return(.llmResolveChatFun(.e$fun)())
+    }
+  }
+  stop("no LLM API key detected for any ellmer chat engine\n",
+       "set an API key (e.g. ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY), ",
+       "pass an ellmer chat object via the `chat` argument, or select a provider ",
+       "with options(nonmem2rx.llmProvider='openai')",
+       call.=FALSE)
+}
+
 #' Get a compact R function text representation of a nonmem2rx model for LLM context
 #'
 #' @param nm2rx nonmem2rx/rxUI object
@@ -14,7 +106,9 @@
 #' Use an LLM to determine the residual error structure for a nonmem2rx model
 #'
 #' @param nm2rx nonmem2rx object lacking `$predDf`
-#' @param chat ellmer chat object; if NULL a default `ellmer::chat_claude()` is created
+#' @param chat ellmer chat object; if NULL a default engine is selected by
+#'   [.llmDefaultChat()] (honoring `getOption("nonmem2rx.llmProvider")` and
+#'   auto-detecting from available API keys)
 #' @param maxAttempts maximum number of LLM validation attempts
 #' @param verbose logical, passed through for future use
 #' @param ... additional arguments (unused)
@@ -27,7 +121,7 @@
          "install with: install.packages('ellmer')", call.=FALSE)
   }
 
-  if (is.null(chat)) chat <- ellmer::chat_claude()
+  if (is.null(chat)) chat <- .llmDefaultChat()
 
   .errorBlock <- nm2rx$nonmemErrorBlock
   .pkBlock    <- nm2rx$nonmemPkBlock

@@ -4,7 +4,14 @@
 \alias{as.nonmem2rx}
 \title{Convert a model to a nonmem2rx model}
 \usage{
-as.nonmem2rx(model1, model2, compress = TRUE)
+as.nonmem2rx(
+  model1,
+  model2,
+  compress = TRUE,
+  chat = NULL,
+  maxAttempts = 3,
+  useLLM = getOption("nonmem2rx.useLLM", TRUE)
+)
 }
 \arguments{
 \item{model1}{Input model 1}
@@ -12,6 +19,22 @@ as.nonmem2rx(model1, model2, compress = TRUE)
 \item{model2}{Input model 2}
 
 \item{compress}{boolean to compress the ui at the end}
+
+\item{chat}{optional \code{ellmer} chat object used when the model lacks a
+residual error specification (\verb{$predDf}) and \code{useLLM=TRUE}.  When \code{NULL}
+a default engine is selected: \code{getOption("nonmem2rx.llmProvider")} is
+honored first (it may be an \code{ellmer} chat function, a provider name such
+as \code{"openai"}, or a full function name such as \code{"chat_openai"}, exposing
+every engine exported by \code{ellmer}), otherwise the first provider with a
+detected API key is used (e.g. \code{ANTHROPIC_API_KEY}, \code{OPENAI_API_KEY},
+\code{GEMINI_API_KEY}).}
+
+\item{maxAttempts}{maximum number of LLM validation attempts when inferring
+the residual error structure}
+
+\item{useLLM}{logical; when \code{TRUE} (default, controllable with
+\code{getOption("nonmem2rx.useLLM")}) an LLM is used to infer the residual
+error structure for models that lack one}
 }
 \value{
 nonmem2rx model

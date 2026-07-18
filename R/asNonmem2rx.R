@@ -3,6 +3,19 @@
 #' @param model1 Input model 1
 #' @param model2 Input model 2
 #' @param compress boolean to compress the ui at the end
+#' @param chat optional `ellmer` chat object used when the model lacks a
+#'   residual error specification (`$predDf`) and `useLLM=TRUE`.  When `NULL`
+#'   a default engine is selected: `getOption("nonmem2rx.llmProvider")` is
+#'   honored first (it may be an `ellmer` chat function, a provider name such
+#'   as `"openai"`, or a full function name such as `"chat_openai"`, exposing
+#'   every engine exported by `ellmer`), otherwise the first provider with a
+#'   detected API key is used (e.g. `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`,
+#'   `GEMINI_API_KEY`).
+#' @param maxAttempts maximum number of LLM validation attempts when inferring
+#'   the residual error structure
+#' @param useLLM logical; when `TRUE` (default, controllable with
+#'   `getOption("nonmem2rx.useLLM")`) an LLM is used to infer the residual
+#'   error structure for models that lack one
 #' @return nonmem2rx model
 #' @export
 #' @author Matthew L. Fidler
