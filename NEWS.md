@@ -1,6 +1,14 @@
 # nonmem2rx 0.1.11
 
 
+* `nonmem2rx()`'s `inputData` argument now also accepts a `data.frame`
+  of the already read-in NONMEM input dataset (in addition to a file
+  path).  This is useful when importing a model from a different
+  system where you have the data to validate against but the file
+  paths in the control stream do not match (#186).  The columns are
+  assumed to be in `$INPUT` order and the usual `$INPUT` names,
+  `DROP`, `IGNORE`/`ACCEPT` filters and record subsetting are applied.
+
 * Support the NONMEM `$DATA` numeric-comparison operators `.EQN.` and
   `.NEN.` in `IGNORE=`/`ACCEPT=` filters (#195).  These request that the
   data item be converted to numeric before being compared, so they now
