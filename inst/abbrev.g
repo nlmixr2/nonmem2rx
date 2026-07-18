@@ -38,6 +38,7 @@ statement
     | callsupp singleLineComment?
     | callrandom singleLineComment?
     | exit_line singleLineComment?
+    | comAssign singleLineComment?
     | comresn1 singleLineComment?
     | ifexit singleLineComment?
     | callfl singleLineComment?
@@ -65,6 +66,7 @@ mtimeL      : ('mtime(' | 'MTIME(') decimalintNo0 ')' '=' logical_or_expression;
 exit_line: 'EXIT' decimalint decimalint;
 ifexit: ifStatement '(' logical_or_expression ')' 'EXIT' decimalint decimalint;
 comresn1: 'COMRES' '=' '-' '1';
+comAssign: com '=' logical_or_expression;
 callfl: 'CALLFL' '=' ('-' ('1' | '2') | '0' | '1');
 
 call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
@@ -85,7 +87,7 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         ) ')';
 
 if1 : ifStatement '(' logical_or_expression ')' identifier  '='  logical_or_expression;
-if1other : ifStatement '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL);
+if1other : ifStatement '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL | comAssign);
 
 
 ifthen: ifStatement '(' logical_or_expression ')' thenStatement;
