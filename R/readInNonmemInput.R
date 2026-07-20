@@ -1,3 +1,29 @@
+#' Apply NONMEM's single-character `$DATA` IGNORE record filter
+#'
+#' `IGNORE=@` drops records whose first column starts with a letter;
+#' `IGNORE=<char>` drops records whose first column equals `<char>`; when no
+#' single-character IGNORE is given, `#` comment rows are dropped.  Sharing this
+#' between the file- and `data.frame`-supplied input paths keeps them filtered
+#' identically.
+#'
+#' @param data data.frame of the (as-read) nonmem input dataset
+#' @return `data` with ignored records removed
+#' @noRd
+#' @author Matthew L. Fidler
+.dropDataIgnore1Rows <- function(data) {
+  if (!is.null(.nonmem2rx$dataIgnore1)) {
+    if (.nonmem2rx$dataIgnore1 == "@") {
+      .w <- which(regexpr("^[A-Za-z]", data[, 1]) != -1)
+    } else {
+      .w <- which(data[, 1] == .nonmem2rx$dataIgnore1)
+    }
+  } else {
+    .w <- which(regexpr("^[#]", data[, 1]) != -1)
+  }
+  if (length(.w) > 0) data <- data[-.w, ]
+  data
+}
+
 #' Read in data frame nonmem input file
 #'
 #' This requires the parsing environment setup
@@ -21,7 +47,9 @@
   .haveData <- FALSE
   if (is.data.frame(inputData)) {
     .minfo("using supplied data.frame for nonmem input data (for model validation)")
-    .data <- as.data.frame(inputData)
+    # A supplied data.frame is treated as the already-read input dataset and is
+    # run through the same $DATA IGNORE record filter as a file read.
+    .data <- .dropDataIgnore1Rows(as.data.frame(inputData))
     .haveData <- TRUE
   } else {
     if (is.null(inputData)) {
@@ -30,32 +58,27 @@
       .file <- inputData
     }
     .ext <- tools::file_ext(.file)
-    if (.ext == "csv" && file.exists(.file)) {
+    if (tolower(.ext) == "csv" && file.exists(.file)) {
       .minfo(paste0("read in nonmem input data (for model validation): ", .file))
       if (!is.null(.nonmem2rx$dataIgnore1)) {
         .lines <- readLines(.file,n=scanLines, encoding="latin1")
         if (.nonmem2rx$dataIgnore1 == "@") {
-          .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
+          .minfo("ignoring lines that begin with a letter (IGNORE=@)")
           .skip <- 0L
           while (.skip != scanLines - 1L && grepl("^[A-Za-z]", .lines[.skip+1L])) {
             .skip <- .skip+1L
           }
           .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
                             skip=.skip)
-          .w <- which(regexpr("^[A-Za-z]", .data[,1]) != -1)
-          if (length(.w) > 0) .data <- .data[-.w, ]
         } else {
           .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
           .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
                             comment.char=.nonmem2rx$dataIgnore1)
-          .w <- which(.data[,1] == .nonmem2rx$dataIgnore1)
-          if (length(.w) > 0) .data <- .data[-.w, ]
         }
       } else {
         .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE)
-        .w <- which(regexpr("^[#]", .data[,1]) != -1)
-        if (length(.w) > 0) .data <- .data[-.w, ]
       }
+      .data <- .dropDataIgnore1Rows(.data)
       .haveData <- TRUE
     }
   }

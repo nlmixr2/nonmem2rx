@@ -97,7 +97,8 @@ stream.  When you import a model from another system, though, that
 path often does not match your machine, so you can override it with
 the `inputData` argument.
 
-`inputData` accepts either a **path** or an **in-memory
+`inputData` accepts `NULL` (the default -- find the data from the
+`$DATA` record of the control stream), a **path**, or an **in-memory
 `data.frame`**.
 
 The path form is the simplest fix when the data is a plain CSV that
