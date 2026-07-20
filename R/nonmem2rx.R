@@ -70,6 +70,8 @@
   .nonmem2rx$needExtCalc <- TRUE
   .nonmem2rx$mixp <- integer(0)
   .nonmem2rx$nspop <- 0L
+  .nonmem2rx$mixProbNames <- character(0)
+  .nonmem2rx$mixNative <- FALSE
   .nonmem2rx$advan5 <- NULL
   .nonmem2rx$advan5max <- 0L
   .nonmem2rx$advan5k <- NULL
@@ -761,6 +763,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                })
       }
     }
+    # collapse imperative MIXNUM/MIXEST branching into native mix() calls now that
+    # the full $PK/$PRED code has been parsed
+    .nonmem2rxMix()
     .txt <- paste0("function() {\n",
                    "rxode2::ini({\n",
                    paste(.nonmem2rx$ini, collapse="\n"),
@@ -796,7 +801,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .msg <- NULL
     if (validate) {
       if (length(.nonmem2rx$mixp) > 0) {
-        .minfo("mixture model, not currently validated")
+        # The model is now a native mixture (mix()/mixest) that simulates and
+        # estimates, but simulation draws the sub-population randomly (mixunif)
+        # whereas NONMEM assigns each subject its estimated component (MIXEST),
+        # which NONMEM does not expose as a recoverable per-subject column here.
+        # Without that assignment a faithful prediction comparison is not
+        # possible, so validation stays gated (see NEWS / plan for enabling it).
+        .minfo("native mixture model; simulation-based validation skipped (per-subject sub-population not recoverable)")
         .msg <- "mixture model; not validated"
         validate <- FALSE
       }

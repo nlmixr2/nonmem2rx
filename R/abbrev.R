@@ -57,16 +57,64 @@ nonmem2rxRec.mix <- function(x) {
     stop("probabilities in mixture models must specify all sequential values, ie, P(1), P(2)",
          call.=FALSE)
   }
-  # define the simulated mixnum
-  .addModel(paste0("NMMIXNUM <- rxord(",
-                   paste(paste0("rxp.", .nonmem2rx$mixp[-length(.nonmem2rx$mixp)],"."),
-                         collapse=", "),
-                   ")"))
+  # Prefer a native rxode2/nlmixr2 mixture translation using mix(): the
+  # nlmixr2est mixture machinery is driven by `ui$mixProbs`, which is populated
+  # when a mix() call appears in the model.  For NONMEM's imperative MIXNUM/MIXEST
+  # code we register the probabilities with a dummy mix() and alias NMMIXNUM to the
+  # reserved `mixest` variable so estimation loops over the sub-populations (see
+  # `.mixProbNames`).  When the probabilities are not simple ini() parameters we
+  # fall back to the legacy rxord() simulation.
+  .probNames <- .mixProbNames(.nonmem2rx$nspop)
+  if (!is.null(.probNames)) {
+    .nonmem2rx$mixNative <- TRUE
+    .nonmem2rx$mixProbNames <- .probNames
+    # NMMIXNUM (from MIXNUM/MIXEST in the grammar) aliases the estimated component
+    .addModel("NMMIXNUM <- mixest")
+    # dummy mix() registers the probabilities (components are constant, the real
+    # sub-population values come from the imperative code that references NMMIXNUM)
+    .addModel(paste0("rxMixDummy <- mix(",
+                     paste(c(rbind(rep("1", length(.probNames)), .probNames), "1"),
+                           collapse=", "),
+                     ")"))
+  } else {
+    .minfo("mixture probabilities are not simple parameters; using legacy rxord() simulation")
+    .addModel(paste0("NMMIXNUM <- rxord(",
+                     paste(paste0("rxp.", .nonmem2rx$mixp[-length(.nonmem2rx$mixp)],"."),
+                           collapse=", "),
+                     ")"))
+  }
   .addModel("cur.mixp <- -1")
   # define cur.mixp which nonmem translates from MIXP and MIXP(MIXNUM)
   .addModel(paste(paste0("if (NMMIXNUM == ", .nonmem2rx$mixp, ") cur.mixp <- rxp.", .nonmem2rx$mixp, "."),
                   collapse="\n"))
   # MIXP(#) is translated in the grammar
+}
+#' Determine the mixture probability parameter names for a native mix() translation
+#'
+#' The `prob` grammar rule emits `rxp.<k>. <- <expr>` lines for each `P(k)=`.  A
+#' native mix() translation needs the first `nMix - 1` probabilities to each be a
+#' bare population parameter already defined in the ini() block (the last
+#' probability is implicit, `1 - sum(others)`).
+#'
+#' @param nMix Number of mixture sub-populations (NSPOP)
+#' @return Character vector of length `nMix - 1` with the probability parameter
+#'   names, or `NULL` when the probabilities cannot be expressed as ini parameters
+#'   (signalling the legacy rxord() fallback)
+#' @noRd
+#' @author Matthew L. Fidler
+.mixProbNames <- function(nMix) {
+  if (nMix < 2L) return(NULL)
+  .iniNames <- sub("^\\s*([A-Za-z0-9._]+)\\s*(<-|=).*$", "\\1",
+                   grep("(<-|=)", .nonmem2rx$ini, value=TRUE))
+  .names <- character(nMix - 1L)
+  for (.k in seq_len(nMix - 1L)) {
+    .line <- grep(paste0("^rxp\\.", .k, "\\. <- "), .nonmem2rx$model, value=TRUE)
+    if (length(.line) != 1L) return(NULL)
+    .rhs <- trimws(sub(paste0("^rxp\\.", .k, "\\. <- "), "", .line))
+    if (!(.rhs %in% .iniNames)) return(NULL)
+    .names[.k] <- .rhs
+  }
+  .names
 }
 
 #' @export
