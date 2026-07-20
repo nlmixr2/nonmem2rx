@@ -1,6 +1,11 @@
 # nonmem2rx 0.1.11
 
 
+* Regenerate the `rxSolve.nonmem2rx()` method so it no longer passes the
+  `order` solver argument, which was removed from `rxode2::rxSolve()`.
+  Passing it caused solving a translated model to fail with
+  `unused argument: 'order'` against the current CRAN `rxode2`.
+
 * `nonmem2rx()`'s `inputData` argument now also accepts a `data.frame`
   of the already read-in NONMEM input dataset (in addition to a file
   path).  This is useful when importing a model from a different
