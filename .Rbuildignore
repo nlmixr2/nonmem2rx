@@ -18,6 +18,8 @@
 ^docs$
 ^pkgdown$
 ^cran-comments\.md$
+^CLAUDE\.md$
+^\.claude$
 ^CRAN-SUBMISSION$
 ^doc$
 ^Meta$
