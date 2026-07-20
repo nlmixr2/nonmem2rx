@@ -5,7 +5,11 @@ title: "Reading rounding from NONMEM"
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  # Use the standard print methods instead of nlmixr2extra's knit_print()
+  # LaTeX-equation rendering, which errors on this imported model
+  # ("cannot handle class, please report a bug: NULL").
+  render = knitr::normal_print
 )
 ```
 
