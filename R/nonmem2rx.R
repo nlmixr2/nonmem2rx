@@ -744,6 +744,9 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                })
       }
     }
+    # collapse imperative MIXNUM/MIXEST branching into native mix() calls now that
+    # the full $PK/$PRED code has been parsed
+    .nonmem2rxMix()
     .txt <- paste0("function() {\n",
                    "rxode2::ini({\n",
                    paste(.nonmem2rx$ini, collapse="\n"),
