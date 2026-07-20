@@ -70,6 +70,8 @@
   .nonmem2rx$needExtCalc <- TRUE
   .nonmem2rx$mixp <- integer(0)
   .nonmem2rx$nspop <- 0L
+  .nonmem2rx$mixProbNames <- character(0)
+  .nonmem2rx$mixNative <- FALSE
   .nonmem2rx$advan5 <- NULL
   .nonmem2rx$advan5max <- 0L
   .nonmem2rx$advan5k <- NULL
