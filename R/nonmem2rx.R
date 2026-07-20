@@ -613,7 +613,11 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .pt <- proc.time()
   .ret <- .collectWarn({
     checkmate::assertFileExists(file)
+    # inputData must be NULL (use $DATA), a data.frame (already-read input), or
+    # a path to a csv file; assert the path case explicitly so an unexpected
+    # type gives a clear message instead of a confusing assertFileExists() error
     if (!is.null(inputData) && !is.data.frame(inputData)) {
+      checkmate::assertString(inputData, .var.name="inputData")
       checkmate::assertFileExists(inputData)
     }
     if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
