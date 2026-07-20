@@ -1,6 +1,19 @@
 # nonmem2rx 0.1.11
 
 
+* NONMEM mixture models (`$MIX`) now translate to the native rxode2/nlmixr2
+  mixture support (`mix()`), replacing the previous `rxord()` simulation of
+  the sub-population.  When the mixture probabilities are simple parameters
+  (e.g. `P(1)=THETA(5)`), the imperative `MIXNUM`/`MIXEST` branching in
+  `$PK`/`$PRED` is collapsed into readable `mix()` calls (e.g.
+  `V <- mix(VCM, p1, VCF)`), the probabilities are registered on the model
+  (`ui$mixProbs`) so the model estimates natively under `focei` and `saem`,
+  and `MIXEST`/`MIXNUM` map to the reserved `mixest` component.  Models whose
+  probabilities are not simple parameters fall back to the previous `rxord()`
+  translation.  Simulation-based validation remains gated for mixtures because
+  NONMEM's per-subject sub-population assignment is not recoverable for a
+  faithful prediction comparison.
+
 * Support the NONMEM `$DATA` numeric-comparison operators `.EQN.` and
   `.NEN.` in `IGNORE=`/`ACCEPT=` filters (#195).  These request that the
   data item be converted to numeric before being compared, so they now

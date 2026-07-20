@@ -782,7 +782,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .msg <- NULL
     if (validate) {
       if (length(.nonmem2rx$mixp) > 0) {
-        .minfo("mixture model, not currently validated")
+        # The model is now a native mixture (mix()/mixest) that simulates and
+        # estimates, but simulation draws the sub-population randomly (mixunif)
+        # whereas NONMEM assigns each subject its estimated component (MIXEST),
+        # which NONMEM does not expose as a recoverable per-subject column here.
+        # Without that assignment a faithful prediction comparison is not
+        # possible, so validation stays gated (see NEWS / plan for enabling it).
+        .minfo("native mixture model; simulation-based validation skipped (per-subject sub-population not recoverable)")
         .msg <- "mixture model; not validated"
         validate <- FALSE
       }
