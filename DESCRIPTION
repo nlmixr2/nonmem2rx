@@ -61,7 +61,8 @@ Suggests:
     vdiffr,
     knitr,
     rmarkdown,
-    spelling
+    spelling,
+    nlmixr2est
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

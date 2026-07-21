@@ -124,6 +124,9 @@ withr::with_options(
 
   test_that("DDE delay()/past() survive into an nlmixr2 model", {
     skip_on_cran()
+    # nonmem2rx does not need nlmixr2est; only exercise it when installed, and
+    # keep the (heavier) nlmixr2est path off CI
+    skip_on_ci()
     skip_if_not_installed("nlmixr2est")
     # a delay model with a residual error model, function interface as used by
     # nlmixr2; confirms nlmixr2est understands delay()/past() (full FOCEi
