@@ -103,6 +103,36 @@ withr::with_options(
     expect_true(.allFinite(r, ev, c("rxddta1", "rxddta2")))
   })
 
+  test_that("DDE delay()/past() survive into an nlmixr2 model", {
+    skip_on_cran()
+    skip_if_not_installed("nlmixr2est")
+    # a delay model with a residual error model, function interface as used by
+    # nlmixr2; confirms nlmixr2est understands delay()/past() (full FOCEi
+    # estimation of delay models is verified manually -- too heavy for the suite)
+    dde <- function() {
+      ini({
+        kg <- 0.4
+        k4 <- 0.3
+        tt <- 5
+        aa <- 2
+        bb <- -0.25
+        prop.sd <- 0.1
+      })
+      model({
+        A1(0) <- aa
+        past(A1, tt) <- aa * exp(bb * t)
+        d/dt(A1) <- 1 - kg * A1
+        d/dt(A2) <- k4 * A1 - k4 * delay(A1, tt)
+        cp <- A2
+        cp ~ prop(prop.sd)
+      })
+    }
+    ui <- nlmixr2est::nlmixr(dde)
+    mt <- paste(deparse(ui$funPrint), collapse="\n")
+    expect_match(mt, "delay(A1, tt)", fixed=TRUE)
+    expect_match(mt, "past(A1, tt)", fixed=TRUE)
+  })
+
   test_that("Appendix 11 PDLIDR (ADVAN13 ;DDE) translates and solves", {
     skip_on_cran()
     r <- .ddeTrans("dde/app11-pdlidr-advan13.ctl")
