@@ -1,6 +1,18 @@
 # nonmem2rx 0.1.11
 
 
+* Regenerate the `rxSolve.nonmem2rx()` method so it no longer passes the
+  `order` solver argument, which was removed from `rxode2::rxSolve()`.
+  Passing it caused solving a translated model to fail with
+  `unused argument: 'order'` against the current CRAN `rxode2`.
+
+* `nonmem2rx()`'s `inputData` argument now also accepts a `data.frame`
+  of the already read-in NONMEM input dataset (in addition to a file
+  path).  This is useful when importing a model from a different
+  system where you have the data to validate against but the file
+  paths in the control stream do not match (#186).  The columns are
+  assumed to be in `$INPUT` order and the usual `$INPUT` names,
+  `DROP`, `IGNORE`/`ACCEPT` filters and record subsetting are applied.
 * `ADVAN5`/`ADVAN7` general linear models (which NONMEM itself solves with
   matrix exponentials) are now translated to rxode2's native
   matrix-exponential `matExp()` model (`cmt()` declarations plus

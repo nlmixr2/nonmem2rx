@@ -352,12 +352,25 @@
 #' @param file NONMEM run file, like an `.xml` or `.lst` file or even
 #'   a control stream
 #'
-#' @param inputData this is a path to the input dataset (or `NULL` to
-#'   determine from the dataset).  Often the input dataset may be
-#'   different from the place it points to in the control stream
-#'   because directories can be created to run NONMEM from a script.
-#'   Because of this, when this is specified the input data will be
-#'   assumed to be from here instead.
+#' @param inputData this is the input dataset used for validation.  It
+#'   can be:
+#'
+#' - `NULL` (default) to determine the dataset from the `$DATA` record
+#'   in the control stream
+#'
+#' - a path to the input dataset (as a character string).  Often the
+#'   input dataset may be different from the place it points to in the
+#'   control stream because directories can be created to run NONMEM
+#'   from a script.  Because of this, when this is specified the input
+#'   data will be assumed to be from here instead.
+#'
+#' - a `data.frame` of the already read-in NONMEM input dataset.  This
+#'   is useful when you want to import a model from a different system,
+#'   have the data to check it against, but the file paths in the
+#'   control stream do not match.  The columns are assumed to be in the
+#'   same order as the `$INPUT` record (just as if it were read from
+#'   the file), and the `$INPUT` names, `DROP`, `IGNORE`/`ACCEPT`
+#'   filters and record subsetting are applied.
 #'
 #' @param nonmemOutputDir This is a path the the nonmem output
 #'   directory.  When not `NULL` it will assume that the diretory for
@@ -626,7 +639,13 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
   .pt <- proc.time()
   .ret <- .collectWarn({
     checkmate::assertFileExists(file)
-    if (!is.null(inputData)) checkmate::assertFileExists(inputData)
+    # inputData must be NULL (use $DATA), a data.frame (already-read input), or
+    # a path to a csv file; assert the path case explicitly so an unexpected
+    # type gives a clear message instead of a confusing assertFileExists() error
+    if (!is.null(inputData) && !is.data.frame(inputData)) {
+      checkmate::assertString(inputData, .var.name="inputData")
+      checkmate::assertFileExists(inputData)
+    }
     if (!is.null(nonmemOutputDir)) checkmate::assertDirectoryExists(nonmemOutputDir)
     if (!is.null(rename)) checkmate::assertCharacter(rename, any.missing=FALSE, min.len=1, names="strict")
     checkmate::assertIntegerish(scanLines, len=1, any.missing=FALSE, lower=1L)

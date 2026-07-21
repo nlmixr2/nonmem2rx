@@ -57,6 +57,19 @@ modAuc <- mod %>%
 modAuc
 ```
 
+```{r fixSimModelCache, include=FALSE}
+# Temporary workaround for an rxode2 model-piping cache bug
+# (nlmixr2/rxode2#1149): piping an imported model that keeps a persistent
+# `meta` environment leaves a stale simulation-model cache
+# (`meta$.simModelBase`), which drops the appended `AUC` state from the solve.
+# Clearing it forces the simulation model to rebuild. Remove once a fixed
+# rxode2 is released.
+if (is.environment(modAuc$meta) &&
+      exists(".simModelBase", envir = modAuc$meta, inherits = FALSE)) {
+  rm(list = ".simModelBase", envir = modAuc$meta)
+}
+```
+
 You can also use `append=NA` to pre-pend or `append=f` to put the ODE
 right after the `f` line in the model.
 

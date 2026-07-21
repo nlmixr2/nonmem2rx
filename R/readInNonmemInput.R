@@ -1,10 +1,38 @@
+#' Apply NONMEM's single-character `$DATA` IGNORE record filter
+#'
+#' `IGNORE=@` drops records whose first column starts with a letter;
+#' `IGNORE=<char>` drops records whose first column equals `<char>`; when no
+#' single-character IGNORE is given, `#` comment rows are dropped.  Sharing this
+#' between the file- and `data.frame`-supplied input paths keeps them filtered
+#' identically.
+#'
+#' @param data data.frame of the (as-read) nonmem input dataset
+#' @return `data` with ignored records removed
+#' @noRd
+#' @author Matthew L. Fidler
+.dropDataIgnore1Rows <- function(data) {
+  if (!is.null(.nonmem2rx$dataIgnore1)) {
+    if (.nonmem2rx$dataIgnore1 == "@") {
+      .w <- which(regexpr("^[A-Za-z]", data[, 1]) != -1)
+    } else {
+      .w <- which(data[, 1] == .nonmem2rx$dataIgnore1)
+    }
+  } else {
+    .w <- which(regexpr("^[#]", data[, 1]) != -1)
+  }
+  if (length(.w) > 0) data <- data[-.w, ]
+  data
+}
+
 #' Read in data frame nonmem input file
 #'
 #' This requires the parsing environment setup
 #'
 #' @param file this is the file name of the control stream
 #' @param inputData is a flag to use a different input data than
-#'   `file`.  This is the user-specified input data.
+#'   `file`.  This is the user-specified input data.  It may be `NULL`
+#'   (determine from the control stream), a path to a csv file, or a
+#'   `data.frame` of the already read-in NONMEM input dataset.
 #' @param rename rename parameters
 #' @param delta Delta offset for ties
 #' @param scanLines number of lines to scan before meeting the first data row (default 50)
@@ -16,39 +44,45 @@
 .readInDataFromNonmem <- function(file, inputData, rename=NULL, delta=1e-4,
                                   scanLines=50L) {
   .data <- NULL
-  if (is.null(inputData)) {
-    .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
+  .haveData <- FALSE
+  if (is.data.frame(inputData)) {
+    .minfo("using supplied data.frame for nonmem input data (for model validation)")
+    # A supplied data.frame is treated as the already-read input dataset and is
+    # run through the same $DATA IGNORE record filter as a file read.
+    .data <- .dropDataIgnore1Rows(as.data.frame(inputData))
+    .haveData <- TRUE
   } else {
-    .file <- inputData
-  }
-  .ext <- tools::file_ext(.file)
-  if (.ext == "csv" && file.exists(.file)) {
-    .minfo(paste0("read in nonmem input data (for model validation): ", .file))
-    if (!is.null(.nonmem2rx$dataIgnore1)) {
-      .lines <- readLines(.file,n=scanLines, encoding="latin1")
-      if (.nonmem2rx$dataIgnore1 == "@") {
-        .minfo("ignoring lines that begin with a letter (IGNORE=@)'")
-        .skip <- 0L
-        while (.skip != scanLines - 1L && grepl("^[A-Za-z]", .lines[.skip+1L])) {
-          .skip <- .skip+1L
-        }
-        .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
-                          skip=.skip)
-        .w <- which(regexpr("^[A-Za-z]", .data[,1]) != -1)
-        if (length(.w) > 0) .data <- .data[-.w, ]
-      } else {
-        .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
-        .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
-                          comment.char=.nonmem2rx$dataIgnore1)
-        .w <- which(.data[,1] == .nonmem2rx$dataIgnore1)
-        if (length(.w) > 0) .data <- .data[-.w, ]
-      }
+    if (is.null(inputData)) {
+      .file <- .getFileNameIgnoreCase(file.path(dirname(file), .nonmem2rx$dataFile))
     } else {
-      .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE)
-      .w <- which(regexpr("^[#]", .data[,1]) != -1)
-      if (length(.w) > 0) .data <- .data[-.w, ]
+      .file <- inputData
     }
-
+    .ext <- tools::file_ext(.file)
+    if (tolower(.ext) == "csv" && file.exists(.file)) {
+      .minfo(paste0("read in nonmem input data (for model validation): ", .file))
+      if (!is.null(.nonmem2rx$dataIgnore1)) {
+        .lines <- readLines(.file,n=scanLines, encoding="latin1")
+        if (.nonmem2rx$dataIgnore1 == "@") {
+          .minfo("ignoring lines that begin with a letter (IGNORE=@)")
+          .skip <- 0L
+          while (.skip != scanLines - 1L && grepl("^[A-Za-z]", .lines[.skip+1L])) {
+            .skip <- .skip+1L
+          }
+          .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
+                            skip=.skip)
+        } else {
+          .minfo(paste0("ignoring lines that begin with '", .nonmem2rx$dataIgnore1, "'"))
+          .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE,
+                            comment.char=.nonmem2rx$dataIgnore1)
+        }
+      } else {
+        .data <- read.csv(.file, row.names=NULL, na.strings=c("NA", "."), header=FALSE)
+      }
+      .data <- .dropDataIgnore1Rows(.data)
+      .haveData <- TRUE
+    }
+  }
+  if (.haveData) {
     .minfo("applying names specified by $INPUT")
     # need to apply input names
     # 1. Only work with columns specified in $input
