@@ -75,6 +75,9 @@
   .nonmem2rx$advan5 <- NULL
   .nonmem2rx$advan5max <- 0L
   .nonmem2rx$advan5k <- NULL
+  .nonmem2rx$advan5edges <- list()
+  .nonmem2rx$matexp <- FALSE
+  .nonmem2rx$cmtFinalNames <- NULL
 }
 #' Add theta name to .nonmem2rx info
 #'
@@ -245,6 +248,15 @@
                  v
                }, character(1), USE.NAMES=FALSE)
   .c <- paste0("rxddta",seq_along(.n))
+  # record the final compartment names (index -> name, including any `c.`
+  # collision handling above) so the optional matrix-exponential path can emit
+  # cmt()/k_<from>_<to> using the same names the states are renamed to
+  if (.nonmem2rx$advan5max > 0L) {
+    .fn <- paste0("rxddta", seq_len(.nonmem2rx$advan5max))
+    .m <- min(length(.n), .nonmem2rx$advan5max)
+    if (.m > 0L) .fn[seq_len(.m)] <- .n[seq_len(.m)]
+    .nonmem2rx$cmtFinalNames <- .fn
+  }
   .txt<- paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")
   .tmp <- try(eval(parse(text=.txt)),silent=TRUE)
   if (inherits(.tmp, "try-error")) {
@@ -404,6 +416,13 @@
 #' @param extended Translate extended control streams from tools like
 #'   wings for NONMEM
 #'
+#' @param matexp For `ADVAN5`/`ADVAN7` general linear models (which NONMEM
+#'   itself solves with matrix exponentials), translate the linear system to
+#'   rxode2's native matrix-exponential `matExp()` model (default `TRUE`).
+#'   Set `matexp=FALSE` to instead use the explicit `d/dt()` ODE translation.
+#'   Other model types are unaffected.  If the installed rxode2 does not
+#'   support `matExp()`, the ODE translation is used with a warning.
+#'
 #' @param nLinesPro The number of lines to check for the $PROBLEM
 #'   statement.
 #'
@@ -505,6 +524,10 @@
 #' - `nonmem2rx.extended` - should nonmem2rx support extended control
 #'    streams? (default `FALSE`)
 #'
+#' - `nonmem2rx.matexp` - should nonmem2rx translate `ADVAN5`/`ADVAN7`
+#'    general linear models to matrix-exponential `matExp()` models (default
+#'    `TRUE`)?  Set to `FALSE` to use the explicit `d/dt()` ODE translation.
+#'
 #' - `nonmem2rx.compress` - should the ui be compressed or
 #' uncompressed (default: `TRUE`)
 #'
@@ -572,6 +595,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       strictLst=FALSE,
                       unintFixed=FALSE,
                       extended=getOption("nonmem2rx.extended",FALSE),
+                      matexp=getOption("nonmem2rx.matexp", TRUE),
                       nLinesPro=20L,
                       delta=1e-4,
                       usePhi=TRUE,
@@ -610,6 +634,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     checkmate::assertLogical(updateFinal, len=1, any.missing= FALSE)
     checkmate::assertLogical(unintFixed, len=1, any.missing= FALSE)
     checkmate::assertLogical(extended, len=1, any.missing= FALSE)
+    checkmate::assertLogical(matexp, len=1, any.missing= FALSE)
     checkmate::assertLogical(overwrite, len=1, any.missing = FALSE)
     checkmate::assertLogical(load, len=1, any.missing = FALSE)
     checkmate::assertLogical(compress, len=1, any.missing = FALSE)
@@ -633,7 +658,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     .digest <- digest::digest(list(utils::packageVersion("nonmem2rx"), file, inputData, nonmemOutputDir,
                                    rename, tolowerLhs, thetaNames, etaNames, cmtNames, updateFinal,
                                    determineError, validate, nonmemData, strictLst, unintFixed,
-                                   extended, nLinesPro, delta, usePhi, useExt, useCov, useXml,
+                                   extended, matexp, nLinesPro, delta, usePhi, useExt, useCov, useXml,
                                    useLst, mod, cov, phi, lst, xml, ext, scanLines, keep))
     if (!is.null(save)) {
       if (load && overwrite) {
@@ -660,6 +685,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     checkmate::assertIntegerish(nLinesPro, len=1, lower=1)
     .clearNonmem2rx()
     .nonmem2rx$extendedCtl <- extended
+    .nonmem2rx$matexp <- matexp
     .nonmem2rx$unintFixed <- unintFixed
     on.exit({
       .Call(`_nonmem2rx_r_parseFree`)
@@ -927,6 +953,18 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       checkmate::assertCharacter(cmtNames, any.missing = FALSE)
     }
     .rx <- .replaceCmtNames(.rx, cmtNames)
+    if (matexp && .nonmem2rx$advan %in% c(5L, 7L)) {
+      # opt-in: re-emit the ADVAN5/7 linear system as a native matrix-exponential
+      # matExp() model.  This runs on the finished, already-renamed ui so the
+      # compartment names are final (rxRename does not touch the k_<from>_<to>
+      # rate tokens, so the block cannot be renamed after the fact); the
+      # rxUiDecompress() below then normalizes the rebuilt ui
+      .fn <- .nonmem2rx$cmtFinalNames
+      if (is.null(.fn)) .fn <- paste0("rxddta", seq_len(.nonmem2rx$advan5max))
+      .minfo("translating ADVAN5/7 linear system to matrix-exponential matExp() model")
+      .rx <- .advan5matexp(.rx, .fn)
+      .minfo("done")
+    }
     .rx <- rxode2::rxUiDecompress(.rx)
     .rx$file <- file
     .rx$outputExtension <- lst
