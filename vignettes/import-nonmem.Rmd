@@ -17,6 +17,10 @@ setRxThreads(1L)
 library(data.table)
 setDTthreads(1L)
 
+# the ADVAN5/7 matExp() examples below need matrix-exponential support in the
+# installed rxode2; skip them gracefully on older versions
+.hasMatExp <- exists("indLin", where=asNamespace("rxode2"), inherits=FALSE)
+
 ```
 
 The goal of `nonmem2rx` is to convert a NONMEM control stream to
@@ -49,6 +53,12 @@ control stream are:
   stream](https://wfn.sourceforge.net/wfncs.htm#control_streams)
   support, as used by Wings for NONMEM. You can turn it on by
   `options(nonmem2rx.extended=TRUE)`
+
+- `ADVAN5`/`ADVAN7` general linear models are translated to `rxode2`'s native
+  matrix-exponential `matExp()` model by default. If you prefer ordinary
+  differential equations, turn this off with `nonmem2rx(..., matexp=FALSE)` or
+  `options(nonmem2rx.matexp=FALSE)` (see [General linear models
+  (`ADVAN5`/`ADVAN7`)](#general-linear-models-advan5advan7) below).
 
 You probably also want to change the name of parameters and
 compartments. The easiest way to name the parameters whatever you want
@@ -136,6 +146,34 @@ has no header, use `read.csv(..., header = FALSE)`; a header row that
 NONMEM skips via `IGNORE=@` is fine with a plain `read.csv()`, since
 the header becomes the (discarded) names and the data rows still line
 up with `$INPUT`.
+
+## General linear models (`ADVAN5`/`ADVAN7`)
+
+NONMEM's `ADVAN5` and `ADVAN7` are *general linear* models: a system of
+compartments connected by rate constants (`K12`, `K21`, `K20`, ...) that
+NONMEM solves with matrix exponentials.  By default `nonmem2rx` mirrors this
+and translates them to `rxode2`'s native matrix-exponential `matExp()` model,
+using `cmt()` declarations and `k_<from>_<to>` rate constants (with
+`k_<from>_output` for elimination):
+
+```{r advan5matexp, eval=.hasMatExp}
+advan5 <- system.file("mods/advan5/advan5.ctl", package="nonmem2rx")
+
+mod <- nonmem2rx(advan5, validate=FALSE, save=FALSE)
+mod
+```
+
+If you prefer explicit ordinary differential equations, use `matexp=FALSE` to
+translate the same linear system to `d/dt()` equations instead:
+
+```{r advan5ode, eval=.hasMatExp}
+mod <- nonmem2rx(advan5, validate=FALSE, save=FALSE, matexp=FALSE)
+mod
+```
+
+Both models solve to the same predictions; the matrix-exponential form simply
+lets `rxode2` use its matrix-exponential solver rather than a general ODE
+integrator.  Only `ADVAN5`/`ADVAN7` models are affected.
 
 ## Technical details about reading NONMEM to rxode2
 
