@@ -25,6 +25,7 @@ Matthew L. Fidler
 ## Examples
 
 ``` r
+
 nmext(system.file("run001.ext", package="nonmem2rx"))
 #> $theta
 #>      theta1      theta2      theta3      theta4      theta5      theta6 

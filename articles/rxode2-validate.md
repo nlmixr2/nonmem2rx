@@ -1,6 +1,7 @@
 # Qualify rxode2 model against NONMEM
 
 ``` r
+
 library(nonmem2rx)
 
 # First we need the location of the nonmem control stream Since we are running an example, we will use one of the built-in examples in `nonmem2rx`
@@ -49,7 +50,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -106,6 +107,7 @@ If you want numerical differences, you can also get these from the
 modified returned `ui` object. For the rtol, atol as follows you have:
 
 ``` r
+
 mod$iwresAtol
 #>         50% 
 #> 3.64871e-06
@@ -131,6 +133,7 @@ they validate). However you can explore these difference further if you
 wish by looking at the `ipredCompare` and `predCompare` datasets:
 
 ``` r
+
 head(mod$iwresCompare)
 #>   ID TIME nonmemIWRES      IWRES
 #> 1  1 0.25    -0.73154 -0.7315464
@@ -171,6 +174,7 @@ validation predictions (dosing and observations) by the `$nonmemData`
 item:
 
 ``` r
+
 head(mod$nonmemData) # with nlme loaded you can also use getData(mod)
 #>   ID TIME     DV   LNDV MDV    AMT EVID   DOSE   V1I  CLI   QI   V2I SSX IIX SD
 #> 1  1 0.00    0.0 0.0000   1 120000    1 120000 101.5 3.57 6.99 59.19  99   0  1
@@ -194,12 +198,14 @@ The easiest way to visually compare the differences is by the plot
 method:
 
 ``` r
+
 plot(mod) # for general plot
 ```
 
 ![](rxode2-validate_files/figure-html/plot-1.png)
 
 ``` r
+
 # you can also see individual comparisons
 plot(mod, log="y", ncol=2, nrow=2,
      xlab="Time (hr)", ylab="Concentrations",
@@ -209,6 +215,7 @@ plot(mod, log="y", ncol=2, nrow=2,
 ![](rxode2-validate_files/figure-html/plot-2.png)
 
 ``` r
+
 
 # If you want all pages you could use:
 #

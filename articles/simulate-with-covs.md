@@ -7,6 +7,7 @@ simulate from; this simulation exercise shows a few methods to simulate
 with the covariates from NONMEM.
 
 ``` r
+
 library(nonmem2rx)
 library(rxode2)
 ```
@@ -26,6 +27,7 @@ with different dosing scenarios.
 For any simulation scenario, we need to import the NONMEM model:
 
 ``` r
+
 # Since this is an included example, we import the model from the
 # `nonmem2rx` package.  This is done by the `system.file()` command:
 wbcModel <- system.file("wbc/wbc.lst", package="nonmem2rx")
@@ -70,7 +72,7 @@ wbc <- nonmem2rx(wbcModel)
 #> ℹ change initial estimate of `eta2` to `2.99999999999372e-06`
 #> ℹ change initial estimate of `eta3` to `1.99999999999944e-05`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/wbc/wbc.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ renaming 'ytype' to 'nmytype'
 #> ℹ done
@@ -115,6 +117,7 @@ print(wbc)
 #> 7                  7           c.CIRC
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
+#>     NULL
 #>     description <- "wbc"
 #>     dfObs <- 176
 #>     dfSub <- 45
@@ -253,6 +256,7 @@ NONMEM input dataset. If we want to simulate covariates from here, we
 simply add `resample=TRUE`:
 
 ``` r
+
 sim <- rxSolve(wbc, resample=TRUE, nStud=500)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
 #> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
@@ -292,6 +296,7 @@ creating a event table with the same input PK parameters as the NONMEM
 dataset.
 
 ``` r
+
 # first create the base event table with the nubmer of individuals
 # matching the NONMEM dataset:
 ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
@@ -371,6 +376,7 @@ have `225` patients, which is a `5` fold increase in subjects compared
 to the NONMEM input.
 
 ``` r
+
 # first create the base event table with the nubmer of individuals
 # matching the NONMEM dataset:
 ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
@@ -418,7 +424,7 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:47
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:44
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")

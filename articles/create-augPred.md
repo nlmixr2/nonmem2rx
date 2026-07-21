@@ -8,6 +8,7 @@ population.
 ## Step 1: Convert the `NONMEM` model to `rxode2`:
 
 ``` r
+
 library(babelmixr2)
 library(nonmem2rx)
 
@@ -57,7 +58,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -88,6 +89,7 @@ Once the residual specification is compatible with a nlmixr2 object, you
 can convert the model, `mod`, to a nlmixr2 fit object:
 
 ``` r
+
 fit <- as.nlmixr2(mod)
 #> → loading into symengine environment...
 #> → pruning branches (`if`/`else`) of full model...
@@ -98,7 +100,7 @@ fit <- as.nlmixr2(mod)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.0.2 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.4 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -106,28 +108,31 @@ fit <- as.nlmixr2(mod)
 fit
 ```
 
-$$\begin{aligned}
-{cmt(CENTRAL)} & \\
-{cmt(PERI)} & \\
-{cl} & {= \exp\left( {theta1} + {eta1} \right)} \\
-v & {= \exp\left( {theta2} + {eta2} \right)} \\
-q & {= \exp\left( {theta3} + {eta3} \right)} \\
-{v2} & {= \exp\left( {theta4} + {eta4} \right)} \\
-{v1} & {= v} \\
-{scale1} & {= v} \\
-{k21} & {= \frac{q}{v2}} \\
-{k12} & {= \frac{q}{v}} \\
-\frac{d\ CENTRAL}{dt} & {= {k21} \times {PERI} - {k12} \times {CENTRAL} - \frac{{cl} \times {CENTRAL}}{v1}} \\
-\frac{d\ PERI}{dt} & {= - {k21} \times {PERI} + {k12} \times {CENTRAL}} \\
-f & {= \frac{CENTRAL}{scale1}} \\
-{ipred} & {= f} \\
-{rescv} & {= {RSV}} \\
-{ipred} & {\sim prop(RSV)}
-\end{aligned}$$
+``` math
+\begin{align*}
+cmt({CENTRAL}) \\
+cmt({PERI}) \\
+{cl} & = \exp\left({theta1}+{eta1}\right) \\
+{v} & = \exp\left({theta2}+{eta2}\right) \\
+{q} & = \exp\left({theta3}+{eta3}\right) \\
+{v2} & = \exp\left({theta4}+{eta4}\right) \\
+{v1} & = {v} \\
+{scale1} & = {v} \\
+{k21} & = \frac{{q}}{{v2}} \\
+{k12} & = \frac{{q}}{{v}} \\
+\frac{d \: CENTRAL}{dt} & = {k21} {\times} {PERI}-{k12} {\times} {CENTRAL}-\frac{{cl} {\times} {CENTRAL}}{{v1}} \\
+\frac{d \: PERI}{dt} & = -{k21} {\times} {PERI}+{k12} {\times} {CENTRAL} \\
+{f} & = \frac{{CENTRAL}}{{scale1}} \\
+{ipred} & = {f} \\
+{rescv} & = {RSV} \\
+{ipred} & \sim prop({RSV})
+\end{align*}
+```
 
 ## Step 3: Create and plot an augmented prediction
 
 ``` r
+
 ap <- augPred(fit)
 
 head(ap)
@@ -142,4 +147,18 @@ head(ap)
 plot(ap)
 ```
 
-![](create-augPred_files/figure-html/augPred-1.png)![](create-augPred_files/figure-html/augPred-2.png)![](create-augPred_files/figure-html/augPred-3.png)![](create-augPred_files/figure-html/augPred-4.png)![](create-augPred_files/figure-html/augPred-5.png)![](create-augPred_files/figure-html/augPred-6.png)![](create-augPred_files/figure-html/augPred-7.png)![](create-augPred_files/figure-html/augPred-8.png)
+![](create-augPred_files/figure-html/augPred-1.png)
+
+![](create-augPred_files/figure-html/augPred-2.png)
+
+![](create-augPred_files/figure-html/augPred-3.png)
+
+![](create-augPred_files/figure-html/augPred-4.png)
+
+![](create-augPred_files/figure-html/augPred-5.png)
+
+![](create-augPred_files/figure-html/augPred-6.png)
+
+![](create-augPred_files/figure-html/augPred-7.png)
+
+![](create-augPred_files/figure-html/augPred-8.png)

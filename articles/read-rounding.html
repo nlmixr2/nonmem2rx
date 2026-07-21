@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Reading rounding from NONMEM">
 </head>
@@ -161,7 +161,7 @@ model.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta7` to `0.0083631531443303`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta8` to `0.00274561514766752`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem input data (for model validation): /home/runner/work/nonmem2rx/nonmem2rx/vignettes/articles/pk.turnover.emax3-nonmem/pk.turnover.emax3.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'ytype' to 'nmytype'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'dvid' to 'nmdvid'</span></span>
@@ -180,75 +180,177 @@ model.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving pred problem</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
-<span><span class="va">mod</span></span></code></pre></div>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mi>U</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>k</mi><mi>t</mi><mi>r</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>2</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>k</mi><mi>a</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>3</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>c</mi><mi>l</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>4</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>v</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>5</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>6</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>7</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>m</mi><mi>u</mi><mi>_</mi><mn>8</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>t</mi><mi>e</mi><mn>0</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>t</mi><mi>r</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>1</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>a</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>2</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>k</mi><mi>a</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>l</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>3</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>c</mi><mi>l</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>v</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>4</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>v</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>5</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>c</mi><mn>50</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>6</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>7</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>m</mi><mi>u</mi><mi>_</mi><mn>8</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mn>0</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>.</mi><mi>r</mi><mi>x</mi><mi>d</mi><mi>d</mi><mi>t</mi><mi>a</mi><mn>4</mn><mi>.</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>.</mi><mi>r</mi><mi>x</mi><mi>d</mi><mi>d</mi><mi>t</mi><mi>a</mi><mn>4</mn><mi>.</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow><mo>≥</mo><mn>0</mn><mo>∧</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow><mo>≤</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="prefix">{</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow><mo>=</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo stretchy="false" form="postfix">}</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow><mo>≥</mo><mo>−</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><mo>∧</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow><mo>&lt;</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="prefix">{</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow><mo>=</mo><mo>−</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo stretchy="false" form="postfix">}</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>p</mi><mi>d</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mrow><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>×</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow></mrow><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mn>001</mn></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>i</mi><mi>n</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow><mo>×</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>−</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mo>−</mo><mfrac><mrow><mi>c</mi><mi>l</mi></mrow><mi>v</mi></mfrac><mo>×</mo><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>i</mi><mi>n</mi></mrow><mo>×</mo><mrow><mi>p</mi><mi>d</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo>×</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>d</mi><mi>c</mi><mi>p</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow><mo>≥</mo><mn>0</mn><mo>∧</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow><mo>≤</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="prefix">{</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow><mo>=</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo stretchy="false" form="postfix">}</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow><mo>≥</mo><mo>−</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><mo>∧</mo><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow><mo>&lt;</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="prefix">{</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow><mo>=</mo><mo>−</mo><mrow><mn>1</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo stretchy="false" form="postfix">}</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>p</mi><mi>d</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mrow><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>×</mo><mrow><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>d</mi><mi>c</mi><mi>p</mi></mrow></mrow><mrow><mi>r</mi><mi>x</mi><mi>d</mi><mi>z</mi><mi>e</mi><mn>001</mn></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>k</mi><mi>i</mi><mi>n</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow><mo>×</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mi>f</mi><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>e</mi><mi>_</mi><mi>c</mi><mi>p</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mi>f</mi><mn>2</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>_</mi><mi>i</mi><mi>p</mi><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mi>f</mi><mn>1</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>_</mi><mi>i</mi><mi>p</mi><mn>1</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>w</mi><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>s</mi><mi>q</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>k</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mi>f</mi><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>×</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>w</mi><mn>1</mn></mrow><mo>≡</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>w</mi><mn>1</mn></mrow><mo>=</mo><mn>1</mn></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>_</mi><mi>i</mi><mi>p</mi><mn>2</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mi>f</mi><mn>2</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>r</mi><mi>x</mi><mi>_</mi><mi>p</mi><mn>2</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>_</mi><mi>i</mi><mi>p</mi><mn>2</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>w</mi><mn>2</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>s</mi><mi>q</mi><mi>r</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>d</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>w</mi><mn>2</mn></mrow><mo>≡</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>w</mi><mn>2</mn></mrow><mo>=</mo><mn>1</mn></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>i</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>_</mi><mi>i</mi><mi>p</mi><mn>1</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>w</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>w</mi><mn>1</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">f</mi></mrow></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>n</mi><mi>m</mi><mi>d</mi><mi>v</mi><mi>i</mi><mi>d</mi></mrow><mo>≡</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="prefix">{</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mrow><mi>i</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow><mo>=</mo><mrow><mi>r</mi><mi>x</mi><mi>_</mi><mi>i</mi><mi>p</mi><mn>2</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mi>w</mi><mo>=</mo><mrow><mi>w</mi><mn>2</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo stretchy="false" form="postfix">}</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>y</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>i</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow><mo>+</mo><mi>w</mi><mo>×</mo><mrow><mi>e</mi><mi>p</mi><mi>s</mi><mn>1</mn></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
-cmt({DEPOT}) \\
-cmt({GUT}) \\
-cmt({CENTER}) \\
-cmt({EFFECT}) \\
-{mu\_1} &amp; = {tktr} \\
-{mu\_2} &amp; = {tka} \\
-{mu\_3} &amp; = {tcl} \\
-{mu\_4} &amp; = {tv} \\
-{mu\_5} &amp; = {temax} \\
-{mu\_6} &amp; = {tec50} \\
-{mu\_7} &amp; = {tkout} \\
-{mu\_8} &amp; = {te0} \\
-{ktr} &amp; = \exp\left({mu\_1}+{eta.ktr}\right) \\
-{ka} &amp; = \exp\left({mu\_2}+{eta.ka}\right) \\
-{cl} &amp; = \exp\left({mu\_3}+{eta.cl}\right) \\
-{v} &amp; = \exp\left({mu\_4}+{eta.v}\right) \\
-{emax} &amp; = \left(\left({1}\right)-\left({0}\right)\right) {\times} \left(\frac{{1}}{\left({1}+\exp\left(-\left({mu\_5}+{eta.emax}\right)\right)\right)}\right)+\left({0}\right) \\
-{ec50} &amp; = \exp\left({mu\_6}+{eta.ec50}\right) \\
-{kout} &amp; = \exp\left({mu\_7}+{eta.kout}\right) \\
-{e0} &amp; = \exp\left({mu\_8}+{eta.e0}\right) \\
-{rxini.rxddta4.} &amp; = {e0} \\
-EFFECT({0}) &amp; = {rxini.rxddta4.} \\
-{dcp} &amp; = \frac{{CENTER}}{{v}} \\
-{rxdz001} &amp; = \left({ec50}+{dcp}\right) \\
-\mathrm{if} &amp; \left({rxdz001}{\geq}{0}{\land}{rxdz001}{\leq}{1 \times 10^{-6}}\right) \{ \\
- &amp; {rxdz001}  = {1 \times 10^{-6}} \\
-\}  \\
-\mathrm{if} &amp; \left({rxdz001}{\geq}-{1 \times 10^{-6}}{\land}{rxdz001}&lt;{0}\right) \{ \\
- &amp; {rxdz001}  = -{1 \times 10^{-6}} \\
-\}  \\
-{pd} &amp; = {1}-\frac{{emax} {\times} {dcp}}{{rxdz001}} \\
-{kin} &amp; = {e0} {\times} {kout} \\
-\frac{d \: DEPOT}{dt} &amp; = -{ktr} {\times} {DEPOT} \\
-\frac{d \: GUT}{dt} &amp; = {ktr} {\times} {DEPOT}-{ka} {\times} {GUT} \\
-\frac{d \: CENTER}{dt} &amp; = {ka} {\times} {GUT}-\frac{{cl}}{{v}} {\times} {CENTER} \\
-\frac{d \: EFFECT}{dt} &amp; = {kin} {\times} {pd}-{kout} {\times} {EFFECT} \\
-{cp} &amp; = \frac{{CENTER}}{{v}} \\
-{f} &amp; = {DEPOT} \\
-{rxe\_dcp} &amp; = \frac{{CENTER}}{{v}} \\
-{rxdze001} &amp; = \left({ec50}+{rxe\_dcp}\right) \\
-\mathrm{if} &amp; \left({rxdze001}{\geq}{0}{\land}{rxdze001}{\leq}{1 \times 10^{-6}}\right) \{ \\
- &amp; {rxdze001}  = {1 \times 10^{-6}} \\
-\}  \\
-\mathrm{if} &amp; \left({rxdze001}{\geq}-{1 \times 10^{-6}}{\land}{rxdze001}&lt;{0}\right) \{ \\
- &amp; {rxdze001}  = -{1 \times 10^{-6}} \\
-\}  \\
-{rxe\_pd} &amp; = {1}-\frac{{emax} {\times} {rxe\_dcp}}{{rxdze001}} \\
-{rxe\_kin} &amp; = {e0} {\times} {kout} \\
-{rxe\_cp} &amp; = \frac{{CENTER}}{{v}} \\
-{rx\_pf1} &amp; = {rxe\_cp} \\
-{rx\_pf2} &amp; = {EFFECT} \\
-{rx\_ip1} &amp; = {rx\_pf1} \\
-{rx\_p1} &amp; = {rx\_ip1} \\
-{w1} &amp; = sqrt({\left({pkadd.err}\right)}^{{2}}+{\left({rx\_pf1}\right)}^{{2}} {\times} {\left({prop.err}\right)}^{{2}}) \\
-\mathrm{if} &amp; \left({w1}{\equiv}{0}\right) {w1}  = {1} \\
-{rx\_ip2} &amp; = {rx\_pf2} \\
-{rx\_p2} &amp; = {rx\_ip2} \\
-{w2} &amp; = sqrt({\left({pdadd.err}\right)}^{{2}}) \\
-\mathrm{if} &amp; \left({w2}{\equiv}{0}\right) {w2}  = {1} \\
-{ipred} &amp; = {rx\_ip1} \\
-{w} &amp; = {w1} \\
-\mathrm{if} &amp; \left({nmdvid}{\equiv}{2}\right) \{ \\
- &amp; {ipred}  = {rx\_ip2} \\
- &amp; {w}  = {w2} \\
-\}  \\
-{y} &amp; = {ipred}+{w} {\times} {eps1}
-\end{align*}</annotation></semantics></math></p>
+<span><span class="va">mod</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 4-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Initalization:</span> ──  </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span></span>
+<span><span class="co">#&gt;          tktr           tka           tcl            tv      prop.err </span></span>
+<span><span class="co">#&gt;  6.240530e-07 -3.006428e-06 -2.004051e+00  2.051884e+00  9.858046e-02 </span></span>
+<span><span class="co">#&gt;     pkadd.err         temax         tec50         tkout           te0 </span></span>
+<span><span class="co">#&gt;  5.116252e-01  6.418498e+00  1.407633e-01 -2.953470e+00  4.570454e+00 </span></span>
+<span><span class="co">#&gt;     pdadd.err </span></span>
+<span><span class="co">#&gt;  3.717144e+00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Omega</span> (<span style="color: #0000BB; font-weight: bold;">$omega</span>): </span></span>
+<span><span class="co">#&gt;            eta.ktr    eta.ka     eta.cl      eta.v eta.emax  eta.ec50</span></span>
+<span><span class="co">#&gt; eta.ktr  0.5581298 0.0000000 0.00000000 0.00000000    0e+00 0.0000000</span></span>
+<span><span class="co">#&gt; eta.ka   0.0000000 0.5584023 0.00000000 0.00000000    0e+00 0.0000000</span></span>
+<span><span class="co">#&gt; eta.cl   0.0000000 0.0000000 0.07858491 0.00000000    0e+00 0.0000000</span></span>
+<span><span class="co">#&gt; eta.v    0.0000000 0.0000000 0.00000000 0.05082269    0e+00 0.0000000</span></span>
+<span><span class="co">#&gt; eta.emax 0.0000000 0.0000000 0.00000000 0.00000000    5e-05 0.0000000</span></span>
+<span><span class="co">#&gt; eta.ec50 0.0000000 0.0000000 0.00000000 0.00000000    0e+00 0.1842681</span></span>
+<span><span class="co">#&gt; eta.kout 0.0000000 0.0000000 0.00000000 0.00000000    0e+00 0.0000000</span></span>
+<span><span class="co">#&gt; eta.e0   0.0000000 0.0000000 0.00000000 0.00000000    0e+00 0.0000000</span></span>
+<span><span class="co">#&gt;             eta.kout      eta.e0</span></span>
+<span><span class="co">#&gt; eta.ktr  0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.ka   0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.cl   0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.v    0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.emax 0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.ec50 0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.kout 0.008363153 0.000000000</span></span>
+<span><span class="co">#&gt; eta.e0   0.000000000 0.002745615</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; States</span> (<span style="color: #0000BB; font-weight: bold;">$state</span> or <span style="color: #0000BB; font-weight: bold;">$stateDf</span>): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1            DEPOT</span></span>
+<span><span class="co">#&gt; 2                  2              GUT</span></span>
+<span><span class="co">#&gt; 3                  3           CENTER</span></span>
+<span><span class="co">#&gt; 4                  4           EFFECT</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
+<span><span class="co">#&gt;     description &lt;- c("translated from babelmixr2", "; comments show mu referenced model in ui$getSplitMuModel")</span></span>
+<span><span class="co">#&gt;     dfObs &lt;- 483</span></span>
+<span><span class="co">#&gt;     dfSub &lt;- 32</span></span>
+<span><span class="co">#&gt;     sigma &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         eps1 ~ 1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.13e-06", </span></span>
+<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (3.12e-06, 0.000497); atol=6.17e-05", </span></span>
+<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.18e-06", </span></span>
+<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (3.79e-07,0.00313) atol=6.18e-06")</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         tktr &lt;- 6.24053043162953e-07</span></span>
+<span><span class="co">#&gt;         label("1 - tktr")</span></span>
+<span><span class="co">#&gt;         tka &lt;- -3.00642760553675e-06</span></span>
+<span><span class="co">#&gt;         label("2 - tka")</span></span>
+<span><span class="co">#&gt;         tcl &lt;- -2.00405074386117</span></span>
+<span><span class="co">#&gt;         label("3 - tcl")</span></span>
+<span><span class="co">#&gt;         tv &lt;- 2.05188410700476</span></span>
+<span><span class="co">#&gt;         label("4 - tv")</span></span>
+<span><span class="co">#&gt;         prop.err &lt;- c(0, 0.0985804613565218)</span></span>
+<span><span class="co">#&gt;         label("5 - prop.err")</span></span>
+<span><span class="co">#&gt;         pkadd.err &lt;- c(0, 0.511625249037084)</span></span>
+<span><span class="co">#&gt;         label("6 - pkadd.err")</span></span>
+<span><span class="co">#&gt;         temax &lt;- 6.4184983102259</span></span>
+<span><span class="co">#&gt;         label("7 - temax")</span></span>
+<span><span class="co">#&gt;         tec50 &lt;- 0.140763261319656</span></span>
+<span><span class="co">#&gt;         label("8 - tec50")</span></span>
+<span><span class="co">#&gt;         tkout &lt;- -2.9534704318737</span></span>
+<span><span class="co">#&gt;         label("9 - tkout")</span></span>
+<span><span class="co">#&gt;         te0 &lt;- 4.57045413136592</span></span>
+<span><span class="co">#&gt;         label("10 - te0")</span></span>
+<span><span class="co">#&gt;         pdadd.err &lt;- c(0, 3.71714384851537)</span></span>
+<span><span class="co">#&gt;         label("11 - pdadd.err")</span></span>
+<span><span class="co">#&gt;         eta.ktr ~ 0.558129815059436</span></span>
+<span><span class="co">#&gt;         eta.ka ~ 0.558402321309217</span></span>
+<span><span class="co">#&gt;         eta.cl ~ 0.0785849119252598</span></span>
+<span><span class="co">#&gt;         eta.v ~ 0.0508226905750953</span></span>
+<span><span class="co">#&gt;         eta.emax ~ 5e-05</span></span>
+<span><span class="co">#&gt;         eta.ec50 ~ 0.18426809257979</span></span>
+<span><span class="co">#&gt;         eta.kout ~ 0.0083631531443303</span></span>
+<span><span class="co">#&gt;         eta.e0 ~ 0.00274561514766752</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         cmt(DEPOT)</span></span>
+<span><span class="co">#&gt;         cmt(GUT)</span></span>
+<span><span class="co">#&gt;         cmt(CENTER)</span></span>
+<span><span class="co">#&gt;         cmt(EFFECT)</span></span>
+<span><span class="co">#&gt;         mu_1 &lt;- tktr</span></span>
+<span><span class="co">#&gt;         mu_2 &lt;- tka</span></span>
+<span><span class="co">#&gt;         mu_3 &lt;- tcl</span></span>
+<span><span class="co">#&gt;         mu_4 &lt;- tv</span></span>
+<span><span class="co">#&gt;         mu_5 &lt;- temax</span></span>
+<span><span class="co">#&gt;         mu_6 &lt;- tec50</span></span>
+<span><span class="co">#&gt;         mu_7 &lt;- tkout</span></span>
+<span><span class="co">#&gt;         mu_8 &lt;- te0</span></span>
+<span><span class="co">#&gt;         ktr &lt;- exp(mu_1 + eta.ktr)</span></span>
+<span><span class="co">#&gt;         ka &lt;- exp(mu_2 + eta.ka)</span></span>
+<span><span class="co">#&gt;         cl &lt;- exp(mu_3 + eta.cl)</span></span>
+<span><span class="co">#&gt;         v &lt;- exp(mu_4 + eta.v)</span></span>
+<span><span class="co">#&gt;         emax &lt;- ((1) - (0)) * (1/(1 + exp(-(mu_5 + eta.emax)))) + </span></span>
+<span><span class="co">#&gt;             (0)</span></span>
+<span><span class="co">#&gt;         ec50 &lt;- exp(mu_6 + eta.ec50)</span></span>
+<span><span class="co">#&gt;         kout &lt;- exp(mu_7 + eta.kout)</span></span>
+<span><span class="co">#&gt;         e0 &lt;- exp(mu_8 + eta.e0)</span></span>
+<span><span class="co">#&gt;         rxini.rxddta4. &lt;- e0</span></span>
+<span><span class="co">#&gt;         EFFECT(0) &lt;- rxini.rxddta4.</span></span>
+<span><span class="co">#&gt;         dcp &lt;- CENTER/v</span></span>
+<span><span class="co">#&gt;         rxdz001 &lt;- (ec50 + dcp)</span></span>
+<span><span class="co">#&gt;         if (rxdz001 &gt;= 0 &amp;&amp; rxdz001 &lt;= 1e-06) {</span></span>
+<span><span class="co">#&gt;             rxdz001 &lt;- 1e-06</span></span>
+<span><span class="co">#&gt;         }</span></span>
+<span><span class="co">#&gt;         if (rxdz001 &gt;= -1e-06 &amp;&amp; rxdz001 &lt; 0) {</span></span>
+<span><span class="co">#&gt;             rxdz001 &lt;- -1e-06</span></span>
+<span><span class="co">#&gt;         }</span></span>
+<span><span class="co">#&gt;         pd &lt;- 1 - emax * dcp/rxdz001</span></span>
+<span><span class="co">#&gt;         kin &lt;- e0 * kout</span></span>
+<span><span class="co">#&gt;         d/dt(DEPOT) &lt;- -ktr * DEPOT</span></span>
+<span><span class="co">#&gt;         d/dt(GUT) &lt;- ktr * DEPOT - ka * GUT</span></span>
+<span><span class="co">#&gt;         d/dt(CENTER) &lt;- ka * GUT - cl/v * CENTER</span></span>
+<span><span class="co">#&gt;         d/dt(EFFECT) &lt;- kin * pd - kout * EFFECT</span></span>
+<span><span class="co">#&gt;         cp &lt;- CENTER/v</span></span>
+<span><span class="co">#&gt;         f &lt;- DEPOT</span></span>
+<span><span class="co">#&gt;         rxe_dcp &lt;- CENTER/v</span></span>
+<span><span class="co">#&gt;         rxdze001 &lt;- (ec50 + rxe_dcp)</span></span>
+<span><span class="co">#&gt;         if (rxdze001 &gt;= 0 &amp;&amp; rxdze001 &lt;= 1e-06) {</span></span>
+<span><span class="co">#&gt;             rxdze001 &lt;- 1e-06</span></span>
+<span><span class="co">#&gt;         }</span></span>
+<span><span class="co">#&gt;         if (rxdze001 &gt;= -1e-06 &amp;&amp; rxdze001 &lt; 0) {</span></span>
+<span><span class="co">#&gt;             rxdze001 &lt;- -1e-06</span></span>
+<span><span class="co">#&gt;         }</span></span>
+<span><span class="co">#&gt;         rxe_pd &lt;- 1 - emax * rxe_dcp/rxdze001</span></span>
+<span><span class="co">#&gt;         rxe_kin &lt;- e0 * kout</span></span>
+<span><span class="co">#&gt;         rxe_cp &lt;- CENTER/v</span></span>
+<span><span class="co">#&gt;         rx_pf1 &lt;- rxe_cp</span></span>
+<span><span class="co">#&gt;         rx_pf2 &lt;- EFFECT</span></span>
+<span><span class="co">#&gt;         rx_ip1 &lt;- rx_pf1</span></span>
+<span><span class="co">#&gt;         rx_p1 &lt;- rx_ip1</span></span>
+<span><span class="co">#&gt;         w1 &lt;- sqrt((pkadd.err)^2 + (rx_pf1)^2 * (prop.err)^2)</span></span>
+<span><span class="co">#&gt;         if (w1 == 0) </span></span>
+<span><span class="co">#&gt;             w1 &lt;- 1</span></span>
+<span><span class="co">#&gt;         rx_ip2 &lt;- rx_pf2</span></span>
+<span><span class="co">#&gt;         rx_p2 &lt;- rx_ip2</span></span>
+<span><span class="co">#&gt;         w2 &lt;- sqrt((pdadd.err)^2)</span></span>
+<span><span class="co">#&gt;         if (w2 == 0) </span></span>
+<span><span class="co">#&gt;             w2 &lt;- 1</span></span>
+<span><span class="co">#&gt;         ipred &lt;- rx_ip1</span></span>
+<span><span class="co">#&gt;         w &lt;- w1</span></span>
+<span><span class="co">#&gt;         if (nmdvid == 2) {</span></span>
+<span><span class="co">#&gt;             ipred &lt;- rx_ip2</span></span>
+<span><span class="co">#&gt;             w &lt;- w2</span></span>
+<span><span class="co">#&gt;         }</span></span>
+<span><span class="co">#&gt;         y &lt;- ipred + w * eps1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx translation notes (</span><span style="color: #0000BB; font-weight: bold;">$notes</span><span style="font-weight: bold;">):</span> ──  </span></span>
+<span><span class="co">#&gt;    • some etas defaulted to non-mu referenced, possible parsing error: eta.emax as a work-around try putting the mu-referenced expression on a simple line </span></span>
+<span><span class="co">#&gt;    • some etas defaulted to non-mu referenced, possible parsing error: eta5 as a work-around try putting the mu-referenced expression on a simple line </span></span>
+<span><span class="co">#&gt;    • some NONMEM input has tied times; they are offset by a small offset </span></span>
+<span><span class="co">#&gt;    • is.na() applied to non-(list or vector) of type 'language' </span></span>
+<span><span class="co">#&gt;    • 'dvid' variable has special meaning in rxode2, renamed to 'nmdvid', rename/copy in your data too </span></span>
+<span><span class="co">#&gt;    • $MODEL NCOMPARTMENTS/NEQUILIBRIUM/NPARAMETERS statement(s) ignored </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Sigma</span> (<span style="color: #0000BB; font-weight: bold;">$sigma</span>): </span></span>
+<span><span class="co">#&gt;      eps1</span></span>
+<span><span class="co">#&gt; eps1    1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
+<span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 composite comparison: <span style="color: #0000BB; font-weight: bold;">$predAtol</span>, <span style="color: #0000BB; font-weight: bold;">$predRtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredAtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredRtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresAtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresRtol</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="step-2-convert-rxode2-model-to-model-with-endpointsresiduals-specified-like-nlmixr2">Step 2: Convert <code>rxode2</code> model to model with
@@ -485,13 +587,17 @@ convert the fit to a full nlmixr2 fit object.</p>
 <span><span class="co">#&gt; → loading into <span style="color: #0000BB;">symengine</span> environment...</span></span>
 <span><span class="co">#&gt; → pruning branches (`if`/`else`) of full model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; → finding duplicate expressions in EBE model...</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model (2 chunks)...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 5.0.2 using 2 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 5.1.4 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -521,23 +627,35 @@ model:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;           setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.01976 0.081    0.001 320.27      3.167</span></span>
+<span><span class="co">#&gt;             setup postprocess table compress NONMEM as.nlmixr2</span></span>
+<span><span class="co">#&gt; elapsed 0.6350346       0.022 0.046    0.001 320.27      2.422</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                <span style="font-weight: bold;">Parameter</span>      <span style="font-weight: bold;">Est.</span> <span style="font-weight: bold;">Back-transformed</span> <span style="font-weight: bold;">BSV(CV% or SD)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>            1 - <span style="font-weight: bold;">tktr</span>  6.24e-07                1           86.5      <span style="color: #BB0000; font-weight: bold;">59.8%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>              2 - <span style="font-weight: bold;">tka</span> -3.01e-06                1           86.5      <span style="color: #BB0000; font-weight: bold;">59.8%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>              3 - <span style="font-weight: bold;">tcl</span>        -2            0.135           28.6      1.34% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                4 - <span style="font-weight: bold;">tv</span>      2.05             7.78           22.8      6.44% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>    5 - <span style="font-weight: bold;">prop.err</span>    0.0986           0.0986                           </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>  6 - <span style="font-weight: bold;">pkadd.err</span>     0.512            0.512                           </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>          7 - <span style="font-weight: bold;">temax</span>      6.42            0.998        0.00707      <span style="color: #BB0000; font-weight: bold;">100.%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>          8 - <span style="font-weight: bold;">tec50</span>     0.141             1.15           45.0      6.06% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>          9 - <span style="font-weight: bold;">tkout</span>     -2.95           0.0522           9.16      <span style="color: #BB0000; font-weight: bold;">32.4%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>             10 - <span style="font-weight: bold;">te0</span>      4.57             96.6           5.24      18.1% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span> 11 - <span style="font-weight: bold;">pdadd.err</span>      3.72             3.72                           </span></span>
+<span><span class="co">#&gt;                <span style="font-weight: bold;">Parameter</span>      <span style="font-weight: bold;">Est.</span> <span style="font-weight: bold;">SE</span> <span style="font-weight: bold;">%RSE</span> <span style="font-weight: bold;">Back-transformed(95%CI)</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>            1 - <span style="font-weight: bold;">tktr</span>  6.241e-7                           1.000</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>              2 - <span style="font-weight: bold;">tka</span> -3.006e-6                           1.000</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>              3 - <span style="font-weight: bold;">tcl</span>    -2.004                          0.1348</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                4 - <span style="font-weight: bold;">tv</span>     2.052                           7.783</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>    5 - <span style="font-weight: bold;">prop.err</span>   0.09858                         0.09858</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>  6 - <span style="font-weight: bold;">pkadd.err</span>    0.5116                          0.5116</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>          7 - <span style="font-weight: bold;">temax</span>     6.418                          0.9984</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>          8 - <span style="font-weight: bold;">tec50</span>    0.1408                           1.151</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>          9 - <span style="font-weight: bold;">tkout</span>    -2.953                         0.05216</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>             10 - <span style="font-weight: bold;">te0</span>     4.570                           96.59</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span> 11 - <span style="font-weight: bold;">pdadd.err</span>     3.717                           3.717</span></span>
+<span><span class="co">#&gt;           <span style="font-weight: bold;">BSV(CV% or SD)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>               86.45      <span style="color: #BB0000; font-weight: bold;">59.84</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>                86.48      <span style="color: #BB0000; font-weight: bold;">59.84</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>                28.59      1.340 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                 22.83      6.442 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>                            </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>                           </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>           0.007071      <span style="color: #BB0000; font-weight: bold;">99.99</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>              44.98      6.065 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>              9.164      <span style="color: #BB0000; font-weight: bold;">32.42</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>                5.243      18.09 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span>                           </span></span>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
 <span><span class="co">#&gt;   Full BSV covariance (<span style="color: #0000BB; font-weight: bold;">$omega</span>) or correlation (<span style="color: #0000BB; font-weight: bold;">$omegaR</span>; diagonals=SDs) </span></span>
@@ -598,32 +716,106 @@ follows:</p>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> remove between subject variability `eta.emax`</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> remove between subject variability `eta.kout`</span></span>
 <span></span>
-<span><span class="va">mod3</span></span></code></pre></div>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mi>U</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>t</mi><mi>r</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mi>k</mi><mi>t</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>a</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mi>k</mi><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>l</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>c</mi><mi>l</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>c</mi><mi>l</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>v</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>v</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>v</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>e</mi><mi>x</mi><mi>p</mi><mi>i</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>c</mi><mn>50</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mn>0</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mn>0</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>p</mi><mi>d</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mrow><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>×</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>i</mi><mi>n</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow><mo>×</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>−</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mo>−</mo><mfrac><mrow><mi>c</mi><mi>l</mi></mrow><mi>v</mi></mfrac><mo>×</mo><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>i</mi><mi>n</mi></mrow><mo>×</mo><mrow><mi>p</mi><mi>d</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo>×</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>f</mi><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>∼</mo><mi>a</mi><mi>d</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>k</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>f</mi><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>∼</mo><mi>a</mi><mi>d</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>d</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
-cmt({DEPOT}) \\
-cmt({GUT}) \\
-cmt({CENTER}) \\
-cmt({EFFECT}) \\
-{ktr} &amp; = \exp\left({tktr}\right) \\
-{ka} &amp; = \exp\left({tka}\right) \\
-{cl} &amp; = \exp\left({tcl}+{eta.cl}\right) \\
-{v} &amp; = \exp\left({tv}+{eta.v}\right) \\
-{emax} &amp; = expit({temax}, {0}, {1}) \\
-{ec50} &amp; = \exp\left({tec50}+{eta.ec50}\right) \\
-{kout} &amp; = \exp\left({tkout}\right) \\
-{e0} &amp; = \exp\left({te0}+{eta.e0}\right) \\
-EFFECT({0}) &amp; = {e0} \\
-{dcp} &amp; = \frac{{CENTER}}{{v}} \\
-{pd} &amp; = {1}-\frac{{emax} {\times} {dcp}}{\left({ec50}+{dcp}\right)} \\
-{kin} &amp; = {e0} {\times} {kout} \\
-\frac{d \: DEPOT}{dt} &amp; = -{ktr} {\times} {DEPOT} \\
-\frac{d \: GUT}{dt} &amp; = {ktr} {\times} {DEPOT}-{ka} {\times} {GUT} \\
-\frac{d \: CENTER}{dt} &amp; = {ka} {\times} {GUT}-\frac{{cl}}{{v}} {\times} {CENTER} \\
-\frac{d \: EFFECT}{dt} &amp; = {kin} {\times} {pd}-{kout} {\times} {EFFECT} \\
-{eff} &amp; = {EFFECT} \\
-{dcp} &amp; \sim add({pkadd.err})+prop({prop.err}) \\
-{eff} &amp; \sim add({pdadd.err})
-\end{align*}</annotation></semantics></math></p>
+<span><span class="va">mod3</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 4-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Initalization:</span> ──  </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span></span>
+<span><span class="co">#&gt;          tktr           tka           tcl            tv      prop.err </span></span>
+<span><span class="co">#&gt;  6.240530e-07 -3.006428e-06 -2.004051e+00  2.051884e+00  9.858046e-02 </span></span>
+<span><span class="co">#&gt;     pkadd.err         temax         tec50         tkout           te0 </span></span>
+<span><span class="co">#&gt;  5.116252e-01  6.418498e+00  1.407633e-01 -2.953470e+00  4.570454e+00 </span></span>
+<span><span class="co">#&gt;     pdadd.err </span></span>
+<span><span class="co">#&gt;  3.717144e+00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Omega</span> (<span style="color: #0000BB; font-weight: bold;">$omega</span>): </span></span>
+<span><span class="co">#&gt;              eta.cl      eta.v  eta.ec50      eta.e0</span></span>
+<span><span class="co">#&gt; eta.cl   0.07858491 0.00000000 0.0000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.v    0.00000000 0.05082269 0.0000000 0.000000000</span></span>
+<span><span class="co">#&gt; eta.ec50 0.00000000 0.00000000 0.1842681 0.000000000</span></span>
+<span><span class="co">#&gt; eta.e0   0.00000000 0.00000000 0.0000000 0.002745615</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; States</span> (<span style="color: #0000BB; font-weight: bold;">$state</span> or <span style="color: #0000BB; font-weight: bold;">$stateDf</span>): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1            DEPOT</span></span>
+<span><span class="co">#&gt; 2                  2              GUT</span></span>
+<span><span class="co">#&gt; 3                  3           CENTER</span></span>
+<span><span class="co">#&gt; 4                  4           EFFECT</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Multiple Endpoint Model (</span><span style="color: #0000BB; font-weight: bold;">$multipleEndpoint</span><span style="font-weight: bold;">):</span> ──  </span></span>
+<span><span class="co">#&gt;   variable                cmt                dvid*</span></span>
+<span><span class="co">#&gt; 1  dcp ~ … cmt='dcp' or cmt=5 dvid='dcp' or dvid=1</span></span>
+<span><span class="co">#&gt; 2  eff ~ … cmt='eff' or cmt=6 dvid='eff' or dvid=2</span></span>
+<span><span class="co">#&gt;   * If dvids are outside this range, all dvids are re-numered sequentially, ie 1,7, 10 becomes 1,2,3 etc</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">μ-referencing (</span><span style="color: #0000BB; font-weight: bold;">$muRefTable</span><span style="font-weight: bold;">):</span> ──  </span></span>
+<span><span class="co">#&gt;   theta      eta level</span></span>
+<span><span class="co">#&gt; 1   tcl   eta.cl    id</span></span>
+<span><span class="co">#&gt; 2    tv    eta.v    id</span></span>
+<span><span class="co">#&gt; 3 tec50 eta.ec50    id</span></span>
+<span><span class="co">#&gt; 4   te0   eta.e0    id</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     description &lt;- c("translated from babelmixr2", "; comments show mu referenced model in ui$getSplitMuModel")</span></span>
+<span><span class="co">#&gt;     dfObs &lt;- 483</span></span>
+<span><span class="co">#&gt;     dfSub &lt;- 32</span></span>
+<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.13e-06", </span></span>
+<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (3.12e-06, 0.000497); atol=6.17e-05", </span></span>
+<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.18e-06", </span></span>
+<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (3.79e-07,0.00313) atol=6.18e-06")</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         tktr &lt;- 6.24053043162953e-07</span></span>
+<span><span class="co">#&gt;         label("1 - tktr")</span></span>
+<span><span class="co">#&gt;         tka &lt;- -3.00642760553675e-06</span></span>
+<span><span class="co">#&gt;         label("2 - tka")</span></span>
+<span><span class="co">#&gt;         tcl &lt;- -2.00405074386117</span></span>
+<span><span class="co">#&gt;         label("3 - tcl")</span></span>
+<span><span class="co">#&gt;         tv &lt;- 2.05188410700476</span></span>
+<span><span class="co">#&gt;         label("4 - tv")</span></span>
+<span><span class="co">#&gt;         prop.err &lt;- c(0, 0.0985804613565218)</span></span>
+<span><span class="co">#&gt;         label("5 - prop.err")</span></span>
+<span><span class="co">#&gt;         pkadd.err &lt;- c(0, 0.511625249037084)</span></span>
+<span><span class="co">#&gt;         label("6 - pkadd.err")</span></span>
+<span><span class="co">#&gt;         temax &lt;- 6.4184983102259</span></span>
+<span><span class="co">#&gt;         label("7 - temax")</span></span>
+<span><span class="co">#&gt;         tec50 &lt;- 0.140763261319656</span></span>
+<span><span class="co">#&gt;         label("8 - tec50")</span></span>
+<span><span class="co">#&gt;         tkout &lt;- -2.9534704318737</span></span>
+<span><span class="co">#&gt;         label("9 - tkout")</span></span>
+<span><span class="co">#&gt;         te0 &lt;- 4.57045413136592</span></span>
+<span><span class="co">#&gt;         label("10 - te0")</span></span>
+<span><span class="co">#&gt;         pdadd.err &lt;- c(0, 3.71714384851537)</span></span>
+<span><span class="co">#&gt;         label("11 - pdadd.err")</span></span>
+<span><span class="co">#&gt;         eta.cl ~ 0.0785849119252598</span></span>
+<span><span class="co">#&gt;         eta.v ~ 0.0508226905750953</span></span>
+<span><span class="co">#&gt;         eta.ec50 ~ 0.18426809257979</span></span>
+<span><span class="co">#&gt;         eta.e0 ~ 0.00274561514766752</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         cmt(DEPOT)</span></span>
+<span><span class="co">#&gt;         cmt(GUT)</span></span>
+<span><span class="co">#&gt;         cmt(CENTER)</span></span>
+<span><span class="co">#&gt;         cmt(EFFECT)</span></span>
+<span><span class="co">#&gt;         ktr &lt;- exp(tktr)</span></span>
+<span><span class="co">#&gt;         ka &lt;- exp(tka)</span></span>
+<span><span class="co">#&gt;         cl &lt;- exp(tcl + eta.cl)</span></span>
+<span><span class="co">#&gt;         v &lt;- exp(tv + eta.v)</span></span>
+<span><span class="co">#&gt;         emax &lt;- expit(temax, 0, 1)</span></span>
+<span><span class="co">#&gt;         ec50 &lt;- exp(tec50 + eta.ec50)</span></span>
+<span><span class="co">#&gt;         kout &lt;- exp(tkout)</span></span>
+<span><span class="co">#&gt;         e0 &lt;- exp(te0 + eta.e0)</span></span>
+<span><span class="co">#&gt;         EFFECT(0) &lt;- e0</span></span>
+<span><span class="co">#&gt;         dcp &lt;- CENTER/v</span></span>
+<span><span class="co">#&gt;         pd &lt;- 1 - emax * dcp/(ec50 + dcp)</span></span>
+<span><span class="co">#&gt;         kin &lt;- e0 * kout</span></span>
+<span><span class="co">#&gt;         d/dt(DEPOT) &lt;- -ktr * DEPOT</span></span>
+<span><span class="co">#&gt;         d/dt(GUT) &lt;- ktr * DEPOT - ka * GUT</span></span>
+<span><span class="co">#&gt;         d/dt(CENTER) &lt;- ka * GUT - cl/v * CENTER</span></span>
+<span><span class="co">#&gt;         d/dt(EFFECT) &lt;- kin * pd - kout * EFFECT</span></span>
+<span><span class="co">#&gt;         eff &lt;- EFFECT</span></span>
+<span><span class="co">#&gt;         dcp ~ add(pkadd.err) + prop(prop.err)</span></span>
+<span><span class="co">#&gt;         eff ~ add(pdadd.err)</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
 <p>Since you have <code>babelmixr2</code> you could use
 <code>babelmixr2</code> to run the model for you in NONMEM (if you have
 it setup to run NONMEM), or even run the model from <code>nlmixr2</code>
@@ -635,7 +827,6 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; → loading into <span style="color: #0000BB;">symengine</span> environment...</span></span>
 <span><span class="co">#&gt; → pruning branches (`if`/`else`) of full model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; → calculate jacobian</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → calculate sensitivities</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
@@ -651,9 +842,13 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → finding duplicate expressions in EBE model...</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model (2 chunks)...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling inner model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -666,49 +861,78 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; calculating covariance matrix</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:29 </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:28 </span></span>
 <span><span class="co">#&gt; done</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; Warning in FUN(X[[i]], ...): gradient problems with initial estimate and</span></span>
-<span><span class="co">#&gt; covariance; see $scaleInfo</span></span>
-<span><span class="co">#&gt; Warning in FUN(X[[i]], ...): since sandwich matrix is corrected, you may</span></span>
-<span><span class="co">#&gt; compare to $covR or $covS if you wish</span></span>
-<span><span class="co">#&gt; Warning in FUN(X[[i]], ...): S matrix non-positive definite but corrected by S</span></span>
-<span><span class="co">#&gt; = sqrtm(S%*%S)</span></span>
-<span><span class="co">#&gt; Warning in FUN(X[[i]], ...): R matrix non-positive definite but corrected by R</span></span>
-<span><span class="co">#&gt; = sqrtm(R%*%R)</span></span>
-<span><span class="co">#&gt; Warning in FUN(X[[i]], ...): ETAs were reset to zero during optimization; (Can</span></span>
-<span><span class="co">#&gt; control by foceiControl(resetEtaP=.))</span></span>
-<span><span class="co">#&gt; Warning in FUN(X[[i]], ...): initial ETAs were nudged; (can control by</span></span>
-<span><span class="co">#&gt; foceiControl(etaNudge=., etaNudge2=))</span></span>
 <span></span>
-<span><span class="va">fit2</span></span></code></pre></div>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mi>U</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>t</mi><mi>r</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mi>k</mi><mi>t</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>a</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mi>k</mi><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>l</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>c</mi><mi>l</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>c</mi><mi>l</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>v</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>v</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>v</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>e</mi><mi>x</mi><mi>p</mi><mi>i</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>c</mi><mn>50</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mn>0</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mn>0</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>p</mi><mi>d</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mrow><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>×</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>i</mi><mi>n</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow><mo>×</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>−</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mo>−</mo><mfrac><mrow><mi>c</mi><mi>l</mi></mrow><mi>v</mi></mfrac><mo>×</mo><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>i</mi><mi>n</mi></mrow><mo>×</mo><mrow><mi>p</mi><mi>d</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo>×</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>f</mi><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>∼</mo><mi>a</mi><mi>d</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>k</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>f</mi><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>∼</mo><mi>a</mi><mi>d</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>d</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
-cmt({DEPOT}) \\
-cmt({GUT}) \\
-cmt({CENTER}) \\
-cmt({EFFECT}) \\
-{ktr} &amp; = \exp\left({tktr}\right) \\
-{ka} &amp; = \exp\left({tka}\right) \\
-{cl} &amp; = \exp\left({tcl}+{eta.cl}\right) \\
-{v} &amp; = \exp\left({tv}+{eta.v}\right) \\
-{emax} &amp; = expit({temax}, {0}, {1}) \\
-{ec50} &amp; = \exp\left({tec50}+{eta.ec50}\right) \\
-{kout} &amp; = \exp\left({tkout}\right) \\
-{e0} &amp; = \exp\left({te0}+{eta.e0}\right) \\
-EFFECT({0}) &amp; = {e0} \\
-{dcp} &amp; = \frac{{CENTER}}{{v}} \\
-{pd} &amp; = {1}-\frac{{emax} {\times} {dcp}}{\left({ec50}+{dcp}\right)} \\
-{kin} &amp; = {e0} {\times} {kout} \\
-\frac{d \: DEPOT}{dt} &amp; = -{ktr} {\times} {DEPOT} \\
-\frac{d \: GUT}{dt} &amp; = {ktr} {\times} {DEPOT}-{ka} {\times} {GUT} \\
-\frac{d \: CENTER}{dt} &amp; = {ka} {\times} {GUT}-\frac{{cl}}{{v}} {\times} {CENTER} \\
-\frac{d \: EFFECT}{dt} &amp; = {kin} {\times} {pd}-{kout} {\times} {EFFECT} \\
-{eff} &amp; = {EFFECT} \\
-{dcp} &amp; \sim add({pkadd.err})+prop({prop.err}) \\
-{eff} &amp; \sim add({pdadd.err})
-\end{align*}</annotation></semantics></math></p>
+<span><span class="va">fit2</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── </span><span style="color: #0000BB; font-weight: bold;">nlmix</span><span style="color: #BB0000; font-weight: bold;">r²</span><span style="font-weight: bold;"> </span><span style="color: #BBBB00; font-weight: bold;">FOCE</span><span style="color: #BB0000; font-weight: bold;">i</span> (outer: bobyqa) ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)</span></span>
+<span><span class="co">#&gt; FOCEi 1423.043 2340.738 2403.438      -1155.369      1966036839        499851.9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            setup optimize covariance preprocess postprocess table compress</span></span>
+<span><span class="co">#&gt; elapsed 9.105813 20.45482   52.78919      0.033       0.017 0.064    0.001</span></span>
+<span><span class="co">#&gt;             other</span></span>
+<span><span class="co">#&gt; elapsed 0.1281705</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                <span style="font-weight: bold;">Parameter</span>    <span style="font-weight: bold;">Est.</span>      <span style="font-weight: bold;">SE</span>   <span style="font-weight: bold;">%RSE</span>    <span style="font-weight: bold;">Back-transformed(95%CI)</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>            1 - <span style="font-weight: bold;">tktr</span> 0.05093  0.1584  311.0      1.052 (0.7715, 1.435)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>              2 - <span style="font-weight: bold;">tka</span> 0.05071  0.1113  219.4      1.052 (0.8459, 1.308)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>              3 - <span style="font-weight: bold;">tcl</span>  -1.996 0.05169  2.589    0.1358 (0.1227, 0.1503)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                4 - <span style="font-weight: bold;">tv</span>   2.055 0.04506  2.193       7.807 (7.147, 8.528)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>    5 - <span style="font-weight: bold;">prop.err</span>  0.1606 0.03124  19.46   0.1606 (0.09932, 0.2218)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>  6 - <span style="font-weight: bold;">pkadd.err</span>  0.5847 0.07771  13.29    0.5847 (0.4324, 0.7370)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>          7 - <span style="font-weight: bold;">temax</span>   9.209  0.6280  6.819     0.9999 (0.9997, 1.000)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>          8 - <span style="font-weight: bold;">tec50</span>  0.1286 0.09121  70.90      1.137 (0.9511, 1.360)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>          9 - <span style="font-weight: bold;">tkout</span>  -2.964 0.02378 0.8024 0.05162 (0.04927, 0.05409)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>             10 - <span style="font-weight: bold;">te0</span>   4.572 0.01129 0.2470       96.72 (94.60, 98.88)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span> 11 - <span style="font-weight: bold;">pdadd.err</span>   3.809  0.3318  8.711       3.809 (3.159, 4.460)</span></span>
+<span><span class="co">#&gt;           <span style="font-weight: bold;">BSV(CV%)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>                          </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>                           </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>          27.90      2.995 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>           23.67      9.924 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>                      </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>                     </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>                         </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>        42.50      7.298 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>                         </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>          5.254      18.80 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span>                     </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt;   Covariance Type (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$covMethod</span>): <span style="font-weight: bold;">|r|,|s|</span></span></span>
+<span><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
+<span><span class="co">#&gt;   Full BSV covariance (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$omega</span>) or correlation (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$omegaR</span>; diagonals=SDs) </span></span>
+<span><span class="co">#&gt;   Distribution stats (mean/skewness/kurtosis/p-value) available in <span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$shrink</span> </span></span>
+<span><span class="co">#&gt;   Information about run found (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$runInfo</span>):</span></span>
+<span><span class="co">#&gt;    • gradient problems with covariance; see $scaleInfo </span></span>
+<span><span class="co">#&gt;    • since sandwich matrix is corrected, you may compare to $covR or $covS if you wish </span></span>
+<span><span class="co">#&gt;    • S matrix non-positive definite but corrected by S = sqrtm(S%*%S) </span></span>
+<span><span class="co">#&gt;    • R matrix non-positive definite but corrected by R = sqrtm(R%*%R) </span></span>
+<span><span class="co">#&gt;    • last objective function was not at minimum, possible problems in optimization </span></span>
+<span><span class="co">#&gt;    • ETAs were reset to zero during optimization; (Can control by foceiControl(resetEtaP=.)) </span></span>
+<span><span class="co">#&gt;   Censoring (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$censInformation</span>): No censoring</span></span>
+<span><span class="co">#&gt;   Minimization message (<span style="color: #BBBB00;">fit2</span><span style="color: #0000BB; font-weight: bold;">$message</span>):  </span></span>
+<span><span class="co">#&gt;     Normal exit from bobyqa </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Fit Data (object </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="font-weight: bold;"> is a modified </span><span style="color: #0000BB; font-weight: bold;">tibble</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 483 × 33</span></span></span>
+<span><span class="co">#&gt;   ID     TIME CMT      DV  PRED   RES  WRES IPRED   IRES IWRES CPRED  CRES CWRES</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1       0.5 dcp     0    1.25 -<span style="color: #BB0000;">1.25</span> -<span style="color: #BB0000;">1.83</span> 0.994 -<span style="color: #BB0000;">0.994</span> -<span style="color: #BB0000;">1.64</span>  1.23 -<span style="color: #BB0000;">1.23</span> -<span style="color: #BB0000;">1.89</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1       1   dcp     1.9  3.61 -<span style="color: #BB0000;">1.71</span> -<span style="color: #BB0000;">1.45</span> 2.85  -<span style="color: #BB0000;">0.952</span> -<span style="color: #BB0000;">1.28</span>  3.52 -<span style="color: #BB0000;">1.62</span> -<span style="color: #BB0000;">1.64</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1       2   dcp     3.3  7.83 -<span style="color: #BB0000;">4.53</span> -<span style="color: #BB0000;">1.99</span> 6.16  -<span style="color: #BB0000;">2.86</span>  -<span style="color: #BB0000;">2.49</span>  7.66 -<span style="color: #BB0000;">4.36</span> -<span style="color: #BB0000;">2.40</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 480 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 20 more variables: eta.cl &lt;dbl&gt;, eta.v &lt;dbl&gt;, eta.ec50 &lt;dbl&gt;, eta.e0 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   DEPOT &lt;dbl&gt;, GUT &lt;dbl&gt;, CENTER &lt;dbl&gt;, EFFECT &lt;dbl&gt;, ktr &lt;dbl&gt;, ka &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   cl &lt;dbl&gt;, v &lt;dbl&gt;, emax &lt;dbl&gt;, ec50 &lt;dbl&gt;, kout &lt;dbl&gt;, e0 &lt;dbl&gt;, pd &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   kin &lt;dbl&gt;, tad &lt;dbl&gt;, dosenum &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>With these modifications the shrinkage is also reduced (just like in
 the NONMEM case)</p>
 </div>
@@ -724,23 +948,34 @@ model</p>
 <span><span class="co">#&gt; → loading into <span style="color: #0000BB;">symengine</span> environment...</span></span>
 <span><span class="co">#&gt; → pruning branches (`if`/`else`) of full model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; → calculate jacobian</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → calculate sensitivities</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → calculate ∂(f)/∂(η)</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → finding duplicate expressions in inner model...</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → optimizing duplicate expressions in inner model...</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in inner model (2 chunks)...</span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → finding duplicate expressions in EBE model...</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
-<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model...</span></span>
+<span><span class="co">#&gt; → optimizing duplicate expressions in EBE model (2 chunks)...</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling inner model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -753,56 +988,191 @@ model</p>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; calculating covariance matrix</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:04</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:14</span></span>
 <span><span class="co">#&gt; Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can</span></span>
 <span><span class="co">#&gt; check sandwich or S matrix with $covRS and $covS</span></span>
 <span><span class="co">#&gt; Warning in foceiFitCpp_(.ret): gradient problems with covariance; see</span></span>
 <span><span class="co">#&gt; $scaleInfo</span></span>
 <span><span class="co">#&gt; Updated original fit object <span style="color: #BBBB00;">fit</span></span></span>
-<span><span class="co">#&gt;                tktr           tka           tcl           tv         temax</span></span>
-<span><span class="co">#&gt; tktr   1.833921e-02 -1.528029e-02 -2.352104e-05 3.170757e-04  0.0014879140</span></span>
-<span><span class="co">#&gt; tka   -1.528029e-02  1.834268e-02 -2.191127e-05 3.211423e-04  0.0011542368</span></span>
-<span><span class="co">#&gt; tcl   -2.352104e-05 -2.191127e-05  2.480828e-04 1.178238e-05 -0.0008614756</span></span>
-<span><span class="co">#&gt; tv     3.170757e-04  3.211423e-04  1.178238e-05 3.183932e-04  0.0011487138</span></span>
-<span><span class="co">#&gt; temax  1.487914e-03  1.154237e-03 -8.614756e-04 1.148714e-03  7.5954703694</span></span>
-<span><span class="co">#&gt; tec50  1.373244e-04  1.333030e-04 -3.591067e-04 1.236531e-04  0.0486313316</span></span>
-<span><span class="co">#&gt; tkout  9.569355e-05  1.077798e-04 -9.762544e-05 1.190108e-04 -0.0189123057</span></span>
-<span><span class="co">#&gt; te0    1.239438e-05  1.453620e-05 -9.820662e-06 1.249440e-05 -0.0004482796</span></span>
-<span><span class="co">#&gt;               tec50         tkout           te0</span></span>
-<span><span class="co">#&gt; tktr   0.0001373244  9.569355e-05  1.239438e-05</span></span>
-<span><span class="co">#&gt; tka    0.0001333030  1.077798e-04  1.453620e-05</span></span>
-<span><span class="co">#&gt; tcl   -0.0003591067 -9.762544e-05 -9.820662e-06</span></span>
-<span><span class="co">#&gt; tv     0.0001236531  1.190108e-04  1.249440e-05</span></span>
-<span><span class="co">#&gt; temax  0.0486313316 -1.891231e-02 -4.482796e-04</span></span>
-<span><span class="co">#&gt; tec50  0.0018414013  1.543521e-04 -1.362741e-04</span></span>
-<span><span class="co">#&gt; tkout  0.0001543521  6.316783e-04  5.252370e-05</span></span>
-<span><span class="co">#&gt; te0   -0.0001362741  5.252370e-05  8.871375e-05</span></span>
-<span><span class="va">fit</span></span></code></pre></div>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mi>U</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>m</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>t</mi><mi>r</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>a</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>k</mi><mi>a</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>k</mi><mi>a</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>l</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>c</mi><mi>l</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>c</mi><mi>l</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>v</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>v</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>v</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>e</mi><mi>x</mi><mi>p</mi><mi>i</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>c</mi><mn>50</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>t</mi><mi>e</mi><mn>0</mn></mrow><mo>+</mo><mrow><mi>e</mi><mi>t</mi><mi>a</mi><mi>.</mi><mi>e</mi><mn>0</mn></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mi>v</mi></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>p</mi><mi>d</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mrow><mi>e</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mo>×</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi>e</mi><mi>c</mi><mn>50</mn></mrow><mo>+</mo><mrow><mi>d</mi><mi>c</mi><mi>p</mi></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>k</mi><mi>i</mi><mi>n</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>e</mi><mn>0</mn></mrow><mo>×</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mo>−</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>t</mi><mi>r</mi></mrow><mo>×</mo><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mi>O</mi><mi>T</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>a</mi></mrow><mo>×</mo><mrow><mi>G</mi><mi>U</mi><mi>T</mi></mrow><mo>−</mo><mfrac><mrow><mi>c</mi><mi>l</mi></mrow><mi>v</mi></mfrac><mo>×</mo><mrow><mi>C</mi><mi>E</mi><mi>N</mi><mi>T</mi><mi>E</mi><mi>R</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mfrac><mrow><mi>d</mi><mspace width="0.222em"></mspace><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>k</mi><mi>i</mi><mi>n</mi></mrow><mo>×</mo><mrow><mi>p</mi><mi>d</mi></mrow><mo>−</mo><mrow><mi>k</mi><mi>o</mi><mi>u</mi><mi>t</mi></mrow><mo>×</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>f</mi><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mrow><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>c</mi><mi>p</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>∼</mo><mi>a</mi><mi>d</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>k</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>e</mi><mi>f</mi><mi>f</mi></mtd><mtd columnalign="left" style="text-align: left"><mo>∼</mo><mi>a</mi><mi>d</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mi>d</mi><mi>a</mi><mi>d</mi><mi>d</mi><mi>.</mi><mi>e</mi><mi>r</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
-cmt({DEPOT}) \\
-cmt({GUT}) \\
-cmt({CENTER}) \\
-cmt({EFFECT}) \\
-{ktr} &amp; = \exp\left({tktr}+{eta.ktr}\right) \\
-{ka} &amp; = \exp\left({tka}+{eta.ka}\right) \\
-{cl} &amp; = \exp\left({tcl}+{eta.cl}\right) \\
-{v} &amp; = \exp\left({tv}+{eta.v}\right) \\
-{emax} &amp; = expit({temax}+{eta.emax}, {0}, {1}) \\
-{ec50} &amp; = \exp\left({tec50}+{eta.ec50}\right) \\
-{kout} &amp; = \exp\left({tkout}+{eta.kout}\right) \\
-{e0} &amp; = \exp\left({te0}+{eta.e0}\right) \\
-EFFECT({0}) &amp; = {e0} \\
-{dcp} &amp; = \frac{{CENTER}}{{v}} \\
-{pd} &amp; = {1}-\frac{{emax} {\times} {dcp}}{\left({ec50}+{dcp}\right)} \\
-{kin} &amp; = {e0} {\times} {kout} \\
-\frac{d \: DEPOT}{dt} &amp; = -{ktr} {\times} {DEPOT} \\
-\frac{d \: GUT}{dt} &amp; = {ktr} {\times} {DEPOT}-{ka} {\times} {GUT} \\
-\frac{d \: CENTER}{dt} &amp; = {ka} {\times} {GUT}-\frac{{cl}}{{v}} {\times} {CENTER} \\
-\frac{d \: EFFECT}{dt} &amp; = {kin} {\times} {pd}-{kout} {\times} {EFFECT} \\
-{eff} &amp; = {EFFECT} \\
-{dcp} &amp; \sim add({pkadd.err})+prop({prop.err}) \\
-{eff} &amp; \sim add({pdadd.err})
-\end{align*}</annotation></semantics></math></p>
+<span><span class="co">#&gt;                      tktr           tka           tcl            tv</span></span>
+<span><span class="co">#&gt; tktr         7.117551e-04  1.226477e-05 -3.804048e-06  6.487412e-05</span></span>
+<span><span class="co">#&gt; tka          1.226477e-05  2.236301e-05 -2.268007e-08  3.241752e-06</span></span>
+<span><span class="co">#&gt; tcl         -3.804048e-06 -2.268007e-08  1.312454e-04  5.156170e-06</span></span>
+<span><span class="co">#&gt; tv           6.487412e-05  3.241752e-06  5.156170e-06  1.358642e-04</span></span>
+<span><span class="co">#&gt; prop.err    -3.082560e-05 -1.442396e-06 -7.446109e-06  1.872193e-05</span></span>
+<span><span class="co">#&gt; pkadd.err    8.311740e-05  4.054890e-06  1.535522e-04 -5.614444e-05</span></span>
+<span><span class="co">#&gt; temax        5.679707e-04 -3.312004e-05 -9.245357e-05  3.105047e-04</span></span>
+<span><span class="co">#&gt; tec50        2.472474e-05  5.848648e-07 -1.832133e-04  5.324455e-05</span></span>
+<span><span class="co">#&gt; tkout        1.872373e-05  1.134966e-06 -5.305420e-05  5.375822e-05</span></span>
+<span><span class="co">#&gt; te0          2.884045e-06  1.400669e-07 -6.109209e-06  5.554689e-06</span></span>
+<span><span class="co">#&gt; pdadd.err    9.726719e-05  5.108921e-06 -1.542511e-04  1.752999e-04</span></span>
+<span><span class="co">#&gt; om.eta.ktr   2.491142e-04  1.141137e-06  2.494431e-06  4.145592e-05</span></span>
+<span><span class="co">#&gt; om.eta.ka   -8.426159e-05  5.947916e-06  4.340370e-06  1.161604e-05</span></span>
+<span><span class="co">#&gt; om.eta.cl    2.440707e-08  3.289216e-09  9.727122e-07  7.122064e-07</span></span>
+<span><span class="co">#&gt; om.eta.v    -1.674692e-06 -7.593511e-08  1.140494e-06  8.963284e-07</span></span>
+<span><span class="co">#&gt; om.eta.emax  4.795794e-08 -2.689360e-09 -1.166710e-08  3.074419e-08</span></span>
+<span><span class="co">#&gt; om.eta.ec50 -4.866894e-07 -8.373748e-09  4.179315e-06 -1.233600e-06</span></span>
+<span><span class="co">#&gt; om.eta.kout  2.407474e-07  1.302878e-08 -3.906939e-07  6.013430e-07</span></span>
+<span><span class="co">#&gt; om.eta.e0    3.777665e-08  1.987335e-09 -6.333809e-08  7.562325e-08</span></span>
+<span><span class="co">#&gt;                  prop.err     pkadd.err         temax         tec50</span></span>
+<span><span class="co">#&gt; tktr        -3.082560e-05  8.311740e-05  5.679707e-04  2.472474e-05</span></span>
+<span><span class="co">#&gt; tka         -1.442396e-06  4.054890e-06 -3.312004e-05  5.848648e-07</span></span>
+<span><span class="co">#&gt; tcl         -7.446109e-06  1.535522e-04 -9.245357e-05 -1.832133e-04</span></span>
+<span><span class="co">#&gt; tv           1.872193e-05 -5.614444e-05  3.105047e-04  5.324455e-05</span></span>
+<span><span class="co">#&gt; prop.err     9.528457e-05 -2.713613e-04  2.375178e-05  1.943147e-05</span></span>
+<span><span class="co">#&gt; pkadd.err   -2.713613e-04  2.909074e-03 -4.038898e-04 -2.473354e-04</span></span>
+<span><span class="co">#&gt; temax        2.375178e-05 -4.038898e-04  3.717483e+00  2.238245e-02</span></span>
+<span><span class="co">#&gt; tec50        1.943147e-05 -2.473354e-04  2.238245e-02  8.847216e-04</span></span>
+<span><span class="co">#&gt; tkout        1.136123e-05 -9.152552e-05 -9.514660e-03  7.993296e-05</span></span>
+<span><span class="co">#&gt; te0          1.151226e-06 -1.013283e-05 -1.240086e-04 -6.412860e-05</span></span>
+<span><span class="co">#&gt; pdadd.err    3.701360e-05 -1.204600e-04 -2.332204e-02  1.637766e-04</span></span>
+<span><span class="co">#&gt; om.eta.ktr   5.186590e-05 -2.695553e-06 -2.868540e-04  6.178644e-06</span></span>
+<span><span class="co">#&gt; om.eta.ka    6.404873e-05 -3.681776e-05 -5.645412e-04 -5.485836e-06</span></span>
+<span><span class="co">#&gt; om.eta.cl    5.078831e-07  1.587141e-05 -6.701757e-06 -1.149177e-06</span></span>
+<span><span class="co">#&gt; om.eta.v     4.724737e-06  2.997372e-06 -2.589168e-05 -1.641539e-06</span></span>
+<span><span class="co">#&gt; om.eta.emax  3.712916e-09 -3.135457e-08  2.996180e-04  1.831847e-06</span></span>
+<span><span class="co">#&gt; om.eta.ec50 -5.294395e-07  3.677414e-05 -6.559946e-04 -1.575773e-05</span></span>
+<span><span class="co">#&gt; om.eta.kout  1.669907e-07  9.224099e-07 -6.580260e-05  1.471163e-06</span></span>
+<span><span class="co">#&gt; om.eta.e0    2.018697e-08 -3.971365e-08 -8.564827e-06  1.589712e-07</span></span>
+<span><span class="co">#&gt;                     tkout           te0     pdadd.err    om.eta.ktr</span></span>
+<span><span class="co">#&gt; tktr         1.872373e-05  2.884045e-06  9.726719e-05  2.491142e-04</span></span>
+<span><span class="co">#&gt; tka          1.134966e-06  1.400669e-07  5.108921e-06  1.141137e-06</span></span>
+<span><span class="co">#&gt; tcl         -5.305420e-05 -6.109209e-06 -1.542511e-04  2.494431e-06</span></span>
+<span><span class="co">#&gt; tv           5.375822e-05  5.554689e-06  1.752999e-04  4.145592e-05</span></span>
+<span><span class="co">#&gt; prop.err     1.136123e-05  1.151226e-06  3.701360e-05  5.186590e-05</span></span>
+<span><span class="co">#&gt; pkadd.err   -9.152552e-05 -1.013283e-05 -1.204600e-04 -2.695553e-06</span></span>
+<span><span class="co">#&gt; temax       -9.514660e-03 -1.240086e-04 -2.332204e-02 -2.868540e-04</span></span>
+<span><span class="co">#&gt; tec50        7.993296e-05 -6.412860e-05  1.637766e-04  6.178644e-06</span></span>
+<span><span class="co">#&gt; tkout        3.165048e-04  2.651478e-05  1.940087e-04  1.404801e-05</span></span>
+<span><span class="co">#&gt; te0          2.651478e-05  4.413047e-05  1.230731e-05  1.388562e-06</span></span>
+<span><span class="co">#&gt; pdadd.err    1.940087e-04  1.230731e-05  3.976383e-02  2.987240e-04</span></span>
+<span><span class="co">#&gt; om.eta.ktr   1.404801e-05  1.388562e-06  2.987240e-04  9.253453e-02</span></span>
+<span><span class="co">#&gt; om.eta.ka    5.450136e-06  6.522215e-08  2.492119e-04  2.965039e-02</span></span>
+<span><span class="co">#&gt; om.eta.cl   -1.954464e-07 -3.521995e-08  5.635618e-06  2.059001e-05</span></span>
+<span><span class="co">#&gt; om.eta.v    -3.300434e-07 -4.206716e-08  1.521112e-05  1.625102e-05</span></span>
+<span><span class="co">#&gt; om.eta.emax -7.694311e-07 -1.462942e-08 -1.478714e-06 -6.780320e-09</span></span>
+<span><span class="co">#&gt; om.eta.ec50 -4.223933e-06 -5.115733e-07  2.801966e-04  6.768802e-06</span></span>
+<span><span class="co">#&gt; om.eta.kout  1.272296e-06 -1.942521e-07  5.322319e-05  4.488374e-06</span></span>
+<span><span class="co">#&gt; om.eta.e0    6.589633e-08 -4.893808e-08  1.442266e-05  1.732708e-07</span></span>
+<span><span class="co">#&gt;                 om.eta.ka     om.eta.cl      om.eta.v   om.eta.emax</span></span>
+<span><span class="co">#&gt; tktr        -8.426159e-05  2.440707e-08 -1.674692e-06  4.795794e-08</span></span>
+<span><span class="co">#&gt; tka          5.947916e-06  3.289216e-09 -7.593511e-08 -2.689360e-09</span></span>
+<span><span class="co">#&gt; tcl          4.340370e-06  9.727122e-07  1.140494e-06 -1.166710e-08</span></span>
+<span><span class="co">#&gt; tv           1.161604e-05  7.122064e-07  8.963284e-07  3.074419e-08</span></span>
+<span><span class="co">#&gt; prop.err     6.404873e-05  5.078831e-07  4.724737e-06  3.712916e-09</span></span>
+<span><span class="co">#&gt; pkadd.err   -3.681776e-05  1.587141e-05  2.997372e-06 -3.135457e-08</span></span>
+<span><span class="co">#&gt; temax       -5.645412e-04 -6.701757e-06 -2.589168e-05  2.996180e-04</span></span>
+<span><span class="co">#&gt; tec50       -5.485836e-06 -1.149177e-06 -1.641539e-06  1.831847e-06</span></span>
+<span><span class="co">#&gt; tkout        5.450136e-06 -1.954464e-07 -3.300434e-07 -7.694311e-07</span></span>
+<span><span class="co">#&gt; te0          6.522215e-08 -3.521995e-08 -4.206716e-08 -1.462942e-08</span></span>
+<span><span class="co">#&gt; pdadd.err    2.492119e-04  5.635618e-06  1.521112e-05 -1.478714e-06</span></span>
+<span><span class="co">#&gt; om.eta.ktr   2.965039e-02  2.059001e-05  1.625102e-05 -6.780320e-09</span></span>
+<span><span class="co">#&gt; om.eta.ka    9.146140e-02  2.015145e-05  1.648622e-05 -3.141669e-08</span></span>
+<span><span class="co">#&gt; om.eta.cl    2.015145e-05  3.900522e-04  2.332449e-07 -2.095038e-10</span></span>
+<span><span class="co">#&gt; om.eta.v     1.648622e-05  2.332449e-07  1.672595e-04 -7.648997e-10</span></span>
+<span><span class="co">#&gt; om.eta.emax -3.141669e-08 -2.095038e-10 -7.648997e-10  3.371466e-03</span></span>
+<span><span class="co">#&gt; om.eta.ec50  6.857673e-06  2.113917e-06  6.300933e-07  1.267573e-07</span></span>
+<span><span class="co">#&gt; om.eta.kout  4.297694e-06  6.795138e-08  2.175756e-07  1.868036e-09</span></span>
+<span><span class="co">#&gt; om.eta.e0    1.523645e-07  5.359341e-09  8.067423e-09 -4.033401e-10</span></span>
+<span><span class="co">#&gt;               om.eta.ec50   om.eta.kout     om.eta.e0</span></span>
+<span><span class="co">#&gt; tktr        -4.866894e-07  2.407474e-07  3.777665e-08</span></span>
+<span><span class="co">#&gt; tka         -8.373748e-09  1.302878e-08  1.987335e-09</span></span>
+<span><span class="co">#&gt; tcl          4.179315e-06 -3.906939e-07 -6.333809e-08</span></span>
+<span><span class="co">#&gt; tv          -1.233600e-06  6.013430e-07  7.562325e-08</span></span>
+<span><span class="co">#&gt; prop.err    -5.294395e-07  1.669907e-07  2.018697e-08</span></span>
+<span><span class="co">#&gt; pkadd.err    3.677414e-05  9.224099e-07 -3.971365e-08</span></span>
+<span><span class="co">#&gt; temax       -6.559946e-04 -6.580260e-05 -8.564827e-06</span></span>
+<span><span class="co">#&gt; tec50       -1.575773e-05  1.471163e-06  1.589712e-07</span></span>
+<span><span class="co">#&gt; tkout       -4.223933e-06  1.272296e-06  6.589633e-08</span></span>
+<span><span class="co">#&gt; te0         -5.115733e-07 -1.942521e-07 -4.893808e-08</span></span>
+<span><span class="co">#&gt; pdadd.err    2.801966e-04  5.322319e-05  1.442266e-05</span></span>
+<span><span class="co">#&gt; om.eta.ktr   6.768802e-06  4.488374e-06  1.732708e-07</span></span>
+<span><span class="co">#&gt; om.eta.ka    6.857673e-06  4.297694e-06  1.523645e-07</span></span>
+<span><span class="co">#&gt; om.eta.cl    2.113917e-06  6.795138e-08  5.359341e-09</span></span>
+<span><span class="co">#&gt; om.eta.v     6.300933e-07  2.175756e-07  8.067423e-09</span></span>
+<span><span class="co">#&gt; om.eta.emax  1.267573e-07  1.868036e-09 -4.033401e-10</span></span>
+<span><span class="co">#&gt; om.eta.ec50  2.228655e-03  1.293380e-06  2.576137e-07</span></span>
+<span><span class="co">#&gt; om.eta.kout  1.293380e-06  6.463107e-06  2.914145e-08</span></span>
+<span><span class="co">#&gt; om.eta.e0    2.576137e-07  2.914145e-08  5.463700e-07</span></span>
+<span><span class="va">fit</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── </span><span style="color: #0000BB; font-weight: bold;">nlmix</span><span style="color: #BB0000; font-weight: bold;">r²</span><span style="font-weight: bold;"> </span><span style="color: #BBBB00; font-weight: bold;">nonmem2rx</span><span style="font-weight: bold;"> reading NONMEM ver 7.4.3 ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;               OBJF     AIC      BIC Log-likelihood Condition#(Cov)</span></span>
+<span><span class="co">#&gt; nonmem2rx 439.2156 1364.91 1444.331      -663.4551         6871556</span></span>
+<span><span class="co">#&gt;           Condition#(Cor)</span></span>
+<span><span class="co">#&gt; nonmem2rx        10.42427</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             setup postprocess table compress NONMEM as.nlmixr2 covariance</span></span>
+<span><span class="co">#&gt; elapsed 0.6350346       0.022 0.046    0.001 320.27      2.422      52.57</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                <span style="font-weight: bold;">Parameter</span>      <span style="font-weight: bold;">Est.</span>       <span style="font-weight: bold;">SE</span>    <span style="font-weight: bold;">%RSE</span>    <span style="font-weight: bold;">Back-transformed(95%CI)</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>            1 - <span style="font-weight: bold;">tktr</span>  6.241e-7  0.09734 1.560e7      1.000 (0.8263, 1.210)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>              2 - <span style="font-weight: bold;">tka</span> -3.006e-6  0.09745 3241000      1.000 (0.8261, 1.210)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>              3 - <span style="font-weight: bold;">tcl</span>    -2.004  0.01155  0.5764    0.1348 (0.1318, 0.1379)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                4 - <span style="font-weight: bold;">tv</span>     2.052  0.01261  0.6148       7.783 (7.592, 7.977)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>    5 - <span style="font-weight: bold;">prop.err</span>   0.09858 0.009993   10.14  0.09858 (0.07899, 0.1182)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>  6 - <span style="font-weight: bold;">pkadd.err</span>    0.5116  0.05401   10.56    0.5116 (0.4058, 0.6175)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>          7 - <span style="font-weight: bold;">temax</span>     6.418    1.955   30.46     0.9984 (0.9300, 1.000)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>          8 - <span style="font-weight: bold;">tec50</span>    0.1408  0.03075   21.84       1.151 (1.084, 1.223)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>          9 - <span style="font-weight: bold;">tkout</span>    -2.953  0.01787  0.6050 0.05216 (0.05036, 0.05402)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>             10 - <span style="font-weight: bold;">te0</span>     4.570 0.006660  0.1457       96.59 (95.34, 97.86)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span> 11 - <span style="font-weight: bold;">pdadd.err</span>     3.717   0.1974   5.311       3.717 (3.330, 4.104)</span></span>
+<span><span class="co">#&gt;           <span style="font-weight: bold;">BSV(CV% or SD)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tktr</span>               86.45      <span style="color: #BB0000; font-weight: bold;">59.84</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tka</span>                86.48      <span style="color: #BB0000; font-weight: bold;">59.84</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tcl</span>                28.59      1.340 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tv</span>                 22.83      6.442 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">prop.err</span>                            </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pkadd.err</span>                           </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">temax</span>           0.007071      <span style="color: #BB0000; font-weight: bold;">99.99</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tec50</span>              44.98      6.065 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">tkout</span>              9.164      <span style="color: #BB0000; font-weight: bold;">32.42</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">te0</span>                5.243      18.09 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">pdadd.err</span>                           </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt;   Covariance Type (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$covMethod</span>): <span style="font-weight: bold;">r</span></span></span>
+<span><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
+<span><span class="co">#&gt;   Full BSV covariance (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$omega</span>) or correlation (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$omegaR</span>; diagonals=SDs) </span></span>
+<span><span class="co">#&gt;   Distribution stats (mean/skewness/kurtosis/p-value) available in <span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$shrink</span> </span></span>
+<span><span class="co">#&gt;   Censoring (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$censInformation</span>): No censoring</span></span>
+<span><span class="co">#&gt;   Minimization message (<span style="color: #BBBB00;">fit</span><span style="color: #0000BB; font-weight: bold;">$message</span>):  </span></span>
+<span><span class="co">#&gt;     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  WARNINGS AND ERRORS (IF ANY) FOR PROBLEM    1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  (WARNING  2) NM-TRAN INFERS THAT THE DATA ARE POPULATION.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     </span></span>
+<span><span class="co">#&gt; 0MINIMIZATION TERMINATED</span></span>
+<span><span class="co">#&gt;  DUE TO ROUNDING ERRORS (ERROR=134)</span></span>
+<span><span class="co">#&gt;  NO. OF FUNCTION EVALUATIONS USED:     1088</span></span>
+<span><span class="co">#&gt;  NO. OF SIG. DIGITS UNREPORTABLE</span></span>
+<span><span class="co">#&gt; 0PARAMETER ESTIMATE IS NEAR ITS BOUNDARY</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=5.09e-06</span></span>
+<span><span class="co">#&gt;     PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=5.29e-06</span></span>
+<span><span class="co">#&gt;     IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.2e-06, 0.000454); atol=3.03e-05</span></span>
+<span><span class="co">#&gt;     PRED absolute difference compared to Nonmem PRED: 95% percentile: (4.72e-07,0.00361); atol=5.29e-06</span></span>
+<span><span class="co">#&gt;     there are solving errors during optimization (see '$prderr')</span></span>
+<span><span class="co">#&gt;     nonmem2rx model file: 'pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl' </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">── Fit Data (object </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="font-weight: bold;"> is a modified </span><span style="color: #0000BB; font-weight: bold;">tibble</span><span style="font-weight: bold;">): ──</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 483 × 35</span></span></span>
+<span><span class="co">#&gt;   ID     TIME CMT      DV  PRED   RES IPRED   IRES  IWRES eta.ktr eta.ka eta.cl</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1       0.5 dcp     0    1.16 -<span style="color: #BB0000;">1.16</span> 0.444 -<span style="color: #BB0000;">0.444</span> -<span style="color: #BB0000;">0.864</span>  -<span style="color: #BB0000;">0.506</span> -<span style="color: #BB0000;">0.506</span>  0.699</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1       1   dcp     1.9  3.37 -<span style="color: #BB0000;">1.47</span> 1.45   0.446  0.840  -<span style="color: #BB0000;">0.506</span> -<span style="color: #BB0000;">0.506</span>  0.699</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 1       2   dcp     3.3  7.51 -<span style="color: #BB0000;">4.21</span> 3.96  -<span style="color: #BB0000;">0.660</span> -<span style="color: #BB0000;">1.03</span>   -<span style="color: #BB0000;">0.506</span> -<span style="color: #BB0000;">0.506</span>  0.699</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 480 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more variables: eta.v &lt;dbl&gt;, eta.emax &lt;dbl&gt;, eta.ec50 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   eta.kout &lt;dbl&gt;, eta.e0 &lt;dbl&gt;, dcp &lt;dbl&gt;, eff &lt;dbl&gt;, DEPOT &lt;dbl&gt;, GUT &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   CENTER &lt;dbl&gt;, EFFECT &lt;dbl&gt;, ktr &lt;dbl&gt;, ka &lt;dbl&gt;, cl &lt;dbl&gt;, v &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   emax &lt;dbl&gt;, ec50 &lt;dbl&gt;, kout &lt;dbl&gt;, e0 &lt;dbl&gt;, pd &lt;dbl&gt;, kin &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   tad &lt;dbl&gt;, dosenum &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>Note this covariance step is not 100% successful since it is not
 <code>r, s</code>. However, it can give some insights on which
 parameters are estimated well. In this case you can see that the
@@ -821,7 +1191,7 @@ parameters may help your estimate progress in <code>NONMEM</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

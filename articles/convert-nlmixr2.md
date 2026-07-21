@@ -12,6 +12,7 @@ with and without certainty without any modifications)
 For example you could have something like:
 
 ``` r
+
 y <- ipred*(1+eps1)
 ```
 
@@ -19,6 +20,7 @@ For a model that can do `nlmixr2` estimation instead of simply
 simulation the residual needs to be changed to something like:
 
 ``` r
+
 cp ~ prop(prop.sd)
 ```
 
@@ -32,6 +34,7 @@ option `determineError=FALSE`)
 ## Example – no error determined
 
 ``` r
+
 library(nonmem2rx)
 library(babelmixr2)
 
@@ -81,7 +84,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -128,6 +131,7 @@ print(mod)
 #> 
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
+#>     NULL
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
 #>     dfObs <- 2280
 #>     dfSub <- 120
@@ -246,6 +250,7 @@ In this case, I will name the parameters to something a bit more
 meaningful while keeping the estimates the same:
 
 ``` r
+
 mod2 <-function() {
   ini({
     lcl <- 1.37034036528946
@@ -282,6 +287,7 @@ compare the already imported rxode2 model function with the model you
 made some manual tweaks to:
 
 ``` r
+
 new <- as.nonmem2rx(mod2, mod)
 #> ℹ parameter labels from comments are typically ignored in non-interactive mode
 #> ℹ Need to run with the source intact to parse comments
@@ -408,6 +414,7 @@ model that:
 You can then convert it to a `nlmixr2` fit object with `babelmixr2`:
 
 ``` r
+
 library(babelmixr2)
 
 fit <- as.nlmixr2(new)
@@ -420,7 +427,7 @@ fit <- as.nlmixr2(new)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.0.2 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.4 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -435,17 +442,17 @@ print(fit)
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>            setup table compress NONMEM as.nlmixr2
-#> elapsed 0.030846 0.103    0.002 100.95      2.269
+#>             setup postprocess table compress NONMEM as.nlmixr2
+#> elapsed 0.6853482       0.017 0.068    0.002 100.95      1.876
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
-#>      Est.     SE  %RSE Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
-#> lcl  1.37 0.0298  2.17       3.94 (3.71, 4.17)     32.6      1.94% 
-#> lvc   4.2 0.0295 0.703       66.6 (62.8, 70.5)     32.3      2.46% 
-#> lq   1.38 0.0547  3.96       3.98 (3.57, 4.42)     32.7      40.5% 
-#> lvp  3.88 0.0348 0.899       48.3 (45.1, 51.7)     27.5      28.4% 
-#> RSV 0.196                                0.196                     
+#>       Est.       SE   %RSE Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
+#> lcl  1.370  0.02979  2.174    3.937 (3.713, 4.173)    32.64      1.935 
+#> lvc  4.198  0.02952 0.7032    66.56 (62.82, 70.53)    32.33      2.465 
+#> lq   1.380  0.05471  3.965    3.975 (3.571, 4.425)    32.65      40.50 
+#> lvp  3.877  0.03483 0.8986    48.26 (45.07, 51.67)    27.53      28.37 
+#> RSV 0.1964 0.003153  1.605 0.1964 (0.1903, 0.2026)                     
 #>  
 #>   Covariance Type ($covMethod): nonmem2rx
 #>   No correlations in between subject variability (BSV) matrix

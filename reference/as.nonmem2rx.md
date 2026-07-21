@@ -5,7 +5,14 @@ Convert a model to a nonmem2rx model
 ## Usage
 
 ``` r
-as.nonmem2rx(model1, model2, compress = TRUE)
+as.nonmem2rx(
+  model1,
+  model2,
+  compress = TRUE,
+  chat = NULL,
+  maxAttempts = 3,
+  useLLM = getOption("nonmem2rx.useLLM", TRUE)
+)
 ```
 
 ## Arguments
@@ -22,6 +29,28 @@ as.nonmem2rx(model1, model2, compress = TRUE)
 
   boolean to compress the ui at the end
 
+- chat:
+
+  optional `ellmer` chat object used when the model lacks a residual
+  error specification (`$predDf`) and `useLLM=TRUE`. When `NULL` a
+  default engine is selected: `getOption("nonmem2rx.llmProvider")` is
+  honored first (it may be an `ellmer` chat function, a provider name
+  such as `"openai"`, or a full function name such as `"chat_openai"`,
+  exposing every engine exported by `ellmer`), otherwise the first
+  provider with a detected API key is used (e.g. `ANTHROPIC_API_KEY`,
+  `OPENAI_API_KEY`, `GEMINI_API_KEY`).
+
+- maxAttempts:
+
+  maximum number of LLM validation attempts when inferring the residual
+  error structure
+
+- useLLM:
+
+  logical; when `TRUE` (default, controllable with
+  `getOption("nonmem2rx.useLLM")`) an LLM is used to infer the residual
+  error structure for models that lack one
+
 ## Value
 
 nonmem2rx model
@@ -33,6 +62,7 @@ Matthew L. Fidler
 ## Examples
 
 ``` r
+
 # \donttest{
 
  mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
@@ -77,7 +107,7 @@ Matthew L. Fidler
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'

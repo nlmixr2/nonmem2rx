@@ -6,6 +6,7 @@ dosing paradigm than what was modeled.
 ## Step 1: Import the model
 
 ``` r
+
 library(nonmem2rx)
 library(rxode2)
 
@@ -57,7 +58,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -86,6 +87,7 @@ case is done by creating a [quick event
 table](https://nlmixr2.github.io/rxode2/articles/rxode2-event-table.html):
 
 ``` r
+
 ev <- et(amt=120000, ii=12, until=24) %>%
   et(list(c(0, 2), # add observations in windows
           c(4, 6),
@@ -104,6 +106,7 @@ In this step, we solve the model with the new event table for the 10
 subjects:
 
 ``` r
+
 s <- rxSolve(mod, ev)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
 #> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
@@ -129,6 +132,7 @@ you can use the [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
 function to see the individual profiles you simulated:
 
 ``` r
+
 library(ggplot2)
 plot(s, ipred) +
   ylab("Concentrations")

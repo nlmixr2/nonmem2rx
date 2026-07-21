@@ -8,6 +8,7 @@ uncertainty](simulate-new-dosing.md) in the parameters themselves.
 ## Step 1: Import the model
 
 ``` r
+
 library(nonmem2rx)
 library(rxode2)
 # its best practice to set the seed for the simulations
@@ -61,7 +62,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -90,6 +91,7 @@ case is done by creating a [quick event
 table](https://nlmixr2.github.io/rxode2/articles/rxode2-event-table.html).
 
 ``` r
+
 ev <- et(amt=120000, ii=12, until=24) %>%
   et(c(1:6, seq(8, 24, by=2))) %>%
   et(id=1:100)
@@ -103,6 +105,7 @@ how many times
 should sample with `nStud=X`. In this case we will use `100`.
 
 ``` r
+
 s <- rxSolve(mod, ev, nStud=100)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
 #> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
@@ -174,6 +177,7 @@ One way to do that is to select the interesting components, create a
 confidence interval and then plot the confidence bands:
 
 ``` r
+
 sci <- confint(s, parm=c("CENTRAL", "PERI", "sim"))
 #> summarizing data...done
 
@@ -207,6 +211,7 @@ plot(sci)
 ![](simulate-uncertainty_files/figure-html/confint-1.png)
 
 ``` r
+
 
 plot(sci, log="y")
 ```

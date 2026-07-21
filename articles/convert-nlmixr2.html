@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Converting a NONMEM fit to a nlmixr2 object">
 </head>
@@ -164,7 +164,7 @@ this case because of the option <code>determineError=FALSE</code>)</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta4` to `0.0730497519364148`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'ytype' to 'nmytype'</span></span>
@@ -211,6 +211,7 @@ this case because of the option <code>determineError=FALSE</code>)</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
 <span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
 <span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
@@ -490,7 +491,7 @@ methods.</p>
 <span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:00</span></span>
 <span><span class="co">#&gt; → compiling EBE model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
-<span><span class="co">#&gt; rxode2 5.0.2 using 2 threads (see ?getRxThreads)</span></span>
+<span><span class="co">#&gt; rxode2 5.1.4 using 2 threads (see ?getRxThreads)</span></span>
 <span><span class="co">#&gt;   no cache: create with `rxCreateCache()`</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -505,17 +506,17 @@ methods.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            setup table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.030846 0.103    0.002 100.95      2.269</span></span>
+<span><span class="co">#&gt;             setup postprocess table compress NONMEM as.nlmixr2</span></span>
+<span><span class="co">#&gt; elapsed 0.6853482       0.017 0.068    0.002 100.95      1.876</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      <span style="font-weight: bold;">Est.</span>     <span style="font-weight: bold;">SE</span>  <span style="font-weight: bold;">%RSE</span> <span style="font-weight: bold;">Back-transformed(95%CI)</span> <span style="font-weight: bold;">BSV(CV%)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">lcl</span>  1.37 0.0298  2.17       3.94 (3.71, 4.17)     32.6      1.94% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">lvc</span>   4.2 0.0295 0.703       66.6 (62.8, 70.5)     32.3      2.46% </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">lq</span>   1.38 0.0547  3.96       3.98 (3.57, 4.42)     32.7      <span style="color: #BB0000; font-weight: bold;">40.5%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">lvp</span>  3.88 0.0348 0.899       48.3 (45.1, 51.7)     27.5      <span style="color: #00BB00; font-weight: bold;">28.4%</span> </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">RSV</span> 0.196                                0.196                     </span></span>
+<span><span class="co">#&gt;       <span style="font-weight: bold;">Est.</span>       <span style="font-weight: bold;">SE</span>   <span style="font-weight: bold;">%RSE</span> <span style="font-weight: bold;">Back-transformed(95%CI)</span> <span style="font-weight: bold;">BSV(CV%)</span> <span style="font-weight: bold;">Shrink(SD)%</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">lcl</span>  1.370  0.02979  2.174    3.937 (3.713, 4.173)    32.64      1.935 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">lvc</span>  4.198  0.02952 0.7032    66.56 (62.82, 70.53)    32.33      2.465 </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">lq</span>   1.380  0.05471  3.965    3.975 (3.571, 4.425)    32.65      <span style="color: #BB0000; font-weight: bold;">40.50</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">lvp</span>  3.877  0.03483 0.8986    48.26 (45.07, 51.67)    27.53      <span style="color: #00BB00; font-weight: bold;">28.37</span> </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">RSV</span> 0.1964 0.003153  1.605 0.1964 (0.1903, 0.2026)                     </span></span>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt;   Covariance Type (<span style="color: #0000BB; font-weight: bold;">$covMethod</span>): <span style="font-weight: bold;">nonmem2rx</span></span></span>
 <span><span class="co">#&gt;   No correlations in between subject variability (BSV) matrix</span></span>
@@ -564,7 +565,7 @@ methods.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

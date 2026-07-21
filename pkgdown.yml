@@ -1,5 +1,5 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/convert-nlmixr2: convert-nlmixr2.html
@@ -13,4 +13,4 @@ articles:
   articles/simulate-new-dosing: simulate-new-dosing.html
   articles/simulate-uncertainty: simulate-uncertainty.html
   articles/simulate-with-covs: simulate-with-covs.html
-last_built: 2026-04-26T21:58Z
+last_built: 2026-07-21T03:42Z

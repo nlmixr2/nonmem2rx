@@ -1,5 +1,106 @@
 # Changelog
 
+## nonmem2rx 0.1.11
+
+- Regenerate the `rxSolve.nonmem2rx()` method so it no longer passes the
+  `order` solver argument, which was removed from
+  [`rxode2::rxSolve()`](https://nlmixr2.github.io/rxode2/reference/rxSolve.html).
+  Passing it caused solving a translated model to fail with
+  `unused argument: 'order'` against the current CRAN `rxode2`.
+
+- [`nonmem2rx()`](../reference/nonmem2rx.md)’s `inputData` argument now
+  also accepts a `data.frame` of the already read-in NONMEM input
+  dataset (in addition to a file path). This is useful when importing a
+  model from a different system where you have the data to validate
+  against but the file paths in the control stream do not match
+  ([\#186](https://github.com/nlmixr2/nonmem2rx/issues/186)). The
+  columns are assumed to be in `$INPUT` order and the usual `$INPUT`
+  names, `DROP`, `IGNORE`/`ACCEPT` filters and record subsetting are
+  applied.
+
+- `ADVAN5`/`ADVAN7` general linear models (which NONMEM itself solves
+  with matrix exponentials) are now translated to rxode2’s native
+  matrix-exponential `matExp()` model (`cmt()` declarations plus
+  `k_<from>_<to>` rate constants) by default, instead of explicit
+  `d/dt()` ODEs. The previous ODE translation is retained and can be
+  selected with the new `matexp=FALSE` argument (or
+  `options(nonmem2rx.matexp=FALSE)`). Other model types are unaffected,
+  and if the installed rxode2 does not support `matExp()` the ODE
+  translation is used with a warning.
+
+- NONMEM mixture models (`$MIX`) now translate to the native
+  rxode2/nlmixr2 mixture support
+  ([`mix()`](https://nlmixr2.github.io/rxode2/reference/mix.html)),
+  replacing the previous
+  [`rxord()`](https://nlmixr2.github.io/rxode2/reference/rxord.html)
+  simulation of the sub-population. When the mixture probabilities are
+  simple parameters (e.g. `P(1)=THETA(5)`), the imperative
+  `MIXNUM`/`MIXEST` branching in `$PK`/`$PRED` is collapsed into
+  readable
+  [`mix()`](https://nlmixr2.github.io/rxode2/reference/mix.html) calls
+  (e.g. `V <- mix(VCM, p1, VCF)`), the probabilities are registered on
+  the model (`ui$mixProbs`) so the model estimates natively under
+  `focei` and `saem`, and `MIXEST`/`MIXNUM` map to the reserved `mixest`
+  component. Models whose probabilities are not simple parameters fall
+  back to the previous
+  [`rxord()`](https://nlmixr2.github.io/rxode2/reference/rxord.html)
+  translation. Simulation-based validation remains gated for mixtures
+  because NONMEM’s per-subject sub-population assignment is not
+  recoverable for a faithful prediction comparison.
+
+- Support the NONMEM `$DATA` numeric-comparison operators `.EQN.` and
+  `.NEN.` in `IGNORE=`/`ACCEPT=` filters
+  ([\#195](https://github.com/nlmixr2/nonmem2rx/issues/195)). These
+  request that the data item be converted to numeric before being
+  compared, so they now translate to `as.numeric(.data$COL) == value` /
+  `!= value`. `.NEN.` was previously unparseable (silently dropping the
+  filter), and `.EQN.` was treated as a plain `==` without the numeric
+  coercion.
+
+- Support assignment to the NONMEM `COM(#)` communication array
+  (declared with `$ABBREVIATED COMRES=#`). Previously only reading
+  `COM(#)` was translated, so control streams that assigned `COM(#)`
+  (e.g. `IF(NEWIND.LE.1) COM(1)=-1`) failed to parse
+  ([\#228](https://github.com/nlmixr2/nonmem2rx/issues/228)). A `COM(#)`
+  assignment now translates to the rxode2 sticky variable `rxCOM_#_`,
+  which retains its value from record to record like the NONMEM COM
+  array (see the rxode2 sticky variable vignette).
+
+- Add optional LLM-assisted residual error detection to
+  [`as.nonmem2rx()`](../reference/as.nonmem2rx.md) (via the `ellmer`
+  package) for models imported without a residual error specification
+  (`$predDf`). When no `chat` engine is supplied, the default engine is
+  now chosen dynamically: `getOption( "nonmem2rx.llmProvider")` is
+  honored first (accepting any exported `ellmer::chat_*` engine by
+  name), otherwise the first provider with a configured API key is
+  auto-detected (e.g. `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`,
+  `GEMINI_API_KEY`), instead of always requiring Claude. Any `ellmer`
+  chat object may also be passed directly through the new `chat`
+  argument.
+
+- Add integer overflow guards in the C-level string buffer
+  (`src/sbuf.c`). `sAppendN`, `sAppend`, and `addLine` previously
+  computed the new allocation size as `sbb->o + 2 + n + SBUF_MXBUF` (or
+  analogous expression). When the user-controlled `n` was large enough
+  this expression overflowed `int` to a negative value, which
+  `R_Realloc` then converted to a huge unsigned size and crashed. The
+  guard converts this into a clean R error.
+
+- Document known `(int)strlen(gBuf)` cast in all 10 NONMEM-record parser
+  entry-points (`src/abbrec.c`, `src/abbrev.c`, `src/data.c`,
+  `src/input.c`, `src/lst.c`, `src/model.c`, `src/omega.c`, `src/sub.c`,
+  `src/tab.c`, `src/theta.c`). Inputs at or above `INT_MAX` bytes cause
+  silent length truncation passed to `dparse()`. A long-term fix will
+  switch each call site to `udparse()` once dparser-R ships that symbol
+  to CRAN.
+
+- Fix implicit `ptrdiff_t` to `int` truncation in `rc_dup_str`
+  (`src/records.c`). When the parser passes a string segment longer than
+  `INT_MAX` bytes (or a NUL-terminated string of that length), the
+  pointer difference / `strlen` result was silently cast to `int`,
+  truncating the length to a wrong (often negative) value. The new guard
+  rejects such inputs with an informative R error.
+
 ## nonmem2rx 0.1.10
 
 - Bug fix for covariance matrices that span multiple FORTRAN output

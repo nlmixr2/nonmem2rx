@@ -10,12 +10,14 @@ You can install the development version of nonmem2rx from
 [GitHub](https://github.com/) with the r-universe:
 
 ``` r
+
 install.packages('nonmem2rx', repos = c('https://nlmixr2.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 When on CRAN, you can also get the CRAN version by:
 
 ``` r
+
 install.packages('nonmem2rx')
 ```
 
@@ -91,6 +93,7 @@ Once `nonmem2rx` has been loaded, you simply type the location of the
 nonmem control stream for the parser to start. For example:
 
 ``` r
+
 library(nonmem2rx)
 
 # First we need the location of the nonmem control stream Since we are

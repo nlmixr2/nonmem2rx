@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Importing NONMEM into rxode2">
 </head>
@@ -144,7 +144,7 @@ R.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta4` to `0.0730497519364148`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'ytype' to 'nmytype'</span></span>
@@ -190,6 +190,7 @@ R.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
 <span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
 <span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
@@ -312,6 +313,13 @@ control stream are:</p>
 <li><p>Turn on <a href="https://wfn.sourceforge.net/wfncs.htm#control_streams" class="external-link">extended
 control stream</a> support, as used by Wings for NONMEM. You can turn it
 on by <code>options(nonmem2rx.extended=TRUE)</code></p></li>
+<li><p><code>ADVAN5</code>/<code>ADVAN7</code> general linear models are
+translated to <code>rxode2</code>’s native matrix-exponential
+<code>matExp()</code> model by default. If you prefer ordinary
+differential equations, turn this off with
+<code>nonmem2rx(..., matexp=FALSE)</code> or
+<code>options(nonmem2rx.matexp=FALSE)</code> (see <a href="#general-linear-models-advan5advan7">General linear models
+(<code>ADVAN5</code>/<code>ADVAN7</code>)</a> below).</p></li>
 </ul>
 <p>You probably also want to change the name of parameters and
 compartments. The easiest way to name the parameters whatever you want
@@ -361,7 +369,7 @@ is to pre-specify the names. For example:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta4` to `0.0730497519364148`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'ytype' to 'nmytype'</span></span>
@@ -645,6 +653,440 @@ to <code>nlmixr2</code>. If you want, you can still <a href="https://nlmixr2.git
 the <code>rxode2</code> model to a nlmixr2 fit</a>.</p>
 </div>
 <div class="section level2">
+<h2 id="pointing-nonmem2rx-at-the-input-data">Pointing <code>nonmem2rx</code> at the input data<a class="anchor" aria-label="anchor" href="#pointing-nonmem2rx-at-the-input-data"></a>
+</h2>
+<p>To validate the translation, <code>nonmem2rx</code> reads the NONMEM
+input dataset and re-runs the model to compare against the NONMEM
+output. By default it finds the data from the <code>$DATA</code> record
+of the control stream. When you import a model from another system,
+though, that path often does not match your machine, so you can override
+it with the <code>inputData</code> argument.</p>
+<p><code>inputData</code> accepts <code>NULL</code> (the default – find
+the data from the <code>$DATA</code> record of the control stream), a
+<strong>path</strong>, or an <strong>in-memory
+<code>data.frame</code></strong>.</p>
+<p>The path form is the simplest fix when the data is a plain CSV that
+just lives somewhere else – for example a folder or two higher up than
+the control stream:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="st">"runs/run1/run1.ctl"</span>,</span>
+<span>                 inputData <span class="op">=</span> <span class="st">"../../data.csv"</span><span class="op">)</span></span></code></pre></div>
+<p>When the data is not a plain on-disk CSV – it is already in memory,
+came from a database, or needs a custom reader (fixed-width,
+tab-delimited, decompressed on the fly) – read it in yourself and pass
+the resulting <code>data.frame</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># read the data from wherever it really is</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/Bolus_2CPT.csv"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/cpt/runODE032.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span>,</span>
+<span>                 lst<span class="op">=</span><span class="st">".res"</span>, save<span class="op">=</span><span class="cn">FALSE</span>, inputData <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in xml file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in ext file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in phi file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in lst file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> abbreviated list parsing</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in grd file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> splitting control stream by records</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $INPUT</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $MODEL</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $gTHETA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $OMEGA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $SIGMA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $PROBLEM</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $DATA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $SUBROUTINES</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $PK</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $DES</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $ERROR</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $ESTIMATION</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Ignore record $ESTIMATION</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $COVARIANCE</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Ignore record $COVARIANCE</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $TABLE</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta1` to `1.37034036528946`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta2` to `4.19814911033061`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta3` to `1.38003493562413`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta4` to `3.87657341967489`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `theta5` to `0.196446108190896`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta1` to `0.101251418415006`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta2` to `0.0993872449483344`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `0.101302674763154`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta4` to `0.0730497519364148`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using supplied data.frame for nonmem input data (for model validation)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'ytype' to 'nmytype'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> replace theta names</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> replace eta names</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done (no labels)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming compartments</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving ipred problem</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> solving pred problem</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="va">mod</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 2-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Initalization:</span> ──  </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span></span>
+<span><span class="co">#&gt;    theta1    theta2    theta3    theta4       RSV </span></span>
+<span><span class="co">#&gt; 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Omega</span> (<span style="color: #0000BB; font-weight: bold;">$omega</span>): </span></span>
+<span><span class="co">#&gt;           eta1       eta2      eta3       eta4</span></span>
+<span><span class="co">#&gt; eta1 0.1012514 0.00000000 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta2 0.0000000 0.09938724 0.0000000 0.00000000</span></span>
+<span><span class="co">#&gt; eta3 0.0000000 0.00000000 0.1013027 0.00000000</span></span>
+<span><span class="co">#&gt; eta4 0.0000000 0.00000000 0.0000000 0.07304975</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; States</span> (<span style="color: #0000BB; font-weight: bold;">$state</span> or <span style="color: #0000BB; font-weight: bold;">$stateDf</span>): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1          CENTRAL</span></span>
+<span><span class="co">#&gt; 2                  2             PERI</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">μ-referencing (</span><span style="color: #0000BB; font-weight: bold;">$muRefTable</span><span style="font-weight: bold;">):</span> ──  </span></span>
+<span><span class="co">#&gt;    theta  eta level</span></span>
+<span><span class="co">#&gt; 1 theta1 eta1    id</span></span>
+<span><span class="co">#&gt; 2 theta2 eta2    id</span></span>
+<span><span class="co">#&gt; 3 theta3 eta3    id</span></span>
+<span><span class="co">#&gt; 4 theta4 eta4    id</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
+<span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
+<span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
+<span><span class="co">#&gt;     sigma &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         eps1 ~ 1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     thetaMat &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         theta1 ~ c(theta1 = 0.000887681)</span></span>
+<span><span class="co">#&gt;         theta2 ~ c(theta1 = -0.00010551, theta2 = 0.000871409)</span></span>
+<span><span class="co">#&gt;         theta3 ~ c(theta1 = 0.000184416, theta2 = -0.000106195, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.00299336)</span></span>
+<span><span class="co">#&gt;         theta4 ~ c(theta1 = -0.000120234, theta2 = -5.06663e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.000165252, theta4 = 0.00121347)</span></span>
+<span><span class="co">#&gt;         RSV ~ c(theta1 = 5.2783e-08, theta2 = -1.56562e-05, theta3 = 5.99331e-06, </span></span>
+<span><span class="co">#&gt;             theta4 = -2.53991e-05, RSV = 9.94218e-06)</span></span>
+<span><span class="co">#&gt;         eps1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0)</span></span>
+<span><span class="co">#&gt;         eta1 ~ c(theta1 = -4.71273e-05, theta2 = 4.69667e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = -3.64271e-05, theta4 = 2.54796e-05, RSV = -8.16885e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 0.000169296)</span></span>
+<span><span class="co">#&gt;         omega.2.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0)</span></span>
+<span><span class="co">#&gt;         eta2 ~ c(theta1 = -7.37156e-05, theta2 = 2.56634e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = -8.08349e-05, theta4 = 1.37e-05, RSV = -4.36564e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 8.75181e-06, omega.2.1 = 0, eta2 = 0.00015125)</span></span>
+<span><span class="co">#&gt;         omega.3.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.3.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0)</span></span>
+<span><span class="co">#&gt;         eta3 ~ c(theta1 = 6.63383e-05, theta2 = -8.19002e-05, </span></span>
+<span><span class="co">#&gt;             theta3 = 0.000548985, theta4 = 0.000168356, RSV = 1.59122e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 3.48714e-05, omega.2.1 = 0, eta2 = 4.31593e-07, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0.000959029)</span></span>
+<span><span class="co">#&gt;         omega.4.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0)</span></span>
+<span><span class="co">#&gt;         omega.4.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.4.2 = 0)</span></span>
+<span><span class="co">#&gt;         omega.4.3 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, </span></span>
+<span><span class="co">#&gt;             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, </span></span>
+<span><span class="co">#&gt;             omega.4.2 = 0, omega.4.3 = 0)</span></span>
+<span><span class="co">#&gt;         eta4 ~ c(theta1 = -9.49661e-06, theta2 = 0.000110108, </span></span>
+<span><span class="co">#&gt;             theta3 = -0.000306537, theta4 = -9.12897e-05, RSV = 3.1877e-06, </span></span>
+<span><span class="co">#&gt;             eps1 = 0, eta1 = 1.36628e-05, omega.2.1 = 0, eta2 = -1.95096e-05, </span></span>
+<span><span class="co">#&gt;             omega.3.1 = 0, omega.3.2 = 0, eta3 = -0.00012977, </span></span>
+<span><span class="co">#&gt;             omega.4.1 = 0, omega.4.2 = 0, omega.4.3 = 0, eta4 = 0.00051019)</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     validation &lt;- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", </span></span>
+<span><span class="co">#&gt;         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", </span></span>
+<span><span class="co">#&gt;         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", </span></span>
+<span><span class="co">#&gt;         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.82e-07, 4.63e-05); atol=3.65e-06", </span></span>
+<span><span class="co">#&gt;         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", </span></span>
+<span><span class="co">#&gt;         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         theta1 &lt;- 1.37034036528946</span></span>
+<span><span class="co">#&gt;         label("log Cl")</span></span>
+<span><span class="co">#&gt;         theta2 &lt;- 4.19814911033061</span></span>
+<span><span class="co">#&gt;         label("log Vc")</span></span>
+<span><span class="co">#&gt;         theta3 &lt;- 1.38003493562413</span></span>
+<span><span class="co">#&gt;         label("log Q")</span></span>
+<span><span class="co">#&gt;         theta4 &lt;- 3.87657341967489</span></span>
+<span><span class="co">#&gt;         label("log Vp")</span></span>
+<span><span class="co">#&gt;         RSV &lt;- c(0, 0.196446108190896, 1)</span></span>
+<span><span class="co">#&gt;         label("RSV")</span></span>
+<span><span class="co">#&gt;         eta1 ~ 0.101251418415006</span></span>
+<span><span class="co">#&gt;         eta2 ~ 0.0993872449483344</span></span>
+<span><span class="co">#&gt;         eta3 ~ 0.101302674763154</span></span>
+<span><span class="co">#&gt;         eta4 ~ 0.0730497519364148</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         cmt(CENTRAL)</span></span>
+<span><span class="co">#&gt;         cmt(PERI)</span></span>
+<span><span class="co">#&gt;         cl &lt;- exp(theta1 + eta1)</span></span>
+<span><span class="co">#&gt;         v &lt;- exp(theta2 + eta2)</span></span>
+<span><span class="co">#&gt;         q &lt;- exp(theta3 + eta3)</span></span>
+<span><span class="co">#&gt;         v2 &lt;- exp(theta4 + eta4)</span></span>
+<span><span class="co">#&gt;         v1 &lt;- v</span></span>
+<span><span class="co">#&gt;         scale1 &lt;- v</span></span>
+<span><span class="co">#&gt;         k21 &lt;- q/v2</span></span>
+<span><span class="co">#&gt;         k12 &lt;- q/v</span></span>
+<span><span class="co">#&gt;         d/dt(CENTRAL) &lt;- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1</span></span>
+<span><span class="co">#&gt;         d/dt(PERI) &lt;- -k21 * PERI + k12 * CENTRAL</span></span>
+<span><span class="co">#&gt;         f &lt;- CENTRAL/scale1</span></span>
+<span><span class="co">#&gt;         ipred &lt;- f</span></span>
+<span><span class="co">#&gt;         rescv &lt;- RSV</span></span>
+<span><span class="co">#&gt;         ipred ~ prop(RSV)</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx translation notes (</span><span style="color: #0000BB; font-weight: bold;">$notes</span><span style="font-weight: bold;">):</span> ──  </span></span>
+<span><span class="co">#&gt;    • there are duplicate eta names, not renaming duplicate parameters </span></span>
+<span><span class="co">#&gt;    • there are duplicate theta names, not renaming duplicate parameters </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
+<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
+<span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 composite comparison: <span style="color: #0000BB; font-weight: bold;">$predAtol</span>, <span style="color: #0000BB; font-weight: bold;">$predRtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredAtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredRtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresAtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresRtol</span></span></span></code></pre></div>
+<p>Either way the control stream itself is left untouched.</p>
+<p>One thing to get right: the supplied <code>data.frame</code> is
+interpreted <strong>positionally against <code>$INPUT</code></strong> –
+the column <em>names</em> are discarded and re-applied from the
+<code>$INPUT</code> record, and the usual <code>$INPUT</code> names,
+<code>DROP</code>, <code>IGNORE</code>/<code>ACCEPT</code> filters and
+record subsetting are then applied. So read the data in the same column
+order NONMEM would see it and do not reorder, insert, or drop columns
+beforehand. If the CSV has no header, use
+<code>read.csv(..., header = FALSE)</code>; a header row that NONMEM
+skips via <code>IGNORE=@</code> is fine with a plain
+<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code>, since the header becomes the (discarded) names
+and the data rows still line up with <code>$INPUT</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="general-linear-models-advan5advan7">General linear models (<code>ADVAN5</code>/<code>ADVAN7</code>)<a class="anchor" aria-label="anchor" href="#general-linear-models-advan5advan7"></a>
+</h2>
+<p>NONMEM’s <code>ADVAN5</code> and <code>ADVAN7</code> are <em>general
+linear</em> models: a system of compartments connected by rate constants
+(<code>K12</code>, <code>K21</code>, <code>K20</code>, …) that NONMEM
+solves with matrix exponentials. By default <code>nonmem2rx</code>
+mirrors this and translates them to <code>rxode2</code>’s native
+matrix-exponential <code>matExp()</code> model, using <code>cmt()</code>
+declarations and <code>k_&lt;from&gt;_&lt;to&gt;</code> rate constants
+(with <code>k_&lt;from&gt;_output</code> for elimination):</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">advan5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mods/advan5/advan5.ctl"</span>, package<span class="op">=</span><span class="st">"nonmem2rx"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">advan5</span>, validate<span class="op">=</span><span class="cn">FALSE</span>, save<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/advan5/advan5.ctl'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in lst file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> seeing if file argument is actually lst file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> not list file, control stream</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> splitting control stream by records</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $INPUT</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $MODEL</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $gTHETA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $OMEGA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $SIGMA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $PROBLEM</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $DATA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $SUBROUTINES</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $PK</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $ERROR</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $ESTIMATION</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Ignore record $ESTIMATION</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> replace theta names</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> replace eta names</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming compartments</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> translating ADVAN5/7 linear system to matrix-exponential matExp() model</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="va">mod</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 4-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Initalization:</span> ──  </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span></span>
+<span><span class="co">#&gt; TVK12 TVK23 TVK32 TVK20 </span></span>
+<span><span class="co">#&gt;   1.0   0.5   0.2   0.3 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Omega</span> (<span style="color: #0000BB; font-weight: bold;">$omega</span>): </span></span>
+<span><span class="co">#&gt;         IIV.K12</span></span>
+<span><span class="co">#&gt; IIV.K12     0.1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; States</span> (<span style="color: #0000BB; font-weight: bold;">$state</span> or <span style="color: #0000BB; font-weight: bold;">$stateDf</span>): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1            DEPOT</span></span>
+<span><span class="co">#&gt; 2                  2          CENTRAL</span></span>
+<span><span class="co">#&gt; 3                  3           PERIPH</span></span>
+<span><span class="co">#&gt; 4                  4           output</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     description &lt;- "ADVAN5 three-compartment linear system (matExp translation test)"</span></span>
+<span><span class="co">#&gt;     sigma &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         eps1 ~ 0.01</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         TVK12 &lt;- 1</span></span>
+<span><span class="co">#&gt;         label("TVK12")</span></span>
+<span><span class="co">#&gt;         TVK23 &lt;- 0.5</span></span>
+<span><span class="co">#&gt;         label("TVK23")</span></span>
+<span><span class="co">#&gt;         TVK32 &lt;- 0.2</span></span>
+<span><span class="co">#&gt;         label("TVK32")</span></span>
+<span><span class="co">#&gt;         TVK20 &lt;- 0.3</span></span>
+<span><span class="co">#&gt;         label("TVK20")</span></span>
+<span><span class="co">#&gt;         IIV.K12 ~ 0.1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         k12 &lt;- TVK12 * exp(IIV.K12)</span></span>
+<span><span class="co">#&gt;         k23 &lt;- TVK23</span></span>
+<span><span class="co">#&gt;         k32 &lt;- TVK32</span></span>
+<span><span class="co">#&gt;         k20 &lt;- TVK20</span></span>
+<span><span class="co">#&gt;         scale2 &lt;- 1</span></span>
+<span><span class="co">#&gt;         f &lt;- CENTRAL/scale2</span></span>
+<span><span class="co">#&gt;         ipred &lt;- CENTRAL</span></span>
+<span><span class="co">#&gt;         y &lt;- ipred * (1 + eps1)</span></span>
+<span><span class="co">#&gt;         matExp()</span></span>
+<span><span class="co">#&gt;         cmt(DEPOT)</span></span>
+<span><span class="co">#&gt;         cmt(CENTRAL)</span></span>
+<span><span class="co">#&gt;         cmt(PERIPH)</span></span>
+<span><span class="co">#&gt;         k_DEPOT_CENTRAL &lt;- k12</span></span>
+<span><span class="co">#&gt;         k_CENTRAL_PERIPH &lt;- k23</span></span>
+<span><span class="co">#&gt;         k_PERIPH_CENTRAL &lt;- k32</span></span>
+<span><span class="co">#&gt;         k_CENTRAL_output &lt;- k20</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Sigma</span> (<span style="color: #0000BB; font-weight: bold;">$sigma</span>): </span></span>
+<span><span class="co">#&gt;      eps1</span></span>
+<span><span class="co">#&gt; eps1 0.01</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
+<span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 composite comparison: <span style="color: #0000BB; font-weight: bold;">$predAtol</span>, <span style="color: #0000BB; font-weight: bold;">$predRtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredAtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredRtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresAtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresRtol</span></span></span></code></pre></div>
+<p>If you prefer explicit ordinary differential equations, use
+<code>matexp=FALSE</code> to translate the same linear system to
+<code>d/dt()</code> equations instead:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nonmem2rx.html">nonmem2rx</a></span><span class="op">(</span><span class="va">advan5</span>, validate<span class="op">=</span><span class="cn">FALSE</span>, save<span class="op">=</span><span class="cn">FALSE</span>, matexp<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/advan5/advan5.ctl'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> reading in lst file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> seeing if file argument is actually lst file</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> not list file, control stream</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> splitting control stream by records</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $INPUT</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $MODEL</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $gTHETA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $OMEGA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $SIGMA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $PROBLEM</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $DATA</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $SUBROUTINES</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $PK</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $ERROR</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing record $ESTIMATION</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Ignore record $ESTIMATION</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> changing most variables to lower case</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> replace theta names</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> replace eta names</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming compartments</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> done</span></span>
+<span><span class="va">mod</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 3-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Initalization:</span> ──  </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Fixed Effects</span> (<span style="color: #0000BB; font-weight: bold;">$theta</span>): </span></span>
+<span><span class="co">#&gt; TVK12 TVK23 TVK32 TVK20 </span></span>
+<span><span class="co">#&gt;   1.0   0.5   0.2   0.3 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Omega</span> (<span style="color: #0000BB; font-weight: bold;">$omega</span>): </span></span>
+<span><span class="co">#&gt;         IIV.K12</span></span>
+<span><span class="co">#&gt; IIV.K12     0.1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; States</span> (<span style="color: #0000BB; font-weight: bold;">$state</span> or <span style="color: #0000BB; font-weight: bold;">$stateDf</span>): </span></span>
+<span><span class="co">#&gt;   Compartment Number Compartment Name</span></span>
+<span><span class="co">#&gt; 1                  1            DEPOT</span></span>
+<span><span class="co">#&gt; 2                  2          CENTRAL</span></span>
+<span><span class="co">#&gt; 3                  3           PERIPH</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
+<span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     description &lt;- "ADVAN5 three-compartment linear system (matExp translation test)"</span></span>
+<span><span class="co">#&gt;     sigma &lt;- lotri({</span></span>
+<span><span class="co">#&gt;         eps1 ~ 0.01</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     ini({</span></span>
+<span><span class="co">#&gt;         TVK12 &lt;- 1</span></span>
+<span><span class="co">#&gt;         label("TVK12")</span></span>
+<span><span class="co">#&gt;         TVK23 &lt;- 0.5</span></span>
+<span><span class="co">#&gt;         label("TVK23")</span></span>
+<span><span class="co">#&gt;         TVK32 &lt;- 0.2</span></span>
+<span><span class="co">#&gt;         label("TVK32")</span></span>
+<span><span class="co">#&gt;         TVK20 &lt;- 0.3</span></span>
+<span><span class="co">#&gt;         label("TVK20")</span></span>
+<span><span class="co">#&gt;         IIV.K12 ~ 0.1</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt;     model({</span></span>
+<span><span class="co">#&gt;         cmt(DEPOT)</span></span>
+<span><span class="co">#&gt;         cmt(CENTRAL)</span></span>
+<span><span class="co">#&gt;         cmt(PERIPH)</span></span>
+<span><span class="co">#&gt;         k12 &lt;- TVK12 * exp(IIV.K12)</span></span>
+<span><span class="co">#&gt;         k23 &lt;- TVK23</span></span>
+<span><span class="co">#&gt;         k32 &lt;- TVK32</span></span>
+<span><span class="co">#&gt;         k20 &lt;- TVK20</span></span>
+<span><span class="co">#&gt;         scale2 &lt;- 1</span></span>
+<span><span class="co">#&gt;         f &lt;- CENTRAL/scale2</span></span>
+<span><span class="co">#&gt;         ipred &lt;- CENTRAL</span></span>
+<span><span class="co">#&gt;         y &lt;- ipred * (1 + eps1)</span></span>
+<span><span class="co">#&gt;         d/dt(DEPOT) &lt;- -k12 * DEPOT</span></span>
+<span><span class="co">#&gt;         d/dt(CENTRAL) &lt;- k12 * DEPOT - k23 * CENTRAL + k32 * </span></span>
+<span><span class="co">#&gt;             PERIPH - k20 * CENTRAL</span></span>
+<span><span class="co">#&gt;         d/dt(PERIPH) &lt;- k23 * CENTRAL - k32 * PERIPH</span></span>
+<span><span class="co">#&gt;     })</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Sigma</span> (<span style="color: #0000BB; font-weight: bold;">$sigma</span>): </span></span>
+<span><span class="co">#&gt;      eps1</span></span>
+<span><span class="co">#&gt; eps1 0.01</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
+<span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
+<span><span class="co">#&gt; NONMEM/rxode2 composite comparison: <span style="color: #0000BB; font-weight: bold;">$predAtol</span>, <span style="color: #0000BB; font-weight: bold;">$predRtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredAtol</span>, <span style="color: #0000BB; font-weight: bold;">$ipredRtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresAtol</span>, <span style="color: #0000BB; font-weight: bold;">$iwresRtol</span></span></span></code></pre></div>
+<p>Both models solve to the same predictions; the matrix-exponential
+form simply lets <code>rxode2</code> use its matrix-exponential solver
+rather than a general ODE integrator. Only
+<code>ADVAN5</code>/<code>ADVAN7</code> models are affected.</p>
+</div>
+<div class="section level2">
 <h2 id="technical-details-about-reading-nonmem-to-rxode2">Technical details about reading NONMEM to rxode2<a class="anchor" aria-label="anchor" href="#technical-details-about-reading-nonmem-to-rxode2"></a>
 </h2>
 <p>The key files to import are the NONMEM control stream (or related
@@ -691,7 +1133,7 @@ in the control stream (ie <code>COMP=(compartmenName)</code>)</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

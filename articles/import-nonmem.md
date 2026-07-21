@@ -6,6 +6,7 @@ The goal of `nonmem2rx` is to convert a NONMEM control stream to
 Here is a quick example of a conversion:
 
 ``` r
+
 library(nonmem2rx)
 
 # First we need the location of the nonmem control stream Since we are running
@@ -56,7 +57,7 @@ mod <- nonmem2rx(resFile, save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -102,6 +103,7 @@ mod
 #> 
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
+#>     NULL
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
 #>     dfObs <- 2280
 #>     dfSub <- 120
@@ -227,11 +229,19 @@ control stream are:
   support, as used by Wings for NONMEM. You can turn it on by
   `options(nonmem2rx.extended=TRUE)`
 
+- `ADVAN5`/`ADVAN7` general linear models are translated to `rxode2`’s
+  native matrix-exponential `matExp()` model by default. If you prefer
+  ordinary differential equations, turn this off with
+  `nonmem2rx(..., matexp=FALSE)` or `options(nonmem2rx.matexp=FALSE)`
+  (see [General linear models
+  (`ADVAN5`/`ADVAN7`)](#general-linear-models-advan5advan7) below).
+
 You probably also want to change the name of parameters and
 compartments. The easiest way to name the parameters whatever you want
 is to pre-specify the names. For example:
 
 ``` r
+
 mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE,
                  thetaNames=c("lcl", "lvc", "lq", "lvp", "prop.sd"),
                  etaNames=c("eta.cl", "eta.vc", "eta.q","eta.vp"),
@@ -276,7 +286,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -431,6 +441,7 @@ following model (which grabs the parameter automatically labels to
 generate variables), `sigma` is simply `eps#`.
 
 ``` r
+
 mod <- nonmem2rx(system.file("Theopd.ctl", package="nonmem2rx"), save=FALSE)
 #> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/Theopd.ctl'
 #> ℹ reading in lst file
@@ -514,6 +525,7 @@ or
 would both work):
 
 ``` r
+
 mod <- mod %>% rxRename(add.var=eps1)
 mod
 #>  ── rxode2-based Pred model ───────────────────────────────────────────────────── 
@@ -568,6 +580,452 @@ This model does not specify the residuals in a way that makes sense to
 `nlmixr2`. If you want, you can still [convert the `rxode2` model to a
 nlmixr2
 fit](https://nlmixr2.github.io/nonmem2rx/articles/convert-nlmixr2.html).
+
+## Pointing `nonmem2rx` at the input data
+
+To validate the translation, `nonmem2rx` reads the NONMEM input dataset
+and re-runs the model to compare against the NONMEM output. By default
+it finds the data from the `$DATA` record of the control stream. When
+you import a model from another system, though, that path often does not
+match your machine, so you can override it with the `inputData`
+argument.
+
+`inputData` accepts `NULL` (the default – find the data from the `$DATA`
+record of the control stream), a **path**, or an **in-memory
+`data.frame`**.
+
+The path form is the simplest fix when the data is a plain CSV that just
+lives somewhere else – for example a folder or two higher up than the
+control stream:
+
+``` r
+
+mod <- nonmem2rx("runs/run1/run1.ctl",
+                 inputData = "../../data.csv")
+```
+
+When the data is not a plain on-disk CSV – it is already in memory, came
+from a database, or needs a custom reader (fixed-width, tab-delimited,
+decompressed on the fly) – read it in yourself and pass the resulting
+`data.frame`:
+
+``` r
+
+# read the data from wherever it really is
+d <- read.csv(system.file("mods/cpt/Bolus_2CPT.csv", package="nonmem2rx"))
+
+mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
+                 lst=".res", save=FALSE, inputData = d)
+#> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'
+#> ℹ reading in xml file
+#> ℹ done
+#> ℹ reading in ext file
+#> ℹ done
+#> ℹ reading in phi file
+#> ℹ done
+#> ℹ reading in lst file
+#> ℹ abbreviated list parsing
+#> ℹ done
+#> ℹ reading in grd file
+#> ℹ done
+#> ℹ splitting control stream by records
+#> ℹ done
+#> ℹ Processing record $INPUT
+#> ℹ Processing record $MODEL
+#> ℹ Processing record $gTHETA
+#> ℹ Processing record $OMEGA
+#> ℹ Processing record $SIGMA
+#> ℹ Processing record $PROBLEM
+#> ℹ Processing record $DATA
+#> ℹ Processing record $SUBROUTINES
+#> ℹ Processing record $PK
+#> ℹ Processing record $DES
+#> ℹ Processing record $ERROR
+#> ℹ Processing record $ESTIMATION
+#> ℹ Ignore record $ESTIMATION
+#> ℹ Processing record $COVARIANCE
+#> ℹ Ignore record $COVARIANCE
+#> ℹ Processing record $TABLE
+#> ℹ change initial estimate of `theta1` to `1.37034036528946`
+#> ℹ change initial estimate of `theta2` to `4.19814911033061`
+#> ℹ change initial estimate of `theta3` to `1.38003493562413`
+#> ℹ change initial estimate of `theta4` to `3.87657341967489`
+#> ℹ change initial estimate of `theta5` to `0.196446108190896`
+#> ℹ change initial estimate of `eta1` to `0.101251418415006`
+#> ℹ change initial estimate of `eta2` to `0.0993872449483344`
+#> ℹ change initial estimate of `eta3` to `0.101302674763154`
+#> ℹ change initial estimate of `eta4` to `0.0730497519364148`
+#> ℹ using supplied data.frame for nonmem input data (for model validation)
+#> ℹ applying names specified by $INPUT
+#> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
+#> ℹ renaming 'ytype' to 'nmytype'
+#> ℹ done
+#> ℹ read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv
+#> ℹ done
+#> ℹ changing most variables to lower case
+#> ℹ done
+#> ℹ replace theta names
+#> ℹ done
+#> ℹ replace eta names
+#> ℹ done (no labels)
+#> ℹ renaming compartments
+#> ℹ done
+#> ℹ solving ipred problem
+#> ℹ done
+#> ℹ solving pred problem
+#> ℹ done
+mod
+#>  ── rxode2-based free-form 2-cmt ODE model ────────────────────────────────────── 
+#>  ── Initalization: ──  
+#> Fixed Effects ($theta): 
+#>    theta1    theta2    theta3    theta4       RSV 
+#> 1.3703404 4.1981491 1.3800349 3.8765734 0.1964461 
+#> 
+#> Omega ($omega): 
+#>           eta1       eta2      eta3       eta4
+#> eta1 0.1012514 0.00000000 0.0000000 0.00000000
+#> eta2 0.0000000 0.09938724 0.0000000 0.00000000
+#> eta3 0.0000000 0.00000000 0.1013027 0.00000000
+#> eta4 0.0000000 0.00000000 0.0000000 0.07304975
+#> 
+#> States ($state or $stateDf): 
+#>   Compartment Number Compartment Name
+#> 1                  1          CENTRAL
+#> 2                  2             PERI
+#>  ── μ-referencing ($muRefTable): ──  
+#>    theta  eta level
+#> 1 theta1 eta1    id
+#> 2 theta2 eta2    id
+#> 3 theta3 eta3    id
+#> 4 theta4 eta4    id
+#> 
+#>  ── Model (Normalized Syntax): ── 
+#> function() {
+#>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
+#>     dfObs <- 2280
+#>     dfSub <- 120
+#>     sigma <- lotri({
+#>         eps1 ~ 1
+#>     })
+#>     thetaMat <- lotri({
+#>         theta1 ~ c(theta1 = 0.000887681)
+#>         theta2 ~ c(theta1 = -0.00010551, theta2 = 0.000871409)
+#>         theta3 ~ c(theta1 = 0.000184416, theta2 = -0.000106195, 
+#>             theta3 = 0.00299336)
+#>         theta4 ~ c(theta1 = -0.000120234, theta2 = -5.06663e-05, 
+#>             theta3 = 0.000165252, theta4 = 0.00121347)
+#>         RSV ~ c(theta1 = 5.2783e-08, theta2 = -1.56562e-05, theta3 = 5.99331e-06, 
+#>             theta4 = -2.53991e-05, RSV = 9.94218e-06)
+#>         eps1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0)
+#>         eta1 ~ c(theta1 = -4.71273e-05, theta2 = 4.69667e-05, 
+#>             theta3 = -3.64271e-05, theta4 = 2.54796e-05, RSV = -8.16885e-06, 
+#>             eps1 = 0, eta1 = 0.000169296)
+#>         omega.2.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0)
+#>         eta2 ~ c(theta1 = -7.37156e-05, theta2 = 2.56634e-05, 
+#>             theta3 = -8.08349e-05, theta4 = 1.37e-05, RSV = -4.36564e-06, 
+#>             eps1 = 0, eta1 = 8.75181e-06, omega.2.1 = 0, eta2 = 0.00015125)
+#>         omega.3.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, 
+#>             omega.3.1 = 0)
+#>         omega.3.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, 
+#>             omega.3.1 = 0, omega.3.2 = 0)
+#>         eta3 ~ c(theta1 = 6.63383e-05, theta2 = -8.19002e-05, 
+#>             theta3 = 0.000548985, theta4 = 0.000168356, RSV = 1.59122e-06, 
+#>             eps1 = 0, eta1 = 3.48714e-05, omega.2.1 = 0, eta2 = 4.31593e-07, 
+#>             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0.000959029)
+#>         omega.4.1 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, 
+#>             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0)
+#>         omega.4.2 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, 
+#>             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, 
+#>             omega.4.2 = 0)
+#>         omega.4.3 ~ c(theta1 = 0, theta2 = 0, theta3 = 0, theta4 = 0, 
+#>             RSV = 0, eps1 = 0, eta1 = 0, omega.2.1 = 0, eta2 = 0, 
+#>             omega.3.1 = 0, omega.3.2 = 0, eta3 = 0, omega.4.1 = 0, 
+#>             omega.4.2 = 0, omega.4.3 = 0)
+#>         eta4 ~ c(theta1 = -9.49661e-06, theta2 = 0.000110108, 
+#>             theta3 = -0.000306537, theta4 = -9.12897e-05, RSV = 3.1877e-06, 
+#>             eps1 = 0, eta1 = 1.36628e-05, omega.2.1 = 0, eta2 = -1.95096e-05, 
+#>             omega.3.1 = 0, omega.3.2 = 0, eta3 = -0.00012977, 
+#>             omega.4.1 = 0, omega.4.2 = 0, omega.4.3 = 0, eta4 = 0.00051019)
+#>     })
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.82e-07, 4.63e-05); atol=3.65e-06", 
+#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
+#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
+#>     ini({
+#>         theta1 <- 1.37034036528946
+#>         label("log Cl")
+#>         theta2 <- 4.19814911033061
+#>         label("log Vc")
+#>         theta3 <- 1.38003493562413
+#>         label("log Q")
+#>         theta4 <- 3.87657341967489
+#>         label("log Vp")
+#>         RSV <- c(0, 0.196446108190896, 1)
+#>         label("RSV")
+#>         eta1 ~ 0.101251418415006
+#>         eta2 ~ 0.0993872449483344
+#>         eta3 ~ 0.101302674763154
+#>         eta4 ~ 0.0730497519364148
+#>     })
+#>     model({
+#>         cmt(CENTRAL)
+#>         cmt(PERI)
+#>         cl <- exp(theta1 + eta1)
+#>         v <- exp(theta2 + eta2)
+#>         q <- exp(theta3 + eta3)
+#>         v2 <- exp(theta4 + eta4)
+#>         v1 <- v
+#>         scale1 <- v
+#>         k21 <- q/v2
+#>         k12 <- q/v
+#>         d/dt(CENTRAL) <- k21 * PERI - k12 * CENTRAL - cl * CENTRAL/v1
+#>         d/dt(PERI) <- -k21 * PERI + k12 * CENTRAL
+#>         f <- CENTRAL/scale1
+#>         ipred <- f
+#>         rescv <- RSV
+#>         ipred ~ prop(RSV)
+#>     })
+#> }
+#>  ── nonmem2rx translation notes ($notes): ──  
+#>    • there are duplicate eta names, not renaming duplicate parameters 
+#>    • there are duplicate theta names, not renaming duplicate parameters 
+#>  ── nonmem2rx extra properties: ──  
+#> other properties include: $nonmemData, $etaData
+#> captured NONMEM table outputs: $predData, $ipredData
+#> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
+#> NONMEM/rxode2 composite comparison: $predAtol, $predRtol, $ipredAtol, $ipredRtol, $iwresAtol, $iwresRtol
+```
+
+Either way the control stream itself is left untouched.
+
+One thing to get right: the supplied `data.frame` is interpreted
+**positionally against `$INPUT`** – the column *names* are discarded and
+re-applied from the `$INPUT` record, and the usual `$INPUT` names,
+`DROP`, `IGNORE`/`ACCEPT` filters and record subsetting are then
+applied. So read the data in the same column order NONMEM would see it
+and do not reorder, insert, or drop columns beforehand. If the CSV has
+no header, use `read.csv(..., header = FALSE)`; a header row that NONMEM
+skips via `IGNORE=@` is fine with a plain
+[`read.csv()`](https://rdrr.io/r/utils/read.table.html), since the
+header becomes the (discarded) names and the data rows still line up
+with `$INPUT`.
+
+## General linear models (`ADVAN5`/`ADVAN7`)
+
+NONMEM’s `ADVAN5` and `ADVAN7` are *general linear* models: a system of
+compartments connected by rate constants (`K12`, `K21`, `K20`, …) that
+NONMEM solves with matrix exponentials. By default `nonmem2rx` mirrors
+this and translates them to `rxode2`’s native matrix-exponential
+`matExp()` model, using `cmt()` declarations and `k_<from>_<to>` rate
+constants (with `k_<from>_output` for elimination):
+
+``` r
+
+advan5 <- system.file("mods/advan5/advan5.ctl", package="nonmem2rx")
+
+mod <- nonmem2rx(advan5, validate=FALSE, save=FALSE)
+#> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/advan5/advan5.ctl'
+#> ℹ reading in lst file
+#> ℹ seeing if file argument is actually lst file
+#> ℹ not list file, control stream
+#> ℹ done
+#> ℹ splitting control stream by records
+#> ℹ done
+#> ℹ Processing record $INPUT
+#> ℹ Processing record $MODEL
+#> ℹ Processing record $gTHETA
+#> ℹ Processing record $OMEGA
+#> ℹ Processing record $SIGMA
+#> ℹ Processing record $PROBLEM
+#> ℹ Processing record $DATA
+#> ℹ Processing record $SUBROUTINES
+#> ℹ Processing record $PK
+#> ℹ Processing record $ERROR
+#> ℹ Processing record $ESTIMATION
+#> ℹ Ignore record $ESTIMATION
+#> ℹ changing most variables to lower case
+#> ℹ done
+#> ℹ replace theta names
+#> ℹ done
+#> ℹ replace eta names
+#> ℹ done
+#> ℹ renaming compartments
+#> ℹ done
+#> ℹ translating ADVAN5/7 linear system to matrix-exponential matExp() model
+#> ℹ done
+mod
+#>  ── rxode2-based free-form 4-cmt ODE model ────────────────────────────────────── 
+#>  ── Initalization: ──  
+#> Fixed Effects ($theta): 
+#> TVK12 TVK23 TVK32 TVK20 
+#>   1.0   0.5   0.2   0.3 
+#> 
+#> Omega ($omega): 
+#>         IIV.K12
+#> IIV.K12     0.1
+#> 
+#> States ($state or $stateDf): 
+#>   Compartment Number Compartment Name
+#> 1                  1            DEPOT
+#> 2                  2          CENTRAL
+#> 3                  3           PERIPH
+#> 4                  4           output
+#>  ── Model (Normalized Syntax): ── 
+#> function() {
+#>     description <- "ADVAN5 three-compartment linear system (matExp translation test)"
+#>     sigma <- lotri({
+#>         eps1 ~ 0.01
+#>     })
+#>     ini({
+#>         TVK12 <- 1
+#>         label("TVK12")
+#>         TVK23 <- 0.5
+#>         label("TVK23")
+#>         TVK32 <- 0.2
+#>         label("TVK32")
+#>         TVK20 <- 0.3
+#>         label("TVK20")
+#>         IIV.K12 ~ 0.1
+#>     })
+#>     model({
+#>         k12 <- TVK12 * exp(IIV.K12)
+#>         k23 <- TVK23
+#>         k32 <- TVK32
+#>         k20 <- TVK20
+#>         scale2 <- 1
+#>         f <- CENTRAL/scale2
+#>         ipred <- CENTRAL
+#>         y <- ipred * (1 + eps1)
+#>         matExp()
+#>         cmt(DEPOT)
+#>         cmt(CENTRAL)
+#>         cmt(PERIPH)
+#>         k_DEPOT_CENTRAL <- k12
+#>         k_CENTRAL_PERIPH <- k23
+#>         k_PERIPH_CENTRAL <- k32
+#>         k_CENTRAL_output <- k20
+#>     })
+#> }
+#>  ── nonmem2rx extra properties: ──  
+#> 
+#> Sigma ($sigma): 
+#>      eps1
+#> eps1 0.01
+#> 
+#> other properties include: $etaData
+#> captured NONMEM table outputs: $predData, $ipredData
+#> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
+#> NONMEM/rxode2 composite comparison: $predAtol, $predRtol, $ipredAtol, $ipredRtol, $iwresAtol, $iwresRtol
+```
+
+If you prefer explicit ordinary differential equations, use
+`matexp=FALSE` to translate the same linear system to `d/dt()` equations
+instead:
+
+``` r
+
+mod <- nonmem2rx(advan5, validate=FALSE, save=FALSE, matexp=FALSE)
+#> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/advan5/advan5.ctl'
+#> ℹ reading in lst file
+#> ℹ seeing if file argument is actually lst file
+#> ℹ not list file, control stream
+#> ℹ done
+#> ℹ splitting control stream by records
+#> ℹ done
+#> ℹ Processing record $INPUT
+#> ℹ Processing record $MODEL
+#> ℹ Processing record $gTHETA
+#> ℹ Processing record $OMEGA
+#> ℹ Processing record $SIGMA
+#> ℹ Processing record $PROBLEM
+#> ℹ Processing record $DATA
+#> ℹ Processing record $SUBROUTINES
+#> ℹ Processing record $PK
+#> ℹ Processing record $ERROR
+#> ℹ Processing record $ESTIMATION
+#> ℹ Ignore record $ESTIMATION
+#> ℹ changing most variables to lower case
+#> ℹ done
+#> ℹ replace theta names
+#> ℹ done
+#> ℹ replace eta names
+#> ℹ done
+#> ℹ renaming compartments
+#> ℹ done
+mod
+#>  ── rxode2-based free-form 3-cmt ODE model ────────────────────────────────────── 
+#>  ── Initalization: ──  
+#> Fixed Effects ($theta): 
+#> TVK12 TVK23 TVK32 TVK20 
+#>   1.0   0.5   0.2   0.3 
+#> 
+#> Omega ($omega): 
+#>         IIV.K12
+#> IIV.K12     0.1
+#> 
+#> States ($state or $stateDf): 
+#>   Compartment Number Compartment Name
+#> 1                  1            DEPOT
+#> 2                  2          CENTRAL
+#> 3                  3           PERIPH
+#>  ── Model (Normalized Syntax): ── 
+#> function() {
+#>     description <- "ADVAN5 three-compartment linear system (matExp translation test)"
+#>     sigma <- lotri({
+#>         eps1 ~ 0.01
+#>     })
+#>     ini({
+#>         TVK12 <- 1
+#>         label("TVK12")
+#>         TVK23 <- 0.5
+#>         label("TVK23")
+#>         TVK32 <- 0.2
+#>         label("TVK32")
+#>         TVK20 <- 0.3
+#>         label("TVK20")
+#>         IIV.K12 ~ 0.1
+#>     })
+#>     model({
+#>         cmt(DEPOT)
+#>         cmt(CENTRAL)
+#>         cmt(PERIPH)
+#>         k12 <- TVK12 * exp(IIV.K12)
+#>         k23 <- TVK23
+#>         k32 <- TVK32
+#>         k20 <- TVK20
+#>         scale2 <- 1
+#>         f <- CENTRAL/scale2
+#>         ipred <- CENTRAL
+#>         y <- ipred * (1 + eps1)
+#>         d/dt(DEPOT) <- -k12 * DEPOT
+#>         d/dt(CENTRAL) <- k12 * DEPOT - k23 * CENTRAL + k32 * 
+#>             PERIPH - k20 * CENTRAL
+#>         d/dt(PERIPH) <- k23 * CENTRAL - k32 * PERIPH
+#>     })
+#> }
+#>  ── nonmem2rx extra properties: ──  
+#> 
+#> Sigma ($sigma): 
+#>      eps1
+#> eps1 0.01
+#> 
+#> other properties include: $etaData
+#> captured NONMEM table outputs: $predData, $ipredData
+#> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
+#> NONMEM/rxode2 composite comparison: $predAtol, $predRtol, $ipredAtol, $ipredRtol, $iwresAtol, $iwresRtol
+```
+
+Both models solve to the same predictions; the matrix-exponential form
+simply lets `rxode2` use its matrix-exponential solver rather than a
+general ODE integrator. Only `ADVAN5`/`ADVAN7` models are affected.
 
 ## Technical details about reading NONMEM to rxode2
 

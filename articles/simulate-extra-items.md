@@ -6,6 +6,7 @@ dosing paradigm with new derived items, in this case `AUC`.
 ## Step 1: Import the model
 
 ``` r
+
 library(nonmem2rx)
 library(rxode2)
 
@@ -56,7 +57,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'
@@ -91,11 +92,12 @@ One thing you can do is to use model piping append `d/dt(AUC) <- f` to
 the imported model:
 
 ``` r
+
 modAuc <- mod %>%
   model(d/dt(AUC) <- f, append=TRUE)
 #> → significant model change detected
 #> → kept in model: '$atol', '$nonmemData', '$rtol', '$ssAtol', '$ssRtol'
-#> → removed from model: '$digest', '$etaData', '$file', '$ipredAtol', '$ipredCompare', '$ipredData', '$ipredRtol', '$iwresAtol', '$iwresCompare', '$iwresRtol', '$notes', '$outputExtension', '$predAtol', '$predCompare', '$predData', '$predRtol', '$sigmaNames'
+#> → removed from model: '$digest', '$etaData', '$file', '$ipredAtol', '$ipredCompare', '$ipredData', '$ipredRtol', '$iwresAtol', '$iwresCompare', '$iwresRtol', '$nonmemErrorBlock', '$nonmemPkBlock', '$nonmemPredBlock', '$notes', '$outputExtension', '$predAtol', '$predCompare', '$predData', '$predRtol', '$sigmaNames'
 
 modAuc
 #>  ── rxode2-based free-form 3-cmt ODE model ────────────────────────────────────── 
@@ -125,6 +127,7 @@ modAuc
 #> 
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
+#>     NULL
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
 #>     dfObs <- 2280
 #>     dfSub <- 120
@@ -249,6 +252,7 @@ add a reset dose to the `AUC` compartment every time a dose is given (so
 it will only track the AUC of the current dose):
 
 ``` r
+
 ev <- et(amt=120000, ii=12, until=24) %>%
   et(amt=0, ii=12, until=24, cmt="AUC", evid=5) %>% # replace AUC with zero at dosing
   et(c(0, 4, 8, 11.999, 12, 12.01, 14, 20, 23.999, 24, 24.001, 28, 32, 36)) %>%
@@ -261,6 +265,7 @@ In this step, we solve the model with the new event table for the 10
 subjects:
 
 ``` r
+
 s <- rxSolve(modAuc, ev)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
 #> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
@@ -287,6 +292,7 @@ you can use the [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
 function to see the individual running AUC profiles you simulated:
 
 ``` r
+
 library(ggplot2)
 plot(s, AUC) +
   ylab("Running AUC")
@@ -298,6 +304,7 @@ You can also select the points near the dosing to get the AUC for the
 interval:
 
 ``` r
+
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -314,24 +321,24 @@ s %>% filter(time %in% c(11.999,  23.999)) %>%
   mutate(time=round(time)) %>%
   select(id, time, AUC)
 #>    id time       AUC
-#> 1   1   12 14933.285
-#> 2   1   24 20692.082
-#> 3   2   12 11099.596
-#> 4   2   24 16694.837
-#> 5   3   12 10303.763
-#> 6   3   24 14196.023
-#> 7   4   12 13015.708
-#> 8   4   24 21400.784
-#> 9   5   12 11612.369
-#> 10  5   24 17944.491
-#> 11  6   12 10137.247
-#> 12  6   24 15223.973
-#> 13  7   12 16532.019
-#> 14  7   24 22787.019
-#> 15  8   12 10612.266
-#> 16  8   24 16781.396
-#> 17  9   12 11593.421
-#> 18  9   24 17713.529
-#> 19 10   12  7972.637
-#> 20 10   24 13225.795
+#> 1   1   12 12811.793
+#> 2   1   24 16247.506
+#> 3   2   12 11070.357
+#> 4   2   24 16431.798
+#> 5   3   12  9693.564
+#> 6   3   24 15837.132
+#> 7   4   12 15812.760
+#> 8   4   24 21004.825
+#> 9   5   12  9965.387
+#> 10  5   24 16287.056
+#> 11  6   12 13827.312
+#> 12  6   24 18036.250
+#> 13  7   12 11402.477
+#> 14  7   24 16431.372
+#> 15  8   12 10226.535
+#> 16  8   24 14220.704
+#> 17  9   12 14948.519
+#> 18  9   24 20909.278
+#> 19 10   12 13000.306
+#> 20 10   24 19899.201
 ```

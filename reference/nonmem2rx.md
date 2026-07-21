@@ -21,6 +21,7 @@ nonmem2rx(
   strictLst = FALSE,
   unintFixed = FALSE,
   extended = getOption("nonmem2rx.extended", FALSE),
+  matexp = getOption("nonmem2rx.matexp", TRUE),
   nLinesPro = 20L,
   delta = 1e-04,
   usePhi = TRUE,
@@ -54,11 +55,24 @@ nonmem2rx(
 
 - inputData:
 
-  this is a path to the input dataset (or `NULL` to determine from the
-  dataset). Often the input dataset may be different from the place it
-  points to in the control stream because directories can be created to
-  run NONMEM from a script. Because of this, when this is specified the
-  input data will be assumed to be from here instead.
+  this is the input dataset used for validation. It can be:
+
+  - `NULL` (default) to determine the dataset from the `$DATA` record in
+    the control stream
+
+  - a path to the input dataset (as a character string). Often the input
+    dataset may be different from the place it points to in the control
+    stream because directories can be created to run NONMEM from a
+    script. Because of this, when this is specified the input data will
+    be assumed to be from here instead.
+
+  - a `data.frame` of the already read-in NONMEM input dataset. This is
+    useful when you want to import a model from a different system, have
+    the data to check it against, but the file paths in the control
+    stream do not match. The columns are assumed to be in the same order
+    as the `$INPUT` record (just as if it were read from the file), and
+    the `$INPUT` names, `DROP`, `IGNORE`/`ACCEPT` filters and record
+    subsetting are applied.
 
 - nonmemOutputDir:
 
@@ -137,6 +151,16 @@ nonmem2rx(
 
   Translate extended control streams from tools like wings for NONMEM
 
+- matexp:
+
+  For `ADVAN5`/`ADVAN7` general linear models (which NONMEM itself
+  solves with matrix exponentials), translate the linear system to
+  rxode2's native matrix-exponential `matExp()` model (default `TRUE`).
+  Set `matexp=FALSE` to instead use the explicit `d/dt()` ODE
+  translation. Other model types are unaffected. If the installed rxode2
+  does not support `matExp()`, the ODE translation is used with a
+  warning.
+
 - nLinesPro:
 
   The number of lines to check for the \$PROBLEM statement.
@@ -210,13 +234,13 @@ nonmem2rx(
   - a `NULL` (meaning don't save),
 
   - a logical (default `FALSE`, don't save) that when `TRUE` will use
-    the base name of the control stream, append `.qs` and save the file
-    using [`qs2::qs_save()`](https://rdrr.io/pkg/qs2/man/qs_save.html)
+    the base name of the control stream, append `.rds` and save the file
+    using [`saveRDS()`](https://rdrr.io/r/base/readRDS.html)
 
   - A path to a file to write
 
-    Note that this file will be saved with qs2::qs_save() and can be
-    loaded with qs2::qs_read()
+    Note that this file will be saved with saveRDS() and can be loaded
+    with readRDS()
 
   - A `NA` value which means save if the whole process (including
     validation) takes too much time
@@ -280,12 +304,17 @@ following options are queried:
 - `nonmem2rx.extended` - should nonmem2rx support extended control
   streams? (default `FALSE`)
 
+- `nonmem2rx.matexp` - should nonmem2rx translate `ADVAN5`/`ADVAN7`
+  general linear models to matrix-exponential `matExp()` models (default
+  `TRUE`)? Set to `FALSE` to use the explicit `d/dt()` ODE translation.
+
 - `nonmem2rx.compress` - should the ui be compressed or uncompressed
   (default: `TRUE`)
 
 ## Examples
 
 ``` r
+
 # You can run a translation without validating the input.  This is
 # a faster way to import a dataset (and allows the CRAN machines to
 # run a quick example)
@@ -386,7 +415,7 @@ mod <- nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"),
 #> ℹ change initial estimate of `eta3` to `0.101302674763154`
 #> ℹ change initial estimate of `eta4` to `0.0730497519364148`
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
-#> ℹ ignoring lines that begin with a letter (IGNORE=@)'
+#> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
 #> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
 #> ℹ renaming 'ytype' to 'nmytype'

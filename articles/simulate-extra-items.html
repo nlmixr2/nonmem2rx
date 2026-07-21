@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulate Derived Variables from imported NONMEM model">
 </head>
@@ -146,7 +146,7 @@ different dosing paradigm with new derived items, in this case
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta3` to `0.101302674763154`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> change initial estimate of `eta4` to `0.0730497519364148`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> ignoring lines that begin with a letter (IGNORE=@)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying names specified by $INPUT</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> renaming 'ytype' to 'nmytype'</span></span>
@@ -183,7 +183,7 @@ your model, and for sparse data wouldn’t be terribly accurate.</p>
 <span>  <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/model.html" class="external-link">model</a></span><span class="op">(</span><span class="va">d</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">dt</a></span><span class="op">(</span><span class="va">AUC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">f</span>, append<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → significant model change detected</span></span>
 <span><span class="co">#&gt; → kept in model: '$atol', '$nonmemData', '$rtol', '$ssAtol', '$ssRtol'</span></span>
-<span><span class="co">#&gt; → removed from model: '$digest', '$etaData', '$file', '$ipredAtol', '$ipredCompare', '$ipredData', '$ipredRtol', '$iwresAtol', '$iwresCompare', '$iwresRtol', '$notes', '$outputExtension', '$predAtol', '$predCompare', '$predData', '$predRtol', '$sigmaNames'</span></span>
+<span><span class="co">#&gt; → removed from model: '$digest', '$etaData', '$file', '$ipredAtol', '$ipredCompare', '$ipredData', '$ipredRtol', '$iwresAtol', '$iwresCompare', '$iwresRtol', '$nonmemErrorBlock', '$nonmemPkBlock', '$nonmemPredBlock', '$notes', '$outputExtension', '$predAtol', '$predCompare', '$predData', '$predRtol', '$sigmaNames'</span></span>
 <span></span>
 <span><span class="va">modAuc</span></span>
 <span><span class="co">#&gt;  <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">rxode2-based free-form 3-cmt ODE model</span> <span style="color: #00BBBB;">──────────────────────────────────────</span> </span></span>
@@ -213,6 +213,7 @@ your model, and for sparse data wouldn’t be terribly accurate.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
+<span><span class="co">#&gt;     NULL</span></span>
 <span><span class="co">#&gt;     description &lt;- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"</span></span>
 <span><span class="co">#&gt;     dfObs &lt;- 2280</span></span>
 <span><span class="co">#&gt;     dfSub &lt;- 120</span></span>
@@ -396,26 +397,26 @@ interval:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">AUC</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    id time       AUC</span></span>
-<span><span class="co">#&gt; 1   1   12 14933.285</span></span>
-<span><span class="co">#&gt; 2   1   24 20692.082</span></span>
-<span><span class="co">#&gt; 3   2   12 11099.596</span></span>
-<span><span class="co">#&gt; 4   2   24 16694.837</span></span>
-<span><span class="co">#&gt; 5   3   12 10303.763</span></span>
-<span><span class="co">#&gt; 6   3   24 14196.023</span></span>
-<span><span class="co">#&gt; 7   4   12 13015.708</span></span>
-<span><span class="co">#&gt; 8   4   24 21400.784</span></span>
-<span><span class="co">#&gt; 9   5   12 11612.369</span></span>
-<span><span class="co">#&gt; 10  5   24 17944.491</span></span>
-<span><span class="co">#&gt; 11  6   12 10137.247</span></span>
-<span><span class="co">#&gt; 12  6   24 15223.973</span></span>
-<span><span class="co">#&gt; 13  7   12 16532.019</span></span>
-<span><span class="co">#&gt; 14  7   24 22787.019</span></span>
-<span><span class="co">#&gt; 15  8   12 10612.266</span></span>
-<span><span class="co">#&gt; 16  8   24 16781.396</span></span>
-<span><span class="co">#&gt; 17  9   12 11593.421</span></span>
-<span><span class="co">#&gt; 18  9   24 17713.529</span></span>
-<span><span class="co">#&gt; 19 10   12  7972.637</span></span>
-<span><span class="co">#&gt; 20 10   24 13225.795</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   1   12 12811.793</span></span>
+<span><span class="co">#&gt; 2   1   24 16247.506</span></span>
+<span><span class="co">#&gt; 3   2   12 11070.357</span></span>
+<span><span class="co">#&gt; 4   2   24 16431.798</span></span>
+<span><span class="co">#&gt; 5   3   12  9693.564</span></span>
+<span><span class="co">#&gt; 6   3   24 15837.132</span></span>
+<span><span class="co">#&gt; 7   4   12 15812.760</span></span>
+<span><span class="co">#&gt; 8   4   24 21004.825</span></span>
+<span><span class="co">#&gt; 9   5   12  9965.387</span></span>
+<span><span class="co">#&gt; 10  5   24 16287.056</span></span>
+<span><span class="co">#&gt; 11  6   12 13827.312</span></span>
+<span><span class="co">#&gt; 12  6   24 18036.250</span></span>
+<span><span class="co">#&gt; 13  7   12 11402.477</span></span>
+<span><span class="co">#&gt; 14  7   24 16431.372</span></span>
+<span><span class="co">#&gt; 15  8   12 10226.535</span></span>
+<span><span class="co">#&gt; 16  8   24 14220.704</span></span>
+<span><span class="co">#&gt; 17  9   12 14948.519</span></span>
+<span><span class="co">#&gt; 18  9   24 20909.278</span></span>
+<span><span class="co">#&gt; 19 10   12 13000.306</span></span>
+<span><span class="co">#&gt; 20 10   24 19899.201</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -428,7 +429,7 @@ interval:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

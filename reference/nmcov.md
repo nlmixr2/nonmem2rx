@@ -30,6 +30,7 @@ Philip Delff and Matthew L. Fidler
 ## Examples
 
 ``` r
+
 nmcov(system.file("mods/cpt/runODE032.cov", package="nonmem2rx"))
 #>                  THETA1       THETA2       THETA3       THETA4       THETA5
 #> THETA1      8.87681e-04 -1.05510e-04  1.84416e-04 -1.20234e-04  5.27830e-08
