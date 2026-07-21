@@ -444,3 +444,31 @@ test_that("abbrev #190", {
   expect_error(nonmem2rx(m), NA)
 
 })
+
+test_that("DDE delayed states AD_x_y translate to delay()", {
+
+  .a <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
+    .clearNonmem2rx()
+    .Call(`_nonmem2rx_setRecord`, "$DES")
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$DES', abbrevLin, extended)
+    expect_equal(.nonmem2rx$model, eq)
+  }
+
+  # linear DDE: dA/dt = -k*A(t-tau)
+  .a("DADT(1)=-K*AD_1_1",
+     "d/dt(rxddta1) <-  - K * delay(rxddta1, TAU1)")
+
+  # delayed logistic growth (Yan et al. Appendix 4)
+  .a("DADT(1)=KG*(1.0-AD_1_1/YSS)*A(1)",
+     "d/dt(rxddta1) <- KG * (1.0 - delay(rxddta1, TAU1) / YSS) * rxddta1")
+
+  # multiple delayed states, shared delay TAU1 (lifespan TGI, Appendix 6)
+  .a("CCDEL=AD_2_1/V\nDADT(4)=KPOT*CC*A(3)-KPOT*CCDEL*AD_3_1",
+     c("CCDEL <- delay(rxddta2, TAU1) / V",
+       "d/dt(rxddta4) <- KPOT * CC * rxddta3 - KPOT * CCDEL * delay(rxddta3, TAU1)"))
+
+  # multi-digit state and delay indices
+  .a("DADT(2)=K12*AD_10_2",
+     "d/dt(rxddta2) <- K12 * delay(rxddta10, TAU2)")
+
+})

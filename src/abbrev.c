@@ -140,6 +140,19 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     writeAinfo(v + 4);
     sAppendN(&curLine, ".", 1);
     return 1;
+  } else if (!strcmp("adState", name)) {
+    // NONMEM DDE delayed state AD_x_y = value of A(x) delayed by TAUy.
+    // Translate to rxode2 delay(rxddta<x>, TAU<y>).
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    char *xstr = v + 3;             // skip "AD_"; xstr now = "x_y"
+    char *ystr = strchr(xstr, '_'); // separator between state and delay index
+    *ystr = '\0';                   // terminate the state number; xstr = "x"
+    ystr++;                         // ystr = "y" (the delay index)
+    sAppendN(&curLine, "delay(", 6);
+    writeAinfo(xstr);              // appends rxddta<x> (ODE) and updates maxA
+    sAppend(&curLine, ", TAU%s)", ystr);
+    return 1;
   } else if (!strcmp("ratei", name)) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);

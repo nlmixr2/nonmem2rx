@@ -195,6 +195,7 @@ alagi        : "[Aa][Ll][Aa][Gg][1-9][0-9]*";
 ratei        : "[Rr][1-9][0-9]*";
 duri         : "[Dd][1-9][0-9]*";
 scalei       : "[Ss]([0-9]+|C|O)";
+adState      : "[Aa][Dd][_][1-9][0-9]*[_][1-9][0-9]*";
 
 
 primary_expression
@@ -208,6 +209,7 @@ primary_expression
     | ratei
     | duri
     | scalei
+    | adState
     | identifier
     | theta
     | thetaI
