@@ -472,3 +472,33 @@ test_that("DDE delayed states AD_x_y translate to delay()", {
      "d/dt(rxddta2) <- K12 * delay(rxddta10, TAU2)")
 
 })
+
+test_that("DDE past histories AP_x_y translate to past()", {
+
+  .a <- function(abbrev, eq="no", abbrevLin=0L, extended=0L) {
+    .clearNonmem2rx()
+    .Call(`_nonmem2rx_setRecord`, "$DES")
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$DES', abbrevLin, extended)
+    expect_equal(.nonmem2rx$model, eq)
+  }
+
+  # constant history
+  .a("AP_1_1=Y0", "past(rxddta1, TAU1) <- Y0")
+
+  # zero histories on multiple states (lifespan TGI, Appendix 6)
+  .a("AP_2_1=0\nAP_3_1=0",
+     c("past(rxddta2, TAU1) <- 0", "past(rxddta3, TAU1) <- 0"))
+
+  # non-constant history, NONMEM T -> rxode2 t (rheumatoid arthritis, Appendix 7)
+  .a("AP_1_1=AA*EXP(BB*T)", "past(rxddta1, TAU1) <- AA * exp(BB * t)")
+
+  # parameter-valued history (PDLIDR, Appendix 11)
+  .a("AP_2_1=K0/K1", "past(rxddta2, TAU1) <- K0 / K1")
+
+  # past() and delay() together (RA-style $DES)
+  .a("AP_1_1=AA*EXP(BB*T)\nDADT(1)=K3-KG*A(1)\nDADT(2)=K4*A(1)-K4*AD_1_1",
+     c("past(rxddta1, TAU1) <- AA * exp(BB * t)",
+       "d/dt(rxddta1) <- K3 - KG * rxddta1",
+       "d/dt(rxddta2) <- K4 * rxddta1 - K4 * delay(rxddta1, TAU1)"))
+
+})

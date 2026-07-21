@@ -1066,6 +1066,24 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
       return 1;
     }
     return 0;
+  } else if (!strcmp("apState", name)) {
+    // NONMEM DDE past history AP_x_y = expr defines the pre-history of A(x)
+    // for delay TAUy.  Translate to rxode2 past(rxddta<x>, TAU<y>) <- expr.
+    if (i == 0) {
+      D_ParseNode *xpn = d_get_child(pn, 0);
+      char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+      char *xstr = v + 3;             // skip "AP_"; xstr now = "x_y"
+      char *ystr = strchr(xstr, '_'); // separator between state and delay index
+      *ystr = '\0';                   // terminate the state number; xstr = "x"
+      ystr++;                         // ystr = "y" (the delay index)
+      sAppendN(&curLine, "past(", 5);
+      writeAinfo(xstr);              // appends rxddta<x>
+      sAppend(&curLine, ", TAU%s) <- ", ystr);
+      return 1;
+    } else if (i == 1) {
+      return 1;
+    }
+    return 0;
   } else if (!strcmp("rate", name)) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
@@ -1278,6 +1296,7 @@ void wprint_parsetree_abbrev(D_ParserTables pt, D_ParseNode *pn, int depth, prin
       !strcmp("ifexit", name) ||
       !strcmp("if1", name) ||
       !strcmp("comAssign", name) ||
+      !strcmp("apState", name) ||
       !strcmp("derivative", name) ||
       !strcmp("derivativeI", name) ||
       !strcmp("scale", name) ||
