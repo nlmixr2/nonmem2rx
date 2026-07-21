@@ -106,16 +106,35 @@
 .addModel <- function(text) {
   assign("model", c(.nonmem2rx$model, text), envir=.nonmem2rx)
 }
+#' Recursively strip redundant wrapping parentheses from a language object
+#'
+#' `(Y0)` parses to a call to `(` and is not `identical()` to the bare `Y0`, so
+#' remove those wrappers before comparing expressions.
+#'
+#' @param e a language object (call, name) or atomic constant
+#' @return `e` with redundant `( )` wrappers removed at every level
+#' @noRd
+#' @author Matthew L. Fidler
+.stripParens <- function(e) {
+  if (is.call(e) && identical(e[[1L]], as.name("(")) && length(e) == 2L) {
+    return(.stripParens(e[[2L]]))
+  }
+  if (is.call(e)) {
+    for (.i in seq_along(e)) e[[.i]] <- .stripParens(e[[.i]])
+  }
+  e
+}
 #' Compare two model expressions for semantic equality
 #'
 #' @param a,b expression strings to compare
-#' @return TRUE when the two expressions are equal (numeric values compared
-#'   with `all.equal`, otherwise compared as parsed language objects)
+#' @return TRUE when the two expressions are equal (redundant parentheses are
+#'   ignored; numeric values compared with `all.equal`, otherwise compared as
+#'   parsed language objects)
 #' @noRd
 #' @author Matthew L. Fidler
 .exprEqual <- function(a, b) {
-  .ea <- tryCatch(str2lang(a), error=function(e) NULL)
-  .eb <- tryCatch(str2lang(b), error=function(e) NULL)
+  .ea <- tryCatch(.stripParens(str2lang(a)), error=function(e) NULL)
+  .eb <- tryCatch(.stripParens(str2lang(b)), error=function(e) NULL)
   if (is.null(.ea) || is.null(.eb)) return(identical(a, b))
   if (is.numeric(.ea) && is.numeric(.eb)) return(isTRUE(all.equal(.ea, .eb)))
   identical(.ea, .eb)

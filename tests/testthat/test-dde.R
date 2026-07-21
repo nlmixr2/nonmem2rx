@@ -39,6 +39,25 @@ test_that(".pruneConstPast drops constant histories equal to the init", {
              "past(rxddta2, TAU1) <- K0/K1")),
     "rxini.rxddta2. <- K0/K1")
 
+  # redundant parentheses do not block pruning of an equivalent constant history
+  expect_equal(
+    .prune(c("rxini.rxddta1. <- Y0",
+             "past(rxddta1, TAU1) <- (Y0)")),
+    "rxini.rxddta1. <- Y0")
+  expect_equal(
+    .prune(c("rxini.rxddta2. <- (K0/K1)",
+             "past(rxddta2, TAU1) <- K0/K1")),
+    "rxini.rxddta2. <- (K0/K1)")
+
+})
+
+test_that(".exprEqual ignores redundant parentheses", {
+  expect_true(.exprEqual("Y0", "(Y0)"))
+  expect_true(.exprEqual("K0/K1", "(K0/K1)"))
+  expect_true(.exprEqual("a * exp(b * t)", "(a * exp(b * t))"))
+  expect_true(.exprEqual("0", "(0)"))
+  expect_false(.exprEqual("Y0", "Y1"))
+  expect_false(.exprEqual("K0/K1", "K0/K2"))
 })
 
 withr::with_options(
