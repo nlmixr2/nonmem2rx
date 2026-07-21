@@ -418,9 +418,10 @@
 #'
 #' @param matexp For `ADVAN5`/`ADVAN7` general linear models (which NONMEM
 #'   itself solves with matrix exponentials), translate the linear system to
-#'   rxode2's native matrix-exponential `matExp()` model instead of explicit
-#'   `d/dt()` ODEs (default `FALSE`).  This is an opt-in alternative to the
-#'   default ODE translation; other model types are unaffected.
+#'   rxode2's native matrix-exponential `matExp()` model (default `TRUE`).
+#'   Set `matexp=FALSE` to instead use the explicit `d/dt()` ODE translation.
+#'   Other model types are unaffected.  If the installed rxode2 does not
+#'   support `matExp()`, the ODE translation is used with a warning.
 #'
 #' @param nLinesPro The number of lines to check for the $PROBLEM
 #'   statement.
@@ -524,8 +525,8 @@
 #'    streams? (default `FALSE`)
 #'
 #' - `nonmem2rx.matexp` - should nonmem2rx translate `ADVAN5`/`ADVAN7`
-#'    general linear models to matrix-exponential `matExp()` models instead
-#'    of ODEs? (default `FALSE`)
+#'    general linear models to matrix-exponential `matExp()` models (default
+#'    `TRUE`)?  Set to `FALSE` to use the explicit `d/dt()` ODE translation.
 #'
 #' - `nonmem2rx.compress` - should the ui be compressed or
 #' uncompressed (default: `TRUE`)
@@ -594,7 +595,7 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                       strictLst=FALSE,
                       unintFixed=FALSE,
                       extended=getOption("nonmem2rx.extended",FALSE),
-                      matexp=getOption("nonmem2rx.matexp", FALSE),
+                      matexp=getOption("nonmem2rx.matexp", TRUE),
                       nLinesPro=20L,
                       delta=1e-4,
                       usePhi=TRUE,

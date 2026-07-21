@@ -101,6 +101,13 @@
   if (!(.nonmem2rx$advan %in% c(5L, 7L))) return(rxui)
   .edges <- .nonmem2rx$advan5edges
   if (is.null(.edges) || nrow(.edges) == 0L) return(rxui)
+  # matExp() is now the default translation, so degrade gracefully to the ODE
+  # model if the installed rxode2 does not support matrix exponentials
+  if (!exists("indLin", where=asNamespace("rxode2"), inherits=FALSE)) {
+    warning("installed rxode2 does not support matrix exponentials (matExp()); ",
+            "keeping the ADVAN5/7 ode translation", call.=FALSE)
+    return(rxui)
+  }
   # resolve each rate-constant name against the current model variables
   # case-insensitively; tolowerLhs (and other renaming) may have changed the
   # case seen while parsing $PK (e.g. K12 -> k12)

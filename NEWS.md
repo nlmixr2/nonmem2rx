@@ -1,13 +1,14 @@
 # nonmem2rx 0.1.11
 
 
-* Added an opt-in `matexp` argument (default `FALSE`, also settable with
-  `options(nonmem2rx.matexp=)`).  For `ADVAN5`/`ADVAN7` general linear models
-  (which NONMEM itself solves with matrix exponentials), `matexp=TRUE`
-  translates the linear system to rxode2's native matrix-exponential
-  `matExp()` model (`cmt()` declarations plus `k_<from>_<to>` rate constants)
-  instead of the explicit `d/dt()` ODEs.  The default ODE translation is
-  unchanged and other model types are unaffected.
+* `ADVAN5`/`ADVAN7` general linear models (which NONMEM itself solves with
+  matrix exponentials) are now translated to rxode2's native
+  matrix-exponential `matExp()` model (`cmt()` declarations plus
+  `k_<from>_<to>` rate constants) by default, instead of explicit `d/dt()`
+  ODEs.  The previous ODE translation is retained and can be selected with
+  the new `matexp=FALSE` argument (or `options(nonmem2rx.matexp=FALSE)`).
+  Other model types are unaffected, and if the installed rxode2 does not
+  support `matExp()` the ODE translation is used with a warning.
 
 * NONMEM mixture models (`$MIX`) now translate to the native rxode2/nlmixr2
   mixture support (`mix()`), replacing the previous `rxord()` simulation of

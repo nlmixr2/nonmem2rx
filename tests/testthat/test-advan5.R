@@ -117,21 +117,46 @@ test_that("advan5/7 matrix-exponential rate-constant edge capture", {
   expect_equal(nrow(.nonmem2rx$advan5edges), 4L)
 })
 
-test_that("nonmem2rx(matexp=TRUE) translates ADVAN5 to a matExp() model equal to the ODE model", {
+test_that("advan5/7 edge capture handles NONMEM 'T' notation and multi-digit compartments", {
+  .edge <- function(k) {
+    .clearNonmem2rx()
+    .nonmem2rx$advan <- 5L
+    .advan5handleK(k)
+    .e <- .nonmem2rx$advan5edges
+    if (is.null(.e)) return(NULL)
+    c(from=.e$from[1], to=.e$to[1])
+  }
+  # single digit, with and without the optional 'T' separator
+  expect_equal(.edge("K12"),    c(from=1,  to=2))
+  expect_equal(.edge("K1T2"),   c(from=1,  to=2))
+  expect_equal(.edge("K20"),    c(from=2,  to=0))   # elimination (single digit)
+  # multi-digit compartments require the 'T' separator (NONMEM rule)
+  expect_equal(.edge("K10T2"),  c(from=10, to=2))
+  expect_equal(.edge("K1T10"),  c(from=1,  to=10))
+  expect_equal(.edge("K10T20"), c(from=10, to=20))
+  expect_equal(.edge("K12T0"),  c(from=12, to=0))   # elimination (multi-digit)
+  # ambiguous multi-digit forms without 'T' are not valid NONMEM and are ignored
+  expect_null(.edge("K102"))
+  expect_null(.edge("K123"))
+})
+
+test_that("nonmem2rx translates ADVAN5 to a matExp() model (default) equal to the matexp=FALSE ODE model", {
   skip_on_cran()
   # matrix-exponential (matExp()/indLin) support in rxode2 is required
   skip_if_not(exists("indLin", where=asNamespace("rxode2"), inherits=FALSE),
               "installed rxode2 lacks matExp()/indLin support")
   .f <- system.file("mods/advan5/advan5.ctl", package="nonmem2rx")
   skip_if(.f == "")
+  # matExp() is the default translation for ADVAN5/7
+  .mex <- nonmem2rx(.f, validate=FALSE, save=FALSE, load=FALSE)
+  # matexp=FALSE selects the retained explicit-ODE translation
   .ode <- nonmem2rx(.f, validate=FALSE, save=FALSE, load=FALSE, matexp=FALSE)
-  .mex <- nonmem2rx(.f, validate=FALSE, save=FALSE, load=FALSE, matexp=TRUE)
   .no <- rxode2::rxNorm(.ode)
   .nm <- rxode2::rxNorm(.mex)
-  # default (ODE) path: explicit d/dt(), no matExp()
+  # opt-out (ODE) path: explicit d/dt(), no matExp()
   expect_false(grepl("matExp()", .no, fixed=TRUE))
   expect_true(grepl("d/dt(CENTRAL)", .no, fixed=TRUE))
-  # matexp path: native matExp() block, no d/dt() for the linear system
+  # default path: native matExp() block, no d/dt() for the linear system
   expect_true(grepl("matExp()", .nm, fixed=TRUE))
   expect_true(grepl("k_DEPOT_CENTRAL", .nm, fixed=TRUE))
   expect_true(grepl("k_CENTRAL_PERIPH", .nm, fixed=TRUE))
