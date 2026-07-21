@@ -14,7 +14,10 @@
        c(0L, 1L, 4L), #12, , 6L not supported
        c(0L, 1L), #13
        c(0L, 1L), #14
-       c(0L, 1L)) #15
+       c(0L, 1L), #15
+       c(0L, 1L), #16 RADAR5 delay differential equation (DDE) solver
+       integer(0), #17 RADAR5 delay differential algebraic equation solver (unsupported)
+       c(0L, 1L)) #18 DDE_SOLVER delay differential equation (DDE) solver
 
 #' @export
 #' @rdname nonmem2rxRec
@@ -38,6 +41,14 @@ nonmem2rxRec.sub <- function(x) {
   if (.nonmem2rx$advan == 10L) {
     stop("Michelis Menton model translation not supported (ADVAN10)",
          call.=FALSE)
+  }
+  if (.nonmem2rx$advan == 17L) {
+    stop("Delay Differential Algebraic Equations are not supported in translation (ADVAN17)",
+         call.=FALSE)
+  }
+  if (.nonmem2rx$advan %in% c(16L, 18L)) {
+    .minfo(sprintf("NONMEM delay differential equation solver ADVAN%d detected; delayed states (AD_x_y) and past histories (AP_x_y) are translated to rxode2 delay()/past()",
+                   .nonmem2rx$advan))
   }
   if (.nonmem2rx$advan %in% c(1L, 3L, 11L)) {
     .nonmem2rx$abbrevLin <- 1L # one compartment without ka
