@@ -106,6 +106,63 @@
 .addModel <- function(text) {
   assign("model", c(.nonmem2rx$model, text), envir=.nonmem2rx)
 }
+#' Compare two model expressions for semantic equality
+#'
+#' @param a,b expression strings to compare
+#' @return TRUE when the two expressions are equal (numeric values compared
+#'   with `all.equal`, otherwise compared as parsed language objects)
+#' @noRd
+#' @author Matthew L. Fidler
+.exprEqual <- function(a, b) {
+  .ea <- tryCatch(str2lang(a), error=function(e) NULL)
+  .eb <- tryCatch(str2lang(b), error=function(e) NULL)
+  if (is.null(.ea) || is.null(.eb)) return(identical(a, b))
+  if (is.numeric(.ea) && is.numeric(.eb)) return(isTRUE(all.equal(.ea, .eb)))
+  identical(.ea, .eb)
+}
+#' Drop constant NONMEM DDE past histories that equal the compartment init
+#'
+#' A NONMEM `AP_x_y = expr` past history that is constant (does not depend on
+#' time) and equals the compartment's initial condition is redundant: rxode2
+#' uses the constant initial condition as the default delay history.  Such
+#' `past()` lines are removed.  Non-constant histories (functions of `t`) and
+#' constants that differ from the initial condition are kept.
+#'
+#' @return nothing, called for the side effect of updating `.nonmem2rx$model`
+#' @noRd
+#' @author Matthew L. Fidler
+.pruneConstPast <- function() {
+  .model <- .nonmem2rx$model
+  if (is.null(.model)) return(invisible())
+  # initial conditions are emitted as `rxini.rxddta<x>. <- <expr>`
+  .iniRe <- "^rxini\\.rxddta([0-9]+)\\. <- (.*)$"
+  .iniMap <- list()
+  for (.i in grep(.iniRe, .model)) {
+    .m <- regmatches(.model[.i], regexec(.iniRe, .model[.i]))[[1]]
+    .iniMap[[.m[2]]] <- .m[3]
+  }
+  .pastRe <- "^past\\(rxddta([0-9]+), TAU[0-9]+\\) <- (.*)$"
+  .drop <- integer(0)
+  for (.i in seq_along(.model)) {
+    .m <- regmatches(.model[.i], regexec(.pastRe, .model[.i]))[[1]]
+    if (length(.m) == 0L) next
+    .cmt <- .m[2]
+    .rhs <- .m[3]
+    .vars <- tryCatch(all.vars(str2lang(.rhs)), error=function(e) character(0))
+    if (any(.vars %in% c("t", "time"))) next # non-constant history, keep
+    .ini <- .iniMap[[.cmt]]
+    if (is.null(.ini)) .ini <- "0" # default rxode2 initial condition
+    if (.exprEqual(.rhs, .ini)) {
+      .drop <- c(.drop, .i)
+      .minfo(sprintf("dropping constant NONMEM past history for compartment %s (equals its initial condition; rxode2 uses the initial condition as the default delay history)",
+                     .cmt))
+    }
+  }
+  if (length(.drop)) {
+    assign("model", .model[-.drop], envir=.nonmem2rx)
+  }
+  invisible()
+}
 #' Use lower case for the lhs defined parts of the model
 #'
 #' @param rxui rxui object
@@ -792,6 +849,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     # collapse imperative MIXNUM/MIXEST branching into native mix() calls now that
     # the full $PK/$PRED code has been parsed
     .nonmem2rxMix()
+    # drop redundant constant DDE past histories that equal the compartment init
+    .pruneConstPast()
     .txt <- paste0("function() {\n",
                    "rxode2::ini({\n",
                    paste(.nonmem2rx$ini, collapse="\n"),
