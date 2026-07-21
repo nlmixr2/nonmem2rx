@@ -40,3 +40,81 @@ test_that(".pruneConstPast drops constant histories equal to the init", {
     "rxini.rxddta2. <- K0/K1")
 
 })
+
+withr::with_options(
+  list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.overwrite=FALSE,
+       nonmem2rx.validate=FALSE, nlmixr2.collectWarnings=FALSE), {
+
+  .ddeTrans <- function(f) {
+    suppressMessages(nonmem2rx(system.file(f, package="nonmem2rx"),
+                               validate=FALSE, updateFinal=FALSE, determineError=FALSE,
+                               useLst=FALSE, useExt=FALSE, usePhi=FALSE, useCov=FALSE,
+                               useXml=FALSE))
+  }
+  .modelTxt <- function(r) paste(deparse(body(r$fun)), collapse="\n")
+  .allFinite <- function(r, ev, states) {
+    # delay models solve on the dense dop853+ros4 composite; ros4 warns when an
+    # analytic Jacobian cannot be built and falls back to dop853 (dense, which
+    # is what delays require) -- a benign, expected warning here
+    s <- suppressWarnings(
+      rxode2::rxSolve(r, ev, returnType="data.frame", atol=1e-8, rtol=1e-8))
+    all(vapply(states, function(st) all(is.finite(s[[st]])), logical(1)))
+  }
+
+  test_that("Appendix 3 stiff DDE (ADVAN16) translates and solves", {
+    skip_on_cran()
+    r <- .ddeTrans("dde/app3-stiff-2cmt.ctl")
+    txt <- .modelTxt(r)
+    # AD_1_1 -> delay() on the stiff two-compartment model
+    expect_match(txt, "delay(rxddta1, tau1)", fixed=TRUE)
+    # constant past AP_1_1=Y0 equals the init, so no past() line remains
+    expect_false(grepl("past(", txt, fixed=TRUE))
+    ev <- rxode2::et(amt=1, cmt="rxddta1", time=0.5)
+    ev <- rxode2::et(ev, seq(0, 8, by=0.5))
+    ev <- rxode2::et(ev, CMT=1)
+    expect_true(.allFinite(r, ev, c("rxddta1", "rxddta2")))
+  })
+
+  test_that("Appendix 6 lifespan TGI (ADVAN16) translates and solves", {
+    skip_on_cran()
+    r <- .ddeTrans("dde/app6-tgi.ctl")
+    txt <- .modelTxt(r)
+    # shared delay TAU1 on two states
+    expect_match(txt, "delay(rxddta2, tau1)", fixed=TRUE)
+    expect_match(txt, "delay(rxddta3, tau1)", fixed=TRUE)
+    # AP_2_1=0 equals default init (dropped); AP_3_1=0 differs from init W0 (kept)
+    expect_false(grepl("past(rxddta2", txt, fixed=TRUE))
+    expect_match(txt, "past(rxddta3, tau1) <- 0", fixed=TRUE)
+    ev <- rxode2::et(amt=100, cmt="rxddta1", time=0)
+    ev <- rxode2::et(ev, seq(0, 20, by=1))
+    ev <- rxode2::et(ev, CMT=3)
+    expect_true(.allFinite(r, ev, c("rxddta1", "rxddta2", "rxddta3", "rxddta4")))
+  })
+
+  test_that("Appendix 7 rheumatoid arthritis (ADVAN16) keeps non-constant past()", {
+    skip_on_cran()
+    r <- .ddeTrans("dde/app7-ra.ctl")
+    txt <- .modelTxt(r)
+    expect_match(txt, "delay(rxddta1, tau1)", fixed=TRUE)
+    # non-constant history AP_1_1 = AA*EXP(BB*T); NONMEM T -> rxode2 t; kept
+    expect_match(txt, "past(rxddta1, tau1) <- aa * exp(bb * t)", fixed=TRUE)
+    ev <- rxode2::et(seq(0, 25, by=0.5))
+    ev <- rxode2::et(ev, CMT=2)
+    expect_true(.allFinite(r, ev, c("rxddta1", "rxddta2")))
+  })
+
+  test_that("Appendix 11 PDLIDR (ADVAN13 ;DDE) translates and solves", {
+    skip_on_cran()
+    r <- .ddeTrans("dde/app11-pdlidr-advan13.ctl")
+    txt <- .modelTxt(r)
+    # parameter delay TAU1 = THETA*EXP(ETA); AD_2_1 -> delay()
+    expect_match(txt, "delay(rxddta2, tau1)", fixed=TRUE)
+    # parameter past AP_2_1=K0/K1 equals init A_0(2)=K0/K1 (dropped)
+    expect_false(grepl("past(", txt, fixed=TRUE))
+    ev <- rxode2::et(amt=0.1, cmt="rxddta1", time=0)
+    ev <- rxode2::et(ev, seq(0, 28, by=1))
+    ev <- rxode2::et(ev, CMT=3)
+    expect_true(.allFinite(r, ev, c("rxddta1", "rxddta2", "rxddta3")))
+  })
+
+})
