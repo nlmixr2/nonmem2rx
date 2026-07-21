@@ -17,6 +17,10 @@ setRxThreads(1L)
 library(data.table)
 setDTthreads(1L)
 
+# the ADVAN5/7 matExp() examples below need matrix-exponential support in the
+# installed rxode2; skip them gracefully on older versions
+.hasMatExp <- exists("indLin", where=asNamespace("rxode2"), inherits=FALSE)
+
 ```
 
 The goal of `nonmem2rx` is to convert a NONMEM control stream to
@@ -103,7 +107,7 @@ and translates them to `rxode2`'s native matrix-exponential `matExp()` model,
 using `cmt()` declarations and `k_<from>_<to>` rate constants (with
 `k_<from>_output` for elimination):
 
-```{r advan5matexp}
+```{r advan5matexp, eval=.hasMatExp}
 advan5 <- system.file("mods/advan5/advan5.ctl", package="nonmem2rx")
 
 mod <- nonmem2rx(advan5, validate=FALSE, save=FALSE)
@@ -113,7 +117,7 @@ mod
 If you prefer explicit ordinary differential equations, use `matexp=FALSE` to
 translate the same linear system to `d/dt()` equations instead:
 
-```{r advan5ode}
+```{r advan5ode, eval=.hasMatExp}
 mod <- nonmem2rx(advan5, validate=FALSE, save=FALSE, matexp=FALSE)
 mod
 ```

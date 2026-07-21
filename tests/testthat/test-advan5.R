@@ -101,28 +101,36 @@ test_that("test advan5/advan7 translations", {
 test_that("advan5/7 matrix-exponential rate-constant edge capture", {
   .clearNonmem2rx()
   .nonmem2rx$advan <- 5L
+  .nonmem2rx$matexp <- TRUE # edges are only captured for the matExp() path
   # depot(1) -> central(2), central(2) -> periph(3), periph(3) -> central(2),
   # central(2) -> elimination (0)
   .advan5handleK("K12")
   .advan5handleK("K23")
   .advan5handleK("K32")
   .advan5handleK("K20")
-  expect_equal(.nonmem2rx$advan5edges,
+  expect_equal(.advan5edgesDf(),
                data.frame(from=c(1, 2, 3, 2),
                           to=c(2, 3, 2, 0),
                           k=c("K12", "K23", "K32", "K20"),
                           stringsAsFactors=FALSE))
   # a repeated K is only captured once (matches advan5k dedup)
   .advan5handleK("K12")
-  expect_equal(nrow(.nonmem2rx$advan5edges), 4L)
+  expect_equal(nrow(.advan5edgesDf()), 4L)
+  # with matexp off, edges are not captured
+  .clearNonmem2rx()
+  .nonmem2rx$advan <- 5L
+  .nonmem2rx$matexp <- FALSE
+  .advan5handleK("K12")
+  expect_null(.advan5edgesDf())
 })
 
 test_that("advan5/7 edge capture handles NONMEM 'T' notation and multi-digit compartments", {
   .edge <- function(k) {
     .clearNonmem2rx()
     .nonmem2rx$advan <- 5L
+    .nonmem2rx$matexp <- TRUE
     .advan5handleK(k)
-    .e <- .nonmem2rx$advan5edges
+    .e <- .advan5edgesDf()
     if (is.null(.e)) return(NULL)
     c(from=.e$from[1], to=.e$to[1])
   }
@@ -170,5 +178,7 @@ test_that("nonmem2rx translates ADVAN5 to a matExp() model (default) equal to th
                                           addDosing=FALSE, atol=1e-10, rtol=1e-10))
   .sm <- suppressWarnings(rxode2::rxSolve(rxode2::zeroRe(.mex), .ev, returnType="data.frame",
                                           addDosing=FALSE, atol=1e-10, rtol=1e-10))
-  expect_equal(.so$ipred, .sm$ipred, tolerance=1e-5)
+  # the matrix exponential is exact for the constant-coefficient linear system,
+  # so it agrees with the ODE integrator to well within solver tolerance
+  expect_equal(.so$ipred, .sm$ipred, tolerance=1e-8)
 })

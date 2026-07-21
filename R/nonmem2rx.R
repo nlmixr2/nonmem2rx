@@ -75,7 +75,7 @@
   .nonmem2rx$advan5 <- NULL
   .nonmem2rx$advan5max <- 0L
   .nonmem2rx$advan5k <- NULL
-  .nonmem2rx$advan5edges <- NULL
+  .nonmem2rx$advan5edges <- list()
   .nonmem2rx$matexp <- FALSE
   .nonmem2rx$cmtFinalNames <- NULL
 }

@@ -32,12 +32,29 @@
   }
   .nonmem2rx$advan5k <- c(.nonmem2rx$advan5k, k)
   # keep a clean directed edge (source, destination, rate constant name) so the
-  # optional matrix-exponential path can rebuild the rate matrix; destination 0
-  # means elimination out of the system (rxode2 "output" compartment)
-  .nonmem2rx$advan5edges <- rbind(.nonmem2rx$advan5edges,
-                                  data.frame(from=.n1, to=.n2, k=k,
-                                             stringsAsFactors=FALSE))
+  # matrix-exponential path can rebuild the rate matrix; destination 0 means
+  # elimination out of the system (rxode2 "output" compartment).  Only needed
+  # for the matExp() translation, and accumulated in a list (materialized to a
+  # data.frame once, in .advan5edgesDf()) to avoid repeated rbind() growth.
+  if (isTRUE(.nonmem2rx$matexp)) {
+    .nonmem2rx$advan5edges[[length(.nonmem2rx$advan5edges) + 1L]] <-
+      list(from=.n1, to=.n2, k=k)
+  }
   NULL
+}
+#' Materialize the accumulated ADVAN5/7 rate-constant edges as a data.frame
+#'
+#' @return data.frame with columns `from`, `to` (compartment indices; `to==0`
+#'   is elimination) and `k` (rate-constant name), or `NULL` when none captured
+#' @noRd
+#' @author Matthew L. Fidler
+.advan5edgesDf <- function() {
+  .e <- .nonmem2rx$advan5edges
+  if (length(.e) == 0L) return(NULL)
+  data.frame(from=vapply(.e, `[[`, numeric(1), "from"),
+             to=vapply(.e, `[[`, numeric(1), "to"),
+             k=vapply(.e, `[[`, character(1), "k"),
+             stringsAsFactors=FALSE)
 }
 #' Get the advan5 odes
 #'  
@@ -99,8 +116,8 @@
 #' @author Matthew L. Fidler
 .advan5matexp <- function(rxui, finalNames) {
   if (!(.nonmem2rx$advan %in% c(5L, 7L))) return(rxui)
-  .edges <- .nonmem2rx$advan5edges
-  if (is.null(.edges) || nrow(.edges) == 0L) return(rxui)
+  .edges <- .advan5edgesDf()
+  if (is.null(.edges)) return(rxui)
   # matExp() is now the default translation, so degrade gracefully to the ODE
   # model if the installed rxode2 does not support matrix exponentials
   if (!exists("indLin", where=asNamespace("rxode2"), inherits=FALSE)) {
