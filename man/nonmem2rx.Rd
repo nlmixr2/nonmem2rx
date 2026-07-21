@@ -20,6 +20,7 @@ nonmem2rx(
   strictLst = FALSE,
   unintFixed = FALSE,
   extended = getOption("nonmem2rx.extended", FALSE),
+  matexp = getOption("nonmem2rx.matexp", FALSE),
   nLinesPro = 20L,
   delta = 1e-04,
   usePhi = TRUE,
@@ -110,6 +111,12 @@ successful load (default \code{FALSE}).}
 
 \item{extended}{Translate extended control streams from tools like
 wings for NONMEM}
+
+\item{matexp}{For \code{ADVAN5}/\code{ADVAN7} general linear models (which NONMEM
+itself solves with matrix exponentials), translate the linear system to
+rxode2's native matrix-exponential \code{matExp()} model instead of explicit
+\code{d/dt()} ODEs (default \code{FALSE}).  This is an opt-in alternative to the
+default ODE translation; other model types are unaffected.}
 
 \item{nLinesPro}{The number of lines to check for the $PROBLEM
 statement.}
@@ -209,6 +216,9 @@ overwritten (default \code{TRUE})
 translating and validating again? (default \code{TRUE})
 \item \code{nonmem2rx.extended} - should nonmem2rx support extended control
 streams? (default \code{FALSE})
+\item \code{nonmem2rx.matexp} - should nonmem2rx translate \code{ADVAN5}/\code{ADVAN7}
+general linear models to matrix-exponential \code{matExp()} models instead
+of ODEs? (default \code{FALSE})
 \item \code{nonmem2rx.compress} - should the ui be compressed or
 uncompressed (default: \code{TRUE})
 }
