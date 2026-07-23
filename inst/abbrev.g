@@ -21,6 +21,7 @@ statement
     | ini singleLineComment?
     | iniI singleLineComment?
     | mtimeL singleLineComment?
+    | apState singleLineComment?
     | fbio singleLineComment?
     | alag singleLineComment?
     | rate singleLineComment?
@@ -56,6 +57,7 @@ alag        : "[Aa][Ll][Aa][Gg][1-9][0-9]*" '=' logical_or_expression;
 rate        : "[Rr][1-9][0-9]*" '=' logical_or_expression;
 dur         : "[Dd][1-9][0-9]*" '=' logical_or_expression;
 scale       : "[Ss]([0-9]+|C|O)" '=' logical_or_expression;
+apState     : "[Aa][Pp][_][1-9][0-9]*[_][1-9][0-9]*" '=' logical_or_expression;
 derivative  : ('DADT(' | 'dadt(' ) decimalintNo0 ')' '=' logical_or_expression;
 derivativeI : ('DADT(' | 'dadt(' ) identifier ')' '=' logical_or_expression;
 da          : ('DA(' | 'da(' ) decimalintNo0 ',' decimalintNo0 ')' '=' logical_or_expression;
@@ -87,7 +89,7 @@ call_protocol_phrase: '(' ('OBSERVATION' 'EVENT'
         ) ')';
 
 if1 : ifStatement '(' logical_or_expression ')' identifier  '='  logical_or_expression;
-if1other : ifStatement '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL | comAssign);
+if1other : ifStatement '(' logical_or_expression ')' (ini | iniI | fbio | alag | rate | dur | scale | derivative | derivativeI | da | dp | prob | mtimeL | apState | comAssign);
 
 
 ifthen: ifStatement '(' logical_or_expression ')' thenStatement;
@@ -195,6 +197,7 @@ alagi        : "[Aa][Ll][Aa][Gg][1-9][0-9]*";
 ratei        : "[Rr][1-9][0-9]*";
 duri         : "[Dd][1-9][0-9]*";
 scalei       : "[Ss]([0-9]+|C|O)";
+adState      : "[Aa][Dd][_][1-9][0-9]*[_][1-9][0-9]*";
 
 
 primary_expression
@@ -208,6 +211,7 @@ primary_expression
     | ratei
     | duri
     | scalei
+    | adState
     | identifier
     | theta
     | thetaI

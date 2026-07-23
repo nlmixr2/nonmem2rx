@@ -42,4 +42,17 @@ test_that("test sub", {
   .s("ADVAN13 TOL=10 SSATOL=12", c(advan=13L, trans=0L, abbrevLin=0L),
      tol=10, ssAtol=12)
 
+  # delay differential equation (DDE) solvers (Yan et al. 2021)
+  suppressMessages(
+    .s("ADVAN16 TOL=6 ATOL=6", c(advan=16L, trans=0L, abbrevLin=0L),
+       tol=6, atol=6, ssTol=6, ssAtol=6))
+  suppressMessages(
+    .s("ADVAN18 TOL=6 ATOL=6", c(advan=18L, trans=0L, abbrevLin=0L),
+       tol=6, atol=6, ssTol=6, ssAtol=6))
+  expect_message(.s("ADVAN16 TOL=6 ATOL=6", c(advan=16L, trans=0L, abbrevLin=0L),
+                    tol=6, atol=6, ssTol=6, ssAtol=6),
+                 "delay differential equation solver ADVAN16")
+  expect_error(.s("ADVAN17"),
+               "Delay Differential Algebraic Equations are not supported")
+
 })

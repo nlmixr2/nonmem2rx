@@ -106,6 +106,126 @@
 .addModel <- function(text) {
   assign("model", c(.nonmem2rx$model, text), envir=.nonmem2rx)
 }
+#' Recursively strip redundant wrapping parentheses from a language object
+#'
+#' `(Y0)` parses to a call to `(` and is not `identical()` to the bare `Y0`, so
+#' remove those wrappers before comparing expressions.
+#'
+#' @param e a language object (call, name) or atomic constant
+#' @return `e` with redundant `( )` wrappers removed at every level
+#' @noRd
+#' @author Matthew L. Fidler
+.stripParens <- function(e) {
+  if (is.call(e) && identical(e[[1L]], as.name("(")) && length(e) == 2L) {
+    return(.stripParens(e[[2L]]))
+  }
+  if (is.call(e)) {
+    for (.i in seq_along(e)) e[[.i]] <- .stripParens(e[[.i]])
+  }
+  e
+}
+#' Compare two model expressions for semantic equality
+#'
+#' @param a,b expression strings to compare
+#' @return TRUE when the two expressions are equal (redundant parentheses are
+#'   ignored; numeric values compared with `all.equal`, otherwise compared as
+#'   parsed language objects)
+#' @noRd
+#' @author Matthew L. Fidler
+.exprEqual <- function(a, b) {
+  .ea <- tryCatch(.stripParens(str2lang(a)), error=function(e) NULL)
+  .eb <- tryCatch(.stripParens(str2lang(b)), error=function(e) NULL)
+  if (is.null(.ea) || is.null(.eb)) return(identical(a, b))
+  if (is.numeric(.ea) && is.numeric(.eb)) return(isTRUE(all.equal(.ea, .eb)))
+  identical(.ea, .eb)
+}
+#' Brace nesting depth of each model line
+#'
+#' Model lines are emitted unindented, with blocks delimited by lines like
+#' `if (cond) {`, `} else {` and `}`, so the nesting can be recovered by
+#' counting braces.  A line's depth is the depth of the block it belongs to:
+#' a leading `}` closes the block the line itself is part of, so `}` and
+#' `} else {` report the depth of the enclosing block.
+#'
+#' @param lines character vector of model lines
+#' @return integer vector of the same length, 0 for top-level statements
+#' @noRd
+#' @author Matthew L. Fidler
+.blockDepth <- function(lines) {
+  .count <- function(line, ch) {
+    lengths(regmatches(line, gregexpr(ch, line, fixed=TRUE)))
+  }
+  .open <- .count(lines, "{")
+  .close <- .count(lines, "}")
+  .cur <- 0L
+  .depth <- integer(length(lines))
+  for (.i in seq_along(lines)) {
+    .depth[.i] <- .cur - .close[.i]
+    .cur <- .cur + .open[.i] - .close[.i]
+  }
+  .depth
+}
+#' Drop constant NONMEM DDE past histories that equal the compartment init
+#'
+#' A NONMEM `AP_x_y = expr` past history that is constant (does not depend on
+#' time) and equals the compartment's initial condition is redundant: rxode2
+#' uses the constant initial condition as the default delay history.  Such
+#' `past()` lines are removed.  Non-constant histories (functions of `t`) and
+#' constants that differ from the initial condition are kept.
+#'
+#' Only unconditional statements are considered.  A `past()` or initial
+#' condition written inside an `IF` block holds for some subjects/times only,
+#' so nothing can be concluded about how the two compare; a compartment with
+#' any conditional history or initial condition is left alone.
+#'
+#' @return nothing, called for the side effect of updating `.nonmem2rx$model`
+#' @noRd
+#' @author Matthew L. Fidler
+.pruneConstPast <- function() {
+  .model <- .nonmem2rx$model
+  if (is.null(.model)) return(invisible())
+  .depth <- .blockDepth(.model)
+  # initial conditions are emitted as `rxini.rxddta<x>. <- <expr>`
+  .iniRe <- "^rxini\\.rxddta([0-9]+)\\. <- (.*)$"
+  .pastRe <- "^past\\(rxddta([0-9]+), TAU[0-9]+\\) <- (.*)$"
+  .iniMap <- list()
+  .cond <- character(0) # compartments with a conditional init or past()
+  for (.re in c(.iniRe, .pastRe)) {
+    for (.i in grep(.re, .model)) {
+      .m <- regmatches(.model[.i], regexec(.re, .model[.i]))[[1]]
+      if (.depth[.i] != 0L) {
+        .cond <- c(.cond, .m[2])
+      } else if (identical(.re, .iniRe)) {
+        .iniMap[[.m[2]]] <- .m[3]
+      }
+    }
+  }
+  .drop <- integer(0)
+  for (.i in seq_along(.model)) {
+    if (.depth[.i] != 0L) next # conditional past(), cannot reason about it
+    .m <- regmatches(.model[.i], regexec(.pastRe, .model[.i]))[[1]]
+    if (length(.m) == 0L) next
+    .cmt <- .m[2]
+    .rhs <- .m[3]
+    if (.cmt %in% .cond) next # a conditional init/past() decides this compartment
+    .vars <- tryCatch(all.vars(str2lang(.rhs)), error=function(e) character(0))
+    # NONMEM `T`/`TIME` are normally lower-cased to `t`/`time` before this
+    # point, but compare case-insensitively so any un-translated variant still
+    # counts as time-dependent (keeping the history is always the safe choice)
+    if (any(tolower(.vars) %in% c("t", "time"))) next # non-constant history, keep
+    .ini <- .iniMap[[.cmt]]
+    if (is.null(.ini)) .ini <- "0" # default rxode2 initial condition
+    if (.exprEqual(.rhs, .ini)) {
+      .drop <- c(.drop, .i)
+      .minfo(sprintf("dropping constant NONMEM past history for compartment %s (equals its initial condition; rxode2 uses the initial condition as the default delay history)",
+                     .cmt))
+    }
+  }
+  if (length(.drop)) {
+    assign("model", .model[-.drop], envir=.nonmem2rx)
+  }
+  invisible()
+}
 #' Use lower case for the lhs defined parts of the model
 #'
 #' @param rxui rxui object
@@ -792,6 +912,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
     # collapse imperative MIXNUM/MIXEST branching into native mix() calls now that
     # the full $PK/$PRED code has been parsed
     .nonmem2rxMix()
+    # drop redundant constant DDE past histories that equal the compartment init
+    .pruneConstPast()
     .txt <- paste0("function() {\n",
                    "rxode2::ini({\n",
                    paste(.nonmem2rx$ini, collapse="\n"),

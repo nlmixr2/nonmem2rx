@@ -1,0 +1,41 @@
+$PROBLEM Two Comp Del Distr
+;DDE
+$ABBR DERIV2=NO
+$INPUT ID AMT TIME DV EVID CMT
+$DATA app3.csv IGNORE=@
+$SUBROUTINES ADVAN16 TOL=6 ATOL=6
+$MODEL NCOMPARTMENTS=2
+$PK
+K10=THETA(1)
+Y0=THETA(2)
+K21=THETA(3)
+K=THETA(4)
+K12=K*K21
+; TAUy
+TAU1=THETA(5)
+; Initial conditions
+A_0(1)=Y0
+A_0(2)=0
+$DES
+; AD_x_y is the State value of A(x) delayed for time TAUy.
+; AP_x_y is the State value of A(x) in the past, for time delay TAUy.
+AP_1_1=Y0
+;BASE EQUATIONS
+DADT(1)=-K10*A(1)-K12*AD_1_1+K21*A(2)
+DADT(2)=K12*AD_1_1-K21*A(2)
+$ERROR
+IPRED=1
+IF(CMT.EQ.1) IPRED=A(1)
+IF(CMT.EQ.2) IPRED=A(2)
+Y=IPRED+EPS(1)
+$THETA
+0.1   ;1. K10
+1.0   ;2. Y0
+50.0  ;3. K21
+0.5   ;4. K
+0.4   ;5. TAU1
+$OMEGA
+0 FIX
+$SIGMA
+0.01
+$ESTIMATION METHOD=1 MAXEVAL=0

@@ -1,6 +1,18 @@
 # nonmem2rx 0.1.11
 
 
+* NONMEM delay differential equation (DDE) models are now translated to
+  rxode2's native `delay()`/`past()` syntax.  The DDE solvers `ADVAN16`
+  (RADAR5) and `ADVAN18` (DDE_SOLVER) are accepted (in addition to the
+  `ADVAN13` DDE extension), a delayed state `AD_x_y` (state `A(x)` delayed by
+  `TAUy`) becomes `delay(rxddta<x>, TAU<y>)`, and a past history
+  `AP_x_y = expr` becomes `past(rxddta<x>, TAU<y>) <- expr` (NONMEM `T` maps to
+  rxode2 `t`).  A constant past that equals the compartment's initial condition
+  is dropped, since rxode2 uses the initial condition as the default delay
+  history.  The translated models solve in rxode2 (dense auto-switch) and can
+  be estimated in nlmixr2.  `ADVAN17` (delay differential *algebraic*
+  equations) is not supported.
+
 * Regenerate the `rxSolve.nonmem2rx()` method so it no longer passes the
   `order` solver argument, which was removed from `rxode2::rxSolve()`.
   Passing it caused solving a translated model to fail with
