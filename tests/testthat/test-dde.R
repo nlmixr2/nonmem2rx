@@ -33,6 +33,19 @@ test_that(".pruneConstPast drops constant histories equal to the init", {
     .prune("past(rxddta1, TAU1) <- AA * exp(BB * t)"),
     "past(rxddta1, TAU1) <- AA * exp(BB * t)")
 
+  # the time check is case-insensitive: an un-lower-cased T/TIME still counts as
+  # time-dependent, so the history is kept even when it matches the init text
+  expect_equal(
+    .prune(c("rxini.rxddta1. <- AA * exp(BB * T)",
+             "past(rxddta1, TAU1) <- AA * exp(BB * T)")),
+    c("rxini.rxddta1. <- AA * exp(BB * T)",
+      "past(rxddta1, TAU1) <- AA * exp(BB * T)"))
+  expect_equal(
+    .prune(c("rxini.rxddta2. <- TIME",
+             "past(rxddta2, TAU1) <- TIME")),
+    c("rxini.rxddta2. <- TIME",
+      "past(rxddta2, TAU1) <- TIME"))
+
   # parameter-valued constant history equal to the init is dropped (Appendix 11)
   expect_equal(
     .prune(c("rxini.rxddta2. <- K0/K1",
@@ -71,6 +84,20 @@ withr::with_options(
                                useXml=FALSE))
   }
   .modelTxt <- function(r) paste(deparse(body(r$fun)), collapse="\n")
+
+  test_that("the DDE fixture data lines up with each fixture's $INPUT", {
+    # $INPUT names are applied positionally, so an extra/missing leading column
+    # in the csv would silently shift ID/TIME/... onto the wrong data
+    for (.f in c("app3-stiff-2cmt", "app6-tgi", "app7-ra", "app11-pdlidr-advan13")) {
+      .ctl <- system.file(file.path("dde", paste0(.f, ".ctl")), package="nonmem2rx")
+      .ddeTrans(file.path("dde", paste0(.f, ".ctl")))
+      .d <- suppressMessages(.readInDataFromNonmem(.ctl, NULL))
+      expect_equal(names(.d), unname(.nonmem2rx$input))
+      expect_true(all(.d$ID == 1))
+      expect_true(all(is.finite(.d$TIME)))
+    }
+  })
+
   .allFinite <- function(r, ev, states) {
     # delay models solve on the dense dop853+ros4 composite; ros4 warns when an
     # analytic Jacobian cannot be built and falls back to dop853 (dense, which

@@ -168,7 +168,10 @@
     .cmt <- .m[2]
     .rhs <- .m[3]
     .vars <- tryCatch(all.vars(str2lang(.rhs)), error=function(e) character(0))
-    if (any(.vars %in% c("t", "time"))) next # non-constant history, keep
+    # NONMEM `T`/`TIME` are normally lower-cased to `t`/`time` before this
+    # point, but compare case-insensitively so any un-translated variant still
+    # counts as time-dependent (keeping the history is always the safe choice)
+    if (any(tolower(.vars) %in% c("t", "time"))) next # non-constant history, keep
     .ini <- .iniMap[[.cmt]]
     if (is.null(.ini)) .ini <- "0" # default rxode2 initial condition
     if (.exprEqual(.rhs, .ini)) {
