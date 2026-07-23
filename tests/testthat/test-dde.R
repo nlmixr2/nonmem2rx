@@ -64,6 +64,82 @@ test_that(".pruneConstPast drops constant histories equal to the init", {
 
 })
 
+test_that(".pruneConstPast leaves conditional histories and inits alone", {
+
+  .prune <- function(lines) {
+    .clearNonmem2rx()
+    assign("model", lines, envir=.nonmem2rx)
+    suppressMessages(.pruneConstPast())
+    .nonmem2rx$model
+  }
+
+  # a past() inside an IF block is only in effect for part of the data, so it
+  # cannot be compared against the init; dropping it would leave an empty block
+  .ifElse <- c("rxini.rxddta1. <- 0",
+               "if (FLAG == 1) {",
+               "past(rxddta1, TAU1) <- 0",
+               "} else {",
+               "past(rxddta1, TAU1) <- 5",
+               "}")
+  expect_equal(.prune(.ifElse), .ifElse)
+
+  .if1 <- c("rxini.rxddta1. <- Y0",
+            "if (FLAG == 1) {",
+            "past(rxddta1, TAU1) <- Y0",
+            "}")
+  expect_equal(.prune(.if1), .if1)
+
+  # a conditional *initial condition* means the effective init is not known, so
+  # an unconditional past() that happens to match it must be kept
+  .condIni <- c("if (t >= 0) {",
+                "rxini.rxddta1. <- Y0",
+                "rxddta1(0) <- rxini.rxddta1.",
+                "}",
+                "past(rxddta1, TAU1) <- Y0")
+  expect_equal(.prune(.condIni), .condIni)
+
+  # a conditional past() elsewhere blocks pruning of an unconditional one for
+  # the same compartment (the conditional assignment would otherwise win)
+  .mixed <- c("rxini.rxddta1. <- Y0",
+              "if (FLAG == 1) {",
+              "past(rxddta1, TAU1) <- 5",
+              "}",
+              "past(rxddta1, TAU1) <- Y0")
+  expect_equal(.prune(.mixed), .mixed)
+
+  # an unrelated IF block does not stop pruning of a top-level past()
+  expect_equal(
+    .prune(c("rxini.rxddta1. <- Y0",
+             "if (FLAG == 1) {",
+             "KX <- 0",
+             "} else {",
+             "KX <- 5",
+             "}",
+             "past(rxddta1, TAU1) <- Y0")),
+    c("rxini.rxddta1. <- Y0",
+      "if (FLAG == 1) {",
+      "KX <- 0",
+      "} else {",
+      "KX <- 5",
+      "}"))
+
+})
+
+test_that(".blockDepth tracks the nesting of emitted model lines", {
+  expect_equal(
+    .blockDepth(c("A <- 1",
+                  "if (x == 1) {",
+                  "B <- 2",
+                  "if (y == 1) {",
+                  "C <- 3",
+                  "}",
+                  "} else {",
+                  "D <- 4",
+                  "}",
+                  "E <- 5")),
+    c(0L, 0L, 1L, 1L, 2L, 1L, 0L, 1L, 0L, 0L))
+})
+
 test_that(".exprEqual ignores redundant parentheses", {
   expect_true(.exprEqual("Y0", "(Y0)"))
   expect_true(.exprEqual("K0/K1", "(K0/K1)"))

@@ -139,6 +139,32 @@
   if (is.numeric(.ea) && is.numeric(.eb)) return(isTRUE(all.equal(.ea, .eb)))
   identical(.ea, .eb)
 }
+#' Brace nesting depth of each model line
+#'
+#' Model lines are emitted unindented, with blocks delimited by lines like
+#' `if (cond) {`, `} else {` and `}`, so the nesting can be recovered by
+#' counting braces.  A line's depth is the depth of the block it belongs to:
+#' a leading `}` closes the block the line itself is part of, so `}` and
+#' `} else {` report the depth of the enclosing block.
+#'
+#' @param lines character vector of model lines
+#' @return integer vector of the same length, 0 for top-level statements
+#' @noRd
+#' @author Matthew L. Fidler
+.blockDepth <- function(lines) {
+  .count <- function(line, ch) {
+    lengths(regmatches(line, gregexpr(ch, line, fixed=TRUE)))
+  }
+  .open <- .count(lines, "{")
+  .close <- .count(lines, "}")
+  .cur <- 0L
+  .depth <- integer(length(lines))
+  for (.i in seq_along(lines)) {
+    .depth[.i] <- .cur - .close[.i]
+    .cur <- .cur + .open[.i] - .close[.i]
+  }
+  .depth
+}
 #' Drop constant NONMEM DDE past histories that equal the compartment init
 #'
 #' A NONMEM `AP_x_y = expr` past history that is constant (does not depend on
@@ -147,26 +173,41 @@
 #' `past()` lines are removed.  Non-constant histories (functions of `t`) and
 #' constants that differ from the initial condition are kept.
 #'
+#' Only unconditional statements are considered.  A `past()` or initial
+#' condition written inside an `IF` block holds for some subjects/times only,
+#' so nothing can be concluded about how the two compare; a compartment with
+#' any conditional history or initial condition is left alone.
+#'
 #' @return nothing, called for the side effect of updating `.nonmem2rx$model`
 #' @noRd
 #' @author Matthew L. Fidler
 .pruneConstPast <- function() {
   .model <- .nonmem2rx$model
   if (is.null(.model)) return(invisible())
+  .depth <- .blockDepth(.model)
   # initial conditions are emitted as `rxini.rxddta<x>. <- <expr>`
   .iniRe <- "^rxini\\.rxddta([0-9]+)\\. <- (.*)$"
-  .iniMap <- list()
-  for (.i in grep(.iniRe, .model)) {
-    .m <- regmatches(.model[.i], regexec(.iniRe, .model[.i]))[[1]]
-    .iniMap[[.m[2]]] <- .m[3]
-  }
   .pastRe <- "^past\\(rxddta([0-9]+), TAU[0-9]+\\) <- (.*)$"
+  .iniMap <- list()
+  .cond <- character(0) # compartments with a conditional init or past()
+  for (.re in c(.iniRe, .pastRe)) {
+    for (.i in grep(.re, .model)) {
+      .m <- regmatches(.model[.i], regexec(.re, .model[.i]))[[1]]
+      if (.depth[.i] != 0L) {
+        .cond <- c(.cond, .m[2])
+      } else if (identical(.re, .iniRe)) {
+        .iniMap[[.m[2]]] <- .m[3]
+      }
+    }
+  }
   .drop <- integer(0)
   for (.i in seq_along(.model)) {
+    if (.depth[.i] != 0L) next # conditional past(), cannot reason about it
     .m <- regmatches(.model[.i], regexec(.pastRe, .model[.i]))[[1]]
     if (length(.m) == 0L) next
     .cmt <- .m[2]
     .rhs <- .m[3]
+    if (.cmt %in% .cond) next # a conditional init/past() decides this compartment
     .vars <- tryCatch(all.vars(str2lang(.rhs)), error=function(e) character(0))
     # NONMEM `T`/`TIME` are normally lower-cased to `t`/`time` before this
     # point, but compare case-insensitively so any un-translated variant still
