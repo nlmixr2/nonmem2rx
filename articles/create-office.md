@@ -99,7 +99,7 @@ fit <- as.nlmixr2(mod)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.4 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.7 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done

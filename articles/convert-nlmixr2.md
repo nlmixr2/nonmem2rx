@@ -427,7 +427,7 @@ fit <- as.nlmixr2(new)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.4 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.7 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -443,16 +443,16 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.6853482       0.017 0.068    0.002 100.95      1.876
+#> elapsed 0.9261815       0.018 0.061    0.001 100.95      1.658
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
-#>       Est.       SE   %RSE Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
-#> lcl  1.370  0.02979  2.174    3.937 (3.713, 4.173)    32.64      1.935 
-#> lvc  4.198  0.02952 0.7032    66.56 (62.82, 70.53)    32.33      2.465 
-#> lq   1.380  0.05471  3.965    3.975 (3.571, 4.425)    32.65      40.50 
-#> lvp  3.877  0.03483 0.8986    48.26 (45.07, 51.67)    27.53      28.37 
-#> RSV 0.1964 0.003153  1.605 0.1964 (0.1903, 0.2026)                     
+#>      Est.      SE  %RSE Back-transformed(95%CI) BSV(CV%) Shrink(SD)%
+#> lcl  1.37  0.0298  2.17       3.94 (3.71, 4.17)     32.6       1.94 
+#> lvc  4.20  0.0295 0.703       66.6 (62.8, 70.5)     32.3       2.46 
+#> lq   1.38  0.0547  3.96       3.98 (3.57, 4.42)     32.7       40.5 
+#> lvp  3.88  0.0348 0.899       48.3 (45.1, 51.7)     27.5       28.4 
+#> RSV 0.196 0.00315  1.61    0.196 (0.190, 0.203)                     
 #>  
 #>   Covariance Type ($covMethod): nonmem2rx
 #>   No correlations in between subject variability (BSV) matrix

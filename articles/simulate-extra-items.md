@@ -127,7 +127,6 @@ modAuc
 #> 
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
-#>     NULL
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
 #>     dfObs <- 2280
 #>     dfSub <- 120
