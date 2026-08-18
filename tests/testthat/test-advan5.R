@@ -174,10 +174,12 @@ test_that("nonmem2rx translates ADVAN5 to a matExp() model (default) equal to th
   # both models solve to the same values when random effects are zeroed
   .ev <- rxode2::et(amt=100, cmt="DEPOT")
   .ev <- rxode2::et(.ev, seq(0, 24, by=4))
+  # zeroRe() drops the sigma block entirely rather than fixing eps1 at 0, so
+  # eps1 (used only in the unchecked `y` line) must be supplied explicitly
   .so <- suppressWarnings(rxode2::rxSolve(rxode2::zeroRe(.ode), .ev, returnType="data.frame",
-                                          addDosing=FALSE, atol=1e-10, rtol=1e-10))
+                                          addDosing=FALSE, atol=1e-10, rtol=1e-10, params=c(eps1=0)))
   .sm <- suppressWarnings(rxode2::rxSolve(rxode2::zeroRe(.mex), .ev, returnType="data.frame",
-                                          addDosing=FALSE, atol=1e-10, rtol=1e-10))
+                                          addDosing=FALSE, atol=1e-10, rtol=1e-10, params=c(eps1=0)))
   # the matrix exponential is exact for the constant-coefficient linear system,
   # so it agrees with the ODE integrator to well within solver tolerance
   expect_equal(.so$ipred, .sm$ipred, tolerance=1e-8)
