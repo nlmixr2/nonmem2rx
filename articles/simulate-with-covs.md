@@ -424,7 +424,7 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:39
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:42
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")

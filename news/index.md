@@ -2,6 +2,13 @@
 
 ## nonmem2rx 0.1.11
 
+- `nonmem2rx` now requires `rxode2` 5.1.5 or later. That release fixes
+  an `rxode2` model-piping bug where a model piped from an import (which
+  keeps a persistent `meta` environment) shared the original’s cached
+  simulation model, so states appended by piping (like a running `AUC`)
+  were silently dropped from the solve
+  ([\#246](https://github.com/nlmixr2/nonmem2rx/issues/246)).
+
 - NONMEM delay differential equation (DDE) models are now translated to
   rxode2’s native
   [`delay()`](https://nlmixr2.github.io/rxode2/reference/delay.html)/`past()`
