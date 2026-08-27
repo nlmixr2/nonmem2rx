@@ -43,9 +43,9 @@ rxode2::logit
 #' @export
 rxode2::expit
 
-#' @importFrom rxode2 `model<-`
+#' @importFrom rxode2 "model<-"
 #' @export
-rxode2::`model<-`
+rxode2::"model<-"
 
 #' @importFrom lotri lotri
 #' @export
@@ -54,4 +54,3 @@ lotri::lotri
 #' @importFrom ggplot2 autoplot
 #' @export
 ggplot2::autoplot
-

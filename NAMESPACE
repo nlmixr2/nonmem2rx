@@ -55,8 +55,8 @@ importFrom(ggplot2,autoplot)
 importFrom(lotri,lotri)
 importFrom(magrittr,`%>%`)
 importFrom(rxode2,
+  "model<-",
   RxODE,
-  `model<-`,
   expit,
   ini,
   logit,
