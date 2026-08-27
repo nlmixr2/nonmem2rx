@@ -54,17 +54,19 @@ importFrom(dparser,mkdparse)
 importFrom(ggplot2,autoplot)
 importFrom(lotri,lotri)
 importFrom(magrittr,`%>%`)
-importFrom(rxode2,RxODE)
-importFrom(rxode2,`model<-`)
-importFrom(rxode2,expit)
-importFrom(rxode2,ini)
-importFrom(rxode2,logit)
-importFrom(rxode2,model)
-importFrom(rxode2,rxRename)
-importFrom(rxode2,rxSolve)
-importFrom(rxode2,rxUiGet)
-importFrom(rxode2,rxode)
-importFrom(rxode2,rxode2)
+importFrom(rxode2,
+  RxODE,
+  `model<-`,
+  expit,
+  ini,
+  logit,
+  model,
+  rxRename,
+  rxSolve,
+  rxUiGet,
+  rxode,
+  rxode2
+)
 importFrom(stats,setNames)
 importFrom(utils,read.csv)
 useDynLib(nonmem2rx, .registration=TRUE)
