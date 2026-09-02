@@ -1,6 +1,7 @@
 #define USE_FC_LEN_T
 #define STRICT_R_HEADERS
 #include <Rcpp.h>
+#include <unordered_map>
 #include <R.h>
 #define _(String) (String)
 
@@ -9,9 +10,15 @@ using namespace Rcpp;
 //[[Rcpp::export]]
 IntegerVector fromNonmemToRxId_(IntegerVector nonmemId, NumericVector time) {
   std::vector<std::string> lvl;
+  // Aliases for one base id are handed out in order -- the first block of an
+  // id takes the bare name, the next "#2", then "#3" -- so the next free
+  // suffix is all that has to be remembered.  Searching lvl for it instead
+  // walked every alias already given out AND scanned the whole of lvl for
+  // each: 4000 blocks took 9.9s.  A base id is "NM:'<int>'" and never holds a
+  // '#', so a suffixed name can never collide with a base name.
+  std::unordered_map<std::string, unsigned int> nextAlias;
   IntegerVector ret(nonmemId.size());
   std::string cur0, cur;
-  unsigned int j;
   int fctInt = 1;
   for (unsigned int i = 0; i < nonmemId.size(); ++i) {
     int nmid = nonmemId[i];
@@ -21,17 +28,15 @@ IntegerVector fromNonmemToRxId_(IntegerVector nonmemId, NumericVector time) {
     cur = cur0 = "NM:'" + std::to_string(nmid) + "'";
     // A NONMEM id is reused whenever time restarts, so the same id can name
     // several distinct subjects; the second and later ones are aliased
-    // "<id>#2", "<id>#3", ...  j has to advance for that: leaving it at 1
-    // rebuilds "#2" forever, so a third block of one id never terminated.
-    j = 1;
-    while (true) {
-      if (std::find(lvl.begin(), lvl.end(), cur) == lvl.end()) {
-        lvl.push_back(cur);
-        break;
-      }
-      j++;
-      cur = cur0 + "#" + std::to_string(j);
+    // "<id>#2", "<id>#3", ...
+    std::unordered_map<std::string, unsigned int>::iterator na = nextAlias.find(cur0);
+    if (na == nextAlias.end()) {
+      nextAlias[cur0] = 2;
+    } else {
+      cur = cur0 + "#" + std::to_string(na->second);
+      na->second++;
     }
+    lvl.push_back(cur);
     ret[i] = fctInt;
     while (i < nonmemId.size() - 1) {
       int nmid2 = nonmemId[i+1];

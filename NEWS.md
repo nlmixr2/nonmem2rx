@@ -1,5 +1,12 @@
 # nonmem2rx 0.1.11
 
+* Importing a dataset with many reused NONMEM `ID`s is no longer slow.  The
+  next free alias was found by walking every alias already given out and
+  scanning the whole level list for each, so the cost grew with the cube of
+  the number of reused blocks: 4000 blocks took about 10 seconds.  Only the
+  next free suffix per id is remembered now, and the same 4000 blocks are
+  below timer resolution.
+
 * Importing a dataset where a NONMEM `ID` starts over more than twice no
   longer hangs.  A repeated `ID` is aliased `<id>#2`, `<id>#3`, and so on, but
   the alias counter never advanced, so the third block of an id searched for

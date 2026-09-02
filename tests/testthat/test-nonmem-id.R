@@ -43,3 +43,26 @@ test_that("a NONMEM id reused more than twice keeps getting new aliases", {
     c("NM:'1'", "NM:'1'#2", "NM:'1'#3")
   )
 })
+
+test_that("aliasing does not slow down with the number of reused blocks", {
+
+  # The next free alias used to be found by walking every alias already given
+  # out and scanning the whole level list for each, so the cost grew with the
+  # cube of the block count: 500 blocks took 0.02s and 4000 took 9.9s.  Doubling
+  # the blocks must not do much more than double the work.
+  .blocks <- function(nb) {
+    as.integer(rep(rep(c(1L, 2L), each = 2L), length.out = nb * 2L))
+  }
+  .minElapsed <- function(id, reps = 3L) {
+    min(vapply(seq_len(reps),
+               function(i) system.time(fromNonmemToRxId(id))[["elapsed"]],
+               numeric(1)))
+  }
+
+  expect_equal(nlevels(fromNonmemToRxId(.blocks(2000))), 2000L)
+
+  .small <- .minElapsed(.blocks(1000))
+  # generous: the defect was ~50x over this doubling, and the floor keeps a
+  # sub-millisecond .small from making the bound meaninglessly tight
+  expect_lt(.minElapsed(.blocks(2000)), max(8 * .small, 0.5))
+})
