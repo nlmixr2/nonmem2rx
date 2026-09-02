@@ -19,13 +19,18 @@ IntegerVector fromNonmemToRxId_(IntegerVector nonmemId, NumericVector time) {
     if (ISNA(nmt)) nmt = 0.0;
     if (nmid == NA_INTEGER) nmid = 0; // NONMEM convention na=0
     cur = cur0 = "NM:'" + std::to_string(nmid) + "'";
+    // A NONMEM id is reused whenever time restarts, so the same id can name
+    // several distinct subjects; the second and later ones are aliased
+    // "<id>#2", "<id>#3", ...  j has to advance for that: leaving it at 1
+    // rebuilds "#2" forever, so a third block of one id never terminated.
     j = 1;
     while (true) {
       if (std::find(lvl.begin(), lvl.end(), cur) == lvl.end()) {
         lvl.push_back(cur);
         break;
       }
-      cur = cur0 + "#" + std::to_string(j+1);
+      j++;
+      cur = cur0 + "#" + std::to_string(j);
     }
     ret[i] = fctInt;
     while (i < nonmemId.size() - 1) {

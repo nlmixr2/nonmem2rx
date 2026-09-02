@@ -1,5 +1,12 @@
 # nonmem2rx 0.1.11
 
+* Importing a dataset where a NONMEM `ID` starts over more than twice no
+  longer hangs.  A repeated `ID` is aliased `<id>#2`, `<id>#3`, and so on, but
+  the alias counter never advanced, so the third block of an id searched for
+  `#2`, found it, and searched for `#2` again without end.  Two blocks were
+  fine, which is why this went unnoticed; three or more -- an id reused after
+  a time reset, as in crossover and multiple-occasion data -- never returned.
+
 
 * `nonmem2rx` now requires `rxode2` 5.1.5 or later.  That release fixes an
   `rxode2` model-piping bug where a model piped from an import (which keeps a
