@@ -46,11 +46,14 @@ grammar sources live in `inst/*.g` (e.g. `theta.g`, `omega.g`, `model.g`, `input
 parser `src/<name>.g.d_parser.h`, hand-written reduction actions live in `src/<name>.c`, and
 each is exposed to R as a `_nonmem2rx_trans_<name>` `.Call` entry (registered in `src/init.c`).
 
-**Editing a grammar is a two-step process:** change `inst/<name>.g`, then regenerate the C
-parser. The regeneration functions are in `R/buildParser.R` (all marked `## nocov`):
-`.nonmem2rxBuildTheta()`, `.nonmem2rxBuildModel()`, etc., or `.nonmem2rxBuildGram()` to rebuild
-everything. These call `dparser::mkdparse()` and rename the output to `*.g.d_parser.h`. Do not
-hand-edit the generated `*.g.d_parser.h` files.
+**Editing a grammar is a two-step process:** change `inst/<name>.g`,
+then regenerate the C parser. This is done by `devtools::document()`.
+This calls she regeneration functions are in `R/buildParser.R` (all
+marked `## nocov`): `.nonmem2rxBuildTheta()`,
+`.nonmem2rxBuildModel()`, etc., or `.nonmem2rxBuildGram()` to rebuild
+everything. These call `dparser::mkdparse()` and rename the output to
+`*.g.d_parser.h`. Do not hand-edit the generated `*.g.d_parser.h`
+files.
 
 `R/buildParser.R` also **generates R source files** that should not be edited directly — they
 carry a "built from buildParser.R, edit there" banner:
