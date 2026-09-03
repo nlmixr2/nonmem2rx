@@ -357,7 +357,7 @@ simply add <code>resample=TRUE</code>:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:05</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:04</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span></code></pre></div>
 <p>In this case every individual re-samples from the original dataset’s
 covariates. In this particular case, the dosing changes per individual
@@ -427,8 +427,8 @@ NONMEM dataset.</p>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; summarizing data...</span></span>
-<span><span class="co">#&gt; done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> this simulation drew from 'thetaMat', so the simulated values include parameter uncertainty</span></span>
+<span><span class="co">#&gt; summarizing data...done</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ci</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: `aes_string()` was deprecated in ggplot2 3.0.0.</span></span>
@@ -499,12 +499,12 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:29</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:24</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; summarizing data...</span></span>
-<span><span class="co">#&gt; done</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> this simulation drew from 'thetaMat', so the simulated values include parameter uncertainty</span></span>
+<span><span class="co">#&gt; summarizing data...done</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ci</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulate-with-covs_files/figure-html/simUncertanty3-1.png" class="r-plt" alt="" width="700"></p>

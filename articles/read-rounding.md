@@ -511,14 +511,7 @@ fit <- as.nlmixr2(new)
 #> → loading into symengine environment...
 #> → pruning branches (`if`/`else`) of full model...
 #> ✔ done
-#> → optimizing duplicate expressions in EBE model (2 chunks)...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> → finding duplicate expressions in EBE model...
 #> → compiling EBE model...
 #> ✔ done
 #> rxode2 5.1.7 using 2 threads (see ?getRxThreads)
@@ -552,8 +545,8 @@ print(fit)
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>            setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.603488       0.019 0.053    0.001 320.27      2.524
+#>             setup postprocess table compress NONMEM as.nlmixr2
+#> elapsed 0.7153397       0.017 0.035    0.001 320.27      0.965
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -767,33 +760,16 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → calculate ∂(R²)/∂(η)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → finding duplicate expressions in inner model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in inner model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in EBE model (2 chunks)...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> → finding duplicate expressions in EBE model...
 #> → compiling inner model...
 #> ✔ done
 #> → finding duplicate expressions in FD model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in FD model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:15 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:11 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -807,9 +783,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 9.366245 2.818254   30.18019      0.032        0.02 0.057    0.001
-#>             other
-#> elapsed 0.1043118
+#> elapsed 2.257844  2.13161   22.51423      0.023       0.014 0.047    0.001
+#>              other
+#> elapsed 0.08331609
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -886,42 +862,17 @@ getVarCov(fit)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → calculate ∂(f)/∂(η)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in inner model (2 chunks)...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in EBE model (2 chunks)...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> → finding duplicate expressions in inner model...
+#> → finding duplicate expressions in EBE model...
 #> → compiling inner model...
 #> ✔ done
 #> → finding duplicate expressions in FD model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in FD model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:12
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:10
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
@@ -973,8 +924,8 @@ fit
 #> 
 #> ── Time (sec fit$time): ──
 #> 
-#>            setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.603488       0.019 0.053    0.001 320.27      2.524     50.065
+#>             setup postprocess table compress NONMEM as.nlmixr2 covariance
+#> elapsed 0.7153397       0.017 0.035    0.001 320.27      0.965     36.631
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 

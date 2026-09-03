@@ -94,9 +94,6 @@ fit <- as.nlmixr2(mod)
 #> → pruning branches (`if`/`else`) of full model...
 #> ✔ done
 #> → finding duplicate expressions in EBE model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in EBE model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
 #> rxode2 5.1.7 using 2 threads (see ?getRxThreads)
@@ -165,23 +162,10 @@ obnd_pptx = report_fit(
 #> → calculate ∂(R²)/∂(η)
 #> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → finding duplicate expressions in inner model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in inner model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00 
-#> 
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → finding duplicate expressions in EBE model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in EBE model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling inner model...
 #> ✔ done
 #> → finding duplicate expressions in FD model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in FD model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
 #> → compiling events FD model...
@@ -196,7 +180,7 @@ obnd_pptx = report_fit(
 #> 'object'
 #> Warning in is.na(p_res): is.na() applied to non-(list or vector) of type
 #> 'object'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> Warning in melt.data.table(dx.cats, measure.vars = cats): id.vars and
 #> measure.vars are internally guessed when both are 'NULL'. All
 #> non-numeric/integer/logical type columns are considered id.vars, which in this
@@ -246,7 +230,7 @@ obnd_docx = report_fit(
 #> 'object'
 #> Warning in is.na(p_res): is.na() applied to non-(list or vector) of type
 #> 'object'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> Warning in melt.data.table(dx.cats, measure.vars = cats): id.vars and
 #> measure.vars are internally guessed when both are 'NULL'. All
 #> non-numeric/integer/logical type columns are considered id.vars, which in this

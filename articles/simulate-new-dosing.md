@@ -120,11 +120,6 @@ s <- rxSolve(mod, ev)
 #> ℹ using NONMEM specified atol=1e-12
 #> ℹ using NONMEM specified rtol=1e-06
 #> ℹ using NONMEM specified ssAtol=1e-12
-#> ℹ rxControl items read from fun: 'thetaMat', 'dfSub', 'dfObs'
-#> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2', 'omega.4.1', 'omega.4.2', 'omega.4.3'
-#> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> Warning: 'thetaMat' is ignored since nStud <= 1
-#> use 'simVariability = TRUE' to override.
 ```
 
 Note that since this is a `nonmem2rx` model, the default solving will

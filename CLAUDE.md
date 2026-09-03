@@ -58,10 +58,11 @@ actions live in `src/<name>.c`, and each is exposed to R as a
 `_nonmem2rx_trans_<name>` `.Call` entry (registered in `src/init.c`).
 
 **Editing a grammar is a two-step process:** change `inst/<name>.g`,
-then regenerate the C parser. The regeneration functions are in
-`R/buildParser.R` (all marked `## nocov`): `.nonmem2rxBuildTheta()`,
-`.nonmem2rxBuildModel()`, etc., or `.nonmem2rxBuildGram()` to rebuild
-everything. These call
+then regenerate the C parser. This is done by
+[`devtools::document()`](https://devtools.r-lib.org/reference/document.html).
+This calls she regeneration functions are in `R/buildParser.R` (all
+marked `## nocov`): `.nonmem2rxBuildTheta()`, `.nonmem2rxBuildModel()`,
+etc., or `.nonmem2rxBuildGram()` to rebuild everything. These call
 [`dparser::mkdparse()`](https://nlmixr2.github.io/dparser-R/reference/mkdparse.html)
 and rename the output to `*.g.d_parser.h`. Do not hand-edit the
 generated `*.g.d_parser.h` files.

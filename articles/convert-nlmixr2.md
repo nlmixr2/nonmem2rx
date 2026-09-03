@@ -422,9 +422,6 @@ fit <- as.nlmixr2(new)
 #> → pruning branches (`if`/`else`) of full model...
 #> ✔ done
 #> → finding duplicate expressions in EBE model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
-#> → optimizing duplicate expressions in EBE model...
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 #> → compiling EBE model...
 #> ✔ done
 #> rxode2 5.1.7 using 2 threads (see ?getRxThreads)
@@ -443,7 +440,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.8450524       0.015  0.06    0.001 100.95      1.563
+#> elapsed 0.7555093       0.013 0.036    0.001 100.95      0.911
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 

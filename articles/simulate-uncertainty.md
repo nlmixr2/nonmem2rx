@@ -179,6 +179,7 @@ confidence interval and then plot the confidence bands:
 ``` r
 
 sci <- confint(s, parm=c("CENTRAL", "PERI", "sim"))
+#> ℹ this simulation drew from 'thetaMat', so the simulated values include parameter uncertainty
 #> summarizing data...done
 
 sci

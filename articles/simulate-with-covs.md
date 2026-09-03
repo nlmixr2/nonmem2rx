@@ -276,7 +276,7 @@ sim <- rxSolve(wbc, resample=TRUE, nStud=500)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:05
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:04
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 ```
 
@@ -349,8 +349,8 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")
-#> summarizing data...
-#> done
+#> ℹ this simulation drew from 'thetaMat', so the simulated values include parameter uncertainty
+#> summarizing data...done
 
 plot(ci)
 #> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
@@ -424,12 +424,12 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:29
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:24
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")
-#> summarizing data...
-#> done
+#> ℹ this simulation drew from 'thetaMat', so the simulated values include parameter uncertainty
+#> summarizing data...done
 
 plot(ci)
 ```
