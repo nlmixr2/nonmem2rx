@@ -180,6 +180,10 @@
 .parseRec <- function(ctl) {
   checkmate::checkString(ctl)
   .clearRecordEnv()
+  ## reported before the records are parsed, so an inverse-CDF individual
+  ## parameter is named for what it is rather than surfacing as a syntax
+  ## error on the `VQ(i)=` slot assignment it produces
+  .nonmemAssertNoCdfInv(ctl)
   .minfo("splitting control stream by records")
   .recs <- strsplit(ctl, "(^|\\n) *[$]")[[1]]
   if (length(.recs) == 1L && is.na(.recs)) {

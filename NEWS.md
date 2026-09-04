@@ -1,5 +1,26 @@
 # nonmem2rx 0.1.11
 
+* A `$ABBR VECTOR VQ2(10)` record now parses.  It declares the argument
+  vector a `$ABBR FUNCTION` routine is called with, and it used to be a
+  syntax error -- so a model using one could not be read far enough to
+  say what was actually in it.
+
+* A model that maps an individual parameter through an inverse CDF
+  (`GAMMACDFINV`, `WEIBULLCDFINV`, `LOGNORMALINV`, ... -- NONMEM's way of
+  giving a parameter a distribution other than normal, Bauer 2022) now
+  says so.  It is refused before the records are parsed, naming the
+  routine and pointing at rxode2's `dist()` line, rather than surfacing
+  as a syntax error on the `VQ(1)=` slot assignment the protocol
+  produces.  Importing one is not supported yet: the argument vector is a
+  statement protocol rather than an expression, so it does not translate
+  the way the rest of the abbreviated code does.
+
+  A model that babelmixr2 wrote from a declared random effect
+  distribution with an ELEMENTARY quantile function -- Weibull,
+  lognormal, uniform, exponential, logistic, Cauchy, Gumbel, ... -- has
+  no `$ABBR FUNCTION` in it at all, and round trips through this import
+  unchanged.
+
 
 * `nonmem2rx` now requires `rxode2` 5.1.5 or later.  That release fixes an
   `rxode2` model-piping bug where a model piped from an import (which keeps a

@@ -10,6 +10,7 @@ statement: comres
     | declare
     | protect
     | function
+    | vector
     | replace
     | desfull
     ;
@@ -28,6 +29,14 @@ declare_item: 'INTEGER'? 'DOWHILE'? identifier_nm ('(' "[^,)]*" (',' "[^,)]*")* 
 declare: 'DECLARE' (declare_item ','*)+;
 
 function: 'FUNCTION' identifier_nm '(' (identifier_nm | '*') ',' decimalintNo0 (',' decimalintNo0)? ')';
+
+// `$ABBR VECTOR VQ2(10)` declares the argument vector a `$ABBR FUNCTION`
+// routine is called with -- the CDFINV protocol a declared non-normal
+// individual parameter uses (gamma_indpar.pdf).  Parsed so the record
+// does not fail; the vector itself carries no information rxode2 needs,
+// since the CDFINV call in the abbreviated code is what names the
+// distribution.
+vector: 'VECTOR' identifier_nm '(' decimalintNo0 ')';
 
 replace: 'REPLACE'  (replace_multiple
   | replace_data
