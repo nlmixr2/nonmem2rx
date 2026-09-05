@@ -42,4 +42,16 @@ test_that("a NONMEM id reused more than twice keeps getting new aliases", {
     levels(fromNonmemToRxId(as.integer(rep(1, 6)), c(0, 1, 0, 1, 0, 1))),
     c("NM:'1'", "NM:'1'#2", "NM:'1'#3")
   )
+
+  # a missing id (aliased to 0) restarting in time is counted the same way
+  expect_equal(
+    levels(fromNonmemToRxId(rep(NA_integer_, 6), c(0, 1, 0, 1, 0, 1))),
+    c("NM:'0'", "NM:'0'#2", "NM:'0'#3")
+  )
+
+  # a missing time (treated as 0) still splits a run into a new block/alias
+  expect_equal(
+    fromNonmemToRxId(as.integer(c(1, 1, 1)), c(1, NA, 2)),
+    factor(c(1L, 2L, 2L), labels = c("NM:'1'", "NM:'1'#2"))
+  )
 })
