@@ -180,7 +180,7 @@ obnd_pptx = report_fit(
 #> 'object'
 #> Warning in is.na(p_res): is.na() applied to non-(list or vector) of type
 #> 'object'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
 #> Warning in melt.data.table(dx.cats, measure.vars = cats): id.vars and
 #> measure.vars are internally guessed when both are 'NULL'. All
 #> non-numeric/integer/logical type columns are considered id.vars, which in this
@@ -230,7 +230,7 @@ obnd_docx = report_fit(
 #> 'object'
 #> Warning in is.na(p_res): is.na() applied to non-(list or vector) of type
 #> 'object'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
 #> Warning in melt.data.table(dx.cats, measure.vars = cats): id.vars and
 #> measure.vars are internally guessed when both are 'NULL'. All
 #> non-numeric/integer/logical type columns are considered id.vars, which in this

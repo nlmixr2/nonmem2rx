@@ -375,7 +375,7 @@ covariates as the NONMEM model in general (and also with resampling)</p>
 this by creating a event table with the same input PK parameters as the
 NONMEM dataset.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># first create the base event table with the nubmer of individuals</span></span>
+<code class="sourceCode R"><span><span class="co"># first create the base event table with the number of individuals</span></span>
 <span><span class="co"># matching the NONMEM dataset:</span></span>
 <span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/et.html" class="external-link">et</a></span><span class="op">(</span>amt<span class="op">=</span><span class="fl">410</span>, ii<span class="op">=</span><span class="fl">20</span><span class="op">*</span><span class="fl">24</span>, until<span class="op">=</span><span class="fl">365</span><span class="op">*</span><span class="fl">24</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Add dosing 20 days apart for a year</span></span>
 <span>  <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/et.html" class="external-link">et</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">24</span>, by<span class="op">=</span><span class="fl">7</span><span class="op">*</span><span class="fl">24</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Assume weekly observations</span></span>
@@ -452,7 +452,7 @@ the original dataset). In this case, I will assume that the new study
 will have <code>225</code> patients, which is a <code>5</code> fold
 increase in subjects compared to the NONMEM input.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># first create the base event table with the nubmer of individuals</span></span>
+<code class="sourceCode R"><span><span class="co"># first create the base event table with the number of individuals</span></span>
 <span><span class="co"># matching the NONMEM dataset:</span></span>
 <span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/et.html" class="external-link">et</a></span><span class="op">(</span>amt<span class="op">=</span><span class="fl">410</span>, ii<span class="op">=</span><span class="fl">20</span><span class="op">*</span><span class="fl">24</span>, until<span class="op">=</span><span class="fl">365</span><span class="op">*</span><span class="fl">24</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Add dosing 20 days apart for a year</span></span>
 <span>  <span class="fu"><a href="https://nlmixr2.github.io/rxode2/reference/et.html" class="external-link">et</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">365</span><span class="op">*</span><span class="fl">24</span>, by<span class="op">=</span><span class="fl">7</span><span class="op">*</span><span class="fl">24</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Assume weekly observations</span></span>
@@ -499,7 +499,7 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:24</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:21</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>

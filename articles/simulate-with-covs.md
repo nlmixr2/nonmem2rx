@@ -297,7 +297,7 @@ dataset.
 
 ``` r
 
-# first create the base event table with the nubmer of individuals
+# first create the base event table with the number of individuals
 # matching the NONMEM dataset:
 ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
   et(seq(0, 365*24, by=7*24)) %>% # Assume weekly observations
@@ -377,7 +377,7 @@ to the NONMEM input.
 
 ``` r
 
-# first create the base event table with the nubmer of individuals
+# first create the base event table with the number of individuals
 # matching the NONMEM dataset:
 ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
   et(seq(0, 365*24, by=7*24)) %>% # Assume weekly observations
@@ -424,7 +424,7 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:24
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:21
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")

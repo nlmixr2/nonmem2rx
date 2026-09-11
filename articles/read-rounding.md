@@ -546,7 +546,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.7153397       0.017 0.035    0.001 320.27      0.965
+#> elapsed 0.6828326       0.018 0.047    0.001 320.27      0.945
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -769,7 +769,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:11 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:09 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -778,40 +778,40 @@ fit2
 #> ── nlmixr² FOCEi (outer: bobyqa) ──
 #> 
 #>           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)
-#> FOCEi 1423.228 2340.923 2403.623      -1155.461         1211902        78.59467
+#> FOCEi 1423.589 2341.284 2403.984      -1155.642        173268.4        25.84419
 #> 
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.257844  2.13161   22.51423      0.023       0.014 0.047    0.001
+#> elapsed 2.297046 2.247638   14.50267      0.033       0.015  0.05    0.001
 #>              other
-#> elapsed 0.08331609
+#> elapsed 0.08664472
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
 #>                Parameter   Est.     SE  %RSE Back-transformed(95%CI) BSV(CV%)
-#> tktr            1 - tktr 0.0698 0.0482  69.0      1.07 (0.976, 1.18)         
-#> tka              2 - tka 0.0421 0.0410  97.5      1.04 (0.962, 1.13)         
-#> tcl              3 - tcl  -2.00 0.0723  3.62    0.136 (0.118, 0.156)     28.6
-#> tv                4 - tv   2.06 0.0586  2.85       7.83 (6.98, 8.79)     23.3
-#> prop.err    5 - prop.err  0.158 0.0232  14.7    0.158 (0.113, 0.204)         
-#> pkadd.err  6 - pkadd.err  0.606 0.0593  9.78    0.606 (0.490, 0.722)         
-#> temax          7 - temax   6.71   13.8   205   0.999 (1.51e-9, 1.00)         
-#> tec50          8 - tec50  0.122  0.243   199      1.13 (0.701, 1.82)     44.0
-#> tkout          9 - tkout  -2.96 0.0413  1.40 0.0517 (0.0477, 0.0561)         
-#> te0             10 - te0   4.57 0.0348 0.762        96.7 (90.3, 104)     5.23
-#> pdadd.err 11 - pdadd.err   3.84  0.252  6.56       3.84 (3.35, 4.33)         
+#> tktr            1 - tktr 0.0616 0.0148  24.0       1.06 (1.03, 1.09)         
+#> tka              2 - tka 0.0578 0.0229  39.5       1.06 (1.01, 1.11)         
+#> tcl              3 - tcl  -1.99 0.0794  3.98    0.136 (0.117, 0.159)     28.7
+#> tv                4 - tv   2.05 0.0921  4.48       7.80 (6.51, 9.34)     24.3
+#> prop.err    5 - prop.err  0.157 0.0379  24.1   0.157 (0.0831, 0.232)         
+#> pkadd.err  6 - pkadd.err  0.642 0.0915  14.3    0.642 (0.462, 0.821)         
+#> temax          7 - temax   7.10   3.96  55.8     0.999 (0.341, 1.00)         
+#> tec50          8 - tec50  0.106  0.176   166      1.11 (0.787, 1.57)     41.1
+#> tkout          9 - tkout  -2.96 0.0136 0.460 0.0516 (0.0502, 0.0530)         
+#> te0             10 - te0   4.57 0.0124 0.270       96.7 (94.4, 99.1)     5.24
+#> pdadd.err 11 - pdadd.err   3.75  0.290  7.75       3.75 (3.18, 4.32)         
 #>           Shrink(SD)%
 #> tktr                 
 #> tka                  
-#> tcl             4.95 
-#> tv              9.06 
+#> tcl             5.46 
+#> tv              11.4 
 #> prop.err             
 #> pkadd.err            
 #> temax                
-#> tec50           9.27 
+#> tec50           5.65 
 #> tkout                
-#> te0             19.2 
+#> te0             18.0 
 #> pdadd.err            
 #>  
 #>   Covariance Type (fit2$covMethod): |r|
@@ -832,9 +832,9 @@ fit2
 #> # A tibble: 483 × 33
 #>   ID     TIME CMT      DV  PRED   RES  WRES IPRED   IRES IWRES CPRED  CRES CWRES
 #>   <fct> <dbl> <fct> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 1       0.5 dcp     0    1.26 -1.26 -1.80  1.00 -1.00  -1.60  1.23 -1.23 -1.85
-#> 2 1       1   dcp     1.9  3.62 -1.72 -1.47  2.87 -0.971 -1.28  3.54 -1.64 -1.64
-#> 3 1       2   dcp     3.3  7.84 -4.54 -2.02  6.19 -2.89  -2.51  7.67 -4.37 -2.43
+#> 1 1       0.5 dcp     0    1.27 -1.27 -1.73  1.01 -1.01  -1.53  1.24 -1.24 -1.77
+#> 2 1       1   dcp     1.9  3.65 -1.75 -1.43  2.89 -0.989 -1.26  3.57 -1.67 -1.60
+#> 3 1       2   dcp     3.3  7.90 -4.60 -1.98  6.22 -2.92  -2.49  7.72 -4.42 -2.37
 #> # ℹ 480 more rows
 #> # ℹ 20 more variables: eta.cl <dbl>, eta.v <dbl>, eta.ec50 <dbl>, eta.e0 <dbl>,
 #> #   DEPOT <dbl>, GUT <dbl>, CENTER <dbl>, EFFECT <dbl>, ktr <dbl>, ka <dbl>,
@@ -925,7 +925,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.7153397       0.017 0.035    0.001 320.27      0.965     36.631
+#> elapsed 0.6828326       0.018 0.047    0.001 320.27      0.945     35.037
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
