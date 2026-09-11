@@ -389,7 +389,7 @@
   .ret
 }
 
-#'  Update the input model with final parmeter estimates
+#'  Update the input model with final parameter estimates
 #'
 #' @param rxui ui
 #' @inheritParams nonmem2rx
@@ -472,7 +472,7 @@
 #'   filters and record subsetting are applied.
 #'
 #' @param nonmemOutputDir This is a path the the nonmem output
-#'   directory.  When not `NULL` it will assume that the diretory for
+#'   directory.  When not `NULL` it will assume that the directory for
 #'   the output files is located here instead of where the control
 #'   stream currently exists.
 #'
