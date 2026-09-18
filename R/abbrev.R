@@ -443,7 +443,7 @@ nonmem2rxRec.err <- function(x) {
   }
   .theta
 }
-#'  Calulate the final covariates or nonmem input data items
+#'  Calculate the final covariates or nonmem input data items
 #'
 #' @return nothing, called for side effects
 #' @noRd
