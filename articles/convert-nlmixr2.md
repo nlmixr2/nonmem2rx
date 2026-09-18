@@ -424,7 +424,7 @@ fit <- as.nlmixr2(new)
 #> → finding duplicate expressions in EBE model...
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.7 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.8 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -440,7 +440,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.7650894       0.015 0.037    0.001 100.95       0.91
+#> elapsed 0.8540891       0.018 0.044    0.001 100.95      1.131
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -452,6 +452,7 @@ print(fit)
 #> RSV 0.196 0.00315  1.61    0.196 (0.190, 0.203)                     
 #>  
 #>   Covariance Type ($covMethod): nonmem2rx
+#>   Fixed parameter correlations in $cor
 #>   No correlations in between subject variability (BSV) matrix
 #>   Full BSV covariance ($omega) or correlation ($omegaR; diagonals=SDs) 
 #>   Distribution stats (mean/skewness/kurtosis/p-value) available in $shrink 
