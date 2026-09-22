@@ -34,6 +34,12 @@ test_that("$DATA options parse (#181)", {
   expect_equal(.nonmem2rx$dataIgnore1, "#")
   expect_equal(.nonmem2rx$dataRecords, 20L)
 
+  # backslashes in unquoted values are escaped for R
+  .p("file.csv IGNORE=(GEN.EQ.M\\F)")
+  expect_equal(.nonmem2rx$dataCond, ".data$GEN == 'M\\\\F'")
+  expect_equal(eval(parse(text=.nonmem2rx$dataCond),
+                    list(.data=list(GEN="M\\F"))), TRUE)
+
   .p("file.csv ACCEPT=(SEX='F' AGE.LE.60)")
   expect_equal(.nonmem2rx$dataCond, c(".data$SEX == 'F'", ".data$AGE <= 60"))
   expect_equal(.nonmem2rx$dataCondType, "accept")
@@ -65,6 +71,20 @@ test_that("$DATA contiguous runs (#181)", {
 
 test_that("$DATA malformed dates are missing (#181)", {
   expect_equal(.dataDateDays(c("12/31/1999/1", "3"), "DATE"), c(NA, 3))
+})
+
+test_that("$DATA DAT2/DAT3 field order (#181)", {
+  .ref <- as.numeric(as.Date("1999-12-31"))
+  expect_equal(.dataDateDays("1999-12-31", "DAT2"), .ref)
+  expect_equal(.dataDateDays("1999-31-12", "DAT3"), .ref)
+  expect_equal(.dataDateDays("31-12-1999", "DAT1"), .ref)
+  expect_equal(.dataDateDays("12/31/1999", "DATE"), .ref)
+  # two fields: month/day in the label's order
+  .md <- as.numeric(as.Date("2000-12-31"))
+  expect_equal(.dataDateDays("12-31", "DAT2"), .md)
+  expect_equal(.dataDateDays("31-12", "DAT3"), .md)
+  expect_equal(.dataDateDays("31-12", "DAT1"), .md)
+  expect_equal(.dataDateDays("12-31", "DATE"), .md)
 })
 
 test_that("$DATA TRANSLATE digits (#181)", {

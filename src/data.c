@@ -97,8 +97,14 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
     return;
   } else if (!strcmp("word_value", name)) {
     // unquoted non-numeric value; NONMEM compares it as a character string
+    // (quotes cannot occur in it; backslashes are escaped for R's parser)
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
-    sAppend(&curLine, "'%s'", v);
+    sAppendN(&curLine, "'", 1);
+    for (char *c = v; *c != 0; c++) {
+      if (*c == '\\') sAppendN(&curLine, "\\\\", 2);
+      else sAppend(&curLine, "%c", *c);
+    }
+    sAppendN(&curLine, "'", 1);
     return;
   } else if (!strcmp("format_statement", name)) {
     char *v = (char*)rc_dup_str(pn->start_loc.s, pn->end);
