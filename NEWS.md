@@ -29,6 +29,14 @@
   `input.g`, `model.g`, `sub.g`, `tab.g`) were measured and are flat in the
   record size.
 
+* Validation plots now separate multiple endpoints (#171).  When the
+  observations come from more than one `DVID` (or, without a `DVID`, more
+  than one `CMT`), the `predCompare`, `ipredCompare` and `iwresCompare`
+  datasets gain a final `ENDPOINT` column (like `"DVID=2"`).  `plot()` and
+  `autoplot()` then facet the NONMEM vs rxode2 overview by type and
+  endpoint, and the per-subject pages draw one panel for each subject and
+  endpoint with its own y scale, so endpoints on different scales are no
+  longer drawn on the same axis.  Single-endpoint output is unchanged.
 * `$DATA` now accepts every option in the NONMEM `$DATA` usage, and the ones
   that change the data are applied when the input data is imported (#181):
   - `TRANSLATE=(TIME/F[/D], II/F[/D])` divides TIME/II by `F` and rounds to
