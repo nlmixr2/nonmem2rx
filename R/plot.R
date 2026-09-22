@@ -136,9 +136,9 @@ autoplot.nonmem2rx <- function(object, ...,
 #' @author Matthew L. Fidler
 .plotCompareData <- function(cmp, type) {
   if (is.null(cmp)) return(NULL)
-  .n <- length(cmp)
-  .ret <- data.frame(id=cmp[[1]], time=cmp[[2]],
-                     nonmem=cmp[[.n - 1L]], rxode2=cmp[[.n]], type=type)
+  .ret <- data.frame(id=cmp$ID, time=cmp$TIME,
+                     nonmem=cmp[[paste0("nonmem", type)]], rxode2=cmp[[type]],
+                     type=type)
   if (any(names(cmp) == "ENDPOINT")) {
     .ret$endpoint <- as.character(cmp$ENDPOINT)
   }
@@ -168,9 +168,9 @@ autoplot.nonmem2rx <- function(object, ...,
 #' @author Matthew L. Fidler
 .plotCompareData <- function(cmp, type) {
   if (is.null(cmp)) return(NULL)
-  .n <- length(cmp)
-  .ret <- data.frame(id=cmp[[1]], time=cmp[[2]],
-                     nonmem=cmp[[.n - 1L]], rxode2=cmp[[.n]], type=type)
+  .ret <- data.frame(id=cmp$ID, time=cmp$TIME,
+                     nonmem=cmp[[paste0("nonmem", type)]], rxode2=cmp[[type]],
+                     type=type)
   if (any(names(cmp) == "ENDPOINT")) {
     .ret$endpoint <- as.character(cmp$ENDPOINT)
   }

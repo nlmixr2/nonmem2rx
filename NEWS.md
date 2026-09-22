@@ -3,7 +3,7 @@
 * Validation plots now separate multiple endpoints (#171).  When the
   observations come from more than one `DVID` (or, without a `DVID`, more
   than one `CMT`), the `predCompare`, `ipredCompare` and `iwresCompare`
-  datasets gain an `ENDPOINT` column (like `"DVID=2"`).  `plot()` and
+  datasets gain a final `ENDPOINT` column (like `"DVID=2"`).  `plot()` and
   `autoplot()` then facet the NONMEM vs rxode2 overview by type and
   endpoint, and the per-subject pages draw one panel for each subject and
   endpoint with its own y scale, so endpoints on different scales are no

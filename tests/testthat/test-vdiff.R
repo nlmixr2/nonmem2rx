@@ -61,7 +61,7 @@ test_that("multiple endpoint plots (#171)", {
 
   for (.cmp in c("predCompare", "ipredCompare", "iwresCompare")) {
     .c <- mod[[.cmp]]
-    expect_equal(names(.c)[1:3], c("ID", "TIME", "ENDPOINT"))
+    expect_equal(names(.c)[c(1:2, 5)], c("ID", "TIME", "ENDPOINT"))
     expect_equal(sort(unique(.c$ENDPOINT)), c("DVID=1", "DVID=2"))
     expect_equal(.c$ENDPOINT == "DVID=2", .c$TIME > 24)
   }
@@ -76,7 +76,7 @@ test_that("multiple endpoint plots (#171)", {
   expect_length(ggplot2::autoplot(mod, page=TRUE), 27L)
 
   # endpoint only on some of the comparisons
-  assign("ipredCompare", mod$ipredCompare[, -3], envir=mod)
+  assign("ipredCompare", mod$ipredCompare[, -5], envir=mod)
   expect_error(ggplot2::autoplot(mod), NA)
   expect_error(ggplot2::autoplot(mod, page=1), NA)
 })

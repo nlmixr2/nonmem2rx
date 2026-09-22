@@ -110,16 +110,17 @@
 
 #' Add the endpoint to a comparison dataset
 #'
-#' @param cmp comparison dataset with `ID` and `TIME` as the first
-#'   two columns
+#' @param cmp comparison dataset
 #' @param endpoint endpoint labels from `.nonmemEndpoint()`
-#' @return comparison dataset with `ENDPOINT` after `TIME` when there
-#'   are multiple endpoints
+#' @return comparison dataset with a final `ENDPOINT` column when
+#'   there are multiple endpoints (appended so the existing column
+#'   positions do not change)
 #' @noRd
 #' @author Matthew L. Fidler
 .addEndpoint <- function(cmp, endpoint) {
   if (is.null(endpoint) || length(endpoint) != length(cmp[,1])) return(cmp)
-  data.frame(cmp[, 1:2], ENDPOINT=endpoint, cmp[, -(1:2), drop=FALSE])
+  cmp$ENDPOINT <- endpoint
+  cmp
 }
 
 #' Do a validation on a ui setup with nonmem information inside of it
