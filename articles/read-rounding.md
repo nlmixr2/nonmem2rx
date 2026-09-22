@@ -545,8 +545,8 @@ print(fit)
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.8320861       0.034 0.047    0.001 320.27      1.195
+#>            setup postprocess table compress NONMEM as.nlmixr2
+#> elapsed 0.620346       0.022 0.044    0.008 320.27      1.394
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -769,7 +769,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:11 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:10 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -783,9 +783,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.818523 3.010856    18.3343      0.042       0.019  0.06    0.001
+#> elapsed 2.881106 2.968973   17.46828       0.04        0.02 0.058    0.001
 #>             other
-#> elapsed 0.1363216
+#> elapsed 0.1286366
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -913,7 +913,7 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:13
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:12
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
@@ -965,8 +965,8 @@ fit
 #> 
 #> ── Time (sec fit$time): ──
 #> 
-#>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.8320861       0.034 0.047    0.001 320.27      1.195     44.383
+#>            setup postprocess table compress NONMEM as.nlmixr2 covariance
+#> elapsed 0.620346       0.022 0.044    0.008 320.27      1.394     41.351
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 

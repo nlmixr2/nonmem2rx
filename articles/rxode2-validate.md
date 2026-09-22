@@ -52,7 +52,7 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ read in nonmem input data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/Bolus_2CPT.csv
 #> ℹ ignoring lines that begin with a letter (IGNORE=@)
 #> ℹ applying names specified by $INPUT
-#> ℹ subsetting accept/ignore filters code: .data[-which((.data$SD == 0)),]
+#> ℹ ignore filter code: .data$SD == 0
 #> ℹ renaming 'ytype' to 'nmytype'
 #> ℹ done
 #> ℹ read in nonmem IPRED data (for model validation): /home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.csv
