@@ -98,7 +98,7 @@
       if (length(.w) == 1L) {
         .x <- data[, .w]
         if (length(unique(.x[!is.na(.x)])) > 1L) {
-          return(paste0(names(data)[.w], "=", .x))
+          return(paste0(toupper(.v), "=", .x))
         }
       }
     }

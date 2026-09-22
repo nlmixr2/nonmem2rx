@@ -75,6 +75,21 @@ test_that("multiple endpoint plots (#171)", {
   # pages count id/endpoint panels
   expect_length(ggplot2::autoplot(mod, page=TRUE), 27L)
 
+  # endpoint from the NONMEM output tables (lower case column)
+  mod <- rxode2::rxUiDecompress(mod)
+  assign("nonmemData", .d[, names(.d) != "DVID"], envir=mod)
+  for (.v in c("ipredData", "predData")) {
+    .t <- get(.v, envir=mod)
+    .t$dvid <- ifelse(.t$TIME > 12, 3, 4)
+    assign(.v, .t, envir=mod)
+  }
+  suppressMessages(.nonmem2rxValidate(mod))
+  class(mod) <- c("nonmem2rx", "rxUi")
+  for (.cmp in c("predCompare", "ipredCompare", "iwresCompare")) {
+    .c <- mod[[.cmp]]
+    expect_equal(.c$ENDPOINT, ifelse(.c$TIME > 12, "DVID=3", "DVID=4"))
+  }
+
   # endpoint only on some of the comparisons; no endpoint split
   assign("ipredCompare", mod$ipredCompare[, -5], envir=mod)
   a <- ggplot2::autoplot(mod)
@@ -98,7 +113,7 @@ test_that(".nonmemEndpoint()", {
   expect_null(.nonmemEndpoint(.out, .in))
   # output table columns are preferred
   .out$cmt <- c(4, 5, 4)
-  expect_equal(.nonmemEndpoint(.out, .in), c("cmt=4", "cmt=5", "cmt=4"))
+  expect_equal(.nonmemEndpoint(.out, .in), c("CMT=4", "CMT=5", "CMT=4"))
   # cannot align rows
   .out$cmt <- NULL
   .in$CMT <- c(1, 2, 3, 2)
