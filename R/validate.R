@@ -74,6 +74,54 @@
   seq_along(inputData[,1])
 }
 
+#' Determine the endpoint of each compared observation
+#'
+#' NONMEM identifies multiple endpoints with either a `DVID` column or
+#' the observation compartment `CMT`.  This looks for these columns
+#' first in the NONMEM output table and then in the observation
+#' records of the NONMEM input dataset.
+#'
+#' @param outData NONMEM output table data (restricted to observations)
+#' @param inputData NONMEM input data
+#' @param obsIdx observation index of the NONMEM input data
+#' @return `NULL` when there is only one endpoint, otherwise a
+#'   character vector labeling the endpoint of each row in `outData`
+#'   (like `"CMT=2"`)
+#' @noRd
+#' @author Matthew L. Fidler
+.nonmemEndpoint <- function(outData, inputData, obsIdx) {
+  .n <- length(outData[,1])
+  .get <- function(data) {
+    for (.v in c("dvid", "cmt")) {
+      .w <- which(tolower(names(data)) == .v)
+      if (length(.w) == 1L) {
+        .x <- data[, .w]
+        if (length(unique(.x[!is.na(.x)])) <= 1L) return(NULL)
+        return(paste0(names(data)[.w], "=", .x))
+      }
+    }
+    NULL
+  }
+  .ret <- .get(outData)
+  if (!is.null(.ret)) return(.ret)
+  if (is.null(inputData) || length(obsIdx) != .n) return(NULL)
+  .get(inputData[obsIdx,, drop=FALSE])
+}
+
+#' Add the endpoint to a comparison dataset
+#'
+#' @param cmp comparison dataset with `ID` and `TIME` as the first
+#'   two columns
+#' @param endpoint endpoint labels from `.nonmemEndpoint()`
+#' @return comparison dataset with `ENDPOINT` after `TIME` when there
+#'   are multiple endpoints
+#' @noRd
+#' @author Matthew L. Fidler
+.addEndpoint <- function(cmp, endpoint) {
+  if (is.null(endpoint) || length(endpoint) != length(cmp[,1])) return(cmp)
+  data.frame(cmp[, 1:2], ENDPOINT=endpoint, cmp[, -(1:2), drop=FALSE])
+}
+
 #' Do a validation on a ui setup with nonmem information inside of it
 #'
 #'
@@ -208,6 +256,7 @@
           .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
                              nonmemIPRED=.ipredData$IPRED,
                              IPRED=.ipredSolve[[.y]])
+          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .rx$nonmemData, .obsIdx))
           .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
@@ -236,6 +285,7 @@
           .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
                              nonmemIWRES=.ipredData$IWRES,
                              IWRES=.ipredSolve[[.iwres]])
+          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .rx$nonmemData, .obsIdx))
           .qi <- stats::quantile(with(.cmp, 100*abs((IWRES-nonmemIWRES)/nonmemIWRES)), .q, na.rm=TRUE)
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qai <- stats::quantile(with(.cmp, abs(IWRES-nonmemIWRES)), .q, na.rm=TRUE)
@@ -300,6 +350,7 @@
           .cmp <- data.frame(ID=.predData[,.wid], TIME=.predData[,.wtime],
                              nonmemPRED=.predData$PRED,
                              PRED=.predSolve[[.y]])
+          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.predData, .rx$nonmemData, .obsIdx))
           .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .msg <- c(.msg,
