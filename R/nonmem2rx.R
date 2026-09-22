@@ -25,6 +25,12 @@
   .nonmem2rx$dataCond <- character(0)
   .nonmem2rx$dataIgnore1 <- NULL
   .nonmem2rx$dataRecords <- NA_integer_
+  .nonmem2rx$dataRecordsLabel <- NULL
+  .nonmem2rx$dataNull <- NULL
+  .nonmem2rx$dataLast20 <- 50L
+  .nonmem2rx$dataMisdat <- numeric(0)
+  .nonmem2rx$dataRepl <- NA_integer_
+  .nonmem2rx$dataTranslate <- list()
   .nonmem2rx$needNmevid <- FALSE
   .nonmem2rx$needNmid <- FALSE
   .nonmem2rx$tables <- list()
