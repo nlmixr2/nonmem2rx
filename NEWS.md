@@ -1,5 +1,25 @@
 # nonmem2rx 0.1.11
 
+* `$DATA` now accepts every option in the NONMEM `$DATA` usage, and the ones
+  that change the data are applied when the input data is imported (#181):
+  - `TRANSLATE=(TIME/F[/D], II/F[/D])` divides TIME/II by `F` and rounds to
+    `D` digits (for example `TIME/24` for hours to days, `II/0.01/6`).  The
+    item may be named by its `$INPUT` synonym.
+  - Before `TRANSLATE`, NM-TRAN's day-time translation is done: `hh:mm` or
+    `hh:mm:ss` clock times and `DATE`/`DAT1`/`DAT2`/`DAT3` dates (with
+    `LAST20=` for two digit years) become times relative to each
+    individual's first record, and `hh:mm` II values become hours.
+  - `RECORDS=n` (also `NRECORDS`, `RECS`, `NRECS`) is now applied before
+    `IGNORE`/`ACCEPT`, as NM-TRAN does, and `RECORDS=label` (`ID`, `IR`,
+    `INDREC`, ...) is supported.
+  - `NULL=c` replaces null data items and `MISDAT=r` values are read as 0.
+  - `DROP`/`SKIP` items are kept until after `IGNORE`/`ACCEPT`, so they can
+    be used in filter conditions.
+  - The format specification, `*`, `CHECKDATA`, `NOOPEN`, `BLANKOK`, `REPL`,
+    `(NO)FDATACSV`, `PRED_IGNORE_DATA`, the `/=` operator, unquoted
+    character values (`GEN.EQ.M` compares with the string `M`, not a
+    column) and lower/mixed case options are now parsed.
+
 * Importing a dataset with many reused NONMEM `ID`s is no longer slow.  The
   next free alias was found by walking every alias already given out and
   scanning the whole level list for each, so the cost grew with the cube of
