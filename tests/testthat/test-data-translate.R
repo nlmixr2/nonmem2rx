@@ -174,6 +174,14 @@ test_that("$DATA options are applied when importing data (#181)", {
            "2,3/1,00:00,0,5")
   .d <- .read("ID DATE=DROP TIME AMT DV", "IGNORE=@", .md)
   expect_equal(.d$TIME, c(0, 2, 0, 24, 48))
+  # a month/day date continues from the year of a prior full date
+  .mix <- c("ID,DATE,TIME,AMT,DV",
+            "1,12/31/1998,00:00,100,.",
+            "1,1/1,00:00,0,5",
+            "2,2/28/1999,00:00,100,.",
+            "2,3/1,00:00,0,5")
+  .d <- .read("ID DATE=DROP TIME AMT DV", "IGNORE=@", .mix)
+  expect_equal(.d$TIME, c(0, 24, 0, 24))
   # DAT1 is day month year
   .dat1 <- c("ID,DAT1,TIME,AMT,DV",
              "1,31-12-1999,23:00,100,.",

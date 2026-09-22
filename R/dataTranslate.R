@@ -56,8 +56,9 @@
 #' `DAT1` (day month year), `DAT2` (year month day), `DAT3` (year day
 #' month).  One field is a day; two fields are month and day; one or two
 #' digit years are placed in a century by `LAST20`.  Month/day dates without
-#' a year start in a leap year and move to the next year when the date goes
-#' backwards within an individual (e.g. 12/31 followed by 1/1).
+#' a year use the year of the individual's last full date (a leap year if
+#' there is none) and move to the next year when the date goes backwards
+#' within an individual (e.g. 12/31 followed by 1/1).
 #'
 #' @param x vector of dates
 #' @param type reserved date label (`DATE`, `DAT1`, `DAT2`, `DAT3`)
@@ -103,7 +104,9 @@
       if (v["y"] < 100) {
         v["y"] <- v["y"] + ifelse(v["y"] > last20, 1900, 2000)
       }
-      .ret[.i] <- .days(v["y"], v["m"], v["d"])
+      # later month/day dates of this individual continue from this year
+      .year <- v[["y"]]
+      .ret[.i] <- .last <- .days(v["y"], v["m"], v["d"])
     }
   }
   .ret
