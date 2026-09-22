@@ -452,7 +452,7 @@
        update=.update.theta && .update.omega && .update.sigma)
 }
 
-#' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+#' Convert a NONMEM source file to a rxode model (nlmixr2-style)
 #'
 #' @param file NONMEM run file, like an `.xml` or `.lst` file or even
 #'   a control stream
