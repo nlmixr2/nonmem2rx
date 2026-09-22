@@ -18,6 +18,18 @@
   names(data)[toupper(names(data)) %in% toupper(.cols)]
 }
 
+#' Number contiguous runs of equal values (missing values compare equal)
+#'
+#' @param x vector (e.g. the ID data item)
+#' @return integer run number for each element
+#' @noRd
+#' @author Matthew L. Fidler
+.dataRuns <- function(x) {
+  .x <- as.character(x)
+  .x[is.na(.x)] <- "\001NA"
+  cumsum(c(TRUE, .x[-1] != .x[-length(.x)]))[seq_along(.x)]
+}
+
 #' Convert NONMEM clock times (`hh:mm` or `hh:mm:ss`) to hours
 #'
 #' @param x vector of times; values without a `:` are taken as hours
@@ -139,8 +151,7 @@
       .minfo("translating clock times/dates to relative times (NM-TRAN day-time translation)")
       .idCols <- .dataItemCols(data, "ID")
       if (length(.idCols) > 0L) {
-        .id <- data[[.idCols[1]]]
-        .id <- cumsum(c(TRUE, .id[-1] != .id[-length(.id)]))
+        .id <- .dataRuns(data[[.idCols[1]]])
       } else {
         .id <- rep(1L, nrow(data))
       }
@@ -195,9 +206,7 @@
   if (toupper(.lab) %in% c("IR", "INDREC", "INDIVIDUALRECORD")) .lab <- "ID"
   .cols <- .dataItemCols(data, .lab)
   if (length(.cols) == 0L) return(data)
-  .v <- as.character(data[[.cols[1]]])
-  .n <- which(.v != .v[1])
-  .n <- if (length(.n) == 0L) nrow(data) else .n[1] - 1L
+  .n <- sum(.dataRuns(data[[.cols[1]]]) == 1L)
   .minfo(sprintf("RECORDS=%s: using the first %d records", .lab, .n))
   data[seq_len(.n), , drop=FALSE]
 }

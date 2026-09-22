@@ -53,6 +53,12 @@ test_that("$DATA options parse (#181)", {
   expect_equal(.nonmem2rx$dataTranslate, list(TIME=list(factor=24, digits=2L)))
 })
 
+test_that("$DATA contiguous runs (#181)", {
+  expect_equal(.dataRuns(c(1, 1, 2, 2, 1)), c(1, 1, 2, 2, 3))
+  expect_equal(.dataRuns(c(NA, NA, 2)), c(1, 1, 2))
+  expect_equal(.dataRuns(character(0)), integer(0))
+})
+
 test_that("$DATA TRANSLATE digits (#181)", {
   expect_equal(.dataTranslateDigits("24", ""), 2L)
   expect_equal(.dataTranslateDigits("1.0000", ""), 4L)
@@ -111,6 +117,13 @@ test_that("$DATA options are applied when importing data (#181)", {
   .d <- .read("ID TIME AMT II DV GEN", "IGNORE=@ RECORDS=4 IGNORE=(GEN.EQ.F)", .csv)
   expect_equal(.d$TIME, c(0, 12, 30))
   .d <- .read("ID TIME AMT II DV GEN", "IGNORE=@ RECORDS=ID", .csv)
+  expect_equal(.d$ID, c(1, 1, 1))
+  .d <- .read("ID TIME AMT II DV GEN", "IGNORE=@ RECORDS=IR", .csv)
+  expect_equal(.d$ID, c(1, 1, 1))
+  .d <- .read("ID TIME AMT II DV GEN", "IGNORE=@ RECORDS=INDREC", .csv)
+  expect_equal(.d$ID, c(1, 1, 1))
+  # RECORDS=label with another data item (and its synonym)
+  .d <- .read("ID TIME AMT II DV SEX=GEN", "IGNORE=@ RECORDS=GEN", .csv)
   expect_equal(.d$ID, c(1, 1, 1))
 
   # NULL= replaces nulls; MISDAT values are interpreted as 0
