@@ -138,6 +138,16 @@ test_that("$DATA options are applied when importing data (#181)", {
   .d <- .read("ID TIME AMT II DV GEN", "IGNORE=@ NULL=0 MISDAT=4", .csv)
   expect_equal(.d$DV, c(0, 5, 0, 0, 3, 0))
 
+  # ACCEPT keeps only records meeting a condition (missing values do not)
+  .acc <- c("ID,TIME,AMT,DV,GEN",
+            "1,0,100,.,M",
+            "1,1,0,5,.",
+            "2,0,100,.,F")
+  .d <- .read("ID TIME AMT DV GEN", "IGNORE=@ ACCEPT=(GEN.EQ.M)", .acc)
+  expect_equal(.d$TIME, 0)
+  .d <- .read("ID TIME AMT DV GEN", "IGNORE=@ IGNORE=(GEN.EQ.M)", .acc)
+  expect_equal(.d$ID, c(1, 2))
+
   # NULL= is applied after the numeric IGNORE filters
   .nullCsv <- c("ID,TIME,AMT,DV,AGE",
                 "1,0,100,.,100",

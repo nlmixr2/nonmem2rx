@@ -105,14 +105,16 @@
     .data <- .dataApplyRecords(.data)
     # https://www.mail-archive.com/nmusers@globomaxnm.com/msg05323.html
     if (length(.nonmem2rx$dataCond) > 0) {
-      .cond <- paste0("-which(",
-                     ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
-                     paste(.nonmem2rx$dataCond, collapse=" | "),
-                     "))")
-      .minfo(paste0("subsetting accept/ignore filters code: .data[", .cond, ",]"))
-      .w <- eval(parse(text=.cond))
-      if (length(.w) > 0) {
-        .data <- .data[.w,]
+      .cond <- paste(.nonmem2rx$dataCond, collapse=" | ")
+      .minfo(paste0(ifelse(.nonmem2rx$dataCondType == "accept", "accept", "ignore"),
+                    " filter code: ", .cond))
+      # a condition that cannot be evaluated (missing value) is not met
+      .met <- eval(parse(text=.cond))
+      .met <- !is.na(.met) & .met
+      if (.nonmem2rx$dataCondType == "accept") {
+        .data <- .data[.met, , drop=FALSE]
+      } else {
+        .data <- .data[!.met, , drop=FALSE]
       }
     }
     # NULL=c replaces null data items ("." or empty); this is done after
