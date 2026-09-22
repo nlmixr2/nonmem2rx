@@ -1,6 +1,11 @@
 //loop
+// `statement` must not be nullable: a nullable element under `(statement)+` is
+// infinitely ambiguous (an empty statement fits at every position), and
+// dparser resolves that by greediness, which is quadratic in the record size.
+// The emptiness belongs on the list, so `BLOCK(n) SAME` -- which carries no
+// statements at all -- still parses.
 statement_list :  block_type? first? block_type? fixed?
-        (statement)+ ;
+        (statement)* ;
 
 diagonal: ('diagonal' | 'DIAGONAL') '(' decimalint ')';
 
@@ -36,7 +41,7 @@ first: diagonal | block | blockn | blocknsame | blocksame | blocksamen | blockns
 
 statement: omega_statement  |
         block_type |
-  singleLineComment?;
+  singleLineComment;
 
 omega_name: identifier '=';
 
@@ -90,7 +95,11 @@ block_chol_type: 'CHOLESKY' | 'CHOL' |
     'cholesky' | 'chol' |
     'Cholesky' | 'Chol';
 
-block_type: off_diag_type? diag_type? | diag_type? off_diag_type? | block_chol_type?;
+// Every alternative was optional, so `block_type` derived the empty string
+// three different ways; it is used as `block_type?` everywhere it may be
+// absent, so requiring the first element here accepts the same non-empty
+// strings without the ambiguity.
+block_type: off_diag_type diag_type? | diag_type off_diag_type? | block_chol_type;
 
 whitespace: ( "[ \t\r\n]+")*;
 singleLineComment: ';' "[^\n]*";

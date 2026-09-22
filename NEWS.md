@@ -1,5 +1,34 @@
 # nonmem2rx 0.1.11
 
+* Reading a NONMEM `.lst` covariance block is no longer slow.  `lst.g` let a
+  run of numbers be cut into `constant_line`s in exponentially many ways, and
+  dparser resolves that ambiguity by greediness, which re-walks the whole
+  accumulated parse tree at every split point -- so the cost grew with the cube
+  of the block size (40 rows took 26 seconds).  A statement is now a single
+  item rather than a line of them, which the tree walk never distinguished
+  anyway: `inst/run-153.lst` imports in 0.17s instead of 2.24s,
+  `DDMODEL00000301/run3.lst` in 0.15s instead of 1.57s, and 400 rows -- which
+  did not finish in any usable time before -- parse in 0.3s.  A `+` still has
+  to lead an item, so a stray one is still a syntax error (#250).
+
+* `$THETA` and `$OMEGA`/`$SIGMA` records parse about 2.5x faster.  Both
+  grammars had the ambiguity found in `rxode2`'s `tran.g`: a nullable
+  `statement` under `(statement)+`, which lets an empty statement be inserted
+  at every position, and which dparser resolves by greediness.  `omega.g` also
+  derived the empty string three different ways through `block_type`.  The
+  emptiness moved to the list, so an empty record and `$OMEGA BLOCK(n) SAME`
+  (which carries no statements) still parse.  A 400-theta `$THETA` record goes
+  from 7.3s to 2.8s (#250).
+
+  Both grammars now report no ambiguity at all under dparser's
+  `ambiguity_fn`.  What is left of their super-linear cost is not ambiguity but
+  GLR branching from the optional `')'` and `','` in `theta.g`'s `theta1`..
+  `theta8` and in `omega.g`'s `omega0`..`omega4`, which is a separate matter.
+
+  The remaining `inst/*.g` grammars (`abbrev.g`, `abbrec.g`, `data.g`,
+  `input.g`, `model.g`, `sub.g`, `tab.g`) were measured and are flat in the
+  record size.
+
 * Validation plots now separate multiple endpoints (#171).  When the
   observations come from more than one `DVID` (or, without a `DVID`, more
   than one `CMT`), the `predCompare`, `ipredCompare` and `iwresCompare`
@@ -8,6 +37,7 @@
   endpoint, and the per-subject pages draw one panel for each subject and
   endpoint with its own y scale, so endpoints on different scales are no
   longer drawn on the same axis.  Single-endpoint output is unchanged.
+
 * `$DATA` now accepts every option in the NONMEM `$DATA` usage, and the ones
   that change the data are applied when the input data is imported (#181):
   - `TRANSLATE=(TIME/F[/D], II/F[/D])` divides TIME/II by `F` and rounds to
