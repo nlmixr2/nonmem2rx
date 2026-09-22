@@ -36,12 +36,15 @@ autoplot.nonmem2rx <- function(object, ...,
   .data <- lapply(names(.types), function(type) {
     .plotCompareData(object[[.types[type]]], type)
   })
-  .hasEndpoint <- any(vapply(.data, function(d) {
+  .data <- .data[!vapply(.data, is.null, logical(1))]
+  # only split by endpoint when every comparison knows its endpoint;
+  # otherwise PRED/IPRED would land on different panels
+  .hasEndpoint <- all(vapply(.data, function(d) {
     any(names(d) == "endpoint")
   }, logical(1)))
-  if (.hasEndpoint) {
+  if (!.hasEndpoint) {
     .data <- lapply(.data, function(d) {
-      if (!is.null(d) && !any(names(d) == "endpoint")) d$endpoint <- NA_character_
+      d$endpoint <- NULL
       d
     })
   }
@@ -49,7 +52,6 @@ autoplot.nonmem2rx <- function(object, ...,
   .data$type <- factor(.data$type,
                        intersect(c("PRED", "IPRED", "IWRES"), unique(.data$type)))
   if (.hasEndpoint) {
-    .data$endpoint[is.na(.data$endpoint)] <- "NA"
     .data$endpoint <- factor(.data$endpoint, .sortEndpoint(unique(.data$endpoint)))
   }
   if (is.logical(page) && !page) {
@@ -69,7 +71,7 @@ autoplot.nonmem2rx <- function(object, ...,
   if (.hasEndpoint) {
     # each panel is an id/endpoint combination; order by id first
     .data$panel <- paste0("id=", .data$id, "; ", .data$endpoint)
-    .data <- .data[order(.data$id, as.integer(.data$endpoint), .data$type, .data$time), ]
+    .data <- .data[order(.data$id, as.integer(.data$endpoint)), ]
     .data$panel <- factor(.data$panel, unique(.data$panel))
   } else {
     .data$panel <- .data$id
