@@ -92,20 +92,7 @@
     }
     .data <- .data[,seq_along(.inp), drop=FALSE]
     names(.data) <- names(.inp)
-    # 2. NULL=c replaces null data items ("." or empty)
-    if (!is.null(.nonmem2rx$dataNull)) {
-      .minfo(paste0("replacing null data items with '", .nonmem2rx$dataNull, "' (NULL=)"))
-      for (.i in seq_along(.data)) {
-        .cur <- .data[[.i]]
-        .w <- is.na(.cur) | as.character(.cur) %in% c("", ".")
-        if (any(.w)) {
-          .cur <- as.character(.cur)
-          .cur[.w] <- .nonmem2rx$dataNull
-          .data[[.i]] <- .cur
-        }
-      }
-    }
-    # 3. add nonmem declared aliases into the dataset; DROP items are kept
+    # 2. add nonmem declared aliases into the dataset; DROP items are kept
     # until after the IGNORE/ACCEPT filters since they may be used there
     .w <- which(names(.inp) != .inp & .inp != "DROP" & names(.inp) != "DROP")
     if (length(.w) > 0) {
@@ -114,7 +101,7 @@
         .data[, .inpr[.i]] <- .data[, .i]
       }
     }
-    # 4. RECORDS= selects records before the IGNORE/ACCEPT filters
+    # 3. RECORDS= selects records before the IGNORE/ACCEPT filters
     .data <- .dataApplyRecords(.data)
     # https://www.mail-archive.com/nmusers@globomaxnm.com/msg05323.html
     if (length(.nonmem2rx$dataCond) > 0) {
@@ -128,9 +115,23 @@
         .data <- .data[.w,]
       }
     }
-    # 5. day-time translation and TRANSLATE= (after the filters)
+    # NULL=c replaces null data items ("." or empty); this is done after
+    # IGNORE/ACCEPT so the filters see the data as read
+    if (!is.null(.nonmem2rx$dataNull)) {
+      .minfo(paste0("replacing null data items with '", .nonmem2rx$dataNull, "' (NULL=)"))
+      for (.i in seq_along(.data)) {
+        .cur <- .data[[.i]]
+        .w <- is.na(.cur) | as.character(.cur) %in% c("", ".")
+        if (any(.w)) {
+          .cur <- as.character(.cur)
+          .cur[.w] <- .nonmem2rx$dataNull
+          .data[[.i]] <- .cur
+        }
+      }
+    }
+    # 4. day-time translation and TRANSLATE= (after the filters)
     .data <- .dataTimeTranslate(.data)
-    # 6. drop values requested by nonmem
+    # 5. drop values requested by nonmem
     .w <- which(.inp == "DROP" | names(.inp) == "DROP")
     if (length(.w) > 0) {
       .data <- .data[, -.w, drop=FALSE]

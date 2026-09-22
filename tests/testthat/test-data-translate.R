@@ -40,6 +40,17 @@ test_that("$DATA options parse (#181)", {
 
   .p("*")
   expect_equal(.nonmem2rx$dataFile, "*")
+
+  # the "=" is optional
+  .p("file.csv RECORDS ID LAST20 30 MISDAT 3 REPL 2 NULL 0")
+  expect_equal(.nonmem2rx$dataRecordsLabel, "ID")
+  expect_equal(.nonmem2rx$dataLast20, 30L)
+  expect_equal(.nonmem2rx$dataMisdat, 3)
+  expect_equal(.nonmem2rx$dataRepl, 2L)
+  expect_equal(.nonmem2rx$dataNull, "0")
+  .p("file.csv RECORDS 20 TRANSLATE (TIME/24)")
+  expect_equal(.nonmem2rx$dataRecords, 20L)
+  expect_equal(.nonmem2rx$dataTranslate, list(TIME=list(factor=24, digits=2L)))
 })
 
 test_that("$DATA TRANSLATE digits (#181)", {
@@ -106,6 +117,16 @@ test_that("$DATA options are applied when importing data (#181)", {
   .d <- .read("ID TIME AMT II DV GEN", "IGNORE=@ NULL=0 MISDAT=4", .csv)
   expect_equal(.d$DV, c(0, 5, 0, 0, 3, 0))
 
+  # NULL= is applied after the numeric IGNORE filters
+  .nullCsv <- c("ID,TIME,AMT,DV,AGE",
+                "1,0,100,.,100",
+                "1,1,0,5,.",
+                "2,0,100,.,40")
+  .d <- .read("ID TIME AMT DV AGE", "IGNORE=@ NULL=0 IGNORE=(AGE.LE.60)", .nullCsv)
+  expect_equal(.d$ID, c(1, 1))
+  expect_equal(.d$AGE, c(100, 0))
+  expect_equal(.d$DV, c(0, 5))
+
   # day-time translation of clock times happens before TRANSLATE
   .clock <- c("ID,TIME,AMT,II,DV",
               "1,08:00,100,12:30,.",
@@ -131,6 +152,15 @@ test_that("$DATA options are applied when importing data (#181)", {
   .d <- .read("ID DATE=DROP TIME AMT DV", "IGNORE=@ LAST20=-1", .date[1:3])
   expect_equal(.d$TIME,
                c(0, 24 * as.numeric(as.Date("1900-01-01") - as.Date("1999-12-31")) - 22))
+  # month/day dates without a year cross the year boundary (and allow 2/29)
+  .md <- c("ID,DATE,TIME,AMT,DV",
+           "1,12/31,23:00,100,.",
+           "1,1/1,01:00,0,5",
+           "2,2/28,00:00,100,.",
+           "2,2/29,00:00,0,5",
+           "2,3/1,00:00,0,5")
+  .d <- .read("ID DATE=DROP TIME AMT DV", "IGNORE=@", .md)
+  expect_equal(.d$TIME, c(0, 2, 0, 24, 48))
   # DAT1 is day month year
   .dat1 <- c("ID,DAT1,TIME,AMT,DV",
              "1,31-12-1999,23:00,100,.",

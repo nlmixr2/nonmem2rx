@@ -43,37 +43,58 @@
 #' The field order depends on the reserved label: `DATE` (month day year),
 #' `DAT1` (day month year), `DAT2` (year month day), `DAT3` (year day
 #' month).  One field is a day; two fields are month and day; one or two
-#' digit years are placed in a century by `LAST20`.
+#' digit years are placed in a century by `LAST20`.  Month/day dates without
+#' a year start in a leap year and move to the next year when the date goes
+#' backwards within an individual (e.g. 12/31 followed by 1/1).
 #'
 #' @param x vector of dates
 #' @param type reserved date label (`DATE`, `DAT1`, `DAT2`, `DAT3`)
 #' @param last20 `$DATA LAST20` value
+#' @param id individual (contiguous records)
 #' @return numeric days
 #' @noRd
 #' @author Matthew L. Fidler
-.dataDateDays <- function(x, type, last20=50L) {
+.dataDateDays <- function(x, type, last20=50L, id=rep(1L, length(x))) {
   .order <- switch(toupper(type),
                    DATE=c("m", "d", "y"),
                    DAT1=c("d", "m", "y"),
                    DAT2=c("y", "m", "d"),
                    DAT3=c("y", "d", "m"))
-  vapply(strsplit(trimws(as.character(x)), "[^0-9]+"),
-         function(v) {
-           v <- suppressWarnings(as.numeric(v[v != ""]))
-           if (length(v) == 0L || anyNA(v)) return(NA_real_)
-           if (length(v) == 1L) return(v)
-           if (length(v) == 2L) {
-             names(v) <- .order[.order != "y"]
-             v <- c(v, y=2001)
-           } else {
-             names(v) <- .order
-             if (v["y"] < 100) {
-               v["y"] <- v["y"] + ifelse(v["y"] > last20, 1900, 2000)
-             }
-           }
-           as.numeric(as.Date(sprintf("%04d-%02d-%02d", as.integer(v["y"]),
-                                      as.integer(v["m"]), as.integer(v["d"]))))
-         }, numeric(1), USE.NAMES=FALSE)
+  .days <- function(y, m, d) {
+    as.numeric(as.Date(sprintf("%04d-%02d-%02d", as.integer(y),
+                               as.integer(m), as.integer(d))))
+  }
+  .fields <- lapply(strsplit(trimws(as.character(x)), "[^0-9]+"),
+                    function(v) suppressWarnings(as.numeric(v[v != ""])))
+  .ret <- rep(NA_real_, length(x))
+  .year <- 2000
+  .last <- NA_real_
+  for (.i in seq_along(.fields)) {
+    v <- .fields[[.i]]
+    if (.i == 1L || id[.i] != id[.i - 1L]) {
+      .year <- 2000
+      .last <- NA_real_
+    }
+    if (length(v) == 0L || anyNA(v)) next
+    if (length(v) == 1L) {
+      .ret[.i] <- v
+    } else if (length(v) == 2L) {
+      names(v) <- .order[.order != "y"]
+      .d <- .days(.year, v["m"], v["d"])
+      if (!is.na(.last) && !is.na(.d) && .d < .last) {
+        .year <- .year + 1
+        .d <- .days(.year, v["m"], v["d"])
+      }
+      .ret[.i] <- .last <- .d
+    } else {
+      names(v) <- .order
+      if (v["y"] < 100) {
+        v["y"] <- v["y"] + ifelse(v["y"] > last20, 1900, 2000)
+      }
+      .ret[.i] <- .days(v["y"], v["m"], v["d"])
+    }
+  }
+  .ret
 }
 
 #' Fill missing values forward within each individual
@@ -128,7 +149,7 @@
         .dateCols <- .dataItemCols(data, .dateType[1])
         if (length(.dateCols) > 0L) {
           .days <- .dataDateDays(data[[.dateCols[1]]], .dateType[1],
-                                 .nonmem2rx$dataLast20)
+                                 .nonmem2rx$dataLast20, .id)
           .hours <- .hours + 24 * .dataFillForward(.days, .id)
         }
       }
