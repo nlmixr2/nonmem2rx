@@ -243,6 +243,10 @@ wish by looking at the <code>ipredCompare</code> and
 <span><span class="co">#&gt; 4  1 1.00     1604.8 1604.752</span></span>
 <span><span class="co">#&gt; 5  1 1.50     1516.9 1516.913</span></span>
 <span><span class="co">#&gt; 6  1 2.00     1435.7 1435.723</span></span></code></pre></div>
+<p>When a model has more than one endpoint (the observations have more
+than one <code>DVID</code>, or without a <code>DVID</code> more than one
+<code>CMT</code>), these datasets also have an <code>ENDPOINT</code>
+column, and the validation plots are split by endpoint.</p>
 <p>In these cases you can see that NONMEM seems to round the values for
 the output (the rounding rules are based on the <code>FORMAT</code>
 option), but rxode2 seems to keep the entire number.</p>

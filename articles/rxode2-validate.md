@@ -162,6 +162,11 @@ head(mod$predCompare)
 #> 6  1 2.00     1435.7 1435.723
 ```
 
+When a model has more than one endpoint (the observations have more than
+one `DVID`, or without a `DVID` more than one `CMT`), these datasets
+also have an `ENDPOINT` column, and the validation plots are split by
+endpoint.
+
 In these cases you can see that NONMEM seems to round the values for the
 output (the rounding rules are based on the `FORMAT` option), but rxode2
 seems to keep the entire number.

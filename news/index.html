@@ -53,7 +53,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.11" id="nonmem2rx-0111">nonmem2rx 0.1.11<a class="anchor" aria-label="anchor" href="#nonmem2rx-0111"></a></h2>
-<ul><li>
+<ul><li><p>Validation plots now separate multiple endpoints (<a href="https://github.com/nlmixr2/nonmem2rx/issues/171" class="external-link">#171</a>). When the observations come from more than one <code>DVID</code> (or, without a <code>DVID</code>, more than one <code>CMT</code>), the <code>predCompare</code>, <code>ipredCompare</code> and <code>iwresCompare</code> datasets gain a final <code>ENDPOINT</code> column (like <code>"DVID=2"</code>). <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> then facet the NONMEM vs rxode2 overview by type and endpoint, and the per-subject pages draw one panel for each subject and endpoint with its own y scale, so endpoints on different scales are no longer drawn on the same axis. Single-endpoint output is unchanged.</p></li>
+<li>
 <p><code>$DATA</code> now accepts every option in the NONMEM <code>$DATA</code> usage, and the ones that change the data are applied when the input data is imported (<a href="https://github.com/nlmixr2/nonmem2rx/issues/181" class="external-link">#181</a>):</p>
 <ul><li>
 <code>TRANSLATE=(TIME/F[/D], II/F[/D])</code> divides TIME/II by <code>F</code> and rounds to <code>D</code> digits (for example <code>TIME/24</code> for hours to days, <code>II/0.01/6</code>). The item may be named by its <code>$INPUT</code> synonym.</li>

@@ -2,6 +2,19 @@
 
 ## nonmem2rx 0.1.11
 
+- Validation plots now separate multiple endpoints
+  ([\#171](https://github.com/nlmixr2/nonmem2rx/issues/171)). When the
+  observations come from more than one `DVID` (or, without a `DVID`,
+  more than one `CMT`), the `predCompare`, `ipredCompare` and
+  `iwresCompare` datasets gain a final `ENDPOINT` column (like
+  `"DVID=2"`). [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+  and
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  then facet the NONMEM vs rxode2 overview by type and endpoint, and the
+  per-subject pages draw one panel for each subject and endpoint with
+  its own y scale, so endpoints on different scales are no longer drawn
+  on the same axis. Single-endpoint output is unchanged.
+
 - `$DATA` now accepts every option in the NONMEM `$DATA` usage, and the
   ones that change the data are applied when the input data is imported
   ([\#181](https://github.com/nlmixr2/nonmem2rx/issues/181)):
