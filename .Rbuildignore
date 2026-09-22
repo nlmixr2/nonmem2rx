@@ -24,3 +24,4 @@
 ^CRAN-SUBMISSION$
 ^doc$
 ^Meta$
+^src/.*[.]d$
