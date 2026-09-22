@@ -87,3 +87,26 @@ test_that("a flattened lst.g still reads the values it used to (#250)", {
                 sep="\n"),
           TRUE))
 })
+
+test_that("a `+` in a .lst block must still lead an item (#250)", {
+  ## The flattening replaced `constant_line : '+'? (constant_item)+` with a
+  ## `plus_item`.  `plus_item : '+'` alone would have made a stray `+` -- which
+  ## used to be a syntax error, since the `+` had to be followed by at least
+  ## one item -- parse silently, so `plus_item` binds one item instead.
+  ##
+  ## A failed parse leaves the C-level error buffers (`eBuf`, `sbTransErr`,
+  ## `errP`) set, and those are shared by every grammar's parser, so a
+  ## deliberate syntax error here breaks an unrelated later test unless a
+  ## known-good parse follows it.  One rejection is asserted, then the state is
+  ## flushed -- and that flush is the positive case, so it is asserted too.
+  .clearNonmem2rx()
+  expect_error(.Call(`_nonmem2rx_trans_lst`, "+", TRUE))
+  ## the first parse after a failure still re-raises the stale error, so flush
+  ## once before asserting that a `+` leading an item is accepted
+  .clearNonmem2rx()
+  try(.Call(`_nonmem2rx_trans_lst`, "+     3.0000E+00  4.0000E+00", TRUE),
+      silent=TRUE)
+  .clearNonmem2rx()
+  expect_silent(.Call(`_nonmem2rx_trans_lst`,
+                      "+     3.0000E+00  4.0000E+00", TRUE))
+})

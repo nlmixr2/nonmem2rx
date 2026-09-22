@@ -6,9 +6,10 @@
   accumulated parse tree at every split point -- so the cost grew with the cube
   of the block size (40 rows took 26 seconds).  A statement is now a single
   item rather than a line of them, which the tree walk never distinguished
-  anyway: `inst/run-153.lst` imports in 0.13s instead of 2.24s, 40 rows go from
-  26s to below timer resolution, and 400 rows -- which did not finish in any
-  usable time before -- parse in 0.2s (#250).
+  anyway: `inst/run-153.lst` imports in 0.17s instead of 2.24s,
+  `DDMODEL00000301/run3.lst` in 0.15s instead of 1.57s, and 400 rows -- which
+  did not finish in any usable time before -- parse in 0.3s.  A `+` still has
+  to lead an item, so a stray one is still a syntax error (#250).
 
 * `$THETA` and `$OMEGA`/`$SIGMA` records parse about 2.5x faster.  Both
   grammars had the ambiguity found in `rxode2`'s `tran.g`: a nullable

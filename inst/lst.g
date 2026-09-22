@@ -28,7 +28,10 @@ one_stop_line: '1';
 
 compress_lab2:  compress_lab '|' compress_lab;
 compress_lab: ('TH' decimalint | "OM[0-9][0-9][0-9][0-9]" | "SG[0-9][0-9][0-9][0-9]");
-plus_item: '+';
+// A `+` still has to lead an item, exactly as `'+'? (constant_item)+` required
+// -- binding it to one item keeps a stray `+` a syntax error without bringing
+// back the list, since the items after the first are statements of their own.
+plus_item: '+' constant_item;
 
 constant_item: est_label | est_label_new | constant | na_item;
 na_item: '.........';
