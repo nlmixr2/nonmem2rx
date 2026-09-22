@@ -47,6 +47,16 @@ test_that("$DATA options parse (#181)", {
   .p("*")
   expect_equal(.nonmem2rx$dataFile, "*")
 
+  # alphanumeric values may start with a digit
+  .p("file.csv IGNORE=(A.EQ.1A5)")
+  expect_equal(.nonmem2rx$dataCond, ".data$A == '1A5'")
+  # an IGNORE list that cannot be parsed is an error, not IGNORE="=" plus a
+  # format specification
+  expect_error(.p("file.csv IGNORE=(A-EQ-1)"))
+  expect_error(.p("file.csv ACCEPT=(A.EQ.1) (3F10.0)"))
+  .p("file.csv IGNORE #")
+  expect_equal(.nonmem2rx$dataIgnore1, "#")
+
   # a format specification may span lines
   .p("file.csv (3F10.0,\n  2F5.0) IGNORE=@")
   expect_equal(.nonmem2rx$dataIgnore1, "@")
@@ -190,6 +200,11 @@ test_that("$DATA options are applied when importing data (#181)", {
   .d <- .read("ID TIME AMT II DV", "IGNORE=@ TRANSLATE=(TIME/24/4, II/24)", .clock)
   expect_equal(.d$TIME, round(c(0, 12.5, 0, 2.01) / 24, 4))
   expect_equal(.d$II, round(c(12.5, 0, 1, 0) / 24, 2))
+
+  # a missing first time uses the first available time as the origin
+  .d <- .read("ID TIME AMT II DV", "IGNORE=@",
+              c("ID,TIME,AMT,II,DV", "1,.,0,0,.", "1,08:00,100,0,.", "1,10:30,0,0,5"))
+  expect_equal(.d$TIME, c(NA, 0, 2.5))
 
   # dates (DATE=DROP still adjusts TIME)
   .date <- c("ID,DATE,TIME,AMT,DV",

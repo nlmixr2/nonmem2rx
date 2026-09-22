@@ -1,5 +1,5 @@
 //loop
-statement_list : filename
+statement_list : filename format_statement?
         (statement)*;
 
 filename: filename_t1 | filename_t2 | filename_t3 | filename_t4;
@@ -12,7 +12,9 @@ filename_t4: ("[^ .\n]+")+ '.'  "[A-Za-z0-9_]+";
 format_statement: "\(([^()]|\(([^()]|\([^()]*\))*\))*\)";
 
 ignore_name: "([Ii][Gg][Nn][Oo][Rr][Ee]|[Ii][Gg][Nn])";
-ignore1_statement: ignore_name '='? "[^\n]";
+// IGNORE=c (c cannot be "(" which starts an IGNORE list) or IGNORE c
+ignore1_statement: ignore_name '=' "[^\n(]";
+ignore1b_statement: ignore_name "[^\n(= \t]";
 ignore1a_statement: ignore_name '='? "['\"]" "[^\n]" "['\"]";
 ignore_statement: ignore_name '='? logic_bracket;
 accept_statement: "([Aa][Cc][Cc][Ee][Pp][Tt])" '='? logic_bracket;
@@ -49,7 +51,7 @@ logic_value: logic_constant | char_t1 | char_t2 | word_value;
 char_t1: "\'([^\'\\]|\\[^])*\'";
 char_t2: "\"([^\"\\]|\\[^])*\"";
 // unquoted non-numeric value (compared as a character string)
-word_value: "[^ \t\r\n,()'\"=<>/!.0-9+\-][^ \t\r\n,()'\"]*";
+word_value: "[^ \t\r\n,()'\"=<>/!.+\-][^ \t\r\n,()'\"]*" $term -5;
 
 logic_compare: eq_expression_nm
     | neq_expression_nm
@@ -69,8 +71,8 @@ gt_expression_nm: '>' | "(\.[Gg][Tt]\.)";
 ge_expression_nm: '>='| "(\.[Gg][Ee]\.)";
 le_expression_nm: '<='| "(\.[Ll][Ee]\.)";
 
-statement: format_statement
-    | ignore1_statement
+statement: ignore1_statement
+    | ignore1b_statement
     | ignore1a_statement
     | ignore_statement
     | accept_statement

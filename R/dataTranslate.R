@@ -167,7 +167,9 @@
           .hours <- .hours + 24 * .dataFillForward(.days, .id)
         }
       }
-      .first <- .hours[!duplicated(.id)][.id]
+      # relative to the first (non-missing) time of each individual
+      .first <- vapply(split(.hours, .id),
+                       function(h) h[!is.na(h)][1], numeric(1))[.id]
       data <- .setCols(data, .timeCols, .hours - .first)
     }
   }

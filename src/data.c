@@ -211,8 +211,9 @@ void wprint_parsetree_data(D_ParserTables pt, D_ParseNode *pn, int depth, print_
     ignoreAcceptFlag = 2;
   } else if (!strcmp("accept_statement", name)) {
     ignoreAcceptFlag = 1;
-  } else if (!strcmp("ignore1_statement", name)) {
-    D_ParseNode *xpn = d_get_child(pn, 2);
+  } else if (!strcmp("ignore1_statement", name) ||
+             !strcmp("ignore1b_statement", name)) {
+    D_ParseNode *xpn = d_get_child(pn, name[7] == 'b' ? 1 : 2);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     nonmem2rxPushDataCond(v);
     return;
