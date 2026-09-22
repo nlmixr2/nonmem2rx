@@ -8,8 +8,8 @@ filename_t2: "\"([^\"\\]|\\[^])*\"";
 filename_t3: "[^ '\"\n]+";
 filename_t4: ("[^ .\n]+")+ '.'  "[A-Za-z0-9_]+";
 
-// FORTRAN format specification, e.g. (3F10.0) or (2(F5.0,1X))
-format_statement: "\(([^()\n]|\(([^()\n]|\([^()\n]*\))*\))*\)";
+// FORTRAN format specification, e.g. (3F10.0) or (2(F5.0,1X)); may span lines
+format_statement: "\(([^()]|\(([^()]|\([^()]*\))*\))*\)";
 
 ignore_name: "([Ii][Gg][Nn][Oo][Rr][Ee]|[Ii][Gg][Nn])";
 ignore1_statement: ignore_name '='? "[^\n]";

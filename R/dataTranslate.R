@@ -88,7 +88,7 @@
       .year <- 2000
       .last <- NA_real_
     }
-    if (length(v) == 0L || anyNA(v)) next
+    if (length(v) == 0L || length(v) > 3L || anyNA(v)) next
     if (length(v) == 1L) {
       .ret[.i] <- v
     } else if (length(v) == 2L) {

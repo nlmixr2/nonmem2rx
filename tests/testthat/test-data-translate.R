@@ -41,6 +41,10 @@ test_that("$DATA options parse (#181)", {
   .p("*")
   expect_equal(.nonmem2rx$dataFile, "*")
 
+  # a format specification may span lines
+  .p("file.csv (3F10.0,\n  2F5.0) IGNORE=@")
+  expect_equal(.nonmem2rx$dataIgnore1, "@")
+
   # the "=" is optional
   .p("file.csv RECORDS ID LAST20 30 MISDAT 3 REPL 2 NULL 0")
   expect_equal(.nonmem2rx$dataRecordsLabel, "ID")
@@ -57,6 +61,10 @@ test_that("$DATA contiguous runs (#181)", {
   expect_equal(.dataRuns(c(1, 1, 2, 2, 1)), c(1, 1, 2, 2, 3))
   expect_equal(.dataRuns(c(NA, NA, 2)), c(1, 1, 2))
   expect_equal(.dataRuns(character(0)), integer(0))
+})
+
+test_that("$DATA malformed dates are missing (#181)", {
+  expect_equal(.dataDateDays(c("12/31/1999/1", "3"), "DATE"), c(NA, 3))
 })
 
 test_that("$DATA TRANSLATE digits (#181)", {
