@@ -109,4 +109,12 @@ test_that("a `+` in a .lst block must still lead an item (#250)", {
   .clearNonmem2rx()
   expect_silent(.Call(`_nonmem2rx_trans_lst`,
                       "+     3.0000E+00  4.0000E+00", TRUE))
+  ## A `+` BETWEEN items is accepted, and was accepted before the flattening
+  ## too: `whitespace` in lst.g includes "\n", so the grammar has no notion of
+  ## a line, and the old `constant_line` could start at any position in
+  ## `(statement)+`.  Pinned here so it does not get "tightened" by mistake --
+  ## it is not new, and .lst files do not rely on it being rejected.
+  .clearNonmem2rx()
+  expect_silent(.Call(`_nonmem2rx_trans_lst`,
+                      "1.0000E+01 + 2.0000E+01", TRUE))
 })

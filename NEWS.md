@@ -37,6 +37,7 @@
   endpoint, and the per-subject pages draw one panel for each subject and
   endpoint with its own y scale, so endpoints on different scales are no
   longer drawn on the same axis.  Single-endpoint output is unchanged.
+
 * `$DATA` now accepts every option in the NONMEM `$DATA` usage, and the ones
   that change the data are applied when the input data is imported (#181):
   - `TRANSLATE=(TIME/F[/D], II/F[/D])` divides TIME/II by `F` and rounds to
