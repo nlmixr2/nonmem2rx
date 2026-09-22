@@ -1,5 +1,33 @@
 # nonmem2rx 0.1.11
 
+* Reading a NONMEM `.lst` covariance block is no longer slow.  `lst.g` let a
+  run of numbers be cut into `constant_line`s in exponentially many ways, and
+  dparser resolves that ambiguity by greediness, which re-walks the whole
+  accumulated parse tree at every split point -- so the cost grew with the cube
+  of the block size (40 rows took 26 seconds).  A statement is now a single
+  item rather than a line of them, which the tree walk never distinguished
+  anyway: `inst/run-153.lst` imports in 0.13s instead of 2.24s, 40 rows go from
+  26s to below timer resolution, and 400 rows -- which did not finish in any
+  usable time before -- parse in 0.2s (#250).
+
+* `$THETA` and `$OMEGA`/`$SIGMA` records parse about 2.5x faster.  Both
+  grammars had the ambiguity found in `rxode2`'s `tran.g`: a nullable
+  `statement` under `(statement)+`, which lets an empty statement be inserted
+  at every position, and which dparser resolves by greediness.  `omega.g` also
+  derived the empty string three different ways through `block_type`.  The
+  emptiness moved to the list, so an empty record and `$OMEGA BLOCK(n) SAME`
+  (which carries no statements) still parse.  A 400-theta `$THETA` record goes
+  from 7.3s to 2.8s (#250).
+
+  Both grammars now report no ambiguity at all under dparser's
+  `ambiguity_fn`.  What is left of their super-linear cost is not ambiguity but
+  GLR branching from the optional `')'` and `','` in `theta.g`'s `theta1`..
+  `theta8` and in `omega.g`'s `omega0`..`omega4`, which is a separate matter.
+
+  The remaining `inst/*.g` grammars (`abbrev.g`, `abbrec.g`, `data.g`,
+  `input.g`, `model.g`, `sub.g`, `tab.g`) were measured and are flat in the
+  record size.
+
 * Importing a dataset with many reused NONMEM `ID`s is no longer slow.  The
   next free alias was found by walking every alias already given out and
   scanning the whole level list for each, so the cost grew with the cube of

@@ -1,11 +1,15 @@
 //loop
-statement_list : (statement)+ ;
+// `statement` must not be nullable: a nullable element under `(statement)+` is
+// infinitely ambiguous (an empty statement fits at every position), and
+// dparser resolves that by greediness, which is quadratic in the record size.
+// The emptiness belongs on the list, so an empty $THETA record still parses.
+statement_list : (statement)* ;
 
 statement: name_option ','*
     | theta_statement ','*
     | numberpointsLine ','*
     | abortInfo ','*
-    | singleLineComment?;
+    | singleLineComment;
 
 abortInfo: 'ABORT' | 'NOABORT' | 'Abort' | 'Noabort' | 'abort' | 'noabort';
 
