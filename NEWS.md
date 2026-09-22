@@ -19,6 +19,9 @@
     `(NO)FDATACSV`, `PRED_IGNORE_DATA`, the `/=` operator, unquoted
     character values (`GEN.EQ.M` compares with the string `M`, not a
     column) and lower/mixed case options are now parsed.
+  - An `IGNORE`/`ACCEPT` condition on a missing value is not met, so `ACCEPT`
+    drops such records; an `IGNORE`/`ACCEPT` list that cannot be parsed is
+    now a syntax error instead of being silently skipped.
 
 * Importing a dataset with many reused NONMEM `ID`s is no longer slow.  The
   next free alias was found by walking every alias already given out and
