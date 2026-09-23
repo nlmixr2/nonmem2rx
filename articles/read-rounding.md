@@ -546,7 +546,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.6573508       0.025 0.046    0.001 320.27      1.357
+#> elapsed 0.4783123       0.017 0.034    0.001 320.27      1.051
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -769,7 +769,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:11 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:08 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -777,83 +777,83 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 fit2
 #> ── nlmixr² FOCEi (outer: bobyqa) ──
 #> 
-#>           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)
-#> FOCEi 1423.792 2341.486 2404.187      -1155.743          373218        338.2793
+#>           OBJF     AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)
+#> FOCEi 1423.416 2341.11 2403.811      -1155.555        174577.9        19.65997
 #> 
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.895885 3.111229   18.21517      0.046       0.026 0.057    0.001
-#>             other
-#> elapsed 0.1317124
+#> elapsed 2.097769 1.614325    13.2337      0.031       0.016 0.048    0.001
+#>              other
+#> elapsed 0.08420317
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
-#>                Parameter   Est.     SE  %RSE Back-transformed(95%CI) BSV(CV%)
-#> tktr            1 - tktr 0.0708 0.0182  25.7       1.07 (1.04, 1.11)         
-#> tka              2 - tka 0.0385 0.0620   161      1.04 (0.920, 1.17)         
-#> tcl              3 - tcl  -1.98 0.0914  4.60    0.137 (0.115, 0.164)     28.7
-#> tv                4 - tv   2.05 0.0859  4.18       7.79 (6.59, 9.22)     23.3
-#> prop.err    5 - prop.err  0.157  0.152  96.9   0.157 (-0.141, 0.455)         
-#> pkadd.err  6 - pkadd.err  0.650  0.228  35.1     0.650 (0.203, 1.10)         
-#> temax          7 - temax   6.63   3.17  47.8     0.999 (0.604, 1.00)         
-#> tec50          8 - tec50  0.116  0.136   117      1.12 (0.860, 1.47)     43.4
-#> tkout          9 - tkout  -2.96 0.0235 0.794 0.0516 (0.0492, 0.0540)         
-#> te0             10 - te0   4.57 0.0113 0.247       96.7 (94.6, 98.8)     5.28
-#> pdadd.err 11 - pdadd.err   3.77   1.34  35.5       3.77 (1.15, 6.39)         
+#>                Parameter   Est.      SE  %RSE Back-transformed(95%CI) BSV(CV%)
+#> tktr            1 - tktr 0.0631  0.0324  51.4      1.07 (0.999, 1.13)         
+#> tka              2 - tka 0.0634  0.0705   111      1.07 (0.928, 1.22)         
+#> tcl              3 - tcl  -2.00  0.0584  2.92    0.135 (0.121, 0.152)     27.2
+#> tv                4 - tv   2.06  0.0867  4.21       7.85 (6.62, 9.31)     25.1
+#> prop.err    5 - prop.err  0.155  0.0117  7.54    0.155 (0.132, 0.178)         
+#> pkadd.err  6 - pkadd.err  0.610  0.0818  13.4    0.610 (0.449, 0.770)         
+#> temax          7 - temax   7.49    3.22  42.9     0.999 (0.766, 1.00)         
+#> tec50          8 - tec50  0.129  0.0607  46.9       1.14 (1.01, 1.28)     42.5
+#> tkout          9 - tkout  -2.97 0.00952 0.321 0.0516 (0.0506, 0.0525)         
+#> te0             10 - te0   4.57  0.0106 0.231       96.8 (94.8, 98.8)     5.21
+#> pdadd.err 11 - pdadd.err   3.82   0.238  6.23       3.82 (3.36, 4.29)         
 #>           Shrink(SD)%
 #> tktr                 
 #> tka                  
-#> tcl             5.46 
-#> tv              9.03 
+#> tcl            0.612 
+#> tv              13.4 
 #> prop.err             
 #> pkadd.err            
 #> temax                
-#> tec50           8.86 
+#> tec50           7.50 
 #> tkout                
-#> te0             18.5 
+#> te0             18.8 
 #> pdadd.err            
 #>  
 #>   Covariance Type (fit2$covMethod): |r|
 #>   Some strong fixed parameter correlations exist (fit2$cor) :
 #>                cor:tka,tktr            cor:tcl,tktr             cor:tv,tktr 
-#>                  0.374                  -0.427                  -0.106   
+#>                  0.136                  -0.0299                    0.117   
 #>       cor:prop.err,tktr      cor:pkadd.err,tktr          cor:temax,tktr 
-#>                  0.369                  -0.417                   0.245   
+#>                -0.0417                  -0.0929                    0.114   
 #>          cor:tec50,tktr          cor:tkout,tktr            cor:te0,tktr 
-#>                0.00150                    0.309                  -0.341  
+#>                -0.0835                   0.0616                   0.0806   
 #>      cor:pdadd.err,tktr             cor:tcl,tka              cor:tv,tka 
-#>                  0.424                  -0.799                  0.0780   
+#>                 0.0202                   0.0468                   -0.236   
 #>        cor:prop.err,tka       cor:pkadd.err,tka           cor:temax,tka 
-#>                  0.916                  -0.895                   0.254   
+#>                 0.0831                    0.185                   -0.271   
 #>           cor:tec50,tka           cor:tkout,tka             cor:te0,tka 
-#>                 -0.332                   0.617                  -0.640  
+#>                0.00767                   -0.159                   -0.201   
 #>       cor:pdadd.err,tka              cor:tv,tcl        cor:prop.err,tcl 
-#>                  0.834                   0.355                  -0.821  
+#>                 0.0162                   -0.337                 -0.0226   
 #>       cor:pkadd.err,tcl           cor:temax,tcl           cor:tec50,tcl 
-#>                  0.904                  -0.604                 -0.0759   
+#>                 -0.122                   -0.239                   -0.130   
 #>           cor:tkout,tcl             cor:te0,tcl       cor:pdadd.err,tcl 
-#>                 -0.463                   0.824                  -0.950  
+#>                 0.0944                   -0.321                  0.0223   
 #>         cor:prop.err,tv        cor:pkadd.err,tv            cor:temax,tv 
-#>                  0.151                   0.0431                   -0.778  
+#>                 -0.247                   -0.643                   0.754  
 #>            cor:tec50,tv            cor:tkout,tv              cor:te0,tv 
-#>                 -0.896                   0.341                   0.445  
+#>                 0.0267                  -0.0662                    0.600  
 #>        cor:pdadd.err,tv  cor:pkadd.err,prop.err      cor:temax,prop.err 
-#>                 -0.308                  -0.953                   0.213   
+#>                -0.0602                    0.430                  -0.229   
 #>      cor:tec50,prop.err      cor:tkout,prop.err        cor:te0,prop.err 
-#>                 -0.397                   0.636                  -0.667  
+#>                 0.0611                  0.00544                   -0.134   
 #>  cor:pdadd.err,prop.err     cor:temax,pkadd.err     cor:tec50,pkadd.err 
-#>                  0.869                  -0.359                   0.248   
+#>                  0.146                   -0.495                   0.115   
 #>     cor:tkout,pkadd.err       cor:te0,pkadd.err cor:pdadd.err,pkadd.err 
-#>                 -0.616                   0.746                  -0.923  
+#>                -0.0299                   -0.340                   0.200   
 #>         cor:tec50,temax         cor:tkout,temax           cor:te0,temax 
-#>                  0.624                  -0.108                   -0.580  
+#>                 0.0377                   -0.132                    0.443  
 #>     cor:pdadd.err,temax         cor:tkout,tec50           cor:te0,tec50 
-#>                  0.538                  -0.595                  -0.214   
+#>                -0.0185                -0.000672                   0.0354   
 #>     cor:pdadd.err,tec50           cor:te0,tkout     cor:pdadd.err,tkout 
-#>                 0.0558                   -0.262                    0.418  
+#>                  0.207                    0.103                    0.155   
 #>       cor:pdadd.err,te0 
-#>                 -0.858  
+#>                  0.153   
 #>  
 #> 
 #>   No correlations in between subject variability (BSV) matrix
@@ -873,9 +873,9 @@ fit2
 #> # A tibble: 483 × 33
 #>   ID     TIME CMT      DV  PRED   RES  WRES IPRED   IRES IWRES CPRED  CRES CWRES
 #>   <fct> <dbl> <fct> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 1       0.5 dcp     0    1.26 -1.26 -1.71  1.00 -1.00  -1.50  1.24 -1.24 -1.75
-#> 2 1       1   dcp     1.9  3.63 -1.73 -1.45  2.88 -0.978 -1.24  3.55 -1.65 -1.61
-#> 3 1       2   dcp     3.3  7.87 -4.57 -2.02  6.21 -2.91  -2.48  7.69 -4.39 -2.42
+#> 1 1       0.5 dcp     0    1.27 -1.27 -1.78  1.01 -1.01  -1.61  1.24 -1.24 -1.84
+#> 2 1       1   dcp     1.9  3.65 -1.75 -1.43  2.89 -0.993 -1.31  3.57 -1.67 -1.61
+#> 3 1       2   dcp     3.3  7.87 -4.57 -1.94  6.21 -2.91  -2.56  7.70 -4.40 -2.34
 #> # ℹ 480 more rows
 #> # ℹ 20 more variables: eta.cl <dbl>, eta.v <dbl>, eta.ec50 <dbl>, eta.e0 <dbl>,
 #> #   DEPOT <dbl>, GUT <dbl>, CENTER <dbl>, EFFECT <dbl>, ktr <dbl>, ka <dbl>,
@@ -913,60 +913,60 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:12
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:08
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
 #> $scaleInfo
 #> Updated original fit object fit
 #>                    tktr           tka           tcl            tv      prop.err
-#> tktr       9.475892e-03 -7.615446e-03 -8.904494e-06  1.633233e-04 -7.552258e-05
-#> tka       -7.615446e-03  9.496619e-03 -1.023037e-05  1.656046e-04 -7.619279e-05
-#> tcl       -8.904494e-06 -1.023037e-05  1.334426e-04  3.137692e-06 -6.811114e-06
-#> tv         1.633233e-04  1.656046e-04  3.137692e-06  1.591275e-04  7.634408e-06
-#> prop.err  -7.552258e-05 -7.619279e-05 -6.811114e-06  7.634408e-06  9.985560e-05
-#> pkadd.err  2.277061e-04  2.284636e-04  1.530983e-04 -2.658527e-05 -2.819467e-04
-#> temax      8.605693e-04  1.403445e-04 -3.888498e-04  4.331816e-04  3.734906e-05
-#> tec50      6.212785e-05  5.792453e-05 -1.947467e-04  6.457691e-05  1.611336e-05
-#> tkout      4.368727e-05  5.232270e-05 -5.434984e-05  6.078214e-05  7.990717e-06
-#> te0        6.234925e-06  7.779437e-06 -5.359561e-06  6.398080e-06  5.987645e-07
-#> pdadd.err  2.427905e-04  2.515289e-04 -1.537354e-04  2.036927e-04  1.803500e-05
+#> tktr       9.475892e-03 -7.615446e-03 -8.904753e-06  1.633236e-04 -7.552254e-05
+#> tka       -7.615446e-03  9.496620e-03 -1.023068e-05  1.656049e-04 -7.619275e-05
+#> tcl       -8.904753e-06 -1.023068e-05  1.334429e-04  3.137332e-06 -6.811161e-06
+#> tv         1.633236e-04  1.656049e-04  3.137332e-06  1.591279e-04  7.634461e-06
+#> prop.err  -7.552254e-05 -7.619275e-05 -6.811161e-06  7.634461e-06  9.985560e-05
+#> pkadd.err  2.277057e-04  2.284631e-04  1.530988e-04 -2.658582e-05 -2.819467e-04
+#> temax      8.605237e-04  1.402899e-04 -3.887930e-04  4.331181e-04  3.734071e-05
+#> tec50      6.212825e-05  5.792502e-05 -1.947472e-04  6.457748e-05  1.611343e-05
+#> tkout      4.368879e-05  5.232452e-05 -5.435173e-05  6.078425e-05  7.990995e-06
+#> te0        6.235052e-06  7.779588e-06 -5.359718e-06  6.398256e-06  5.987876e-07
+#> pdadd.err  2.427914e-04  2.515300e-04 -1.537365e-04  2.036940e-04  1.803518e-05
 #>               pkadd.err         temax         tec50         tkout           te0
-#> tktr       2.277061e-04  8.605693e-04  6.212785e-05  4.368727e-05  6.234925e-06
-#> tka        2.284636e-04  1.403445e-04  5.792453e-05  5.232270e-05  7.779437e-06
-#> tcl        1.530983e-04 -3.888498e-04 -1.947467e-04 -5.434984e-05 -5.359561e-06
-#> tv        -2.658527e-05  4.331816e-04  6.457691e-05  6.078214e-05  6.398080e-06
-#> prop.err  -2.819467e-04  3.734906e-05  1.611336e-05  7.990717e-06  5.987645e-07
-#> pkadd.err  2.916805e-03 -7.209705e-04 -2.492677e-04 -8.357610e-05 -7.656749e-06
-#> temax     -7.209705e-04  3.821178e+00  2.434665e-02 -9.591918e-03 -2.409370e-04
-#> tec50     -2.492677e-04  2.434665e-02  9.453554e-04  8.518615e-05 -6.754130e-05
-#> tkout     -8.357610e-05 -9.591918e-03  8.518615e-05  3.193345e-04  2.655162e-05
-#> te0       -7.656749e-06 -2.409370e-04 -6.754130e-05  2.655162e-05  4.435605e-05
-#> pdadd.err -8.688040e-05 -2.288294e-02  1.711954e-04  1.989594e-04  1.591426e-05
+#> tktr       2.277057e-04  8.605237e-04  6.212825e-05  4.368879e-05  6.235052e-06
+#> tka        2.284631e-04  1.402899e-04  5.792502e-05  5.232452e-05  7.779588e-06
+#> tcl        1.530988e-04 -3.887930e-04 -1.947472e-04 -5.435173e-05 -5.359718e-06
+#> tv        -2.658582e-05  4.331181e-04  6.457748e-05  6.078425e-05  6.398256e-06
+#> prop.err  -2.819467e-04  3.734071e-05  1.611343e-05  7.990995e-06  5.987876e-07
+#> pkadd.err  2.916805e-03 -7.208832e-04 -2.492685e-04 -8.357900e-05 -7.656990e-06
+#> temax     -7.208832e-04  3.821188e+00  2.434656e-02 -9.592252e-03 -2.409647e-04
+#> tec50     -2.492685e-04  2.434656e-02  9.453561e-04  8.518911e-05 -6.754105e-05
+#> tkout     -8.357900e-05 -9.592252e-03  8.518911e-05  3.193456e-04  2.655254e-05
+#> te0       -7.656990e-06 -2.409647e-04 -6.754105e-05  2.655254e-05  4.435613e-05
+#> pdadd.err -8.688221e-05 -2.288315e-02  1.711972e-04  1.989664e-04  1.591483e-05
 #>               pdadd.err
-#> tktr       2.427905e-04
-#> tka        2.515289e-04
-#> tcl       -1.537354e-04
-#> tv         2.036927e-04
-#> prop.err   1.803500e-05
-#> pkadd.err -8.688040e-05
-#> temax     -2.288294e-02
-#> tec50      1.711954e-04
-#> tkout      1.989594e-04
-#> te0        1.591426e-05
-#> pdadd.err  3.897702e-02
+#> tktr       2.427914e-04
+#> tka        2.515300e-04
+#> tcl       -1.537365e-04
+#> tv         2.036940e-04
+#> prop.err   1.803518e-05
+#> pkadd.err -8.688221e-05
+#> temax     -2.288315e-02
+#> tec50      1.711972e-04
+#> tkout      1.989664e-04
+#> te0        1.591483e-05
+#> pdadd.err  3.897703e-02
 fit
 #> ── nlmixr² nonmem2rx reading NONMEM ver 7.4.3 ──
 #> 
 #>               OBJF     AIC      BIC Log-likelihood Condition#(Cov)
-#> nonmem2rx 439.2156 1364.91 1444.331      -663.4551          152342
+#> nonmem2rx 439.2156 1364.91 1444.331      -663.4551        152342.4
 #>           Condition#(Cor)
-#> nonmem2rx         14.6108
+#> nonmem2rx        14.61083
 #> 
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.6573508       0.025 0.046    0.001 320.27      1.357     41.842
+#> elapsed 0.4783123       0.017 0.034    0.001 320.27      1.051      28.99
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
@@ -1006,7 +1006,7 @@ fit
 #>      cor:pdadd.err,tktr             cor:tcl,tka              cor:tv,tka 
 #>                 0.0126                 -0.00909                    0.135   
 #>        cor:prop.err,tka       cor:pkadd.err,tka           cor:temax,tka 
-#>                -0.0782                   0.0434                 0.000737   
+#>                -0.0782                   0.0434                 0.000736   
 #>           cor:tec50,tka           cor:tkout,tka             cor:te0,tka 
 #>                 0.0193                   0.0300                   0.0120   
 #>       cor:pdadd.err,tka              cor:tv,tcl        cor:prop.err,tcl 

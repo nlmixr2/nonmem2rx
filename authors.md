@@ -13,7 +13,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/nlmixr2/nonmem2rx/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/nlmixr2/nonmem2rx/blob/v0.1.11/DESCRIPTION)
 
 Fidler M (2026). *nonmem2rx: Converts 'NONMEM' Models to 'rxode2'*. R
 package version 0.1.11, <https://nlmixr2.github.io/nonmem2rx/>.

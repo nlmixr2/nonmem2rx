@@ -124,7 +124,7 @@ s <- rxSolve(mod, ev, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2', 'omega.4.1', 'omega.4.2', 'omega.4.3'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
 
 s
 #> ── Solved rxode2 object ──
