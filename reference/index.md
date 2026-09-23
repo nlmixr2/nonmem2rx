@@ -3,7 +3,7 @@
 ## Importing NONMEM to rxode2
 
 - [`nonmem2rx()`](nonmem2rx.md) : Convert a NONMEM source file to a
-  rxode model (nlmixr2-syle)
+  rxode model (nlmixr2-style)
 
 ## Cross-checking manual models
 

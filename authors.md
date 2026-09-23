@@ -16,12 +16,12 @@ Source:
 [`DESCRIPTION`](https://github.com/nlmixr2/nonmem2rx/blob/main/DESCRIPTION)
 
 Fidler M (2026). *nonmem2rx: Converts 'NONMEM' Models to 'rxode2'*. R
-package version 0.1.10, <https://nlmixr2.github.io/nonmem2rx/>.
+package version 0.1.11, <https://nlmixr2.github.io/nonmem2rx/>.
 
     @Manual{,
       title = {nonmem2rx: Converts 'NONMEM' Models to 'rxode2'},
       author = {Matthew Fidler},
       year = {2026},
-      note = {R package version 0.1.10},
+      note = {R package version 0.1.11},
       url = {https://nlmixr2.github.io/nonmem2rx/},
     }

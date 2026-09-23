@@ -1,6 +1,6 @@
-# Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+# Convert a NONMEM source file to a rxode model (nlmixr2-style)
 
-Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+Convert a NONMEM source file to a rxode model (nlmixr2-style)
 
 ## Usage
 
@@ -77,7 +77,7 @@ nonmem2rx(
 - nonmemOutputDir:
 
   This is a path the the nonmem output directory. When not `NULL` it
-  will assume that the diretory for the output files is located here
+  will assume that the directory for the output files is located here
   instead of where the control stream currently exists.
 
 - rename:

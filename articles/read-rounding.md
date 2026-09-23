@@ -546,7 +546,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.6404263       0.022 0.045    0.001 320.27      1.375
+#> elapsed 0.6573508       0.025 0.046    0.001 320.27      1.357
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -769,7 +769,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:10 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:11 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -783,9 +783,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.860132 2.929141    17.3168      0.039       0.025 0.056    0.001
-#>           other
-#> elapsed 0.11893
+#> elapsed 2.895885 3.111229   18.21517      0.046       0.026 0.057    0.001
+#>             other
+#> elapsed 0.1317124
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -966,7 +966,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.6404263       0.022 0.045    0.001 320.27      1.375     41.175
+#> elapsed 0.6573508       0.025 0.046    0.001 320.27      1.357     41.842
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
