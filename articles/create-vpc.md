@@ -137,7 +137,7 @@ prediction-corrected VPCs and arrange them on a single plot:
 
 library(ggplot2)
 p1 <- vpcPlot(fit, show=list(obs_dv=TRUE))
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
 #> Warning in filter_dv(obs, verbose): No software packages matched for filtering values, not filtering.
 #>  Object class: other, data.frame
 #>  Available filters: phoenix, nonmem
@@ -158,7 +158,7 @@ p1a <- p1 + xgxr::xgx_scale_y_log10()
 
 ## A prediction-corrected VPC
 p2 <- vpcPlot(fit, pred_corr = TRUE, show=list(obs_dv=TRUE))
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:00
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:01
 #> Warning in filter_dv(obs, verbose): No software packages matched for filtering values, not filtering.
 #>  Object class: other, data.frame
 #>  Available filters: phoenix, nonmem
