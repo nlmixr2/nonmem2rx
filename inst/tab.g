@@ -59,5 +59,5 @@ string: string1 | string2;
 string1: "\'([^\'\\]|\\[^])*\'";
 string2: "\"([^\"\\]|\\[^])*\"";
 whitespace: ( "[ \t\r\n]+" | singleLineComment)*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;

@@ -18,5 +18,5 @@ reg_item: identifier_nm;
 statement: (drop_item | alias_item | reg_item | singleLineComment);
 
 whitespace: ( "[ \t\r\n,]+" | singleLineComment)*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;

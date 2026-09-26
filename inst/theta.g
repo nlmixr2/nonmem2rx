@@ -67,7 +67,7 @@ constant : decimalint | float1 | float2;
 
 
 whitespace: ( "[ \t\r\n]+")*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 
 decimalint: "0|([1-9][0-9]*)" $term -1;
 string: "\"([^\"\\]|\\[^])*\"";
