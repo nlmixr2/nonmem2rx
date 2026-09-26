@@ -59,7 +59,7 @@ constantneg: '-'? constant;
 constant : decimalint | float1 | float2;
 
 whitespace: ( "[ \t\r\n]+" | singleLineComment)*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 
 string:  str_t1 | str_t2;
 str_t1: "\'([^\'\\]|\\[^])*\'";

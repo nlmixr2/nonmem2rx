@@ -1,5 +1,14 @@
 # nonmem2rx 0.1.11
 
+* A `THETA(#)` or `ETA(#)` used in the model beyond what `$THETA` or
+  `$OMEGA` defines is now an error.  Previously it was silently translated
+  into a data covariate (like `eta11`), giving a model that could not be
+  used with the intended data.
+
+* An empty `;` comment line no longer swallows the line after it.  In
+  `$THETA`/`$OMEGA` this silently dropped an estimate and renumbered every
+  one after it (and likewise in the other record parsers).
+
 * Reading a NONMEM `.lst` covariance block is no longer slow.  `lst.g` let a
   run of numbers be cut into `constant_line`s in exponentially many ways, and
   dparser resolves that ambiguity by greediness, which re-walks the whole

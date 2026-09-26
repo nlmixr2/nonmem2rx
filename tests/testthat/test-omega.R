@@ -18,6 +18,8 @@ test_that("test omega", {
   }
 
   .o("1", "eta1 ~ 1", 1)
+  # an empty ';' comment line must not swallow the next omega
+  .o("0.3 ; ZVP\n;\n0.1 ; ZEMAX\n", c("eta1 ~ 0.3", "eta2 ~ 0.1"), 2)
   .o("(1 fix)", "eta1 ~ fix(1)", 1)
   .o("(fix 1)", "eta1 ~ fix(1)", 1)
 
