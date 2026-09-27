@@ -6,6 +6,14 @@
   error (for example in a `.lst` file) printed freed memory.  The record name
   now has its own buffer.
 
+* An `$OMEGA` label left over from a translation that stopped with an error
+  (for example a `NAMES()` count mismatch) is now cleared before the next
+  `$OMEGA` record, instead of being read from freed memory.
+
+* Syntax errors in a `.lst` file are now labelled as coming from the NONMEM
+  output rather than from the last control-stream record parsed (or from a
+  `NULL` record name).
+
 # nonmem2rx 0.1.11
 
 * Reading a NONMEM `.lst` covariance block is no longer slow.  `lst.g` let a

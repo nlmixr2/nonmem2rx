@@ -46,14 +46,18 @@ const char *record;
 static sbuf recordBuf;
 static int recordBufIni = 0;
 
-SEXP _nonmem2rx_setRecord(SEXP rec) {
+void nonmem2rxSetRecord(const char *rec) {
   if (!recordBufIni) {
     sIni(&recordBuf);
     recordBufIni = 1;
   }
   sClear(&recordBuf);
-  sAppend(&recordBuf, "%s", CHAR(STRING_ELT(rec, 0)));
+  sAppend(&recordBuf, "%s", rec);
   record = recordBuf.s;
+}
+
+SEXP _nonmem2rx_setRecord(SEXP rec) {
+  nonmem2rxSetRecord(CHAR(STRING_ELT(rec, 0)));
   return R_NilValue;
 }
 
@@ -79,6 +83,11 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
+  if (recordBufIni) {
+    sFree(&recordBuf);
+    recordBufIni = 0;
+    record = NULL;
+  }
   //sFree(&sbOut);
   freeP();
   //sFree(&_bufw);
