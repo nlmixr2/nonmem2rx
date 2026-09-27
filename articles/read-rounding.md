@@ -134,7 +134,6 @@ mod
 #> 4                  4           EFFECT
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
-#>     NULL
 #>     description <- c("translated from babelmixr2", "; comments show mu referenced model in ui$getSplitMuModel")
 #>     dfObs <- 483
 #>     dfSub <- 32
@@ -246,22 +245,17 @@ mod
 #>             ipred <- rx_ip2
 #>             w <- w2
 #>         }
-#>         y <- ipred + w * eps1
+#>         rx.IPRED.add ~ sqrt((pkadd.err)^2 + (rx_pf1)^2 * (prop.err)^2)
+#>         ipred ~ add(rx.IPRED.add)
 #>     })
 #> }
 #>  ── nonmem2rx translation notes ($notes): ──  
 #>    • some etas defaulted to non-mu referenced, possible parsing error: eta.emax as a work-around try putting the mu-referenced expression on a simple line 
 #>    • some etas defaulted to non-mu referenced, possible parsing error: eta5 as a work-around try putting the mu-referenced expression on a simple line 
 #>    • some NONMEM input has tied times; they are offset by a small offset 
-#>    • is.na() applied to non-(list or vector) of type 'language' 
 #>    • 'dvid' variable has special meaning in rxode2, renamed to 'nmdvid', rename/copy in your data too 
 #>    • $MODEL NCOMPARTMENTS/NEQUILIBRIUM/NPARAMETERS statement(s) ignored 
 #>  ── nonmem2rx extra properties: ──  
-#> 
-#> Sigma ($sigma): 
-#>      eps1
-#> eps1    1
-#> 
 #> other properties include: $nonmemData, $etaData
 #> captured NONMEM table outputs: $predData, $ipredData
 #> NONMEM/rxode2 comparison data: $iwresCompare, $predCompare, $ipredCompare
@@ -545,8 +539,8 @@ print(fit)
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.4783123       0.017 0.034    0.001 320.27      1.051
+#>            setup postprocess table compress NONMEM as.nlmixr2
+#> elapsed 0.697296       0.013 0.028    0.001 320.27      0.973
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -769,7 +763,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:08 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:05 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -783,9 +777,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.097769 1.614325    13.2337      0.031       0.016 0.048    0.001
+#> elapsed 1.883969 1.286608   10.19597      0.025       0.011 0.033        0
 #>              other
-#> elapsed 0.08420317
+#> elapsed 0.06045049
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -913,7 +907,7 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:08
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:07
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
@@ -965,8 +959,8 @@ fit
 #> 
 #> ── Time (sec fit$time): ──
 #> 
-#>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.4783123       0.017 0.034    0.001 320.27      1.051      28.99
+#>            setup postprocess table compress NONMEM as.nlmixr2 covariance
+#> elapsed 0.697296       0.013 0.028    0.001 320.27      0.973      24.96
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 

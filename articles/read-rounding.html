@@ -83,7 +83,7 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Reading rounding from NONMEM</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/v0.1.11/vignettes/articles/read-rounding.Rmd" class="external-link"><code>vignettes/articles/read-rounding.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nlmixr2/nonmem2rx/blob/main/vignettes/articles/read-rounding.Rmd" class="external-link"><code>vignettes/articles/read-rounding.Rmd</code></a></small>
       <div class="d-none name"><code>read-rounding.Rmd</code></div>
     </div>
 
@@ -219,7 +219,6 @@ model.</p>
 <span><span class="co">#&gt; 4                  4           EFFECT</span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
-<span><span class="co">#&gt;     NULL</span></span>
 <span><span class="co">#&gt;     description &lt;- c("translated from babelmixr2", "; comments show mu referenced model in ui$getSplitMuModel")</span></span>
 <span><span class="co">#&gt;     dfObs &lt;- 483</span></span>
 <span><span class="co">#&gt;     dfSub &lt;- 32</span></span>
@@ -331,22 +330,17 @@ model.</p>
 <span><span class="co">#&gt;             ipred &lt;- rx_ip2</span></span>
 <span><span class="co">#&gt;             w &lt;- w2</span></span>
 <span><span class="co">#&gt;         }</span></span>
-<span><span class="co">#&gt;         y &lt;- ipred + w * eps1</span></span>
+<span><span class="co">#&gt;         rx.IPRED.add ~ sqrt((pkadd.err)^2 + (rx_pf1)^2 * (prop.err)^2)</span></span>
+<span><span class="co">#&gt;         ipred ~ add(rx.IPRED.add)</span></span>
 <span><span class="co">#&gt;     })</span></span>
 <span><span class="co">#&gt; }</span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx translation notes (</span><span style="color: #0000BB; font-weight: bold;">$notes</span><span style="font-weight: bold;">):</span> ──  </span></span>
 <span><span class="co">#&gt;    • some etas defaulted to non-mu referenced, possible parsing error: eta.emax as a work-around try putting the mu-referenced expression on a simple line </span></span>
 <span><span class="co">#&gt;    • some etas defaulted to non-mu referenced, possible parsing error: eta5 as a work-around try putting the mu-referenced expression on a simple line </span></span>
 <span><span class="co">#&gt;    • some NONMEM input has tied times; they are offset by a small offset </span></span>
-<span><span class="co">#&gt;    • is.na() applied to non-(list or vector) of type 'language' </span></span>
 <span><span class="co">#&gt;    • 'dvid' variable has special meaning in rxode2, renamed to 'nmdvid', rename/copy in your data too </span></span>
 <span><span class="co">#&gt;    • $MODEL NCOMPARTMENTS/NEQUILIBRIUM/NPARAMETERS statement(s) ignored </span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">nonmem2rx extra properties:</span> ──  </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">Sigma</span> (<span style="color: #0000BB; font-weight: bold;">$sigma</span>): </span></span>
-<span><span class="co">#&gt;      eps1</span></span>
-<span><span class="co">#&gt; eps1    1</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other properties include: <span style="color: #0000BB; font-weight: bold;">$nonmemData</span>, <span style="color: #0000BB; font-weight: bold;">$etaData</span></span></span>
 <span><span class="co">#&gt; captured NONMEM table outputs: <span style="color: #0000BB; font-weight: bold;">$predData</span>, <span style="color: #0000BB; font-weight: bold;">$ipredData</span></span></span>
 <span><span class="co">#&gt; NONMEM/rxode2 comparison data: <span style="color: #0000BB; font-weight: bold;">$iwresCompare</span>, <span style="color: #0000BB; font-weight: bold;">$predCompare</span>, <span style="color: #0000BB; font-weight: bold;">$ipredCompare</span></span></span>
@@ -620,8 +614,8 @@ model:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;             setup postprocess table compress NONMEM as.nlmixr2</span></span>
-<span><span class="co">#&gt; elapsed 0.4783123       0.017 0.034    0.001 320.27      1.051</span></span>
+<span><span class="co">#&gt;            setup postprocess table compress NONMEM as.nlmixr2</span></span>
+<span><span class="co">#&gt; elapsed 0.697296       0.013 0.028    0.001 320.27      0.973</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -837,7 +831,7 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; calculating covariance matrix</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:08 </span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:05 </span></span>
 <span><span class="co">#&gt; done</span></span>
 <span><span class="co">#&gt; → Calculating residuals/tables</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
@@ -851,9 +845,9 @@ reduction in shrinkage)</p>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;            setup optimize covariance preprocess postprocess table compress</span></span>
-<span><span class="co">#&gt; elapsed 2.097769 1.614325    13.2337      0.031       0.016 0.048    0.001</span></span>
+<span><span class="co">#&gt; elapsed 1.883969 1.286608   10.19597      0.025       0.011 0.033        0</span></span>
 <span><span class="co">#&gt;              other</span></span>
-<span><span class="co">#&gt; elapsed 0.08420317</span></span>
+<span><span class="co">#&gt; elapsed 0.06045049</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit2</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -979,7 +973,7 @@ model</p>
 <span><span class="co">#&gt; → compiling events FD model...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> done</span></span>
 <span><span class="co">#&gt; calculating covariance matrix</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:08</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:07</span></span>
 <span><span class="co">#&gt; Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can</span></span>
 <span><span class="co">#&gt; check sandwich or S matrix with $covRS and $covS</span></span>
 <span><span class="co">#&gt; Warning in foceiFitCpp_(.ret): gradient problems with covariance; see</span></span>
@@ -1031,8 +1025,8 @@ model</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Time (sec </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$time</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;             setup postprocess table compress NONMEM as.nlmixr2 covariance</span></span>
-<span><span class="co">#&gt; elapsed 0.4783123       0.017 0.034    0.001 320.27      1.051      28.99</span></span>
+<span><span class="co">#&gt;            setup postprocess table compress NONMEM as.nlmixr2 covariance</span></span>
+<span><span class="co">#&gt; elapsed 0.697296       0.013 0.028    0.001 320.27      0.973      24.96</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">── Population Parameters (</span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixed</span><span style="font-weight: bold;"> or </span><span style="color: #BBBB00; font-weight: bold;">fit</span><span style="color: #0000BB; font-weight: bold;">$parFixedDf</span><span style="font-weight: bold;">): ──</span></span></span>
 <span><span class="co">#&gt; </span></span>
