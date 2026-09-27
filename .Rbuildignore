@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.git$
 ^\.github$
 ^README\.Rmd$
 ^inst/PsN.zip$
