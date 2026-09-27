@@ -7,7 +7,7 @@
   Available at https://github.com/jplevyak/dparser
 */
 
-#line 7 "/home/matt-fidler/src/nonmem2rx/src/sub.g.d_parser.c"
+#line 7 "/home/matt-fidler/src/nonmem2rx-undefined-theta-eta/src/sub.g.d_parser.c"
 #include "dparse.h"
 
 D_Reduction d_reduction_0_nonmem2rxSub = {1, 0, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
@@ -58,7 +58,7 @@ D_Reduction d_reduction_97_nonmem2rxSub = {1, 42, NULL, NULL, 0, 0, 0, 0, 0, 0, 
 D_Reduction d_reduction_98_nonmem2rxSub = {2, 43, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
 D_Reduction d_reduction_99_nonmem2rxSub = {0, 43, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
 D_Reduction d_reduction_100_nonmem2rxSub = {1, 44, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
-D_Reduction d_reduction_102_nonmem2rxSub = {2, 45, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
+D_Reduction d_reduction_102_nonmem2rxSub = {1, 45, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
 D_Reduction d_reduction_103_nonmem2rxSub = {1, 46, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
 D_Reduction d_reduction_104_nonmem2rxSub = {1, 47, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_0_nonmem2rxSub = {48, 0, 0, 0, 0, 0, NULL};
@@ -126,8 +126,7 @@ D_Shift d_shift_61_nonmem2rxSub = {109, 0, 0, 0, -3, 0, NULL};
 D_Shift d_shift_62_nonmem2rxSub = {110, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_63_nonmem2rxSub = {111, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_64_nonmem2rxSub = {112, 0, 0, 0, 0, 0, NULL};
-D_Shift d_shift_65_nonmem2rxSub = {113, 0, 0, 0, 0, 0, NULL};
-D_Shift d_shift_66_nonmem2rxSub = {114, 0, 0, 0, -4, 0, NULL};
+D_Shift d_shift_65_nonmem2rxSub = {113, 0, 0, 0, -4, 0, NULL};
 
 D_Shift * d_accepts_diff_0_0_nonmem2rxSub[] = {0};
 D_Shift * d_accepts_diff_0_1_nonmem2rxSub[] = {&d_shift_7_nonmem2rxSub,0};
@@ -1035,6 +1034,20 @@ unsigned char d_scanner_82_1_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
 
 D_Shift * d_shift_82_1_nonmem2rxSub[] = {&d_shift_62_nonmem2rxSub,NULL};
 
+unsigned char d_scanner_82_2_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
+0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+};
+
+unsigned char d_scanner_82_2_1_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+};
+
 D_Shift * d_shift_82_2_nonmem2rxSub[] = {&d_shift_63_nonmem2rxSub,NULL};
 
 D_Shift * d_accepts_diff_85_0_nonmem2rxSub[] = {0};
@@ -1268,7 +1281,7 @@ unsigned char d_scanner_90_1_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 };
 
-D_Shift * d_shift_90_1_nonmem2rxSub[] = {&d_shift_65_nonmem2rxSub,NULL};
+D_Shift * d_shift_90_1_nonmem2rxSub[] = {&d_shift_64_nonmem2rxSub,NULL};
 
 unsigned char d_scanner_90_2_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -1288,20 +1301,6 @@ unsigned char d_scanner_98_0_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 
 };
-
-D_Shift * d_accepts_diff_100_0_nonmem2rxSub[] = {0};
-D_Shift ** d_accepts_diff_100_nonmem2rxSub[] = {
-d_accepts_diff_100_0_nonmem2rxSub
-};
-
-unsigned char d_scanner_100_0_0_nonmem2rxSub[SCANNER_BLOCK_SIZE] = {
-0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-};
-
-D_Shift * d_shift_100_0_nonmem2rxSub[] = {&d_shift_64_nonmem2rxSub,NULL};
 
 D_Shift * d_accepts_diff_103_0_nonmem2rxSub[] = {0};
 D_Shift ** d_accepts_diff_103_nonmem2rxSub[] = {
@@ -1909,8 +1908,8 @@ SB_uint8 d_scanner_82_nonmem2rxSub[3] = {
  , d_scanner_0_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub}},
 {d_shift_82_1_nonmem2rxSub, {d_scanner_82_1_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub
  , d_scanner_0_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub}},
-{d_shift_82_2_nonmem2rxSub, {d_scanner_0_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub
- , d_scanner_0_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub}}
+{d_shift_82_2_nonmem2rxSub, {d_scanner_82_2_0_nonmem2rxSub, d_scanner_82_2_1_nonmem2rxSub
+ , d_scanner_82_2_1_nonmem2rxSub, d_scanner_82_2_1_nonmem2rxSub}}
 };
 
 SB_trans_uint8 d_transition_82_nonmem2rxSub[3] = {
@@ -2094,20 +2093,6 @@ SB_trans_uint8 d_transition_98_nonmem2rxSub[2] = {
  , d_accepts_diff_0_0_0_nonmem2rxSub, d_accepts_diff_0_0_0_nonmem2rxSub}}
 };
 
-SB_uint8 d_scanner_100_nonmem2rxSub[2] = {
-{d_shift_100_0_nonmem2rxSub, {d_scanner_100_0_0_nonmem2rxSub, d_scanner_90_0_1_nonmem2rxSub
- , d_scanner_90_0_1_nonmem2rxSub, d_scanner_90_0_1_nonmem2rxSub}},
-{d_shift_100_0_nonmem2rxSub, {d_scanner_100_0_0_nonmem2rxSub, d_scanner_90_0_1_nonmem2rxSub
- , d_scanner_90_0_1_nonmem2rxSub, d_scanner_90_0_1_nonmem2rxSub}}
-};
-
-SB_trans_uint8 d_transition_100_nonmem2rxSub[2] = {
-{{d_accepts_diff_0_0_0_nonmem2rxSub, d_accepts_diff_0_0_0_nonmem2rxSub
- , d_accepts_diff_0_0_0_nonmem2rxSub, d_accepts_diff_0_0_0_nonmem2rxSub}},
-{{d_accepts_diff_0_0_0_nonmem2rxSub, d_accepts_diff_0_0_0_nonmem2rxSub
- , d_accepts_diff_0_0_0_nonmem2rxSub, d_accepts_diff_0_0_0_nonmem2rxSub}}
-};
-
 SB_uint8 d_scanner_103_nonmem2rxSub[2] = {
 {NULL, {d_scanner_85_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub
  , d_scanner_0_0_0_nonmem2rxSub, d_scanner_0_0_0_nonmem2rxSub}},
@@ -2229,22 +2214,21 @@ unsigned char d_goto_valid_88_nonmem2rxSub[] = {
 0x0,0x4,0x0,0x0,0x20,0x0,0xe0,0x7,0x0,0x0,0x0,0x0,0x0,0x2,0x0};
 D_Reduction * d_reductions_89_nonmem2rxSub[] = {&d_reduction_28_nonmem2rxSub};
 unsigned char d_goto_valid_90_nonmem2rxSub[] = {
-0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x2};
+0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x1};
 D_Reduction * d_reductions_91_nonmem2rxSub[] = {&d_reduction_37_nonmem2rxSub};
 unsigned char d_goto_valid_92_nonmem2rxSub[] = {
-0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x2};
+0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x1};
 D_Reduction * d_reductions_93_nonmem2rxSub[] = {&d_reduction_46_nonmem2rxSub};
 unsigned char d_goto_valid_94_nonmem2rxSub[] = {
-0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x2};
+0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x1};
 D_Reduction * d_reductions_95_nonmem2rxSub[] = {&d_reduction_56_nonmem2rxSub};
 unsigned char d_goto_valid_96_nonmem2rxSub[] = {
-0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x2};
+0x0,0x0,0x0,0x0,0x20,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x1};
 D_Reduction * d_reductions_97_nonmem2rxSub[] = {&d_reduction_66_nonmem2rxSub};
 unsigned char d_goto_valid_98_nonmem2rxSub[] = {
-0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2};
+0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1};
 D_Reduction * d_reductions_99_nonmem2rxSub[] = {&d_reduction_100_nonmem2rxSub};
-unsigned char d_goto_valid_100_nonmem2rxSub[] = {
-0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1};
+D_Reduction * d_reductions_100_nonmem2rxSub[] = {&d_reduction_102_nonmem2rxSub};
 D_Reduction * d_reductions_101_nonmem2rxSub[] = {&d_reduction_98_nonmem2rxSub};
 D_Reduction * d_reductions_102_nonmem2rxSub[] = {&d_reduction_100_nonmem2rxSub};
 unsigned char d_goto_valid_103_nonmem2rxSub[] = {
@@ -2263,29 +2247,28 @@ D_Reduction * d_reductions_113_nonmem2rxSub[] = {&d_reduction_57_nonmem2rxSub};
 D_Reduction * d_reductions_114_nonmem2rxSub[] = {&d_reduction_65_nonmem2rxSub};
 D_Reduction * d_reductions_115_nonmem2rxSub[] = {&d_reduction_67_nonmem2rxSub};
 D_Reduction * d_reductions_116_nonmem2rxSub[] = {&d_reduction_91_nonmem2rxSub};
-D_Reduction * d_reductions_117_nonmem2rxSub[] = {&d_reduction_102_nonmem2rxSub};
-D_Reduction * d_reductions_118_nonmem2rxSub[] = {&d_reduction_15_nonmem2rxSub};
-D_Reduction * d_reductions_119_nonmem2rxSub[] = {&d_reduction_27_nonmem2rxSub};
+D_Reduction * d_reductions_117_nonmem2rxSub[] = {&d_reduction_15_nonmem2rxSub};
+D_Reduction * d_reductions_118_nonmem2rxSub[] = {&d_reduction_27_nonmem2rxSub};
 unsigned short d_gotos_nonmem2rxSub[305] = {
 46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,
 62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,
-78,79,80,81,82,83,84,99,118,0,0,0,0,0,0,3,
+78,79,80,81,82,83,84,99,0,0,0,0,0,0,0,3,
 4,5,0,0,6,7,8,9,10,11,0,0,12,13,14,0,
-0,15,16,17,0,0,18,19,20,21,0,88,22,23,24,25,
-117,0,26,27,28,29,30,31,32,86,33,34,35,36,37,38,
+0,15,16,17,0,0,18,19,20,21,117,88,22,23,24,25,
+0,0,26,27,28,29,30,31,32,86,33,34,35,36,37,38,
 39,40,41,42,43,44,45,85,49,50,51,52,53,54,55,56,
 57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,
-73,74,75,76,77,78,79,80,81,90,92,0,0,102,103,87,
-0,94,96,108,3,4,5,89,91,6,7,8,9,10,11,93,
-95,12,13,14,119,120,15,16,17,0,0,18,19,20,21,0,
+73,74,75,76,77,78,79,80,81,90,92,0,108,102,103,87,
+0,94,96,0,3,4,5,89,91,6,7,8,9,10,11,93,
+95,12,13,14,118,119,15,16,17,0,0,18,19,20,21,0,
 98,22,23,24,25,0,106,26,27,28,29,30,31,32,97,33,
 34,35,36,37,38,39,40,41,42,43,44,45,104,87,87,100,
 101,107,109,111,113,87,87,115,0,0,0,110,112,114,0,0,
 116,6,7,8,9,10,11,0,87,87,0,0,105,0,0,0,
 0,0,0,0,87,0,0,3,4,5,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,87,87,87,87,0,0,87,0,0,108,108,
-108,0,0,108,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,87,87,87,87,0,0,87,0,108,108,108,
+0,0,108,0,0,0,0,0,0,0,0,0,0,0,0,0,
 87};
 
 D_ErrorRecoveryHint d_error_recovery_hints_0_nonmem2rxSub[] = {{0, 35, "ss"}};
@@ -2391,9 +2374,9 @@ D_State d_states_nonmem2rxSub[] = {
 {NULL, -2147483647, {1, d_reductions_95_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {d_goto_valid_96_nonmem2rxSub, -178, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_90_nonmem2rxSub, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_90_nonmem2rxSub, d_accepts_diff_90_nonmem2rxSub, -1},
 {NULL, -2147483647, {1, d_reductions_97_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_98_nonmem2rxSub, -34, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_98_nonmem2rxSub, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_98_nonmem2rxSub, d_accepts_diff_98_nonmem2rxSub, -1},
+{d_goto_valid_98_nonmem2rxSub, -28, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_98_nonmem2rxSub, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_98_nonmem2rxSub, d_accepts_diff_98_nonmem2rxSub, -1},
 {NULL, -2147483647, {1, d_reductions_99_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_100_nonmem2rxSub, 72, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_100_nonmem2rxSub, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_100_nonmem2rxSub, d_accepts_diff_100_nonmem2rxSub, -1},
+{NULL, -2147483647, {1, d_reductions_100_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_101_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_102_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {d_goto_valid_103_nonmem2rxSub, -127, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_103_nonmem2rxSub, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_103_nonmem2rxSub, d_accepts_diff_103_nonmem2rxSub, -1},
@@ -2411,8 +2394,7 @@ D_State d_states_nonmem2rxSub[] = {
 {NULL, -2147483647, {1, d_reductions_115_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_116_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_117_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{NULL, -2147483647, {1, d_reductions_118_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{NULL, -2147483647, {1, d_reductions_119_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1}
+{NULL, -2147483647, {1, d_reductions_118_nonmem2rxSub}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1}
 };
 
 D_Symbol d_symbols_nonmem2rxSub[] = {
@@ -2527,11 +2509,10 @@ D_Symbol d_symbols_nonmem2rxSub[] = {
 {D_SYMBOL_REGEX, "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\\\\-\\\\+]?[0-9]+)?", 55, -1},
 {D_SYMBOL_REGEX, "[0-9]+[eE][\\\\-\\\\+]?[0-9]+", 29, -1},
 {D_SYMBOL_REGEX, "[ \\t\\r\\n, ]+", 15, -1},
-{D_SYMBOL_STRING, ";", 1, -1},
-{D_SYMBOL_REGEX, "[^\\n]*", 7, -1},
+{D_SYMBOL_REGEX, ";[^\\n]*", 8, -1},
 {D_SYMBOL_REGEX, "[^0-9 \\n][^ \\n]*", 18, -1},
 {D_SYMBOL_REGEX, "[a-zA-Z][a-zA-Z0-9_]*", 21, -1},
 };
 
 D_ParserTables parser_tables_nonmem2rxSub = {
-120, d_states_nonmem2rxSub, d_gotos_nonmem2rxSub, 1, 115, d_symbols_nonmem2rxSub, NULL, 0, NULL, 0};
+119, d_states_nonmem2rxSub, d_gotos_nonmem2rxSub, 1, 114, d_symbols_nonmem2rxSub, NULL, 0, NULL, 0};

@@ -37,7 +37,7 @@ string: string1 | string2;
 string1: "\'([^\'\\]|\\[^])*\'";
 string2: "\"([^\"\\]|\\[^])*\"";
 whitespace: ( "[ \t\r\n]+" | singleLineComment)*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 
 identifier_any: "[0-9_][a-zA-Z0-9_]*" $term -5;
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;

@@ -389,12 +389,48 @@ nonmem2rxRec.err <- function(x) {
   }
   .ret
 }
+#' Error on THETA(#)/ETA(#) used in the model but never defined
+#'
+#' NM-TRAN rejects these; left alone they silently become data
+#' covariates (like `eta11`) in the translated model.  Skipped when no
+#' $THETA/$OMEGA is present, since a $MSFI run takes them from the MSF file.
+#'
+#' @return nothing, called for side effects
+#' @noRd
+#' @author Matthew L. Fidler
+.undefinedThetaEta <- function() {
+  .msg <- character(0)
+  .theta <- integer(0)
+  if (.nonmem2rx$thetaMax > 0L) {
+    .theta <- sort(.nonmem2rx$thetaObs[.nonmem2rx$thetaObs > .nonmem2rx$thetaMax])
+  }
+  if (length(.theta) > 0L) {
+    .msg <- c(.msg, sprintf("%s used but only %d defined in $THETA",
+                            paste0("THETA(", .theta, ")", collapse=", "),
+                            .nonmem2rx$thetaMax))
+  }
+  .eta <- integer(0)
+  if (.nonmem2rx$etaMax > 0L) {
+    .eta <- sort(.nonmem2rx$etaObs[.nonmem2rx$etaObs > .nonmem2rx$etaMax])
+  }
+  if (length(.eta) > 0L) {
+    .msg <- c(.msg, sprintf("%s used but only %d defined in $OMEGA",
+                            paste0("ETA(", .eta, ")", collapse=", "),
+                            .nonmem2rx$etaMax))
+  }
+  if (length(.msg) > 0L) {
+    stop("undefined model parameters (NM-TRAN would reject this control stream):\n",
+         paste0("  ", .msg, collapse="\n"), call.=FALSE)
+  }
+  invisible()
+}
 #' Puts in any missing parameter definitions
 #'
 #' @return missing parameters
 #' @noRd
 #' @author Matthew L. Fidler
 .missingPrefix <- function() {
+  .undefinedThetaEta()
   .maxTheta <- .nonmem2rx$thetaMax
   .sl <- seq_len(.maxTheta)
   .ret <- character(0)

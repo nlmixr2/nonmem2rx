@@ -102,7 +102,7 @@ block_chol_type: 'CHOLESKY' | 'CHOL' |
 block_type: off_diag_type diag_type? | diag_type off_diag_type? | block_chol_type;
 
 whitespace: ( "[ \t\r\n]+")*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 decimalint: "0|([1-9][0-9]*)" $term -1;
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
