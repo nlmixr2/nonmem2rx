@@ -1,3 +1,11 @@
+# nonmem2rx 0.1.12
+
+* Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
+  record name used in syntax-error messages was stored in the parser's
+  duplicated-string pool, which is freed after every parse, so a later syntax
+  error (for example in a `.lst` file) printed freed memory.  The record name
+  now has its own buffer.
+
 # nonmem2rx 0.1.11
 
 * Reading a NONMEM `.lst` covariance block is no longer slow.  `lst.g` let a

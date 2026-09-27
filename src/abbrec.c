@@ -41,9 +41,19 @@ extern int lastStrLoc;
 int _rxode2_reallyHasAfter = 0;
 int rx_suppress_syntax_info = 0;
 const char *record;
+// The record name must outlive parseFree(0), which frees the
+// rc_dup_str() pool (_dupStrs); keep it in its own buffer.
+static sbuf recordBuf;
+static int recordBufIni = 0;
 
 SEXP _nonmem2rx_setRecord(SEXP rec) {
-  record = (char*)rc_dup_str(CHAR(STRING_ELT(rec, 0)), 0);
+  if (!recordBufIni) {
+    sIni(&recordBuf);
+    recordBufIni = 1;
+  }
+  sClear(&recordBuf);
+  sAppend(&recordBuf, "%s", CHAR(STRING_ELT(rec, 0)));
+  record = recordBuf.s;
   return R_NilValue;
 }
 
