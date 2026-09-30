@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nonmem2rx</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -200,7 +200,6 @@ with different dosing scenarios.</p>
 <span><span class="co">#&gt; 7                  7           c.CIRC</span></span>
 <span><span class="co">#&gt;  ── <span style="font-weight: bold;">Model (Normalized Syntax):</span> ── </span></span>
 <span><span class="co">#&gt; function() {</span></span>
-<span><span class="co">#&gt;     NULL</span></span>
 <span><span class="co">#&gt;     description &lt;- "wbc"</span></span>
 <span><span class="co">#&gt;     dfObs &lt;- 176</span></span>
 <span><span class="co">#&gt;     dfSub &lt;- 45</span></span>
@@ -357,7 +356,7 @@ simply add <code>resample=TRUE</code>:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:03</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:00:05</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span></code></pre></div>
 <p>In this case every individual re-samples from the original dataset’s
 covariates. In this particular case, the dosing changes per individual
@@ -499,7 +498,7 @@ increase in subjects compared to the NONMEM input.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using NONMEM specified ssAtol=1e-12</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> thetaMat has zero diagonal items, ignored: 'eps1'</span></span>
-<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:03</span></span>
+<span><span class="co">#&gt; [====|====|====|====|====|====|====|====|====|====] 0:01:44</span></span>
 <span><span class="co">#&gt; Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix</span></span>
 <span></span>
 <span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"y"</span><span class="op">)</span></span>

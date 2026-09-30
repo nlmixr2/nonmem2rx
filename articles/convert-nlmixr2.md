@@ -131,7 +131,6 @@ print(mod)
 #> 
 #>  ── Model (Normalized Syntax): ── 
 #> function() {
-#>     NULL
 #>     description <- "BOLUS_2CPT_CLV1QV2 SINGLE DOSE FOCEI (120 Ind/2280 Obs) runODE032"
 #>     dfObs <- 2280
 #>     dfSub <- 120
@@ -440,7 +439,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.6636606        0.01 0.027    0.001 100.95       0.75
+#> elapsed 0.8979441       0.019 0.049    0.002 100.95      1.194
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
