@@ -176,7 +176,9 @@ void trans_lst(const char* parse){
   finalizeSyntaxError();
 }
 
+void nonmem2rxSetRecord(const char *rec);
 SEXP _nonmem2rx_trans_lst(SEXP in, SEXP cov) {
+  nonmem2rxSetRecord("NONMEM output (.lst)");
   if (INTEGER(cov)[0]) {
     lstType = 5;
   }
