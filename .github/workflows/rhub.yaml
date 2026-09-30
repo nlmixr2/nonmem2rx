@@ -71,7 +71,7 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-          dependencies: '"hard"'
+          dependencies: "'hard'"
           extra-packages: |
             any::rcmdcheck
             any::testthat
@@ -114,7 +114,7 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-          dependencies: '"hard"'
+          dependencies: "'hard'"
           extra-packages: |
             any::rcmdcheck
             any::testthat
