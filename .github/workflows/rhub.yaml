@@ -60,18 +60,39 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-      # Deviation from the canonical rhub.yaml: install only the hard
-      # dependencies plus what the tests and the tarball build actually use.
-      # With "all" (the default) the Suggests tree pulls in the whole nlmixr2
-      # universe, which is what broke these checks -- valgrind died in pak
-      # after installing ~200 packages and m1-san died compiling Hmisc, which
-      # nonmem2rx never loads.  Keep in sync with the other-platforms job
-      # below, and re-apply after `rhub::rhub_setup()` overwrites this file.
-      - uses: r-hub/actions/setup-deps@v1
+      # Two deviations from the canonical rhub.yaml, both re-apply after
+      # `rhub::rhub_setup()` overwrites this file:
+      #
+      # 1. Install only the hard dependencies plus what the tests and the
+      #    tarball build actually use.  With "all" (the default) the Suggests
+      #    tree pulls in the whole nlmixr2 universe, which is what broke these
+      #    checks -- valgrind died in pak after installing ~200 packages and
+      #    m1-san died compiling Hmisc, which nonmem2rx never loads.
+      #
+      # 2. Call r-lib/actions/setup-r-dependencies directly, instead of
+      #    r-hub/actions/setup-deps, only to get a per-platform
+      #    `cache-version`.  setup-deps derives it from the R-hub repo, and the
+      #    gcc-asan and valgrind containers share one ("fedora-42/4.7") while
+      #    being the same OS and R version, so their dependency caches collide.
+      #    valgrind then restored gcc-asan's library and failed to install:
+      #    "unable to load shared object dparser.so: libasan.so.8: cannot open
+      #    shared object file".  Everything else here mirrors what setup-deps
+      #    passes on.  Note the quoting of `dependencies` differs from
+      #    setup-deps': this value is interpolated into R code once, not twice.
+      - name: Set user library location
+        run: |
+          dir.create(lib <- Sys.getenv("R_LIBS_USER"), showWarnings = FALSE, recursive = TRUE)
+          writeLines(paste0("R_LIBS_USER=", Sys.getenv("R_LIBS_USER")), Sys.getenv("GITHUB_ENV"))
+        shell: Rscript {0}
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          token: ${{ secrets.RHUB_TOKEN }}
-          job-config: ${{ matrix.config.job-config }}
-          dependencies: "'hard'"
+          cache-version: rhub-${{ matrix.config.label }}
+          packages: deps::.,any::sessioninfo
+          needs: check
+          pak-version: devel
+          install-pandoc: true
+          install-quarto: false
+          dependencies: '"hard"'
           extra-packages: |
             any::rcmdcheck
             any::testthat
@@ -80,6 +101,8 @@ jobs:
             any::vdiffr
             any::knitr
             any::rmarkdown
+        env:
+          R_KEEP_PKG_SOURCE: yes
       - uses: r-hub/actions/run-check@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
