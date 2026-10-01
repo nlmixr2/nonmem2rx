@@ -84,10 +84,20 @@ jobs:
           dir.create(lib <- Sys.getenv("R_LIBS_USER"), showWarnings = FALSE, recursive = TRUE)
           writeLines(paste0("R_LIBS_USER=", Sys.getenv("R_LIBS_USER")), Sys.getenv("GITHUB_ENV"))
         shell: Rscript {0}
+      # Platforms whose check script needs the package itself installed (vnu
+      # runs find.package("nonmem2rx")) ask for it with this environment
+      # variable; setup-deps honours it, so reproduce that here.
+      - name: Decide which packages to install
+        id: rhub-packages
+        run: |
+          local <- Sys.getenv("RHUB_ACTIONS_INSTALL_LOCAL_PACKAGE") == "true"
+          pkgs <- if (local) "local::.,any::sessioninfo" else "deps::.,any::sessioninfo"
+          cat(paste0("packages=", pkgs), sep = "\n", append = TRUE, file = Sys.getenv("GITHUB_OUTPUT"))
+        shell: Rscript {0}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: rhub-${{ matrix.config.label }}
-          packages: deps::.,any::sessioninfo
+          packages: ${{ steps.rhub-packages.outputs.packages }}
           needs: check
           pak-version: devel
           install-pandoc: true
