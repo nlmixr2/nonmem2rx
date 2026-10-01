@@ -423,7 +423,7 @@ fit <- as.nlmixr2(new)
 #> → finding duplicate expressions in EBE model...
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.8 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.9 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -439,7 +439,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.8355935       0.019 0.047    0.001 100.95      1.123
+#> elapsed 0.9531977       0.019 0.048    0.002 100.95      1.179
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 

@@ -508,7 +508,7 @@ fit <- as.nlmixr2(new)
 #> → finding duplicate expressions in EBE model...
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.8 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.9 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -540,7 +540,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.6410394       0.023  0.05    0.001 320.27        1.3
+#> elapsed 0.7130337       0.024 0.057    0.001 320.27      1.434
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -777,9 +777,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.835214 2.936846   17.93459      0.038        0.02 0.067    0.001
+#> elapsed 3.038963 2.944602   17.85868      0.044        0.02  0.07    0.001
 #>             other
-#> elapsed 0.1193504
+#> elapsed 0.1217537
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -907,7 +907,7 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:12
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:13
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
@@ -960,7 +960,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.6410394       0.023  0.05    0.001 320.27        1.3     41.496
+#> elapsed 0.7130337       0.024 0.057    0.001 320.27      1.434     44.576
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
