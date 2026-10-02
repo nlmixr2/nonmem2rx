@@ -14,6 +14,11 @@
   output rather than from the last control-stream record parsed (or from a
   `NULL` record name).
 
+* The `PRED` validation no longer needs the `tibble` package.  It asked
+  `rxSolve()` for a tibble while the `IPRED` validation beside it asked for a
+  `data.frame`, so where `tibble` was unavailable the solve failed quietly and
+  only the `IPRED` half of `$meta$validation` was reported.
+
 # nonmem2rx 0.1.11
 
 * A `THETA(#)` or `ETA(#)` used in the model beyond what `$THETA` or

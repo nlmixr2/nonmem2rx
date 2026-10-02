@@ -333,7 +333,10 @@
                                        paste0("rxerr.", .rx$predDf$var)))
       }
       .minfo("solving pred problem")
-      .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "tibble",
+      # data.frame, like the ipred solve above: "tibble" would need the tibble
+      # package, which nonmem2rx does not depend on, and only names() and [[
+      # are used on the result
+      .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
                                 covsInterpolation="nocb",
                                 addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
                                 safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
