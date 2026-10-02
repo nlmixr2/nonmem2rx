@@ -1,5 +1,8 @@
 # nonmem2rx 0.1.12
 
+* Abbreviated code now accepts the Fortran `.NOT.` operator and the `/=`
+  and `.NEN.` not-equal operators (previously a syntax error).
+
 * Model validation now matches the rxode2 solve to the NONMEM records by row,
   so it is no longer skipped when the lengths differ: models with `MTIME`
   (rxode2 adds output at the model event times) and data with

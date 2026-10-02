@@ -172,7 +172,9 @@ Rules of thumb:
   column (the standard `{{TABLE}}` writes `ID TIME EVID ROWID IPRED IWRES`
   plus a `FIRSTONLY` ETA table).
 - Avoid records that tie in TIME unless ties are the point of the case
-  (see `dose-obs-ties`).
+  (see `dose-obs-ties`). rxode2 sorts tied records, so `nonmem2rx`
+  deliberately offsets them by `delta=1e-4`, which gives small
+  differences where concentrations change fast.
 - Use `write=` for anything rxode2 can't simulate directly: clock times,
   comment/junk rows to be ignored, character columns, aliased names,
   reused IDs. Junk rows should carry doses that would change the
@@ -245,7 +247,7 @@ simulated records, for `RECORDS=`).
 | `sigma-block-two-eps` | params | $SIGMA BLOCK(2) with additive + proportional EPS (Y=IPRED*(1+EPS(1))+EPS(2)) |  |
 | `labels-nm75` | params | NONMEM 7.5 labels: $THETA CL=(...), $OMEGA ECL=..., $SIGMA PROP=..., referenced as THETA(CL)/ETA(ECL)/EPS(PROP) |  |
 | `if-else-logic` | code | IF/ELSE IF/ELSE/ENDIF, nested IF, one-line IF, .AND./.OR., ==, >=, .NE. and $ERROR (ONLY OBSERVATIONS) |  |
-| `logical-not-and-slash-ne` | code | Fortran .NOT. and the /= operator in IF conditions | dry |
+| `logical-not-and-slash-ne` | code | Fortran .NOT. and the /= operator in IF conditions |  |
 | `math-functions` | code | DEXP/DLOG/LOG10/DSQRT/DABS/** powers, MIN/MAX, and a probit bioavailability using PHI() |  |
 | `do-while-loop` | code | DO WHILE / ENDDO loop computing an allometric factor |  |
 | `pred-emax-reserved-names` | code | $PRED sigmoid Emax with variables named GAMMA, BETA, LAMBDA (rxode2 function names) and no dose records |  |

@@ -502,3 +502,21 @@ test_that("DDE past histories AP_x_y translate to past()", {
        "d/dt(rxddta2) <- K4 * rxddta1 - K4 * delay(rxddta1, TAU1)"))
 
 })
+
+test_that(".NOT., /= and .NEN. in abbreviated code", {
+  .a <- function(abbrev, eq) {
+    .clearNonmem2rx()
+    .Call(`_nonmem2rx_setRecord`, "$PRED")
+    .Call(`_nonmem2rx_trans_abbrev`, abbrev, '$PRED', 0L, 0L)
+    expect_equal(.nonmem2rx$model, eq)
+  }
+  ## .NOT. binds looser than comparisons and tighter than .AND.
+  .a("IF (.NOT. SEX .EQ. 1) FSEX = 2", "if (!(SEX == 1)) FSEX <- 2")
+  .a("IF (.not.(SEX .EQ. 1) .AND. (AGE >= 65 .OR. RACE .EQ. 3)) FSEX = 1",
+     "if (!((SEX == 1)) && (AGE >= 65 || RACE == 3)) FSEX <- 1")
+  .a("IF (.NOT. .NOT. A .GT. 2) B = 3", "if (!(!(A > 2))) B <- 3")
+  .a("IF (SEX /= 1 .AND. SEX /= 0) FSEX = 3", "if (SEX != 1 && SEX != 0) FSEX <- 3")
+  .a("IF (A .NEN. 2) B = 3", "if (A != 2) B <- 3")
+  ## division is unaffected by the /= operator
+  .a("IF (A/2 .EQ. 1) B = C/D", "if (A / 2 == 1) B <- C / D")
+})

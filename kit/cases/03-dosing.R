@@ -164,7 +164,7 @@ kitCase(
   name="dual-absorption",
   covers="Same dose split into first-order depot (F1) and zero-order central input (RATE=-2, D2, F2=1-F1)",
   tags=c("dosing", "bioav", "modeled-dur", "advan2", "ties"),
-  known="the two dose records share TIME=0; .fixNonmemTies shifts the second dose by delta=1e-4",
+  known="by design: rxode2 sorts records tied in TIME, so nonmem2rx offsets the second dose by delta=1e-4 (.fixNonmemTies); expect small differences",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka <- 0.8; tfr <- 0.4; td2 <- 4
@@ -567,7 +567,7 @@ kitCase(
   name="dose-obs-ties",
   covers="Ties: obs listed before/after a dose and after an SS dose at the same TIME, plus replicate samples at one TIME",
   tags=c("dosing", "ties", "ss", "advan2"),
-  known="nonmem2rx shifts every record tied in TIME (dose or obs) by delta=1e-4 (.fixNonmemTies), biasing IPRED where concentrations change fast",
+  known="by design: rxode2 sorts records tied in TIME, so nonmem2rx offsets them by delta=1e-4 (.fixNonmemTies); expect small IPRED differences where concentrations change fast",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka <- 3

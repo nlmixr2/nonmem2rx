@@ -79,8 +79,7 @@ kitVariant("if-else-logic", "logical-not-and-slash-ne",
            tags=c("code", "if", "grammar"),
            ctl=sub("  IF (SEX .NE. 1 .AND. (AGE >= 65 .OR. RACE .EQ. 3)) FSEX = THETA(7)\n",
                    "  IF (.NOT.(SEX .EQ. 1) .AND. (AGE >= 65 .OR. RACE .EQ. 3)) FSEX = THETA(7)\n  IF (SEX /= 1 .AND. SEX /= 0) FSEX = -1\n",
-                   .kitEnv$cases[["if-else-logic"]]$ctl, fixed=TRUE),
-           known="abbrev grammar rejects .NOT. and /= ($PK syntax error)")
+                   .kitEnv$cases[["if-else-logic"]]$ctl, fixed=TRUE))
 
 kitCase(
   name="math-functions",
