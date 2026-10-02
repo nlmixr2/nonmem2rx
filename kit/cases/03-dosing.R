@@ -626,11 +626,9 @@ $SIGMA 1 FIX
 kitVariant("mtime-change-point", "mtime-change-point-ode",
            "MTIME/MPAST switching KA in an ADVAN13 ODE model",
            tags=c("dosing", "mtime", "ode", "advan13"),
-           knownFull="the validation solve returns extra rows at mtime() times, so IPRED/PRED lengths differ and validation is skipped",
            ctl=.odeCtl(.kitEnv$cases[["mtime-change-point"]]$ctl, .des1))
 
 kitVariant("cmt-off-depot", "cmt-off-depot-ode",
            "Negative CMT on an EVID=2 record turns the depot off in an ADVAN13 ODE model",
            tags=c("dosing", "cmt-off", "ode", "advan13"),
-           knownFull="validation counts EVID=2 records as observations but the solve drops compartment-off (CMT<0) records, so lengths differ and validation is skipped",
            ctl=.odeCtl(.kitEnv$cases[["cmt-off-depot"]]$ctl, .des1))

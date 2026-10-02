@@ -199,7 +199,7 @@ simulated records, for `RECORDS=`).
 | `advan4-trans4-ss` | linear | ADVAN4 TRANS4 two-compartment oral at steady state (SS=1, II) followed by washout |  |
 | `advan11-trans4-3cmt` | linear | ADVAN11 TRANS4 three-compartment IV infusion at steady state (SS=1 with RATE) |  |
 | `advan12-trans4-3cmt-oral` | linear | ADVAN12 TRANS4 three-compartment first-order absorption with ALAG1 | dry |
-| `advan5-transit` | ode | ADVAN5 general linear model with named $MODEL COMP (DEFDOSE/DEFOBS), transit chain and peripheral (matExp translation) | full |
+| `advan5-transit` | ode | ADVAN5 general linear model with named $MODEL COMP (DEFDOSE/DEFOBS), transit chain and peripheral (matExp translation) |  |
 | `advan7-t-notation` | ode | ADVAN7 with K1T0/K1T2/K2T1 'T' rate-constant notation |  |
 | `advan7-unnamed-comp` | ode | ADVAN7 where $MODEL names the first compartment but leaves the second as a bare COMP | dry |
 | `advan6-michaelis-menten` | ode | ADVAN6 nonlinear (Michaelis-Menten) elimination with TOL; IV bolus at two dose levels |  |
@@ -223,8 +223,8 @@ simulated records, for `RECORDS=`).
 | `infusion-into-depot` | dosing | Zero-order infusion (RATE>0) into the absorption depot of ADVAN2, overlapping a bolus |  |
 | `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) | dry |
 | `dose-obs-ties` | dosing | Ties: obs listed before/after a dose and after an SS dose at the same TIME, plus replicate samples at one TIME | dry |
-| `mtime-change-point-ode` | dosing | MTIME/MPAST switching KA in an ADVAN13 ODE model | full |
-| `cmt-off-depot-ode` | dosing | Negative CMT on an EVID=2 record turns the depot off in an ADVAN13 ODE model | full |
+| `mtime-change-point-ode` | dosing | MTIME/MPAST switching KA in an ADVAN13 ODE model |  |
+| `cmt-off-depot-ode` | dosing | Negative CMT on an EVID=2 record turns the depot off in an ADVAN13 ODE model |  |
 | `input-alias-drop-skip` | data | $INPUT synonyms on both sides (TAFD=TIME, CONC=DV) used in code, DROP/SKIP of character columns, '.' DV on dose rows |  |
 | `ignore-hash-and-list` | data | IGNORE=# header/comment lines together with IGNORE=(FLAG.EQ.1) and IGNORE=(AMT.GT.1000) filters |  |
 | `ignore-c-column` | data | Leading C column with IGNORE=C (Bauer-style commented records) including the header |  |
@@ -233,13 +233,13 @@ simulated records, for `RECORDS=`).
 | `clock-time-date` | data | Clock times (HH:MM) with DATE=DROP (MM/DD/YYYY), crossing midnight and Feb 29 |  |
 | `clock-time-dat1` | data | Clock times with DAT1 (DD/MM/YYYY) day-first dates |  |
 | `translate-time-days` | data | $DATA TRANSLATE=(TIME/24/4 II/24/4): file in hours, model in days (NONMEM 7.5+) |  |
-| `repeated-nonmonotone-ids` | data | Non-monotone ID values reused by non-contiguous individuals (10, 2, 7, 10, 2, ...) | full |
+| `repeated-nonmonotone-ids` | data | Non-monotone ID values reused by non-contiguous individuals (10, 2, 7, 10, 2, ...) |  |
 | `lowercase-input` | data | Lower-case $INPUT labels (id time amt dv ...) with upper-case abbreviated code |  |
 | `reserved-columns` | data | Data columns that are reserved in rxode2 (DUR informational, SIM replicate, TAD) next to fixed-RATE infusions |  |
 | `dvid-no-cmt` | data | Parent + metabolite endpoints selected by DVID with no CMT column (doses to DEFDOSE) |  |
 | `omega-block-labels-order` | params | $OMEGA BLOCK(2) between diagonal records, labels inside the block, ETAs used out of order in code |  |
-| `omega-sd-correlation` | params | $OMEGA BLOCK(2) SD CORRELATION, $OMEGA VARIANCE, and $SIGMA SD with an EPS-based proportional error | dry |
-| `omega-cholesky` | params | $OMEGA BLOCK(2) CHOLESKY (lower-triangular factor) values | dry |
+| `omega-sd-correlation` | params | $OMEGA BLOCK(2) SD CORRELATION, $OMEGA VARIANCE, and $SIGMA SD with an EPS-based proportional error |  |
+| `omega-cholesky` | params | $OMEGA BLOCK(2) CHOLESKY (lower-triangular factor) values |  |
 | `omega-same-iov` | params | Inter-occasion variability: $OMEGA BLOCK(1) + BLOCK(1) SAME selected by an OCC column |  |
 | `theta-forms` | params | $THETA numeric forms (.12E+01, 3.0E1, 1E+04, 3.), FIX in several positions and empty upper bounds |  |
 | `sigma-block-two-eps` | params | $SIGMA BLOCK(2) with additive + proportional EPS (Y=IPRED*(1+EPS(1))+EPS(2)) |  |

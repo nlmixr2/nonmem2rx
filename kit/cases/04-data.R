@@ -212,7 +212,6 @@ kitCase(
   name="repeated-nonmonotone-ids",
   covers="Non-monotone ID values reused by non-contiguous individuals (10, 2, 7, 10, 2, ...)",
   tags=c("data", "id"),
-  knownFull="PRED validation (R/validate.R) solves nonmemData with raw NONMEM IDs, merging reused IDs into one subject; the IPRED path converts with fromNonmemToRxId()",
   sim=.simOral1, data=.dataOral1,
   write=function(d) {
     d$ID <- c(10, 2, 7)[((d$ID - 1) %% 3) + 1]

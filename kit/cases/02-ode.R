@@ -4,7 +4,6 @@ kitCase(
   name="advan5-transit",
   covers="ADVAN5 general linear model with named $MODEL COMP (DEFDOSE/DEFOBS), transit chain and peripheral (matExp translation)",
   tags=c("general-linear", "advan5", "model-comp"),
-  knownFull="PRED validation solves with returnType=\"tibble\"; the matExp model returns ipred twice, so as_tibble() errors and PRED is silently not validated",
   sim=function() {
     ini({
       tktr <- 2; tcl <- 3; tv <- 20; tq <- 1.5; tvp <- 40

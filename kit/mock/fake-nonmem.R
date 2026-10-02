@@ -52,6 +52,16 @@ writeLines(c("TABLE NO.     1: First Order Conditional Estimation with Interacti
 
 ## tables: every record after filtering is a simulated row
 .d <- .sim$data
+## NONMEM writes the ID values of the data file (they differ from the
+## simulation's when a case rewrites them, e.g. reused IDs)
+.f <- try(utils::read.csv("data.csv", check.names=FALSE), silent=TRUE)
+if (!inherits(.f, "try-error")) {
+  names(.f) <- toupper(gsub("[^A-Za-z0-9]", "", names(.f)))
+  if (all(c("ID", "ROWID") %in% names(.f))) {
+    .rowMatch <- match(.d$ROWID, suppressWarnings(as.numeric(.f$ROWID)))
+    if (!anyNA(.rowMatch)) .d$ID <- suppressWarnings(as.numeric(.f$ID[.rowMatch]))
+  }
+}
 .p <- .sim$predAll
 .pred <- .p$simPred[match(.d$ROWID, .p$ROWID)]
 .pred[is.na(.pred)] <- 0
@@ -76,7 +86,8 @@ for (.t in grep("^[$]TAB", .ctlLines, value=TRUE)) {
   if (!"NOAPPEND" %in% .opts) .cols <- c(.cols, setdiff(c("DV", "PRED", "RES", "WRES"), .cols))
   .tab <- vapply(.cols, function(c) rep_len(as.numeric(.col(c)), nrow(.d)), numeric(nrow(.d)))
   if (!is.matrix(.tab)) .tab <- matrix(.tab, nrow=nrow(.d))
-  if ("FIRSTONLY" %in% .opts) .tab <- .tab[!duplicated(.d$ID), , drop=FALSE]
+  ## one row per individual (a contiguous run of the same ID)
+  if ("FIRSTONLY" %in% .opts) .tab <- .tab[c(TRUE, diff(.d$ID) != 0), , drop=FALSE]
   .body <- apply(.tab, 1, function(r) paste0(" ", paste(.e(r), collapse=" ")))
   .head <- c("TABLE NO.  1", paste0(" ", paste(formatC(.cols, width=-12), collapse=" ")))
   .out <- if ("NOHEADER" %in% .opts) .body else if ("ONEHEADER" %in% .opts) c(.head, .body) else {

@@ -1,5 +1,20 @@
 # nonmem2rx 0.1.12
 
+* Model validation now matches the rxode2 solve to the NONMEM records by row,
+  so it is no longer skipped when the lengths differ: models with `MTIME`
+  (rxode2 adds output at the model event times) and data with
+  compartment-off (`CMT<0`) records now validate.
+
+* PRED validation now treats a reused, non-contiguous NONMEM `ID` as a new
+  individual (as IPRED validation already did).  IPRED validation also keeps
+  ETAs aligned for reused IDs instead of skipping the check.
+
+* PRED validation no longer fails silently for models that output a variable
+  twice (such as `ADVAN5`/`ADVAN7` `matExp()` models).
+
+* Validation no longer stops with "object '.iwres' not found" when the IPRED
+  solve fails.
+
 * `$OMEGA`/`$SIGMA` `BLOCK(n)` records using the `SD`, `CORRELATION` or
   `CHOLESKY` options now import the whole block.  Previously only the first
   row was kept (for example `BLOCK(2) SD CORRELATION 0.3 0.5 0.2` became
