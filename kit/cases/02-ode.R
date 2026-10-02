@@ -102,8 +102,7 @@ $SIGMA 1 FIX
 kitVariant("advan7-t-notation", "advan7-unnamed-comp",
            "ADVAN7 where $MODEL names the first compartment but leaves the second as a bare COMP",
            tags=c("general-linear", "advan7", "model-comp"),
-           ctl=sub("COMP=(PERIPH)", "COMP", .kitEnv$cases[["advan7-t-notation"]]$ctl, fixed=TRUE),
-           known="a bare COMP after a named COMP gives a model mixing matExp() with d/dt(rxddta1) (rxode2 syntax error)")
+           ctl=sub("COMP=(PERIPH)", "COMP", .kitEnv$cases[["advan7-t-notation"]]$ctl, fixed=TRUE))
 
 kitCase(
   name="advan6-michaelis-menten",

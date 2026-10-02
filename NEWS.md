@@ -1,5 +1,11 @@
 # nonmem2rx 0.1.12
 
+* A `$MODEL` that mixes named and bare `COMP` records (for example
+  `COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP`) now renames the named compartments.
+  Previously the rename failed silently, and `ADVAN5`/`ADVAN7` models then
+  stopped with an rxode2 syntax error because the matrix-exponential code
+  used the names the rename should have applied.
+
 * Abbreviated code now accepts the Fortran `.NOT.` operator and the `/=`
   and `.NEN.` not-equal operators (previously a syntax error).
 

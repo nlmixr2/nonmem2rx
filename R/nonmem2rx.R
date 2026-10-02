@@ -374,23 +374,30 @@
                  v
                }, character(1), USE.NAMES=FALSE)
   .c <- paste0("rxddta",seq_along(.n))
+  # a bare $MODEL COMP keeps its rxddtaN placeholder; renaming it to itself
+  # makes rxRename() fail and would leave every compartment un-renamed
+  .w <- which(.n != .c)
+  .ret <- rxui
+  if (length(.w) > 0L) {
+    .txt<- paste0("rxode2::rxRename(rxui, ",
+                  paste(paste(.n[.w],"=", .c[.w], sep=""), collapse=", "), ")")
+    .tmp <- try(eval(parse(text=.txt)),silent=TRUE)
+    if (inherits(.tmp, "try-error")) {
+      .minfo(sprintf("cmt not renamed; err evaluating: %s", .txt))
+      .n <- .c # the states keep their rxddtaN names
+    } else {
+      .ret <- .tmp
+      .minfo("done")
+    }
+  }
   # record the final compartment names (index -> name, including any `c.`
   # collision handling above) so the optional matrix-exponential path can emit
-  # cmt()/k_<from>_<to> using the same names the states are renamed to
+  # cmt()/k_<from>_<to> using the same names the states actually have
   if (.nonmem2rx$advan5max > 0L) {
     .fn <- paste0("rxddta", seq_len(.nonmem2rx$advan5max))
     .m <- min(length(.n), .nonmem2rx$advan5max)
     if (.m > 0L) .fn[seq_len(.m)] <- .n[seq_len(.m)]
     .nonmem2rx$cmtFinalNames <- .fn
-  }
-  .txt<- paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")
-  .tmp <- try(eval(parse(text=.txt)),silent=TRUE)
-  if (inherits(.tmp, "try-error")) {
-    .minfo(sprintf("cmt not renamed; err evaluating: %s", .txt))
-    .ret <- rxui
-  } else {
-    .ret <- .tmp
-    .minfo("done")
   }
   .ret
 }

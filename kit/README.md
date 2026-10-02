@@ -203,7 +203,7 @@ simulated records, for `RECORDS=`).
 | `advan12-trans4-3cmt-oral` | linear | ADVAN12 TRANS4 three-compartment first-order absorption with ALAG1 | dry |
 | `advan5-transit` | ode | ADVAN5 general linear model with named $MODEL COMP (DEFDOSE/DEFOBS), transit chain and peripheral (matExp translation) |  |
 | `advan7-t-notation` | ode | ADVAN7 with K1T0/K1T2/K2T1 'T' rate-constant notation |  |
-| `advan7-unnamed-comp` | ode | ADVAN7 where $MODEL names the first compartment but leaves the second as a bare COMP | dry |
+| `advan7-unnamed-comp` | ode | ADVAN7 where $MODEL names the first compartment but leaves the second as a bare COMP |  |
 | `advan6-michaelis-menten` | ode | ADVAN6 nonlinear (Michaelis-Menten) elimination with TOL; IV bolus at two dose levels |  |
 | `advan13-pkpd-turnover` | ode | ADVAN13 PK + indirect response with A_0 baseline, two endpoints switched on CMT in $ERROR, ATOL/TOL/SSTOL |  |
 | `advan13-time-in-des-no-doses` | ode | ADVAN13 endogenous circadian turnover using T inside $DES; dataset has no dose records; A_0 from THETA |  |
