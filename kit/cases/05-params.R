@@ -70,7 +70,6 @@ kitCase(
   name="omega-sd-correlation",
   covers="$OMEGA BLOCK(2) SD CORRELATION, $OMEGA VARIANCE, and $SIGMA SD with an EPS-based proportional error",
   tags=c("params", "omega", "sigma", "sd", "correlation", "error-eps"),
-  known="$OMEGA BLOCK(2) SD CORRELATION keeps only 'eta1 ~ 0.09'; the rest of the block (and eta2) is dropped",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka <- 1.2
@@ -115,7 +114,6 @@ kitCase(
   name="omega-cholesky",
   covers="$OMEGA BLOCK(2) CHOLESKY (lower-triangular factor) values",
   tags=c("params", "omega", "cholesky"),
-  known="$OMEGA BLOCK(2) CHOLESKY keeps only 'eta1 ~ 0.1' (not 0.3^2); the rest of the block (and eta2) is dropped",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka <- 1.2

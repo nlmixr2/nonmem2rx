@@ -1,5 +1,11 @@
 # nonmem2rx 0.1.12
 
+* `$OMEGA`/`$SIGMA` `BLOCK(n)` records using the `SD`, `CORRELATION` or
+  `CHOLESKY` options now import the whole block.  Previously only the first
+  row was kept (for example `BLOCK(2) SD CORRELATION 0.3 0.5 0.2` became
+  `eta1 ~ 0.09` and `eta2` was lost).  `CHOLESKY` values are now read as the
+  lower-triangular factor, and `FIX` is kept through the conversion.
+
 * Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
   record name used in syntax-error messages was stored in the parser's
   duplicated-string pool, which is freed after every parse, so a later syntax
