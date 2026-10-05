@@ -437,3 +437,79 @@ $SIGMA 1 FIX
 {{EST}}
 {{TABLE}}
 ")
+
+## Macro-constant (alpha/beta) parameterizations.  The truth is the ODE
+## with the equivalent micro constants:
+##   TRANS6: K21 (or K32) given;  K10 = ALPHA*BETA/K21, K12 = ALPHA+BETA-K21-K10
+##   TRANS5: K21 = (AOB*BETA + ALPHA)/(AOB + 1), then as TRANS6
+.macroCase <- function(advan, trans) {
+  .oral <- advan == 4
+  .k21 <- if (trans == 6) quote(tk21) else quote((taob * tbeta + talpha) / (taob + 1))
+  .ini <- c(list(quote(talpha <- 0.8), quote(tbeta <- 0.05),
+                 if (trans == 6) quote(tk21 <- 0.2) else quote(taob <- 5),
+                 quote(tv <- 20)),
+            if (.oral) list(quote(tka <- 1.5)),
+            list(quote(eta.alpha ~ 0.04), quote(eta.v ~ 0.04), quote(prop.sd <- 0.1)))
+  .input <- if (.oral) {
+    list(quote(d/dt(depot) <- -tka * depot),
+         quote(d/dt(central) <- tka * depot - (k10 + k12) * central + k21 * periph))
+  } else {
+    list(quote(d/dt(central) <- -(k10 + k12) * central + k21 * periph))
+  }
+  .sim <- eval(bquote(function() {
+    ini({
+      ..(.ini)
+    })
+    model({
+      alpha <- talpha * exp(eta.alpha); beta <- tbeta
+      k21 <- .(.k21)
+      k10 <- alpha * beta / k21
+      k12 <- alpha + beta - k21 - k10
+      v <- tv * exp(eta.v)
+      ..(.input)
+      d/dt(periph) <- k12 * central - k21 * periph
+      ipred <- central / v
+      ipred ~ prop(prop.sd)
+    })
+  }, splice=TRUE))
+  .c <- if (.oral) 2 else 1
+  .pk <- if (trans == 6) {
+    sprintf("  ALPHA = THETA(1)*EXP(ETA(1))\n  BETA  = THETA(2)\n  %s = THETA(3)", if (.oral) "K32" else "K21")
+  } else {
+    "  ALPHA = THETA(1)*EXP(ETA(1))\n  BETA  = THETA(2)\n  AOB   = THETA(3)"
+  }
+  .pk <- paste0(.pk, sprintf("\n  V = THETA(4)*EXP(ETA(2))%s\n  S%d = V",
+                             if (.oral) "\n  KA = THETA(5)" else "", .c))
+  kitCase(
+    name=sprintf("advan%d-trans%d-macro", advan, trans),
+    covers=sprintf("ADVAN%d TRANS%d macro constants (ALPHA, BETA, %s%s)", advan, trans,
+                   if (trans == 6) (if (.oral) "K32" else "K21") else "AOB",
+                   if (.oral) ", KA" else ""),
+    tags=c("linear", paste0("advan", advan), paste0("trans", trans), "macro"),
+    sim=.sim,
+    data=function(nSub) {
+      .id <- seq_len(nSub)
+      nmBind(nmDose(.id, 0, amt=100, cmt=1), nmObs(.id, pkTimes(72), cmt=.c))
+    },
+    ctl=sprintf("$PROBLEM {{PROBLEM}}
+$INPUT {{INPUT}}
+$DATA {{DATA}} IGNORE=@
+$SUBROUTINES ADVAN%d TRANS%d
+$PK
+%s
+$ERROR
+  IPRED = F
+  W = THETA(%d)*IPRED
+  IF (W .EQ. 0) W = 1
+  IWRES = (DV - IPRED)/W
+  Y = IPRED + W*EPS(1)
+$THETA (0, 0.8) (0, 0.05) %s (0, 20)%s (0, 0.1)
+$OMEGA 0.04 0.04
+$SIGMA 1 FIX
+{{EST}}
+{{TABLE}}
+", advan, trans, .pk, if (.oral) 6 else 5,
+                if (trans == 6) "(0, 0.2)" else "(0, 5)",
+                if (.oral) " (0, 1.5)" else ""))
+}
+for (.a in c(3, 4)) for (.t in c(5, 6)) .macroCase(.a, .t)

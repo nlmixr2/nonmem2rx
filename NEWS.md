@@ -6,6 +6,8 @@
   closed-form `ADVAN`/`TRANS` combination without a `linCmt()` translation is
   now an error instead.
 
+* `ADVAN4 TRANS6` (`ALPHA BETA K32 KA`) models now translate to `linCmt()`.
+
 * A `$MODEL` that mixes named and bare `COMP` records (for example
   `COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP`) now renames the named compartments.
   Previously the rename failed silently, and `ADVAN5`/`ADVAN7` models then

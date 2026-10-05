@@ -28,6 +28,7 @@
 .linCmtAdvan$`4`$`3` <- c("CL"="cl", "V"="v", "Q"="q", "VSS"="vss", "KA"="ka")
 .linCmtAdvan$`4`$`4` <- c("CL"="cl", "V2"="v2", "Q"="q", "V3"="v3", "KA"="ka")
 .linCmtAdvan$`4`$`5` <- c("AOB"="aob", "ALPHA"="alpha", "BETA"="beta", "KA"="ka", "#"="vc")
+.linCmtAdvan$`4`$`6` <- c("ALPHA"="alpha", "BETA"="beta", "K32"="k32", "KA"="ka", "#"="vc")
 
 .linCmtAdvan$`11` <- new.env(parent=emptyenv())
 .linCmtAdvan$`11`$`1` <- c("K"="k", "K12"="k12", "K21"="k21", "K13"="k13","K31"="k31", "#"="vc")

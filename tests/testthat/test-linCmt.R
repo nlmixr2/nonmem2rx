@@ -37,3 +37,36 @@ $SIGMA 0.01
   expect_true(all(is.finite(.t4)) && all(.t4 > 0))
   expect_equal(.t4, .t1, tolerance=1e-6)
 })
+
+test_that("ADVAN4 TRANS6 (ALPHA, BETA, K32, KA) matches the micro-constant form", {
+  .ctl <- function(trans, pk) {
+    paste0("$PROBLEM advan4
+$INPUT ID TIME AMT DV EVID CMT
+$DATA nodata.csv IGNORE=@
+$SUBROUTINES ADVAN4 TRANS", trans, "
+$PK
+", pk, "
+  KA = 1.5
+  S2 = V
+$ERROR
+  IPRED = F
+  Y = IPRED + EPS(1)
+$THETA 0.8 0.05 0.2 20
+$OMEGA 0 FIX
+$SIGMA 0.01
+")
+  }
+  .ev <- rxode2::et(amt=100, cmt=1) |> rxode2::et(c(0.5, 2, 12, 48))
+  .solve <- function(ctl) {
+    withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE,
+                             nonmem2rx.overwrite=FALSE), {
+      .m <- suppressMessages(nonmem2rx(ctl, validate=FALSE, compress=FALSE))
+    })
+    suppressMessages(suppressWarnings(rxode2::rxSolve(rxode2::zeroRe(.m), .ev)))$ipred
+  }
+  .t6 <- .solve(.ctl(6, "  ALPHA = THETA(1)\n  BETA = THETA(2)\n  K32 = THETA(3)\n  V = THETA(4)"))
+  ## K20 = ALPHA*BETA/K32, K23 = ALPHA + BETA - K32 - K20
+  .t1 <- .solve(.ctl(1, "  K32 = THETA(3)\n  K = THETA(1)*THETA(2)/K32\n  K23 = THETA(1) + THETA(2) - K32 - K\n  V = THETA(4)"))
+  expect_true(all(is.finite(.t6)) && all(.t6 > 0))
+  expect_equal(.t6, .t1, tolerance=1e-6)
+})

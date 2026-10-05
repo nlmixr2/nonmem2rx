@@ -228,6 +228,10 @@ simulated records, for `RECORDS=`).
 | `advan11-trans4-3cmt` | linear | ADVAN11 TRANS4 three-compartment IV infusion at steady state (SS=1 with RATE) |  |
 | `advan12-trans4-3cmt-oral` | linear | ADVAN12 TRANS4 three-compartment first-order absorption with ALAG1 |  |
 | `advan12-trans1-k` | linear | ADVAN12 TRANS1 three-compartment oral with micro constants K, K23, K32, K24, K42, KA |  |
+| `advan3-trans5-macro` | linear | ADVAN3 TRANS5 macro constants (ALPHA, BETA, AOB) |  |
+| `advan3-trans6-macro` | linear | ADVAN3 TRANS6 macro constants (ALPHA, BETA, K21) |  |
+| `advan4-trans5-macro` | linear | ADVAN4 TRANS5 macro constants (ALPHA, BETA, AOB, KA) |  |
+| `advan4-trans6-macro` | linear | ADVAN4 TRANS6 macro constants (ALPHA, BETA, K32, KA) |  |
 | `advan5-transit` | ode | ADVAN5 general linear model with named $MODEL COMP (DEFDOSE/DEFOBS), transit chain and peripheral (matExp translation) |  |
 | `advan7-t-notation` | ode | ADVAN7 with K1T0/K1T2/K2T1 'T' rate-constant notation |  |
 | `advan7-unnamed-comp` | ode | ADVAN7 where $MODEL names the first compartment but leaves the second as a bare COMP |  |
