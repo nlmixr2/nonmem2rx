@@ -15,3 +15,5 @@ docs
 .vexp/
 revdep/
 /kit-runs/
+/nonmem2rx-stress-*/
+/nonmem2rx-stress-*.zip

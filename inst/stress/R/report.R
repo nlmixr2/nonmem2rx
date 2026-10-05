@@ -16,7 +16,7 @@ kitReport <- function(res, outDir) {
   .tab$note <- ifelse(is.na(.tab$note), "",
                       gsub("[|\n]", " ", substr(.tab$note, 1, 160)))
   .counts <- table(factor(res$status,
-                          levels=c("PASS", "FAIL", "ERROR", "XFAIL", "XPASS")))
+                          levels=c("PASS", "FAIL", "ERROR", "XFAIL", "XPASS", "SKIP")))
   .md <- c("# nonmem2rx kit results", "",
            paste0("Run: ", format(Sys.time()), "; mode: ",
                   paste(unique(res$mode), collapse=", "),

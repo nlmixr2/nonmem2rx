@@ -1,4 +1,4 @@
-## R-session entry point (see kit/kit.R and kit/README.md)
+## runKit(): the lower-level runner behind stressKit() (see stress.R and README.md)
 
 #' Run the nonmem2rx round-trip kit
 #'

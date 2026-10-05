@@ -29,4 +29,3 @@
 ^src/compile_commands\.json$
 ^\.aider.*$
 ^revdep$
-^kit$

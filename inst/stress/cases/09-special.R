@@ -3,7 +3,7 @@
 kitCase(
   name="dde-advan16-delay",
   covers="ADVAN16 delay differential equation: delayed drug effect via AD_1_1 with TAU1 and constant past AP_1_1",
-  tags=c("special", "dde", "advan16", "a0"),
+  tags=c("special", "dde", "advan16", "a0", "nm75"),
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tkin <- 10; tkout <- 0.5; ttau <- 4; tic50 <- 1

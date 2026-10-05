@@ -44,13 +44,35 @@ kitRunNonmem <- function(dir, cmd, ctl="run.ctl", lst="run.lst",
   on.exit(setwd(.old))
   .t0 <- Sys.time()
   unlink(lst)
-  ## coreutils timeout kills NONMEM itself, not just the shell wrapper
-  .to <- Sys.which("timeout")
-  if (nzchar(.to)) .cmd <- paste(.to, "--kill-after=30", timeout, "sh -c", shQuote(.cmd))
-  .status <- suppressWarnings(system(paste(.cmd, "> nonmem.log 2>&1"),
-                                     timeout=if (nzchar(.to)) 0 else timeout))
+  if (.Platform$OS.type == "windows") {
+    ## nmfe7*.bat needs cmd.exe; Windows' own timeout.exe is not a limit
+    .status <- suppressWarnings(shell(paste(.cmd, "> nonmem.log 2>&1"),
+                                      wait=TRUE))
+  } else {
+    ## coreutils timeout kills NONMEM itself, not just the shell wrapper
+    .to <- Sys.which("timeout")
+    if (nzchar(.to)) .cmd <- paste(.to, "--kill-after=30", timeout, "sh -c", shQuote(.cmd))
+    .status <- suppressWarnings(system(paste(.cmd, "> nonmem.log 2>&1"),
+                                       timeout=if (nzchar(.to)) 0 else timeout))
+  }
   ## NONMEM writes "Stop Time" as the very last thing it does
   .ok <- file.exists(lst) && any(grepl("Stop Time", readLines(lst, warn=FALSE)))
+  .kitCleanNonmem()
   list(status=.status, ok=.ok, seconds=as.numeric(Sys.time() - .t0,
                                                   units="secs"))
+}
+
+## Remove NONMEM's build and scratch files (executable, compiled
+## sources, temp_dir, data copies) from the current directory so the
+## returned zip holds only the control stream, data and NONMEM output.
+.kitCleanNonmem <- function() {
+  unlink(c("temp_dir", "worker*"), recursive=TRUE)
+  .f <- list.files(".", all.files=TRUE, no..=TRUE)
+  .scratch <- grepl(paste0("^(nonmem|nonmem[.]exe|FDATA|FCON|FREPORT|FSIZES|FSTREAM|",
+                           "FSUBS.*|FMSG|INTER|LINK[.]LNK|GFCOMPILE[.]BAT|trash.*|",
+                           "fort[.].*|linkc[.]lnk|compile[.]lnk|nmprd4p[.]mod|",
+                           "prsizes[.]f90|nmpathlist[.]txt|background[.]set|",
+                           "locfile.*|.*[.](o|obj|f90|mod|exe|lib))$"), .f, ignore.case=TRUE)
+  unlink(.f[.scratch])
+  invisible()
 }

@@ -1,5 +1,12 @@
 # nonmem2rx 0.1.12
 
+* Added a NONMEM stress kit in `inst/stress` (like babelmixr2's).  It
+  simulates edge-case datasets with rxode2, runs NONMEM, imports the runs
+  with `nonmem2rx()` and checks the import; without NONMEM it checks the
+  translations only.  Load it with
+  `source(system.file("stress", "stress.R", package = "nonmem2rx"))` and
+  run `stressCheck()` and `stressKit()`; see `inst/stress/README.md`.
+
 * `ADVAN12 TRANS4` (`CL V2 Q3 V3 Q4 V4 KA`) models now translate to a working
   `linCmt()` model.  The parameter map was registered under `TRANS2`, so the
   model kept an unresolved `linCmtFun` parameter and could not be solved.  A

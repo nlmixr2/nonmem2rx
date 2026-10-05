@@ -1,29 +1,45 @@
-## Load the nonmem2rx round-trip kit into an R session:
+## nonmem2rx stress kit: rxode2 simulation -> NONMEM -> nonmem2rx import.
 ##
-##   source("kit/kit.R")
-##   kitList()                                   # the cases
-##   res <- runKit(mode="dry", jobs=8)           # no NONMEM needed
-##   res <- runKit(mode="full", nmfe="nmfe75 {ctl} {lst}", tags="dosing")
+## On the NONMEM machine, in a fresh R session (for example RStudio):
 ##
-## The kit's functions live in an attached "nmkit" environment, so they do
-## not clutter the global environment; re-sourcing replaces it.
+##   devtools::load_all("path/to/nonmem2rx")    # the version to test
+##   source(system.file("stress", "stress.R", package = "nonmem2rx"))
+##   stressCheck()                               # versions; is NONMEM found?
+##   res <- stressKit()                          # or stressKit(nonmem = "nmfe75")
 ##
-## nonmem2rx: if it is already loaded (library() or devtools::load_all())
-## that version is used.  Otherwise the kit loads the source tree it sits
-## in with devtools::load_all(), or the installed package when the kit is
-## not inside a nonmem2rx source tree.
+## stressKit() runs every case and zips the output
+## (nonmem2rx-stress-<date>-<time>.zip) to send back.  Without NONMEM,
+## stressKit(modes = "translate") checks the translations only.  Back
+## home, stressReplay("<zip>") re-imports the returned NONMEM output.
+## See README.md in this directory.
+##
+## The kit's functions live in an attached "nonmem2rx-stress" environment,
+## so they do not clutter the global environment; sourcing again replaces
+## it.  nonmem2rx: if it is already loaded (library() or
+## devtools::load_all()) that version is used; otherwise the kit loads
+## the source tree it sits in (inst/stress) or the installed package.
 
 local({
-  .kitDir <- tryCatch(dirname(normalizePath(sys.frame(1)$ofile)),
-                      error=function(e) NULL)
+  ## the innermost source() of this file (it may be sourced by another
+  ## script, so the outermost frame is not necessarily this one)
+  .kitDir <- NULL
+  for (.fr in rev(sys.frames())) {
+    .of <- tryCatch(get("ofile", envir=.fr, inherits=FALSE), error=function(e) NULL)
+    if (is.character(.of) && basename(.of) == "stress.R") {
+      .kitDir <- dirname(normalizePath(.of))
+      break
+    }
+  }
   if (is.null(.kitDir)) {
-    .kitDir <- if (dir.exists("kit/cases")) normalizePath("kit") else
-      stop("source kit/kit.R with source(); could not find the kit directory",
+    .kitDir <- if (dir.exists("inst/stress/cases")) normalizePath("inst/stress") else
+      stop("load the kit with source(system.file(\"stress\", \"stress.R\", package=\"nonmem2rx\"))",
            call.=FALSE)
   }
-  .pkgDir <- dirname(.kitDir)
+  ## a source tree has the kit in <pkg>/inst/stress; an installed package
+  ## has it in <lib>/nonmem2rx/stress
+  .pkgDir <- dirname(dirname(.kitDir))
   .desc <- file.path(.pkgDir, "DESCRIPTION")
-  .inSource <- file.exists(.desc) &&
+  .inSource <- basename(dirname(.kitDir)) == "inst" && file.exists(.desc) &&
     any(grepl("^Package: nonmem2rx$", readLines(.desc)))
   if (!"nonmem2rx" %in% loadedNamespaces()) {
     if (.inSource) {
@@ -36,7 +52,7 @@ local({
   .ns <- asNamespace("nonmem2rx")
   .dev <- requireNamespace("pkgload", quietly=TRUE) &&
     pkgload::is_dev_package("nonmem2rx")
-  ## kit/mock/fake-nonmem.R loads the same nonmem2rx in its own process
+  ## mock/fake-nonmem.R loads the same nonmem2rx in its own process
   if (.dev) {
     Sys.setenv(NMKIT_PKGDIR=pkgload::pkg_path(getNamespaceInfo(.ns, "path")))
   } else {
@@ -48,7 +64,7 @@ local({
                   utils::packageVersion("rxode2")))
   suppressMessages(requireNamespace("rxode2"))
 
-  if ("nmkit" %in% search()) detach("nmkit", character.only=TRUE)
+  if ("nonmem2rx-stress" %in% search()) detach("nonmem2rx-stress", character.only=TRUE)
   .env <- new.env()
   for (.f in list.files(file.path(.kitDir, "R"), pattern="[.][Rr]$",
                         full.names=TRUE)) {
@@ -56,7 +72,7 @@ local({
   }
   .env$.kitDir <- .kitDir
   .env$kitLoadCases(file.path(.kitDir, "cases"))
-  attach(.env, name="nmkit", warn.conflicts=FALSE)
-  message(sprintf("nonmem2rx kit: %d cases loaded; see runKit() and kitList()",
+  attach(.env, name="nonmem2rx-stress", warn.conflicts=FALSE)
+  message(sprintf("nonmem2rx stress kit: %d cases; see stressCheck(), stressList() and stressKit()",
                   length(.env$.kitEnv$cases)))
 })

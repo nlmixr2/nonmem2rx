@@ -3,7 +3,7 @@
 ##
 ## Stands in for `nmfe` so the kit's full/import plumbing can be checked
 ## without a NONMEM license:
-##   Rscript kit/run-kit.R --mode full --nmfe "Rscript /abs/path/kit/mock/fake-nonmem.R {ctl} {lst}"
+##   stressKit(nonmem = paste("Rscript", system.file("stress", "mock", "fake-nonmem.R", package = "nonmem2rx")))
 ##
 ## It writes NONMEM-format run.lst / run.ext and every $TABLE file of the
 ## control stream from the rxode2 truth (initial estimates, all etas 0),

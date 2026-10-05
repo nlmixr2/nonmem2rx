@@ -1,157 +1,204 @@
-# nonmem2rx round-trip kit
+# nonmem2rx NONMEM stress kit
 
-A NONMEM-in-the-loop test kit for `nonmem2rx`. Each case:
+The stress kit checks how nonmem2rx imports NONMEM runs, case by case.
+For each case it:
 
 1. **simulates** a NONMEM-style dataset with an rxode2 model (the
    "truth"), using the same NONMEM-faithful solving options that
-   `nonmem2rx` validates with (`covsInterpolation="nocb"`,
-   `addlKeepsCov`, `ssAtDoseTime`, ...);
+   nonmem2rx validates with;
 2. writes the **data file and control stream**, whose initial estimates
    equal the true values;
-3. **runs NONMEM** (full mode); and
-4. **imports** the run with `nonmem2rx()` and scores the validation
-   (NONMEM IPRED/PRED/IWRES vs rxode2).
+3. **runs NONMEM**; and
+4. **imports** the run with `nonmem2rx()` and checks it: NONMEM's own
+   IPRED/PRED against rxode2's.
 
-The cases concentrate on edge cases in the `tests/testthat` model types:
-dosing records, `$INPUT`/`$DATA` handling, `$OMEGA`/`$SIGMA` forms,
-abbreviated-code constructs, error models, estimation/table outputs,
-DDEs and mixtures. Many of the dosing and data cases have no unit test
-in the package.
+It has two modes:
 
-The kit lives in `kit/` and is excluded from the package build
-(`.Rbuildignore`).
+- **translate**: steps 1, 2 and 4 without NONMEM. The translated model is
+  solved at the true values with the random effects set to zero and
+  compared with the rxode2 truth. The imported `$OMEGA`/`$SIGMA` and the
+  records kept by `IGNORE`/`ACCEPT`/`RECORDS` are checked too. No NONMEM
+  is needed.
+- **run**: also runs NONMEM and validates the import against NONMEM's
+  output. Use this mode on a machine that has NONMEM.
 
-## Quick start
+The cases concentrate on edge cases: dosing records, `$INPUT`/`$DATA`
+handling, `$THETA`/`$OMEGA`/`$SIGMA` forms, abbreviated code, error
+models, estimation methods and table formats, DDEs and mixtures (see
+[Cases](#cases)).
 
-From an R session in the package root:
+## Quick start: the kit for a NONMEM machine
+
+Everything runs from the R session that is set up for NONMEM (for
+example RStudio); no `Rscript` is needed and nothing is installed.
+
+1. In a fresh session (Session > Restart R), load the nonmem2rx version
+   to test (for example a pull request branch) and the kit:
+
+   ```r
+   devtools::load_all("path/to/nonmem2rx")
+   source(system.file("stress", "stress.R", package = "nonmem2rx"))
+   ```
+
+   Restart R and load again before each run, so the session cannot run
+   older nonmem2rx code with a newer kit.
+
+2. Check the versions and that NONMEM is found:
+
+   ```r
+   stressCheck()
+   stressCheck(nonmem = "/opt/nm75/run/nmfe75")   # if NONMEM is not found
+   ```
+
+   NONMEM is found from `options(nonmem2rx.nonmem=)` or
+   `options(babelmixr2.nonmem=)`, an `nmfe7*` on the `PATH`, or the usual
+   install directories (like `/opt/NONMEM/nm75/run/nmfe75` or
+   `C:/nm75/run/nmfe75.bat`); otherwise give it with `nonmem=`.
+
+3. Run the kit:
+
+   ```r
+   res <- stressKit()                                    # NONMEM is found
+   res <- stressKit(nonmem = "nmfe743-ifort")            # NONMEM not found
+   res <- stressKit(cases = "advan1|ss2", nonmem = "nmfe75")   # a few cases first
+   res <- stressKit(est = "posthoc")                     # MAXEVAL=0: much faster
+   res[res$status %in% c("FAIL", "ERROR", "XPASS"), c("case", "status", "note")]
+   ```
+
+   `stressKit()` simulates and translates every case, runs NONMEM on
+   each, imports and validates the output, and zips the output folder
+   (`nonmem2rx-stress-<date>-<time>.zip` in the working directory;
+   `attr(res, "zip")` has its path).
+
+4. Send the zip file back.
+
+The full kit is one NONMEM run per case (about 80 small FOCE-I fits plus
+SAEM/IMP, ITS, FO and LAPLACE cases), so it takes a while;
+`est = "posthoc"` replaces the default FOCE-I fits with `MAXEVAL=0`
+evaluations and still writes every output file. `stressList()` lists the
+cases.
+
+`stressKit()` arguments: `nonmem=`, `modes=` (`"translate"` and/or
+`"run"`), `cases=` (a regular expression), `tags=`, `est=` (`"full"` or
+`"posthoc"`), `nSub=`, `jobs=` (cases in parallel; not on Windows),
+`timeout=` (seconds per NONMEM run; not on Windows), `out=` (output
+directory), `bundle=`.
+
+Cases that use NONMEM 7.5 features (tag `nm75`: `$DATA TRANSLATE`, 7.5
+`THETA(CL)` labels, `ADVAN16` delay equations, `$ABBR REPLACE`) are
+reported as `SKIP`, not as failures, when an older NONMEM stops on them.
+
+### Without NONMEM
 
 ```r
-source("kit/kit.R")     # loads nonmem2rx (source tree) and the kit's cases
-kitList()               # cases: name, tags, known, covers
-
-# NONMEM-free check of every case (about 1 minute with jobs = 8)
-res <- runKit(mode = "dry", jobs = 8)
-
-# the real thing: simulate, run NONMEM, import, validate
-res <- runKit(mode = "full", nmfe = "nmfe75 {ctl} {lst}", jobs = 4)
-
-# a subset, by tag or by name
-runKit(mode = "full", tags = c("dosing", "ss"), nmfe = "nmfe75 {ctl} {lst}")
-runKit(mode = "full", cases = c("ss2-asymmetric-bid", "evid4-reset-dose"),
-       nmfe = "nmfe75 {ctl} {lst}")
-
-res[res$status != "PASS", c("case", "status", "note")]
+res <- stressKit(modes = "translate", bundle = FALSE)
 ```
 
-`source("kit/kit.R")` uses nonmem2rx if it is already loaded (with
-`library()` or `devtools::load_all()`). Otherwise it loads the source
-tree the kit sits in with `devtools::load_all()`. The kit's functions go
-into an attached `nmkit` environment, not the global environment, and
-sourcing again replaces it. `runKit()` returns one row per case and
-writes `summary.md`/`summary.csv` to `out` (default `kit-runs/`), with
-one directory per case. It sets rxode2/data.table to one thread while it
-runs and restores your settings afterwards.
+This needs no NONMEM; it is the check to run after every change to
+nonmem2rx.
 
-### Command line
+### Back home: replaying a returned zip
 
-`kit/run-kit.R` wraps the same `runKit()`. Its exit status is non-zero
-when any case is `FAIL` or `ERROR`, which suits CI.
+The returned zip holds each case's control stream, data and NONMEM
+output, so it can be imported again on a machine without NONMEM, for
+example after a fix:
+
+```r
+devtools::load_all("path/to/nonmem2rx")
+source(system.file("stress", "stress.R", package = "nonmem2rx"))
+res <- stressReplay("nonmem2rx-stress-20261004-101500.zip")
+res <- stressReplay("nonmem2rx-stress-20261004-101500.zip", cases = "mtime")
+```
+
+## Running it with Rscript
+
+Where `Rscript` works with the right library paths, `run-stress.R` does
+the same from a shell:
 
 ```sh
-Rscript kit/run-kit.R --list
-Rscript kit/run-kit.R --mode dry --jobs 8
-Rscript kit/run-kit.R --mode full --nmfe "nmfe75 {ctl} {lst}" --tags dosing,ss
+STRESS=inst/stress/run-stress.R   # in a nonmem2rx checkout
+Rscript "$STRESS" --check
+Rscript "$STRESS" --list
+Rscript "$STRESS" --mode=translate --jobs=8
+Rscript "$STRESS" --kit --nonmem=nmfe75
+Rscript "$STRESS" --mode=run --nonmem=/opt/nm75/run/nmfe75 --tags=dosing,ss
+Rscript "$STRESS" --replay=nonmem2rx-stress-20261004-101500.zip
 ```
 
-Options map onto `runKit()` arguments: `--mode`, `--cases a,b`,
-`--tags t1,t2`, `--nmfe`, `--est`, `--nsub`, `--seed`, `--jobs`, `--out`
-and `--timeout`. `--installed` uses the installed nonmem2rx instead of
-the source tree.
+The options match the `stressKit()` arguments (`--cases=`, `--tags=`,
+`--est=`, `--nsub=`, `--jobs=`, `--timeout=`, `--out=`, `--bundle`);
+`--installed` uses the installed nonmem2rx instead of the source tree.
+The script exits with status 1 when any case fails, so it can be used in
+a CI job.
 
-### Modes
+## Output
 
-| mode | what it does | needs NONMEM |
-|---|---|---|
-| `dry` | simulate, write `data.csv` + `run.ctl`, translate with `nonmem2rx(validate=FALSE)`. Then solve the translated model at the initial estimates with all random effects zero, and compare its PRED with the rxode2 truth. Also checks that the imported `$OMEGA` (and `$SIGMA` where the case gives one) equals the truth, and that `IGNORE`/`ACCEPT`/`RECORDS` kept exactly the simulated rows. | no |
-| `full` | `dry`, then run NONMEM in each case directory and import with full validation | yes |
-| `import` | re-import NONMEM output already in `out` (e.g. after running NONMEM yourself on a cluster: run `dry`, run every `*/run.ctl`, then `import`) | no (uses existing output) |
+The output directory (by default `nonmem2rx-stress-<date>-<time>`) has:
 
-The dry PRED comparison doesn't depend on NONMEM. It catches translation,
-data-reading and event-handling errors (the truth is solved independently
-by rxode2), so it is worth running in CI without a license.
+- `results.csv`: one row per case, with
+  - `status`:
+    - `PASS`: every check passed
+    - `FAIL`: a check failed
+    - `ERROR`: the kit itself failed for this case
+    - `XFAIL`: a known issue (the diagnosis is in `note`)
+    - `XPASS`: a known issue that now passes, so its mark can go
+    - `SKIP`: needs NONMEM 7.5 and an older NONMEM stopped
+  - `dryMaxRel`: the largest % difference between the translated model's
+    PRED and the rxode2 truth (translate check; passes at 0.01 %)
+  - `dryOmegaDiff`/`drySigmaDiff`: the largest relative difference of the
+    imported omega/sigma from the truth (passes at 1e-6)
+  - `ipredRtol`/`predRtol`: median % difference between NONMEM's and
+    rxode2's IPRED/PRED (passes at 1 %); `ipredQ95`/`predQ95`: the 95th
+    percentiles (pass at 5 %); missing rxode2 predictions count as
+    infinite, and both IPRED and PRED must validate
+  - `nmSeconds`: how long NONMEM took; `note`: what went wrong
+- `summary.md`: the versions (including the nonmem2rx git commit) and a
+  table of every case.
+- `sessionInfo.txt`: the R session.
+- `<case>/`: the control stream (`run.ctl`), data (`data.csv`), the
+  simulation (`sim.rds`), NONMEM's output (`run.lst`, `.ext`, `.phi`,
+  `.cov`, tables, `nonmem.log`) and the import logs (`import-dry.log`,
+  `import.log`, `dry-compare.csv`). NONMEM's executable and scratch files
+  are removed after each run.
 
-### `runKit()` arguments
+Per-case thresholds are set with `tol=list(dry=, ipred=, pred=,
+ipredQ95=, predQ95=, iwres=, validate=)` in the case.
 
-| argument | default | meaning |
-|---|---|---|
-| `mode` | `"dry"` | `"dry"`, `"full"` or `"import"` (see above) |
-| `nmfe` | `Sys.getenv("NMKIT_NMFE")` | NONMEM command template; `{ctl}` and `{lst}` are replaced, e.g. `"nmfe75 {ctl} {lst}"`, `"/opt/nm760/run/nmfe76 {ctl} {lst} -maxlim=2"`. PsN's `"execute {ctl}"` also works, because it copies the output back. |
-| `est` | `"full"` | default estimation records: `"full"` = FOCE-I `MAXEVAL=9999` + `$COV`; `"posthoc"` = `MAXEVAL=0 POSTHOC` at the true values (fast, still exercises tables/.ext/.phi). Cases that test estimation methods keep their own records. |
-| `nSub` | 20 | subjects per case (some cases fix their own) |
-| `seed` | 42 | base seed; each case derives a stable seed from its name |
-| `jobs` | 1 | cases run in parallel (forked; Unix only) |
-| `timeout` | 3600 | NONMEM timeout per case, in seconds |
-| `cases`, `tags` | all | select cases |
-| `out` | `"kit-runs"` | output directory |
+## Lower-level runner
 
-## Reading the results
-
-Status per case:
-
-- `PASS`: every check passed.
-- `FAIL`: a check failed. Look in `kit-runs/<case>/` for `import*.log`,
-  `dry-compare.csv`, `nonmem.log` and the NONMEM output.
-- `ERROR`: the kit itself failed for this case.
-- `XFAIL`: a **known issue** (the case's `known` / `knownFull` text is
-  shown as the note). An `XPASS` means the issue looks fixed, so
-  remove the `known` mark.
-
-Columns in `summary.md`:
-
-- `dryMaxRel`: max % difference, translated PRED vs rxode2 truth.
-  Passes at ≤ 0.01 % by default.
-- `dryOmegaDiff` / `drySigmaDiff`: max relative difference of the
-  imported matrices from the truth. Passes at ≤ 1e-6.
-- `ipredRtol` / `predRtol`: median % difference between NONMEM and the
-  rxode2 import, from `nonmem2rx` validation (≤ 1 % by default). The 95th
-  percentiles (`ipredQ95`/`predQ95` in `summary.csv`, ≤ 5 %) are also
-  required, so a subset of wrong records can't hide behind the median.
-  Missing rxode2 predictions count as infinite. Both IPRED and PRED must
-  validate; a full-mode case fails if either was skipped.
-- The dry comparison scores rows whose true value is ~0 (before a lag,
-  after a reset) with an absolute floor, and uses NONMEM ID semantics (a
-  reused, non-contiguous ID is a new individual).
-
-Per-case thresholds are set with `tol=list(dry=, ipred=, pred=, ipredQ95=,
-predQ95=, iwres=, validate=)`. `iwres` is an absolute median IWRES
-difference and is off by default. Set a value to `NA` to skip that check.
+`stressKit()` calls `runKit()`, which can also be used directly:
+`runKit(mode = "dry" | "full" | "import", nmfe = "nmfe75 {ctl} {lst}",
+cases =, tags =, est =, nSub =, seed =, jobs =, out =, timeout =)`.
+`mode = "import"` re-imports NONMEM output already in `out` (run `dry`,
+run NONMEM on every `*/run.ctl` yourself, then `import`).
 
 ## Self-test without NONMEM
 
-`kit/mock/fake-nonmem.R` stands in for `nmfe` so the full/import
-plumbing can be checked without a license. It writes NONMEM-format
-`.lst`, `.ext` and every `$TABLE` file from the rxode2 truth:
+`mock/fake-nonmem.R` stands in for `nmfe` so the run/import plumbing can
+be checked without a license. It writes NONMEM-format `.lst`, `.ext` and
+every `$TABLE` file from the rxode2 truth:
 
 ```r
-runKit(mode = "full", jobs = 8, out = tempfile("kit-mock"),
-       nmfe = paste("Rscript", normalizePath("kit/mock/fake-nonmem.R"), "{ctl} {lst}"))
+stressKit(nonmem = paste("Rscript", system.file("stress", "mock", "fake-nonmem.R",
+                                                package = "nonmem2rx")),
+          bundle = FALSE, out = tempfile("stress-mock"))
 ```
 
-This is **not** NONMEM and proves nothing about NONMEM's behaviour. Only
-a real `mode = "full"` run does that.
+This is **not** NONMEM and proves nothing about NONMEM's behaviour.
 
 ## Layout
 
 ```
-kit/
-  kit.R              source() this from R: loads nonmem2rx, the kit and its cases
-  run-kit.R          command-line wrapper around runKit()
+inst/stress/
+  stress.R           source() this: loads nonmem2rx, the kit and its cases
+  run-stress.R       the same from Rscript
+  R/stress-kit.R     stressCheck(), stressList(), stressKit(), stressReplay()
   R/main.R           runKit()
   R/case.R           kitCase()/kitVariant() registry and case fields
   R/data.R           nmDose()/nmObs()/nmOther()/nmBind()/nmCov() data builders
   R/sim.R            rxode2 simulation and data writing
   R/nonmem.R         control-stream placeholders and NONMEM execution
-  R/import.R         nonmem2rx import, dry PRED/omega/sigma checks, metrics
+  R/import.R         nonmem2rx import, translate-mode checks, metrics
   R/run.R            per-case pipeline and pass/fail rules
   R/report.R         summary.md / summary.csv
   cases/NN-*.R       the cases (one file per theme)
@@ -245,17 +292,17 @@ simulated records, for `RECORDS=`).
 | `dur-with-lag` | dosing | RATE=-2 modeled duration combined with ALAG1 on the same compartment |  |
 | `infusion-bioav-fixed-rate` | dosing | F1 < 1 applied to a fixed-RATE infusion (NONMEM shortens the duration, rate unchanged) |  |
 | `infusion-with-lag` | dosing | ALAG1 applied to a fixed-RATE infusion |  |
-| `dual-absorption` | dosing | Same dose split into first-order depot (F1) and zero-order central input (RATE=-2, D2, F2=1-F1) | dry |
+| `dual-absorption` | dosing | Same dose split into first-order depot (F1) and zero-order central input (RATE=-2, D2, F2=1-F1) | always |
 | `ss2-asymmetric-bid` | dosing | Asymmetric BID at steady state: SS=1 morning dose then SS=2 evening dose (superposition), both II=24 |  |
 | `ss-constant-infusion` | dosing | Steady-state constant infusion (SS=1, AMT=0, RATE>0, II=0) with a bolus on top later |  |
 | `ss-with-lag` | dosing | Steady state (SS=1) oral dosing with an absorption lag longer than a quarter of the interval |  |
 | `evid3-reset` | dosing | EVID=3 reset record between two dosing periods (ADDL in first period) |  |
 | `evid4-reset-dose` | dosing | EVID=4 reset-and-dose record starting a second period |  |
 | `evid2-time-varying-cov` | dosing | Time-varying covariate changed on EVID=2 records (NONMEM next-observation-carried-backward semantics) |  |
-| `cmt-off-depot` | dosing | Negative CMT on an EVID=2 record turns the depot off (e.g. emesis) mid-absorption | dry |
+| `cmt-off-depot` | dosing | Negative CMT on an EVID=2 record turns the depot off (e.g. emesis) mid-absorption | always |
 | `infusion-into-depot` | dosing | Zero-order infusion (RATE>0) into the absorption depot of ADVAN2, overlapping a bolus |  |
-| `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) | dry |
-| `dose-obs-ties` | dosing | Ties: obs listed before/after a dose and after an SS dose at the same TIME, plus replicate samples at one TIME | dry |
+| `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) | always |
+| `dose-obs-ties` | dosing | Ties: obs listed before/after a dose and after an SS dose at the same TIME, plus replicate samples at one TIME | always |
 | `mtime-change-point-ode` | dosing | MTIME/MPAST switching KA in an ADVAN13 ODE model |  |
 | `cmt-off-depot-ode` | dosing | Negative CMT on an EVID=2 record turns the depot off in an ADVAN13 ODE model |  |
 | `input-alias-drop-skip` | data | $INPUT synonyms on both sides (TAFD=TIME, CONC=DV) used in code, DROP/SKIP of character columns, '.' DV on dose rows |  |
@@ -282,27 +329,27 @@ simulated records, for `RECORDS=`).
 | `math-functions` | code | DEXP/DLOG/LOG10/DSQRT/DABS/** powers, MIN/MAX, and a probit bioavailability using PHI() |  |
 | `do-while-loop` | code | DO WHILE / ENDDO loop computing an allometric factor |  |
 | `pred-emax-reserved-names` | code | $PRED sigmoid Emax with variables named GAMMA, BETA, LAMBDA (rxode2 function names) and no dose records |  |
-| `time-in-pk` | code | TIME used in $PK (time-varying CL): NONMEM evaluates $PK only at records, so CL is piecewise constant (next-record value) | dry |
-| `retained-pk-variables` | code | Savic transit absorption: dose amount/time kept in $PK variables across records (IF (AMT.GT.0) ...), GAMLN in $DES | dry |
+| `time-in-pk` | code | TIME used in $PK (time-varying CL): NONMEM evaluates $PK only at records, so CL is piecewise constant (next-record value) | always |
+| `retained-pk-variables` | code | Savic transit absorption: dose amount/time kept in $PK variables across records (IF (AMT.GT.0) ...), GAMLN in $DES | always |
 | `err-add-eps` | error | Additive error on EPS with an estimated $SIGMA (Y = IPRED + EPS(1)) |  |
 | `err-exp-eps` | error | Exponential error Y = IPRED*EXP(EPS(1)) (log-normal on the original scale) |  |
 | `err-log-dv` | error | Log-transformed DV with additive error on the log scale and a guarded LOG(F) |  |
 | `err-two-eps-theta` | error | Combined error with two THETA-scaled EPS and $SIGMA 1 FIX 1 FIX |  |
 | `err-combined1` | error | Combined error on the SD scale, W = THETA(a) + THETA(b)*IPRED (rxode2 combined1) |  |
 | `err-power` | error | Power error model W = THETA*IPRED**THETA |  |
-| `err-m3-blq` | error | M3 censoring: BLQ records use F_FLAG=1 with Y = PHI((LLOQ-IPRED)/W) (LAPLACE) | full |
+| `err-m3-blq` | error | M3 censoring: BLQ records use F_FLAG=1 with Y = PHI((LLOQ-IPRED)/W) (LAPLACE) | run |
 | `est-saem-imp` | estimation | Two estimation steps: SAEM then IMP EONLY=1 (.ext holds two tables; final is IMP) |  |
 | `est-its-foce` | estimation | ITS followed by FOCE-I (METHOD=COND INTER) with MATRIX=R covariance |  |
 | `est-foce-no-inter` | estimation | FOCE without INTERACTION (METHOD=1) and no $COV step |  |
 | `est-fo-posthoc` | estimation | First-order (METHOD=0) estimation with POSTHOC etas |  |
 | `est-maxeval0` | estimation | MAXEVAL=0 POSTHOC evaluation only (final estimates = initial estimates) |  |
-| `table-noheader-format` | estimation | NOHEADER/NOAPPEND tables with FORMAT=s1PE17.9, PRED listed explicitly, separate FIRSTONLY ETA1 ETA2 table | full |
+| `table-noheader-format` | estimation | NOHEADER/NOAPPEND tables with FORMAT=s1PE17.9, PRED listed explicitly, separate FIRSTONLY ETA1 ETA2 table | run |
 | `table-ipre-alias` | estimation | Legacy 4-character IPRE in code and tables, an extra full table without IPRED listed first, ETAs in a full table |  |
 | `table-repeated-headers` | estimation | Tables longer than 900 records without ONEHEADER (NONMEM repeats the TABLE NO. header block) |  |
 | `dde-advan16-delay` | special | ADVAN16 delay differential equation: delayed drug effect via AD_1_1 with TAU1 and constant past AP_1_1 |  |
 | `mix-two-clearance` | special | $MIX with two sub-populations (fast/slow clearance), P(1)=THETA, MIXNUM and MIXEST in $PK |  |
 
-`known` = "dry": XFAIL in every mode (a translation problem). "full": the
-dry run passes, but `nonmem2rx`'s validation against NONMEM output has a
-known problem. The `known`/`knownFull` text in each case records the
-diagnosis.
+`known`: "always" cases are XFAIL in both modes (a translation problem);
+"run" cases pass the translate checks, but nonmem2rx's validation against
+NONMEM output has a known problem. The `known`/`knownFull` text in each
+case records the diagnosis.

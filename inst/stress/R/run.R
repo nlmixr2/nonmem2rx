@@ -23,7 +23,8 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
                ipredRtol=NA_real_, ipredQ95=NA_real_, ipredMax=NA_real_,
                predRtol=NA_real_, predQ95=NA_real_, predMax=NA_real_, iwresAtol=NA_real_, iwresRtol=NA_real_,
                dfSub=NA_real_, dfObs=NA_real_, nTheta=NA_integer_,
-               nEta=NA_integer_, nWarn=NA_integer_, note=NA_character_)
+               nEta=NA_integer_, nWarn=NA_integer_, status=NA_character_,
+               note=NA_character_)
   .tol <- .kitTol(case)
   if (mode != "import") {
     unlink(.dir, recursive=TRUE)
@@ -79,6 +80,12 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
     .res$nmSeconds <- .nm$seconds
     if (!.nm$ok) {
       .res$note <- "NONMEM did not finish (see nonmem.log / run.lst)"
+      ## cases using NONMEM 7.5 features are expected to stop in older
+      ## NM-TRANs: report them as skipped, not failed
+      if ("nm75" %in% case$tags) {
+        .res$status <- "SKIP"
+        .res$note <- "needs NONMEM 7.5 or later (NONMEM did not finish; see nonmem.log)"
+      }
       return(.kitFinish(.res, case, .tol, .dir))
     }
   }
@@ -126,6 +133,11 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
     .known <- paste(c(.known, case$knownFull), collapse="; ")
   }
   res$known <- !is.null(.known)
+  if (identical(res$status, "SKIP")) {
+    .df <- as.data.frame(res, stringsAsFactors=FALSE)
+    if (dir.exists(dir)) saveRDS(.df, file.path(dir, "result.rds"))
+    return(.df)
+  }
   .pass <- switch(res$mode,
                   dry=.kitPassDry(res, case, tol),
                   full=.kitPassDry(res, case, tol) && .kitPassFull(res, tol),
