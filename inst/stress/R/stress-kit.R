@@ -206,7 +206,16 @@ stressReplay <- function(zip, cases=NULL, out=tempfile("nonmem2rx-replay-"),
     .dir <- if (length(.top) == 1L) .top else out
   }
   .ran <- basename(list.dirs(.dir, recursive=FALSE))
-  .ran <- .ran[file.exists(file.path(.dir, .ran, "run.lst"))]
+  ## only runs NONMEM finished (it writes "Stop Time" last)
+  .done <- vapply(.ran, function(r) {
+    .lst <- file.path(.dir, r, "run.lst")
+    file.exists(.lst) && any(grepl("Stop Time", readLines(.lst, warn=FALSE)))
+  }, logical(1))
+  if (any(!.done)) {
+    message("NONMEM did not finish (not replayed): ",
+            paste(.ran[!.done], collapse=", "))
+  }
+  .ran <- .ran[.done]
   .known <- intersect(.ran, names(.kitEnv$cases))
   if (length(setdiff(.ran, .known)) > 0L) {
     message("not cases of this kit (skipped): ",

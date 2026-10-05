@@ -317,8 +317,8 @@ $SIGMA 1 FIX
 
 kitCase(
   name="advan13-abbr-replace-names",
-  covers="$ABBR REPLACE of THETA/ETA/DADT/A by name (nm7.5 style) with named compartments",
-  tags=c("ode", "advan13", "abbr-replace", "nm75"),
+  covers="$ABBR REPLACE of THETA/ETA/DADT/A by name with named compartments",
+  tags=c("ode", "advan13", "abbr-replace"),
   sim=function() {
     ini({
       tcl <- 3; tv <- 25; tka <- 1.1

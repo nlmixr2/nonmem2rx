@@ -71,7 +71,16 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
       }
     }
   } else {
-    .sim <- readRDS(file.path(.dir, "sim.rds"))
+    ## keep the translate-check results of the run being re-imported, so
+    ## a case known for a translation problem stays XFAIL
+    .prev <- file.path(.dir, "result.rds")
+    if (file.exists(.prev)) {
+      .prev <- readRDS(.prev)
+      .keep <- intersect(c("sim", "dryImport", "dryError", "dryMaxRel", "dryNobs",
+                           "dryNexpected", "dryOmegaDiff", "drySigmaDiff"),
+                         names(.prev))
+      .res[.keep] <- .prev[1, .keep]
+    }
   }
   if (mode == "full") {
     if (is.null(nmfe)) stop("full mode needs a NONMEM command (--nmfe)", call.=FALSE)
@@ -141,7 +150,8 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
   .pass <- switch(res$mode,
                   dry=.kitPassDry(res, case, tol),
                   full=.kitPassDry(res, case, tol) && .kitPassFull(res, tol),
-                  import=.kitPassFull(res, tol))
+                  import=(!isTRUE(res$sim) || .kitPassDry(res, case, tol)) &&
+                    .kitPassFull(res, tol))
   res$status <- if (.pass) {
     if (res$known) "XPASS" else "PASS"
   } else {

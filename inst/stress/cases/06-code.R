@@ -2,7 +2,7 @@
 
 kitCase(
   name="if-else-logic",
-  covers="IF/ELSE IF/ELSE/ENDIF, nested IF, one-line IF, .AND./.OR., ==, >=, .NE. and $ERROR (ONLY OBSERVATIONS)",
+  covers="IF/ELSE IF/ELSE/ENDIF, nested IF, one-line IF, .AND./.OR. precedence without parentheses, ==, >=, .NE. and $ERROR (ONLY OBSERVATIONS)",
   tags=c("code", "if", "covariate", "only-obs"),
   sim=function() {
     ini({
@@ -56,7 +56,7 @@ $PK
       FSEX = THETA(4)
     ENDIF
   ENDIF
-  IF (SEX .NE. 1 .AND. (AGE >= 65 .OR. RACE .EQ. 3)) FSEX = THETA(7)
+  IF (SEX .NE. 1 .AND. AGE >= 65 .OR. SEX .NE. 1 .AND. RACE .EQ. 3) FSEX = THETA(7)
   CL = THETA(1)*FRACE*FSEX*EXP(ETA(1))
   V  = THETA(2)*EXP(ETA(2))
   KA = THETA(3)
@@ -77,8 +77,8 @@ $SIGMA 1 FIX
 kitVariant("if-else-logic", "logical-not-and-slash-ne",
            "Fortran .NOT. and the /= operator in IF conditions",
            tags=c("code", "if", "grammar"),
-           ctl=sub("  IF (SEX .NE. 1 .AND. (AGE >= 65 .OR. RACE .EQ. 3)) FSEX = THETA(7)\n",
-                   "  IF (.NOT.(SEX .EQ. 1) .AND. (AGE >= 65 .OR. RACE .EQ. 3)) FSEX = THETA(7)\n  IF (SEX /= 1 .AND. SEX /= 0) FSEX = -1\n",
+           ctl=sub("  IF (SEX .NE. 1 .AND. AGE >= 65 .OR. SEX .NE. 1 .AND. RACE .EQ. 3) FSEX = THETA(7)\n",
+                   "  IF (.NOT. SEX .EQ. 1 .AND. AGE >= 65 .OR. .NOT. SEX .EQ. 1 .AND. RACE .EQ. 3) FSEX = THETA(7)\n  IF (SEX /= 1 .AND. SEX /= 0) FSEX = -1\n",
                    .kitEnv$cases[["if-else-logic"]]$ctl, fixed=TRUE))
 
 kitCase(
@@ -114,7 +114,7 @@ $INPUT {{INPUT}}
 $DATA {{DATA}} IGNORE=@
 $SUBROUTINES ADVAN2 TRANS2
 $PK
-  WTC = MAX(MIN(WT, 120), 40)
+  WTC = MAX(MIN(WT, 120.0), 40.0)
   CL = THETA(1)*DEXP(0.75*DLOG(WTC/70))*(1 + THETA(5)*LOG10(AGE/40))*EXP(ETA(1))
   V  = THETA(2)*DSQRT(WTC/70)**2*EXP(ETA(2))
   KA = THETA(3)*EXP(DABS(ETA(2))*0)
@@ -160,6 +160,7 @@ kitCase(
 $INPUT {{INPUT}}
 $DATA {{DATA}} IGNORE=@
 $SUBROUTINES ADVAN2 TRANS2
+$ABBR DECLARE DOWHILE N
 $PK
   N = 0
   CUMW = 1

@@ -85,8 +85,10 @@ cases.
 directory), `bundle=`.
 
 Cases that use NONMEM 7.5 features (tag `nm75`: `$DATA TRANSLATE`, 7.5
-`THETA(CL)` labels, `ADVAN16` delay equations, `$ABBR REPLACE`) are
-reported as `SKIP`, not as failures, when an older NONMEM stops on them.
+`THETA(CL)` labels, `ADVAN16` delay equations) are reported as `SKIP`, not
+as failures, when an older NONMEM stops on them; run them on NONMEM 7.5
+with `stressKit(nonmem = "nmfe75", tags = "nm75")`.  NONMEM 7.6 is not
+needed.
 
 ### Without NONMEM
 
@@ -286,7 +288,7 @@ simulated records, for `RECORDS=`).
 | `advan13-pkpd-turnover` | ode | ADVAN13 PK + indirect response with A_0 baseline, two endpoints switched on CMT in $ERROR, ATOL/TOL/SSTOL |  |
 | `advan13-time-in-des-no-doses` | ode | ADVAN13 endogenous circadian turnover using T inside $DES; dataset has no dose records; A_0 from THETA |  |
 | `advan14-ode` | ode | ADVAN14 (CVODES) two-compartment ODE oral model |  |
-| `advan13-abbr-replace-names` | ode | $ABBR REPLACE of THETA/ETA/DADT/A by name (nm7.5 style) with named compartments |  |
+| `advan13-abbr-replace-names` | ode | $ABBR REPLACE of THETA/ETA/DADT/A by name with named compartments |  |
 | `rate-minus1-modeled-rate` | dosing | RATE=-1 with modeled zero-order rate R1 (ETA on R1) |  |
 | `rate-minus2-modeled-dur` | dosing | RATE=-2 with modeled duration D1 (ETA on D1) |  |
 | `dur-with-lag` | dosing | RATE=-2 modeled duration combined with ALAG1 on the same compartment |  |
@@ -324,7 +326,7 @@ simulated records, for `RECORDS=`).
 | `theta-forms` | params | $THETA numeric forms (.12E+01, 3.0E1, 1E+04, 3.), FIX in several positions and empty upper bounds |  |
 | `sigma-block-two-eps` | params | $SIGMA BLOCK(2) with additive + proportional EPS (Y=IPRED*(1+EPS(1))+EPS(2)) |  |
 | `labels-nm75` | params | NONMEM 7.5 labels: $THETA CL=(...), $OMEGA ECL=..., $SIGMA PROP=..., referenced as THETA(CL)/ETA(ECL)/EPS(PROP) |  |
-| `if-else-logic` | code | IF/ELSE IF/ELSE/ENDIF, nested IF, one-line IF, .AND./.OR., ==, >=, .NE. and $ERROR (ONLY OBSERVATIONS) |  |
+| `if-else-logic` | code | IF/ELSE IF/ELSE/ENDIF, nested IF, one-line IF, .AND./.OR. precedence without parentheses, ==, >=, .NE. and $ERROR (ONLY OBSERVATIONS) |  |
 | `logical-not-and-slash-ne` | code | Fortran .NOT. and the /= operator in IF conditions |  |
 | `math-functions` | code | DEXP/DLOG/LOG10/DSQRT/DABS/** powers, MIN/MAX, and a probit bioavailability using PHI() |  |
 | `do-while-loop` | code | DO WHILE / ENDDO loop computing an allometric factor |  |
