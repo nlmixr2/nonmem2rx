@@ -441,6 +441,7 @@ nmlst <- function(file, strictLst=FALSE) {
   } else {
     .lst <-file
   }
+  .lst <- .nmlstFinalEstimation(.lst)
   if (length(.lst) == 0) {
     warning("no lines read for file", call.= FALSE)
     return(list(theta=.nmlst$theta,
@@ -543,4 +544,24 @@ nmlst <- function(file, strictLst=FALSE) {
     assign(type, .est, envir=.nmlst)
   }
   invisible()
+}
+
+#' Keep only the final estimation step of the first problem in a listing
+#'
+#' With several `$EST` records the listing has one block per estimation
+#' step (each starting at a `#TBLN:` line); the final estimates are in the
+#' last block of the first problem.  The listing reader parses the first
+#' block it meets, so drop the earlier ones.
+#'
+#' @param lines lines of the listing
+#' @return lines with the earlier estimation blocks of problem 1 removed
+#' @noRd
+#' @author Matthew L. Fidler
+.nmlstFinalEstimation <- function(lines) {
+  .prob <- grep("^ *PROBLEM NO[.]:", lines)
+  .end <- if (length(.prob) > 1L) .prob[2] - 1L else length(lines)
+  .tbln <- grep("^ *#TBLN:", lines)
+  .tbln <- .tbln[.tbln <= .end]
+  if (length(.tbln) <= 1L) return(lines)
+  lines[-seq(.tbln[1], .tbln[length(.tbln)] - 1L)]
 }

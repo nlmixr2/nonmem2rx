@@ -7,6 +7,23 @@
   `source(system.file("stress", "stress.R", package = "nonmem2rx"))` and
   run `stressCheck()` and `stressKit()`; see `inst/stress/README.md`.
 
+* Runs with several `$EST` records (for example ITS followed by FOCE) now
+  import the final estimates.  NONMEM writes one table per estimation step
+  to the `.ext`, `.phi`, `.cov`, `.cor`, `.coi` and `.grd` files and one
+  block per step to the `.xml` and `.lst` files, and `nmext()`, `nmcov()`,
+  `nmgrd()`, `nmxml()`, `nmlst()` and `nminfo()` read the first step.  The
+  model was then validated with the first step's estimates against tables
+  from the last step.  They now use the last estimation step of the first
+  problem.
+
+* First-order (`METHOD=0`) runs now validate with the POSTHOC etas from the
+  output tables.  NONMEM leaves every `.phi` eta at zero for FO, and the
+  `.phi` etas were preferred.
+
+* `nmxml()` now reads `$SIGMA` (its XPath was malformed, so it was never
+  found), and returns `NULL` instead of an empty vector when `$OMEGA` is
+  missing.
+
 * `ADVAN12 TRANS4` (`CL V2 Q3 V3 Q4 V4 KA`) models now translate to a working
   `linCmt()` model.  The parameter map was registered under `TRANS2`, so the
   model kept an unresolved `linCmtFun` parameter and could not be solved.  A

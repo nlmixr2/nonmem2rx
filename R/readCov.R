@@ -37,7 +37,16 @@ nmcov <- function (file, ...) {
            perl = TRUE), `:=`(TABLE, get(cnames[1]))]
   dt1[, `:=`(NMREP, cumsum(!is.na(TABLE)) + 1)]
   dt1[, `:=`(TABLE, NULL)]
-  dt1 <- dt1[NMREP==1,]
+  .final <- .nmFinalTable(file)
+  dt1 <- dt1[NMREP==.final,]
+  if (.final > 1L) {
+    # a later table starts with its own "TABLE NO." and NAME header rows,
+    # which also made fread() read the numbers as text
+    dt1 <- dt1[!(NAME %in% c("NAME", "") | grepl("^TABLE", NAME)), ]
+    for (.c in setdiff(names(dt1), c("NAME", "NMREP", "TABLE"))) {
+      set(dt1, j=.c, value=suppressWarnings(as.numeric(dt1[[.c]])))
+    }
+  }
   name <- dt1$NAME
   dt1[,`:=`(NAME, NULL)]
   dt1[, `:=`(NMREP, NULL),]

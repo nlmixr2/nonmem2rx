@@ -1007,7 +1007,14 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       if (inherits(.ipredData, "try-error")) .predData <- .ipredData <- NULL
       if (!is.null(.ipredData)) {
         .digs <- 0L
-        if (!is.null(.lstInfo$eta)) {
+        # first-order (FO) estimation leaves every .phi eta at zero, even
+        # with POSTHOC; the individual etas are then only in the tables
+        .phiEta <- .lstInfo$eta
+        if (!is.null(.phiEta) &&
+              all(unlist(.phiEta[, names(.phiEta) != "ID", drop=FALSE]) == 0)) {
+          .phiEta <- NULL
+        }
+        if (!is.null(.phiEta)) {
           .digs <- 5L # seems to be the default for phi files
         }
         # get ETA data if it has better digits than the phi file (or isn't present yet)
@@ -1016,8 +1023,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                               rename=rename,
                                               digits=.digs))
         if (inherits(.etaData, "try-error")) .etaData <- NULL
-        if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
-          .etaData <- .lstInfo$eta
+        if (is.null(.etaData) && !is.null(.phiEta)) {
+          .etaData <- .phiEta
         }
       }
       if (is.null(.predData)) {
