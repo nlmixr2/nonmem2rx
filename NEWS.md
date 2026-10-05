@@ -33,9 +33,6 @@
   individual (as IPRED validation already did).  IPRED validation also keeps
   ETAs aligned for reused IDs instead of skipping the check.
 
-* PRED validation no longer fails silently for models that output a variable
-  twice (such as `ADVAN5`/`ADVAN7` `matExp()` models).
-
 * Validation no longer stops with "object '.iwres' not found" when the IPRED
   solve fails.
 
@@ -58,6 +55,13 @@
 * Syntax errors in a `.lst` file are now labelled as coming from the NONMEM
   output rather than from the last control-stream record parsed (or from a
   `NULL` record name).
+
+* The `PRED` validation no longer needs the `tibble` package.  It asked
+  `rxSolve()` for a tibble while the `IPRED` validation beside it asked for a
+  `data.frame`, so where `tibble` was unavailable the solve failed quietly and
+  only the `IPRED` half of `$meta$validation` was reported.  The tibble also
+  failed, whatever was installed, for models that output a variable twice
+  (such as `ADVAN5`/`ADVAN7` `matExp()` models).
 
 # nonmem2rx 0.1.11
 

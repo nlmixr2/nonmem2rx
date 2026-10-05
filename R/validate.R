@@ -402,8 +402,9 @@
                                        paste0("rxerr.", .rx$predDf$var)))
       }
       .minfo("solving pred problem")
-      # data.frame, not tibble: some models (e.g. matExp) output a
-      # variable twice, which as_tibble() rejects
+      # data.frame, like the ipred solve above: "tibble" would need the tibble
+      # package, which nonmem2rx does not depend on, and some models (e.g.
+      # matExp) output a variable twice, which as_tibble() rejects
       .predSolve <- try(rxSolve(.model, .params, .nonmemToRxIdData(.nonmemData),
                                 returnType = "data.frame",
                                 covsInterpolation="nocb",
