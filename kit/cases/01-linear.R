@@ -339,7 +339,6 @@ kitCase(
   name="advan12-trans4-3cmt-oral",
   covers="ADVAN12 TRANS4 three-compartment first-order absorption with ALAG1",
   tags=c("linear", "advan12", "alag"),
-  known="ADVAN12 TRANS4 (CL V2 Q3 V3 Q4 V4 KA) translates to linCmt() with an unresolved linCmtFun parameter",
   sim=function() {
     ini({
       tcl <- 6; tv2 <- 8; tq3 <- 4; tv3 <- 20; tq4 <- 1; tv4 <- 60; tka <- 2; tlag <- 0.25
@@ -384,6 +383,56 @@ $ERROR
   Y = IPRED + W*EPS(1)
 $THETA (0, 6) (0, 8) (0, 4) (0, 20) (0, 1) (0, 60) (0, 2) (0, 0.25) (0, 0.1)
 $OMEGA 0.09 0.04 0.09
+$SIGMA 1 FIX
+{{EST}}
+{{TABLE}}
+")
+
+kitCase(
+  name="advan12-trans1-k",
+  covers="ADVAN12 TRANS1 three-compartment oral with micro constants K, K23, K32, K24, K42, KA",
+  tags=c("linear", "advan12", "trans1"),
+  sim=function() {
+    ini({
+      tk <- 0.5; tv2 <- 8; tk23 <- 0.5; tk32 <- 0.2; tk24 <- 0.1; tk42 <- 0.02; tka <- 2
+      eta.k ~ 0.09; eta.v2 ~ 0.04
+      prop.sd <- 0.1
+    })
+    model({
+      k <- tk * exp(eta.k); v2 <- tv2 * exp(eta.v2); ka <- tka
+      d/dt(depot) <- -ka * depot
+      d/dt(central) <- ka * depot - (k + tk23 + tk24) * central + tk32 * p1 + tk42 * p2
+      d/dt(p1) <- tk23 * central - tk32 * p1
+      d/dt(p2) <- tk24 * central - tk42 * p2
+      ipred <- central / v2
+      ipred ~ prop(prop.sd)
+    })
+  },
+  data=function(nSub) {
+    .id <- seq_len(nSub)
+    nmBind(nmDose(.id, 0, amt=100, cmt=1), nmObs(.id, c(0.1, 0.2, pkTimes(72)), cmt=2))
+  },
+  ctl="$PROBLEM {{PROBLEM}}
+$INPUT {{INPUT}}
+$DATA {{DATA}} IGNORE=@
+$SUBROUTINES ADVAN12 TRANS1
+$PK
+  K   = THETA(1)*EXP(ETA(1))
+  V2  = THETA(2)*EXP(ETA(2))
+  K23 = THETA(3)
+  K32 = THETA(4)
+  K24 = THETA(5)
+  K42 = THETA(6)
+  KA  = THETA(7)
+  S2 = V2
+$ERROR
+  IPRED = F
+  W = THETA(8)*IPRED
+  IF (W .EQ. 0) W = 1
+  IWRES = (DV - IPRED)/W
+  Y = IPRED + W*EPS(1)
+$THETA (0, 0.5) (0, 8) (0, 0.5) (0, 0.2) (0, 0.1) (0, 0.02) (0, 2) (0, 0.1)
+$OMEGA 0.09 0.04
 $SIGMA 1 FIX
 {{EST}}
 {{TABLE}}

@@ -1,5 +1,11 @@
 # nonmem2rx 0.1.12
 
+* `ADVAN12 TRANS4` (`CL V2 Q3 V3 Q4 V4 KA`) models now translate to a working
+  `linCmt()` model.  The parameter map was registered under `TRANS2`, so the
+  model kept an unresolved `linCmtFun` parameter and could not be solved.  A
+  closed-form `ADVAN`/`TRANS` combination without a `linCmt()` translation is
+  now an error instead.
+
 * A `$MODEL` that mixes named and bare `COMP` records (for example
   `COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP`) now renames the named compartments.
   Previously the rename failed silently, and `ADVAN5`/`ADVAN7` models then
