@@ -2,6 +2,9 @@
 ## nonmem2rx round-trip kit: simulate with rxode2 -> run NONMEM ->
 ## import with nonmem2rx -> validate.  See kit/README.md.
 ##
+## Command-line wrapper around runKit(); from an R session use
+##   source("kit/kit.R"); runKit(mode="dry")
+##
 ## Usage (from the package root):
 ##   Rscript kit/run-kit.R --list
 ##   Rscript kit/run-kit.R --mode dry                     # no NONMEM needed
@@ -40,46 +43,24 @@
   if (length(.f) == 1) dirname(normalizePath(.f)) else "kit"
 })
 
-.pkgDir <- dirname(.kitDir)
-.inSource <- file.exists(file.path(.pkgDir, "DESCRIPTION")) &&
-  any(grepl("^Package: nonmem2rx$", readLines(file.path(.pkgDir, "DESCRIPTION"))))
-if (.inSource && !isTRUE(.opt("installed"))) {
-  message("using nonmem2rx from source: ", .pkgDir)
-  Sys.setenv(NMKIT_PKGDIR=.pkgDir)  # also used by kit/mock/fake-nonmem.R
-  suppressMessages(devtools::load_all(.pkgDir, quiet=TRUE))
-} else {
-  suppressMessages(library(nonmem2rx))
-}
-suppressMessages(library(rxode2))
-rxode2::setRxThreads(1L)
-data.table::setDTthreads(1L)
-
-for (.f in list.files(file.path(.kitDir, "R"), full.names=TRUE)) source(.f)
-kitLoadCases(file.path(.kitDir, "cases"))
+## kit/kit.R uses an already-loaded nonmem2rx, so load the installed one
+## first when asked
+if (isTRUE(.opt("installed"))) suppressMessages(library(nonmem2rx))
+source(file.path(.kitDir, "kit.R"))
 
 if (isTRUE(.opt("list"))) {
-  .l <- kitList()
-  print(.l, right=FALSE, row.names=FALSE)
+  print(kitList(), right=FALSE, row.names=FALSE)
   quit(status=0)
 }
 
-.mode <- .opt("mode", "dry")
-.cases <- kitCases(names=.split(.opt("cases")), tags=.split(.opt("tags")))
-.nmfe <- .opt("nmfe", Sys.getenv("NMKIT_NMFE", ""))
-if (!nzchar(.nmfe)) .nmfe <- NULL
-if (.mode == "full" && is.null(.nmfe)) {
-  stop("--mode full needs --nmfe \"nmfe75 {ctl} {lst}\" or NMKIT_NMFE", call.=FALSE)
-}
-.out <- normalizePath(.opt("out", "kit-runs"), mustWork=FALSE)
-
-message(sprintf("nonmem2rx kit: %d case(s), mode=%s, out=%s", length(.cases), .mode, .out))
-.res <- kitRun(.cases, .out, mode=.mode,
+.res <- runKit(mode=.opt("mode", "dry"),
+               cases=.split(.opt("cases")), tags=.split(.opt("tags")),
+               nmfe=.opt("nmfe", Sys.getenv("NMKIT_NMFE", "")),
+               est=.opt("est", "full"),
                nSub=as.integer(.opt("nsub", 20L)),
                seed=as.integer(.opt("seed", 42L)),
-               est=.opt("est", "full"), nmfe=.nmfe,
                jobs=as.integer(.opt("jobs", 1L)),
+               out=.opt("out", "kit-runs"),
                timeout=as.numeric(.opt("timeout", 3600)))
-.counts <- kitReport(.res, .out)
-message(paste(paste0(names(.counts), ": ", .counts), collapse=" | "))
-message("summary: ", file.path(.out, "summary.md"))
+.counts <- attr(.res, "counts")
 quit(status=if (.counts[["FAIL"]] + .counts[["ERROR"]] > 0) 1 else 0)

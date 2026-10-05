@@ -23,28 +23,50 @@ The kit lives in `kit/` and is excluded from the package build
 
 ## Quick start
 
-Run from the package root. When the kit sits inside the `nonmem2rx`
-source tree, it loads that tree with `devtools::load_all()`; pass
-`--installed` to use the installed package instead.
+From an R session in the package root:
 
-```sh
-# list cases (name, tags, covers)
-Rscript kit/run-kit.R --list
+```r
+source("kit/kit.R")     # loads nonmem2rx (source tree) and the kit's cases
+kitList()               # cases: name, tags, known, covers
 
-# NONMEM-free check of every case (about 1 minute with --jobs 8)
-Rscript kit/run-kit.R --mode dry --jobs 8
+# NONMEM-free check of every case (about 1 minute with jobs = 8)
+res <- runKit(mode = "dry", jobs = 8)
 
 # the real thing: simulate, run NONMEM, import, validate
-Rscript kit/run-kit.R --mode full --nmfe "nmfe75 {ctl} {lst}" --jobs 4
+res <- runKit(mode = "full", nmfe = "nmfe75 {ctl} {lst}", jobs = 4)
 
 # a subset, by tag or by name
-Rscript kit/run-kit.R --mode full --tags dosing,ss --nmfe "nmfe75 {ctl} {lst}"
-Rscript kit/run-kit.R --mode full --cases ss2-asymmetric-bid,evid4-reset-dose --nmfe "..."
+runKit(mode = "full", tags = c("dosing", "ss"), nmfe = "nmfe75 {ctl} {lst}")
+runKit(mode = "full", cases = c("ss2-asymmetric-bid", "evid4-reset-dose"),
+       nmfe = "nmfe75 {ctl} {lst}")
+
+res[res$status != "PASS", c("case", "status", "note")]
 ```
 
-Results go to `kit-runs/` (change with `--out`): one directory per case
-plus `summary.md` and `summary.csv`. The exit status is non-zero when any
-case is `FAIL` or `ERROR`.
+`source("kit/kit.R")` uses nonmem2rx if it is already loaded (with
+`library()` or `devtools::load_all()`). Otherwise it loads the source
+tree the kit sits in with `devtools::load_all()`. The kit's functions go
+into an attached `nmkit` environment, not the global environment, and
+sourcing again replaces it. `runKit()` returns one row per case and
+writes `summary.md`/`summary.csv` to `out` (default `kit-runs/`), with
+one directory per case. It sets rxode2/data.table to one thread while it
+runs and restores your settings afterwards.
+
+### Command line
+
+`kit/run-kit.R` wraps the same `runKit()`. Its exit status is non-zero
+when any case is `FAIL` or `ERROR`, which suits CI.
+
+```sh
+Rscript kit/run-kit.R --list
+Rscript kit/run-kit.R --mode dry --jobs 8
+Rscript kit/run-kit.R --mode full --nmfe "nmfe75 {ctl} {lst}" --tags dosing,ss
+```
+
+Options map onto `runKit()` arguments: `--mode`, `--cases a,b`,
+`--tags t1,t2`, `--nmfe`, `--est`, `--nsub`, `--seed`, `--jobs`, `--out`
+and `--timeout`. `--installed` uses the installed nonmem2rx instead of
+the source tree.
 
 ### Modes
 
@@ -52,23 +74,25 @@ case is `FAIL` or `ERROR`.
 |---|---|---|
 | `dry` | simulate, write `data.csv` + `run.ctl`, translate with `nonmem2rx(validate=FALSE)`. Then solve the translated model at the initial estimates with all random effects zero, and compare its PRED with the rxode2 truth. Also checks that the imported `$OMEGA` (and `$SIGMA` where the case gives one) equals the truth, and that `IGNORE`/`ACCEPT`/`RECORDS` kept exactly the simulated rows. | no |
 | `full` | `dry`, then run NONMEM in each case directory and import with full validation | yes |
-| `import` | re-import NONMEM output already in `--out` (e.g. after running NONMEM yourself on a cluster: run `dry`, run every `*/run.ctl`, then `import`) | no (uses existing output) |
+| `import` | re-import NONMEM output already in `out` (e.g. after running NONMEM yourself on a cluster: run `dry`, run every `*/run.ctl`, then `import`) | no (uses existing output) |
 
 The dry PRED comparison doesn't depend on NONMEM. It catches translation,
 data-reading and event-handling errors (the truth is solved independently
 by rxode2), so it is worth running in CI without a license.
 
-### Options
+### `runKit()` arguments
 
-| option | default | meaning |
+| argument | default | meaning |
 |---|---|---|
-| `--nmfe "cmd"` | `$NMKIT_NMFE` | NONMEM command template; `{ctl}` and `{lst}` are replaced, e.g. `nmfe75 {ctl} {lst}`, `/opt/nm760/run/nmfe76 {ctl} {lst} -maxlim=2`. PsN's `execute {ctl}` also works, because it copies the output back. |
-| `--est full\|posthoc` | `full` | default estimation records: `full` = FOCE-I `MAXEVAL=9999` + `$COV`; `posthoc` = `MAXEVAL=0 POSTHOC` at the true values (fast, still exercises tables/.ext/.phi). Cases that test estimation methods keep their own records. |
-| `--nsub N` | 20 | subjects per case (some cases fix their own) |
-| `--seed N` | 42 | base seed; each case derives a stable seed from its name |
-| `--jobs N` | 1 | cases run in parallel (forked) |
-| `--timeout S` | 3600 | NONMEM timeout per case |
-| `--cases`, `--tags` | all | select cases |
+| `mode` | `"dry"` | `"dry"`, `"full"` or `"import"` (see above) |
+| `nmfe` | `Sys.getenv("NMKIT_NMFE")` | NONMEM command template; `{ctl}` and `{lst}` are replaced, e.g. `"nmfe75 {ctl} {lst}"`, `"/opt/nm760/run/nmfe76 {ctl} {lst} -maxlim=2"`. PsN's `"execute {ctl}"` also works, because it copies the output back. |
+| `est` | `"full"` | default estimation records: `"full"` = FOCE-I `MAXEVAL=9999` + `$COV`; `"posthoc"` = `MAXEVAL=0 POSTHOC` at the true values (fast, still exercises tables/.ext/.phi). Cases that test estimation methods keep their own records. |
+| `nSub` | 20 | subjects per case (some cases fix their own) |
+| `seed` | 42 | base seed; each case derives a stable seed from its name |
+| `jobs` | 1 | cases run in parallel (forked; Unix only) |
+| `timeout` | 3600 | NONMEM timeout per case, in seconds |
+| `cases`, `tags` | all | select cases |
+| `out` | `"kit-runs"` | output directory |
 
 ## Reading the results
 
@@ -108,19 +132,21 @@ difference and is off by default. Set a value to `NA` to skip that check.
 plumbing can be checked without a license. It writes NONMEM-format
 `.lst`, `.ext` and every `$TABLE` file from the rxode2 truth:
 
-```sh
-Rscript kit/run-kit.R --mode full --jobs 8 \
-  --nmfe "Rscript $PWD/kit/mock/fake-nonmem.R {ctl} {lst}" --out /tmp/kit-mock
+```r
+runKit(mode = "full", jobs = 8, out = tempfile("kit-mock"),
+       nmfe = paste("Rscript", normalizePath("kit/mock/fake-nonmem.R"), "{ctl} {lst}"))
 ```
 
 This is **not** NONMEM and proves nothing about NONMEM's behaviour. Only
-a real `--mode full` run does that.
+a real `mode = "full"` run does that.
 
 ## Layout
 
 ```
 kit/
-  run-kit.R          command-line entry point
+  kit.R              source() this from R: loads nonmem2rx, the kit and its cases
+  run-kit.R          command-line wrapper around runKit()
+  R/main.R           runKit()
   R/case.R           kitCase()/kitVariant() registry and case fields
   R/data.R           nmDose()/nmObs()/nmOther()/nmBind()/nmCov() data builders
   R/sim.R            rxode2 simulation and data writing
