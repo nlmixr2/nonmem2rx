@@ -41,7 +41,18 @@ test_that("tables test", {
   .t("ID TIME IPRED\nFIXEDETAS=(1,3-4) varcalc=3 NOPRINT FILE=sdtab02",
      list(list(file = "sdtab02", hasPred = TRUE, fullData = TRUE, hasIpred = TRUE, hasEta = FALSE, digits=4L)))
 
-  expect_error(.t("ID TIME VARCALC=4 FILE=sdtab03"))
+  .t("ID TIME IPRED\nFIXEDETAS=(01 2-3) VARCALC=0 NOPRINT FILE=sdtab03",
+     list(list(file = "sdtab03", hasPred = TRUE, fullData = TRUE, hasIpred = TRUE, hasEta = FALSE, digits=4L)))
+
+  .t("ID TIME IPRED\nFIXEDETAS=2 VARCALC=2 NOPRINT FILE=sdtab04",
+     list(list(file = "sdtab04", hasPred = TRUE, fullData = TRUE, hasIpred = TRUE, hasEta = FALSE, digits=4L)))
+
+  # the value of an unsupported KEY=VALUE option is not a table column
+  .t("ID TIME\nFOO=ETA1 BAR=IPRED FILE=sdtab05",
+     list(list(file = "sdtab05", hasPred = TRUE, fullData = TRUE, hasIpred = FALSE, hasEta = FALSE, digits=4L)))
+
+  expect_error(.t("ID TIME VARCALC=4 FILE=sdtab06"))
+  expect_error(.t("ID TIME VARCALC=ETA1 FILE=sdtab07"))
 
   expect_error(.t("fun=funny.csv"))
 

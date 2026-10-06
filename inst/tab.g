@@ -21,7 +21,7 @@ statement: identifier_nm
     | npdtype_statement
     | varcalc_statement
     | fixedetas_statement
-    | identifier_nm '=' identifier_nm
+    | assign_statement
     ;
 
 etas_paren_name: ('ETAS' | 'Etas' | 'etas' | 'ETA' | 'Eta' | 'eta') ;
@@ -39,8 +39,10 @@ parafile_statement: ('PARAFILE' | 'Parafile' | 'parafile') '=' filename ;
 clockseed_statement: ('CLOCKSEED' | 'clockseed' | 'Clockseed') '=' "[01]";
 file_statement: ('FILE' | 'file' | 'File') '=' filename;
 idformat_statement: ('IDFORMAT' | 'idformat' | 'Idformat') '=' fortran_format;
+assign_statement: identifier_nm '=' identifier_nm;
 varcalc_statement: ('VARCALC' | 'varcalc' | 'Varcalc') '=' "[0-3]";
-fixedetas_statement: ('FIXEDETAS' | 'fixedetas' | 'Fixedetas') '=' '(' decimalintNo0 ('-' decimalintNo0)* (',' decimalintNo0 ('-' decimalintNo0)*)* ')';
+fixedetas_statement: ('FIXEDETAS' | 'fixedetas' | 'Fixedetas') '=' ('(' fixedetas_item (','? fixedetas_item)* ')' | fixedetas_item);
+fixedetas_item: "[0-9]+" ('-' "[0-9]+")?;
 
 npdtype_statement: ('NPDTYPE' | 'Npdtype' | 'npdtype') '=' "[01]";
 

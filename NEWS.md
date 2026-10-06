@@ -3,6 +3,8 @@
 * `$TABLE` records now accept the `VARCALC=` and `FIXEDETAS=` options
   instead of stopping with a syntax error (#262).  They only change how
   NONMEM computes extra table metrics, so they are parsed and ignored.
+  The value of an unrecognised `KEY=VALUE` `$TABLE` option (for example
+  `FOO=ETA1`) is no longer mistaken for a table column.
 
 * Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
   record name used in syntax-error messages was stored in the parser's
