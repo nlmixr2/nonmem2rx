@@ -51,6 +51,9 @@ test_that("tables test", {
   .t("ID TIME\nFOO=ETA1 BAR=IPRED BAZ=1 QUX=1.5 QUUX='a b' FILE=sdtab05",
      list(list(file = "sdtab05", hasPred = TRUE, fullData = TRUE, hasIpred = FALSE, hasEta = FALSE, digits=4L)))
 
+  .t("ID TIME\nVARCALC=01 FILE=sdtab06 PARAFILE=on",
+     list(list(file = "sdtab06", hasPred = TRUE, fullData = TRUE, hasIpred = FALSE, hasEta = FALSE, digits=4L)))
+
   expect_error(.t("ID TIME VARCALC=4 FILE=sdtab06"))
   expect_error(.t("ID TIME VARCALC=ETA1 FILE=sdtab07"))
   expect_error(.t("ID TIME FIXEDETAS=ETA1 FILE=sdtab08"))

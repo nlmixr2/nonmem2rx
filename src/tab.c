@@ -123,6 +123,7 @@ void wprint_parsetree_tab(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
     return;
   } else if (!strcmp("parafile_statement", name)) {
     // don't parse the parafile filename statements
+    return;
   } else if (!strcmp("filename_t3", name)) {
     tableFileName = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     return;

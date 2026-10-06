@@ -3356,7 +3356,7 @@ unsigned char d_scanner_110_0_0_nonmem2rxTab[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+2, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 };
 
 D_Shift * d_shift_110_1_nonmem2rxTab[] = {&d_shift_84_nonmem2rxTab,NULL};
@@ -5162,14 +5162,18 @@ SB_trans_uint8 d_transition_106_nonmem2rxTab[12] = {
  , d_accepts_diff_61_0_0_nonmem2rxTab, d_accepts_diff_61_0_0_nonmem2rxTab}}
 };
 
-SB_uint8 d_scanner_110_nonmem2rxTab[2] = {
+SB_uint8 d_scanner_110_nonmem2rxTab[3] = {
 {NULL, {d_scanner_110_0_0_nonmem2rxTab, d_scanner_61_0_1_nonmem2rxTab
+ , d_scanner_61_0_1_nonmem2rxTab, d_scanner_61_0_1_nonmem2rxTab}},
+{d_shift_110_1_nonmem2rxTab, {d_scanner_110_0_0_nonmem2rxTab, d_scanner_61_0_1_nonmem2rxTab
  , d_scanner_61_0_1_nonmem2rxTab, d_scanner_61_0_1_nonmem2rxTab}},
 {d_shift_110_1_nonmem2rxTab, {d_scanner_61_0_1_nonmem2rxTab, d_scanner_61_0_1_nonmem2rxTab
  , d_scanner_61_0_1_nonmem2rxTab, d_scanner_61_0_1_nonmem2rxTab}}
 };
 
-SB_trans_uint8 d_transition_110_nonmem2rxTab[2] = {
+SB_trans_uint8 d_transition_110_nonmem2rxTab[3] = {
+{{d_accepts_diff_61_0_0_nonmem2rxTab, d_accepts_diff_61_0_0_nonmem2rxTab
+ , d_accepts_diff_61_0_0_nonmem2rxTab, d_accepts_diff_61_0_0_nonmem2rxTab}},
 {{d_accepts_diff_61_0_0_nonmem2rxTab, d_accepts_diff_61_0_0_nonmem2rxTab
  , d_accepts_diff_61_0_0_nonmem2rxTab, d_accepts_diff_61_0_0_nonmem2rxTab}},
 {{d_accepts_diff_61_0_0_nonmem2rxTab, d_accepts_diff_61_0_0_nonmem2rxTab
@@ -6104,7 +6108,7 @@ D_Symbol d_symbols_nonmem2rxTab[] = {
 {D_SYMBOL_STRING, "varcalc", 7, -1},
 {D_SYMBOL_STRING, "Varcalc", 7, -1},
 {D_SYMBOL_STRING, "=", 1, -1},
-{D_SYMBOL_REGEX, "[0-3]", 5, -1},
+{D_SYMBOL_REGEX, "0*[0-3]", 7, -1},
 {D_SYMBOL_STRING, "FIXEDETAS", 9, -1},
 {D_SYMBOL_STRING, "fixedetas", 9, -1},
 {D_SYMBOL_STRING, "Fixedetas", 9, -1},

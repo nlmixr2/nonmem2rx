@@ -40,7 +40,7 @@ clockseed_statement: ('CLOCKSEED' | 'clockseed' | 'Clockseed') '=' "[01]";
 file_statement: ('FILE' | 'file' | 'File') '=' filename;
 idformat_statement: ('IDFORMAT' | 'idformat' | 'Idformat') '=' fortran_format;
 assign_statement: identifier_nm '=' (identifier_nm | decimalint | float1 | float2 | string);
-varcalc_statement: ('VARCALC' | 'varcalc' | 'Varcalc') '=' "[0-3]";
+varcalc_statement: ('VARCALC' | 'varcalc' | 'Varcalc') '=' "0*[0-3]";
 fixedetas_statement: ('FIXEDETAS' | 'fixedetas' | 'Fixedetas') '=' ('(' fixedetas_item (','? fixedetas_item)* ')' | fixedetas_item);
 fixedetas_item: "[0-9]+" ('-' "[0-9]+")?;
 

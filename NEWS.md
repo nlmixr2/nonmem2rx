@@ -7,6 +7,8 @@
   quoted values, and their value (for example `FOO=ETA1`) is no longer
   mistaken for a table column.
 
+* A `$TABLE` `PARAFILE=` value no longer replaces the table's `FILE=` name.
+
 * Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
   record name used in syntax-error messages was stored in the parser's
   duplicated-string pool, which is freed after every parse, so a later syntax
