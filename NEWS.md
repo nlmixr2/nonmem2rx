@@ -1,5 +1,11 @@
 # nonmem2rx 0.1.12
 
+* Models that refer to `DV` (for example `IRES = DV - IPRED` in `$ERROR`)
+  no longer simulate wrong amounts when doses have modeled lag times and
+  durations in more than one compartment (#263).  The `DV` reference makes
+  `DV` a time-varying covariate, which exposed a bug in `rxode2`; this
+  needs `rxode2` 5.1.8 or later.
+
 * Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
   record name used in syntax-error messages was stored in the parser's
   duplicated-string pool, which is freed after every parse, so a later syntax
