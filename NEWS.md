@@ -1,5 +1,9 @@
 # nonmem2rx 0.1.12
 
+* `$TABLE` records now accept the `VARCALC=` and `FIXEDETAS=` options
+  instead of stopping with a syntax error (#262).  They only change how
+  NONMEM computes extra table metrics, so they are parsed and ignored.
+
 * Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
   record name used in syntax-error messages was stored in the parser's
   duplicated-string pool, which is freed after every parse, so a later syntax

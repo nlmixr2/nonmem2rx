@@ -19,6 +19,8 @@ statement: identifier_nm
     | file_statement
     | idformat_statement
     | npdtype_statement
+    | varcalc_statement
+    | fixedetas_statement
     | identifier_nm '=' identifier_nm
     ;
 
