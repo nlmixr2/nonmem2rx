@@ -48,7 +48,7 @@ test_that("tables test", {
      list(list(file = "sdtab04", hasPred = TRUE, fullData = TRUE, hasIpred = TRUE, hasEta = FALSE, digits=4L)))
 
   # the value of an unsupported KEY=VALUE option is not a table column
-  .t("ID TIME\nFOO=ETA1 BAR=IPRED BAZ=1 QUX=1.5 QUUX='a b' FILE=sdtab05",
+  .t("ID TIME\nFOO=ETA1 BAR=IPRED BAZ=1 QUX=1.5 QUUX='a b' CORGE=1e-5 GRAULT=\"c d\" FIXEDETAS=1-3 FILE=sdtab05",
      list(list(file = "sdtab05", hasPred = TRUE, fullData = TRUE, hasIpred = FALSE, hasEta = FALSE, digits=4L)))
 
   .t("ID TIME\nVARCALC=01 FILE=sdtab06 PARAFILE=on",
