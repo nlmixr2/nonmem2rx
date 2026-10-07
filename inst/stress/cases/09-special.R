@@ -88,6 +88,8 @@ kitVariant("dde-advan16-delay", "dde-advan18-delay",
 kitVariant("dde-advan16-delay", "dde-advan13-delay",
            "ADVAN13 delay differential equation through NONMEM's -dde expansion: AD_1_1 with TAU1 and constant past AP_1_1",
            tags=c("special", "dde", "advan13", "a0", "nm75"),
+           knownFull=paste("NONMEM 7.5.1 stops at the first evaluation (ERROR IN LSODA: CODE -3) in its",
+                           "-dde ADVAN13 expansion; the translation matches NONMEM through ADVAN18 (#266)"),
            ctl=sub("$SUBROUTINES ADVAN16 TOL=9 ATOL=12", "$SUBROUTINES ADVAN13 TOL=9 ATOL=12",
                    .kitEnv$cases[["dde-advan16-delay"]]$ctl, fixed=TRUE))
 

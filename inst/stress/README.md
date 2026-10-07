@@ -356,7 +356,7 @@ simulated records, for `RECORDS=`).
 | `table-repeated-headers` | estimation | Tables longer than 900 records without ONEHEADER (NONMEM repeats the TABLE NO. header block) |  |
 | `dde-advan16-delay` | special | ADVAN16 delay differential equation: delayed drug effect via AD_1_1 with TAU1 and constant past AP_1_1 |  |
 | `dde-advan18-delay` | special | ADVAN18 (DDE_SOLVER) delay differential equation: AD_1_1 with TAU1 and constant past AP_1_1 |  |
-| `dde-advan13-delay` | special | ADVAN13 delay differential equation through NONMEM's -dde expansion: AD_1_1 with TAU1 and constant past AP_1_1 |  |
+| `dde-advan13-delay` | special | ADVAN13 delay differential equation through NONMEM's -dde expansion: AD_1_1 with TAU1 and constant past AP_1_1 | run |
 | `mix-two-clearance` | special | $MIX with two sub-populations (fast/slow clearance), P(1)=THETA, MIXNUM and MIXEST in $PK |  |
 
 `known`: "always" cases are XFAIL in both modes (a translation problem);
