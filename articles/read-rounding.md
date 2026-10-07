@@ -540,7 +540,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.6751655       0.025 0.055    0.001 320.27      1.299
+#> elapsed 0.7156326       0.027  0.06    0.001 320.27      1.328
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -777,9 +777,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.779996 3.124385   19.14877       0.04       0.021  0.07    0.002
+#> elapsed 2.816208 3.247312   19.20389      0.043       0.023  0.07    0.001
 #>             other
-#> elapsed 0.1138467
+#> elapsed 0.1195916
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -963,7 +963,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.6751655       0.025 0.055    0.001 320.27      1.299     41.933
+#> elapsed 0.7156326       0.027  0.06    0.001 320.27      1.328     41.754
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 

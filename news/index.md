@@ -2,6 +2,13 @@
 
 ## nonmem2rx 0.1.12
 
+- Models that refer to `DV` (for example `IRES = DV - IPRED` in
+  `$ERROR`) no longer simulate wrong amounts when doses have modeled lag
+  times and durations in more than one compartment
+  ([\#263](https://github.com/nlmixr2/nonmem2rx/issues/263)). The `DV`
+  reference makes `DV` a time-varying covariate, which exposed a bug in
+  `rxode2`; this needs `rxode2` 5.1.8 or later.
+
 - `$TABLE` records now accept the `VARCALC=` and `FIXEDETAS=` options
   instead of stopping with a syntax error
   ([\#262](https://github.com/nlmixr2/nonmem2rx/issues/262)). They only

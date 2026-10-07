@@ -439,7 +439,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.8671719       0.019 0.054    0.001 100.95      1.113
+#> elapsed 0.8622351        0.02 0.054    0.002 100.95      1.101
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
