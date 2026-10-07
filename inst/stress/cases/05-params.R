@@ -332,7 +332,9 @@ $SUBROUTINES ADVAN2 TRANS2
 ; the labels must be defined before they are used, so the parameter
 ; records come before $PK
 $THETA CL=(0, 3) V=(0, 30) KA=(0, 1.2)
-$OMEGA ECL=0.09 EV=0.04
+; one label per record: NM-TRAN reads \"0.09 EV\" as an exponent
+$OMEGA ECL=0.09
+$OMEGA EV=0.04
 $SIGMA PROP=0.01
 $PK
   CL = THETA(CL)*EXP(ETA(ECL))

@@ -31,23 +31,29 @@ kitCase(
   ## laid out like the ADVAN16 examples of Yan et al. 2021 (inst/dde)
   ctl="$PROBLEM {{PROBLEM}}
 ;DDE
+$ABBR DERIV2=NO
 $INPUT {{INPUT}}
 $DATA {{DATA}} IGNORE=@
 $SUBROUTINES ADVAN16 TOL=9 ATOL=12
 $MODEL NCOMPARTMENTS=2
 $PK
-  CL   = THETA(1)*EXP(ETA(1))
-  V    = THETA(2)
-  KIN  = THETA(3)*EXP(ETA(2))
-  KOUT = THETA(4)
-  TAU1 = THETA(5)
-  IC50 = THETA(6)
-  A_0(2) = KIN/KOUT
+CL=THETA(1)*EXP(ETA(1))
+V=THETA(2)
+KIN=THETA(3)*EXP(ETA(2))
+KOUT=THETA(4)
+IC50=THETA(6)
+; TAUy
+TAU1=THETA(5)
+; Initial conditions
+A_0(2)=KIN/KOUT
 $DES
-  AP_1_1 = 0
-  CDEL = AD_1_1/V
-  DADT(1) = -CL/V*A(1)
-  DADT(2) = KIN*(1 - CDEL/(IC50 + CDEL)) - KOUT*A(2)
+; AD_x_y is the State value of A(x) delayed for time TAUy.
+; AP_x_y is the State value of A(x) in the past, for time delay TAUy.
+AP_1_1=0
+;BASE EQUATIONS
+CDEL=AD_1_1/V
+DADT(1)=-CL/V*A(1)
+DADT(2)=KIN*(1-CDEL/(IC50+CDEL))-KOUT*A(2)
 $ERROR
   IF (CMT .EQ. 2) THEN
     IPRED = A(2)
