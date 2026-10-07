@@ -58,6 +58,11 @@
   row was kept (for example `BLOCK(2) SD CORRELATION 0.3 0.5 0.2` became
   `eta1 ~ 0.09` and `eta2` was lost).  `CHOLESKY` values are now read as the
   lower-triangular factor, and `FIX` is kept through the conversion.
+* Models that refer to `DV` (for example `IRES = DV - IPRED` in `$ERROR`)
+  no longer simulate wrong amounts when doses have modeled lag times and
+  durations in more than one compartment (#263).  The `DV` reference makes
+  `DV` a time-varying covariate, which exposed a bug in `rxode2`; this
+  needs `rxode2` 5.1.8 or later.
 
 * `$TABLE` records now accept the `VARCALC=` and `FIXEDETAS=` options
   instead of stopping with a syntax error (#262).  They only change how
