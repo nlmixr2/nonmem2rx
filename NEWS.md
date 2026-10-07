@@ -18,8 +18,10 @@
   Models with `delay()` (the `ADVAN16`/`ADVAN18` translations) keep the
   continuous time, since rxode2 evaluates a `delay()` assigned outside of
   `d/dt()` at the record time with `nonmem = TRUE`.  The stress kit uses the
-  same options, so its `time-in-pk` and `mtime-change-point` cases are no
-  longer known issues with a newer rxode2 (#267).
+  same options, so its `time-in-pk` case is no longer a known issue with a
+  newer rxode2.  Its `mtime-change-point` case is no longer a known issue:
+  the ~1% difference between `linCmt()` and the ODE came from the kit's own
+  simulation switching at `t >= MTIME` (#267).
 
 * Added a NONMEM stress kit in `inst/stress` (like babelmixr2's).  It
   simulates edge-case datasets with rxode2, runs NONMEM, imports the runs

@@ -309,7 +309,7 @@ simulated records, for `RECORDS=`).
 | `evid2-time-varying-cov` | dosing | Time-varying covariate changed on EVID=2 records (NONMEM next-observation-carried-backward semantics) |  |
 | `cmt-off-depot` | dosing | Negative CMT on an EVID=2 record turns the depot off (e.g. emesis) mid-absorption | always |
 | `infusion-into-depot` | dosing | Zero-order infusion (RATE>0) into the absorption depot of ADVAN2, overlapping a bolus |  |
-| `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) | always (rxode2 without `rxSolve(nonmem = TRUE)`) |
+| `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) |  |
 | `dose-obs-ties` | dosing | Ties: obs listed before/after a dose and after an SS dose at the same TIME, plus replicate samples at one TIME | always |
 | `mtime-change-point-ode` | dosing | MTIME/MPAST switching KA in an ADVAN13 ODE model |  |
 | `cmt-off-depot-ode` | dosing | Negative CMT on an EVID=2 record turns the depot off in an ADVAN13 ODE model |  |

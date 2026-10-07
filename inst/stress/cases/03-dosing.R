@@ -516,7 +516,6 @@ kitCase(
   name="mtime-change-point",
   covers="MTIME/MPAST model event time switching KA at an estimated time (ADVAN2)",
   tags=c("dosing", "mtime", "advan2"),
-  known=if (!.kitHasNonmemSolve) "rxode2 linCmt() and the equivalent ODE disagree (~1%) when KA switches at mtime(); passes with rxSolve(nonmem=TRUE) from a newer rxode2",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka1 <- 2; tka2 <- 0.2; tchg <- 1.5
