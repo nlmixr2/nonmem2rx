@@ -84,6 +84,8 @@ kitRunNonmem <- function(dir, cmd, ctl="run.ctl", lst="run.lst",
     if (file.exists(f)) readLines(f, warn=FALSE) else character(0)
   }
   .l <- c(.read("run.lst"), .read("nonmem.log"))
+  .lic <- grep("license extension is required", .l, ignore.case=TRUE, value=TRUE)
+  if (length(.lic) > 0L) return(paste("licence:", trimws(.lic[1])))
   .e <- grep("AN ERROR WAS FOUND", .l)
   if (length(.e) > 0L) {
     .tail <- .l[.e[1]:min(length(.l), .e[1] + 8L)]

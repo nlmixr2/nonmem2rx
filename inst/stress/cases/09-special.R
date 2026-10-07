@@ -75,6 +75,22 @@ $SIGMA 1 FIX
 {{TABLE}}
 ")
 
+## The same delay model with the other NONMEM DDE solvers: ADVAN16
+## (RADAR5) needs the RADAR5NM licence extension, ADVAN18 (DDE_SOLVER) uses
+## the same syntax, and ADVAN13 solves it through the -dde expansion
+## (Yan et al. 2021, Appendix 11).
+kitVariant("dde-advan16-delay", "dde-advan18-delay",
+           "ADVAN18 (DDE_SOLVER) delay differential equation: AD_1_1 with TAU1 and constant past AP_1_1",
+           tags=c("special", "dde", "advan18", "a0", "nm75"),
+           ctl=sub("$SUBROUTINES ADVAN16 TOL=9 ATOL=12", "$SUBROUTINES ADVAN18 TOL=9 ATOL=12",
+                   .kitEnv$cases[["dde-advan16-delay"]]$ctl, fixed=TRUE))
+
+kitVariant("dde-advan16-delay", "dde-advan13-delay",
+           "ADVAN13 delay differential equation through NONMEM's -dde expansion: AD_1_1 with TAU1 and constant past AP_1_1",
+           tags=c("special", "dde", "advan13", "a0", "nm75"),
+           ctl=sub("$SUBROUTINES ADVAN16 TOL=9 ATOL=12", "$SUBROUTINES ADVAN13 TOL=9 ATOL=12",
+                   .kitEnv$cases[["dde-advan16-delay"]]$ctl, fixed=TRUE))
+
 kitCase(
   name="mix-two-clearance",
   covers="$MIX with two sub-populations (fast/slow clearance), P(1)=THETA, MIXNUM and MIXEST in $PK",

@@ -72,7 +72,7 @@ example RStudio); no `Rscript` is needed and nothing is installed.
 
 4. Send the zip file back.
 
-The full kit is one NONMEM run per case (about 80 small FOCE-I fits plus
+The full kit is one NONMEM run per case (about 84 small FOCE-I fits plus
 SAEM/IMP, ITS, FO and LAPLACE cases), so it takes a while;
 `est = "posthoc"` replaces the default FOCE-I fits with `MAXEVAL=0`
 evaluations and still writes every output file. `stressList()` lists the
@@ -85,8 +85,8 @@ cases.
 directory), `bundle=`.
 
 Cases that use NONMEM 7.5 features (tag `nm75`: `$DATA TRANSLATE`, 7.5
-`THETA(CL)` labels, `ADVAN16` delay equations, run with NONMEM's `-dde`
-option, which the kit adds) are reported as `SKIP`, not
+`THETA(CL)` labels, delay equations with `ADVAN16`, `ADVAN18` and `ADVAN13`,
+run with NONMEM's `-dde` option, which the kit adds) are reported as `SKIP`, not
 as failures, when a NONMEM older than 7.5 stops on them. The version is
 read from the NONMEM command (`nmfe743-ifort` is 7.4.3). On 7.5 or later,
 or when the command does not show a version, they are `FAIL` like any
@@ -147,7 +147,9 @@ The output directory (by default `nonmem2rx-stress-<date>-<time>`) has:
     - `ERROR`: the kit itself failed for this case
     - `XFAIL`: a known issue (the diagnosis is in `note`)
     - `XPASS`: a known issue that now passes, so its mark can go
-    - `SKIP`: needs NONMEM 7.5 and a NONMEM older than 7.5 stopped
+    - `SKIP`: needs NONMEM 7.5 and a NONMEM older than 7.5 stopped, or
+      needs a NONMEM licence extension that is not installed (`ADVAN16`
+      needs RADAR5NM)
   - `dryMaxRel`: the largest % difference between the translated model's
     PRED and the rxode2 truth (translate check; passes at 0.01 %)
   - `dryOmegaDiff`/`drySigmaDiff`: the largest relative difference of the
@@ -353,6 +355,8 @@ simulated records, for `RECORDS=`).
 | `table-ipre-alias` | estimation | Legacy 4-character IPRE in code and tables, an extra full table without IPRED listed first, ETAs in a full table |  |
 | `table-repeated-headers` | estimation | Tables longer than 900 records without ONEHEADER (NONMEM repeats the TABLE NO. header block) |  |
 | `dde-advan16-delay` | special | ADVAN16 delay differential equation: delayed drug effect via AD_1_1 with TAU1 and constant past AP_1_1 |  |
+| `dde-advan18-delay` | special | ADVAN18 (DDE_SOLVER) delay differential equation: AD_1_1 with TAU1 and constant past AP_1_1 |  |
+| `dde-advan13-delay` | special | ADVAN13 delay differential equation through NONMEM's -dde expansion: AD_1_1 with TAU1 and constant past AP_1_1 |  |
 | `mix-two-clearance` | special | $MIX with two sub-populations (fast/slow clearance), P(1)=THETA, MIXNUM and MIXEST in $PK |  |
 
 `known`: "always" cases are XFAIL in both modes (a translation problem);

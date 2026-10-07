@@ -91,6 +91,12 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
     if (!.nm$ok) {
       .why <- .kitNonmemError(.dir)
       .res$note <- paste("NONMEM did not finish:", .why)
+      if (startsWith(.why, "licence:")) {
+        ## e.g. ADVAN16/17 need the RADAR5NM licence extension
+        .res$status <- "SKIP"
+        .res$note <- paste("needs a NONMEM licence extension;", .why)
+        return(.kitFinish(.res, case, .tol, .dir))
+      }
       if ("nm75" %in% case$tags) {
         ## cases using NONMEM 7.5 features are skipped, not failed, only on
         ## a NONMEM known to be older than 7.5
