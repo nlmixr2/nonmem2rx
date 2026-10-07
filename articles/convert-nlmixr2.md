@@ -47,8 +47,6 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
-#> ℹ reading in ext file
-#> ℹ done
 #> ℹ reading in phi file
 #> ℹ done
 #> ℹ reading in lst file
@@ -439,7 +437,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.8622351        0.02 0.054    0.002 100.95      1.101
+#> elapsed 0.8493785       0.019 0.048    0.001 100.95      1.085
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 

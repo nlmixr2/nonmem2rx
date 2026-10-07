@@ -13,8 +13,6 @@ mod <- nonmem2rx(ctlFile, lst=".res", save=FALSE, determineError=FALSE)
 #> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl'
 #> ℹ reading in xml file
 #> ℹ done
-#> ℹ reading in ext file
-#> ℹ done
 #> ℹ reading in phi file
 #> ℹ done
 #> ℹ reading in lst file

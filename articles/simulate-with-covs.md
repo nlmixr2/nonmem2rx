@@ -36,8 +36,6 @@ wbc <- nonmem2rx(wbcModel)
 #> ℹ getting information from  '/home/runner/work/_temp/Library/nonmem2rx/wbc/wbc.lst'
 #> ℹ reading in xml file
 #> ℹ done
-#> ℹ reading in ext file
-#> ℹ done
 #> ℹ reading in phi file
 #> ℹ done
 #> ℹ reading in lst file
@@ -423,7 +421,7 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:46
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:47
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")

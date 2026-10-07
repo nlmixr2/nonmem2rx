@@ -29,8 +29,6 @@ mod <- nonmem2rx("pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl")
 #> ℹ getting information from  'pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl'
 #> ℹ reading in xml file
 #> ℹ done
-#> ℹ reading in ext file
-#> ℹ done
 #> ℹ reading in phi file
 #> ℹ done
 #> ℹ reading in lst file
@@ -540,7 +538,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.7156326       0.027  0.06    0.001 320.27      1.328
+#> elapsed 0.8544686       0.032 0.061    0.001 320.27      1.245
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -777,9 +775,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.816208 3.247312   19.20389      0.043       0.023  0.07    0.001
+#> elapsed 2.711637  3.03808   18.98364      0.044       0.021 0.062    0.001
 #>             other
-#> elapsed 0.1195916
+#> elapsed 0.1086426
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -963,7 +961,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.7156326       0.027  0.06    0.001 320.27      1.328     41.754
+#> elapsed 0.8544686       0.032 0.061    0.001 320.27      1.245     40.467
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 

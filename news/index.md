@@ -2,6 +2,72 @@
 
 ## nonmem2rx 0.1.12
 
+- Added a NONMEM stress kit in `inst/stress` (like babelmixr2’s). It
+  simulates edge-case datasets with rxode2, runs NONMEM, imports the
+  runs with [`nonmem2rx()`](../reference/nonmem2rx.md) and checks the
+  import; without NONMEM it checks the translations only. Load it with
+  `source(system.file("stress", "stress.R", package = "nonmem2rx"))` and
+  run `stressCheck()` and `stressKit()`; see `inst/stress/README.md`.
+
+- Runs with several `$EST` records (for example ITS followed by FOCE)
+  now import the final estimates. NONMEM writes one table per estimation
+  step to the `.ext`, `.phi`, `.cov`, `.cor`, `.coi` and `.grd` files
+  and one block per step to the `.xml` and `.lst` files, and
+  [`nmext()`](../reference/nmext.md),
+  [`nmcov()`](../reference/nmcov.md),
+  [`nmgrd()`](../reference/nmgrd.md),
+  [`nmxml()`](../reference/nmxml.md), [`nmlst()`](../reference/nmlst.md)
+  and [`nminfo()`](../reference/nminfo.md) read the first step. The
+  model was then validated with the first step’s estimates against
+  tables from the last step. They now use the last estimation step of
+  the first problem.
+
+- First-order (`METHOD=0`) runs now validate with the POSTHOC etas from
+  the output tables. NONMEM leaves every `.phi` eta at zero for FO, and
+  the `.phi` etas were preferred.
+
+- [`nmxml()`](../reference/nmxml.md) now reads `$SIGMA` (its XPath was
+  malformed, so it was never found), and returns `NULL` instead of an
+  empty vector when `$OMEGA` is missing.
+
+- `ADVAN12 TRANS4` (`CL V2 Q3 V3 Q4 V4 KA`) models now translate to a
+  working `linCmt()` model. The parameter map was registered under
+  `TRANS2`, so the model kept an unresolved `linCmtFun` parameter and
+  could not be solved. A closed-form `ADVAN`/`TRANS` combination without
+  a `linCmt()` translation is now an error instead.
+
+- `ADVAN4 TRANS6` (`ALPHA BETA K32 KA`) models now translate to
+  `linCmt()`.
+
+- A `$MODEL` that mixes named and bare `COMP` records (for example
+  `COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP`) now renames the named
+  compartments. Previously the rename failed silently, and
+  `ADVAN5`/`ADVAN7` models then stopped with an rxode2 syntax error
+  because the matrix-exponential code used the names the rename should
+  have applied.
+
+- Abbreviated code now accepts the Fortran `.NOT.` operator and the `/=`
+  and `.NEN.` not-equal operators (previously a syntax error).
+
+- Model validation now matches the rxode2 solve to the NONMEM records by
+  row, so it is no longer skipped when the lengths differ: models with
+  `MTIME` (rxode2 adds output at the model event times) and data with
+  compartment-off (`CMT<0`) records now validate.
+
+- PRED validation now treats a reused, non-contiguous NONMEM `ID` as a
+  new individual (as IPRED validation already did). IPRED validation
+  also keeps ETAs aligned for reused IDs instead of skipping the check.
+
+- Validation no longer stops with “object ‘.iwres’ not found” when the
+  IPRED solve fails.
+
+- `$OMEGA`/`$SIGMA` `BLOCK(n)` records using the `SD`, `CORRELATION` or
+  `CHOLESKY` options now import the whole block. Previously only the
+  first row was kept (for example `BLOCK(2) SD CORRELATION 0.3 0.5 0.2`
+  became `eta1 ~ 0.09` and `eta2` was lost). `CHOLESKY` values are now
+  read as the lower-triangular factor, and `FIX` is kept through the
+  conversion.
+
 - Models that refer to `DV` (for example `IRES = DV - IPRED` in
   `$ERROR`) no longer simulate wrong amounts when doses have modeled lag
   times and durations in more than one compartment
@@ -39,6 +105,8 @@
   for a tibble while the `IPRED` validation beside it asked for a
   `data.frame`, so where `tibble` was unavailable the solve failed
   quietly and only the `IPRED` half of `$meta$validation` was reported.
+  The tibble also failed, whatever was installed, for models that output
+  a variable twice (such as `ADVAN5`/`ADVAN7` `matExp()` models).
 
 ## nonmem2rx 0.1.11
 

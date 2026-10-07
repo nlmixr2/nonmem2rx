@@ -38,7 +38,8 @@ nmxml(system.file("mods/cpt/runODE032.xml", package="nonmem2rx"))
 #> eta4 0.0000000 0.00000000 0.0000000 0.07304975
 #> 
 #> $sigma
-#> NULL
+#>      eps1
+#> eps1    1
 #> 
 #> $cov
 #>                  theta1        theta2        theta3        theta4        theta5

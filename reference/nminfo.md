@@ -118,6 +118,10 @@ nminfo(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
 #> eta3 0.0000000 0.00000000 0.1013027 0.00000000
 #> eta4 0.0000000 0.00000000 0.0000000 0.07304975
 #> 
+#> $sigma
+#>      eps1
+#> eps1    1
+#> 
 #> $cov
 #>                  theta1        theta2        theta3        theta4        theta5
 #> theta1     8.876810e-04 -1.055098e-04  1.844162e-04 -1.202337e-04  5.278300e-08
@@ -360,7 +364,7 @@ nminfo(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
 #> 120 120  0.55679800 -0.17809900 -0.18922100 -0.178665000
 #> 
 #> $uses
-#> [1] "xml" "ext" "phi" "lst" "grd"
+#> [1] "xml" "phi" "lst" "grd"
 #> 
 #> $thetaGrad
 #> NULL
@@ -371,18 +375,14 @@ nminfo(system.file("mods/cpt/runODE032.res", package="nonmem2rx"))
 #> $omegaSource
 #> [1] "xml"
 #> 
+#> $sigmaSource
+#> [1] "xml"
+#> 
 #> $covSource
 #> [1] "xml"
 #> 
 #> $objfSource
 #> [1] "xml"
-#> 
-#> $sigma
-#>      eps1
-#> eps1    1
-#> 
-#> $sigmaSource
-#> [1] "ext"
 #> 
 #> $rawGrad
 #>    ITERATION       GRD(1)       GRD(2)       GRD(3)       GRD(4)       GRD(5) 
