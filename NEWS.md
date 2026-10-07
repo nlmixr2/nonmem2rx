@@ -6,6 +6,15 @@
   `DV` a time-varying covariate, which exposed a bug in `rxode2`; this
   needs `rxode2` 5.1.8 or later.
 
+* `$TABLE` records now accept the `VARCALC=` and `FIXEDETAS=` options
+  instead of stopping with a syntax error (#262).  They only change how
+  NONMEM computes extra table metrics, so they are parsed and ignored.
+  Unrecognised `KEY=VALUE` `$TABLE` options now also accept numeric and
+  quoted values, and their value (for example `FOO=ETA1`) is no longer
+  mistaken for a table column.
+
+* A `$TABLE` `PARAFILE=` value no longer replaces the table's `FILE=` name.
+
 * Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
   record name used in syntax-error messages was stored in the parser's
   duplicated-string pool, which is freed after every parse, so a later syntax
