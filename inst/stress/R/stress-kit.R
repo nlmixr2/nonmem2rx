@@ -33,6 +33,17 @@ stressFindNonmem <- function() {
   paste(nonmem, "{ctl} {lst}")
 }
 
+#' NONMEM version from the run command (nmfe751-ifort -> 7.5.1)
+#'
+#' @param nonmem NONMEM command
+#' @return numeric_version, or NA when the command does not show it
+.stressNmVersion <- function(nonmem) {
+  .cmd <- basename(strsplit(trimws(gsub("[\"']", "", nonmem)), " +")[[1]][1])
+  .m <- regmatches(.cmd, regexec("nmfe([0-9])([0-9])([0-9]?)", .cmd))[[1]]
+  if (length(.m) != 4L) return(NA)
+  numeric_version(paste(c(.m[2], .m[3], if (nzchar(.m[4])) .m[4]), collapse="."))
+}
+
 #' Package versions for the report
 #'
 #' @return markdown list lines
@@ -70,6 +81,11 @@ stressCheck <- function(nonmem=NULL) {
   .nm <- if (is.null(nonmem)) stressFindNonmem() else nonmem
   message(paste(stressVersions(), collapse="\n"))
   message("- NONMEM: ", if (nzchar(.nm)) .nm else "not found (give it with nonmem=)")
+  if (nzchar(.nm)) {
+    .v <- .stressNmVersion(.nm)
+    message("- NONMEM version (from the command): ",
+            if (is.na(.v)) "unknown; cases needing NONMEM 7.5 fail rather than skip" else format(.v))
+  }
   message("- cases: ", length(.kitEnv$cases))
   invisible(.nm)
 }
@@ -162,7 +178,11 @@ stressKit <- function(nonmem=NULL, modes=c("translate", "run"), cases=NULL,
   writeLines(utils::capture.output(utils::sessionInfo()),
              file.path(out, "sessionInfo.txt"))
   message(paste(stressVersions(), collapse="\n"))
-  if (.run) message("- NONMEM: ", .nm)
+  if (.run) {
+    message("- NONMEM: ", .nm)
+    .kitEnv$nmVersion <- .stressNmVersion(.nm)
+    on.exit(.kitEnv$nmVersion <- NULL, add=TRUE)
+  }
   .res <- runKit(mode=if (.run) "full" else "dry", cases=names(.cases),
                  nmfe=if (.run) .stressNmfe(.nm) else NULL, est=est,
                  nSub=nSub, jobs=jobs, out=out, timeout=timeout)

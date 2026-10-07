@@ -86,9 +86,11 @@ directory), `bundle=`.
 
 Cases that use NONMEM 7.5 features (tag `nm75`: `$DATA TRANSLATE`, 7.5
 `THETA(CL)` labels, `ADVAN16` delay equations) are reported as `SKIP`, not
-as failures, when an older NONMEM stops on them; run them on NONMEM 7.5
-with `stressKit(nonmem = "nmfe75", tags = "nm75")`.  NONMEM 7.6 is not
-needed.
+as failures, when a NONMEM older than 7.5 stops on them. The version is
+read from the NONMEM command (`nmfe743-ifort` is 7.4.3). On 7.5 or later,
+or when the command does not show a version, they are `FAIL` like any
+other case. Run them on NONMEM 7.5 with
+`stressKit(nonmem = "nmfe75", tags = "nm75")`. NONMEM 7.6 is not needed.
 
 ### Without NONMEM
 
@@ -144,7 +146,7 @@ The output directory (by default `nonmem2rx-stress-<date>-<time>`) has:
     - `ERROR`: the kit itself failed for this case
     - `XFAIL`: a known issue (the diagnosis is in `note`)
     - `XPASS`: a known issue that now passes, so its mark can go
-    - `SKIP`: needs NONMEM 7.5 and an older NONMEM stopped
+    - `SKIP`: needs NONMEM 7.5 and a NONMEM older than 7.5 stopped
   - `dryMaxRel`: the largest % difference between the translated model's
     PRED and the rxode2 truth (translate check; passes at 0.01 %)
   - `dryOmegaDiff`/`drySigmaDiff`: the largest relative difference of the
@@ -153,7 +155,8 @@ The output directory (by default `nonmem2rx-stress-<date>-<time>`) has:
     rxode2's IPRED/PRED (passes at 1 %); `ipredQ95`/`predQ95`: the 95th
     percentiles (pass at 5 %); missing rxode2 predictions count as
     infinite, and both IPRED and PRED must validate
-  - `nmSeconds`: how long NONMEM took; `note`: what went wrong
+  - `nmSeconds`: how long NONMEM took; `note`: what went wrong (for a
+    NONMEM failure, NM-TRAN's message and the characters in error)
 - `summary.md`: the versions (including the nonmem2rx git commit) and a
   table of every case.
 - `sessionInfo.txt`: the R session.
@@ -314,7 +317,7 @@ simulated records, for `RECORDS=`).
 | `records-limit` | data | RECORDS=n reading only the first n data records; trailing records belong to a junk subject |  |
 | `clock-time-date` | data | Clock times (HH:MM) with DATE=DROP (MM/DD/YYYY), crossing midnight and Feb 29 |  |
 | `clock-time-dat1` | data | Clock times with DAT1 (DD/MM/YYYY) day-first dates |  |
-| `translate-time-days` | data | $DATA TRANSLATE=(TIME/24/4 II/24/4): file in hours, model in days (NONMEM 7.5+) |  |
+| `translate-time-days` | data | $DATA TRANSLATE=(TIME/24 II/24): file in hours, model in days (NONMEM 7.5+) |  |
 | `repeated-nonmonotone-ids` | data | Non-monotone ID values reused by non-contiguous individuals (10, 2, 7, 10, 2, ...) |  |
 | `lowercase-input` | data | Lower-case $INPUT labels (id time amt dv ...) with upper-case abbreviated code |  |
 | `reserved-columns` | data | Data columns that are reserved in rxode2 (DUR informational, SIM replicate, TAD) next to fixed-RATE infusions |  |

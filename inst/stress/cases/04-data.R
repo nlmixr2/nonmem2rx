@@ -179,7 +179,7 @@ kitCase(
 
 kitCase(
   name="translate-time-days",
-  covers="$DATA TRANSLATE=(TIME/24/4 II/24/4): file in hours, model in days (NONMEM 7.5+)",
+  covers="$DATA TRANSLATE=(TIME/24 II/24): file in hours, model in days (NONMEM 7.5+)",
   tags=c("data", "translate", "nm75"),
   sim=function() {
     ini({
@@ -198,7 +198,8 @@ kitCase(
   data=function(nSub) {
     .id <- seq_len(nSub)
     nmBind(nmDose(.id, 0, amt=100, cmt=1, addl=1, ii=1),
-           nmObs(.id, c(0.0125, 0.025, 0.05, 0.1, 0.25, 0.5, 0.9, 1.1, 1.5, 2), cmt=2))
+           ## days that need at most 2 decimals, whatever TRANSLATE rounds to
+           nmObs(.id, c(0.02, 0.05, 0.1, 0.15, 0.25, 0.5, 0.9, 1.1, 1.5, 2), cmt=2))
   },
   write=function(d) {
     d$TIME <- d$TIME * 24
@@ -206,7 +207,7 @@ kitCase(
     d
   },
   ctl=sub("THETA (0, 3) (0, 30) (0, 1.2)", "THETA (0, 72) (0, 30) (0, 28.8)",
-          .oral1Ctl(data="IGNORE=@ TRANSLATE=(TIME/24/4 II/24/4)"), fixed=TRUE))
+          .oral1Ctl(data="IGNORE=@ TRANSLATE=(TIME/24 II/24)"), fixed=TRUE))
 
 kitCase(
   name="repeated-nonmonotone-ids",

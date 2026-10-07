@@ -329,6 +329,11 @@ kitCase(
 $INPUT {{INPUT}}
 $DATA {{DATA}} IGNORE=@
 $SUBROUTINES ADVAN2 TRANS2
+; the labels must be defined before they are used, so the parameter
+; records come before $PK
+$THETA CL=(0, 3) V=(0, 30) KA=(0, 1.2)
+$OMEGA ECL=0.09 EV=0.04
+$SIGMA PROP=0.01
 $PK
   CL = THETA(CL)*EXP(ETA(ECL))
   V  = THETA(V)*EXP(ETA(EV))
@@ -338,9 +343,6 @@ $ERROR
   IPRED = F
   IWRES = (DV - IPRED)/(0.1*IPRED)
   Y = IPRED + IPRED*EPS(PROP)
-$THETA CL=(0, 3) V=(0, 30) KA=(0, 1.2)
-$OMEGA ECL=0.09 EV=0.04
-$SIGMA PROP=0.01
 {{EST}}
 {{TABLE}}
 ")

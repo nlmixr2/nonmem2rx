@@ -88,12 +88,18 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
     .res$nonmem <- .nm$ok
     .res$nmSeconds <- .nm$seconds
     if (!.nm$ok) {
-      .res$note <- "NONMEM did not finish (see nonmem.log / run.lst)"
-      ## cases using NONMEM 7.5 features are expected to stop in older
-      ## NM-TRANs: report them as skipped, not failed
+      .why <- .kitNonmemError(.dir)
+      .res$note <- paste("NONMEM did not finish:", .why)
       if ("nm75" %in% case$tags) {
-        .res$status <- "SKIP"
-        .res$note <- "needs NONMEM 7.5 or later (NONMEM did not finish; see nonmem.log)"
+        ## cases using NONMEM 7.5 features are skipped, not failed, only on
+        ## a NONMEM known to be older than 7.5
+        .v <- .kitEnv$nmVersion
+        if (!is.null(.v) && !is.na(.v) && .v < "7.5") {
+          .res$status <- "SKIP"
+          .res$note <- paste0("needs NONMEM 7.5 or later (NONMEM ", .v, ": ", .why, ")")
+        } else {
+          .res$note <- paste0(.res$note, " [case uses NONMEM 7.5 features]")
+        }
       }
       return(.kitFinish(.res, case, .tol, .dir))
     }

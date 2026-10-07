@@ -76,3 +76,25 @@ kitRunNonmem <- function(dir, cmd, ctl="run.ctl", lst="run.lst",
   unlink(.f[.scratch])
   invisible()
 }
+## Why NONMEM stopped: NM-TRAN's error (message and the characters in
+## error) or else the last line of nonmem.log
+.kitNonmemError <- function(dir) {
+  .read <- function(f) {
+    f <- file.path(dir, f)
+    if (file.exists(f)) readLines(f, warn=FALSE) else character(0)
+  }
+  .l <- c(.read("run.lst"), .read("nonmem.log"))
+  .e <- grep("AN ERROR WAS FOUND", .l)
+  if (length(.e) > 0L) {
+    .tail <- .l[.e[1]:min(length(.l), .e[1] + 8L)]
+    .chars <- trimws(sub(".*CHARACTERS IN ERROR ARE:", "",
+                         grep("CHARACTERS IN ERROR ARE", .tail, value=TRUE)[1]))
+    .msg <- trimws(grep("^ *[0-9]+ +[A-Z]", .tail, value=TRUE)[1])
+    return(paste0("NM-TRAN ", if (is.na(.msg)) "error" else .msg,
+                  if (!is.na(.chars)) paste0(" at '", .chars, "'")))
+  }
+  .l <- trimws(.read("nonmem.log"))
+  .l <- .l[nzchar(.l)]
+  if (length(.l) == 0L) return("no output (see nonmem.log)")
+  substr(.l[length(.l)], 1, 160)
+}

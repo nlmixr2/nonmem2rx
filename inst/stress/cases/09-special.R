@@ -28,11 +28,13 @@ kitCase(
            nmObs(.id, c(0.5, 2, 6, 12, 24), cmt=1),
            nmObs(.id, c(1, 3, 5, 8, 10, 14, 20, 30, 48), cmt=2))
   },
+  ## laid out like the ADVAN16 examples of Yan et al. 2021 (inst/dde)
   ctl="$PROBLEM {{PROBLEM}}
+;DDE
 $INPUT {{INPUT}}
 $DATA {{DATA}} IGNORE=@
 $SUBROUTINES ADVAN16 TOL=9 ATOL=12
-$MODEL COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP=(RESP)
+$MODEL NCOMPARTMENTS=2
 $PK
   CL   = THETA(1)*EXP(ETA(1))
   V    = THETA(2)
