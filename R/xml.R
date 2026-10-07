@@ -75,8 +75,18 @@ nmxml <- function(xml) {
   .ctl <- strsplit(xml2::xml_text(xml2::xml_find_first(.xml, .ctl)), "\n")[[1]]
   .nmtran <- paste0(.prefix, "nmtran")
   .nmtran <- xml2::xml_text(xml2::xml_find_first(.xml,.nmtran))
-  .obj <- paste0("//", .prefix, "final_objective_function")
-  .obj <- xml2::xml_double(xml2::xml_find_first(.xml,.obj))
+  # several $EST records give several <estimation> nodes; the final
+  # estimates are in the last one (of the first problem) that has them
+  .ests <- xml2::xml_find_all(xml2::xml_find_first(.xml, paste0("//", .prefix, "problem")),
+                              paste0("./", .prefix, "estimation"))
+  .final <- function(name) {
+    for (.e in rev(seq_along(.ests))) {
+      .n <- xml2::xml_find_first(.ests[[.e]], paste0(".//", .prefix, name))
+      if (!is.na(.n)) return(.n)
+    }
+    xml2::xml_find_first(.xml, paste0("//", .prefix, name))
+  }
+  .obj <- xml2::xml_double(.final("final_objective_function"))
   .termInfo <- paste0("//", .prefix, "termination_information")
   .termInfo <- xml2::xml_text(xml2::xml_find_first(.xml, .termInfo))
   .nonmem <- paste0("//", .prefix, "nonmem")
@@ -98,9 +108,7 @@ nmxml <- function(xml) {
   .nmlst$section <- .nmlst.nobs
   lapply(seq_along(.lst), .nmlst.fun, lines=.lst)
 
-  .theta <-  paste0("//", .prefix, "theta")
-  .val <- paste0("//", .prefix, "val")
-  .node <- xml2::xml_find_first(.xml,.theta)
+  .node <- .final("theta")
   .children <- xml2::xml_children(.node)
   .theta <- vapply(seq_along(.children),
                    function(i) {
@@ -112,21 +120,18 @@ nmxml <- function(xml) {
     .theta <- NULL
   }
 
-  .omega <- paste0("//", .prefix, "omega")
   .rowcol <- paste0(.prefix, "row/", .prefix, "col")
-  .omega <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml,.omega),
-                                                .rowcol))
+  .omega <- xml2::xml_double(xml2::xml_find_all(.final("omega"), .rowcol))
   if (length(.omega) > 0) {
     .maxElt <- sqrt(1 + length(.omega) * 8)/2 - 1/2
     .omega <- eval(parse(text=paste0("lotri::lotri({",
                                      paste(paste0("eta", seq_len(.maxElt)), collapse="+"),
                                      "~", deparse1(.omega), "})")))
   } else {
-    .omgea <- NULL
+    .omega <- NULL
   }
 
-  .sigma <- paste0("//", .rowcol, "sigma")
-  .sigma <- xml2::xml_double(xml2::xml_find_all(xml2::xml_find_first(.xml, .sigma),.rowcol))
+  .sigma <- xml2::xml_double(xml2::xml_find_all(.final("sigma"), .rowcol))
   if (length(.sigma) > 0) {
     .maxElt <- sqrt(1 + length(.sigma) * 8)/2 - 1/2
     .sigma <- eval(parse(text=paste0("lotri::lotri({",
@@ -136,9 +141,7 @@ nmxml <- function(xml) {
     .sigma <- NULL
   }
 
-  .cov <- paste0("//", .prefix, "covariance")
-  .cov <- .nmxmlGetCov(xml2::xml_find_first(.xml, .cov),
-                       prefix=.prefix)
+  .cov <- .nmxmlGetCov(.final("covariance"), prefix=.prefix)
   list(theta=.theta,
        omega=.omega,
        sigma=.sigma,

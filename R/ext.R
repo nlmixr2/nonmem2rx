@@ -18,7 +18,8 @@ nmext <- function(file) {
                 objf=NULL))
 
   }
-  .lst <- .lst[.lst$NMREP == 1 & .lst$ITERATION == -1e+09,]
+  # the last estimation step of the first problem holds the final estimates
+  .lst <- .lst[.lst$NMREP == .nmFinalTable(file) & .lst$ITERATION == -1e+09,]
   if (length(.lst$OBJ) == 0L) {
     return(list(theta=NULL,
                 omega=NULL,

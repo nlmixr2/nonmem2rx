@@ -28,6 +28,7 @@
 .linCmtAdvan$`4`$`3` <- c("CL"="cl", "V"="v", "Q"="q", "VSS"="vss", "KA"="ka")
 .linCmtAdvan$`4`$`4` <- c("CL"="cl", "V2"="v2", "Q"="q", "V3"="v3", "KA"="ka")
 .linCmtAdvan$`4`$`5` <- c("AOB"="aob", "ALPHA"="alpha", "BETA"="beta", "KA"="ka", "#"="vc")
+.linCmtAdvan$`4`$`6` <- c("ALPHA"="alpha", "BETA"="beta", "K32"="k32", "KA"="ka", "#"="vc")
 
 .linCmtAdvan$`11` <- new.env(parent=emptyenv())
 .linCmtAdvan$`11`$`1` <- c("K"="k", "K12"="k12", "K21"="k21", "K13"="k13","K31"="k31", "#"="vc")
@@ -35,7 +36,7 @@
 
 .linCmtAdvan$`12` <- new.env(parent=emptyenv())
 .linCmtAdvan$`12`$`1` <- c("KA"="ka", "K"="k", "K23"="k23", "K32"="k32", "K24"="k24", "K42"="k42", "#"="vc")
-.linCmtAdvan$`12`$`2` <- c("CL"="cl", "V2"="Vc", "Q3"="q1", "V3"="Vp1", "Q4"="q2", "V4"="Vp2", "KA"="ka")
+.linCmtAdvan$`12`$`4` <- c("CL"="cl", "V2"="Vc", "Q3"="q1", "V3"="Vp1", "Q4"="q2", "V4"="Vp2", "KA"="ka")
 #' Get the translation of rxode2 to NONMEM
 #'
 #' @param advan advan of NONMEM
@@ -60,7 +61,15 @@
 .getLinCmtModel <- function(model, advan=1, trans=1) {
   if (trans==0) trans <- 1
   .rep <- .getLinCmt(advan=advan, trans=trans)
-  if (is.null(.rep)) return(model)
+  if (is.null(.rep)) {
+    # ODE/general linear ADVANs have nothing to map; a closed-form ADVAN
+    # without a parameter map would keep the linCmtFun placeholder
+    if (advan %in% c(1L, 2L, 3L, 4L, 11L, 12L)) {
+      stop(sprintf("ADVAN%s TRANS%s has no linCmt() translation", advan, trans),
+           call.=FALSE)
+    }
+    return(model)
+  }
   .w <- which(names(.rep) == "#")
   if (length(.w) == 1L) {
     if (length(.nonmem2rx$allVol) == 1L) {

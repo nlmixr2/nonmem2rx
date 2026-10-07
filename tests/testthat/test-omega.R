@@ -214,3 +214,32 @@ test_that("test omega", {
 
 
 })
+
+test_that("SD/CORRELATION/CHOLESKY blocks keep the whole block", {
+  .ini <- function(txt) {
+    .clearNonmem2rx()
+    .Call(`_nonmem2rx_omeganum_reset`)
+    .Call(`_nonmem2rx_trans_omega`, txt, "eta", 0L)
+    .nonmem2rx$ini
+  }
+  ## var = sd^2; cov = cor*sd1*sd2 = 0.5*0.3*0.2
+  expect_equal(.ini("BLOCK(2) SD CORRELATION 0.3 0.5 0.2"),
+               "eta1 + eta2 ~ c(0.09, 0.03, 0.04)")
+  expect_equal(.ini("BLOCK(2) SD CORRELATION\n 0.3\n 0.5 0.2"),
+               "eta1 + eta2 ~ c(0.09, 0.03, 0.04)")
+  ## correlation with variance diagonals
+  expect_equal(.ini("BLOCK(2) CORRELATION 0.09 0.5 0.04"),
+               "eta1 + eta2 ~ c(0.09, 0.03, 0.04)")
+  ## sd diagonals with covariance off-diagonals
+  expect_equal(.ini("BLOCK(2) SD 0.3 0.03 0.2"),
+               "eta1 + eta2 ~ c(0.09, 0.03, 0.04)")
+  ## the fixed status survives the conversion
+  expect_equal(.ini("BLOCK(2) SD CORRELATION FIX 0.3 0.5 0.2"),
+               "eta1 + eta2 ~ fix(0.09, 0.03, 0.04)")
+  expect_equal(.ini("SD 0.2 FIX"), "eta1 ~ fix(0.04)")
+  ## Cholesky: the values are the lower-triangular factor L, omega = L %*% t(L)
+  expect_equal(.ini("BLOCK(2) CHOLESKY 0.3 0.1 0.2"),
+               "eta1 + eta2 ~ c(0.09, 0.03, 0.05)")
+  expect_equal(.ini("BLOCK(3) CHOLESKY 1 0.5 2 0.1 0.2 3"),
+               "eta1 + eta2 + eta3 ~ c(1, 0.5, 4.25, 0.1, 0.45, 9.05)")
+})

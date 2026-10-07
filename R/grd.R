@@ -15,7 +15,8 @@ nmgrd <- function(file) {
   if (is.null(.lst)) {
     return(list(rawGrad=NULL))
   }
-  .lst <- .lst[.lst$NMREP == 1 & .lst$ITERATION == max(.lst$ITERATION),]
+  .lst <- .lst[.lst$NMREP == .nmFinalTable(file), ]
+  .lst <- .lst[.lst$ITERATION == max(.lst$ITERATION),]
   .lst$NMREP <- NULL
   unlist(.lst)
 }

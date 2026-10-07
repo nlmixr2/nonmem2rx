@@ -127,6 +127,58 @@
   cmp
 }
 
+#' Align a validation solve with the NONMEM records it reproduces
+#'
+#' The validation solves keep `rxNmRow`, the row number of each record
+#' in the NONMEM input data.  rxode2 adds output rows that are not data
+#' records (model event times from `mtime()`, with a missing `rxNmRow`)
+#' and drops records that are not output (compartment-off `CMT<0`
+#' records), so the solve is matched to the NONMEM output by row rather
+#' than by length.
+#'
+#' @param solve rxode2 solve with an `rxNmRow` column (or a try-error)
+#' @param outData NONMEM output (table) rows for the records in `rows`
+#' @param rows row numbers (in the NONMEM input data) of `outData`, or
+#'   `NULL` when they are unknown
+#' @param inputData NONMEM input data with the `rxNmRow` column
+#' @return list with the aligned `solve`, `outData` and `inputData`
+#' @noRd
+#' @author Matthew L. Fidler
+.alignNonmemSolve <- function(solve, outData, rows, inputData) {
+  .ret <- list(solve=solve, outData=outData, inputData=inputData)
+  if (is.null(rows) || inherits(solve, "try-error") ||
+        !any(names(solve) == "rxNmRow")) {
+    return(.ret)
+  }
+  .s <- solve[!is.na(solve$rxNmRow), , drop=FALSE]
+  .s <- .s[!duplicated(.s$rxNmRow), , drop=FALSE]
+  .use <- rows %in% .s$rxNmRow
+  list(solve=.s[match(rows[.use], .s$rxNmRow), , drop=FALSE],
+       outData=outData[.use, , drop=FALSE],
+       inputData=inputData[match(rows[.use], inputData$rxNmRow), , drop=FALSE])
+}
+
+#' Convert NONMEM IDs to rxode2 IDs (a reused, non-contiguous ID is a
+#' new individual)
+#'
+#' @param data NONMEM input data
+#' @return data with the ID column converted, or `data` unchanged when it
+#'   has no unique ID column
+#' @noRd
+#' @author Matthew L. Fidler
+.nonmemToRxIdData <- function(data) {
+  .wid <- which(tolower(names(data)) == "id")
+  if (length(.wid) != 1L) return(data)
+  .wtime <- which(tolower(names(data)) == "time")
+  if (length(.wtime) == 1L && is.numeric(data[, .wtime])) {
+    data[, .wid] <- fromNonmemToRxId(as.integer(data[, .wid]), data[, .wtime])
+  } else {
+    data[, .wid] <- fromNonmemToRxId(as.integer(data[, .wid]),
+                                     as.double(seq_along(data[, .wid])))
+  }
+  data
+}
+
 #' Do a validation on a ui setup with nonmem information inside of it
 #'
 #'
@@ -167,6 +219,7 @@
   }
   if (!is.null(.rx$nonmemData) && validate) {
     .nonmemData <- .rx$nonmemData
+    .nonmemData$rxNmRow <- seq_along(.nonmemData[, 1])
     .model <- .rx$simulationModelIwres
     .theta <- .rx$theta
     .ci0 <- .ci <- ci
@@ -178,9 +231,12 @@
     if (!is.null(.rx$etaData) && !is.null(.rx$ipredData)) {
       if (length(.rx$ipredData[,1]) == length(.nonmemData[,1])) {
         .ipredData <- .rx$ipredData[.obsIdx,]
+        .ipredRows <- .obsIdx
       } else {
         .ipredData <- .rx$ipredData
+        .ipredRows <- NULL
       }
+      .iwres <- NULL
       .params <- .rx$etaData
       for (.i in seq_along(.theta)) {
         .params[[names(.theta)[.i]]] <- .theta[.i]
@@ -199,7 +255,13 @@
       .doIpred <- TRUE
       if (length(.wid) == 1L) {
         .widNm <- which(tolower(names(.nonmemData)) == "id")
-        if (.widNm == 1L) {
+        # one ETA row per individual (contiguous run of an ID) in data
+        # order is already aligned; this also covers reused IDs, which
+        # the unique(ID) matching below cannot represent
+        .idRuns <- rle(as.character(.nonmemData[, .widNm]))$values
+        .runsAligned <- length(.idRuns) == length(.params[, 1]) &&
+          all(.idRuns == as.character(.params[, .wid]))
+        if (.widNm == 1L && !.runsAligned) {
           .idNm <- unique(.nonmemData[,.widNm])
           .la <- lapply(.idNm, function(id) {
             .ret <- .params[.params[,.wid] == id,, drop=FALSE]
@@ -240,8 +302,12 @@
                                    ss2cancelAllPending=TRUE,
                                    atol=.atol, rtol=.rtol,
                                    ssAtol=.ssAtol, ssRtol=.ssRtol, omega=NULL,
-                                   addDosing = FALSE))
+                                   addDosing = FALSE, keep="rxNmRow"))
         .minfo("done")
+        .al <- .alignNonmemSolve(.ipredSolve, .ipredData, .ipredRows, .nonmemData)
+        .ipredSolve <- .al$solve
+        .ipredData <- .al$outData
+        .ipredInput <- .al$inputData
       }
       if (.doIpred && !inherits(.ipredSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
@@ -261,7 +327,7 @@
           .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
                              nonmemIPRED=.ipredData$IPRED,
                              IPRED=.ipredSolve[[.y]])
-          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .nonmemData))
+          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .ipredInput))
           .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
@@ -283,14 +349,15 @@
           .minfo(.msg)
         }
       }
-      if (.doIpred && any(names(.ipredData) == "IWRES"))  {
+      if (.doIpred && !inherits(.ipredSolve, "try-error") && !is.null(.iwres) &&
+            any(names(.ipredData) == "IWRES"))  {
         if (length(.ipredData$IWRES) == length(.ipredSolve[[.iwres]])) {
           .wid  <- which(tolower(names(.ipredData)) == "id")
           .wtime  <- which(tolower(names(.ipredData)) == "time")
           .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
                              nonmemIWRES=.ipredData$IWRES,
                              IWRES=.ipredSolve[[.iwres]])
-          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .nonmemData))
+          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .ipredInput))
           .qi <- stats::quantile(with(.cmp, 100*abs((IWRES-nonmemIWRES)/nonmemIWRES)), .q, na.rm=TRUE)
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qai <- stats::quantile(with(.cmp, abs(IWRES-nonmemIWRES)), .q, na.rm=TRUE)
@@ -306,7 +373,7 @@
           .rx$iwresRtol <- .qi[3]/100
           .rx$iwresCompare <- .cmp
         } else {
-          .msg < c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
+          .msg <- c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
                                  length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
                                  length(.nonmemData[,1])))
           .minfo(.msg)
@@ -316,8 +383,10 @@
     if (!is.null(.rx$predData)) {
       if (length(.rx$predData[,1]) == length(.nonmemData[,1])) {
         .predData <- .rx$predData[.obsIdx,]
+        .predRows <- .obsIdx
       } else {
         .predData <- .rx$predData
+        .predRows <- NULL
       }
       .params <- c(.theta,
                    vapply(dimnames(.rx$omega)[[1]],
@@ -334,17 +403,22 @@
       }
       .minfo("solving pred problem")
       # data.frame, like the ipred solve above: "tibble" would need the tibble
-      # package, which nonmem2rx does not depend on, and only names() and [[
-      # are used on the result
-      .predSolve <- try(rxSolve(.model, .params, .nonmemData, returnType = "data.frame",
+      # package, which nonmem2rx does not depend on, and some models (e.g.
+      # matExp) output a variable twice, which as_tibble() rejects
+      .predSolve <- try(rxSolve(.model, .params, .nonmemToRxIdData(.nonmemData),
+                                returnType = "data.frame",
                                 covsInterpolation="nocb",
                                 addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
                                 safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
                                 ss2cancelAllPending=TRUE,
                                 atol=.atol, rtol=.rtol,
                                 ssAtol=.ssAtol, ssRtol=.ssRtol,
-                                addDosing = FALSE))
+                                addDosing = FALSE, keep="rxNmRow"))
       .minfo("done")
+      .al <- .alignNonmemSolve(.predSolve, .predData, .predRows, .nonmemData)
+      .predSolve <- .al$solve
+      .predData <- .al$outData
+      .predInput <- .al$inputData
       if (!inherits(.predSolve, "try-error")) {
         if (is.null(.rx$predDf)) {
           .w <- which(tolower(names(.predSolve)) == "y")
@@ -358,7 +432,7 @@
           .cmp <- data.frame(ID=.predData[,.wid], TIME=.predData[,.wtime],
                              nonmemPRED=.predData$PRED,
                              PRED=.predSolve[[.y]])
-          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.predData, .nonmemData))
+          .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.predData, .predInput))
           .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
           .msg <- c(.msg,
