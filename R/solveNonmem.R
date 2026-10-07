@@ -19,7 +19,8 @@
 #' a statement that does not depend on a state, so with `nonmem = TRUE` it
 #' is evaluated at the record time instead of the integration time.  The
 #' delay differential equation translations (`AD_x_y`) are written that way,
-#' so they keep rxode2's continuous time.
+#' so they keep rxode2's continuous time, as does a model whose code cannot
+#' be checked.
 #'
 #' @param model rxode2 model or ui
 #' @return logical
@@ -28,7 +29,8 @@
 .nonmem2rxUseNonmemSolve <- function(model) {
   if (!.nonmem2rxHasNonmemSolve()) return(FALSE)
   .code <- try(rxode2::rxNorm(model), silent=TRUE)
-  inherits(.code, "try-error") || !any(grepl("\\bdelay\\(", .code))
+  if (inherits(.code, "try-error")) return(FALSE)
+  !any(grepl("\\bdelay\\(", .code))
 }
 
 #' Solve the way NONMEM evaluates the model

@@ -300,8 +300,9 @@
                    "sigma = sigma, ",
                    "envir = envir")
   .formalArgs <- paste(.formalArgs, collapse="")
-  # `nonmem` is only passed when set; rxode2 versions without it reject it
-  # as an unused argument
+  # `nonmem` is only passed when set (by the user or by the default above,
+  # after which missing(nonmem) is FALSE); rxode2 versions without it reject
+  # it as an unused argument
   .formalArgs <- paste0("if (missing(nonmem)) {\n",
                         "rxode2::rxSolve(", .formalArgs, ")\n",
                         "} else {\n",
