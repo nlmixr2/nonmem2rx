@@ -112,8 +112,18 @@ void wprint_parsetree_tab(D_ParserTables pt, D_ParseNode *pn, int depth, print_n
              !strcmp("etas_statement2", name)) {
     tableHasEta=1;
     return;
+  } else if (!strcmp("assign_statement", name)) {
+    // unsupported KEY=VALUE option; the value is not a table column
+    // (e.g. VARCALC=ETA1 should not flag the table as having etas)
+    return;
+  } else if (!strcmp("varcalc_statement", name) ||
+             !strcmp("fixedetas_statement", name)) {
+    // VARCALC= and FIXEDETAS= only change how NONMEM computes extra
+    // table metrics; they do not affect the translation
+    return;
   } else if (!strcmp("parafile_statement", name)) {
     // don't parse the parafile filename statements
+    return;
   } else if (!strcmp("filename_t3", name)) {
     tableFileName = (char*)rc_dup_str(pn->start_loc.s, pn->end);
     return;
