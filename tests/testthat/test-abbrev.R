@@ -9,10 +9,10 @@ test_that("test abbrev", {
 
   .a("MTIME(1)=1.5\nMTIME(2)=2.5\nR1=   400*EXP(ETA(1))*(1-MPAST(1))\nR1=R1+300*EXP(ETA(2))*(MPAST(1)-MPAST(2))\nR1=R1+200*EXP(ETA(3))*MPAST(2)",
      c("mtime(rx.mtime.1.) <- 1.5",
-       "rx.mpast.1. <- ifelse(time >= rx.mtime.1., 1, 0)",
+       "rx.mpast.1. <- ifelse(time > rx.mtime.1., 1, 0)",
        "MNOW <- ifelse(time == rx.mtime.1., 1, 0)",
        "mtime(rx.mtime.2.) <- 2.5",
-       "rx.mpast.2. <- ifelse(time >= rx.mtime.2., 1, 0)",
+       "rx.mpast.2. <- ifelse(time > rx.mtime.2., 1, 0)",
        "MNOW <- ifelse(MNOW == 0 && time == rx.mtime.2., 2, MNOW)",
        "rxrate.rxddta1. <- 400 * exp(eta1) * (1 - rx.mpast.1.)",
        "rate(rxddta1) <- rxrate.rxddta1.",
@@ -23,10 +23,10 @@ test_that("test abbrev", {
 
   .a("MTIME(1) = THETA(3)+ETA(1)\nMTIME(2) = THETA(4)+ETA(5)",
      c("mtime(rx.mtime.1.) <- theta3 + eta1",
-       "rx.mpast.1. <- ifelse(time >= rx.mtime.1., 1, 0)",
+       "rx.mpast.1. <- ifelse(time > rx.mtime.1., 1, 0)",
        "MNOW <- ifelse(time == rx.mtime.1., 1, 0)",
        "mtime(rx.mtime.2.) <- theta4 + eta5",
-       "rx.mpast.2. <- ifelse(time >= rx.mtime.2., 1, 0)",
+       "rx.mpast.2. <- ifelse(time > rx.mtime.2., 1, 0)",
        "MNOW <- ifelse(MNOW == 0 && time == rx.mtime.2., 2, MNOW)"))
 
   .a("IF (TIME > MTIME(1)) KA=THETA(2)", "if (t > rx.mtime.1.) KA <- theta2")

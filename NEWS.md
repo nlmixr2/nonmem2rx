@@ -1,5 +1,12 @@
 # nonmem2rx 0.1.12
 
+* `MPAST(i)` now translates to `time > MTIME(i)` instead of `time >=
+  MTIME(i)`.  NONMEM evaluates the interval that ends at `MTIME(i)` with
+  `MPAST(i) = 0`; it becomes 1 only for later intervals.  With rxode2's
+  continuous time both forms give the same solution, but with
+  `rxSolve(nonmem = TRUE)` the old form moved the change point one interval
+  early (#267).
+
 * Added a NONMEM stress kit in `inst/stress` (like babelmixr2's).  It
   simulates edge-case datasets with rxode2, runs NONMEM, imports the runs
   with `nonmem2rx()` and checks the import; without NONMEM it checks the
