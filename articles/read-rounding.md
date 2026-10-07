@@ -508,7 +508,7 @@ fit <- as.nlmixr2(new)
 #> → finding duplicate expressions in EBE model...
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.9 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.8 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -540,7 +540,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.9443193       0.023 0.051    0.002 320.27       1.42
+#> elapsed 0.6751655       0.025 0.055    0.001 320.27      1.299
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -763,7 +763,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:10 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:11 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -777,9 +777,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.977423 2.912986   17.57542      0.039       0.021 0.062    0.002
+#> elapsed 2.779996 3.124385   19.14877       0.04       0.021  0.07    0.002
 #>             other
-#> elapsed 0.1141684
+#> elapsed 0.1138467
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -809,6 +809,7 @@ fit2
 #> pdadd.err            
 #>  
 #>   Covariance Type (fit2$covMethod): |r|
+#>     other calculated covs (setCov()): r; s; r,s
 #>   Some strong fixed parameter correlations exist (fit2$cor) :
 #>                cor:tka,tktr            cor:tcl,tktr             cor:tv,tktr 
 #>                  0.374                  -0.427                  -0.106   
@@ -854,6 +855,7 @@ fit2
 #>   Full BSV covariance (fit2$omega) or correlation (fit2$omegaR; diagonals=SDs) 
 #>   Distribution stats (mean/skewness/kurtosis/p-value) available in fit2$shrink 
 #>   Information about run found (fit2$runInfo):
+#>    • "r,s (full)" covariance needs a positive-definite R; kept "|r|" 
 #>    • gradient problems with covariance; see $scaleInfo 
 #>    • using R matrix to calculate covariance, can check sandwich or S matrix with $covRS and $covS 
 #>    • R matrix non-positive definite but corrected by R = sqrtm(R%*%R) 
@@ -907,11 +909,12 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:13
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:12
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
 #> $scaleInfo
+#> Warning: "r,s (full)" covariance needs a positive-definite R; kept "r"
 #> Updated original fit object fit
 #>                    tktr           tka           tcl            tv      prop.err
 #> tktr       9.475892e-03 -7.615446e-03 -8.904494e-06  1.633233e-04 -7.552258e-05
@@ -960,7 +963,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.9443193       0.023 0.051    0.002 320.27       1.42     43.801
+#> elapsed 0.6751655       0.025 0.055    0.001 320.27      1.299     41.933
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
