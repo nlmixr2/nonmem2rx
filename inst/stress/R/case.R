@@ -44,6 +44,8 @@
 ## - `sigma`: expected imported $SIGMA matrix (checked in the dry run);
 ##   the imported $OMEGA is always checked against the simulation's
 ##   omega, so etas must be declared in ETA() order in `sim`.
+## - `nmfeArgs`: extra arguments for the NONMEM command, added after the
+##   control stream and listing (e.g. "-dde" for ADVAN16/18 delay models).
 ## - `dryRows`: function(simData) -> logical; observation rows used in
 ##   the dry PRED comparison (e.g. exclude censored M3 rows).
 ## - `dryPred`: FALSE to skip the NONMEM-free PRED comparison (e.g. when
@@ -56,7 +58,8 @@ kitCase <- function(name, covers, tags=character(0), sim, data, ctl,
                     write=NULL, input=NULL, pred=c(sim="sim"),
                     postSim=NULL, tol=list(), known=NULL,
                     est="default", dryPred=TRUE, nSub=NULL, sigma=NULL,
-                    dryOmega=TRUE, dryRows=NULL, knownFull=NULL) {
+                    dryOmega=TRUE, dryRows=NULL, knownFull=NULL,
+                    nmfeArgs=NULL) {
   stopifnot(is.character(name), length(name) == 1L,
             !grepl("[^A-Za-z0-9_-]", name))
   if (!is.null(.kitEnv$cases[[name]])) {
@@ -69,6 +72,7 @@ kitCase <- function(name, covers, tags=character(0), sim, data, ctl,
                                 est=est, dryPred=dryPred, nSub=nSub,
                                 sigma=sigma, dryOmega=dryOmega,
                                 dryRows=dryRows, knownFull=knownFull,
+                                nmfeArgs=nmfeArgs,
                                 file=.kitEnv$curFile)
   invisible(name)
 }

@@ -84,7 +84,8 @@ kitRunCase <- function(case, outDir, mode="dry", nSub=20L, seed=42L,
   }
   if (mode == "full") {
     if (is.null(nmfe)) stop("full mode needs a NONMEM command (--nmfe)", call.=FALSE)
-    .nm <- kitRunNonmem(.dir, nmfe, timeout=timeout)
+    .nm <- kitRunNonmem(.dir, paste(c(nmfe, case$nmfeArgs), collapse=" "),
+                        timeout=timeout)
     .res$nonmem <- .nm$ok
     .res$nmSeconds <- .nm$seconds
     if (!.nm$ok) {

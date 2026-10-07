@@ -85,7 +85,8 @@ cases.
 directory), `bundle=`.
 
 Cases that use NONMEM 7.5 features (tag `nm75`: `$DATA TRANSLATE`, 7.5
-`THETA(CL)` labels, `ADVAN16` delay equations) are reported as `SKIP`, not
+`THETA(CL)` labels, `ADVAN16` delay equations, run with NONMEM's `-dde`
+option, which the kit adds) are reported as `SKIP`, not
 as failures, when a NONMEM older than 7.5 stops on them. The version is
 read from the NONMEM command (`nmfe743-ifort` is 7.4.3). On 7.5 or later,
 or when the command does not show a version, they are `FAIL` like any
@@ -260,8 +261,8 @@ Rules of thumb:
 - `kitVariant(base, name, covers, ...)` reuses a case with some fields
   overridden. `known=` / `knownFull=` record an understood failure.
 
-Other hooks: `input=` (explicit `$INPUT`), `postSim=` (custom DV, e.g.
-BLQ), `dryRows=` (rows used in the dry comparison), `sigma=` (expected
+Other hooks: `input=` (explicit `$INPUT`), `nmfeArgs=` (extra NONMEM
+command arguments, like `"-dde"`), `postSim=` (custom DV, e.g. BLQ), `dryRows=` (rows used in the dry comparison), `sigma=` (expected
 `$SIGMA`), `est=` (case-specific estimation records), `nSub=`,
 `dryPred=FALSE`, `dryOmega=FALSE`, `tol=`. Placeholders: `{{PROBLEM}}`,
 `{{INPUT}}`, `{{DATA}}`, `{{EST}}`, `{{TABLE}}`, `{{NSIM}}` (number of
