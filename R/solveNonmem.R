@@ -27,9 +27,13 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .nonmem2rxUseNonmemSolve <- function(model) {
-  if (!.nonmem2rxHasNonmemSolve()) return(FALSE)
-  .code <- try(rxode2::rxNorm(model), silent=TRUE)
-  if (inherits(.code, "try-error")) return(FALSE)
+  if (!.nonmem2rxHasNonmemSolve()) {
+    return(FALSE)
+  }
+  .code <- try(rxode2::rxNorm(model), silent = TRUE)
+  if (inherits(.code, "try-error")) {
+    return(FALSE)
+  }
   !any(grepl("\\bdelay\\(", .code))
 }
 
