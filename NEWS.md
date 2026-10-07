@@ -7,6 +7,20 @@
   `rxSolve(nonmem = TRUE)` the old form moved the change point one interval
   early (#267).
 
+* When rxode2 supports `rxSolve(nonmem = TRUE)` (nlmixr2/rxode2#1429),
+  `rxSolve()` on a `nonmem2rx` model and the validation of an import solve
+  with `nonmem = TRUE` and `addlKeepsCov = FALSE`.  Statements that do not
+  depend on a state (`$PK`) then read `time` as the time of the data record
+  that ends the interval, the way NONMEM calls `$PK` at its records.  With
+  `covsInterpolation = "nocb"` this matches NONMEM for `TIME` in `$PK`,
+  `MTIME` change points and covariates changing between `ADDL` doses.  With
+  older rxode2 versions the solve keeps `addlKeepsCov = TRUE` as before.
+  Models with `delay()` (the `ADVAN16`/`ADVAN18` translations) keep the
+  continuous time, since rxode2 evaluates a `delay()` assigned outside of
+  `d/dt()` at the record time with `nonmem = TRUE`.  The stress kit uses the
+  same options, so its `time-in-pk` and `mtime-change-point` cases are no
+  longer known issues with a newer rxode2 (#267).
+
 * Added a NONMEM stress kit in `inst/stress` (like babelmixr2's).  It
   simulates edge-case datasets with rxode2, runs NONMEM, imports the runs
   with `nonmem2rx()` and checks the import; without NONMEM it checks the

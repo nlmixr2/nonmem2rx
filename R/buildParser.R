@@ -106,6 +106,7 @@
   .first <- paste(.first,
                   "..., ",
                   "cores,",
+                  "nonmem, ",
                   'covsInterpolation = c("locf", "linear", "nocb", "midpoint"), ',
                   'naInterpolation = c("locf", "nocb"), ',
                   "addlKeepsCov = FALSE, ",
@@ -134,9 +135,18 @@
       covsInterpolation <- "nocb"
       .minfo("using nocb interpolation like NONMEM, specify directly to change")
     }
+    if (missing(nonmem) && .nonmem2rxUseNonmemSolve(object)) {
+      .minfo("using nonmem=TRUE so $PK-like statements read the record time like NONMEM, specify directly to change")
+      nonmem <- TRUE
+    }
     if (missing(addlKeepsCov)) {
-      .minfo("using addlKeepsCov=TRUE like NONMEM, specify directly to change")
-      addlKeepsCov <- TRUE
+      if (!missing(nonmem) && isTRUE(nonmem)) {
+        .minfo("using addlKeepsCov=FALSE with nonmem=TRUE like NONMEM, specify directly to change")
+        addlKeepsCov <- FALSE
+      } else {
+        .minfo("using addlKeepsCov=TRUE like NONMEM, specify directly to change")
+        addlKeepsCov <- TRUE
+      }
     }
     if (missing(addlDropSs)) {
       .minfo("using addlDropSs=TRUE like NONMEM, specify directly to change")
@@ -290,7 +300,13 @@
                    "sigma = sigma, ",
                    "envir = envir")
   .formalArgs <- paste(.formalArgs, collapse="")
-  .formalArgs <- paste0("rxode2::rxSolve(", .formalArgs, ")")
+  # `nonmem` is only passed when set; rxode2 versions without it reject it
+  # as an unused argument
+  .formalArgs <- paste0("if (missing(nonmem)) {\n",
+                        "rxode2::rxSolve(", .formalArgs, ")\n",
+                        "} else {\n",
+                        "rxode2::rxSolve(", .formalArgs, ", nonmem = nonmem)\n",
+                        "}")
   .args <- c(.args, .formalArgs, "}")
   .args <- paste(.args, collapse="\n")
   .args <- c("# This is built from buildParser.R, edit there",

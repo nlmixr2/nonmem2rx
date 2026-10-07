@@ -106,7 +106,7 @@ kitDryPred <- function(m, simPred, simData, dryRows=NULL) {
   .wt <- which(toupper(names(.nd)) == "TIME")[1]
   .toRxId <- utils::getFromNamespace("fromNonmemToRxId", "nonmem2rx")
   .nd[[.wid]] <- .toRxId(as.integer(.nd[[.wid]]), as.double(.nd[[.wt]]))
-  .opts <- .kitSolveOpts
+  .opts <- c(.kitSolveOpts, .kitModelOpts(.model))
   .opts[c("atol", "rtol", "ssAtol", "ssRtol")] <- list(m$atol, m$rtol, m$ssAtol, m$ssRtol)
   .opts <- .opts[!vapply(.opts, is.null, logical(1))]
   .s <- suppressMessages(do.call(rxode2::rxSolve,
