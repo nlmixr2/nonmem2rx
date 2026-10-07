@@ -104,8 +104,8 @@ kitDryPred <- function(m, simPred, simData, dryRows=NULL) {
   ## a reused, non-contiguous NONMEM ID is a new individual
   .wid <- which(toupper(names(.nd)) == "ID")[1]
   .wt <- which(toupper(names(.nd)) == "TIME")[1]
-  .nd[[.wid]] <- nonmem2rx:::fromNonmemToRxId(as.integer(.nd[[.wid]]),
-                                              as.double(.nd[[.wt]]))
+  .toRxId <- utils::getFromNamespace("fromNonmemToRxId", "nonmem2rx")
+  .nd[[.wid]] <- .toRxId(as.integer(.nd[[.wid]]), as.double(.nd[[.wt]]))
   .opts <- .kitSolveOpts
   .opts[c("atol", "rtol", "ssAtol", "ssRtol")] <- list(m$atol, m$rtol, m$ssAtol, m$ssRtol)
   .opts <- .opts[!vapply(.opts, is.null, logical(1))]

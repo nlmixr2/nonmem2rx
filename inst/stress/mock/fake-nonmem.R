@@ -34,7 +34,7 @@ suppressMessages({
 .lower <- function(mat, lab) {
   if (is.null(mat)) return(NULL)
   .n <- nrow(mat)
-  .v <- c(); .nm <- c()
+  .v <- numeric(0); .nm <- character(0)
   for (.i in seq_len(.n)) for (.j in seq_len(.i)) {
     .v <- c(.v, mat[.i, .j]); .nm <- c(.nm, sprintf("%s(%d,%d)", lab, .i, .j))
   }

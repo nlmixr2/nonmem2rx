@@ -32,13 +32,13 @@ $COV MATRIX=R UNCONDITIONAL")
 
 .estCase("est-fo-posthoc",
          "First-order (METHOD=0) estimation with POSTHOC etas",
-         c("fo"),
+         "fo",
          est="$EST METHOD=0 MAXEVAL=9999 POSTHOC PRINT=5 NOABORT
 $COV UNCONDITIONAL")
 
 .estCase("est-maxeval0",
          "MAXEVAL=0 POSTHOC evaluation only (final estimates = initial estimates)",
-         c("maxeval0"),
+         "maxeval0",
          est="$EST METHOD=1 INTER MAXEVAL=0 POSTHOC")
 
 .estCase("table-noheader-format",
