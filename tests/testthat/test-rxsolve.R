@@ -14,6 +14,16 @@ withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE, nonmem2rx.o
     s <- .rxSolve(f)
     expect_true(inherits(s, "rxSolve"))
     expect_equal(s$env$.args$covsInterpolation, 2L)
+    if (.nonmem2rxHasNonmemSolve()) {
+      # $PK-like statements read the record time like NONMEM (#267)
+      expect_true(s$env$.args$nonmem)
+      expect_false(s$env$.args$addlKeepsCov)
+      s <- .rxSolve(f, nonmem=FALSE)
+      expect_false(s$env$.args$nonmem)
+      expect_true(s$env$.args$addlKeepsCov)
+    } else {
+      expect_true(s$env$.args$addlKeepsCov)
+    }
     s <- rxSolve(f, nStud=1)
     expect_equal(s$env$.args$dfObs, 2280)
     expect_equal(s$env$.args$dfSub, 120)

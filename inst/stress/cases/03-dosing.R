@@ -516,7 +516,6 @@ kitCase(
   name="mtime-change-point",
   covers="MTIME/MPAST model event time switching KA at an estimated time (ADVAN2)",
   tags=c("dosing", "mtime", "advan2"),
-  known="rxode2 linCmt() and the equivalent ODE disagree (~1%) when KA switches at mtime(); compare with NONMEM in full mode",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka1 <- 2; tka2 <- 0.2; tchg <- 1.5
@@ -527,7 +526,8 @@ kitCase(
       cl <- tcl * exp(eta.cl); v <- tv * exp(eta.v)
       mtime(tswitch) <- tchg
       ka <- tka1
-      if (t >= tchg) ka <- tka2
+      ## like MPAST(1): NONMEM's $PK call at MTIME(1) still has MPAST(1)=0
+      if (t > tchg) ka <- tka2
       d/dt(depot) <- -ka * depot
       d/dt(central) <- ka * depot - cl / v * central
       ipred <- central / v

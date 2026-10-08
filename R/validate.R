@@ -295,9 +295,9 @@
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
-        .ipredSolve <- try(rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
+        .ipredSolve <- try(.nonmem2rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
                                    covsInterpolation="nocb",
-                                   addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
+                                   addlDropSs=TRUE, ssAtDoseTime=TRUE,
                                    safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
                                    ss2cancelAllPending=TRUE,
                                    atol=.atol, rtol=.rtol,
@@ -405,10 +405,10 @@
       # data.frame, like the ipred solve above: "tibble" would need the tibble
       # package, which nonmem2rx does not depend on, and some models (e.g.
       # matExp) output a variable twice, which as_tibble() rejects
-      .predSolve <- try(rxSolve(.model, .params, .nonmemToRxIdData(.nonmemData),
+      .predSolve <- try(.nonmem2rxSolve(.model, .params, .nonmemToRxIdData(.nonmemData),
                                 returnType = "data.frame",
                                 covsInterpolation="nocb",
-                                addlKeepsCov=TRUE, addlDropSs=TRUE, ssAtDoseTime=TRUE,
+                                addlDropSs=TRUE, ssAtDoseTime=TRUE,
                                 safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
                                 ss2cancelAllPending=TRUE,
                                 atol=.atol, rtol=.rtol,

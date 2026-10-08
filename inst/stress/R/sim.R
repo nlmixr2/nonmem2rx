@@ -3,13 +3,24 @@
 ## The NONMEM-faithful solving options used here are the same ones
 ## nonmem2rx uses when it validates an import (see R/validate.R), so
 ## the simulated "truth" follows NONMEM event semantics (nocb covariate
-## interpolation, ADDL keeps covariates, SS at dose time, ...).
+## interpolation, SS at dose time, ...).  When rxode2 has
+## rxSolve(nonmem=TRUE), $PK-like statements read the record time and
+## ADDL doses do not keep the covariates of their dose record; otherwise
+## ADDL keeps covariates (see .kitModelOpts()).
 
-.kitSolveOpts <- list(covsInterpolation="nocb", addlKeepsCov=TRUE,
+.kitHasNonmemSolve <- utils::getFromNamespace(".nonmem2rxHasNonmemSolve", "nonmem2rx")()
+
+.kitSolveOpts <- list(covsInterpolation="nocb",
                       addlDropSs=TRUE, ssAtDoseTime=TRUE,
                       ss2cancelAllPending=TRUE, safeZero=FALSE,
                       safePow=FALSE, safeLog=FALSE,
                       atol=1e-10, rtol=1e-10, ssAtol=1e-10, ssRtol=1e-10)
+
+## the model-dependent options, chosen like nonmem2rx's validation does
+.kitModelOpts <- function(model) {
+  .use <- utils::getFromNamespace(".nonmem2rxUseNonmemSolve", "nonmem2rx")
+  if (.use(model)) list(nonmem=TRUE, addlKeepsCov=FALSE) else list(addlKeepsCov=TRUE)
+}
 
 .kitSeed <- function(name, seed) {
   ## stable per-case seed so cases are reproducible independently
@@ -18,7 +29,8 @@
 
 .kitSolve <- function(ui, d, addDosing=FALSE, ...) {
   .args <- c(list(ui, d, keep="ROWID", returnType="data.frame",
-                  addDosing=addDosing), .kitSolveOpts, list(...))
+                  addDosing=addDosing), .kitSolveOpts, .kitModelOpts(ui),
+             list(...))
   suppressMessages(do.call(rxode2::rxSolve, .args))
 }
 

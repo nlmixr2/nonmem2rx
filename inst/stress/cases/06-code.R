@@ -231,7 +231,7 @@ kitCase(
   name="time-in-pk",
   covers="TIME used in $PK (time-varying CL): NONMEM evaluates $PK only at records, so CL is piecewise constant (next-record value)",
   tags=c("code", "time-in-pk", "ode", "advan13"),
-  known="TIME in $PK is rxode2's continuous time, but NONMEM holds $PK values between records (NONMEM 7.4: IPRED off 0.65% median); needs nocb time for PK values in rxode2 (nlmixr2/rxode2#1429)",
+  known=if (!.kitHasNonmemSolve) "TIME in $PK is rxode2's continuous time, but NONMEM holds $PK values between records (NONMEM 7.4: IPRED off 0.65% median); needs rxSolve(nonmem=TRUE) from a newer rxode2 (nlmixr2/rxode2#1429)",
   sim=function() {
     ini({
       tcl <- 3; tv <- 30; tka <- 1.2; tind <- 1; tkind <- 0.05

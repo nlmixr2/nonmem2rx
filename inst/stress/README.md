@@ -309,7 +309,7 @@ simulated records, for `RECORDS=`).
 | `evid2-time-varying-cov` | dosing | Time-varying covariate changed on EVID=2 records (NONMEM next-observation-carried-backward semantics) |  |
 | `cmt-off-depot` | dosing | Negative CMT on an EVID=2 record turns the depot off (e.g. emesis) mid-absorption | always |
 | `infusion-into-depot` | dosing | Zero-order infusion (RATE>0) into the absorption depot of ADVAN2, overlapping a bolus |  |
-| `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) | always |
+| `mtime-change-point` | dosing | MTIME/MPAST model event time switching KA at an estimated time (ADVAN2) |  |
 | `dose-obs-ties` | dosing | Ties: obs listed before/after a dose and after an SS dose at the same TIME, plus replicate samples at one TIME | always |
 | `mtime-change-point-ode` | dosing | MTIME/MPAST switching KA in an ADVAN13 ODE model |  |
 | `cmt-off-depot-ode` | dosing | Negative CMT on an EVID=2 record turns the depot off in an ADVAN13 ODE model |  |
@@ -337,7 +337,7 @@ simulated records, for `RECORDS=`).
 | `math-functions` | code | DEXP/DLOG/LOG10/DSQRT/DABS/** powers, MIN/MAX, and a probit bioavailability using PHI() |  |
 | `do-while-loop` | code | DO WHILE / ENDDO loop computing an allometric factor |  |
 | `pred-emax-reserved-names` | code | $PRED sigmoid Emax with variables named GAMMA, BETA, LAMBDA (rxode2 function names) and no dose records |  |
-| `time-in-pk` | code | TIME used in $PK (time-varying CL): NONMEM evaluates $PK only at records, so CL is piecewise constant (next-record value) | always |
+| `time-in-pk` | code | TIME used in $PK (time-varying CL): NONMEM evaluates $PK only at records, so CL is piecewise constant (next-record value) | always (rxode2 without `rxSolve(nonmem = TRUE)`) |
 | `retained-pk-variables` | code | Savic transit absorption: dose amount/time kept in $PK variables across records (IF (AMT.GT.0) ...), GAMLN in $DES | always |
 | `err-add-eps` | error | Additive error on EPS with an estimated $SIGMA (Y = IPRED + EPS(1)) |  |
 | `err-exp-eps` | error | Exponential error Y = IPRED*EXP(EPS(1)) (log-normal on the original scale) |  |
