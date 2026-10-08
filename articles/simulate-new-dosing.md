@@ -107,7 +107,8 @@ subjects:
 
 s <- rxSolve(mod, ev)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
-#> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
+#> ℹ using nonmem=TRUE so $PK-like statements read the record time like NONMEM, specify directly to change
+#> ℹ using addlKeepsCov=FALSE with nonmem=TRUE like NONMEM, specify directly to change
 #> ℹ using addlDropSs=TRUE like NONMEM, specify directly to change
 #> ℹ using ssAtDoseTime=TRUE like NONMEM, specify directly to change
 #> ℹ using safeZero=FALSE since NONMEM does not use protection by default

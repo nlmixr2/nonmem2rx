@@ -256,7 +256,8 @@ simply add `resample=TRUE`:
 
 sim <- rxSolve(wbc, resample=TRUE, nStud=500)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
-#> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
+#> ℹ using nonmem=TRUE so $PK-like statements read the record time like NONMEM, specify directly to change
+#> ℹ using addlKeepsCov=FALSE with nonmem=TRUE like NONMEM, specify directly to change
 #> ℹ using addlDropSs=TRUE like NONMEM, specify directly to change
 #> ℹ using ssAtDoseTime=TRUE like NONMEM, specify directly to change
 #> ℹ using safeZero=FALSE since NONMEM does not use protection by default
@@ -273,7 +274,7 @@ sim <- rxSolve(wbc, resample=TRUE, nStud=500)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:06
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:04
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 ```
 
@@ -327,7 +328,8 @@ ev <- merge(pkCov, ev)
 
 sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
-#> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
+#> ℹ using nonmem=TRUE so $PK-like statements read the record time like NONMEM, specify directly to change
+#> ℹ using addlKeepsCov=FALSE with nonmem=TRUE like NONMEM, specify directly to change
 #> ℹ using addlDropSs=TRUE like NONMEM, specify directly to change
 #> ℹ using ssAtDoseTime=TRUE like NONMEM, specify directly to change
 #> ℹ using safeZero=FALSE since NONMEM does not use protection by default
@@ -405,7 +407,8 @@ ev <- merge(pkCov, ev)
 
 sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using nocb interpolation like NONMEM, specify directly to change
-#> ℹ using addlKeepsCov=TRUE like NONMEM, specify directly to change
+#> ℹ using nonmem=TRUE so $PK-like statements read the record time like NONMEM, specify directly to change
+#> ℹ using addlKeepsCov=FALSE with nonmem=TRUE like NONMEM, specify directly to change
 #> ℹ using addlDropSs=TRUE like NONMEM, specify directly to change
 #> ℹ using ssAtDoseTime=TRUE like NONMEM, specify directly to change
 #> ℹ using safeZero=FALSE since NONMEM does not use protection by default
@@ -421,7 +424,7 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:47
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:27
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")

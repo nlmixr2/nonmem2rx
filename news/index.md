@@ -2,6 +2,36 @@
 
 ## nonmem2rx 0.1.12
 
+- `MPAST(i)` now translates to `time > MTIME(i)` instead of
+  `time >= MTIME(i)`. NONMEM evaluates the interval that ends at
+  `MTIME(i)` with `MPAST(i) = 0`; it becomes 1 only for later intervals.
+  With rxode2’s continuous time both forms give the same solution, but
+  with `rxSolve(nonmem = TRUE)` the old form moved the change point one
+  interval early
+  ([\#267](https://github.com/nlmixr2/nonmem2rx/issues/267)).
+
+- When rxode2 supports `rxSolve(nonmem = TRUE)` (nlmixr2/rxode2#1429),
+  [`rxSolve()`](https://nlmixr2.github.io/rxode2/reference/rxSolve.html)
+  on a `nonmem2rx` model and the validation of an import solve with
+  `nonmem = TRUE` and `addlKeepsCov = FALSE`. Statements that do not
+  depend on a state (`$PK`) then read `time` as the time of the data
+  record that ends the interval, the way NONMEM calls `$PK` at its
+  records. With `covsInterpolation = "nocb"` this matches NONMEM for
+  `TIME` in `$PK`, `MTIME` change points and covariates changing between
+  `ADDL` doses. With older rxode2 versions the solve keeps
+  `addlKeepsCov = TRUE` as before. Models with
+  [`delay()`](https://nlmixr2.github.io/rxode2/reference/delay.html)
+  (the `ADVAN16`/`ADVAN18` translations) keep the continuous time, since
+  rxode2 evaluates a
+  [`delay()`](https://nlmixr2.github.io/rxode2/reference/delay.html)
+  assigned outside of `d/dt()` at the record time with `nonmem = TRUE`.
+  The stress kit uses the same options, so its `time-in-pk` case is no
+  longer a known issue with a newer rxode2. Its `mtime-change-point`
+  case is no longer a known issue: the ~1% difference between `linCmt()`
+  and the ODE came from the kit’s own simulation switching at
+  `t >= MTIME`
+  ([\#267](https://github.com/nlmixr2/nonmem2rx/issues/267)).
+
 - Added a NONMEM stress kit in `inst/stress` (like babelmixr2’s). It
   simulates edge-case datasets with rxode2, runs NONMEM, imports the
   runs with [`nonmem2rx()`](../reference/nonmem2rx.md) and checks the
