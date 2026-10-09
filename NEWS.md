@@ -6,8 +6,8 @@
   solve got fewer ETA rows than subjects and the IPRED validation was
   skipped.  The ETA rows are matched to the individuals (contiguous runs of
   an `ID`) in data order, so a reused `ID` stays a separate individual even
-  when it is next to it after a subject is dropped, and a `TIME` reset
-  within an individual does not split it.  The PRED validation keeps the
+  when a dropped subject between them leaves them next to each other, and a
+  `TIME` reset within an individual does not split it.  The PRED validation keeps the
   subjects the IPRED validation drops (#269).
 
 * `MPAST(i)` now translates to `time > MTIME(i)` instead of `time >=

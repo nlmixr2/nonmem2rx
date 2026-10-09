@@ -182,8 +182,8 @@
 #' Match the ETA rows to the individuals in the input data
 #'
 #' NONMEM has one ETA row per individual (contiguous run of an ID) in
-#' data order.  Individuals without ETAs (like dose-only subjects whose
-#' ETAs were dropped by `.getValidationEtas()`) are skipped.
+#' data order.  `.getValidationEtas()` drops the ETAs of subjects without
+#' observations by ID, so only runs whose ID has no ETA row are skipped.
 #'
 #' @param runId ID of each contiguous run of an ID in the input data
 #' @param etaId ID of each ETA row
@@ -192,16 +192,10 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .matchEtaRuns <- function(runId, etaId) {
-  .keep <- logical(length(runId))
-  .p <- 1L
-  for (.r in seq_along(runId)) {
-    if (.p > length(etaId)) break
-    if (runId[.r] == etaId[.p]) {
-      .keep[.r] <- TRUE
-      .p <- .p + 1L
-    }
+  .keep <- runId %in% etaId
+  if (sum(.keep) != length(etaId) || !all(runId[.keep] == etaId)) {
+    return(NULL)
   }
-  if (.p <= length(etaId)) return(NULL)
   .keep
 }
 

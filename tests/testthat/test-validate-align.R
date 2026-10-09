@@ -58,9 +58,12 @@ test_that(".matchEtaRuns() skips individuals without ETAs in data order (#269)",
   expect_equal(.matchEtaRuns(c("1", "2", "3"), c("1", "2", "3")), c(TRUE, TRUE, TRUE))
   ## dose-only subject 2 has no ETA row
   expect_equal(.matchEtaRuns(c("1", "2", "3"), c("1", "3")), c(TRUE, FALSE, TRUE))
-  ## a reused ID whose second individual has no ETA row
-  expect_equal(.matchEtaRuns(c("1", "2", "1"), c("1", "2")), c(TRUE, TRUE, FALSE))
-  expect_equal(.matchEtaRuns(c("1", "2", "1"), c("2", "1")), c(FALSE, TRUE, TRUE))
+  ## a reused ID keeps its ETA rows for both individuals
+  expect_equal(.matchEtaRuns(c("1", "2", "1"), c("1", "1")), c(TRUE, FALSE, TRUE))
+  ## the ETAs of a subject are dropped by ID, so ETA rows that would skip
+  ## one individual of a reused ID are not in data order
+  expect_null(.matchEtaRuns(c("1", "2", "1"), c("1", "2")))
+  expect_null(.matchEtaRuns(c("1", "2", "1"), c("2", "1")))
   ## ETA rows not in data order
   expect_null(.matchEtaRuns(c("1", "2", "3"), c("3", "1")))
   expect_null(.matchEtaRuns(c("1", "2"), c("1", "2", "3")))
@@ -72,8 +75,10 @@ test_that("IPRED validation keeps a reused ID separate around a dropped subject 
   mod <- rxode2::rxUiDecompress(mod)
   .d <- mod$nonmemData
   ## subject 2 is dose-only and subject 3 reuses ID 1, so once subject 2
-  ## is dropped the two individuals with ID 1 are next to each other
-  .keep <- !(.d$ID == 2 & .d$EVID == 0)
+  ## is dropped the two individuals with ID 1 are next to each other.
+  ## Subject 1 is dose-only too, but keeps its ETAs since its ID also has
+  ## observations
+  .keep <- !(.d$ID %in% c(1, 2) & .d$EVID == 0)
   .d <- .d[.keep, ]
   .d$ID[.d$ID == 3] <- 1
   .d <- .d[, c(setdiff(names(.d), "ID"), "ID")]
