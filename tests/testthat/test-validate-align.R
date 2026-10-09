@@ -98,3 +98,28 @@ test_that("IPRED validation keeps a reused ID separate around a dropped subject 
   expect_equal(length(.c$ID), sum(.d$EVID == 0))
   expect_equal(.c$IPRED, .c$nonmemIPRED, tolerance=1e-3)
 })
+
+test_that("IPRED validation does not split an individual at a TIME reset (#269)", {
+  skip_on_cran()
+  mod <- suppressMessages(suppressWarnings(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)))
+  mod <- rxode2::rxUiDecompress(mod)
+  ## subject 1 repeats its records after an EVID=4 reset dose; NONMEM
+  ## has one ETA row for it and the same IPRED after the reset
+  .dup <- function(d) {
+    .w <- which(d$ID == 1)
+    .r <- d[.w, ]
+    .r$EVID[1] <- 4
+    rbind(d[.w, ], .r, d[-.w, ])
+  }
+  .d <- mod$nonmemData[, c(setdiff(names(mod$nonmemData), "ID"), "ID")]
+  .d <- .dup(.d)
+  assign("nonmemData", .d, envir=mod)
+  for (.v in c("ipredData", "predData")) {
+    assign(.v, .dup(get(.v, envir=mod)), envir=mod)
+  }
+  .msg <- suppressMessages(.nonmem2rxValidate(mod))
+  expect_true(any(grepl("^IPRED relative difference", .msg)))
+  .c <- mod$ipredCompare
+  expect_equal(length(.c$ID), sum(.d$EVID == 0))
+  expect_equal(.c$IPRED, .c$nonmemIPRED, tolerance=1e-3)
+})
