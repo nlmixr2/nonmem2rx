@@ -53,3 +53,43 @@ test_that("IPRED validation drops dose-only subjects when ID is not the first co
   expect_true(any(grepl("^PRED relative difference", .msg)))
   expect_equal(length(mod$predCompare$ID), sum(.d$EVID == 0))
 })
+
+test_that(".matchEtaRuns() skips individuals without ETAs in data order (#269)", {
+  expect_equal(.matchEtaRuns(c("1", "2", "3"), c("1", "2", "3")), c(TRUE, TRUE, TRUE))
+  ## dose-only subject 2 has no ETA row
+  expect_equal(.matchEtaRuns(c("1", "2", "3"), c("1", "3")), c(TRUE, FALSE, TRUE))
+  ## a reused ID whose second individual has no ETA row
+  expect_equal(.matchEtaRuns(c("1", "2", "1"), c("1", "2")), c(TRUE, TRUE, FALSE))
+  expect_equal(.matchEtaRuns(c("1", "2", "1"), c("2", "1")), c(FALSE, TRUE, TRUE))
+  ## ETA rows not in data order
+  expect_null(.matchEtaRuns(c("1", "2", "3"), c("3", "1")))
+  expect_null(.matchEtaRuns(c("1", "2"), c("1", "2", "3")))
+})
+
+test_that("IPRED validation keeps a reused ID separate around a dropped subject (#269)", {
+  skip_on_cran()
+  mod <- suppressMessages(suppressWarnings(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)))
+  mod <- rxode2::rxUiDecompress(mod)
+  .d <- mod$nonmemData
+  ## subject 2 is dose-only and subject 3 reuses ID 1, so once subject 2
+  ## is dropped the two individuals with ID 1 are next to each other
+  .keep <- !(.d$ID == 2 & .d$EVID == 0)
+  .d <- .d[.keep, ]
+  .d$ID[.d$ID == 3] <- 1
+  .d <- .d[, c(setdiff(names(.d), "ID"), "ID")]
+  assign("nonmemData", .d, envir=mod)
+  for (.v in c("ipredData", "predData")) {
+    .t <- get(.v, envir=mod)[.keep, ]
+    .t$ID[.t$ID == 3] <- 1
+    assign(.v, .t, envir=mod)
+  }
+  .eta <- mod$etaData[mod$etaData$ID != 2, ]
+  .eta$ID[.eta$ID == 3] <- 1
+  assign("etaData", .eta, envir=mod)
+  expect_message(.msg <- .nonmem2rxValidate(mod),
+                 "IDs were not included in the validation: 2")
+  expect_true(any(grepl("^IPRED relative difference", .msg)))
+  .c <- mod$ipredCompare
+  expect_equal(length(.c$ID), sum(.d$EVID == 0))
+  expect_equal(.c$IPRED, .c$nonmemIPRED, tolerance=1e-3)
+})

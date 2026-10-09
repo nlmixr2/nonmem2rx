@@ -179,6 +179,32 @@
   data
 }
 
+#' Match the ETA rows to the individuals in the input data
+#'
+#' NONMEM has one ETA row per individual (contiguous run of an ID) in
+#' data order.  Individuals without ETAs (like dose-only subjects whose
+#' ETAs were dropped by `.getValidationEtas()`) are skipped.
+#'
+#' @param runId ID of each contiguous run of an ID in the input data
+#' @param etaId ID of each ETA row
+#' @return logical vector of the runs that have ETA rows, or `NULL`
+#'   when the ETA rows are not in data order
+#' @noRd
+#' @author Matthew L. Fidler
+.matchEtaRuns <- function(runId, etaId) {
+  .keep <- logical(length(runId))
+  .p <- 1L
+  for (.r in seq_along(runId)) {
+    if (.p > length(etaId)) break
+    if (runId[.r] == etaId[.p]) {
+      .keep[.r] <- TRUE
+      .p <- .p + 1L
+    }
+  }
+  if (.p <= length(etaId)) return(NULL)
+  .keep
+}
+
 #' Do a validation on a ui setup with nonmem information inside of it
 #'
 #'
@@ -258,44 +284,44 @@
         # the ETA table and the input data have their own ID columns
         .widNm <- which(tolower(names(.nonmemData)) == "id")
         if (length(.widNm) == 1L) {
-          # one ETA row per individual (contiguous run of an ID) in data
-          # order is already aligned; this also covers reused IDs, which
-          # the unique(ID) matching below cannot represent
-          .idRuns <- rle(as.character(.nonmemData[, .widNm]))$values
-          .runsAligned <- length(.idRuns) == length(.params[, 1]) &&
-            all(.idRuns == as.character(.params[, .wid]))
-          if (!.runsAligned) {
-            .idNm <- unique(.nonmemData[,.widNm])
+          # each contiguous run of an ID in the data is one NONMEM
+          # individual (a reused ID is a new individual), so the rxode2 ID
+          # is the run number; it is assigned before any subject is
+          # dropped so the runs around a dropped subject stay separate
+          .runs <- rle(as.character(.nonmemData[, .widNm]))
+          .run <- rep(seq_along(.runs$values), .runs$lengths)
+          .nonmemIpred[, .widNm] <- .run
+          .keep <- .matchEtaRuns(.runs$values, as.character(.params[, .wid]))
+          if (is.null(.keep)) {
+            # the ETAs are not in data order; match them by ID instead
+            .idNm <- unique(.runs$values)
             .la <- lapply(.idNm, function(id) {
-              .ret <- .params[.params[,.wid] == id,, drop=FALSE]
+              .ret <- .params[as.character(.params[,.wid]) == id,, drop=FALSE]
               if (length(.ret[,1]) == 0L) return(NULL)
               .ret
             })
-            .w <- which(vapply(.la, is.null, logical(1)))
-            if (length(.w) > 0) {
-              # subjects without ETAs (like dose-only subjects) are dropped
-              .minfo(paste0("the following IDs were not included in the validation: ", paste(.idNm[.w], collapse=", ")))
-              .nonmemIpred <- .nonmemData[!(.nonmemData[, .widNm] %in% .idNm[.w]), ]
-              .idNm <- .idNm[-.w]
-            }
             .params <- do.call("rbind",.la)
-
-            if (length(.idNm) != length(.params[, 1]) ||
-                  !all(.idNm == .params[,.wid])) {
+            .keep <- .runs$values %in% as.character(.params[, .wid])
+            if (sum(.keep) != length(.params[, 1]) ||
+                  !all(.runs$values[.keep] == as.character(.params[,.wid]))) {
               .minfo("id values between input and output do not match, skipping IPRED check")
               .doIpred <- FALSE
               .msg <- "id values between input and output do not match, skipping IPRED validation"
               .ipredSolve <- NULL
             }
           }
+          if (!all(.keep)) {
+            # subjects without ETAs (like dose-only subjects) are dropped
+            .minfo(paste0("the following IDs were not included in the validation: ",
+                          paste(.runs$values[!.keep], collapse=", ")))
+            .nonmemIpred <- .nonmemIpred[.keep[.run], ]
+          }
         }
         .params <- .params[,-.wid]
-        # dummy id to match the .params
-        .nonmemData2 <- .nonmemToRxIdData(.nonmemIpred)
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
-        .ipredSolve <- try(.nonmem2rxSolve(.model, .params, .nonmemData2, returnType = "data.frame",
+        .ipredSolve <- try(.nonmem2rxSolve(.model, .params, .nonmemIpred, returnType = "data.frame",
                                    covsInterpolation="nocb",
                                    addlDropSs=TRUE, ssAtDoseTime=TRUE,
                                    safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
