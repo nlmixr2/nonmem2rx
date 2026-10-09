@@ -15,15 +15,20 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .getValidationEtas <- function(etaData, inputData, model) {
-  if (is.null(inputData)) return(NULL)
+  if (is.null(inputData)) {
+    return(NULL)
+  }
   .eid <- unique(etaData$ID)
   .m <- rxode2::etTrans(inputData, model)
   .id <- as.numeric(levels(.m$ID))
   .ret <- etaData
   .d <- setdiff(.eid, .id)
   if (length(.d) > 0) {
-    .minfo(paste0("observation only ETAs are ignored: ", paste(.d, collapse=", ")))
-    return(.ret[.ret$ID %in% .id,])
+    .minfo(paste0(
+      "observation only ETAs are ignored: ",
+      paste(.d, collapse = ", ")
+    ))
+    return(.ret[.ret$ID %in% .id, ])
   }
   etaData
 }
@@ -35,18 +40,24 @@
 #' @return input dataset offset for tied times
 #' @noRd
 #' @author Matthew L. Fidler
-.fixNonmemTies <- function(inputData, delta=1e-4) {
-  if (is.null(inputData)) return(NULL)
+.fixNonmemTies <- function(inputData, delta = 1e-4) {
+  if (is.null(inputData)) {
+    return(NULL)
+  }
   .wid <- which(tolower(names(inputData)) == "id")
   .wtime <- which(tolower(names(inputData)) == "time")
-  if (length(.wid) != 1L) return(NULL)
-  if (length(.wtime) != 1L) return(NULL)
-  .id <- as.integer(inputData[,.wid])
-  .time <- as.double(inputData[,.wtime])
+  if (length(.wid) != 1L) {
+    return(NULL)
+  }
+  if (length(.wtime) != 1L) {
+    return(NULL)
+  }
+  .id <- as.integer(inputData[, .wid])
+  .time <- as.double(inputData[, .wtime])
   .new <- .Call(`_nonmem2rx_fixNonmemTies`, .id, .time, delta)
   .inputData <- inputData
-  .inputData[,.wid] <- .id
-  .inputData[,.wtime] <- .new
+  .inputData[, .wid] <- .id
+  .inputData[, .wtime] <- .new
   .inputData
 }
 #' Get the nonmem observation data indexes
@@ -58,20 +69,20 @@
 .nonmemObsIndex <- function(inputData) {
   .wevid <- which(tolower(names(inputData)) == "evid")
   if (length(.wevid) == 1L) {
-    .evid <- inputData[,.wevid]
+    .evid <- inputData[, .wevid]
     return(which(.evid == 0 | .evid == 2))
   }
   .wmdv <- which(tolower(names(inputData)) == "mdv")
   if (length(.wmdv) == 1L) {
-    .mdv <- inputData[,.wmdv]
+    .mdv <- inputData[, .wmdv]
     return(which(.mdv == 0))
   }
   .wdv <- which(tolower(names(inputData)) == "dv")
   if (length(.wdv) == 1L) {
-    .dv <- inputData[,.wdv]
+    .dv <- inputData[, .wdv]
     return(which(!is.na(.dv)))
   }
-  seq_along(inputData[,1])
+  seq_along(inputData[, 1])
 }
 
 #' Determine the endpoint of each compared observation
@@ -91,7 +102,7 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .nonmemEndpoint <- function(outData, inputData) {
-  .n <- length(outData[,1])
+  .n <- length(outData[, 1])
   .get <- function(data) {
     for (.v in c("dvid", "cmt")) {
       .w <- which(tolower(names(data)) == .v)
@@ -105,11 +116,17 @@
     NULL
   }
   .ret <- .get(outData)
-  if (!is.null(.ret)) return(.ret)
-  if (is.null(inputData)) return(NULL)
+  if (!is.null(.ret)) {
+    return(.ret)
+  }
+  if (is.null(inputData)) {
+    return(NULL)
+  }
   .obsIdx <- .nonmemObsIndex(inputData)
-  if (length(.obsIdx) != .n) return(NULL)
-  .get(inputData[.obsIdx,, drop=FALSE])
+  if (length(.obsIdx) != .n) {
+    return(NULL)
+  }
+  .get(inputData[.obsIdx, , drop = FALSE])
 }
 
 #' Add the endpoint to a comparison dataset
@@ -122,7 +139,9 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .addEndpoint <- function(cmp, endpoint) {
-  if (is.null(endpoint) || length(endpoint) != length(cmp[,1])) return(cmp)
+  if (is.null(endpoint) || length(endpoint) != length(cmp[, 1])) {
+    return(cmp)
+  }
   cmp$ENDPOINT <- endpoint
   cmp
 }
@@ -145,17 +164,22 @@
 #' @noRd
 #' @author Matthew L. Fidler
 .alignNonmemSolve <- function(solve, outData, rows, inputData) {
-  .ret <- list(solve=solve, outData=outData, inputData=inputData)
-  if (is.null(rows) || inherits(solve, "try-error") ||
-        !any(names(solve) == "rxNmRow")) {
+  .ret <- list(solve = solve, outData = outData, inputData = inputData)
+  if (
+    is.null(rows) ||
+      inherits(solve, "try-error") ||
+      !any(names(solve) == "rxNmRow")
+  ) {
     return(.ret)
   }
-  .s <- solve[!is.na(solve$rxNmRow), , drop=FALSE]
-  .s <- .s[!duplicated(.s$rxNmRow), , drop=FALSE]
+  .s <- solve[!is.na(solve$rxNmRow), , drop = FALSE]
+  .s <- .s[!duplicated(.s$rxNmRow), , drop = FALSE]
   .use <- rows %in% .s$rxNmRow
-  list(solve=.s[match(rows[.use], .s$rxNmRow), , drop=FALSE],
-       outData=outData[.use, , drop=FALSE],
-       inputData=inputData[match(rows[.use], inputData$rxNmRow), , drop=FALSE])
+  list(
+    solve = .s[match(rows[.use], .s$rxNmRow), , drop = FALSE],
+    outData = outData[.use, , drop = FALSE],
+    inputData = inputData[match(rows[.use], inputData$rxNmRow), , drop = FALSE]
+  )
 }
 
 #' Convert NONMEM IDs to rxode2 IDs (a reused, non-contiguous ID is a
@@ -168,13 +192,17 @@
 #' @author Matthew L. Fidler
 .nonmemToRxIdData <- function(data) {
   .wid <- which(tolower(names(data)) == "id")
-  if (length(.wid) != 1L) return(data)
+  if (length(.wid) != 1L) {
+    return(data)
+  }
   .wtime <- which(tolower(names(data)) == "time")
   if (length(.wtime) == 1L && is.numeric(data[, .wtime])) {
     data[, .wid] <- fromNonmemToRxId(as.integer(data[, .wid]), data[, .wtime])
   } else {
-    data[, .wid] <- fromNonmemToRxId(as.integer(data[, .wid]),
-                                     as.double(seq_along(data[, .wid])))
+    data[, .wid] <- fromNonmemToRxId(
+      as.integer(data[, .wid]),
+      as.double(seq_along(data[, .wid]))
+    )
   }
   data
 }
@@ -210,29 +238,35 @@
 #' @return messages to integrate
 #' @noRd
 #' @author Matthew L. Fidler
-.nonmem2rxValidate <- function(ui, msg=character(0), validate=TRUE, ci=0.95, sigdig=3) {
+.nonmem2rxValidate <- function(
+  ui,
+  msg = character(0),
+  validate = TRUE,
+  ci = 0.95,
+  sigdig = 3
+) {
   .rx <- ui
   .msg <- msg
   .ipredData <- .predData <- NULL
   if (is.null(.rx$nonmemData) && validate) {
     .msg <- "could not read in input data; validation skipped"
   }
-  if (exists("atol", envir=.rx$meta)) {
+  if (exists("atol", envir = .rx$meta)) {
     .atol <- .rx$meta$atol
   } else {
     .atol <- .rx$atol
   }
-  if (exists("rtol", envir=.rx$meta)) {
+  if (exists("rtol", envir = .rx$meta)) {
     .rtol <- .rx$meta$rtol
   } else {
     .rtol <- .rx$rtol
   }
-  if (exists("ssAtol", envir=.rx$meta)) {
+  if (exists("ssAtol", envir = .rx$meta)) {
     .ssAtol <- .rx$meta$ssAtol
   } else {
     .ssAtol <- .rx$ssAtol
   }
-  if (exists("ssRtol", envir=.rx$meta)) {
+  if (exists("ssRtol", envir = .rx$meta)) {
     .ssRtol <- .rx$meta$ssRtol
   } else {
     .ssRtol <- .rx$ssRtol
@@ -249,8 +283,8 @@
     .obsIdx <- .nonmemObsIndex(.nonmemData)
     .msg <- NULL
     if (!is.null(.rx$etaData) && !is.null(.rx$ipredData)) {
-      if (length(.rx$ipredData[,1]) == length(.nonmemData[,1])) {
-        .ipredData <- .rx$ipredData[.obsIdx,]
+      if (length(.rx$ipredData[, 1]) == length(.nonmemData[, 1])) {
+        .ipredData <- .rx$ipredData[.obsIdx, ]
         .ipredRows <- .obsIdx
       } else {
         .ipredData <- .rx$ipredData
@@ -290,15 +324,25 @@
             # the ETAs are not in data order; match them by ID instead
             .idNm <- unique(.runs$values)
             .la <- lapply(.idNm, function(id) {
-              .ret <- .params[as.character(.params[,.wid]) == id,, drop=FALSE]
-              if (length(.ret[,1]) == 0L) return(NULL)
+              .ret <- .params[
+                as.character(.params[, .wid]) == id,
+                ,
+                drop = FALSE
+              ]
+              if (length(.ret[, 1]) == 0L) {
+                return(NULL)
+              }
               .ret
             })
-            .params <- do.call("rbind",.la)
+            .params <- do.call("rbind", .la)
             .keep <- .runs$values %in% as.character(.params[, .wid])
-            if (sum(.keep) != length(.params[, 1]) ||
-                  !all(.runs$values[.keep] == as.character(.params[,.wid]))) {
-              .minfo("id values between input and output do not match, skipping IPRED check")
+            if (
+              sum(.keep) != length(.params[, 1]) ||
+                !all(.runs$values[.keep] == as.character(.params[, .wid]))
+            ) {
+              .minfo(
+                "id values between input and output do not match, skipping IPRED check"
+              )
               .doIpred <- FALSE
               .msg <- "id values between input and output do not match, skipping IPRED validation"
               .ipredSolve <- NULL
@@ -306,25 +350,44 @@
           }
           if (!all(.keep)) {
             # subjects without ETAs (like dose-only subjects) are dropped
-            .minfo(paste0("the following IDs were not included in the validation: ",
-                          paste(.runs$values[!.keep], collapse=", ")))
+            .minfo(paste0(
+              "the following IDs were not included in the validation: ",
+              paste(.runs$values[!.keep], collapse = ", ")
+            ))
             .nonmemIpred <- .nonmemIpred[.keep[.run], ]
           }
         }
-        .params <- .params[,-.wid]
+        .params <- .params[, -.wid]
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
-        .ipredSolve <- try(.nonmem2rxSolve(.model, .params, .nonmemIpred, returnType = "data.frame",
-                                   covsInterpolation="nocb",
-                                   addlDropSs=TRUE, ssAtDoseTime=TRUE,
-                                   safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
-                                   ss2cancelAllPending=TRUE,
-                                   atol=.atol, rtol=.rtol,
-                                   ssAtol=.ssAtol, ssRtol=.ssRtol, omega=NULL,
-                                   addDosing = FALSE, keep="rxNmRow"))
+        .ipredSolve <- try(.nonmem2rxSolve(
+          .model,
+          .params,
+          .nonmemIpred,
+          returnType = "data.frame",
+          covsInterpolation = "nocb",
+          addlDropSs = TRUE,
+          ssAtDoseTime = TRUE,
+          safeZero = FALSE,
+          safePow = FALSE,
+          safeLog = FALSE,
+          ss2cancelAllPending = TRUE,
+          atol = .atol,
+          rtol = .rtol,
+          ssAtol = .ssAtol,
+          ssRtol = .ssRtol,
+          omega = NULL,
+          addDosing = FALSE,
+          keep = "rxNmRow"
+        ))
         .minfo("done")
-        .al <- .alignNonmemSolve(.ipredSolve, .ipredData, .ipredRows, .nonmemIpred)
+        .al <- .alignNonmemSolve(
+          .ipredSolve,
+          .ipredData,
+          .ipredRows,
+          .nonmemIpred
+        )
         .ipredSolve <- .al$solve
         .ipredData <- .al$outData
         .ipredInput <- .al$inputData
@@ -342,98 +405,193 @@
           .iwres <- "iwres"
         }
         if (length(.ipredData$IPRED) == length(.ipredSolve[[.y]])) {
-          .wid  <- which(tolower(names(.ipredData)) == "id")
-          .wtime  <- which(tolower(names(.ipredData)) == "time")
-          .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
-                             nonmemIPRED=.ipredData$IPRED,
-                             IPRED=.ipredSolve[[.y]])
+          .wid <- which(tolower(names(.ipredData)) == "id")
+          .wtime <- which(tolower(names(.ipredData)) == "time")
+          .cmp <- data.frame(
+            ID = .ipredData[, .wid],
+            TIME = .ipredData[, .wtime],
+            nonmemIPRED = .ipredData$IPRED,
+            IPRED = .ipredSolve[[.y]]
+          )
           .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .ipredInput))
-          .qi <- stats::quantile(with(.cmp, 100*abs((IPRED-nonmemIPRED)/nonmemIPRED)), .q, na.rm=TRUE)
+          .qi <- stats::quantile(
+            with(.cmp, 100 * abs((IPRED - nonmemIPRED) / nonmemIPRED)),
+            .q,
+            na.rm = TRUE
+          )
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-          .qai <- stats::quantile(with(.cmp, abs(IPRED-nonmemIPRED)), .q, na.rm=TRUE)
+          .qai <- stats::quantile(
+            with(.cmp, abs(IPRED - nonmemIPRED)),
+            .q,
+            na.rm = TRUE
+          )
           #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-          .msg <- c(paste0("IPRED relative difference compared to Nonmem IPRED: ", round(.qi[3], 2),
-                           "%; ", .ci0 * 100,"% percentile: (",
-                           round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
-                           signif(.qi[3] / 100, digits=.sigdig)),
-                    paste0("IPRED absolute difference compared to Nonmem IPRED: ", .ci0 * 100,"% percentile: (",
-                           signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), "); atol=",
-                           signif(.qai[3], .sigdig)))
+          .msg <- c(
+            paste0(
+              "IPRED relative difference compared to Nonmem IPRED: ",
+              round(.qi[3], 2),
+              "%; ",
+              .ci0 * 100,
+              "% percentile: (",
+              round(.qi[2], 2),
+              "%,",
+              round(.qi[4], 2),
+              "%); rtol=",
+              signif(.qi[3] / 100, digits = .sigdig)
+            ),
+            paste0(
+              "IPRED absolute difference compared to Nonmem IPRED: ",
+              .ci0 * 100,
+              "% percentile: (",
+              signif(.qai[2], .sigdig),
+              ", ",
+              signif(.qai[4], .sigdig),
+              "); atol=",
+              signif(.qai[3], .sigdig)
+            )
+          )
           .rx$ipredAtol <- .qai[3]
-          .rx$ipredRtol <- .qi[3]/100
+          .rx$ipredRtol <- .qi[3] / 100
           .rx$ipredCompare <- .cmp
         } else {
-          .msg <- sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
-                          length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
-                          length(.nonmemIpred[,1]))
+          .msg <- sprintf(
+            "the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
+            length(.ipredSolve[[.y]]),
+            length(.ipredData$IPRED),
+            length(.nonmemIpred[, 1])
+          )
           .minfo(.msg)
         }
       }
-      if (.doIpred && !inherits(.ipredSolve, "try-error") && !is.null(.iwres) &&
-            any(names(.ipredData) == "IWRES"))  {
+      if (
+        .doIpred &&
+          !inherits(.ipredSolve, "try-error") &&
+          !is.null(.iwres) &&
+          any(names(.ipredData) == "IWRES")
+      ) {
         if (length(.ipredData$IWRES) == length(.ipredSolve[[.iwres]])) {
-          .wid  <- which(tolower(names(.ipredData)) == "id")
-          .wtime  <- which(tolower(names(.ipredData)) == "time")
-          .cmp <- data.frame(ID=.ipredData[,.wid], TIME=.ipredData[,.wtime],
-                             nonmemIWRES=.ipredData$IWRES,
-                             IWRES=.ipredSolve[[.iwres]])
+          .wid <- which(tolower(names(.ipredData)) == "id")
+          .wtime <- which(tolower(names(.ipredData)) == "time")
+          .cmp <- data.frame(
+            ID = .ipredData[, .wid],
+            TIME = .ipredData[, .wtime],
+            nonmemIWRES = .ipredData$IWRES,
+            IWRES = .ipredSolve[[.iwres]]
+          )
           .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.ipredData, .ipredInput))
-          .qi <- stats::quantile(with(.cmp, 100*abs((IWRES-nonmemIWRES)/nonmemIWRES)), .q, na.rm=TRUE)
+          .qi <- stats::quantile(
+            with(.cmp, 100 * abs((IWRES - nonmemIWRES) / nonmemIWRES)),
+            .q,
+            na.rm = TRUE
+          )
           #.qp <- stats::quantile(with(.ret, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-          .qai <- stats::quantile(with(.cmp, abs(IWRES-nonmemIWRES)), .q, na.rm=TRUE)
+          .qai <- stats::quantile(
+            with(.cmp, abs(IWRES - nonmemIWRES)),
+            .q,
+            na.rm = TRUE
+          )
           #.qap <- stats::quantile(with(.ret, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-          .msg <- c(.msg, paste0("IWRES relative difference compared to Nonmem IWRES: ", round(.qi[3], 2),
-                                 "%; ", .ci0 * 100,"% percentile: (",
-                                 round(.qi[2], 2), "%,", round(.qi[4], 2), "%); rtol=",
-                                 signif(.qi[3] / 100, digits=.sigdig)),
-                    paste0("IWRES absolute difference compared to Nonmem IWRES: ", .ci0 * 100,"% percentile: (",
-                           signif(.qai[2], .sigdig), ", ", signif(.qai[4], .sigdig), "); atol=",
-                           signif(.qai[3], .sigdig)))
+          .msg <- c(
+            .msg,
+            paste0(
+              "IWRES relative difference compared to Nonmem IWRES: ",
+              round(.qi[3], 2),
+              "%; ",
+              .ci0 * 100,
+              "% percentile: (",
+              round(.qi[2], 2),
+              "%,",
+              round(.qi[4], 2),
+              "%); rtol=",
+              signif(.qi[3] / 100, digits = .sigdig)
+            ),
+            paste0(
+              "IWRES absolute difference compared to Nonmem IWRES: ",
+              .ci0 * 100,
+              "% percentile: (",
+              signif(.qai[2], .sigdig),
+              ", ",
+              signif(.qai[4], .sigdig),
+              "); atol=",
+              signif(.qai[3], .sigdig)
+            )
+          )
           .rx$iwresAtol <- .qai[3]
-          .rx$iwresRtol <- .qi[3]/100
+          .rx$iwresRtol <- .qi[3] / 100
           .rx$iwresCompare <- .cmp
         } else {
-          .msg <- c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
-                                 length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
-                                 length(.nonmemIpred[,1])))
+          .msg <- c(
+            .msg,
+            sprintf(
+              "the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
+              length(.ipredSolve[[.iwres]]),
+              length(.ipredData$IWRES),
+              length(.nonmemIpred[, 1])
+            )
+          )
           .minfo(.msg)
         }
       }
     }
     if (!is.null(.rx$predData)) {
-      if (length(.rx$predData[,1]) == length(.nonmemData[,1])) {
-        .predData <- .rx$predData[.obsIdx,]
+      if (length(.rx$predData[, 1]) == length(.nonmemData[, 1])) {
+        .predData <- .rx$predData[.obsIdx, ]
         .predRows <- .obsIdx
       } else {
         .predData <- .rx$predData
         .predRows <- NULL
       }
-      .params <- c(.theta,
-                   vapply(dimnames(.rx$omega)[[1]],
-                          function(x) {
-                            0.0
-                          }, double(1), USE.NAMES = TRUE),
-                   vapply(.rx$sigmaNames,
-                          function(x) {
-                            0.0
-                          }, double(1), USE.NAMES = TRUE))
+      .params <- c(
+        .theta,
+        vapply(
+          dimnames(.rx$omega)[[1]],
+          function(x) {
+            0.0
+          },
+          double(1),
+          USE.NAMES = TRUE
+        ),
+        vapply(
+          .rx$sigmaNames,
+          function(x) {
+            0.0
+          },
+          double(1),
+          USE.NAMES = TRUE
+        )
+      )
       if (!is.null(.rx$predDf)) {
-        .params <- c(.params, setNames(rep(0, length(.rx$predDf$cond)),
-                                       paste0("rxerr.", .rx$predDf$var)))
+        .params <- c(
+          .params,
+          setNames(
+            rep(0, length(.rx$predDf$cond)),
+            paste0("rxerr.", .rx$predDf$var)
+          )
+        )
       }
       .minfo("solving pred problem")
       # data.frame, like the ipred solve above: "tibble" would need the tibble
       # package, which nonmem2rx does not depend on, and some models (e.g.
       # matExp) output a variable twice, which as_tibble() rejects
-      .predSolve <- try(.nonmem2rxSolve(.model, .params, .nonmemToRxIdData(.nonmemData),
-                                returnType = "data.frame",
-                                covsInterpolation="nocb",
-                                addlDropSs=TRUE, ssAtDoseTime=TRUE,
-                                safeZero=FALSE, safePow=FALSE, safeLog=FALSE,
-                                ss2cancelAllPending=TRUE,
-                                atol=.atol, rtol=.rtol,
-                                ssAtol=.ssAtol, ssRtol=.ssRtol,
-                                addDosing = FALSE, keep="rxNmRow"))
+      .predSolve <- try(.nonmem2rxSolve(
+        .model,
+        .params,
+        .nonmemToRxIdData(.nonmemData),
+        returnType = "data.frame",
+        covsInterpolation = "nocb",
+        addlDropSs = TRUE,
+        ssAtDoseTime = TRUE,
+        safeZero = FALSE,
+        safePow = FALSE,
+        safeLog = FALSE,
+        ss2cancelAllPending = TRUE,
+        atol = .atol,
+        rtol = .rtol,
+        ssAtol = .ssAtol,
+        ssRtol = .ssRtol,
+        addDosing = FALSE,
+        keep = "rxNmRow"
+      ))
       .minfo("done")
       .al <- .alignNonmemSolve(.predSolve, .predData, .predRows, .nonmemData)
       .predSolve <- .al$solve
@@ -447,33 +605,63 @@
           .y <- "sim"
         }
         if (length(.predData$PRED) == length(.predSolve[[.y]])) {
-          .wid  <- which(tolower(names(.predData)) == "id")
-          .wtime  <- which(tolower(names(.predData)) == "time")
-          .cmp <- data.frame(ID=.predData[,.wid], TIME=.predData[,.wtime],
-                             nonmemPRED=.predData$PRED,
-                             PRED=.predSolve[[.y]])
+          .wid <- which(tolower(names(.predData)) == "id")
+          .wtime <- which(tolower(names(.predData)) == "time")
+          .cmp <- data.frame(
+            ID = .predData[, .wid],
+            TIME = .predData[, .wtime],
+            nonmemPRED = .predData$PRED,
+            PRED = .predSolve[[.y]]
+          )
           .cmp <- .addEndpoint(.cmp, .nonmemEndpoint(.predData, .predInput))
-          .qp <- stats::quantile(with(.cmp, 100*abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-          .qap <- stats::quantile(with(.cmp, abs((PRED-nonmemPRED)/nonmemPRED)), .q, na.rm=TRUE)
-          .msg <- c(.msg,
-                    paste0("PRED relative difference compared to Nonmem PRED: ", round(.qp[3], 2),
-                           "%; ", .ci0 * 100,"% percentile: (",
-                           round(.qp[2], 2), "%,", round(.qp[4], 2), "%); rtol=",
-                           signif(.qp[3] / 100,
-                                  digits=.sigdig)),
-                    paste0("PRED absolute difference compared to Nonmem PRED: ",
-                           .ci0 * 100,"% percentile: (",
-                           signif(.qap[2], .sigdig), ",", signif(.qp[4], .sigdig), ") atol=",
-                           signif(.qap[3], .sigdig)))
+          .qp <- stats::quantile(
+            with(.cmp, 100 * abs((PRED - nonmemPRED) / nonmemPRED)),
+            .q,
+            na.rm = TRUE
+          )
+          .qap <- stats::quantile(
+            with(.cmp, abs((PRED - nonmemPRED) / nonmemPRED)),
+            .q,
+            na.rm = TRUE
+          )
+          .msg <- c(
+            .msg,
+            paste0(
+              "PRED relative difference compared to Nonmem PRED: ",
+              round(.qp[3], 2),
+              "%; ",
+              .ci0 * 100,
+              "% percentile: (",
+              round(.qp[2], 2),
+              "%,",
+              round(.qp[4], 2),
+              "%); rtol=",
+              signif(.qp[3] / 100, digits = .sigdig)
+            ),
+            paste0(
+              "PRED absolute difference compared to Nonmem PRED: ",
+              .ci0 * 100,
+              "% percentile: (",
+              signif(.qap[2], .sigdig),
+              ",",
+              signif(.qp[4], .sigdig),
+              ") atol=",
+              signif(.qap[3], .sigdig)
+            )
+          )
           .rx$predAtol <- .qap[3]
-          .rx$predRtol <- .qp[3]/100
+          .rx$predRtol <- .qp[3] / 100
           .rx$predCompare <- .cmp
         } else {
-          .msg <- c(.msg,
-                    sprintf("The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
-                            length(.predSolve[[.y]]),
-                            length(.predData$PRED),
-                            length(.nonmemData[,1])))
+          .msg <- c(
+            .msg,
+            sprintf(
+              "The length of the pred solve (%d) is not the same as the preds in the nonmem output (%d); input length: %d",
+              length(.predSolve[[.y]]),
+              length(.predData$PRED),
+              length(.nonmemData[, 1])
+            )
+          )
           .minfo(.msg[length(.msg)])
         }
       }
@@ -483,7 +671,10 @@
     }
     if (is.null(.ipredData) && is.null(.predData)) {
       .msg <- "NONMEM input data found but could not find output PRED/IPRED data to validate against"
-      warning("NONMEM input data found but could not find output PRED/IPRED data to validate against", call.=FALSE)
+      warning(
+        "NONMEM input data found but could not find output PRED/IPRED data to validate against",
+        call. = FALSE
+      )
     }
   }
   .msg
