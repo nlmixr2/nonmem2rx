@@ -25,3 +25,31 @@ test_that("PRED validation data treats a reused ID as a new individual", {
   ## no ID column: unchanged
   expect_identical(.nonmemToRxIdData(data.frame(TIME=1)), data.frame(TIME=1))
 })
+
+test_that("IPRED validation drops dose-only subjects when ID is not the first column (#269)", {
+  skip_on_cran()
+  mod <- suppressMessages(suppressWarnings(nonmem2rx(system.file("mods/cpt/runODE032.ctl", package="nonmem2rx"), lst=".res", save=FALSE)))
+  mod <- rxode2::rxUiDecompress(mod)
+  .d <- mod$nonmemData
+  ## subject 2 keeps only its dose records, so NONMEM still has its
+  ## ETAs but they are dropped from the validation ETAs
+  .keep <- !(.d$ID == 2 & .d$EVID == 0)
+  .d <- .d[.keep, ]
+  ## ID is no longer the first input column
+  .d <- .d[, c(setdiff(names(.d), c("ID", "TIME")), "ID", "TIME")]
+  assign("nonmemData", .d, envir=mod)
+  for (.v in c("ipredData", "predData")) {
+    assign(.v, get(.v, envir=mod)[.keep, ], envir=mod)
+  }
+  assign("etaData", mod$etaData[mod$etaData$ID != 2, ], envir=mod)
+  expect_message(.msg <- .nonmem2rxValidate(mod),
+                 "IDs were not included in the validation: 2")
+  expect_true(any(grepl("^IPRED relative difference", .msg)))
+  .c <- mod$ipredCompare
+  expect_false(any(.c$ID == 2))
+  expect_equal(length(.c$ID), sum(.d$EVID == 0))
+  expect_equal(.c$IPRED, .c$nonmemIPRED, tolerance=1e-3)
+  ## PRED does not need ETAs, so it still uses all of the input data
+  expect_true(any(grepl("^PRED relative difference", .msg)))
+  expect_equal(length(mod$predCompare$ID), sum(.d$EVID == 0))
+})

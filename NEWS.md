@@ -1,5 +1,12 @@
 # nonmem2rx 0.1.12
 
+* IPRED validation now drops subjects without ETAs (like dose-only
+  subjects) from the input data when `ID` is not the first `$INPUT`
+  column.  Before, the solve got fewer ETA rows than subjects and the
+  IPRED validation was skipped.  The rxode2 IDs of the IPRED solve now
+  come from the input data's own `ID` and `TIME` columns, and the PRED
+  validation keeps the subjects the IPRED validation drops (#269).
+
 * `MPAST(i)` now translates to `time > MTIME(i)` instead of `time >=
   MTIME(i)`.  NONMEM evaluates the interval that ends at `MTIME(i)` with
   `MPAST(i) = 0`; it becomes 1 only for later intervals.  With rxode2's

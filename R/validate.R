@@ -251,47 +251,47 @@
         }
       }
       .wid <- which(tolower(names(.params)) == "id")
-      .wtime <- which(tolower(names(.params)) == "time")
       .doIpred <- TRUE
+      # the IPRED solve drops subjects without ETAs; the PRED solve keeps them
+      .nonmemIpred <- .nonmemData
       if (length(.wid) == 1L) {
+        # the ETA table and the input data have their own ID columns
         .widNm <- which(tolower(names(.nonmemData)) == "id")
-        # one ETA row per individual (contiguous run of an ID) in data
-        # order is already aligned; this also covers reused IDs, which
-        # the unique(ID) matching below cannot represent
-        .idRuns <- rle(as.character(.nonmemData[, .widNm]))$values
-        .runsAligned <- length(.idRuns) == length(.params[, 1]) &&
-          all(.idRuns == as.character(.params[, .wid]))
-        if (.widNm == 1L && !.runsAligned) {
-          .idNm <- unique(.nonmemData[,.widNm])
-          .la <- lapply(.idNm, function(id) {
-            .ret <- .params[.params[,.wid] == id,, drop=FALSE]
-            if (length(.ret[,1]) == 0L) return(NULL)
-            .ret
-          })
-          .w <- which(vapply(seq_along(.la), function(i){is.null(.la[[i]])}, logical(1)))
-          if (length(.w) > 0) {
-            .minfo(paste0("the following IDs were not included in the validation: ", paste(.idNm[.w], collapse=", ")))
-            .nonmemData <- .nonmemData[!(.nonmemData[, .widNm] %in% .idNm[.w]), ]
-          }
-          .params <- do.call("rbind",.la)
+        if (length(.widNm) == 1L) {
+          # one ETA row per individual (contiguous run of an ID) in data
+          # order is already aligned; this also covers reused IDs, which
+          # the unique(ID) matching below cannot represent
+          .idRuns <- rle(as.character(.nonmemData[, .widNm]))$values
+          .runsAligned <- length(.idRuns) == length(.params[, 1]) &&
+            all(.idRuns == as.character(.params[, .wid]))
+          if (!.runsAligned) {
+            .idNm <- unique(.nonmemData[,.widNm])
+            .la <- lapply(.idNm, function(id) {
+              .ret <- .params[.params[,.wid] == id,, drop=FALSE]
+              if (length(.ret[,1]) == 0L) return(NULL)
+              .ret
+            })
+            .w <- which(vapply(.la, is.null, logical(1)))
+            if (length(.w) > 0) {
+              # subjects without ETAs (like dose-only subjects) are dropped
+              .minfo(paste0("the following IDs were not included in the validation: ", paste(.idNm[.w], collapse=", ")))
+              .nonmemIpred <- .nonmemData[!(.nonmemData[, .widNm] %in% .idNm[.w]), ]
+              .idNm <- .idNm[-.w]
+            }
+            .params <- do.call("rbind",.la)
 
-          if (!all(.idNm == .params[,.wid])) {
-            .minfo("id values between input and output do not match, skipping IPRED check")
-            .doIpred <- FALSE
-            .msg <- "id values between input and output do not match, skipping IPRED validation"
-            .ipredSolve <- NULL
+            if (length(.idNm) != length(.params[, 1]) ||
+                  !all(.idNm == .params[,.wid])) {
+              .minfo("id values between input and output do not match, skipping IPRED check")
+              .doIpred <- FALSE
+              .msg <- "id values between input and output do not match, skipping IPRED validation"
+              .ipredSolve <- NULL
+            }
           }
         }
         .params <- .params[,-.wid]
-        .nonmemData2 <- .nonmemData
         # dummy id to match the .params
-        if (length(.wtime) == 1 && is.numeric(.nonmemData2[, .wtime])) {
-          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
-                                                  .nonmemData2[, .wtime])
-        } else if (.doIpred) {
-          .nonmemData2[,.wid] <- fromNonmemToRxId(as.integer(.nonmemData2[,.wid]),
-                                                  as.double(seq_along(.nonmemData2[,.wid])))
-        }
+        .nonmemData2 <- .nonmemToRxIdData(.nonmemIpred)
       }
       if (.doIpred) {
         .minfo("solving ipred problem")
@@ -304,7 +304,7 @@
                                    ssAtol=.ssAtol, ssRtol=.ssRtol, omega=NULL,
                                    addDosing = FALSE, keep="rxNmRow"))
         .minfo("done")
-        .al <- .alignNonmemSolve(.ipredSolve, .ipredData, .ipredRows, .nonmemData)
+        .al <- .alignNonmemSolve(.ipredSolve, .ipredData, .ipredRows, .nonmemIpred)
         .ipredSolve <- .al$solve
         .ipredData <- .al$outData
         .ipredInput <- .al$inputData
@@ -345,7 +345,7 @@
         } else {
           .msg <- sprintf("the length of the ipred solve (%d) is not the same as the ipreds in the nonmem output (%d); input length: %d",
                           length(.ipredSolve[[.y]]), length(.ipredData$IPRED),
-                          length(.nonmemData[,1]))
+                          length(.nonmemIpred[,1]))
           .minfo(.msg)
         }
       }
@@ -375,7 +375,7 @@
         } else {
           .msg <- c(.msg, sprintf("the length of the iwres solve (%d) is not the same as the iwres in the nonmem output (%d); input length: %d",
                                  length(.ipredSolve[[.iwres]]), length(.ipredData$IWRES),
-                                 length(.nonmemData[,1])))
+                                 length(.nonmemIpred[,1])))
           .minfo(.msg)
         }
       }
