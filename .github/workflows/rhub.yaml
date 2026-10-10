@@ -111,6 +111,7 @@ jobs:
             any::vdiffr
             any::knitr
             any::rmarkdown
+            nlmixr2/dparser-R
             nlmixr2/rxode2lincmt
             nlmixr2/rxode2
         env:
@@ -158,6 +159,7 @@ jobs:
             any::vdiffr
             any::knitr
             any::rmarkdown
+            nlmixr2/dparser-R
             nlmixr2/rxode2lincmt
             nlmixr2/rxode2
       - uses: r-hub/actions/run-check@v1
