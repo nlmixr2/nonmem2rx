@@ -538,7 +538,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.8123258       0.019 0.042    0.001 320.27      1.109
+#> elapsed 0.6036265       0.027 0.046    0.001 320.27        1.1
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -761,7 +761,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:23 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:21 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -774,10 +774,10 @@ fit2
 #> 
 #> ── Time (sec fit2$time): ──
 #> 
-#>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.365341 1.872809   28.91786      0.038       0.016 0.047    0.001
+#>           setup optimize covariance preprocess postprocess table compress
+#> elapsed 2.35839 1.786887   25.93099      0.038       0.019  0.06    0.001
 #>              other
-#> elapsed 0.07399352
+#> elapsed 0.07773457
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -906,7 +906,7 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:12
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:20
 #> Warning in foceiFitCpp_(.ret): using R matrix to calculate covariance, can
 #> check sandwich or S matrix with $covRS and $covS
 #> Warning in foceiFitCpp_(.ret): gradient problems with covariance; see
@@ -960,7 +960,7 @@ fit
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.8123258       0.019 0.042    0.001 320.27      1.109    234.942
+#> elapsed 0.6036265       0.027 0.046    0.001 320.27        1.1    262.789
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 

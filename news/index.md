@@ -2,6 +2,18 @@
 
 ## nonmem2rx 0.1.12
 
+- IPRED validation now drops subjects without ETAs (like dose-only
+  subjects) from the input data however the `$INPUT` columns are
+  ordered. Before, this only happened when `ID` was the first column;
+  otherwise the solve got fewer ETA rows than subjects and the IPRED
+  validation was skipped. The ETA rows are matched to the individuals
+  (contiguous runs of an `ID`) in data order, so a reused `ID` stays a
+  separate individual even when a dropped subject between them leaves
+  them next to each other, and a `TIME` reset within an individual does
+  not split it. The PRED validation keeps the subjects the IPRED
+  validation drops
+  ([\#269](https://github.com/nlmixr2/nonmem2rx/issues/269)).
+
 - `MPAST(i)` now translates to `time > MTIME(i)` instead of
   `time >= MTIME(i)`. NONMEM evaluates the interval that ends at
   `MTIME(i)` with `MPAST(i) = 0`; it becomes 1 only for later intervals.
