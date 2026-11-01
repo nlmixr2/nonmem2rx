@@ -506,7 +506,7 @@ fit <- as.nlmixr2(new)
 #> → finding duplicate expressions in EBE model...
 #> → compiling EBE model...
 #> ✔ done
-#> rxode2 5.1.8 using 2 threads (see ?getRxThreads)
+#> rxode2 5.1.8.9000 using 2 threads (see ?getRxThreads)
 #>   no cache: create with `rxCreateCache()`
 #> → Calculating residuals/tables
 #> ✔ done
@@ -537,8 +537,8 @@ print(fit)
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.5795048       0.019 0.048    0.001 320.27      1.085
+#>            setup postprocess table compress NONMEM as.nlmixr2
+#> elapsed 0.393326       0.014 0.034    0.001 320.27      0.701
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -761,7 +761,7 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:33 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:24 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -775,9 +775,9 @@ fit2
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.377226 2.108459   16.62334      0.033       0.057  0.05    0.001
-#>             other
-#> elapsed 0.0819749
+#> elapsed 1.844934 1.487939   12.25891       0.02       0.021 0.033        0
+#>              other
+#> elapsed 0.05621656
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
@@ -939,7 +939,7 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:03:36
+#> [====|====|====|====|====|====|====|====|====|====] 0:02:13
 #> Warning: "r,s" not usable (sandwich doubtful); installed "r"
 #> Updated original fit object fit
 #>                      tktr           tka           tcl            tv
@@ -1052,8 +1052,8 @@ fit
 #> 
 #> ── Time (sec fit$time): ──
 #> 
-#>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.5795048       0.019 0.048    0.001 320.27      1.085    218.819
+#>            setup postprocess table compress NONMEM as.nlmixr2 covariance
+#> elapsed 0.393326       0.014 0.034    0.001 320.27      0.701    135.182
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
