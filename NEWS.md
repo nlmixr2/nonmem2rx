@@ -1,3 +1,14 @@
+# nonmem2rx (development version)
+
+* Three `sAppend()` calls in the `$PK`/`$PRED` translator no longer pass
+  their text as the format: a NONMEM variable name was written with
+  `sAppend(&curLine, v)`, which a `%` in the text would have misread, and
+  `rxrate.` passed a length that `sAppendN()` takes.  Under a printf format
+  check of rxode2's sbuf writers, the first two are errors with
+  `-Werror=format-security`.  The translated code is unchanged.  The
+  package now builds with `-DRXODE2_SBUF_FORMAT`, so an rxode2 that offers
+  those checks applies them to its calls.
+
 # nonmem2rx 0.1.12
 
 * IPRED validation now drops subjects without ETAs (like dose-only

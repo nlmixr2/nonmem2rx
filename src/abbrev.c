@@ -343,7 +343,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
       char *v2 = (char*) rc_dup_str(CHAR(STRING_ELT(nonmem2rxGetExtendedVar(v), 0)),0);
       if (strcmp(v, v2)) {
         // different variable, swap and continue
-        sAppend(&curLine, v2);
+        sAppend(&curLine, "%s", v2);
         return 1;
       }
     }
@@ -359,7 +359,7 @@ int abbrev_identifier_or_constant(char *name, int i, D_ParseNode *pn) {
     if (definingScale && hasV) {
       nonmem2rxPushScaleVolume(definingScale-1, v);
     }
-    sAppend(&curLine, v);
+    sAppend(&curLine, "%s", v);
     return 1;
   }
   return 0;
@@ -1088,7 +1088,7 @@ int abbrev_cmt_properties(char *name, int i, D_ParseNode *pn) {
     if (i == 0) {
       D_ParseNode *xpn = d_get_child(pn, 0);
       char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
-      sAppend(&curLine, "rxrate.", 7);
+      sAppendN(&curLine, "rxrate.", 7);
       cmtInfoStr = v + 1;
       writeAinfo(v + 1);
       sAppendN(&curLine, ". <- ", 5);
