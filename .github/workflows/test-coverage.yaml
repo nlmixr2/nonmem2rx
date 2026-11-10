@@ -6,9 +6,10 @@
 on:
   push:
     branches: [main, master]
-  pull_request:
-    branches: [main, master]
-    types: [opened, synchronize, reopened, edited]
+  # PR checks run only when a reviewer approves with the phrase
+  # "ready to be merged" (pushes to a PR branch no longer start CI).
+  pull_request_review:
+    types: [submitted]
 
 name: test-coverage
 
@@ -16,11 +17,11 @@ name: test-coverage
 # on main always finish, since they report coverage
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}${{ github.event.action == 'edited' && !github.event.changes.base && format('-{0}', github.run_id) || '' }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: ${{ (github.event_name == 'pull_request' || github.event_name == 'pull_request_review') }}
 
 jobs:
   test-coverage:
-    if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
+    if: ((github.event_name != 'pull_request' && github.event_name != 'pull_request_review') || github.event.action != 'edited' || github.event.changes.base) && (github.event_name != 'pull_request_review' || (github.event.review.state == 'approved' && contains(github.event.review.body, 'ready to be merged') && contains(fromJSON('["main","master"]'), github.event.pull_request.base.ref)))
     runs-on: ubuntu-latest
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
