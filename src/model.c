@@ -72,15 +72,16 @@ int nonmem2rx_model_warn_npar = 0;
 int nonmem2rxDefObs = 0;
 int nonmem2rxDefDose = 0;
 
-int nonmem2rxDefDepot = 0;
+// first compartment that can receive doses (no NODOSE); NONMEM's default
+// dose compartment when no compartment is DEFDOSE
+int nonmem2rxFirstDosable = 0;
 int nonmem2rxDefCentral = 0;
 
 SEXP nonmem2rxPushModel(const char *cmtName) {
-  if (!nmrxstrcmpi("depot", cmtName)) {
-    nonmem2rxDefDepot = nonmem2rx_model_cmt;
-  } else if (!nmrxstrcmpi("central", cmtName)) {
+  if (!nmrxstrcmpi("central", cmtName)) {
     nonmem2rxDefCentral = nonmem2rx_model_cmt;
   }
+  if (nonmem2rxFirstDosable == 0) nonmem2rxFirstDosable = nonmem2rx_model_cmt;
   nonmem2rx_model_cmt++;
   return nonmem2rxPushModel0(cmtName);
 }
@@ -146,6 +147,11 @@ void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print
       nonmem2rxDefDose = nonmem2rx_model_cmt - 1;
     } else if (!strncmpci("defobs", v, 6)) {
       nonmem2rxDefObs = nonmem2rx_model_cmt - 1;
+    } else if (!nmrxstrcmpi("nodose", v) &&
+               nonmem2rxFirstDosable == nonmem2rx_model_cmt - 1) {
+      // the options follow their compartment, so a NODOSE here belongs to
+      // the most recent compartment
+      nonmem2rxFirstDosable = 0;
     }
   }
   if (nch != 0) {
@@ -191,14 +197,14 @@ SEXP nonmem2rxPushCmtInfo(int defdose, int defobs);
 SEXP _nonmem2rx_trans_model(SEXP in) {
   nonmem2rxDefObs = 0;
   nonmem2rxDefDose = 0;
-  nonmem2rxDefDepot = 0;
+  nonmem2rxFirstDosable = 0;
   nonmem2rxDefCentral = 0;
 
   trans_model(R_CHAR(STRING_ELT(in, 0)));
   parseFree(0);
   sClear(&modelName);
   if (nonmem2rxDefObs == 0) nonmem2rxDefObs = nonmem2rxDefCentral;
-  if (nonmem2rxDefDose == 0) nonmem2rxDefDose = nonmem2rxDefDepot;
+  if (nonmem2rxDefDose == 0) nonmem2rxDefDose = nonmem2rxFirstDosable;
   if (nonmem2rxDefObs == 0) nonmem2rxDefObs = 1;
   if (nonmem2rxDefDose == 0) nonmem2rxDefDose = 1;
 

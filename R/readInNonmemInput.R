@@ -213,7 +213,101 @@
       .data[[n]][.cur %in% .nonmem2rx$dataMisdat] <- 0
     }
   }
-  .fixNonmemTies(.data, delta)
+  .fixNonmemTies(.dataDefaultCmt(.data), delta)
+}
+#' Send doses without a compartment to the `$MODEL` DEFDOSE compartment
+#'
+#' NONMEM gives a dose record without a compartment (no `CMT` data item,
+#' or `CMT` of 0 or missing) to the `DEFDOSE` compartment, and an
+#' observation without one to the `DEFOBS` compartment; other events
+#' (like a reset) keep `CMT` 0.  rxode2 instead
+#' doses the first compartment.  The translated model declares its
+#' compartments in `$MODEL` order, so the NONMEM compartment numbers are
+#' also the rxode2 ones:
+#'
+#' - without a `CMT` column (and a `DEFDOSE` other than compartment 1), a
+#'   `CMT` column is added with `DEFDOSE` on the doses, `DEFOBS` on the
+#'   observations and 0 on the other events;
+#'
+#' - with a `CMT` column, a `CMT` of 0 or missing becomes `DEFDOSE` on the
+#'   doses and `DEFOBS` on the observations.
+#'
+#' Dose records are those with an `EVID` of 1 or 4, and observations those
+#' with an `EVID` of 0; without an `EVID` column, a record with a nonzero
+#' `AMT` is a dose and any other record an observation.
+#'
+#' @param data NONMEM input dataset (after the `$DATA` filters)
+#' @return `data` with the default compartments filled in
+#' @noRd
+#' @author Matthew L. Fidler
+.dataDefaultCmt <- function(data) {
+  .defdose <- .nonmem2rx$defdose
+  .defobs <- .nonmem2rx$defobs
+  if (
+    is.null(names(data)) ||
+      .nonmem2rx$abbrevLin != 0L ||
+      !is.numeric(.defdose) ||
+      .defdose < 1L
+  ) {
+    return(data)
+  }
+  .lname <- tolower(names(data))
+  .col <- function(v) {
+    .w <- which(.lname == v)
+    if (length(.w) == 1L && is.numeric(data[[.w]])) {
+      return(data[[.w]])
+    }
+    NULL
+  }
+  .evid <- .col("evid")
+  if (!is.null(.evid)) {
+    .dose <- !is.na(.evid) & .evid %in% c(1, 4)
+    .obs <- !is.na(.evid) & .evid == 0
+  } else {
+    .amt <- .col("amt")
+    if (is.null(.amt)) {
+      return(data)
+    }
+    .dose <- !is.na(.amt) & .amt != 0
+    .obs <- !.dose
+  }
+  .wcmt <- which(.lname == "cmt")
+  if (length(.wcmt) == 0L) {
+    if (.defdose == 1L || !any(.dose)) {
+      return(data)
+    }
+    .minfo(sprintf(
+      paste0(
+        "no CMT data item: doses go to the $MODEL DEFDOSE ",
+        "compartment (%d), adding CMT to the data"
+      ),
+      .defdose
+    ))
+    data$CMT <- ifelse(.dose, .defdose, ifelse(.obs, .defobs, 0L))
+    return(data)
+  }
+  if (length(.wcmt) != 1L || !is.numeric(data[[.wcmt]])) {
+    return(data)
+  }
+  .cmt <- data[[.wcmt]]
+  .none <- is.na(.cmt) | .cmt == 0
+  .w <- .dose & .none
+  if (any(.w)) {
+    .minfo(sprintf(
+      "doses with CMT=0 go to the $MODEL DEFDOSE compartment (%d)",
+      .defdose
+    ))
+    data[[.wcmt]][.w] <- .defdose
+  }
+  .w <- .obs & .none
+  if (any(.w)) {
+    .minfo(sprintf(
+      "observations with CMT=0 use the $MODEL DEFOBS compartment (%d)",
+      .defobs
+    ))
+    data[[.wcmt]][.w] <- .defobs
+  }
+  data
 }
 #' Apply NONMEM $INPUT alias mappings to an sdtab data frame
 #'
