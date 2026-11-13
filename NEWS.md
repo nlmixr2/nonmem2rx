@@ -1,5 +1,10 @@
 # nonmem2rx (development version)
 
+* `$MODEL COMP=(name, DEFOBS)` now sets the default observation
+  compartment.  Before, `DEFOBS` was recorded as the default dose
+  compartment, so `F` in `$ERROR` fell back to a compartment named
+  `central` or to compartment 1 (often the depot) (#289).
+
 * Three `sAppend()` calls in the `$PK`/`$PRED` translator no longer pass
   their text as the format: a NONMEM variable name was written with
   `sAppend(&curLine, v)`, which a `%` in the text would have misread, and
