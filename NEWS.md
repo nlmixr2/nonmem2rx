@@ -1,5 +1,17 @@
 # nonmem2rx (development version)
 
+* When the input data has no `CMT` data item, the doses now go to the
+  `$MODEL` `DEFDOSE` compartment as they do in NONMEM: `$nonmemData`
+  (and so the validation) gets a `CMT` column with `DEFDOSE` on the
+  doses and `DEFOBS` on the other records.  A dose with `CMT` of 0 (or
+  missing) also goes to `DEFDOSE`.  Before, rxode2 dosed compartment 1,
+  so `COMP=(CENTRAL,DEFOBS) COMP=(DEPOT,DEFDOSE)` turned an oral dose
+  into a bolus (#281).  Data you solve yourself still needs a `CMT`.
+
+* Without `DEFDOSE`, the default dose compartment is the first
+  compartment without `NODOSE`, as in NONMEM, and no longer a
+  compartment named `DEPOT`.
+
 * `$MODEL COMP=(name, DEFOBS)` now sets the default observation
   compartment.  Before, `DEFOBS` was recorded as the default dose
   compartment, so `F` in `$ERROR` fell back to a compartment named
