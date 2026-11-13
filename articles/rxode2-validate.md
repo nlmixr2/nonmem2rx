@@ -107,14 +107,14 @@ modified returned `ui` object. For the rtol, atol as follows you have:
 ``` r
 
 mod$iwresAtol
-#>         50% 
-#> 3.64871e-06
-mod$iwresRtol
 #>          50% 
-#> 8.987887e-06
+#> 3.627287e-06
+mod$iwresRtol
+#>         50% 
+#> 9.00634e-06
 mod$ipredAtol
-#>        50% 
-#> 0.00166826
+#>       50% 
+#> 0.0016683
 mod$ipredRtol
 #>          50% 
 #> 6.430677e-06

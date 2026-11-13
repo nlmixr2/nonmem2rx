@@ -183,8 +183,8 @@ print(mod)
 #>     })
 #>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
 #>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
-#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
-#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.82e-07, 4.63e-05); atol=3.65e-06", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=9.01e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.93e-07, 4.63e-05); atol=3.63e-06", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
@@ -348,8 +348,8 @@ print(new)
 #>     })
 #>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
 #>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
-#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
-#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.82e-07, 4.63e-05); atol=3.65e-06", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=9.01e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.93e-07, 4.63e-05); atol=3.63e-06", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
@@ -429,15 +429,15 @@ fit <- as.nlmixr2(new)
 print(fit)
 #> ── nlmixr² nonmem2rx reading NONMEM ver 7.4.3 ──
 #> 
-#>               OBJF      AIC      BIC Log-likelihood Condition#(Cov)
-#> nonmem2rx 15977.28 20185.64 20237.23      -10083.82        335.4129
+#>               OBJF   AIC      BIC Log-likelihood Condition#(Cov)
+#> nonmem2rx 20167.64 24376 24427.59         -12179        335.4129
 #>           Condition#(Cor)
 #> nonmem2rx        2.096559
 #> 
 #> ── Time (sec $time): ──
 #> 
-#>            setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.597767       0.014 0.043    0.001 100.95      0.663
+#>             setup postprocess table compress NONMEM as.nlmixr2
+#> elapsed 0.2512234       0.016 0.038    0.001 100.95      0.809
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -468,8 +468,8 @@ print(fit)
 #> 
 #>     IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06
 #>     PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06
-#>     IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.25e-05, 0.0418); atol=0.00167
-#>     PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382); atol=6.41e-06
+#>     IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.16e-05, 0.0418); atol=0.00167
+#>     PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.4e-07,0.00382); atol=6.41e-06
 #>     nonmem2rx model file: '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl' 
 #> 
 #> ── Fit Data (object is a modified tibble): ──

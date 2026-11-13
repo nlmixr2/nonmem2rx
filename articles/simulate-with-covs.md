@@ -154,10 +154,10 @@ print(wbc)
 #>             omega.2.1 = 0, eta.MTT = 5.308e-11, omega.3.1 = 0, 
 #>             omega.3.2 = 0, eta.SLOPU = 4.20267e-10)
 #>     })
-#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7.82e-11", 
-#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (4.96e-11, 1.28e-06); atol=5.24e-10", 
-#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.72e-11", 
-#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.4e-11,4.89e-05) atol=6.72e-11")
+#>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7.75e-11", 
+#>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (4.96e-11, 1.84e-06); atol=5.22e-10", 
+#>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.67e-11", 
+#>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.44e-11,5.09e-05) atol=6.67e-11")
 #>     ini({
 #>         log_CIRC0 <- 1.83169895537931
 #>         label("1 - log_CIRC0")
@@ -240,10 +240,10 @@ print(wbc)
 # note the NONMEM vs rxode2 models validate well. You can see this in
 # the validation code:
 message(paste(wbc$meta$validation, collapse="\n"))
-#> IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7.82e-11
-#> IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (4.96e-11, 1.28e-06); atol=5.24e-10
-#> PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.72e-11
-#> PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.4e-11,4.89e-05) atol=6.72e-11
+#> IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=7.75e-11
+#> IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (4.96e-11, 1.84e-06); atol=5.22e-10
+#> PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.67e-11
+#> PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.44e-11,5.09e-05) atol=6.67e-11
 ```
 
 ## Option \#1: simulate with the same conditions as the input model
@@ -274,7 +274,7 @@ sim <- rxSolve(wbc, resample=TRUE, nStud=500)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:03
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:04
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 ```
 
@@ -424,7 +424,7 @@ sim <- rxSolve(wbc, ev, resample=TRUE, nStud=100)
 #> ℹ using NONMEM specified ssAtol=1e-12
 #> ℹ thetaMat has too many items, ignored: 'omega.2.1', 'omega.3.1', 'omega.3.2'
 #> ℹ thetaMat has zero diagonal items, ignored: 'eps1'
-#> [====|====|====|====|====|====|====|====|====|====] 0:01:01
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:14
 #> Warning: corrected 'thetaMat' to be a symmetric, positive definite matrix
 
 ci <- confint(sim, "y")
