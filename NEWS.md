@@ -3,8 +3,9 @@
 * When the input data has no `CMT` data item, the doses now go to the
   `$MODEL` `DEFDOSE` compartment as they do in NONMEM: `$nonmemData`
   (and so the validation) gets a `CMT` column with `DEFDOSE` on the
-  doses and `DEFOBS` on the other records.  A dose with `CMT` of 0 (or
-  missing) also goes to `DEFDOSE`.  Before, rxode2 dosed compartment 1,
+  doses, `DEFOBS` on the observations and 0 on other events.  A `CMT`
+  of 0 (or missing) also becomes `DEFDOSE` on a dose and `DEFOBS` on an
+  observation.  Before, rxode2 dosed compartment 1,
   so `COMP=(CENTRAL,DEFOBS) COMP=(DEPOT,DEFDOSE)` turned an oral dose
   into a bolus (#281).  Data you solve yourself still needs a `CMT`.
 

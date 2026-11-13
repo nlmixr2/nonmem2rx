@@ -68,18 +68,25 @@ test_that("doses without CMT go to the $MODEL DEFDOSE compartment (#281)", {
   )
   expect_equal(.m$nonmemData$CMT, c(2, 1, 1, 1))
 
-  # a CMT column of 0 on the dose uses DEFDOSE; other values are kept
+  # a CMT of 0 uses DEFDOSE on a dose and DEFOBS on an observation; other
+  # values and other events are kept
   .m <- .run(
     .model,
     c(
       "ID,TIME,DV,EVID,AMT,MDV,CMT",
       "1,0,.,1,100,1,0",
       "1,1,.,1,100,1,1",
-      "1,2,0,0,.,0,0"
+      "1,2,0,0,.,0,0",
+      "1,3,0,0,.,0,2",
+      "1,4,.,3,.,1,0"
     ),
     input = "ID TIME DV EVID AMT MDV CMT"
   )
-  expect_equal(.m$nonmemData$CMT, c(2, 1, 0))
+  expect_equal(.m$nonmemData$CMT, c(2, 1, 1, 2, 0))
+
+  # without CMT, a reset keeps CMT 0
+  .m <- .run(.model, c(.data, "1,10,.,3,.,1"))
+  expect_equal(.m$nonmemData$CMT, c(2, 1, 1, 1, 0))
 
   # DEFDOSE on compartment 1 leaves the data alone
   .m <- .run(
