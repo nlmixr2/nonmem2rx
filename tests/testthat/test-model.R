@@ -127,3 +127,18 @@ test_that("DEFOBS chooses the observed compartment for F (#289)", {
     fixed = TRUE
   )
 })
+
+test_that("without DEFDOSE, doses go to the first dosable compartment (#281)", {
+  .cmt <- function(model) {
+    .Call(`_nonmem2rx_setRecord`, "$MODEL")
+    .clearNonmem2rx()
+    .Call(`_nonmem2rx_trans_model`, model)
+    .nonmem2rx$defdose
+  }
+  # a compartment named depot is not the default dose compartment
+  expect_equal(.cmt("COMP=(CENTRAL) COMP=(DEPOT)"), 1L)
+  expect_equal(.cmt("COMP=(CENTRAL, NODOSE) COMP=(DEPOT)"), 2L)
+  expect_equal(.cmt("COMP=(A, NODOSE) COMP=(B, NODOSE) COMP=(C)"), 3L)
+  expect_equal(.cmt("COMP=(A) COMP=(B, NODOSE)"), 1L)
+  expect_equal(.cmt("COMP=(A, NODOSE) COMP=(B) COMP=(C, DEFDOSE)"), 3L)
+})
