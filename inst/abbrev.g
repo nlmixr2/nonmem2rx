@@ -122,8 +122,15 @@ logical_or_expression : logical_and_expression
 
 or_expression_nm: '.or.' | '.OR.';
 
-logical_and_expression : equality_expression0
-        (and_expression_nm equality_expression0)* ;
+logical_and_expression : logical_not_expression
+        (and_expression_nm logical_not_expression)* ;
+
+// Fortran precedence: .NOT. binds looser than the comparisons and
+// tighter than .AND.
+logical_not_expression : not_expression_nm logical_not_expression
+        | equality_expression0;
+
+not_expression_nm: '.not.' | '.NOT.';
 
 and_expression_nm: '.and.' | '.AND.';
 
@@ -134,7 +141,7 @@ equality_expression : relational_expression
         ((neq_expression_nm | eq_expression_nm ) relational_expression)* ;
 
 eq_expression_nm: '.eq.' | '.EQ.' | '==' | '.EQN.' | '.eqn.';
-neq_expression_nm: '.ne.' | '.NE.';
+neq_expression_nm: '.ne.' | '.NE.' | '/=' | '.NEN.' | '.nen.';
 
 relational_expression : additive_expression
         ((lt_expression_nm | gt_expression_nm | le_expression_nm | ge_expression_nm) additive_expression)* ;
@@ -271,6 +278,6 @@ float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 identifier: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;
 whitespace: ( "[ \t\r\n]+" | singleLineComment )*;
-singleLineComment: "[;:]" "[^\n]*";
+singleLineComment: "[;:][^\n]*";
 verbatimCode: '"' "[^\n]*";
 includeCode: 'include' "[^\n]*";

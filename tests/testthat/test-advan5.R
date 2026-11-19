@@ -184,3 +184,33 @@ test_that("nonmem2rx translates ADVAN5 to a matExp() model (default) equal to th
   # so it agrees with the ODE integrator to well within solver tolerance
   expect_equal(.so$ipred, .sm$ipred, tolerance=1e-8)
 })
+
+test_that("a bare $MODEL COMP after a named one still renames and translates", {
+  .ctl <- "$PROBLEM bare COMP
+$INPUT ID TIME AMT DV EVID CMT
+$DATA nodata.csv IGNORE=@
+$SUBROUTINES ADVAN7
+$MODEL COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP
+$PK
+  K10 = THETA(1)
+  K12 = THETA(2)
+  K21 = THETA(3)
+  S1 = THETA(4)
+$ERROR
+  IPRED = F
+  Y = IPRED + EPS(1)
+$THETA 0.2 0.5 0.25 15
+$OMEGA 0 FIX
+$SIGMA 0.01
+"
+  for (.matexp in c(TRUE, FALSE)) {
+    withr::with_options(list(nonmem2rx.save=FALSE, nonmem2rx.load=FALSE,
+                             nonmem2rx.overwrite=FALSE), {
+      .m <- suppressMessages(nonmem2rx(.ctl, validate=FALSE, compress=FALSE,
+                                       matexp=.matexp))
+    })
+    .state <- rxode2::rxModelVars(.m)$state
+    expect_true(all(c("CENTRAL", "rxddta2") %in% .state))
+    expect_false("rxddta1" %in% .state)
+  }
+})

@@ -127,41 +127,47 @@ nonmem2rxRec.sig <- function(x) {
 #' @noRd
 #' @author Matthew L. Fidler
 .addOmega <- function(ini, sd, cor, chol) {
-  if (sd == 0L && cor == 0L && chol == 0L) .addIni(ini)
-  .ini <- eval(parse(text=paste0("lotri::lotri(",ini,")")))
-  .dn <- dimnames(.ini)
-  if (cor != 0L) {
-    # correlation matrix
-    .d <- diag(.ini)
-    if (sd == 0L) {
-      .d <- sqrt(.d) # change to sd
-    }
-    diag(.ini) <- 1
-    .D <- diag(length(.d))
-    diag(.D) <- .d
-    .ini <- .D %*% .ini %*% .D
-    dimnames(.ini) <- .dn
-    class(.ini) <- c("lotriFix", class(.ini))
-    .exp <-as.expression(.ini)
-    .addIni(deparse1(.exp[[2]][[2]]))
+  if (sd == 0L && cor == 0L && chol == 0L) {
+    .addIni(ini)
     return(invisible())
-  } else if (sd != 0L) {
-    # covariance + sd
-    # convert sd to variance
-    .d <- diag(.ini)^2
-    diag(.ini) <- .d
-    dimnames(.ini) <- .dn
-    class(.ini) <- c("lotriFix", class(.ini))
-    .exp <-as.expression(.ini)
-    .addIni(deparse1(.exp[[2]][[2]]))
-  } else if (chol != 0L) {
-    # cholesky to cov
-    .ini <- .ini %*% t(.ini)
-    dimnames(.ini) <- .dn
-    class(.ini) <- c("lotriFix", class(.ini))
-    .exp <-as.expression(.ini)
-    .addIni(deparse1(.exp[[2]][[2]]))
   }
+  .ini <- eval(parse(text=paste0("lotri::lotri(", ini, ")")))
+  .fixed <- any(attr(.ini, "lotriFix"))
+  .ini <- unclass(.ini)
+  attr(.ini, "lotriFix") <- NULL
+  if (chol != 0L) {
+    # NONMEM gives the lower-triangular Cholesky factor row-wise;
+    # lotri() made it symmetric, so drop the upper triangle first
+    .ini[upper.tri(.ini)] <- 0
+    .ini <- .ini %*% t(.ini)
+  } else if (cor != 0L) {
+    # correlation off-diagonals with sd (or variance) diagonals
+    .d <- diag(.ini)
+    if (sd == 0L) .d <- sqrt(.d)
+    diag(.ini) <- 1
+    .ini <- diag(.d, length(.d)) %*% .ini %*% diag(.d, length(.d))
+  } else {
+    # covariance off-diagonals with sd diagonals
+    diag(.ini) <- diag(.ini)^2
+  }
+  .addIni(.omegaIniLine(.ini, sub("~.*$", "", ini), .fixed))
+  invisible()
+}
+#' Build an `ini` line (`eta1 + eta2 ~ c(...)`) from a covariance matrix
+#'
+#' @param mat covariance matrix
+#' @param lhs left hand side of the original ini line (`"eta1 + eta2 "`)
+#' @param fixed is the block fixed
+#' @return ini line for the whole block
+#' @noRd
+#' @author Matthew L. Fidler
+.omegaIniLine <- function(mat, lhs, fixed) {
+  .v <- unlist(lapply(seq_len(nrow(mat)), function(i) mat[i, seq_len(i)]))
+  .v <- format(signif(.v, 15), scientific=FALSE, trim=TRUE, drop0trailing=TRUE)
+  .v <- paste(.v, collapse=", ")
+  if (fixed) return(paste0(trimws(lhs), " ~ fix(", .v, ")"))
+  if (nrow(mat) == 1L) return(paste0(trimws(lhs), " ~ ", .v))
+  paste0(trimws(lhs), " ~ c(", .v, ")")
 }
 #' This handles NONMEM's $omega block(n) value(diaVal, odiag) statement
 #'

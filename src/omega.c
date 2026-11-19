@@ -442,6 +442,8 @@ SEXP nonmem2rxPushObservedMaxEta(int a);
 
 SEXP _nonmem2rx_trans_omega(SEXP in, SEXP prefix, SEXP unintFix) {
   curComment=NULL;
+  // may still point into the freed rc_dup_str() pool if a prior parse errored
+  nonmem2rx_omegaLabel=NULL;
   nonmem2rx_unintFix = INTEGER(unintFix)[0];
   nonmem2rx_omegaFixed = 0;
   nonmem2rx_omegaRepeat = 1;

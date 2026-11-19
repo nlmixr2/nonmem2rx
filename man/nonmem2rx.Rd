@@ -2,7 +2,7 @@
 % Please edit documentation in R/nonmem2rx.R
 \name{nonmem2rx}
 \alias{nonmem2rx}
-\title{Convert a NONMEM source file to a rxode model (nlmixr2-syle)}
+\title{Convert a NONMEM source file to a rxode model (nlmixr2-style)}
 \usage{
 nonmem2rx(
   file,
@@ -68,7 +68,7 @@ filters and record subsetting are applied.
 }}
 
 \item{nonmemOutputDir}{This is a path the the nonmem output
-directory.  When not \code{NULL} it will assume that the diretory for
+directory.  When not \code{NULL} it will assume that the directory for
 the output files is located here instead of where the control
 stream currently exists.}
 
@@ -214,7 +214,7 @@ options that are imported from NONMEM to keep in the model.}
 rxode2 function
 }
 \description{
-Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+Convert a NONMEM source file to a rxode model (nlmixr2-style)
 }
 \details{
 Since some of these options you may want to set per project, the

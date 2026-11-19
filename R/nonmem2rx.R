@@ -25,6 +25,12 @@
   .nonmem2rx$dataCond <- character(0)
   .nonmem2rx$dataIgnore1 <- NULL
   .nonmem2rx$dataRecords <- NA_integer_
+  .nonmem2rx$dataRecordsLabel <- NULL
+  .nonmem2rx$dataNull <- NULL
+  .nonmem2rx$dataLast20 <- 50L
+  .nonmem2rx$dataMisdat <- numeric(0)
+  .nonmem2rx$dataRepl <- NA_integer_
+  .nonmem2rx$dataTranslate <- list()
   .nonmem2rx$needNmevid <- FALSE
   .nonmem2rx$needNmid <- FALSE
   .nonmem2rx$tables <- list()
@@ -368,28 +374,35 @@
                  v
                }, character(1), USE.NAMES=FALSE)
   .c <- paste0("rxddta",seq_along(.n))
+  # a bare $MODEL COMP keeps its rxddtaN placeholder; renaming it to itself
+  # makes rxRename() fail and would leave every compartment un-renamed
+  .w <- which(.n != .c)
+  .ret <- rxui
+  if (length(.w) > 0L) {
+    .txt<- paste0("rxode2::rxRename(rxui, ",
+                  paste(paste(.n[.w],"=", .c[.w], sep=""), collapse=", "), ")")
+    .tmp <- try(eval(parse(text=.txt)),silent=TRUE)
+    if (inherits(.tmp, "try-error")) {
+      .minfo(sprintf("cmt not renamed; err evaluating: %s", .txt))
+      .n <- .c # the states keep their rxddtaN names
+    } else {
+      .ret <- .tmp
+      .minfo("done")
+    }
+  }
   # record the final compartment names (index -> name, including any `c.`
   # collision handling above) so the optional matrix-exponential path can emit
-  # cmt()/k_<from>_<to> using the same names the states are renamed to
+  # cmt()/k_<from>_<to> using the same names the states actually have
   if (.nonmem2rx$advan5max > 0L) {
     .fn <- paste0("rxddta", seq_len(.nonmem2rx$advan5max))
     .m <- min(length(.n), .nonmem2rx$advan5max)
     if (.m > 0L) .fn[seq_len(.m)] <- .n[seq_len(.m)]
     .nonmem2rx$cmtFinalNames <- .fn
   }
-  .txt<- paste0("rxode2::rxRename(rxui, ", paste(paste(.n,"=", .c, sep=""), collapse=", "), ")")
-  .tmp <- try(eval(parse(text=.txt)),silent=TRUE)
-  if (inherits(.tmp, "try-error")) {
-    .minfo(sprintf("cmt not renamed; err evaluating: %s", .txt))
-    .ret <- rxui
-  } else {
-    .ret <- .tmp
-    .minfo("done")
-  }
   .ret
 }
 
-#'  Update the input model with final parmeter estimates
+#'  Update the input model with final parameter estimates
 #'
 #' @param rxui ui
 #' @inheritParams nonmem2rx
@@ -446,7 +459,7 @@
        update=.update.theta && .update.omega && .update.sigma)
 }
 
-#' Convert a NONMEM source file to a rxode model (nlmixr2-syle)
+#' Convert a NONMEM source file to a rxode model (nlmixr2-style)
 #'
 #' @param file NONMEM run file, like an `.xml` or `.lst` file or even
 #'   a control stream
@@ -472,7 +485,7 @@
 #'   filters and record subsetting are applied.
 #'
 #' @param nonmemOutputDir This is a path the the nonmem output
-#'   directory.  When not `NULL` it will assume that the diretory for
+#'   directory.  When not `NULL` it will assume that the directory for
 #'   the output files is located here instead of where the control
 #'   stream currently exists.
 #'
@@ -994,7 +1007,14 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
       if (inherits(.ipredData, "try-error")) .predData <- .ipredData <- NULL
       if (!is.null(.ipredData)) {
         .digs <- 0L
-        if (!is.null(.lstInfo$eta)) {
+        # first-order (FO) estimation leaves every .phi eta at zero, even
+        # with POSTHOC; the individual etas are then only in the tables
+        .phiEta <- .lstInfo$eta
+        if (!is.null(.phiEta) &&
+              all(unlist(.phiEta[, names(.phiEta) != "ID", drop=FALSE]) == 0)) {
+          .phiEta <- NULL
+        }
+        if (!is.null(.phiEta)) {
           .digs <- 5L # seems to be the default for phi files
         }
         # get ETA data if it has better digits than the phi file (or isn't present yet)
@@ -1003,8 +1023,8 @@ nonmem2rx <- function(file, inputData=NULL, nonmemOutputDir=NULL,
                                               rename=rename,
                                               digits=.digs))
         if (inherits(.etaData, "try-error")) .etaData <- NULL
-        if (is.null(.etaData) && !is.null(.lstInfo$eta)) {
-          .etaData <- .lstInfo$eta
+        if (is.null(.etaData) && !is.null(.phiEta)) {
+          .etaData <- .phiEta
         }
       }
       if (is.null(.predData)) {

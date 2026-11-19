@@ -57,6 +57,6 @@ string: "\"([^\"\\]|\\[^])*\"";
 float1: "([0-9]+.[0-9]*|[0-9]*.[0-9]+)([eE][\-\+]?[0-9]+)?" $term -2;
 float2: "[0-9]+[eE][\-\+]?[0-9]+" $term -3;
 whitespace: ( "[ \t\r\n, ]+" | singleLineComment )*;
-singleLineComment: ';' "[^\n]*";
+singleLineComment: ";[^\n]*";
 nonSpace: "[^0-9 \n][^ \n]*";
 identifier_nm: "[a-zA-Z][a-zA-Z0-9_]*" $term -4;

@@ -41,9 +41,23 @@ extern int lastStrLoc;
 int _rxode2_reallyHasAfter = 0;
 int rx_suppress_syntax_info = 0;
 const char *record;
+// The record name must outlive parseFree(0), which frees the
+// rc_dup_str() pool (_dupStrs); keep it in its own buffer.
+static sbuf recordBuf;
+static int recordBufIni = 0;
+
+void nonmem2rxSetRecord(const char *rec) {
+  if (!recordBufIni) {
+    sIni(&recordBuf);
+    recordBufIni = 1;
+  }
+  sClear(&recordBuf);
+  sAppend(&recordBuf, "%s", rec);
+  record = recordBuf.s;
+}
 
 SEXP _nonmem2rx_setRecord(SEXP rec) {
-  record = (char*)rc_dup_str(CHAR(STRING_ELT(rec, 0)), 0);
+  nonmem2rxSetRecord(CHAR(STRING_ELT(rec, 0)));
   return R_NilValue;
 }
 
@@ -69,6 +83,11 @@ void freeP(void){
 }
 void parseFreeLast(void) {
   if (gBufFree) R_Free(gBuf);
+  if (recordBufIni) {
+    sFree(&recordBuf);
+    recordBufIni = 0;
+    record = NULL;
+  }
   //sFree(&sbOut);
   freeP();
   //sFree(&_bufw);

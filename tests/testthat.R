@@ -13,5 +13,15 @@ setRxThreads(1L)
 library(data.table)
 setDTthreads(1L)
 
+# CRAN/R-hub work-arounds, mirroring rxode2's own tests/testthat.R: keep
+# OpenMP and MKL in step with the thread counts above, and on macOS stop
+# rxode2 from unloading the model dlls, which the ASAN checks trip over.
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  Sys.setenv(OMP_NUM_THREADS = "1")
+  Sys.setenv(MKL_NUM_THREADS = "1")
+  if (identical(Sys.info()[["sysname"]], "Darwin")) {
+    rxode2::rxUnloadAll(set = FALSE)
+  }
+}
 
 test_check("nonmem2rx")

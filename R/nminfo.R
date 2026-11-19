@@ -123,6 +123,18 @@ nminfo <- function(file,
       if (verbose) .minfo("reading in phi file")
       .phi <- nmtab(.phiFile)
       if (!is.null(.phi)) {
+        # one table per estimation step; the last one has the final etas.
+        # Its header can differ from the first table's (PHI() for ITS/SAEM,
+        # ETA() for FOCE), so name the columns from its own header
+        .k <- .nmFinalTable(.phiFile)
+        .phi <- .phi[.phi$NMREP == .k, , drop=FALSE]
+        .hdr <- .nmTableHeader(.phiFile, .k)
+        .cols <- setdiff(names(.phi), "NMREP")
+        if (length(.hdr) > 0L && length(.hdr) <= length(.cols)) {
+          # fread(fill=TRUE) adds V# columns for the longer TABLE NO. lines
+          .phi <- .phi[, .cols[seq_along(.hdr)], drop=FALSE]
+          names(.phi) <- .hdr
+        }
         .phi <- .phi[,which(regexpr("(ID|ETA[(0-9])", names(.phi)) != -1), drop=FALSE]
         if (length(.phi) > 1) {
           names(.phi) <- vapply(names(.phi),

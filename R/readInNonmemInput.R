@@ -90,33 +90,56 @@
     if (length(.data) < length(.inp)) {
       .inp <- .inp[seq_along(.data)]
     }
-    .data <- .data[,seq_along(.inp)]
-    # 2. drop values requested by nonmem
+    .data <- .data[,seq_along(.inp), drop=FALSE]
     names(.data) <- names(.inp)
-    .w <- which(.inp == "DROP")
-    if (length(.w) > 0) {
-      .inp <- .inp[-.w]
-      .data <- .data[, -.w]
-    }
-    # 3. add nonmem declared aliases into the dataset
-    .w <- which(names(.inp) != .inp)
+    # 2. add nonmem declared aliases into the dataset; DROP items are kept
+    # until after the IGNORE/ACCEPT filters since they may be used there
+    .w <- which(names(.inp) != .inp & .inp != "DROP" & names(.inp) != "DROP")
     if (length(.w) > 0) {
       .inpr <- .inp[.w]
       for (.i in names(.inpr)) {
         .data[, .inpr[.i]] <- .data[, .i]
       }
     }
+    # 3. RECORDS= selects records before the IGNORE/ACCEPT filters
+    .data <- .dataApplyRecords(.data)
     # https://www.mail-archive.com/nmusers@globomaxnm.com/msg05323.html
     if (length(.nonmem2rx$dataCond) > 0) {
-      .cond <- paste0("-which(",
-                     ifelse(.nonmem2rx$dataCondType == "accept", "!", ""), "(",
-                     paste(.nonmem2rx$dataCond, collapse=" | "),
-                     "))")
-      .minfo(paste0("subsetting accept/ignore filters code: .data[", .cond, ",]"))
-      .w <- eval(parse(text=.cond))
-      if (length(.w) > 0) {
-        .data <- .data[.w,]
+      .cond <- paste(.nonmem2rx$dataCond, collapse=" | ")
+      .minfo(paste0(ifelse(.nonmem2rx$dataCondType == "accept", "accept", "ignore"),
+                    " filter code: ", .cond))
+      # a condition that cannot be evaluated (missing value) is not met
+      .met <- eval(parse(text=.cond))
+      .met <- !is.na(.met) & .met
+      if (.nonmem2rx$dataCondType == "accept") {
+        .data <- .data[.met, , drop=FALSE]
+      } else {
+        .data <- .data[!.met, , drop=FALSE]
       }
+    }
+    # NULL=c replaces null data items ("." or empty); this is done after
+    # IGNORE/ACCEPT so the filters see the data as read
+    if (!is.null(.nonmem2rx$dataNull)) {
+      .minfo(paste0("replacing null data items with '", .nonmem2rx$dataNull, "' (NULL=)"))
+      for (.i in seq_along(.data)) {
+        .cur <- .data[[.i]]
+        .w <- is.na(.cur) | as.character(.cur) %in% c("", ".")
+        if (any(.w)) {
+          .cur <- as.character(.cur)
+          .cur[.w] <- .nonmem2rx$dataNull
+          .data[[.i]] <- .cur
+        }
+      }
+    }
+    # 4. day-time translation and TRANSLATE= (after the filters)
+    .data <- .dataTimeTranslate(.data)
+    # 5. drop values requested by nonmem
+    .w <- which(.inp == "DROP" | names(.inp) == "DROP")
+    if (length(.w) > 0) {
+      .data <- .data[, -.w, drop=FALSE]
+    }
+    if (!is.na(.nonmem2rx$dataRepl)) {
+      .minfo(sprintf("$DATA REPL=%d: the template data is not replicated", .nonmem2rx$dataRepl))
     }
     if (.nonmem2rx$needNmevid) {
       .minfo("adding nmevid to dataset")
@@ -144,11 +167,6 @@
     if (length(.wdur) > 0L) {
       .minfo("renaming 'dur' to 'rxDur'")
       names(.data)[.wdur] <- "rxDur"
-    }
-    # I don't use, records=#, but my reading is this is a filter after the ignore/accept statements
-    if (!is.na(.nonmem2rx$dataRecords)) {
-      .minfo(sprintf("subsetting to %d records after filters", .nonmem2rx$dataRecords))
-      .data <- .data[seq_len(.nonmem2rx$dataRecords), ]
     }
   }
   if (!is.null(rename) && !is.null(names(.data))) {
@@ -185,6 +203,14 @@
     }
     if (all(!isNaX | validNa)) {
       .data[[n]] <- .x
+    }
+  }
+  if (length(.nonmem2rx$dataMisdat) > 0L) {
+    .minfo("MISDAT values are interpreted as 0")
+    for (n in .n) {
+      .cur <- .data[[n]]
+      if (!is.numeric(.cur)) next
+      .data[[n]][.cur %in% .nonmem2rx$dataMisdat] <- 0
     }
   }
   .fixNonmemTies(.data, delta)

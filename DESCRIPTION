@@ -1,7 +1,7 @@
 Package: nonmem2rx
 Type: Package
 Title: Converts 'NONMEM' Models to 'rxode2'
-Version: 0.1.10
+Version: 0.1.12.9000
 Maintainer: Matthew Fidler <matthew.fidler@gmail.com>
 Authors@R: c(person("Matthew","Fidler", role = c("aut", "cre"), email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
     person("Philip", "Delff", email = "philip@delff.dk",role = c("ctb")),
@@ -27,6 +27,8 @@ Description: 'NONMEM' has been a tool for running nonlinear mixed
 License: GPL (>= 3)
 URL: https://nlmixr2.github.io/nonmem2rx/, https://github.com/nlmixr2/nonmem2rx/
 Encoding: UTF-8
+Depends:
+    R (>= 4.1.0)
 LinkingTo:
     dparser,
     Rcpp,
@@ -37,7 +39,7 @@ Imports:
     dparser,
     lotri,
     Rcpp,
-    rxode2 (>= 5.1.5),
+    rxode2 (>= 5.1.8),
     magrittr,
     cli,
     tools,
@@ -65,6 +67,6 @@ Suggests:
     nlmixr2est
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Language: en-US
 Config/roxygen2/version: 8.1.0

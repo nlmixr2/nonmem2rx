@@ -24,42 +24,60 @@ autoplot.nonmem2rx <- function(object, ...,
   stopifnot(log %in% c("", "x", "y", "xy", "yx"))
   .useLogX <- nchar(log) == 2 | log == "x"
   .useLogY <- nchar(log) == 2 | log == "y"
-  .data2 <- object$predCompare
   if (is.null(object$predCompare)) {
     warning("nothing to plot", call. = FALSE)
     return(invisible())
   }
-  names(.data2) <- c("id", "time", "nonmem", "rxode2")
-  .data2$type <- "PRED"
-  .data <- object$ipredCompare
-  if (is.null(.data)) {
-    .data <- .data2
-    .data$type <- factor(.data$type, "PRED")
-  } else {
-    names(.data) <- c("id", "time", "nonmem", "rxode2")
-    .data$type <- "IPRED"
-    .data <- rbind(.data, .data2)
-    .data$type <- factor(.data$type, c("PRED", "IPRED"))
+  # IPRED is drawn first so PRED points overlay IPRED points
+  .types <- c(IPRED="ipredCompare", PRED="predCompare")
+  if (is.logical(page) && !page) {
+    .types <- c(.types, IWRES="iwresCompare")
+  }
+  .data <- lapply(names(.types), function(type) {
+    .plotCompareData(object[[.types[type]]], type)
+  })
+  .data <- .data[!vapply(.data, is.null, logical(1))]
+  # only split by endpoint when every comparison knows its endpoint;
+  # otherwise PRED/IPRED would land on different panels
+  .hasEndpoint <- all(vapply(.data, function(d) {
+    any(names(d) == "endpoint")
+  }, logical(1)))
+  if (!.hasEndpoint) {
+    .data <- lapply(.data, function(d) {
+      d$endpoint <- NULL
+      d
+    })
+  }
+  .data <- do.call(rbind, .data)
+  .data$type <- factor(.data$type,
+                       intersect(c("PRED", "IPRED", "IWRES"), unique(.data$type)))
+  if (.hasEndpoint) {
+    .data$endpoint <- factor(.data$endpoint, .sortEndpoint(unique(.data$endpoint)))
   }
   if (is.logical(page) && !page) {
-    .data2 <- object$iwresCompare
-    if (!is.null(.data2)) {
-      names(.data2) <- c("id", "time", "nonmem", "rxode2")
-      .data2$type <- "IWRES"
-      .lvl <- levels(.data$type)
-      .data <- rbind(.data, .data2)
-      .data$type <- factor(.data$type, c(.lvl, "IWRES"))
+    if (.hasEndpoint) {
+      .facet <- facet_wrap(~type + endpoint, scales="free",
+                           labeller=ggplot2::label_wrap_gen(multi_line=FALSE))
+    } else {
+      .facet <- facet_wrap(~type, scales="free")
     }
     return(ggplot(data=.data, aes(.data$rxode2, .data$nonmem)) +
              geom_point() +
-             facet_wrap(~type, scales="free") +
+             .facet +
              rxode2::rxTheme() +
              ylab("NONMEM") +
              xlab("rxode2"))
   }
+  if (.hasEndpoint) {
+    # each panel is an id/endpoint combination; order by id first
+    .data$panel <- paste0("id=", .data$id, "; ", .data$endpoint)
+    .data <- .data[order(.data$id, as.integer(.data$endpoint)), ]
+    .data$panel <- factor(.data$panel, unique(.data$panel))
+  } else {
+    .data$panel <- .data$id
+  }
 
-  .ids <- unique(.data$id)
-  .npage <- ceiling(length(.ids)/(ncol*nrow))
+  .npage <- ceiling(length(unique(.data$panel))/(ncol*nrow))
 
   .useXgxr <-
     getOption("rxode2.xgxr", TRUE) &&
@@ -81,6 +99,7 @@ autoplot.nonmem2rx <- function(object, ...,
       .logy <- ggplot2::scale_y_log10()
     }
   }
+  .scales <- ifelse(.hasEndpoint, "free_y", "fixed")
   if (is.null(page)) {
       .pages <- seq_len(.npage)
   } else {
@@ -92,8 +111,9 @@ autoplot.nonmem2rx <- function(object, ...,
                    function(p) {
                      .ret <- ggplot(data=.data, aes(.data$time, .data$rxode2, col=.data$type)) +
                        geom_point() +
-                       ggforce::facet_wrap_paginate(~.data$id,
-                                                    ncol=ncol, nrow=nrow, page=p) +
+                       ggforce::facet_wrap_paginate(~.data$panel,
+                                                    ncol=ncol, nrow=nrow, page=p,
+                                                    scales=.scales) +
                        geom_line(aes(.data$time, .data$nonmem)) +
                        ylab(ylab) +
                        xlab(xlab) +
@@ -104,6 +124,70 @@ autoplot.nonmem2rx <- function(object, ...,
                    })
   if (length(.ret) == 1L) return(.ret[[1]])
   .ret
+}
+
+#' Standardize a comparison dataset for plotting
+#'
+#' @param cmp comparison dataset (`predCompare`, `ipredCompare`,
+#'   `iwresCompare`), possibly with an `ENDPOINT` column
+#' @param type type of comparison (`"PRED"`, `"IPRED"`, `"IWRES"`)
+#' @return standardized data frame with `id`, `time`, (optionally)
+#'   `endpoint`, `nonmem`, `rxode2` and `type`; `NULL` if `cmp` is
+#'   `NULL`
+#' @noRd
+#' @author Matthew L. Fidler
+.plotCompareData <- function(cmp, type) {
+  if (is.null(cmp)) return(NULL)
+  .ret <- data.frame(id=cmp$ID, time=cmp$TIME,
+                     nonmem=cmp[[paste0("nonmem", type)]], rxode2=cmp[[type]],
+                     type=type)
+  if (any(names(cmp) == "ENDPOINT")) {
+    .ret$endpoint <- as.character(cmp$ENDPOINT)
+  }
+  .ret
+}
+
+#' Sort endpoint labels by their numeric value when possible
+#'
+#' @param endpoint unique endpoint labels like `"CMT=2"`
+#' @return sorted endpoint labels
+#' @noRd
+#' @author Matthew L. Fidler
+.sortEndpoint <- function(endpoint) {
+  .num <- suppressWarnings(as.numeric(sub("^[^=]*=", "", endpoint)))
+  endpoint[order(.num, endpoint)]
+}
+
+#' Standardize a comparison dataset for plotting
+#'
+#' @param cmp comparison dataset (`predCompare`, `ipredCompare`,
+#'   `iwresCompare`), possibly with an `ENDPOINT` column
+#' @param type type of comparison (`"PRED"`, `"IPRED"`, `"IWRES"`)
+#' @return standardized data frame with `id`, `time`, (optionally)
+#'   `endpoint`, `nonmem`, `rxode2` and `type`; `NULL` if `cmp` is
+#'   `NULL`
+#' @noRd
+#' @author Matthew L. Fidler
+.plotCompareData <- function(cmp, type) {
+  if (is.null(cmp)) return(NULL)
+  .ret <- data.frame(id=cmp$ID, time=cmp$TIME,
+                     nonmem=cmp[[paste0("nonmem", type)]], rxode2=cmp[[type]],
+                     type=type)
+  if (any(names(cmp) == "ENDPOINT")) {
+    .ret$endpoint <- as.character(cmp$ENDPOINT)
+  }
+  .ret
+}
+
+#' Sort endpoint labels by their numeric value when possible
+#'
+#' @param endpoint unique endpoint labels like `"CMT=2"`
+#' @return sorted endpoint labels
+#' @noRd
+#' @author Matthew L. Fidler
+.sortEndpoint <- function(endpoint) {
+  .num <- suppressWarnings(as.numeric(sub("^[^=]*=", "", endpoint)))
+  endpoint[order(.num, endpoint)]
 }
 
 plot.nonmem2rx <- function(x, ..., ncol=3, nrow=3, log="",  xlab = "Time", ylab = "Predictions", page=FALSE) {

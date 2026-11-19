@@ -246,6 +246,15 @@ extern "C" SEXP nonmem2rxPushDataRecords(int nrec) {
   END_RCPP
 }
 
+extern "C" SEXP nonmem2rxPushDataOption(const char* opt, const char* v1,
+                                        const char* v2, const char* v3) {
+  BEGIN_RCPP
+  Environment nonmem2rxNs = loadNamespace("nonmem2rx");
+  Function pushDataOption(".pushDataOption", nonmem2rxNs);
+  pushDataOption(opt, v1, v2, v3);
+  END_RCPP
+}
+
 
 extern "C" SEXP nonmem2rxNeedNmevid(void) {
   BEGIN_RCPP

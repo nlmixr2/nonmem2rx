@@ -1,4 +1,233 @@
+# nonmem2rx (development version)
+
+* `$MODEL COMP=(name, DEFOBS)` now sets the default observation
+  compartment.  Before, `DEFOBS` was recorded as the default dose
+  compartment, so `F` in `$ERROR` fell back to a compartment named
+  `central` or to compartment 1 (often the depot) (#289).
+
+* Three `sAppend()` calls in the `$PK`/`$PRED` translator no longer pass
+  their text as the format: a NONMEM variable name was written with
+  `sAppend(&curLine, v)`, which a `%` in the text would have misread, and
+  `rxrate.` passed a length that `sAppendN()` takes.  Under a printf format
+  check of rxode2's sbuf writers, the first two are errors with
+  `-Werror=format-security`.  The translated code is unchanged.  The
+  package now builds with `-DRXODE2_SBUF_FORMAT`, so an rxode2 that offers
+  those checks applies them to its calls.
+
+# nonmem2rx 0.1.12
+
+* IPRED validation now drops subjects without ETAs (like dose-only
+  subjects) from the input data however the `$INPUT` columns are ordered.
+  Before, this only happened when `ID` was the first column; otherwise the
+  solve got fewer ETA rows than subjects and the IPRED validation was
+  skipped.  The ETA rows are matched to the individuals (contiguous runs of
+  an `ID`) in data order, so a reused `ID` stays a separate individual even
+  when a dropped subject between them leaves them next to each other, and a
+  `TIME` reset within an individual does not split it.  The PRED validation keeps the
+  subjects the IPRED validation drops (#269).
+
+* `MPAST(i)` now translates to `time > MTIME(i)` instead of `time >=
+  MTIME(i)`.  NONMEM evaluates the interval that ends at `MTIME(i)` with
+  `MPAST(i) = 0`; it becomes 1 only for later intervals.  With rxode2's
+  continuous time both forms give the same solution, but with
+  `rxSolve(nonmem = TRUE)` the old form moved the change point one interval
+  early (#267).
+
+* When rxode2 supports `rxSolve(nonmem = TRUE)` (nlmixr2/rxode2#1429),
+  `rxSolve()` on a `nonmem2rx` model and the validation of an import solve
+  with `nonmem = TRUE` and `addlKeepsCov = FALSE`.  Statements that do not
+  depend on a state (`$PK`) then read `time` as the time of the data record
+  that ends the interval, the way NONMEM calls `$PK` at its records.  With
+  `covsInterpolation = "nocb"` this matches NONMEM for `TIME` in `$PK`,
+  `MTIME` change points and covariates changing between `ADDL` doses.  With
+  older rxode2 versions the solve keeps `addlKeepsCov = TRUE` as before.
+  Models with `delay()` (the `ADVAN16`/`ADVAN18` translations) keep the
+  continuous time, since rxode2 evaluates a `delay()` assigned outside of
+  `d/dt()` at the record time with `nonmem = TRUE`.  The stress kit uses the
+  same options, so its `time-in-pk` case is no longer a known issue with a
+  newer rxode2.  Its `mtime-change-point` case is no longer a known issue:
+  the ~1% difference between `linCmt()` and the ODE came from the kit's own
+  simulation switching at `t >= MTIME` (#267).
+
+* Added a NONMEM stress kit in `inst/stress` (like babelmixr2's).  It
+  simulates edge-case datasets with rxode2, runs NONMEM, imports the runs
+  with `nonmem2rx()` and checks the import; without NONMEM it checks the
+  translations only.  Load it with
+  `source(system.file("stress", "stress.R", package = "nonmem2rx"))` and
+  run `stressCheck()` and `stressKit()`; see `inst/stress/README.md`.
+
+* Runs with several `$EST` records (for example ITS followed by FOCE) now
+  import the final estimates.  NONMEM writes one table per estimation step
+  to the `.ext`, `.phi`, `.cov`, `.cor`, `.coi` and `.grd` files and one
+  block per step to the `.xml` and `.lst` files, and `nmext()`, `nmcov()`,
+  `nmgrd()`, `nmxml()`, `nmlst()` and `nminfo()` read the first step.  The
+  model was then validated with the first step's estimates against tables
+  from the last step.  They now use the last estimation step of the first
+  problem.
+
+* First-order (`METHOD=0`) runs now validate with the POSTHOC etas from the
+  output tables.  NONMEM leaves every `.phi` eta at zero for FO, and the
+  `.phi` etas were preferred.
+
+* `nmxml()` now reads `$SIGMA` (its XPath was malformed, so it was never
+  found), and returns `NULL` instead of an empty vector when `$OMEGA` is
+  missing.
+
+* `ADVAN12 TRANS4` (`CL V2 Q3 V3 Q4 V4 KA`) models now translate to a working
+  `linCmt()` model.  The parameter map was registered under `TRANS2`, so the
+  model kept an unresolved `linCmtFun` parameter and could not be solved.  A
+  closed-form `ADVAN`/`TRANS` combination without a `linCmt()` translation is
+  now an error instead.
+
+* `ADVAN4 TRANS6` (`ALPHA BETA K32 KA`) models now translate to `linCmt()`.
+
+* A `$MODEL` that mixes named and bare `COMP` records (for example
+  `COMP=(CENTRAL,DEFDOSE,DEFOBS) COMP`) now renames the named compartments.
+  Previously the rename failed silently, and `ADVAN5`/`ADVAN7` models then
+  stopped with an rxode2 syntax error because the matrix-exponential code
+  used the names the rename should have applied.
+
+* Abbreviated code now accepts the Fortran `.NOT.` operator and the `/=`
+  and `.NEN.` not-equal operators (previously a syntax error).
+
+* Model validation now matches the rxode2 solve to the NONMEM records by row,
+  so it is no longer skipped when the lengths differ: models with `MTIME`
+  (rxode2 adds output at the model event times) and data with
+  compartment-off (`CMT<0`) records now validate.
+
+* PRED validation now treats a reused, non-contiguous NONMEM `ID` as a new
+  individual (as IPRED validation already did).  IPRED validation also keeps
+  ETAs aligned for reused IDs instead of skipping the check.
+
+* Validation no longer stops with "object '.iwres' not found" when the IPRED
+  solve fails.
+
+* `$OMEGA`/`$SIGMA` `BLOCK(n)` records using the `SD`, `CORRELATION` or
+  `CHOLESKY` options now import the whole block.  Previously only the first
+  row was kept (for example `BLOCK(2) SD CORRELATION 0.3 0.5 0.2` became
+  `eta1 ~ 0.09` and `eta2` was lost).  `CHOLESKY` values are now read as the
+  lower-triangular factor, and `FIX` is kept through the conversion.
+* Models that refer to `DV` (for example `IRES = DV - IPRED` in `$ERROR`)
+  no longer simulate wrong amounts when doses have modeled lag times and
+  durations in more than one compartment (#263).  The `DV` reference makes
+  `DV` a time-varying covariate, which exposed a bug in `rxode2`; this
+  needs `rxode2` 5.1.8 or later.
+
+* `$TABLE` records now accept the `VARCALC=` and `FIXEDETAS=` options
+  instead of stopping with a syntax error (#262).  They only change how
+  NONMEM computes extra table metrics, so they are parsed and ignored.
+  Unrecognised `KEY=VALUE` `$TABLE` options now also accept numeric and
+  quoted values, and their value (for example `FOO=ETA1`) is no longer
+  mistaken for a table column.
+
+* A `$TABLE` `PARAFILE=` value no longer replaces the table's `FILE=` name.
+
+* Fixed a heap-use-after-free reported by CRAN's ASAN/valgrind checks.  The
+  record name used in syntax-error messages was stored in the parser's
+  duplicated-string pool, which is freed after every parse, so a later syntax
+  error (for example in a `.lst` file) printed freed memory.  The record name
+  now has its own buffer.
+
+* An `$OMEGA` label left over from a translation that stopped with an error
+  (for example a `NAMES()` count mismatch) is now cleared before the next
+  `$OMEGA` record, instead of being read from freed memory.
+
+* Syntax errors in a `.lst` file are now labelled as coming from the NONMEM
+  output rather than from the last control-stream record parsed (or from a
+  `NULL` record name).
+
+* The `PRED` validation no longer needs the `tibble` package.  It asked
+  `rxSolve()` for a tibble while the `IPRED` validation beside it asked for a
+  `data.frame`, so where `tibble` was unavailable the solve failed quietly and
+  only the `IPRED` half of `$meta$validation` was reported.  The tibble also
+  failed, whatever was installed, for models that output a variable twice
+  (such as `ADVAN5`/`ADVAN7` `matExp()` models).
+
 # nonmem2rx 0.1.11
+
+* A `THETA(#)` or `ETA(#)` used in the model beyond what `$THETA` or
+  `$OMEGA` defines is now an error.  Previously it was silently translated
+  into a data covariate (like `eta11`), giving a model that could not be
+  used with the intended data.
+
+* An empty `;` comment line no longer swallows the line after it.  In
+  `$THETA`/`$OMEGA` this silently dropped an estimate and renumbered every
+  one after it (and likewise in the other record parsers).
+
+* Reading a NONMEM `.lst` covariance block is no longer slow.  `lst.g` let a
+  run of numbers be cut into `constant_line`s in exponentially many ways, and
+  dparser resolves that ambiguity by greediness, which re-walks the whole
+  accumulated parse tree at every split point -- so the cost grew with the cube
+  of the block size (40 rows took 26 seconds).  A statement is now a single
+  item rather than a line of them, which the tree walk never distinguished
+  anyway: `inst/run-153.lst` imports in 0.17s instead of 2.24s,
+  `DDMODEL00000301/run3.lst` in 0.15s instead of 1.57s, and 400 rows -- which
+  did not finish in any usable time before -- parse in 0.3s.  A `+` still has
+  to lead an item, so a stray one is still a syntax error (#250).
+
+* `$THETA` and `$OMEGA`/`$SIGMA` records parse about 2.5x faster.  Both
+  grammars had the ambiguity found in `rxode2`'s `tran.g`: a nullable
+  `statement` under `(statement)+`, which lets an empty statement be inserted
+  at every position, and which dparser resolves by greediness.  `omega.g` also
+  derived the empty string three different ways through `block_type`.  The
+  emptiness moved to the list, so an empty record and `$OMEGA BLOCK(n) SAME`
+  (which carries no statements) still parse.  A 400-theta `$THETA` record goes
+  from 7.3s to 2.8s (#250).
+
+  Both grammars now report no ambiguity at all under dparser's
+  `ambiguity_fn`.  What is left of their super-linear cost is not ambiguity but
+  GLR branching from the optional `')'` and `','` in `theta.g`'s `theta1`..
+  `theta8` and in `omega.g`'s `omega0`..`omega4`, which is a separate matter.
+
+  The remaining `inst/*.g` grammars (`abbrev.g`, `abbrec.g`, `data.g`,
+  `input.g`, `model.g`, `sub.g`, `tab.g`) were measured and are flat in the
+  record size.
+
+* Validation plots now separate multiple endpoints (#171).  When the
+  observations come from more than one `DVID` (or, without a `DVID`, more
+  than one `CMT`), the `predCompare`, `ipredCompare` and `iwresCompare`
+  datasets gain a final `ENDPOINT` column (like `"DVID=2"`).  `plot()` and
+  `autoplot()` then facet the NONMEM vs rxode2 overview by type and
+  endpoint, and the per-subject pages draw one panel for each subject and
+  endpoint with its own y scale, so endpoints on different scales are no
+  longer drawn on the same axis.  Single-endpoint output is unchanged.
+
+* `$DATA` now accepts every option in the NONMEM `$DATA` usage, and the ones
+  that change the data are applied when the input data is imported (#181):
+  - `TRANSLATE=(TIME/F[/D], II/F[/D])` divides TIME/II by `F` and rounds to
+    `D` digits (for example `TIME/24` for hours to days, `II/0.01/6`).  The
+    item may be named by its `$INPUT` synonym.
+  - Before `TRANSLATE`, NM-TRAN's day-time translation is done: `hh:mm` or
+    `hh:mm:ss` clock times and `DATE`/`DAT1`/`DAT2`/`DAT3` dates (with
+    `LAST20=` for two digit years) become times relative to each
+    individual's first record, and `hh:mm` II values become hours.
+  - `RECORDS=n` (also `NRECORDS`, `RECS`, `NRECS`) is now applied before
+    `IGNORE`/`ACCEPT`, as NM-TRAN does, and `RECORDS=label` (`ID`, `IR`,
+    `INDREC`, ...) is supported.
+  - `NULL=c` replaces null data items and `MISDAT=r` values are read as 0.
+  - `DROP`/`SKIP` items are kept until after `IGNORE`/`ACCEPT`, so they can
+    be used in filter conditions.
+  - The format specification, `*`, `CHECKDATA`, `NOOPEN`, `BLANKOK`, `REPL`,
+    `(NO)FDATACSV`, `PRED_IGNORE_DATA`, the `/=` operator, unquoted
+    character values (`GEN.EQ.M` compares with the string `M`, not a
+    column) and lower/mixed case options are now parsed.
+  - An `IGNORE`/`ACCEPT` condition on a missing value is not met, so `ACCEPT`
+    drops such records; an `IGNORE`/`ACCEPT` list that cannot be parsed is
+    now a syntax error instead of being silently skipped.
+
+* Importing a dataset with many reused NONMEM `ID`s is no longer slow.  The
+  next free alias was found by walking every alias already given out and
+  scanning the whole level list for each, so the cost grew with the cube of
+  the number of reused blocks: 4000 blocks took about 10 seconds.  Only the
+  next free suffix per id is remembered now, and the same 4000 blocks are
+  below timer resolution.
+
+* Importing a dataset where a NONMEM `ID` starts over more than twice no
+  longer hangs.  A repeated `ID` is aliased `<id>#2`, `<id>#3`, and so on, but
+  the alias counter never advanced, so the third block of an id searched for
+  `#2`, found it, and searched for `#2` again without end.  Two blocks were
+  fine, which is why this went unnoticed; three or more -- an id reused after
+  a time reset, as in crossover and multiple-occasion data -- never returned.
 
 
 ## Internal

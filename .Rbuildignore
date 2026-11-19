@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.git$
 ^\.github$
 ^README\.Rmd$
 ^inst/PsN.zip$
@@ -25,3 +26,7 @@
 ^doc$
 ^Meta$
 ^src/.*[.]d$
+^\.habit-hooks$
+^src/compile_commands\.json$
+^\.aider.*$
+^revdep$

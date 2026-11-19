@@ -7,7 +7,7 @@
   Available at https://github.com/jplevyak/dparser
 */
 
-#line 7 "/home/matt-fidler/src/nonmem2rx/src/input.g.d_parser.c"
+#line 7 "/home/matt-fidler/src/nonmem2rx-undefined-theta-eta/src/input.g.d_parser.c"
 #include "dparse.h"
 
 D_Reduction d_reduction_0_nonmem2rxInput = {1, 0, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
@@ -28,7 +28,7 @@ D_Reduction d_reduction_24_nonmem2rxInput = {1, 13, NULL, NULL, 0, 0, 0, 0, 0, 0
 D_Reduction d_reduction_25_nonmem2rxInput = {2, 14, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
 D_Reduction d_reduction_26_nonmem2rxInput = {0, 14, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
 D_Reduction d_reduction_27_nonmem2rxInput = {1, 15, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
-D_Reduction d_reduction_29_nonmem2rxInput = {2, 16, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
+D_Reduction d_reduction_29_nonmem2rxInput = {1, 16, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
 D_Reduction d_reduction_30_nonmem2rxInput = {1, 17, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_0_nonmem2rxInput = {18, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_1_nonmem2rxInput = {19, 0, 0, 0, 0, 0, NULL};
@@ -41,8 +41,7 @@ D_Shift d_shift_7_nonmem2rxInput = {25, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_8_nonmem2rxInput = {26, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_9_nonmem2rxInput = {27, 0, 0, 0, 0, 0, NULL};
 D_Shift d_shift_10_nonmem2rxInput = {28, 0, 0, 0, 0, 0, NULL};
-D_Shift d_shift_11_nonmem2rxInput = {29, 0, 0, 0, 0, 0, NULL};
-D_Shift d_shift_12_nonmem2rxInput = {30, 0, 0, 0, -4, 0, NULL};
+D_Shift d_shift_11_nonmem2rxInput = {29, 0, 0, 0, -4, 0, NULL};
 
 D_Shift * d_accepts_diff_0_0_nonmem2rxInput[] = {0};
 D_Shift * d_accepts_diff_0_1_nonmem2rxInput[] = {&d_shift_5_nonmem2rxInput,0};
@@ -89,6 +88,20 @@ unsigned char d_scanner_0_0_2_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 };
 
+unsigned char d_scanner_0_1_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+};
+
+unsigned char d_scanner_0_1_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+};
+
 D_Shift * d_shift_0_1_nonmem2rxInput[] = {&d_shift_10_nonmem2rxInput,NULL};
 
 unsigned char d_scanner_0_2_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
@@ -105,7 +118,7 @@ unsigned char d_scanner_0_2_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 
 };
 
-D_Shift * d_shift_0_2_nonmem2rxInput[] = {&d_shift_12_nonmem2rxInput,NULL};
+D_Shift * d_shift_0_2_nonmem2rxInput[] = {&d_shift_11_nonmem2rxInput,NULL};
 
 unsigned char d_scanner_0_3_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
@@ -315,27 +328,6 @@ unsigned char d_accepts_diff_0_24_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 
 D_Shift * d_shift_0_24_nonmem2rxInput[] = {&d_shift_4_nonmem2rxInput,NULL};
 
-D_Shift * d_accepts_diff_8_0_nonmem2rxInput[] = {0};
-D_Shift ** d_accepts_diff_8_nonmem2rxInput[] = {
-d_accepts_diff_8_0_nonmem2rxInput
-};
-
-unsigned char d_scanner_8_0_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
-0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-};
-
-unsigned char d_scanner_8_0_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-};
-
-D_Shift * d_shift_8_0_nonmem2rxInput[] = {&d_shift_11_nonmem2rxInput,NULL};
-
 D_Shift * d_accepts_diff_13_0_nonmem2rxInput[] = {0};
 D_Shift ** d_accepts_diff_13_nonmem2rxInput[] = {
 d_accepts_diff_13_0_nonmem2rxInput
@@ -371,162 +363,176 @@ unsigned char d_scanner_25_1_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 
 D_Shift * d_shift_25_1_nonmem2rxInput[] = {&d_shift_9_nonmem2rxInput,NULL};
 
-D_Shift * d_accepts_diff_28_0_nonmem2rxInput[] = {0};
-D_Shift ** d_accepts_diff_28_nonmem2rxInput[] = {
-d_accepts_diff_28_0_nonmem2rxInput
+unsigned char d_scanner_25_2_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
 };
 
-unsigned char d_scanner_28_0_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_25_2_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
+};
+
+D_Shift * d_accepts_diff_27_0_nonmem2rxInput[] = {0};
+D_Shift ** d_accepts_diff_27_nonmem2rxInput[] = {
+d_accepts_diff_27_0_nonmem2rxInput
+};
+
+unsigned char d_scanner_27_0_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_28_1_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_27_1_0_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_28_1_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_27_1_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-D_Shift * d_accepts_diff_29_0_nonmem2rxInput[] = {0};
-D_Shift * d_accepts_diff_29_1_nonmem2rxInput[] = {&d_shift_1_nonmem2rxInput,0};
-D_Shift * d_accepts_diff_29_2_nonmem2rxInput[] = {&d_shift_3_nonmem2rxInput,0};
-D_Shift * d_accepts_diff_29_3_nonmem2rxInput[] = {&d_shift_4_nonmem2rxInput,0};
-D_Shift * d_accepts_diff_29_4_nonmem2rxInput[] = {&d_shift_2_nonmem2rxInput,0};
-D_Shift * d_accepts_diff_29_5_nonmem2rxInput[] = {&d_shift_0_nonmem2rxInput,0};
-D_Shift * d_accepts_diff_29_6_nonmem2rxInput[] = {&d_shift_5_nonmem2rxInput,0};
-D_Shift ** d_accepts_diff_29_nonmem2rxInput[] = {
-d_accepts_diff_29_0_nonmem2rxInput,
-d_accepts_diff_29_1_nonmem2rxInput,
-d_accepts_diff_29_2_nonmem2rxInput,
-d_accepts_diff_29_3_nonmem2rxInput,
-d_accepts_diff_29_4_nonmem2rxInput,
-d_accepts_diff_29_5_nonmem2rxInput,
-d_accepts_diff_29_6_nonmem2rxInput
+D_Shift * d_accepts_diff_28_0_nonmem2rxInput[] = {0};
+D_Shift * d_accepts_diff_28_1_nonmem2rxInput[] = {&d_shift_3_nonmem2rxInput,0};
+D_Shift * d_accepts_diff_28_2_nonmem2rxInput[] = {&d_shift_4_nonmem2rxInput,0};
+D_Shift * d_accepts_diff_28_3_nonmem2rxInput[] = {&d_shift_0_nonmem2rxInput,0};
+D_Shift * d_accepts_diff_28_4_nonmem2rxInput[] = {&d_shift_5_nonmem2rxInput,0};
+D_Shift * d_accepts_diff_28_5_nonmem2rxInput[] = {&d_shift_1_nonmem2rxInput,0};
+D_Shift * d_accepts_diff_28_6_nonmem2rxInput[] = {&d_shift_2_nonmem2rxInput,0};
+D_Shift ** d_accepts_diff_28_nonmem2rxInput[] = {
+d_accepts_diff_28_0_nonmem2rxInput,
+d_accepts_diff_28_1_nonmem2rxInput,
+d_accepts_diff_28_2_nonmem2rxInput,
+d_accepts_diff_28_3_nonmem2rxInput,
+d_accepts_diff_28_4_nonmem2rxInput,
+d_accepts_diff_28_5_nonmem2rxInput,
+d_accepts_diff_28_6_nonmem2rxInput
 };
 
-unsigned char d_scanner_29_0_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_0_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 0, 2, 2, 2, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 6, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_2_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_2_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 7, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 8, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_3_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_3_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 10, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_4_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_4_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 11, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_5_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_5_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 12, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_6_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_6_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 13, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_7_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_7_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 14, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_8_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_8_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 15, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_9_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_9_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 16, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_10_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_10_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 17, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_11_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_11_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 18, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_12_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_12_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 19, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_13_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_13_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 20, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_14_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_14_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 21, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_15_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_15_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 22, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_16_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_16_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 23, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 
 };
 
-unsigned char d_scanner_29_17_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
+unsigned char d_scanner_28_17_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2, 
 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
@@ -536,8 +542,8 @@ unsigned char d_scanner_29_17_1_nonmem2rxInput[SCANNER_BLOCK_SIZE] = {
 SB_uint8 d_scanner_0_nonmem2rxInput[25] = {
 {NULL, {d_scanner_0_0_0_nonmem2rxInput, d_scanner_0_0_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_1_nonmem2rxInput, {d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput
- , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
+{d_shift_0_1_nonmem2rxInput, {d_scanner_0_1_0_nonmem2rxInput, d_scanner_0_1_1_nonmem2rxInput
+ , d_scanner_0_1_1_nonmem2rxInput, d_scanner_0_1_1_nonmem2rxInput}},
 {d_shift_0_2_nonmem2rxInput, {d_scanner_0_2_0_nonmem2rxInput, d_scanner_0_2_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
 {d_shift_0_2_nonmem2rxInput, {d_scanner_0_2_0_nonmem2rxInput, d_scanner_0_3_1_nonmem2rxInput
@@ -639,20 +645,6 @@ SB_trans_uint8 d_transition_0_nonmem2rxInput[25] = {
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}}
 };
 
-SB_uint8 d_scanner_8_nonmem2rxInput[2] = {
-{d_shift_8_0_nonmem2rxInput, {d_scanner_8_0_0_nonmem2rxInput, d_scanner_8_0_1_nonmem2rxInput
- , d_scanner_8_0_1_nonmem2rxInput, d_scanner_8_0_1_nonmem2rxInput}},
-{d_shift_8_0_nonmem2rxInput, {d_scanner_8_0_0_nonmem2rxInput, d_scanner_8_0_1_nonmem2rxInput
- , d_scanner_8_0_1_nonmem2rxInput, d_scanner_8_0_1_nonmem2rxInput}}
-};
-
-SB_trans_uint8 d_transition_8_nonmem2rxInput[2] = {
-{{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
- , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
-{{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
- , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}}
-};
-
 SB_uint8 d_scanner_13_nonmem2rxInput[2] = {
 {NULL, {d_scanner_13_0_0_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
@@ -672,8 +664,8 @@ SB_uint8 d_scanner_25_nonmem2rxInput[3] = {
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
 {d_shift_25_1_nonmem2rxInput, {d_scanner_25_1_0_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_1_nonmem2rxInput, {d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput
- , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}}
+{d_shift_0_1_nonmem2rxInput, {d_scanner_25_2_0_nonmem2rxInput, d_scanner_25_2_1_nonmem2rxInput
+ , d_scanner_25_2_1_nonmem2rxInput, d_scanner_25_2_1_nonmem2rxInput}}
 };
 
 SB_trans_uint8 d_transition_25_nonmem2rxInput[3] = {
@@ -685,72 +677,72 @@ SB_trans_uint8 d_transition_25_nonmem2rxInput[3] = {
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}}
 };
 
-SB_uint8 d_scanner_28_nonmem2rxInput[2] = {
-{NULL, {d_scanner_0_0_2_nonmem2rxInput, d_scanner_28_0_1_nonmem2rxInput
+SB_uint8 d_scanner_27_nonmem2rxInput[2] = {
+{NULL, {d_scanner_0_0_2_nonmem2rxInput, d_scanner_27_0_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}}
 };
 
-SB_trans_uint8 d_transition_28_nonmem2rxInput[2] = {
+SB_trans_uint8 d_transition_27_nonmem2rxInput[2] = {
 {{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
 {{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}}
 };
 
-SB_uint8 d_scanner_29_nonmem2rxInput[24] = {
-{NULL, {d_scanner_0_0_2_nonmem2rxInput, d_scanner_29_0_1_nonmem2rxInput
+SB_uint8 d_scanner_28_nonmem2rxInput[24] = {
+{NULL, {d_scanner_0_0_2_nonmem2rxInput, d_scanner_28_0_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_2_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_2_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_3_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_3_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_4_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_4_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_5_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_5_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_6_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_6_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_7_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_7_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_8_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_8_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_9_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_9_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_10_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_10_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_11_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_11_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_12_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_12_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_13_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_13_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_14_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_14_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_15_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_15_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_16_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_16_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_2_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_29_17_1_nonmem2rxInput
+{d_shift_0_2_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_28_17_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_19_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_19_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_20_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_20_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_21_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_21_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_22_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_22_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_23_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_23_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}},
-{d_shift_0_24_nonmem2rxInput, {d_scanner_28_1_0_nonmem2rxInput, d_scanner_28_1_1_nonmem2rxInput
+{d_shift_0_24_nonmem2rxInput, {d_scanner_27_1_0_nonmem2rxInput, d_scanner_27_1_1_nonmem2rxInput
  , d_scanner_0_0_2_nonmem2rxInput, d_scanner_0_0_2_nonmem2rxInput}}
 };
 
-SB_trans_uint8 d_transition_29_nonmem2rxInput[24] = {
+SB_trans_uint8 d_transition_28_nonmem2rxInput[24] = {
 {{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
 {{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
@@ -786,23 +778,23 @@ SB_trans_uint8 d_transition_29_nonmem2rxInput[24] = {
 {{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
 {{d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput
+ , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
+{{d_accepts_diff_0_24_0_nonmem2rxInput, d_accepts_diff_0_24_1_nonmem2rxInput
+ , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
+{{d_accepts_diff_0_20_0_nonmem2rxInput, d_accepts_diff_0_20_1_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
 {{d_accepts_diff_0_22_0_nonmem2rxInput, d_accepts_diff_0_22_1_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
 {{d_accepts_diff_0_23_0_nonmem2rxInput, d_accepts_diff_0_23_1_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
-{{d_accepts_diff_0_21_0_nonmem2rxInput, d_accepts_diff_0_21_1_nonmem2rxInput
- , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
-{{d_accepts_diff_0_20_0_nonmem2rxInput, d_accepts_diff_0_20_1_nonmem2rxInput
- , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
-{{d_accepts_diff_0_24_0_nonmem2rxInput, d_accepts_diff_0_24_1_nonmem2rxInput
- , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
 {{d_accepts_diff_0_19_0_nonmem2rxInput, d_accepts_diff_0_19_1_nonmem2rxInput
+ , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}},
+{{d_accepts_diff_0_21_0_nonmem2rxInput, d_accepts_diff_0_21_1_nonmem2rxInput
  , d_accepts_diff_0_0_0_nonmem2rxInput, d_accepts_diff_0_0_0_nonmem2rxInput}}
 };
 
 unsigned char d_goto_valid_0_nonmem2rxInput[] = {
-0xfe,0x1f,0xff,0x50};
+0xfe,0x1f,0xff,0x30};
 unsigned char d_goto_valid_1_nonmem2rxInput[] = {
 0x0,0x60,0x0,0x0};
 D_Reduction * d_reductions_1_nonmem2rxInput[] = {&d_reduction_26_nonmem2rxInput};
@@ -813,11 +805,10 @@ D_Reduction * d_reductions_4_nonmem2rxInput[] = {&d_reduction_5_nonmem2rxInput};
 D_Reduction * d_reductions_5_nonmem2rxInput[] = {&d_reduction_5_nonmem2rxInput};
 D_Reduction * d_reductions_6_nonmem2rxInput[] = {&d_reduction_5_nonmem2rxInput};
 D_Reduction * d_reductions_7_nonmem2rxInput[] = {&d_reduction_5_nonmem2rxInput};
-unsigned char d_goto_valid_8_nonmem2rxInput[] = {
-0x0,0x0,0x0,0x20};
+D_Reduction * d_reductions_8_nonmem2rxInput[] = {&d_reduction_29_nonmem2rxInput};
 D_Reduction * d_reductions_9_nonmem2rxInput[] = {&d_reduction_30_nonmem2rxInput};
 unsigned char d_goto_valid_11_nonmem2rxInput[] = {
-0xf8,0x1f,0xff,0x50};
+0xf8,0x1f,0xff,0x30};
 D_Reduction * d_reductions_11_nonmem2rxInput[] = {&d_reduction_1_nonmem2rxInput};
 D_Reduction * d_reductions_12_nonmem2rxInput[] = {&d_reduction_3_nonmem2rxInput};
 unsigned char d_goto_valid_13_nonmem2rxInput[] = {
@@ -838,25 +829,23 @@ D_Reduction * d_reductions_23_nonmem2rxInput[] = {&d_reduction_18_nonmem2rxInput
 unsigned char d_goto_valid_25_nonmem2rxInput[] = {
 0x0,0x80,0x1,0x18};
 D_Reduction * d_reductions_25_nonmem2rxInput[] = {&d_reduction_24_nonmem2rxInput};
-D_Reduction * d_reductions_26_nonmem2rxInput[] = {&d_reduction_29_nonmem2rxInput};
-D_Reduction * d_reductions_27_nonmem2rxInput[] = {&d_reduction_2_nonmem2rxInput};
+D_Reduction * d_reductions_26_nonmem2rxInput[] = {&d_reduction_2_nonmem2rxInput};
+unsigned char d_goto_valid_27_nonmem2rxInput[] = {
+0x0,0x0,0x2,0x20};
 unsigned char d_goto_valid_28_nonmem2rxInput[] = {
-0x0,0x0,0x2,0x40};
-unsigned char d_goto_valid_29_nonmem2rxInput[] = {
-0x10,0x0,0xfe,0x40};
-D_Reduction * d_reductions_30_nonmem2rxInput[] = {&d_reduction_27_nonmem2rxInput};
-D_Reduction * d_reductions_31_nonmem2rxInput[] = {&d_reduction_25_nonmem2rxInput};
-D_Reduction * d_reductions_32_nonmem2rxInput[] = {&d_reduction_27_nonmem2rxInput};
-D_Reduction * d_reductions_33_nonmem2rxInput[] = {&d_reduction_11_nonmem2rxInput};
-D_Reduction * d_reductions_34_nonmem2rxInput[] = {&d_reduction_12_nonmem2rxInput};
-D_Reduction * d_reductions_35_nonmem2rxInput[] = {&d_reduction_17_nonmem2rxInput};
-unsigned short d_gotos_nonmem2rxInput[81] = {
-11,12,13,14,15,16,17,18,19,20,21,22,25,26,27,23,
-24,3,4,5,6,7,8,29,30,0,0,9,0,10,28,14,
-15,16,17,18,19,20,21,22,32,33,0,23,24,3,4,5,
-6,7,8,34,31,9,35,9,0,10,0,0,0,0,0,0,
-10,0,0,36,3,4,5,6,7,8,0,0,0,0,0,0,
-10};
+0x10,0x0,0xfe,0x20};
+D_Reduction * d_reductions_29_nonmem2rxInput[] = {&d_reduction_27_nonmem2rxInput};
+D_Reduction * d_reductions_30_nonmem2rxInput[] = {&d_reduction_25_nonmem2rxInput};
+D_Reduction * d_reductions_31_nonmem2rxInput[] = {&d_reduction_27_nonmem2rxInput};
+D_Reduction * d_reductions_32_nonmem2rxInput[] = {&d_reduction_11_nonmem2rxInput};
+D_Reduction * d_reductions_33_nonmem2rxInput[] = {&d_reduction_12_nonmem2rxInput};
+D_Reduction * d_reductions_34_nonmem2rxInput[] = {&d_reduction_17_nonmem2rxInput};
+unsigned short d_gotos_nonmem2rxInput[76] = {
+11,12,13,14,15,16,17,18,19,20,21,22,25,26,28,23,
+24,3,4,5,6,7,8,29,0,0,0,9,10,27,14,15,
+16,17,18,19,20,21,22,31,32,33,23,24,3,4,5,6,
+7,8,34,30,9,10,9,10,0,0,0,0,0,0,0,35,
+3,4,5,6,7,8,0,0,0,0,0,10};
 
 
 D_State d_states_nonmem2rxInput[] = {
@@ -868,12 +857,12 @@ D_State d_states_nonmem2rxInput[] = {
 {NULL, -2147483647, {1, d_reductions_5_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_6_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_7_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_8_nonmem2rxInput, 15, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_8_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_8_nonmem2rxInput, d_accepts_diff_8_nonmem2rxInput, -1},
+{NULL, -2147483647, {1, d_reductions_8_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_9_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {0, NULL}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 1, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_11_nonmem2rxInput, -27, {1, d_reductions_11_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_0_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_0_nonmem2rxInput, d_accepts_diff_0_nonmem2rxInput, -1},
+{d_goto_valid_11_nonmem2rxInput, -26, {1, d_reductions_11_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_0_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_0_nonmem2rxInput, d_accepts_diff_0_nonmem2rxInput, -1},
 {NULL, -2147483647, {1, d_reductions_12_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_13_nonmem2rxInput, 1, {1, d_reductions_13_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_13_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_13_nonmem2rxInput, d_accepts_diff_13_nonmem2rxInput, -1},
+{d_goto_valid_13_nonmem2rxInput, 10, {1, d_reductions_13_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_13_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_13_nonmem2rxInput, d_accepts_diff_13_nonmem2rxInput, -1},
 {NULL, -2147483647, {1, d_reductions_14_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_15_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_16_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
@@ -883,19 +872,18 @@ D_State d_states_nonmem2rxInput[] = {
 {NULL, -2147483647, {1, d_reductions_20_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_21_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_22_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_23_nonmem2rxInput, 0, {1, d_reductions_23_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_13_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_13_nonmem2rxInput, d_accepts_diff_13_nonmem2rxInput, -1},
+{d_goto_valid_23_nonmem2rxInput, 1, {1, d_reductions_23_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_13_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_13_nonmem2rxInput, d_accepts_diff_13_nonmem2rxInput, -1},
 {NULL, -2147483647, {0, NULL}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 1, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_25_nonmem2rxInput, -25, {1, d_reductions_25_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_25_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_25_nonmem2rxInput, d_accepts_diff_25_nonmem2rxInput, -1},
+{d_goto_valid_25_nonmem2rxInput, -24, {1, d_reductions_25_nonmem2rxInput}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_25_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_25_nonmem2rxInput, d_accepts_diff_25_nonmem2rxInput, -1},
 {NULL, -2147483647, {1, d_reductions_26_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{NULL, -2147483647, {1, d_reductions_27_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{d_goto_valid_28_nonmem2rxInput, -34, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_28_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_28_nonmem2rxInput, d_accepts_diff_28_nonmem2rxInput, -1},
-{d_goto_valid_29_nonmem2rxInput, -50, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_29_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_29_nonmem2rxInput, d_accepts_diff_29_nonmem2rxInput, -1},
+{d_goto_valid_27_nonmem2rxInput, -24, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_27_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_27_nonmem2rxInput, d_accepts_diff_27_nonmem2rxInput, -1},
+{d_goto_valid_28_nonmem2rxInput, -46, {0, NULL}, {0, NULL}, {0, NULL}, 1, NULL, (void*)d_scanner_28_nonmem2rxInput, sizeof(unsigned char) , 0, D_SCAN_ALL, (void*)d_transition_28_nonmem2rxInput, d_accepts_diff_28_nonmem2rxInput, -1},
+{NULL, -2147483647, {1, d_reductions_29_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_30_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_31_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_32_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
 {NULL, -2147483647, {1, d_reductions_33_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{NULL, -2147483647, {1, d_reductions_34_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1},
-{NULL, -2147483647, {1, d_reductions_35_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1}
+{NULL, -2147483647, {1, d_reductions_34_nonmem2rxInput}, {0, NULL}, {0, NULL}, 0, NULL, NULL, sizeof(unsigned char) , 0, D_SCAN_ALL, NULL, NULL, -1}
 };
 
 D_Symbol d_symbols_nonmem2rxInput[] = {
@@ -927,10 +915,9 @@ D_Symbol d_symbols_nonmem2rxInput[] = {
 {D_SYMBOL_STRING, "=", 1, -1},
 {D_SYMBOL_STRING, "=", 1, -1},
 {D_SYMBOL_REGEX, "[ \\t\\r\\n,]+", 14, -1},
-{D_SYMBOL_STRING, ";", 1, -1},
-{D_SYMBOL_REGEX, "[^\\n]*", 7, -1},
+{D_SYMBOL_REGEX, ";[^\\n]*", 8, -1},
 {D_SYMBOL_REGEX, "[a-zA-Z][a-zA-Z0-9_]*", 21, -1},
 };
 
 D_ParserTables parser_tables_nonmem2rxInput = {
-36, d_states_nonmem2rxInput, d_gotos_nonmem2rxInput, 1, 31, d_symbols_nonmem2rxInput, NULL, 0, NULL, 0};
+35, d_states_nonmem2rxInput, d_gotos_nonmem2rxInput, 1, 30, d_symbols_nonmem2rxInput, NULL, 0, NULL, 0};

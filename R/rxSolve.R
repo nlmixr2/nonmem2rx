@@ -4,9 +4,9 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     inits = NULL, scale = NULL, method = "liblsoda", sigdig = NULL, 
     atol = 1e-08, rtol = 1e-06, maxsteps = 70000L, hmin = 0, 
     hmax = NA_real_, hmaxSd = 0, hini = 0, maxordn = 12L, maxords = 5L, 
-    order = 5L, ..., cores, covsInterpolation = c("locf", "linear", 
-        "nocb", "midpoint"), naInterpolation = c("locf", "nocb"), 
-    addlKeepsCov = FALSE, addlDropSs = TRUE, ssAtDoseTime = TRUE, 
+    order = 5L, ..., cores, nonmem, covsInterpolation = c("locf", 
+        "linear", "nocb", "midpoint"), naInterpolation = c("locf", 
+        "nocb"), addlKeepsCov = FALSE, addlDropSs = TRUE, ssAtDoseTime = TRUE, 
     safeZero = TRUE, safePow = TRUE, safeLog = TRUE, ss2cancelAllPending = FALSE, 
     nStud = 1L, dfSub = 0, dfObs = 0, thetaMat = NULL, ssAtol = 1e-08, 
     ssRtol = 1e-06, sigma = NULL, envir = parent.frame()) {
@@ -17,9 +17,19 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
         covsInterpolation <- "nocb"
         .minfo("using nocb interpolation like NONMEM, specify directly to change")
     }
+    if (missing(nonmem) && .nonmem2rxUseNonmemSolve(object)) {
+        .minfo("using nonmem=TRUE so $PK-like statements read the record time like NONMEM, specify directly to change")
+        nonmem <- TRUE
+    }
     if (missing(addlKeepsCov)) {
-        .minfo("using addlKeepsCov=TRUE like NONMEM, specify directly to change")
-        addlKeepsCov <- TRUE
+        if (!missing(nonmem) && isTRUE(nonmem)) {
+            .minfo("using addlKeepsCov=FALSE with nonmem=TRUE like NONMEM, specify directly to change")
+            addlKeepsCov <- FALSE
+        }
+        else {
+            .minfo("using addlKeepsCov=TRUE like NONMEM, specify directly to change")
+            addlKeepsCov <- TRUE
+        }
     }
     if (missing(addlDropSs)) {
         .minfo("using addlDropSs=TRUE like NONMEM, specify directly to change")
@@ -138,15 +148,32 @@ rxSolve.nonmem2rx <- function(object, params = NULL, events = NULL,
     }
     .cls <- class(object)
     class(object) <- .cls[-which(.cls == "nonmem2rx")]
-    rxode2::rxSolve(object = object, params = params, events = events, 
-        inits = inits, scale = scale, method = method, sigdig = sigdig, 
-        atol = atol, rtol = rtol, maxsteps = maxsteps, hmin = hmin, 
-        hmax = hmax, hmaxSd = hmaxSd, hini = hini, maxordn = maxordn, 
-        maxords = maxords, order = order, ..., cores = cores, 
-        covsInterpolation = covsInterpolation, addlKeepsCov = addlKeepsCov, 
-        addlDropSs = addlDropSs, ssAtDoseTime = ssAtDoseTime, 
-        safeZero = safeZero, safePow = safePow, safeLog = safeLog, 
-        ss2cancelAllPending = ss2cancelAllPending, nStud = nStud, 
-        dfSub = dfSub, dfObs = dfObs, thetaMat = thetaMat, ssAtol = ssAtol, 
-        ssRtol = ssRtol, sigma = sigma, envir = envir)
+    if (missing(nonmem)) {
+        rxode2::rxSolve(object = object, params = params, events = events, 
+            inits = inits, scale = scale, method = method, sigdig = sigdig, 
+            atol = atol, rtol = rtol, maxsteps = maxsteps, hmin = hmin, 
+            hmax = hmax, hmaxSd = hmaxSd, hini = hini, maxordn = maxordn, 
+            maxords = maxords, order = order, ..., cores = cores, 
+            covsInterpolation = covsInterpolation, addlKeepsCov = addlKeepsCov, 
+            addlDropSs = addlDropSs, ssAtDoseTime = ssAtDoseTime, 
+            safeZero = safeZero, safePow = safePow, safeLog = safeLog, 
+            ss2cancelAllPending = ss2cancelAllPending, nStud = nStud, 
+            dfSub = dfSub, dfObs = dfObs, thetaMat = thetaMat, 
+            ssAtol = ssAtol, ssRtol = ssRtol, sigma = sigma, 
+            envir = envir)
+    }
+    else {
+        rxode2::rxSolve(object = object, params = params, events = events, 
+            inits = inits, scale = scale, method = method, sigdig = sigdig, 
+            atol = atol, rtol = rtol, maxsteps = maxsteps, hmin = hmin, 
+            hmax = hmax, hmaxSd = hmaxSd, hini = hini, maxordn = maxordn, 
+            maxords = maxords, order = order, ..., cores = cores, 
+            covsInterpolation = covsInterpolation, addlKeepsCov = addlKeepsCov, 
+            addlDropSs = addlDropSs, ssAtDoseTime = ssAtDoseTime, 
+            safeZero = safeZero, safePow = safePow, safeLog = safeLog, 
+            ss2cancelAllPending = ss2cancelAllPending, nStud = nStud, 
+            dfSub = dfSub, dfObs = dfObs, thetaMat = thetaMat, 
+            ssAtol = ssAtol, ssRtol = ssRtol, sigma = sigma, 
+            envir = envir, nonmem = nonmem)
+    }
 }

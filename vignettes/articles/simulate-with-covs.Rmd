@@ -84,7 +84,7 @@ dataset.
 
 
 ```{r simCovUncertainty2}
-# first create the base event table with the nubmer of individuals
+# first create the base event table with the number of individuals
 # matching the NONMEM dataset:
 ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
   et(seq(0, 365*24, by=7*24)) %>% # Assume weekly observations
@@ -122,7 +122,7 @@ will have `225` patients, which is a `5` fold increase in subjects
 compared to the NONMEM input.
 
 ```{r simUncertanty3}
-# first create the base event table with the nubmer of individuals
+# first create the base event table with the number of individuals
 # matching the NONMEM dataset:
 ev <- et(amt=410, ii=20*24, until=365*24) %>% # Add dosing 20 days apart for a year
   et(seq(0, 365*24, by=7*24)) %>% # Assume weekly observations

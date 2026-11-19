@@ -1,5 +1,5 @@
-#' Apply the $abbrev replace rules to known abbreaviated code
-#'  
+#' Apply the $abbrev replace rules to known abbreviated code
+#'
 #' @return nothing, called for side effects
 #' @noRd
 #' @author Matthew L. Fidler
@@ -12,8 +12,8 @@
   }
 }
 
-#' Replace an abbreviated code block  
-#'  
+#' Replace an abbreviated code block
+#'
 #' @param code Code to replace
 #' @return replaced abbreviated code
 #' @noRd
@@ -33,8 +33,8 @@
 }
 #' Create a string for a regular expression where case is ignored
 #'
-#' @param item chracter name
-#' @return regular expression 
+#' @param item character name
+#' @return regular expression
 #' @noRd
 #' @author Matthew L. Fidler
 .regexpIgnoreCase <- function(item) {
@@ -53,7 +53,7 @@
         collapse="")
 }
 #' Replace an item according to the replacement rules
-#'  
+#'
 #' @param item replacement item
 #' @param lines lines for replacement
 #' @return replaced line
@@ -73,7 +73,7 @@
 }
 #' Replace rep1 type of expression
 #'
-#'  
+#'
 #' @param rep1 rep1 replacement from nonmem parsing
 #' @param lines  lines to replace
 #' @return replaced lines
@@ -86,7 +86,7 @@
   gsub(.reg, .with, lines, perl=TRUE)
 }
 #' Handle rep2 lines
-#'  
+#'
 #' @param rep2 Replace 2 lines
 #' @param lines lines to replace
 #' @return replaced lines
@@ -96,7 +96,7 @@
   .reg <- paste0("\\b", .regexpIgnoreCase(rep2[[1]]), "\\b")
   gsub(.reg, rep2[[2]], lines)
 }
-#' Handle data item replacement 
+#' Handle data item replacement
 #'
 #' @param repDI data item replacement
 #' @param lines lines to replace
@@ -166,10 +166,10 @@
 }
 #' Replace data value item
 #'
-#'  
+#'
 #' @param repDVI data value replacement item
 #' @param lines input lines
-#' @return ouput lines (replaced)
+#' @return output lines (replaced)
 #' @noRd
 #' @author Matthew L. Fidler
 .repDVI <- function(repDVI, lines) {

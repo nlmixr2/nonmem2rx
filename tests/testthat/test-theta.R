@@ -15,6 +15,10 @@ test_that("test thetas", {
   .t("1", "theta1 <- 1", 1)
 
   .t("1 ; clearance\n", c("theta1 <- 1", "label(\"clearance\")"), 1)
+  # an empty ';' comment line must not swallow the next theta
+  .t(" (0, 4) ; VP\n ;\n (0, 0.5) ; PERR\n",
+     c("theta1 <- c(0, 4)", "label(\"VP\")",
+       "theta2 <- c(0, 0.5)", "label(\"PERR\")"), 2)
   .t("(1 fix)", "theta1 <- fix(1)", 1)
   .t("(1) FIXED", "theta1 <- fix(1)", 1)
   .t("(1, 2.0) FIXED", "theta1 <- fix(1, 2.0)", 1)
