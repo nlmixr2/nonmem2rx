@@ -145,7 +145,7 @@ void wprint_parsetree_model(D_ParserTables pt, D_ParseNode *pn, int depth, print
     if (!nmrxstrcmpi("defdose", v)) {
       nonmem2rxDefDose = nonmem2rx_model_cmt - 1;
     } else if (!strncmpci("defobs", v, 6)) {
-      nonmem2rxDefDose = nonmem2rx_model_cmt - 1;
+      nonmem2rxDefObs = nonmem2rx_model_cmt - 1;
     }
   }
   if (nch != 0) {

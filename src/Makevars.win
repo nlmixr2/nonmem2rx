@@ -1,0 +1,2 @@
+# rxode2 checks sAppend()/sPrint()/addLine() formats when this is defined
+PKG_CPPFLAGS = -DRXODE2_SBUF_FORMAT
