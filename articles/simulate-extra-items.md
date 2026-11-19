@@ -179,8 +179,8 @@ modAuc
 #>     })
 #>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
 #>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
-#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=9.01e-06", 
-#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.93e-07, 4.63e-05); atol=3.63e-06", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.94e-07, 4.63e-05); atol=3.63e-06", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
@@ -321,7 +321,7 @@ s %>% filter(time %in% c(11.999,  23.999)) %>%
 #>    id time       AUC
 #> 1   1   12 12811.793
 #> 2   1   24 16247.506
-#> 3   2   12 11070.357
+#> 3   2   12 11070.356
 #> 4   2   24 16431.799
 #> 5   3   12  9693.564
 #> 6   3   24 15837.132
@@ -333,10 +333,10 @@ s %>% filter(time %in% c(11.999,  23.999)) %>%
 #> 12  6   24 18036.250
 #> 13  7   12 11402.477
 #> 14  7   24 16431.372
-#> 15  8   12 10226.535
+#> 15  8   12 10226.534
 #> 16  8   24 14220.704
 #> 17  9   12 14948.519
 #> 18  9   24 20909.278
-#> 19 10   12 13000.306
+#> 19 10   12 13000.305
 #> 20 10   24 19899.201
 ```

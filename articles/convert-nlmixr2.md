@@ -183,8 +183,8 @@ print(mod)
 #>     })
 #>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
 #>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
-#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=9.01e-06", 
-#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.93e-07, 4.63e-05); atol=3.63e-06", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.94e-07, 4.63e-05); atol=3.63e-06", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
@@ -348,8 +348,8 @@ print(new)
 #>     })
 #>     validation <- c("IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06", 
 #>         "IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.19e-05, 0.0418); atol=0.00167", 
-#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=9.01e-06", 
-#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.93e-07, 4.63e-05); atol=3.63e-06", 
+#>         "IWRES relative difference compared to Nonmem IWRES: 0%; 95% percentile: (0%,0.01%); rtol=8.99e-06", 
+#>         "IWRES absolute difference compared to Nonmem IWRES: 95% percentile: (1.94e-07, 4.63e-05); atol=3.63e-06", 
 #>         "PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06", 
 #>         "PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.41e-07,0.00382) atol=6.41e-06")
 #>     ini({
@@ -437,7 +437,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.2512234       0.016 0.038    0.001 100.95      0.809
+#> elapsed 0.1324662       0.032 0.046    0.002 100.95      1.047
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -468,7 +468,7 @@ print(fit)
 #> 
 #>     IPRED relative difference compared to Nonmem IPRED: 0%; 95% percentile: (0%,0%); rtol=6.43e-06
 #>     PRED relative difference compared to Nonmem PRED: 0%; 95% percentile: (0%,0%); rtol=6.41e-06
-#>     IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.16e-05, 0.0418); atol=0.00167
+#>     IPRED absolute difference compared to Nonmem IPRED: 95% percentile: (2.14e-05, 0.0418); atol=0.00167
 #>     PRED absolute difference compared to Nonmem PRED: 95% percentile: (1.4e-07,0.00382); atol=6.41e-06
 #>     nonmem2rx model file: '/home/runner/work/_temp/Library/nonmem2rx/mods/cpt/runODE032.ctl' 
 #> 
