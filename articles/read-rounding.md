@@ -79,6 +79,7 @@ mod <- nonmem2rx("pk.turnover.emax3-nonmem/pk.turnover.emax3.nmctl")
 #> ℹ renaming 'ytype' to 'nmytype'
 #> ℹ renaming 'dvid' to 'nmdvid'
 #> ℹ done
+#> ℹ observations with CMT=0 use the $MODEL DEFOBS compartment (1)
 #> ℹ read in nonmem IPRED data (for model validation): /home/runner/work/nonmem2rx/nonmem2rx/vignettes/articles/pk.turnover.emax3-nonmem/pk.turnover.emax3.pred
 #> ℹ done
 #> ℹ changing most variables to lower case
@@ -538,7 +539,7 @@ print(fit)
 #> ── Time (sec $time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2
-#> elapsed 0.1394053       0.033 0.058    0.001 320.27      1.064
+#> elapsed 0.1173151       0.019 0.039    0.001 320.27      0.716
 #> 
 #> ── Population Parameters ($parFixed or $parFixedDf): ──
 #> 
@@ -760,9 +761,8 @@ fit2 <- nlmixr(mod3, new$nonmemData, "focei", foceiControl(print=0))
 #> ✔ done
 #> → compiling events FD model...
 #> ✔ done
-#> [IDID=-3, illegal input detected (see printed message).]: 1 warning(s) for subject(s): 25
 #> calculating covariance matrix
-#> [====|====|====|====|====|====|====|====|====|====] 0:00:40 
+#> [====|====|====|====|====|====|====|====|====|====] 0:00:21 
 #> done
 #> → Calculating residuals/tables
 #> ✔ done
@@ -771,122 +771,121 @@ fit2
 #> ── nlmixr² FOCEi (outer: bobyqa) ──
 #> 
 #>           OBJF      AIC      BIC Log-likelihood Condition#(Cov) Condition#(Cor)
-#> FOCEi 1423.173 2340.868 2403.568      -1155.434         2804048        389.6313
+#> FOCEi 1423.072 2340.767 2403.467      -1155.383         1722197        1552.384
 #> 
 #> ── Time (sec fit2$time): ──
 #> 
 #>            setup optimize covariance preprocess postprocess table compress
-#> elapsed 2.586529 4.054886   20.25374      0.032        0.05 0.052    0.001
+#> elapsed 1.708729 2.162952   10.96781      0.021       0.037 0.045    0.001
 #>             other
-#> elapsed 0.1088467
+#> elapsed 0.0625063
 #> 
 #> ── Population Parameters (fit2$parFixed or fit2$parFixedDf): ──
 #> 
 #>                Parameter   Est.     SE  %RSE Back-transformed(95%CI) BSV(CV%)
-#> tktr            1 - tktr 0.0654 0.0614  93.9      1.07 (0.946, 1.20)         
-#> tka              2 - tka 0.0347  0.222   640      1.04 (0.670, 1.60)         
-#> tcl              3 - tcl  -2.00 0.0530  2.66    0.136 (0.122, 0.151)     27.9
-#> tv                4 - tv   2.05 0.0448  2.18       7.81 (7.15, 8.52)     23.4
-#> prop.err    5 - prop.err  0.159 0.0321  20.1   0.159 (0.0966, 0.222)         
-#> pkadd.err  6 - pkadd.err  0.595 0.0851  14.3    0.595 (0.428, 0.761)         
-#> temax          7 - temax   7.54  0.544  7.21     0.999 (0.998, 1.00)         
-#> tec50          8 - tec50  0.126 0.0927  73.4      1.13 (0.946, 1.36)     42.7
-#> tkout          9 - tkout  -2.96 0.0237 0.800 0.0516 (0.0493, 0.0541)         
-#> te0             10 - te0   4.57 0.0119 0.259       96.7 (94.5, 99.0)     4.99
-#> pdadd.err 11 - pdadd.err   3.83  0.332  8.68       3.83 (3.18, 4.48)         
+#> tktr            1 - tktr 0.0398  0.126   317      1.04 (0.813, 1.33)         
+#> tka              2 - tka 0.0647  0.145   224      1.07 (0.802, 1.42)         
+#> tcl              3 - tcl  -2.00 0.0532  2.66    0.136 (0.122, 0.151)     27.8
+#> tv                4 - tv   2.06 0.0445  2.16       7.81 (7.16, 8.52)     23.4
+#> prop.err    5 - prop.err  0.161 0.0320  19.9   0.161 (0.0982, 0.224)         
+#> pkadd.err  6 - pkadd.err  0.584 0.0815  14.0    0.584 (0.424, 0.743)         
+#> temax          7 - temax   8.41  0.498  5.92      1.00 (0.999, 1.00)         
+#> tec50          8 - tec50  0.129 0.0925  71.9      1.14 (0.949, 1.36)     42.6
+#> tkout          9 - tkout  -2.96 0.0236 0.797 0.0516 (0.0493, 0.0541)         
+#> te0             10 - te0   4.57 0.0118 0.259       96.7 (94.5, 99.0)     5.16
+#> pdadd.err 11 - pdadd.err   3.81  0.330  8.64       3.81 (3.17, 4.46)         
 #>           Shrink(SD)%
 #> tktr                 
 #> tka                  
-#> tcl             3.16 
-#> tv              9.32 
+#> tcl             2.89 
+#> tv              9.23 
 #> prop.err             
 #> pkadd.err            
 #> temax                
-#> tec50           7.53 
+#> tec50           7.44 
 #> tkout                
-#> te0             17.9 
+#> te0             18.4 
 #> pdadd.err            
 #>  
 #>   Covariance Type (fit2$covMethod): |r|,|s| (full)
 #>     other calculated covs (setCov()): r; s; r,s; r (full); s (full)
 #>   Some strong fixed parameter correlations exist (fit2$cor) :
 #>                  cor:tka,tktr              cor:tcl,tktr               cor:tv,tktr 
-#>                    0.917                    -0.204                    -0.0806   
+#>                    0.989                    -0.149                   -0.00552   
 #>         cor:prop.err,tktr        cor:pkadd.err,tktr            cor:temax,tktr 
-#>                   -0.149                     0.0502                      0.592  
+#>                   -0.268                    -0.0224                      0.437  
 #>            cor:tec50,tktr            cor:tkout,tktr              cor:te0,tktr 
-#>                    0.109                    -0.0130                      0.113   
+#>                -0.000862                     -0.136                      0.155   
 #>        cor:pdadd.err,tktr        cor:om.eta.cl,tktr         cor:om.eta.v,tktr 
-#>                  -0.0375                     -0.104                     -0.339  
+#>                   -0.108                     -0.135                     -0.381  
 #>      cor:om.eta.ec50,tktr        cor:om.eta.e0,tktr               cor:tcl,tka 
-#>                   -0.130                     0.0448                     -0.165   
+#>                  -0.0460                    -0.0290                     -0.209   
 #>                cor:tv,tka          cor:prop.err,tka         cor:pkadd.err,tka 
-#>                   0.0185                     -0.366                   -0.0236   
+#>                 -0.00518                     -0.346                    0.0143   
 #>             cor:temax,tka             cor:tec50,tka             cor:tkout,tka 
-#>                    0.503                   -0.0191                     -0.166   
+#>                    0.429                    0.0485                     -0.111   
 #>               cor:te0,tka         cor:pdadd.err,tka         cor:om.eta.cl,tka 
-#>                    0.207                     -0.127                     -0.155   
+#>                    0.209                     -0.102                     -0.160   
 #>          cor:om.eta.v,tka       cor:om.eta.ec50,tka         cor:om.eta.e0,tka 
-#>                   -0.347                   -0.0845                     -0.134   
+#>                   -0.346                   -0.0716                    -0.0798   
 #>                cor:tv,tcl          cor:prop.err,tcl         cor:pkadd.err,tcl 
-#>                    0.399                     0.206                     0.0793   
+#>                    0.401                     0.208                     0.0871   
 #>             cor:temax,tcl             cor:tec50,tcl             cor:tkout,tcl 
-#>                   -0.145                     -0.331                    0.0400   
+#>                   -0.179                     -0.336                    0.0376   
 #>               cor:te0,tcl         cor:pdadd.err,tcl         cor:om.eta.cl,tcl 
-#>                  -0.0311                    -0.0530                      0.395  
+#>                  -0.0326                    -0.0548                      0.397  
 #>          cor:om.eta.v,tcl       cor:om.eta.ec50,tcl         cor:om.eta.e0,tcl 
-#>                    0.190                    -0.0469                      0.139   
+#>                    0.192                    -0.0468                      0.136   
 #>           cor:prop.err,tv          cor:pkadd.err,tv              cor:temax,tv 
-#>                   0.0474                     -0.534                    -0.261   
+#>                   0.0459                     -0.532                    -0.291   
 #>              cor:tec50,tv              cor:tkout,tv                cor:te0,tv 
-#>                   -0.209                     0.0157                      0.120   
+#>                   -0.212                     0.0101                      0.116   
 #>          cor:pdadd.err,tv          cor:om.eta.cl,tv           cor:om.eta.v,tv 
-#>                   0.0517                     -0.195                     -0.128   
+#>                   0.0450                     -0.194                     -0.124   
 #>        cor:om.eta.ec50,tv          cor:om.eta.e0,tv    cor:pkadd.err,prop.err 
-#>                    0.305                    -0.263                     -0.199   
+#>                    0.308                    -0.260                     -0.207   
 #>        cor:temax,prop.err        cor:tec50,prop.err        cor:tkout,prop.err 
-#>                   0.0791                     -0.262                     0.0411   
+#>                   0.0957                     -0.270                     0.0418   
 #>          cor:te0,prop.err    cor:pdadd.err,prop.err    cor:om.eta.cl,prop.err 
-#>                   -0.506                    -0.140                     -0.186   
+#>                   -0.508                    -0.142                     -0.186   
 #>     cor:om.eta.v,prop.err  cor:om.eta.ec50,prop.err    cor:om.eta.e0,prop.err 
-#>                   -0.146                      0.147                      0.598  
+#>                   -0.145                      0.132                      0.589  
 #>       cor:temax,pkadd.err       cor:tec50,pkadd.err       cor:tkout,pkadd.err 
-#>                    0.230                     0.0446                     0.0422   
+#>                    0.245                     0.0556                     0.0540   
 #>         cor:te0,pkadd.err   cor:pdadd.err,pkadd.err   cor:om.eta.cl,pkadd.err 
-#>                  -0.0871                     0.0263                      0.187   
+#>                  -0.0753                     0.0385                      0.195   
 #>    cor:om.eta.v,pkadd.err cor:om.eta.ec50,pkadd.err   cor:om.eta.e0,pkadd.err 
-#>                    0.151                     -0.435                    0.0747   
+#>                    0.150                     -0.442                    0.0678   
 #>           cor:tec50,temax           cor:tkout,temax             cor:te0,temax 
-#>                   0.0951                     -0.281                     -0.182   
+#>                    0.165                     -0.240                     -0.214   
 #>       cor:pdadd.err,temax       cor:om.eta.cl,temax        cor:om.eta.v,temax 
-#>                   -0.138                    -0.0646                     -0.315  
+#>                  -0.0534                    -0.0290                     -0.281   
 #>     cor:om.eta.ec50,temax       cor:om.eta.e0,temax           cor:tkout,tec50 
-#>                   -0.385                     0.304                     0.537  
+#>                   -0.377                     0.323                     0.539  
 #>             cor:te0,tec50       cor:pdadd.err,tec50       cor:om.eta.cl,tec50 
-#>                   0.0320                      0.638                    0.0492   
+#>                   0.0352                      0.638                    0.0486   
 #>        cor:om.eta.v,tec50     cor:om.eta.ec50,tec50       cor:om.eta.e0,tec50 
-#>                  -0.0689                     -0.289                     -0.141   
+#>                  -0.0739                     -0.290                     -0.129   
 #>             cor:te0,tkout       cor:pdadd.err,tkout       cor:om.eta.cl,tkout 
-#>                    0.113                      0.436                   -0.0275   
+#>                    0.110                      0.434                   -0.0280   
 #>        cor:om.eta.v,tkout     cor:om.eta.ec50,tkout       cor:om.eta.e0,tkout 
-#>                   0.0291                     0.0334                     -0.115   
+#>                   0.0237                     0.0230                     -0.104   
 #>         cor:pdadd.err,te0         cor:om.eta.cl,te0          cor:om.eta.v,te0 
-#>                   0.0284                    0.00968                     -0.106   
+#>                   0.0279                    0.00971                     -0.103   
 #>       cor:om.eta.ec50,te0         cor:om.eta.e0,te0   cor:om.eta.cl,pdadd.err 
-#>                    0.106                     -0.763                     0.164   
+#>                    0.109                     -0.762                     0.167   
 #>    cor:om.eta.v,pdadd.err cor:om.eta.ec50,pdadd.err   cor:om.eta.e0,pdadd.err 
-#>                   -0.138                   0.000880                     -0.267   
+#>                   -0.140                   -0.00532                     -0.250   
 #>    cor:om.eta.v,om.eta.cl cor:om.eta.ec50,om.eta.cl   cor:om.eta.e0,om.eta.cl 
-#>                    0.509                    -0.209                      0.127   
+#>                    0.506                    -0.211                      0.126   
 #>  cor:om.eta.ec50,om.eta.v    cor:om.eta.e0,om.eta.v cor:om.eta.e0,om.eta.ec50 
-#>                  -0.0251                      0.223                     -0.123   
+#>                  -0.0328                      0.204                     -0.128   
 #>  
 #> 
 #>   No correlations in between subject variability (BSV) matrix
 #>   Full BSV covariance (fit2$omega) or correlation (fit2$omegaR; diagonals=SDs) 
 #>   Distribution stats (mean/skewness/kurtosis/p-value) available in fit2$shrink 
 #>   Information about run found (fit2$runInfo):
-#>    • tolerances (atol/rtol) were temporarily increased for some difficult ODE solving during the optimization. consider increasing sigdig/atol/rtol changing initial estimates or changing the structural model 
 #>    • sandwich matrix corrected; compare it to $covR or $covS 
 #>    • S matrix non-positive definite but corrected by S = sqrtm(S%*%S) 
 #>    • R matrix non-positive definite but corrected by R = sqrtm(R%*%R) 
@@ -900,9 +899,9 @@ fit2
 #> # A tibble: 483 × 33
 #>   ID     TIME CMT      DV  PRED   RES  WRES IPRED   IRES IWRES CPRED  CRES CWRES
 #>   <fct> <dbl> <fct> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 1       0.5 dcp     0    1.25 -1.25 -1.81 0.994 -0.994 -1.61  1.22 -1.22 -1.86
-#> 2 1       1   dcp     1.9  3.60 -1.70 -1.46 2.85  -0.951 -1.27  3.52 -1.62 -1.63
-#> 3 1       2   dcp     3.3  7.83 -4.53 -2.01 6.16  -2.86  -2.49  7.65 -4.35 -2.41
+#> 1 1       0.5 dcp     0    1.26 -1.26 -1.84 0.996 -0.996 -1.65  1.23 -1.23 -1.90
+#> 2 1       1   dcp     1.9  3.61 -1.71 -1.47 2.86  -0.957 -1.29  3.53 -1.63 -1.65
+#> 3 1       2   dcp     3.3  7.84 -4.54 -2.01 6.17  -2.87  -2.49  7.66 -4.36 -2.42
 #> # ℹ 480 more rows
 #> # ℹ 20 more variables: eta.cl <dbl>, eta.v <dbl>, eta.ec50 <dbl>, eta.e0 <dbl>,
 #> #   DEPOT <dbl>, GUT <dbl>, CENTER <dbl>, EFFECT <dbl>, ktr <dbl>, ka <dbl>,
@@ -940,142 +939,134 @@ getVarCov(fit)
 #> → compiling events FD model...
 #> ✔ done
 #> calculating covariance matrix
-#> DLSODA-  ITASK = 4 or 5 and TCRIT (=R1) behind TCUR (=R2)   
-#> DLSODA-  ITASK = 4 or 5 and TCRIT (=R1) behind TCUR (=R2)   
-#> DLSODA-  ITASK = 4 or 5 and TCRIT (=R1) behind TCUR (=R2)   
-#> DLSODA-  ITASK = 4 or 5 and TCRIT (=R1) behind TCUR (=R2)   
-#> DLSODA-  ITASK = 4 or 5 and TCRIT (=R1) behind TCUR (=R2)   
-#> DLSODA-  ITASK = 4 or 5 and TCRIT (=R1) behind TCUR (=R2)   
-#> [====|====|====|====|====|====|====|====|====|====] 0:02:51
+#> [====|====|====|====|====|====|====|====|====|====] 0:01:49
 #> Warning: "r,s" not usable (sandwich doubtful); installed "r"
-#> Warning in foceiFitCpp_(.ret): covariance step: atol/rtol increased for some
-#> difficult ODE solves
 #> Updated original fit object fit
 #>                      tktr           tka           tcl            tv
-#> tktr         1.140591e-01  1.138461e-01  7.007645e-03 -1.408488e-02
-#> tka          1.138461e-01  1.136613e-01  7.055070e-03 -1.397682e-02
-#> tcl          7.007645e-03  7.055070e-03  3.406212e-03 -1.795442e-04
-#> tv          -1.408488e-02 -1.397682e-02 -1.795442e-04  3.405346e-03
-#> prop.err     7.400414e-03  7.376981e-03  7.189718e-04 -1.016780e-03
-#> pkadd.err   -6.505803e-02 -6.483332e-02 -4.391877e-03  7.109323e-03
-#> temax        4.940355e-02  4.865458e-02 -1.862574e-03 -8.768541e-03
-#> tec50       -2.542942e-03 -2.927188e-03 -1.628719e-03 -6.715464e-04
-#> tkout       -2.918336e-03 -2.975936e-03 -1.931079e-04  2.197070e-04
-#> te0         -5.903317e-04 -5.703014e-04 -8.214019e-05  1.316140e-04
-#> pdadd.err    1.162875e-02  1.088021e-02  3.319550e-04 -3.178515e-04
-#> om.eta.ktr  -4.157766e-02 -4.202508e-02 -1.758556e-03  4.976363e-03
-#> om.eta.ka   -4.269761e-02 -4.298067e-02 -1.558508e-03  5.625784e-03
-#> om.eta.cl    3.551959e-04  3.439442e-04  4.490036e-04 -1.824567e-04
-#> om.eta.v    -7.592111e-04 -7.492439e-04 -5.644815e-05  1.327443e-04
-#> om.eta.emax  2.632371e-05  3.084821e-05 -2.003953e-05  1.480894e-05
-#> om.eta.ec50  3.648286e-03  3.669105e-03  3.344674e-04 -1.181044e-05
-#> om.eta.kout  1.062448e-04  9.306102e-05 -6.563130e-06 -3.394467e-05
-#> om.eta.e0    2.337761e-05  2.156990e-05  1.046537e-05 -1.849528e-05
+#> tktr         1.161370e-01  1.161784e-01  7.233331e-03 -1.424628e-02
+#> tka          1.161784e-01  1.162258e-01  7.254061e-03 -1.424507e-02
+#> tcl          7.233331e-03  7.254061e-03  3.440728e-03 -2.028407e-04
+#> tv          -1.424628e-02 -1.424507e-02 -2.028407e-04  3.410010e-03
+#> prop.err     7.594787e-03  7.609545e-03  7.449167e-04 -1.037730e-03
+#> pkadd.err   -6.643520e-02 -6.658359e-02 -4.568194e-03  7.259669e-03
+#> temax        3.826782e-02  3.810781e-02 -3.267605e-03 -8.335324e-03
+#> tec50       -2.430673e-03 -2.496724e-03 -1.739074e-03 -7.519791e-04
+#> tkout       -2.786143e-03 -2.779347e-03 -1.788856e-04  1.977709e-04
+#> te0         -5.912558e-04 -5.895801e-04 -8.498603e-05  1.312103e-04
+#> pdadd.err    1.131070e-02  1.109724e-02  2.820960e-04 -2.781988e-04
+#> om.eta.ktr  -4.694672e-02 -4.672466e-02 -1.754918e-03  5.926099e-03
+#> om.eta.ka   -4.697721e-02 -4.672811e-02 -1.690611e-03  5.988940e-03
+#> om.eta.cl    3.748520e-04  3.594761e-04  4.473161e-04 -1.795332e-04
+#> om.eta.v    -7.467170e-04 -7.621411e-04 -5.331824e-05  1.280128e-04
+#> om.eta.emax -1.533020e-05 -1.507825e-05  1.443385e-06  7.004834e-06
+#> om.eta.ec50  3.906360e-03  3.970848e-03  3.668623e-04 -7.506830e-06
+#> om.eta.kout  2.494904e-04  2.576575e-04  8.198417e-06 -5.380877e-05
+#> om.eta.e0    2.258613e-05  2.255651e-05  1.033845e-05 -1.766507e-05
 #>                  prop.err     pkadd.err         temax         tec50
-#> tktr         7.400414e-03 -6.505803e-02  4.940355e-02 -2.542942e-03
-#> tka          7.376981e-03 -6.483332e-02  4.865458e-02 -2.927188e-03
-#> tcl          7.189718e-04 -4.391877e-03 -1.862574e-03 -1.628719e-03
-#> tv          -1.016780e-03  7.109323e-03 -8.768541e-03 -6.715464e-04
-#> prop.err     6.585778e-04 -4.873711e-03  9.802189e-04 -2.876764e-04
-#> pkadd.err   -4.873711e-03  5.370251e-02 -1.781964e-02  8.699220e-04
-#> temax        9.802189e-04 -1.781964e-02  2.052638e-01  9.231467e-03
-#> tec50       -2.876764e-04  8.699220e-04  9.231467e-03  7.121728e-03
-#> tkout       -1.467083e-04  1.390164e-03 -2.431084e-03  1.108677e-03
-#> te0         -7.797480e-05 -1.273902e-04 -4.522219e-04 -4.928058e-05
-#> pdadd.err    7.822674e-04 -1.460426e-02 -5.080482e-03  1.607412e-02
-#> om.eta.ktr  -2.070981e-03  1.198132e-02 -7.125829e-04  3.200710e-03
-#> om.eta.ka   -2.223348e-03  1.327631e-02 -4.948831e-03  1.150815e-03
-#> om.eta.cl   -1.465777e-06 -6.349640e-04 -2.508338e-04  1.871118e-04
-#> om.eta.v    -7.649035e-05  8.471558e-04 -1.459566e-03  8.640758e-06
-#> om.eta.emax -1.002332e-05  6.496118e-05  3.857855e-06  6.751053e-06
-#> om.eta.ec50  3.472112e-04 -4.223454e-03 -6.100290e-03 -9.864016e-04
-#> om.eta.kout  1.965515e-05 -2.078177e-04  1.317845e-04  1.299996e-04
-#> om.eta.e0    4.441319e-06  2.221061e-05  8.254258e-05 -3.848393e-07
+#> tktr         7.594787e-03 -6.643520e-02  3.826782e-02 -2.430673e-03
+#> tka          7.609545e-03 -6.658359e-02  3.810781e-02 -2.496724e-03
+#> tcl          7.449167e-04 -4.568194e-03 -3.267605e-03 -1.739074e-03
+#> tv          -1.037730e-03  7.259669e-03 -8.335324e-03 -7.519791e-04
+#> prop.err     6.821831e-04 -5.038815e-03  2.596891e-04 -2.848980e-04
+#> pkadd.err   -5.038815e-03  5.487871e-02 -1.189142e-02  8.204657e-04
+#> temax        2.596891e-04 -1.189142e-02  2.200705e-01  1.381360e-02
+#> tec50       -2.848980e-04  8.204657e-04  1.381360e-02  8.173382e-03
+#> tkout       -1.297532e-04  1.275223e-03 -1.772714e-03  1.166812e-03
+#> te0         -7.951699e-05 -1.193547e-04 -7.510530e-04 -4.784036e-05
+#> pdadd.err    7.448356e-04 -1.429033e-02 -8.698114e-04  1.736305e-02
+#> om.eta.ktr  -2.387258e-03  1.453681e-02  9.310183e-03  1.155579e-03
+#> om.eta.ka   -2.345137e-03  1.406989e-02  8.025076e-03  7.467251e-04
+#> om.eta.cl   -3.103002e-06 -6.148344e-04 -4.238906e-05  1.946383e-04
+#> om.eta.v    -7.525701e-05  8.409770e-04 -1.248577e-03  3.465350e-05
+#> om.eta.emax -1.579304e-06  3.864264e-06 -3.535260e-05 -2.032010e-05
+#> om.eta.ec50  3.667813e-04 -4.433852e-03 -7.603589e-03 -1.203092e-03
+#> om.eta.kout  3.588062e-05 -3.272507e-04  1.258649e-04  1.303948e-04
+#> om.eta.e0    4.283713e-06  2.356456e-05  1.108896e-04 -1.568744e-06
 #>                     tkout           te0     pdadd.err    om.eta.ktr
-#> tktr        -2.918336e-03 -5.903317e-04  1.162875e-02 -4.157766e-02
-#> tka         -2.975936e-03 -5.703014e-04  1.088021e-02 -4.202508e-02
-#> tcl         -1.931079e-04 -8.214019e-05  3.319550e-04 -1.758556e-03
-#> tv           2.197070e-04  1.316140e-04 -3.178515e-04  4.976363e-03
-#> prop.err    -1.467083e-04 -7.797480e-05  7.822674e-04 -2.070981e-03
-#> pkadd.err    1.390164e-03 -1.273902e-04 -1.460426e-02  1.198132e-02
-#> temax       -2.431084e-03 -4.522219e-04 -5.080482e-03 -7.125829e-04
-#> tec50        1.108677e-03 -4.928058e-05  1.607412e-02  3.200710e-03
-#> tkout        6.841476e-04  3.512728e-05  2.830870e-03  2.064114e-03
-#> te0          3.512728e-05  1.414515e-04 -2.270218e-04 -5.383982e-04
-#> pdadd.err    2.830870e-03 -2.270218e-04  1.341167e-01 -8.169752e-03
-#> om.eta.ktr   2.064114e-03 -5.383982e-04 -8.169752e-03  7.725439e-02
-#> om.eta.ka    1.762117e-03 -3.864950e-04 -1.185973e-02  7.372101e-02
-#> om.eta.cl   -3.688508e-05 -3.662880e-05  2.171464e-03 -2.945070e-04
-#> om.eta.v     3.492491e-05 -2.856369e-05 -3.977974e-04 -5.690840e-04
-#> om.eta.emax -3.616320e-06  1.227463e-05  1.159868e-04 -3.990711e-04
-#> om.eta.ec50  9.154259e-05  6.039426e-05  1.193993e-03 -7.493699e-04
-#> om.eta.kout  4.363165e-05 -3.426139e-07 -1.851747e-06  1.324938e-04
-#> om.eta.e0   -1.476726e-06 -8.791068e-06 -7.854140e-05  5.922845e-05
+#> tktr        -2.786143e-03 -5.912558e-04  1.131070e-02 -4.694672e-02
+#> tka         -2.779347e-03 -5.895801e-04  1.109724e-02 -4.672466e-02
+#> tcl         -1.788856e-04 -8.498603e-05  2.820960e-04 -1.754918e-03
+#> tv           1.977709e-04  1.312103e-04 -2.781988e-04  5.926099e-03
+#> prop.err    -1.297532e-04 -7.951699e-05  7.448356e-04 -2.387258e-03
+#> pkadd.err    1.275223e-03 -1.193547e-04 -1.429033e-02  1.453681e-02
+#> temax       -1.772714e-03 -7.510530e-04 -8.698114e-04  9.310183e-03
+#> tec50        1.166812e-03 -4.784036e-05  1.736305e-02  1.155579e-03
+#> tkout        6.770531e-04  3.296188e-05  2.807441e-03  1.934877e-03
+#> te0          3.296188e-05  1.412530e-04 -2.462197e-04 -4.749483e-04
+#> pdadd.err    2.807441e-03 -2.462197e-04  1.339923e-01 -1.268257e-02
+#> om.eta.ktr   1.934877e-03 -4.749483e-04 -1.268257e-02  8.642113e-02
+#> om.eta.ka    1.958104e-03 -4.517978e-04 -1.394824e-02  8.696388e-02
+#> om.eta.cl   -4.264909e-05 -3.604806e-05  2.202643e-03 -4.960540e-04
+#> om.eta.v     3.470873e-05 -3.225180e-05 -3.448092e-04 -4.610384e-04
+#> om.eta.emax -3.090581e-06  9.661479e-07 -2.431409e-05  9.723530e-06
+#> om.eta.ec50  9.103128e-05  6.815958e-05  1.130868e-03 -1.246263e-03
+#> om.eta.kout  4.420724e-05 -1.748193e-06 -3.241685e-05  6.421451e-05
+#> om.eta.e0   -1.357739e-06 -8.466892e-06 -7.339928e-05  4.579434e-05
 #>                 om.eta.ka     om.eta.cl      om.eta.v   om.eta.emax
-#> tktr        -4.269761e-02  3.551959e-04 -7.592111e-04  2.632371e-05
-#> tka         -4.298067e-02  3.439442e-04 -7.492439e-04  3.084821e-05
-#> tcl         -1.558508e-03  4.490036e-04 -5.644815e-05 -2.003953e-05
-#> tv           5.625784e-03 -1.824567e-04  1.327443e-04  1.480894e-05
-#> prop.err    -2.223348e-03 -1.465777e-06 -7.649035e-05 -1.002332e-05
-#> pkadd.err    1.327631e-02 -6.349640e-04  8.471558e-04  6.496118e-05
-#> temax       -4.948831e-03 -2.508338e-04 -1.459566e-03  3.857855e-06
-#> tec50        1.150815e-03  1.871118e-04  8.640758e-06  6.751053e-06
-#> tkout        1.762117e-03 -3.688508e-05  3.492491e-05 -3.616320e-06
-#> te0         -3.864950e-04 -3.662880e-05 -2.856369e-05  1.227463e-05
-#> pdadd.err   -1.185973e-02  2.171464e-03 -3.977974e-04  1.159868e-04
-#> om.eta.ktr   7.372101e-02 -2.945070e-04 -5.690840e-04 -3.990711e-04
-#> om.eta.ka    7.117491e-02 -3.804724e-04 -5.082758e-04 -3.628549e-04
-#> om.eta.cl   -3.804724e-04  5.166745e-04  8.596138e-05 -6.939494e-06
-#> om.eta.v    -5.082758e-04  8.596138e-05  1.656244e-04  4.032988e-06
-#> om.eta.emax -3.628549e-04 -6.939494e-06  4.032988e-06  4.263255e-06
-#> om.eta.ec50 -6.437682e-04 -1.360712e-04 -3.623046e-05 -1.988061e-05
-#> om.eta.kout  6.083110e-05 -6.868340e-06 -9.453365e-06 -2.892653e-06
-#> om.eta.e0    4.481018e-05  6.363185e-06  3.482417e-06 -1.389610e-06
+#> tktr        -4.697721e-02  3.748520e-04 -7.467170e-04 -1.533020e-05
+#> tka         -4.672811e-02  3.594761e-04 -7.621411e-04 -1.507825e-05
+#> tcl         -1.690611e-03  4.473161e-04 -5.331824e-05  1.443385e-06
+#> tv           5.988940e-03 -1.795332e-04  1.280128e-04  7.004834e-06
+#> prop.err    -2.345137e-03 -3.103002e-06 -7.525701e-05 -1.579304e-06
+#> pkadd.err    1.406989e-02 -6.148344e-04  8.409770e-04  3.864264e-06
+#> temax        8.025076e-03 -4.238906e-05 -1.248577e-03 -3.535260e-05
+#> tec50        7.467251e-04  1.946383e-04  3.465350e-05 -2.032010e-05
+#> tkout        1.958104e-03 -4.264909e-05  3.470873e-05 -3.090581e-06
+#> te0         -4.517978e-04 -3.604806e-05 -3.225180e-05  9.661479e-07
+#> pdadd.err   -1.394824e-02  2.202643e-03 -3.448092e-04 -2.431409e-05
+#> om.eta.ktr   8.696388e-02 -4.960540e-04 -4.610384e-04  9.723530e-06
+#> om.eta.ka    8.763982e-02 -5.810782e-04 -5.239121e-04  1.126968e-05
+#> om.eta.cl   -5.810782e-04  5.158956e-04  9.209078e-05 -8.211953e-07
+#> om.eta.v    -5.239121e-04  9.209078e-05  1.693764e-04 -7.874029e-07
+#> om.eta.emax  1.126968e-05 -8.211953e-07 -7.874029e-07  7.952941e-08
+#> om.eta.ec50 -9.051197e-04 -1.468285e-04 -3.227488e-05  5.636577e-06
+#> om.eta.kout  9.996865e-05 -1.173449e-05 -1.281969e-05 -4.274223e-07
+#> om.eta.e0    4.448749e-05  6.012552e-06  3.921909e-06 -9.338555e-08
 #>               om.eta.ec50   om.eta.kout     om.eta.e0
-#> tktr         3.648286e-03  1.062448e-04  2.337761e-05
-#> tka          3.669105e-03  9.306102e-05  2.156990e-05
-#> tcl          3.344674e-04 -6.563130e-06  1.046537e-05
-#> tv          -1.181044e-05 -3.394467e-05 -1.849528e-05
-#> prop.err     3.472112e-04  1.965515e-05  4.441319e-06
-#> pkadd.err   -4.223454e-03 -2.078177e-04  2.221061e-05
-#> temax       -6.100290e-03  1.317845e-04  8.254258e-05
-#> tec50       -9.864016e-04  1.299996e-04 -3.848393e-07
-#> tkout        9.154259e-05  4.363165e-05 -1.476726e-06
-#> te0          6.039426e-05 -3.426139e-07 -8.791068e-06
-#> pdadd.err    1.193993e-03 -1.851747e-06 -7.854140e-05
-#> om.eta.ktr  -7.493699e-04  1.324938e-04  5.922845e-05
-#> om.eta.ka   -6.437682e-04  6.083110e-05  4.481018e-05
-#> om.eta.cl   -1.360712e-04 -6.868340e-06  6.363185e-06
-#> om.eta.v    -3.623046e-05 -9.453365e-06  3.482417e-06
-#> om.eta.emax -1.988061e-05 -2.892653e-06 -1.389610e-06
-#> om.eta.ec50  1.870191e-03  4.824446e-05 -8.400708e-06
-#> om.eta.kout  4.824446e-05  1.978160e-05  4.953321e-07
-#> om.eta.e0   -8.400708e-06  4.953321e-07  9.903277e-07
+#> tktr         3.906360e-03  2.494904e-04  2.258613e-05
+#> tka          3.970848e-03  2.576575e-04  2.255651e-05
+#> tcl          3.668623e-04  8.198417e-06  1.033845e-05
+#> tv          -7.506830e-06 -5.380877e-05 -1.766507e-05
+#> prop.err     3.667813e-04  3.588062e-05  4.283713e-06
+#> pkadd.err   -4.433852e-03 -3.272507e-04  2.356456e-05
+#> temax       -7.603589e-03  1.258649e-04  1.108896e-04
+#> tec50       -1.203092e-03  1.303948e-04 -1.568744e-06
+#> tkout        9.103128e-05  4.420724e-05 -1.357739e-06
+#> te0          6.815958e-05 -1.748193e-06 -8.466892e-06
+#> pdadd.err    1.130868e-03 -3.241685e-05 -7.339928e-05
+#> om.eta.ktr  -1.246263e-03  6.421451e-05  4.579434e-05
+#> om.eta.ka   -9.051197e-04  9.996865e-05  4.448749e-05
+#> om.eta.cl   -1.468285e-04 -1.173449e-05  6.012552e-06
+#> om.eta.v    -3.227488e-05 -1.281969e-05  3.921909e-06
+#> om.eta.emax  5.636577e-06 -4.274223e-07 -9.338555e-08
+#> om.eta.ec50  2.090969e-03  5.950018e-05 -9.139937e-06
+#> om.eta.kout  5.950018e-05  2.390977e-05  4.983828e-07
+#> om.eta.e0   -9.139937e-06  4.983828e-07  9.185209e-07
 fit
 #> ── nlmixr² nonmem2rx reading NONMEM ver 7.4.3 ──
 #> 
 #>              OBJF      AIC      BIC Log-likelihood Condition#(Cov)
-#> nonmem2rx 1326.91 2252.605 2332.025      -1107.302     36684660817
+#> nonmem2rx 1326.91 2252.605 2332.025      -1107.302     7.18696e+11
 #>           Condition#(Cor)
-#> nonmem2rx      7971337691
+#> nonmem2rx      9189297094
 #> 
 #> ── Time (sec fit$time): ──
 #> 
 #>             setup postprocess table compress NONMEM as.nlmixr2 covariance
-#> elapsed 0.1394053       0.033 0.058    0.001 320.27      1.064    174.159
+#> elapsed 0.1173151       0.019 0.039    0.001 320.27      0.716    110.651
 #> 
 #> ── Population Parameters (fit$parFixed or fit$parFixedDf): ──
 #> 
 #>                Parameter     Est.     SE   %RSE Back-transformed(95%CI)
-#> tktr            1 - tktr  6.24e-7  0.338 5.41e7      1.00 (0.516, 1.94)
-#> tka              2 - tka -3.01e-6  0.337 1.12e7      1.00 (0.516, 1.94)
-#> tcl              3 - tcl    -2.00 0.0584   2.91    0.135 (0.120, 0.151)
-#> tv                4 - tv     2.05 0.0584   2.84       7.78 (6.94, 8.73)
-#> prop.err    5 - prop.err   0.0986 0.0257   26.0  0.0986 (0.0483, 0.149)
-#> pkadd.err  6 - pkadd.err    0.512  0.232   45.3   0.512 (0.0574, 0.966)
-#> temax          7 - temax     6.42  0.453   7.06    0.998 (0.996, 0.999)
-#> tec50          8 - tec50    0.141 0.0844   60.0      1.15 (0.976, 1.36)
-#> tkout          9 - tkout    -2.95 0.0262  0.886 0.0522 (0.0496, 0.0549)
+#> tktr            1 - tktr  6.24e-7  0.341 5.46e7      1.00 (0.513, 1.95)
+#> tka              2 - tka -3.01e-6  0.341 1.13e7      1.00 (0.513, 1.95)
+#> tcl              3 - tcl    -2.00 0.0587   2.93    0.135 (0.120, 0.151)
+#> tv                4 - tv     2.05 0.0584   2.85       7.78 (6.94, 8.73)
+#> prop.err    5 - prop.err   0.0986 0.0261   26.5  0.0986 (0.0474, 0.150)
+#> pkadd.err  6 - pkadd.err    0.512  0.234   45.8   0.512 (0.0525, 0.971)
+#> temax          7 - temax     6.42  0.469   7.31    0.998 (0.996, 0.999)
+#> tec50          8 - tec50    0.141 0.0904   64.2      1.15 (0.964, 1.37)
+#> tkout          9 - tkout    -2.95 0.0260  0.881 0.0522 (0.0496, 0.0549)
 #> te0             10 - te0     4.57 0.0119  0.260       96.6 (94.4, 98.9)
 #> pdadd.err 11 - pdadd.err     3.72  0.366   9.85       3.72 (3.00, 4.43)
 #>           BSV(CV% or SD) Shrink(SD)%
@@ -1094,177 +1085,177 @@ fit
 #>   Covariance Type (fit$covMethod): r,s (full)
 #>   Some strong fixed parameter correlations exist (fit$cor) :
 #>                    cor:tka,tktr                cor:tcl,tktr 
-#>                       1.00                       0.356  
+#>                       1.00                       0.362  
 #>                 cor:tv,tktr           cor:prop.err,tktr 
-#>                     -0.715                       0.854  
+#>                     -0.716                       0.853  
 #>          cor:pkadd.err,tktr              cor:temax,tktr 
-#>                     -0.831                       0.323  
+#>                     -0.832                       0.239   
 #>              cor:tec50,tktr              cor:tkout,tktr 
-#>                    -0.0892                       -0.330  
+#>                    -0.0789                       -0.314  
 #>                cor:te0,tktr          cor:pdadd.err,tktr 
-#>                     -0.147                       0.0940   
+#>                     -0.146                       0.0907   
 #>         cor:om.eta.ktr,tktr          cor:om.eta.ka,tktr 
-#>                     -0.443                      -0.474  
+#>                     -0.469                      -0.466  
 #>          cor:om.eta.cl,tktr           cor:om.eta.v,tktr 
-#>                     0.0463                       -0.175   
+#>                     0.0484                       -0.168   
 #>        cor:om.eta.emax,tktr        cor:om.eta.ec50,tktr 
-#>                     0.0377                        0.250   
+#>                     -0.160                        0.251   
 #>        cor:om.eta.kout,tktr          cor:om.eta.e0,tktr 
-#>                     0.0707                       0.0696   
+#>                      0.150                       0.0692   
 #>                 cor:tcl,tka                  cor:tv,tka 
-#>                      0.359                      -0.710  
+#>                      0.363                      -0.716  
 #>            cor:prop.err,tka           cor:pkadd.err,tka 
-#>                      0.853                      -0.830  
+#>                      0.855                      -0.834  
 #>               cor:temax,tka               cor:tec50,tka 
-#>                      0.319                      -0.103   
+#>                      0.238                      -0.0810   
 #>               cor:tkout,tka                 cor:te0,tka 
-#>                     -0.337                      -0.142   
+#>                     -0.313                      -0.146   
 #>           cor:pdadd.err,tka          cor:om.eta.ktr,tka 
-#>                     0.0881                       -0.448  
+#>                     0.0889                       -0.466  
 #>           cor:om.eta.ka,tka           cor:om.eta.cl,tka 
-#>                     -0.478                      0.0449   
+#>                     -0.463                      0.0464   
 #>            cor:om.eta.v,tka         cor:om.eta.emax,tka 
-#>                     -0.173                       0.0443   
+#>                     -0.172                       -0.157   
 #>         cor:om.eta.ec50,tka         cor:om.eta.kout,tka 
-#>                      0.252                       0.0621   
+#>                      0.255                        0.155   
 #>           cor:om.eta.e0,tka                  cor:tv,tcl 
-#>                     0.0643                      -0.0527   
+#>                     0.0690                      -0.0592   
 #>            cor:prop.err,tcl           cor:pkadd.err,tcl 
-#>                      0.480                      -0.325  
+#>                      0.486                      -0.332  
 #>               cor:temax,tcl               cor:tec50,tcl 
-#>                    -0.0704                       -0.331  
+#>                     -0.119                       -0.328  
 #>               cor:tkout,tcl                 cor:te0,tcl 
-#>                     -0.126                       -0.118   
+#>                     -0.117                       -0.122   
 #>           cor:pdadd.err,tcl          cor:om.eta.ktr,tcl 
-#>                     0.0155                       -0.108   
+#>                     0.0131                       -0.102   
 #>           cor:om.eta.ka,tcl           cor:om.eta.cl,tcl 
-#>                     -0.100                        0.338  
+#>                    -0.0974                        0.336  
 #>            cor:om.eta.v,tcl         cor:om.eta.emax,tcl 
-#>                    -0.0752                       -0.166   
+#>                    -0.0698                       0.0873   
 #>         cor:om.eta.ec50,tcl         cor:om.eta.kout,tcl 
-#>                      0.133                      -0.0253   
+#>                      0.137                       0.0286   
 #>           cor:om.eta.e0,tcl             cor:prop.err,tv 
-#>                      0.180                       -0.679  
+#>                      0.184                       -0.680  
 #>            cor:pkadd.err,tv                cor:temax,tv 
-#>                      0.526                      -0.332  
+#>                      0.531                      -0.304  
 #>                cor:tec50,tv                cor:tkout,tv 
-#>                     -0.136                        0.144   
+#>                     -0.142                        0.130   
 #>                  cor:te0,tv            cor:pdadd.err,tv 
-#>                      0.190                      -0.0149   
+#>                      0.189                      -0.0130   
 #>           cor:om.eta.ktr,tv            cor:om.eta.ka,tv 
-#>                      0.307                       0.361  
+#>                      0.345                       0.346  
 #>            cor:om.eta.cl,tv             cor:om.eta.v,tv 
-#>                     -0.138                        0.177   
+#>                     -0.135                        0.168   
 #>          cor:om.eta.emax,tv          cor:om.eta.ec50,tv 
-#>                      0.123                     -0.00468   
+#>                      0.425                    -0.00281   
 #>          cor:om.eta.kout,tv            cor:om.eta.e0,tv 
-#>                     -0.131                       -0.318  
+#>                     -0.188                       -0.316  
 #>      cor:pkadd.err,prop.err          cor:temax,prop.err 
-#>                     -0.820                      0.0843   
+#>                     -0.824                      0.0212   
 #>          cor:tec50,prop.err          cor:tkout,prop.err 
-#>                     -0.133                       -0.219   
+#>                     -0.121                       -0.191   
 #>            cor:te0,prop.err      cor:pdadd.err,prop.err 
-#>                     -0.255                       0.0832   
+#>                     -0.256                       0.0779   
 #>     cor:om.eta.ktr,prop.err      cor:om.eta.ka,prop.err 
-#>                     -0.290                       -0.325  
+#>                     -0.311                      -0.303  
 #>      cor:om.eta.cl,prop.err       cor:om.eta.v,prop.err 
-#>                   -0.00251                       -0.232   
+#>                   -0.00523                       -0.221   
 #>    cor:om.eta.emax,prop.err    cor:om.eta.ec50,prop.err 
-#>                     -0.189                        0.313  
+#>                     -0.214                        0.307  
 #>    cor:om.eta.kout,prop.err      cor:om.eta.e0,prop.err 
-#>                      0.172                        0.174   
+#>                      0.281                        0.171   
 #>         cor:temax,pkadd.err         cor:tec50,pkadd.err 
-#>                     -0.170                       0.0445   
+#>                     -0.108                       0.0387   
 #>         cor:tkout,pkadd.err           cor:te0,pkadd.err 
-#>                      0.229                      -0.0462   
+#>                      0.209                      -0.0429   
 #>     cor:pdadd.err,pkadd.err    cor:om.eta.ktr,pkadd.err 
-#>                     -0.172                        0.186   
+#>                     -0.167                        0.211   
 #>     cor:om.eta.ka,pkadd.err     cor:om.eta.cl,pkadd.err 
-#>                      0.215                       -0.121   
+#>                      0.203                       -0.116   
 #>      cor:om.eta.v,pkadd.err   cor:om.eta.emax,pkadd.err 
-#>                      0.284                        0.136   
+#>                      0.276                       0.0585   
 #>   cor:om.eta.ec50,pkadd.err   cor:om.eta.kout,pkadd.err 
-#>                     -0.421                      -0.202   
+#>                     -0.414                      -0.286   
 #>     cor:om.eta.e0,pkadd.err             cor:tec50,temax 
-#>                     0.0963                        0.241   
+#>                      0.105                        0.326  
 #>             cor:tkout,temax               cor:te0,temax 
-#>                     -0.205                      -0.0839   
+#>                     -0.145                       -0.135   
 #>         cor:pdadd.err,temax        cor:om.eta.ktr,temax 
-#>                    -0.0306                     -0.00566   
+#>                   -0.00507                       0.0675   
 #>         cor:om.eta.ka,temax         cor:om.eta.cl,temax 
-#>                    -0.0409                      -0.0244   
+#>                     0.0578                     -0.00398   
 #>          cor:om.eta.v,temax       cor:om.eta.emax,temax 
-#>                     -0.250                      0.00412   
+#>                     -0.205                       -0.267   
 #>       cor:om.eta.ec50,temax       cor:om.eta.kout,temax 
-#>                     -0.311                      0.0654   
+#>                     -0.354                      0.0549   
 #>         cor:om.eta.e0,temax             cor:tkout,tec50 
-#>                      0.183                        0.502  
+#>                      0.247                        0.496  
 #>               cor:te0,tec50         cor:pdadd.err,tec50 
-#>                    -0.0491                        0.520  
+#>                    -0.0445                        0.525  
 #>        cor:om.eta.ktr,tec50         cor:om.eta.ka,tec50 
-#>                      0.136                       0.0511   
+#>                     0.0435                       0.0279   
 #>         cor:om.eta.cl,tec50          cor:om.eta.v,tec50 
-#>                     0.0975                      0.00796   
+#>                     0.0948                       0.0295   
 #>       cor:om.eta.emax,tec50       cor:om.eta.ec50,tec50 
-#>                     0.0387                       -0.270   
+#>                     -0.797                      -0.291   
 #>       cor:om.eta.kout,tec50         cor:om.eta.e0,tec50 
-#>                      0.346                    -0.00458   
+#>                      0.295                      -0.0181   
 #>               cor:te0,tkout         cor:pdadd.err,tkout 
-#>                      0.113                        0.296   
+#>                      0.107                        0.295   
 #>        cor:om.eta.ktr,tkout         cor:om.eta.ka,tkout 
-#>                      0.284                        0.253   
+#>                      0.253                        0.254   
 #>         cor:om.eta.cl,tkout          cor:om.eta.v,tkout 
-#>                    -0.0620                        0.104   
+#>                    -0.0722                        0.102   
 #>       cor:om.eta.emax,tkout       cor:om.eta.ec50,tkout 
-#>                    -0.0670                       0.0809   
+#>                     -0.421                      0.0765   
 #>       cor:om.eta.kout,tkout         cor:om.eta.e0,tkout 
-#>                      0.375                     -0.0567   
+#>                      0.347                     -0.0544   
 #>           cor:pdadd.err,te0          cor:om.eta.ktr,te0 
-#>                    -0.0521                       -0.163   
+#>                    -0.0566                       -0.136   
 #>           cor:om.eta.ka,te0           cor:om.eta.cl,te0 
-#>                     -0.122                       -0.135   
+#>                     -0.128                       -0.134   
 #>            cor:om.eta.v,te0         cor:om.eta.emax,te0 
-#>                     -0.187                        0.500  
+#>                     -0.209                        0.288   
 #>         cor:om.eta.ec50,te0         cor:om.eta.kout,te0 
-#>                      0.117                     -0.00648   
+#>                      0.125                      -0.0301   
 #>           cor:om.eta.e0,te0    cor:om.eta.ktr,pdadd.err 
-#>                     -0.743                     -0.0803   
+#>                     -0.743                      -0.118   
 #>     cor:om.eta.ka,pdadd.err     cor:om.eta.cl,pdadd.err 
-#>                     -0.121                        0.261   
+#>                     -0.129                        0.265   
 #>      cor:om.eta.v,pdadd.err   cor:om.eta.emax,pdadd.err 
-#>                    -0.0844                        0.153   
+#>                    -0.0724                       -0.236   
 #>   cor:om.eta.ec50,pdadd.err   cor:om.eta.kout,pdadd.err 
-#>                     0.0754                     -0.00114   
+#>                     0.0676                      -0.0181   
 #>     cor:om.eta.e0,pdadd.err    cor:om.eta.ka,om.eta.ktr 
-#>                     -0.216                        0.994  
+#>                     -0.209                        0.999  
 #>    cor:om.eta.cl,om.eta.ktr     cor:om.eta.v,om.eta.ktr 
-#>                    -0.0466                       -0.159   
+#>                    -0.0743                       -0.121   
 #>  cor:om.eta.emax,om.eta.ktr  cor:om.eta.ec50,om.eta.ktr 
-#>                     -0.695                     -0.0623   
+#>                      0.117                      -0.0927   
 #>  cor:om.eta.kout,om.eta.ktr    cor:om.eta.e0,om.eta.ktr 
-#>                      0.107                        0.214   
+#>                     0.0447                        0.163   
 #>     cor:om.eta.cl,om.eta.ka      cor:om.eta.v,om.eta.ka 
-#>                    -0.0627                       -0.148   
+#>                    -0.0864                       -0.136   
 #>   cor:om.eta.emax,om.eta.ka   cor:om.eta.ec50,om.eta.ka 
-#>                     -0.659                     -0.0558   
+#>                      0.135                      -0.0669   
 #>   cor:om.eta.kout,om.eta.ka     cor:om.eta.e0,om.eta.ka 
-#>                     0.0513                        0.169   
+#>                     0.0691                        0.157   
 #>      cor:om.eta.v,om.eta.cl   cor:om.eta.emax,om.eta.cl 
-#>                      0.294                       -0.148   
+#>                      0.312                      -0.128   
 #>   cor:om.eta.ec50,om.eta.cl   cor:om.eta.kout,om.eta.cl 
-#>                     -0.138                      -0.0679   
+#>                     -0.141                       -0.106   
 #>     cor:om.eta.e0,om.eta.cl    cor:om.eta.emax,om.eta.v 
-#>                      0.281                        0.152   
+#>                      0.276                       -0.215   
 #>    cor:om.eta.ec50,om.eta.v    cor:om.eta.kout,om.eta.v 
-#>                    -0.0651                       -0.165   
+#>                    -0.0542                       -0.201   
 #>      cor:om.eta.e0,om.eta.v cor:om.eta.ec50,om.eta.emax 
-#>                      0.272                       -0.223   
+#>                      0.314                       0.437  
 #> cor:om.eta.kout,om.eta.emax   cor:om.eta.e0,om.eta.emax 
-#>                     -0.315                      -0.676  
+#>                     -0.310                      -0.346  
 #> cor:om.eta.kout,om.eta.ec50   cor:om.eta.e0,om.eta.ec50 
-#>                      0.251                       -0.195   
+#>                      0.266                       -0.209   
 #>   cor:om.eta.e0,om.eta.kout 
-#>                      0.112   
+#>                      0.106   
 #>  
 #> 
 #>   No correlations in between subject variability (BSV) matrix
